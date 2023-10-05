@@ -104,7 +104,6 @@ class EventsRecyclerViewAdapter(
 
             val text = when {
                 event.isHoliday -> "${event.title} ($holidayString)"
-                event is CalendarEvent.DeviceCalendarEvent -> event.formatTitle()
                 else -> event.title
             }
             binding.root.contentDescription = if (event.isHoliday)

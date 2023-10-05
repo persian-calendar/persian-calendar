@@ -226,12 +226,6 @@ fun Context.getAllEnabledAppointments() = readDeviceEvents(
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 
-fun CalendarEvent.DeviceCalendarEvent.formatTitle(): String =
-    (title + if (description.isNotBlank())
-        " (${description.parseAsHtml(HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()})"
-    else "").replace("\n", " ").trim()
-
-
 fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>, holiday: Boolean, compact: Boolean,
     showDeviceCalendarEvents: Boolean, insertRLM: Boolean, addIsHoliday: Boolean
@@ -239,7 +233,7 @@ fun getEventsTitle(
     .filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
         val title = when {
-            it is CalendarEvent.DeviceCalendarEvent && !compact -> it.formatTitle()
+            it is CalendarEvent.DeviceCalendarEvent -> it.title
             compact -> it.title.replace(Regex(" \\([^)]+\\)$"), "")
             else -> it.title
         }
