@@ -79,10 +79,10 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         selectionIndicator.onDraw(canvas, this)
 
-        // Widget only tweak
+        // Widget only drawing
+        val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         val widgetFooterTextPaint = daysAdapter.sharedDayViewData.widgetFooterTextPaint ?: return
         canvas.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }
@@ -161,12 +161,10 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         val lastPosition = lastPosition ?: return
         val dayView = recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView
             ?: return
-        if (hideAnimator.isRunning) {
-            canvas.drawCircle(
-                dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
-                DayView.radius(dayView) * (1 - hideAnimator.animatedFraction), paint
-            )
-        } else if (isReveal) {
+        if (hideAnimator.isRunning) canvas.drawCircle(
+            dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
+            DayView.radius(dayView) * (1 - hideAnimator.animatedFraction), paint
+        ) else if (isReveal) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = dayView.left.toFloat()
             lastY = dayView.top.toFloat()
