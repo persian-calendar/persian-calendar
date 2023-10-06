@@ -8,7 +8,7 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.google.android.material.carousel.MaskableFrameLayout
+    <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -73,7 +73,7 @@
 
                 </FrameLayout>
 
-                <com.google.android.material.carousel.MaskableFrameLayout
+                <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
@@ -257,12 +257,12 @@
 
                     </LinearLayout>
 
-                </com.google.android.material.carousel.MaskableFrameLayout>
+                </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
 
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-    </com.google.android.material.carousel.MaskableFrameLayout>
+    </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

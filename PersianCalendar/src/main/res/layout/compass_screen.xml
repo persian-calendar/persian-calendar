@@ -8,7 +8,7 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.google.android.material.carousel.MaskableFrameLayout
+    <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
@@ -33,7 +33,7 @@
 
         </FrameLayout>
 
-    </com.google.android.material.carousel.MaskableFrameLayout>
+    </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_appbar"

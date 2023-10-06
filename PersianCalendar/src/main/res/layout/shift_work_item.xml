@@ -8,7 +8,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <com.google.android.material.carousel.MaskableFrameLayout
+    <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
@@ -34,7 +34,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.carousel.MaskableFrameLayout>
+    </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
 
     <Spinner
         android:id="@+id/length_spinner"
