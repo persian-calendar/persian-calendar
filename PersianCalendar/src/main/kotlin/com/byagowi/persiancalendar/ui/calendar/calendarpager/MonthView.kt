@@ -123,6 +123,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     private var lastPosition: Int? = null
     private var lastX = 0f
     private var lastY = 0f
+    private var lastRadius = 0f
     private var isReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
@@ -144,6 +145,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     fun selectDay(selectedDayPosition: Int?) {
         if (selectedDayPosition == null) {
             if (isCurrentlySelected) {
+                isReveal = false
                 isCurrentlySelected = false
                 hideAnimator.start()
             }
@@ -163,11 +165,12 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
             ?: return
         if (hideAnimator.isRunning) canvas.drawCircle(
             dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
-            DayView.radius(dayView) * (1 - hideAnimator.animatedFraction), paint
+            lastRadius * (1 - hideAnimator.animatedFraction), paint
         ) else if (isReveal) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = dayView.left.toFloat()
             lastY = dayView.top.toFloat()
+            lastRadius = DayView.radius(dayView) * fraction
             canvas.drawCircle(
                 lastX + dayView.width / 2f, lastY + dayView.height / 2f,
                 DayView.radius(dayView) * fraction, paint
@@ -176,9 +179,9 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
             lastY = MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
+            lastRadius = DayView.radius(dayView)
             canvas.drawCircle(
-                lastX + dayView.width / 2f, lastY + dayView.height / 2f,
-                DayView.radius(dayView), paint
+                lastX + dayView.width / 2f, lastY + dayView.height / 2f, lastRadius, paint
             )
         }
     }
