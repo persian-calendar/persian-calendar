@@ -1,10 +1,9 @@
 // Copied from https://github.com/material-components/material-components-android/blob/7bc26e5/lib/java/com/google/android/material/carousel/MaskableFrameLayout.java
-// then turned to Kotlin, simplified and removed use of internal things.
-// We used to use the Material but since 1.10.0 it has become unusable, it just shows nothing and probably
-// we shouldn't have used at the first place as it was intended to be used by carousel.
+// then turned to Kotlin, simplified and removed use of Material library internal things.
+// We used to use the Material's impl but since 1.10.0 it has become unusable, it just shows nothing
+// and probably  we shouldn't have used at the first place as it was intended to be used by carousel.
 package com.byagowi.persiancalendar.ui.common
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Outline
@@ -13,24 +12,24 @@ import android.graphics.RectF
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
+import androidx.core.graphics.withClip
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
 import com.google.android.material.shape.Shapeable
 
 /** A [FrameLayout] than is able to mask itself and all children.  */
-class MaskableFrameLayout @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : FrameLayout(context, attrs, defStyleAttr), Shapeable {
+class MaskableFrameLayout(context: Context, attrs: AttributeSet? = null) :
+    FrameLayout(context, attrs), Shapeable {
     private val maskRect = RectF()
     private var shapeAppearanceModel: ShapeAppearanceModel =
-        ShapeAppearanceModel.builder(context, attrs, defStyleAttr, 0, 0).build()
+        ShapeAppearanceModel.builder(context, attrs, 0, 0, 0).build()
     private val maskableDelegate = if (Build.VERSION.SDK_INT >= VERSION_CODES.TIRAMISU)
-        MaskableDelegateV33(this) else MaskableDelegateV14()
+        MaskableDelegateV33(shapeAppearanceModel, this)
+    else MaskableDelegateV14(shapeAppearanceModel)
 
     init {
         setShapeAppearanceModel(shapeAppearanceModel)
@@ -38,7 +37,8 @@ class MaskableFrameLayout @JvmOverloads constructor(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        onMaskChanged()
+        maskRect.set(0f, 0f, width.toFloat(), height.toFloat())
+        maskableDelegate.onMaskChanged(this, maskRect)
     }
 
     override fun setShapeAppearanceModel(shapeAppearanceModel: ShapeAppearanceModel) {
@@ -48,35 +48,16 @@ class MaskableFrameLayout @JvmOverloads constructor(
 
     override fun getShapeAppearanceModel(): ShapeAppearanceModel = shapeAppearanceModel
 
-    private fun onMaskChanged() {
-        if (width == 0) return
-        // Translate the percentage into an actual pixel value of how much of this view should be
-        // masked away.
-        maskRect.set(0f, 0f, width.toFloat(), height.toFloat())
-        maskableDelegate.onMaskChanged(this, maskRect)
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        // Only handle touch events that are within the masked bounds of this view.
-        if (!maskRect.isEmpty && event.action == MotionEvent.ACTION_DOWN) {
-            val x = event.x
-            val y = event.y
-            if (!maskRect.contains(x, y)) return false
-        }
-        return super.onTouchEvent(event)
-    }
-
     override fun dispatchDraw(canvas: Canvas) =
-        maskableDelegate.maybeClip(canvas) { super.dispatchDraw(it) }
+        maskableDelegate.maybeClip(canvas) { super.dispatchDraw(this) }
 
     /**
      * A delegate able to handle logic for when and how to mask a View based on the View's [ ] and mask bounds.
      */
     private abstract class MaskableDelegate {
-        var shapeAppearanceModel: ShapeAppearanceModel? = null
-        var maskBounds = RectF()
-        val shapePath = Path()
+        protected abstract var shapeAppearanceModel: ShapeAppearanceModel
+        protected var maskBounds = RectF()
+        protected val shapePath = Path()
 
         /**
          * Called due to changes in a delegate's shape, mask bounds or other parameters. Delegate
@@ -85,7 +66,7 @@ class MaskableFrameLayout @JvmOverloads constructor(
          *
          * @param view the client view
          */
-        abstract fun invalidateClippingMethod(view: View)
+        protected abstract fun invalidateClippingMethod(view: View)
 
         /**
          * Whether the client view should use canvas clipping to mask itself.
@@ -97,7 +78,7 @@ class MaskableFrameLayout @JvmOverloads constructor(
          *
          * @return true if the client view should clip the canvas
          */
-        abstract fun shouldUseCompatClipping(): Boolean
+        protected abstract val shouldUseCompatClipping: Boolean
 
         /**
          * Called whenever the [ShapeAppearanceModel] of the client changes.
@@ -125,18 +106,13 @@ class MaskableFrameLayout @JvmOverloads constructor(
 
         private val pathProvider = ShapeAppearancePathProvider()
         private fun updateShapePath() {
-            if (!maskBounds.isEmpty && shapeAppearanceModel != null) {
+            if (!maskBounds.isEmpty)
                 pathProvider.calculatePath(shapeAppearanceModel, 1f, maskBounds, shapePath)
-            }
         }
 
-        fun maybeClip(canvas: Canvas, op: (canvas: Canvas) -> Unit) {
-            if (shouldUseCompatClipping() && !shapePath.isEmpty) {
-                canvas.save()
-                canvas.clipPath(shapePath)
-                op(canvas)
-                canvas.restore()
-            } else op(canvas)
+        inline fun maybeClip(canvas: Canvas, op: Canvas.() -> Unit) {
+            if (shouldUseCompatClipping && !shapePath.isEmpty) canvas.withClip(shapePath, op)
+            else op(canvas)
         }
     }
 
@@ -144,12 +120,12 @@ class MaskableFrameLayout @JvmOverloads constructor(
      * A [MaskableDelegate] implementation for API 14-32 that always clips using canvas
      * clipping.
      */
-    private class MaskableDelegateV14 : MaskableDelegate() {
-        override fun shouldUseCompatClipping() = true
+    private class MaskableDelegateV14(override var shapeAppearanceModel: ShapeAppearanceModel) :
+        MaskableDelegate() {
+        override val shouldUseCompatClipping = true
 
         override fun invalidateClippingMethod(view: View) {
-            if (shapeAppearanceModel == null || maskBounds.isEmpty) return
-            view.invalidate()
+            if (!maskBounds.isEmpty) view.invalidate()
         }
     }
 
@@ -161,7 +137,9 @@ class MaskableFrameLayout @JvmOverloads constructor(
      * [Outline.setPath] was added in API 33 and allows using [ ] to clip for all shapes.
      */
     @RequiresApi(VERSION_CODES.TIRAMISU)
-    private class MaskableDelegateV33(view: View) : MaskableDelegate() {
+    private class MaskableDelegateV33(
+        override var shapeAppearanceModel: ShapeAppearanceModel, view: View
+    ) : MaskableDelegate() {
         init {
             view.outlineProvider = object : ViewOutlineProvider() {
                 override fun getOutline(view: View, outline: Outline) {
@@ -170,7 +148,7 @@ class MaskableFrameLayout @JvmOverloads constructor(
             }
         }
 
-        override fun shouldUseCompatClipping() = false
+        override val shouldUseCompatClipping = false
 
         override fun invalidateClippingMethod(view: View) {
             view.clipToOutline = true
