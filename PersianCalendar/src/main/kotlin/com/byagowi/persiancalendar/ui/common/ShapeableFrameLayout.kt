@@ -34,7 +34,7 @@ class ShapeableFrameLayout(context: Context, attrs: AttributeSet? = null) :
      * {@link Outline#setPath(Path)} was added in API 33 which allows use of a
      * ViewOutlineProvider to clip for all shapes.
      */
-    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+    @ChecksSdkIntAtLeast(Build.VERSION_CODES.TIRAMISU)
     private val usesViewOutline = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
 
     init {
