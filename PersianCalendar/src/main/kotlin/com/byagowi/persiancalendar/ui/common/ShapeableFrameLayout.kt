@@ -24,7 +24,7 @@ import com.google.android.material.shape.Shapeable
 class MaskableFrameLayout(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs), Shapeable {
     private val bounds = RectF()
-    private var shapeAppearanceModel: ShapeAppearanceModel =
+    private var shapeAppearanceModel =
         ShapeAppearanceModel.builder(context, attrs, 0, 0, 0).build()
     private val shapePath = Path()
     private val pathProvider = ShapeAppearancePathProvider()
@@ -61,7 +61,7 @@ class MaskableFrameLayout(context: Context, attrs: AttributeSet? = null) :
         invalidateClippingMethod(this)
     }
 
-    override fun getShapeAppearanceModel(): ShapeAppearanceModel = shapeAppearanceModel
+    override fun getShapeAppearanceModel() = shapeAppearanceModel
 
     override fun dispatchDraw(canvas: Canvas) {
         if (usesViewOutline || shapePath.isEmpty) super.dispatchDraw(canvas)
