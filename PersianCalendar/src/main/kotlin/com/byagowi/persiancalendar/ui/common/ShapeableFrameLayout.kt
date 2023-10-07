@@ -20,8 +20,8 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
 import com.google.android.material.shape.Shapeable
 
-/** A [FrameLayout] than is able to mask itself and all children.  */
-class MaskableFrameLayout(context: Context, attrs: AttributeSet? = null) :
+/** A [FrameLayout] than is able to shape itself and all children.  */
+class ShapeableFrameLayout(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs), Shapeable {
     private val bounds = RectF()
     private var shapeAppearanceModel =

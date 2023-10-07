@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@android:color/transparent" />
 
-    <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
+    <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
         android:id="@+id/roundness_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -26,6 +26,6 @@
             android:layout_height="match_parent"
             android:background="?attr/colorSurface" />
 
-    </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
+    </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
 
 </LinearLayout>

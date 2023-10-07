@@ -20,7 +20,7 @@
             android:layout_width="@dimen/grid_calendar_land_width"
             android:layout_height="match_parent" />
 
-        <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
+        <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:shapeAppearance="@style/shapeAppearanceLandscapeCalendarThreeCorners">
@@ -55,7 +55,7 @@
 
             </LinearLayout>
 
-        </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
+        </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
 
     </LinearLayout>
 

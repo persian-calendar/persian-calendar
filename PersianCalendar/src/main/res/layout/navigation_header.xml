@@ -11,7 +11,7 @@
         android:layout_height="1dp"
         android:background="@drawable/drawer_top_bar" />
 
-    <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
+    <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"
@@ -26,6 +26,6 @@
             android:layout_width="match_parent"
             android:layout_height="196dp" />
 
-    </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
+    </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
 
 </LinearLayout>

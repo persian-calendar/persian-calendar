@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/grid_calendar_height" />
 
-            <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
+            <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
@@ -39,7 +39,7 @@
                     android:layout_height="wrap_content"
                     android:background="?attr/colorSurface" />
 
-            </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
+            </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"

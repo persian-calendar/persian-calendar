@@ -8,7 +8,7 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.byagowi.persiancalendar.ui.common.MaskableFrameLayout
+    <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -51,7 +51,7 @@
 
         </LinearLayout>
 
-    </com.byagowi.persiancalendar.ui.common.MaskableFrameLayout>
+    </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
 
     <LinearLayout
         android:id="@+id/standard_side_sheet"
