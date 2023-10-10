@@ -63,9 +63,7 @@ class GLRenderer(
         -1f, -1f, 0f,
         1f, -1f, 0f,
         -1f, 1f, 0f,
-        1f, -1f, 0f,
         1f, 1f, 0f,
-        -1f, 1f, 0f
     )
     private val perVertex = 3
     private val vertexStride = perVertex * 4
@@ -91,7 +89,7 @@ class GLRenderer(
         GLES20.glUniform1f(xHandle, if (overriddenTime == 0f) time else overriddenTime)
         GLES20.glUniform1f(yHandle, overriddenY)
         GLES20.glUniform1f(zoomHandle, overriddenZoom)
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexCount)
         GLES20.glDisableVertexAttribArray(positionHandle)
     }
 
