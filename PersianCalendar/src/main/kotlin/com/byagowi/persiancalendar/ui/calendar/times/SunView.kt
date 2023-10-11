@@ -14,6 +14,7 @@ import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withClip
+import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
@@ -173,7 +174,9 @@ class SunView @JvmOverloads constructor(
             val cx = width * value
             val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
             if (value in .17f..0.83f) {
-                solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
+                withRotation(animator.animatedFraction * 2000f, pivotX = cx, pivotY = cy) {
+                    solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
+                }
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
                 run {
                     solarDraw.moon(
