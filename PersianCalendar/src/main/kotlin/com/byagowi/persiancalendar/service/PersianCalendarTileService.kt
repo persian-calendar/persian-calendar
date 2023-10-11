@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
+import com.byagowi.persiancalendar.utils.launchAppPendingIntent
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 
@@ -22,9 +23,13 @@ class PersianCalendarTileService : TileService() {
 
     override fun onClick() {
         runCatching {
-            startActivityAndCollapse(
-                Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                launchAppPendingIntent()?.let(::startActivityAndCollapse)
+            } else {
+                startActivityAndCollapse(
+                    Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            }
         }.onFailure(logException)
     }
 

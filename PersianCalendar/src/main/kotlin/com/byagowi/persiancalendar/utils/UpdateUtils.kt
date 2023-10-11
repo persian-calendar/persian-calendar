@@ -904,7 +904,7 @@ private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequ
     }
 }
 
-private fun Context.launchAppPendingIntent(action: String? = null): PendingIntent? {
+fun Context.launchAppPendingIntent(action: String? = null): PendingIntent? {
     return PendingIntent.getActivity(
         this, 0,
         Intent(this, MainActivity::class.java).setAction(action)
