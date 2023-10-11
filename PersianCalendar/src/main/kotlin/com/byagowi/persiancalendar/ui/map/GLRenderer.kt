@@ -26,7 +26,8 @@ class GLRenderer(
     private var xHandle = 0
     private var yHandle = 0
     private var zoomHandle = 0
-    private var verticesHandle = 0
+    private var arrayBufferHandle = 0
+    private var elementArrayBufferHandle = 0
     private var textureHandle = 0
     private var textureUniformHandle = 0
     private var isSurfaceCreated = false
@@ -47,16 +48,30 @@ class GLRenderer(
         this.width = width.toFloat()
         this.height = height.toFloat()
 
-        val vertexBuffer = ByteBuffer
-            .allocateDirect(rectangleVertices.size * 4).order(ByteOrder.nativeOrder())
-            .asFloatBuffer().put(rectangleVertices).position(0)
-        val handle = IntArray(1)
-        GLES20.glGenBuffers(1, handle, 0)
-        verticesHandle = handle[0]
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesHandle)
-        GLES20.glBufferData(
-            GLES20.GL_ARRAY_BUFFER, vertexBuffer.limit() * 4, vertexBuffer, GLES20.GL_STATIC_DRAW
-        )
+        run {
+            val bufferHandles = IntArray(2)
+            GLES20.glGenBuffers(2, bufferHandles, 0)
+            arrayBufferHandle = bufferHandles[0]
+            elementArrayBufferHandle = bufferHandles[1]
+        }
+        run {
+            val buffer = ByteBuffer
+                .allocateDirect(rectangleVertices.size * 4).order(ByteOrder.nativeOrder())
+                .asFloatBuffer().put(rectangleVertices).position(0)
+            GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayBufferHandle)
+            GLES20.glBufferData(
+                GLES20.GL_ARRAY_BUFFER, buffer.limit() * 4, buffer, GLES20.GL_STATIC_DRAW
+            )
+        }
+        run {
+            val buffer = ByteBuffer
+                .allocateDirect(rectangleIndices.size * 4).order(ByteOrder.nativeOrder())
+                .asIntBuffer().put(rectangleIndices).position(0)
+            GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferHandle)
+            GLES20.glBufferData(
+                GLES20.GL_ELEMENT_ARRAY_BUFFER, buffer.limit() * 4, buffer, GLES20.GL_STATIC_DRAW
+            )
+        }
     }
 
     private val rectangleVertices = floatArrayOf(
@@ -65,9 +80,10 @@ class GLRenderer(
         -1f, 1f, 0f,
         1f, 1f, 0f,
     )
+    private val rectangleIndices = IntArray(4) { it }
     private val perVertex = 3
     private val vertexStride = perVertex * 4
-    private val vertexCount = rectangleVertices.size / perVertex
+    private val vertexCount = rectangleIndices.size / perVertex
 
     override fun onDrawFrame(gl: GL10?) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
@@ -79,17 +95,18 @@ class GLRenderer(
             GLES20.glUniform1i(textureUniformHandle, 0)
         }
         GLES20.glEnableVertexAttribArray(positionHandle)
-        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesHandle)
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, arrayBufferHandle)
         GLES20.glVertexAttribPointer(
             positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0
         )
+        GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, elementArrayBufferHandle)
         GLES20.glUniform2f(resolutionHandle, width, height)
         val time = System.nanoTime() / 1e9f
         GLES20.glUniform1f(timeHandle, time)
         GLES20.glUniform1f(xHandle, if (overriddenTime == 0f) time else overriddenTime)
         GLES20.glUniform1f(yHandle, overriddenY)
         GLES20.glUniform1f(zoomHandle, overriddenZoom)
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, vertexCount)
+        GLES20.glDrawElements(GLES20.GL_TRIANGLE_STRIP, 4, GLES20.GL_UNSIGNED_INT, vertexCount)
         GLES20.glDisableVertexAttribArray(positionHandle)
     }
 
