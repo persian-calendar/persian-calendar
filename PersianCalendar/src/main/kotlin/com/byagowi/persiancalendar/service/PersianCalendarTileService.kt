@@ -26,6 +26,7 @@ class PersianCalendarTileService : TileService() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 launchAppPendingIntent()?.let(::startActivityAndCollapse)
             } else {
+                @Suppress("DEPRECATION")
                 startActivityAndCollapse(
                     Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 )
