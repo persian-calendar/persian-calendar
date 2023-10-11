@@ -173,10 +173,8 @@ class SunView @JvmOverloads constructor(
             val radius = sqrt(width * height * .002f)
             val cx = width * value
             val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
-            if (value in .17f..0.83f) {
-                withRotation(animator.animatedFraction * 2000f, pivotX = cx, pivotY = cy) {
-                    solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
-                }
+            if (value in .17f..0.83f) withRotation(animator.animatedFraction * 2000f, cx, cy) {
+                solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
                 run {
                     solarDraw.moon(
