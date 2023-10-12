@@ -262,6 +262,8 @@ fun FragmentActivity.askForLocationPermission() {
 
 fun FragmentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+    // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it
+    // didn't go well in Android 6.0 so better not risk I guess
     MaterialAlertDialogBuilder(this)
         .setTitle(R.string.calendar_access)
         .setMessage(R.string.phone_calendar_required)
