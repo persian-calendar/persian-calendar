@@ -7,22 +7,30 @@
 
     <TextView
         android:id="@+id/athan_name"
-        style="@style/ShadowTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="80dp"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:textColor="@android:color/white"
         android:textSize="36sp"
         android:textStyle="bold"
         tools:text="اذان صبح" />
 
     <TextView
         android:id="@+id/place"
-        style="@style/ShadowTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="10dp"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="1"
+        android:shadowDy="1"
+        android:shadowRadius="1"
+        android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:text="به افق شهر" />
