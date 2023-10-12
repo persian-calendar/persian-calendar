@@ -449,6 +449,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
     val horizontalFling = FlingAnimation(x)
     val y = FloatValueHolder()
     val verticalFling = FlingAnimation(y)
+
     val view = object : View(activity) {
         private var r = 0f
         private var previousX = 0f
@@ -458,6 +459,9 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
         private var storedVelocityY = 0f
 
         init {
+            setBackgroundResource(
+                activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
+            )
             horizontalFling.addUpdateListener { _, _, velocity ->
                 storedVelocityX = velocity
                 invalidate()
@@ -515,6 +519,15 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
             if (isWallHit) {
                 performHapticFeedbackVirtualKey()
                 lifecycle.launch { playSoundTick(Random.nextDouble() * 20) }
+
+                val rippleDrawable = background
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+                    rippleDrawable is RippleDrawable
+                ) {
+                    isPressed = false
+                    rippleDrawable.setHotspot(x.value, y.value)
+                    isPressed = true
+                }
             }
         }
 
