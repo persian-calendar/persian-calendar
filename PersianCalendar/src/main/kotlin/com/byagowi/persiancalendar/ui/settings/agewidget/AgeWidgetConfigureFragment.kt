@@ -7,6 +7,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
@@ -37,7 +38,9 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
                         activity.appPrefs.edit { putJdn(key, result) }
                     }
                 }) { title(R.string.select_date) }
-                val showColorOptions = !Theme.isDynamicColor(activity.appPrefs)
+                val prefs = activity.appPrefs
+                val showColorOptions = !(Theme.isDynamicColor(prefs) &&
+                        prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
                 clickable(onClick = {
                     showColorPickerDialog(
                         activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
