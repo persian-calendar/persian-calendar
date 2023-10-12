@@ -135,7 +135,8 @@ class SunView @JvmOverloads constructor(
     var clippingPath = Path()
 
     private fun mainDraw(canvas: Canvas) {
-        val value = (if (animator.isRunning) animator.animatedFraction else 1f) * current
+        val animatedFraction = if (animator.isRunning) animator.animatedFraction else 1f
+        val value = animatedFraction * current
         val width = width
         val height = height
         val isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
@@ -173,7 +174,7 @@ class SunView @JvmOverloads constructor(
             val radius = sqrt(width * height * .002f)
             val cx = width * value
             val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
-            if (value in .17f..0.83f) withRotation(animator.animatedFraction * 900f, cx, cy) {
+            if (value in .17f..0.83f) withRotation(animatedFraction * 900f, cx, cy) {
                 solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
                 run {
