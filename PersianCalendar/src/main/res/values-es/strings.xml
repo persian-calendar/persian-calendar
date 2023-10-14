@@ -405,4 +405,9 @@
     </plurals>
     <string name="time_zones">Husos horarios</string>
     <string name="qr_code">Código QR</string>
+    <plurals name="n_work_days">
+        <item quantity="one">%1$s día laborable</item>
+        <item quantity="many">%1$s días laborables</item>
+        <item quantity="other">%1$s días laborables</item>
+    </plurals>
 </resources>
