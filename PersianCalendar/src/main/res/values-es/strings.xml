@@ -121,7 +121,7 @@
     <string name="astronomy">Astronómica</string>
     <string name="astronomical_info_summary">Mostrar información adicional como constelación, nombres antiguos de años y la luna en escorpio</string>
     <string name="week_number">Semana del año</string>
-    <string name="week_number_summary">Mostrar la semana del año en calendario</string>
+    <string name="week_number_summary">Mostrar el número de la semana en el calendario</string>
     <string name="week_start">Inicio de semana</string>
     <string name="week_start_summary">Elegir día del inicio de semana</string>
     <string name="week_ends">Fin de semanas</string>
