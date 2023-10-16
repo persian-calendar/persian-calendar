@@ -12,7 +12,7 @@
     <string name="help">مساعدة</string>
     <string name="more">المزيد</string>
     <string name="cancel">إلغاء</string>
-    <string name="continue_button">تشغيل</string>
+    <string name="continue_button">استمر</string>
     <string name="outdated_app">بسبب إستخدامك لنسخة قديمة من التطبيق، التاريخ قد لا يكون صحيحاً</string>
     <string name="update">حدّث</string>
     <!--Navigation drawers-->
@@ -429,4 +429,14 @@
     <string name="full_screen">ملء الشاشة</string>
     <string name="exit_full_screen">الخروج من وضع ملء الشاشة</string>
     <string name="color_gradient">تدرج اللون</string>
+    <string name="qr_code">Kare Kod</string>
+    <string name="time_zones">Saat Dilimi</string>
+    <plurals name="n_work_days">
+        <item quantity="zero">صفر</item>
+        <item quantity="one">واحد</item>
+        <item quantity="two">اثنان</item>
+        <item quantity="few">أقل</item>
+        <item quantity="many">أكثر</item>
+        <item quantity="other">آخر</item>
+    </plurals>
 </resources>
