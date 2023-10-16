@@ -393,7 +393,7 @@
     <string name="exit_full_screen">Tam Ekrandan Çık</string>
     <string name="full_screen">Tam Ekran</string>
     <plurals name="n_work_days">
-        <item quantity="one">İş Günü</item>
-        <item quantity="other">İş Günü</item>
+        <item quantity="one">%1$s İş Günü</item>
+        <item quantity="other">%1$s İş Günü</item>
     </plurals>
 </resources>

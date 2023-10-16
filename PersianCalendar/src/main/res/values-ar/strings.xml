@@ -429,14 +429,14 @@
     <string name="full_screen">ملء الشاشة</string>
     <string name="exit_full_screen">الخروج من وضع ملء الشاشة</string>
     <string name="color_gradient">تدرج اللون</string>
-    <string name="qr_code">Kare Kod</string>
-    <string name="time_zones">Saat Dilimi</string>
+    <string name="qr_code">كيو آر كد</string>
+    <string name="time_zones">منطقة زمنية</string>
     <plurals name="n_work_days">
-        <item quantity="zero">صفر</item>
-        <item quantity="one">واحد</item>
-        <item quantity="two">اثنان</item>
-        <item quantity="few">أقل</item>
-        <item quantity="many">أكثر</item>
-        <item quantity="other">آخر</item>
+        <item quantity="zero">لا يوم العمل</item>
+        <item quantity="one">العمل يوم واحد</item>
+        <item quantity="two">يومان العمل</item>
+        <item quantity="few">%1$s أيام العمل</item>
+        <item quantity="many">%1$s يوما العمل</item>
+        <item quantity="other">%1$s يوم العمل</item>
     </plurals>
 </resources>
