@@ -389,4 +389,8 @@
     <string name="add_quick_settings_tile">زیادکردنی کاشیی ڕێکخستنی خێرا</string>
     <string name="true_north">باکووری ڕاستی</string>
     <string name="lock">قوفڵ</string>
+    <plurals name="n_seconds">
+        <item quantity="one">%1$s چرکە</item>
+        <item quantity="other">%1$s چرکە</item>
+    </plurals>
 </resources>
