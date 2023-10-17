@@ -65,4 +65,6 @@
     <string name="year_name">Jahresname</string>
     <string name="widget_mini_name">Persischer Kalender (Klein)</string>
     <string name="today">Heute</string>
+    <string name="update">Aktualisierung</string>
+    <string name="widget_name">Persischer Kalender</string>
 </resources>
