@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">de</string>
-
     <string name="muharram">Muharram</string>
     <string name="safar">Safar</string>
     <string name="rabi_al_awwal">Rabi\' al-awwal</string>
@@ -14,7 +13,6 @@
     <string name="shawwal">Schawwāl</string>
     <string name="dhu_al_qidah">Dhū l-Qaʿda</string>
     <string name="dhu_al_hijjah">Dhū l-Hiddscha</string>
-
     <string name="january">Januar</string>
     <string name="february">Februar</string>
     <string name="march">Marsch</string>
@@ -27,6 +25,6 @@
     <string name="october">Oktober</string>
     <string name="november">November</string>
     <string name="december">Dezember</string>
-
     <string name="country_emoji">🇩🇪🇦🇹🇨🇭</string>
+    <string name="app_name">Persischer Kalender</string>
 </resources>
