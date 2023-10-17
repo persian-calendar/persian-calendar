@@ -29,6 +29,7 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
@@ -94,7 +95,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isPortrait
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -610,13 +610,24 @@ private fun create4x2RemoteViews(
                         timeClock.toFormattedString(printAmPm = false)
             )
             remoteViews.setupForegroundTextColors(textHolderViewId)
-            remoteViews.setFloat(textHolderViewId, "setAlpha", .7f)
             Triple(textHolderViewId, owghatStringId, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
             timeClock.toMinutes() > nowClock.toMinutes()
         } ?: owghats[0]
-        remoteViews.setFloat(nextViewId, "setAlpha", 1f)
+
+        owghats.forEach { (viewId) ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                remoteViews.setFloat(viewId, "setAlpha", 1f)
+            if (viewId != nextViewId) {
+                if (prefersWidgetsDynamicColors) {
+                    remoteViews.setFloat(viewId, "setAlpha", .6f)
+                    remoteViews.setDynamicTextColor(viewId)
+                } else remoteViews.setTextColor(
+                    viewId, ColorUtils.setAlphaComponent(selectedWidgetTextColor, 180)
+                )
+            } else remoteViews.setupForegroundTextColors(viewId)
+        }
 
         val difference = timeClock.toMinutes() - nowClock.toMinutes()
         remoteViews.setTextViewText(
