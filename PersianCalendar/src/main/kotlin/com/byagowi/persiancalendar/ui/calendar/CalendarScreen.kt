@@ -170,7 +170,8 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
     private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
-        binding.eventsParent.setupLayoutTransition()
+        // Causes crashes when different days clicked, let's avoid for now
+        // binding.eventsParent.setupLayoutTransition()
         binding.events.layoutManager = LinearLayoutManager(binding.events.context)
         val adapter = EventsRecyclerViewAdapter(
             isRtl = resources.isRtl, dp = resources.dp,
