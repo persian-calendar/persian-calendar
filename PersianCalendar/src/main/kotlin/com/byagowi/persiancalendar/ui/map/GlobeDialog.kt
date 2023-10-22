@@ -67,13 +67,11 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
 
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(frame)
+        .setOnCancelListener { image.recycle() }
         .show()
 
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
     activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) {
-            dialog.cancel()
-            image.recycle()
-        }
+        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
     })
 }
