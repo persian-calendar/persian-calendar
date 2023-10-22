@@ -133,7 +133,8 @@ class MapScreen : Fragment(R.layout.map_screen) {
         }
         globeViewButton.onClick {
             val textureSize = 2048
-            val bitmap = createBitmap(textureSize, textureSize)
+            val bitmap = runCatching { createBitmap(textureSize, textureSize) }
+                .onFailure(logException).getOrNull() ?: return@onClick
             val matrix = Matrix()
             matrix.setScale(
                 textureSize.toFloat() / mapDraw.mapWidth, textureSize.toFloat() / mapDraw.mapHeight
