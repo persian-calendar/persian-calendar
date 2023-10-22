@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -138,7 +139,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
                 textureSize.toFloat() / mapDraw.mapWidth, textureSize.toFloat() / mapDraw.mapHeight
             )
             binding.map.onDraw(Canvas(bitmap), matrix)
-            showGlobeDialog(activity ?: return@onClick, bitmap)
+            showGlobeDialog(activity ?: return@onClick, bitmap) // DO NOT use bitmap after this
         }
 
         binding.root.setupLayoutTransition()
