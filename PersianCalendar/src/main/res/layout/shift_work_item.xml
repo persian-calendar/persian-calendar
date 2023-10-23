@@ -40,8 +40,7 @@
         android:id="@+id/length_spinner"
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:popupBackground="@drawable/popup_background" />
+        android:padding="0dp" />
 
     <LinearLayout
         android:id="@+id/remove"

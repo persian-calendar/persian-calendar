@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -51,13 +50,14 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         val viewModel by viewModels<ConverterViewModel>()
 
         val binding = ConverterScreenBinding.bind(view)
-        val spinner = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        val spinner = run {
             val toolbarContext = binding.appBar.toolbar.context
             val spinnerBinding = ConverterSpinnerBinding.inflate(toolbarContext.layoutInflater)
             binding.appBar.toolbar.addView(spinnerBinding.root)
             spinnerBinding.spinner
-        } else Spinner(binding.appBar.toolbar.context).also {
-            binding.appBar.toolbar.addView(it)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            spinner.setPopupBackgroundResource(R.drawable.popup_background)
         }
         val availableModes = ConverterScreenMode.entries.filter {
             // Converter doesn't work in Android 5, let's hide it there
