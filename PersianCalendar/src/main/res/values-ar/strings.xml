@@ -367,6 +367,14 @@
         <item quantity="many">%1$s يوما</item>
         <item quantity="other">%1$s يوم</item>
     </plurals>
+    <plurals name="n_weeks">
+        <item quantity="zero">لا أسبوع</item>
+        <item quantity="one">أسبوع واحد</item>
+        <item quantity="two">إسبوعين</item>
+        <item quantity="few">%1$s اسابيع</item>
+        <item quantity="many">%1$s أسبوعا</item>
+        <item quantity="other">%1$s أسبوعا</item>
+    </plurals>
     <plurals name="n_months">
         <item quantity="zero">لا شهر</item>
         <item quantity="one">شهر واحد</item>
