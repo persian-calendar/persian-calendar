@@ -279,18 +279,18 @@
     <string name="widget_customization_owghat">أوقات الصلوات على مصغر (إذا تم تحديد المكان)</string>
     <string name="widget_customization_owghat_location">مكان أوقات الصلوات على مصغر 2×2 والتنبيه (إذا تم تحديد المكان)</string>
     <!--Persian Calendar months-->
-    <string name="farvardin">الحمل</string>
-    <string name="ordibehesht">الثور</string>
-    <string name="khordad">الجوزاء</string>
-    <string name="tir">السرطان</string>
-    <string name="mordad">الأسد</string>
-    <string name="shahrivar">السنبلة</string>
-    <string name="mehr">المیزان</string>
-    <string name="aban">العقرب</string>
-    <string name="azar">القوس</string>
-    <string name="dey">الجدي</string>
-    <string name="bahman">الدلو</string>
-    <string name="esfand">الحوت</string>
+    <string name="farvardin">فروردین</string>
+    <string name="ordibehesht">أرديبهشت</string>
+    <string name="khordad">خرداد</string>
+    <string name="tir">تير</string>
+    <string name="mordad">مرداد</string>
+    <string name="shahrivar">شهريور</string>
+    <string name="mehr">مهر</string>
+    <string name="aban">آبان</string>
+    <string name="azar">آذر</string>
+    <string name="dey">دي</string>
+    <string name="bahman">بهمن</string>
+    <string name="esfand">إسفند</string>
     <!--Islamic Calendar months-->
     <string name="muharram">المحرم</string>
     <string name="safar">صفر</string>
