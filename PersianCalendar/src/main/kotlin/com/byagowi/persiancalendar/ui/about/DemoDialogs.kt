@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.about
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ComposeShader
@@ -518,18 +519,24 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
             }
             if (isWallHit) {
                 performHapticFeedbackVirtualKey()
-                lifecycle.launch { playSoundTick(Random.nextDouble() * 20) }
+                val index = ++counter % diatonicScale.size
+                lifecycle.launch { playSoundTick(diatonicScale[index].toDouble()) }
 
                 val rippleDrawable = background
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
                     rippleDrawable is RippleDrawable
                 ) {
                     isPressed = false
+                    rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
                     rippleDrawable.setHotspot(x.value, y.value)
                     isPressed = true
                 }
             }
         }
+
+        private var counter = 0
+
+        private val diatonicScale = listOf(0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2)
 
         private val lifecycle = activity.lifecycleScope
 
@@ -1084,6 +1091,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
             handler.postDelayed(delay) {
                 if (!dialog.isShowing) return@postDelayed
                 view.isPressed = false
+                rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
                 rippleDrawable.setHotspot(
                     view.width * Random.nextFloat(),
                     view.height * Random.nextFloat()
@@ -1094,6 +1102,10 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
         }
         next()
     }
+}
+
+private fun getRandomTransparentColor(): Int {
+    return Color.argb(0x10, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 }
 
 fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
