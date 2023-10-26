@@ -16,9 +16,12 @@ import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.graphics.withClip
+import com.google.android.material.shape.AbsoluteCornerSize
+import com.google.android.material.shape.CornerSize
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
 import com.google.android.material.shape.Shapeable
+import kotlin.math.min
 
 /** A [FrameLayout] than is able to shape itself and all children.  */
 class ShapeableFrameLayout(context: Context, attrs: AttributeSet? = null) :
@@ -55,8 +58,26 @@ class ShapeableFrameLayout(context: Context, attrs: AttributeSet? = null) :
         invalidateClippingMethod(this)
     }
 
-    override fun setShapeAppearanceModel(shapeAppearanceModel: ShapeAppearanceModel) {
-        this.shapeAppearanceModel = shapeAppearanceModel
+    private fun clampCornerSize(cornerSize: CornerSize): CornerSize {
+        /** See [com.google.android.material.carousel.MaskableFrameLayout.setShapeAppearanceModel] */
+        return if (cornerSize is AbsoluteCornerSize) {
+            // Enforce that the corners of the shape appearance are never larger than half the
+            // width of the shortest edge. As the size of the mask changes, we never want the
+            // corners to be larger than half the width or height of this view.
+            CornerSize { min(cornerSize.cornerSize, min(it.width() / 2f, it.height() / 2f)) }
+        } else {
+            // Relative corner size already enforces a max size based on shortest edge.
+            cornerSize
+        }
+    }
+
+    override fun setShapeAppearanceModel(model: ShapeAppearanceModel) {
+        this.shapeAppearanceModel = model.toBuilder()
+            .setBottomLeftCornerSize(clampCornerSize(model.bottomLeftCornerSize))
+            .setBottomRightCornerSize(clampCornerSize(model.bottomRightCornerSize))
+            .setTopLeftCornerSize(clampCornerSize(model.topLeftCornerSize))
+            .setTopRightCornerSize(clampCornerSize(model.topRightCornerSize))
+            .build()
         updateShapePath()
         invalidateClippingMethod(this)
     }
