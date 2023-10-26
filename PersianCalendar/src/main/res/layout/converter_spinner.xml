@@ -7,7 +7,7 @@
     <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
         android:layout_width="wrap_content"
         android:layout_height="34dp"
-        app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+        app:shapeAppearance="?attr/shapeAppearanceCornerLarge">
 
         <FrameLayout
             android:layout_width="match_parent"
