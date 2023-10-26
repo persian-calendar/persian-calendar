@@ -221,6 +221,8 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
                 findNavController().navigateSafe(AstronomyScreenDirections.actionAstronomyToMap())
             }
         }
+        // Old Android versions don't have that map emoji, let's show just a "m" there
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) binding.mapIcon.text = "m"
         binding.mapIcon.setOnClickListener {
             findNavController().navigateSafe(AstronomyScreenDirections.actionAstronomyToMap())
         }
