@@ -593,7 +593,6 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
         .show()
 }
 
-
 @Language("AGSL")
 val shaderSource = """
 uniform float2 center;
