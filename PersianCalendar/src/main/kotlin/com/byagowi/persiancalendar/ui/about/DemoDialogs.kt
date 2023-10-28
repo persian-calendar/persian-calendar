@@ -482,7 +482,16 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
             path.moveTo(x.value, y.value)
         }
 
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.GRAY }
+        private var shader: RuntimeShader? = null
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.color = Color.GRAY
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                it.color = context.getColor(android.R.color.system_accent1_500)
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                shader = RuntimeShader(shaderSource).also { shader -> it.shader = shader }
+            }
+        }
         private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.color = Color.GRAY
             it.style = Paint.Style.STROKE
@@ -491,7 +500,18 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
         override fun onDraw(canvas: Canvas) {
             path.lineTo(x.value, y.value)
             canvas.drawPath(path, linesPaint)
-            canvas.drawCircle(x.value, y.value, r, paint)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                shader?.also {
+                    it.setFloatUniform("center", x.value, y.value)
+                    it.setFloatUniform("bounds", width.toFloat(), height.toFloat())
+                    it.setFloatUniform("radius", r)
+                    it.setColorUniform("color", paint.color)
+                    it.setIntUniform("mode", counter % 3)
+                }
+                canvas.drawPaint(paint)
+            } else {
+                canvas.drawCircle(x.value, y.value, r, paint)
+            }
             var isWallHit = false
             if (x.value < r) {
                 x.value = r
@@ -572,6 +592,37 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
         .setView(view)
         .show()
 }
+
+
+@Language("AGSL")
+val shaderSource = """
+uniform float2 center;
+uniform float2 bounds;
+uniform float radius;
+uniform int mode;
+layout(color) uniform vec4 color;
+
+float smin(float a, float b, float k) { // https://www.mayerowitz.io/blog/a-journey-into-shaders
+    float h = max(k - abs(a - b), 0) / k;
+    return min(a, b) - h * h * k / 4;
+}
+
+float sdBox(vec2 p, vec2 b) { // https://iquilezles.org/articles/distfunctions2d/
+    vec2 d = abs(p) - b;
+    return length(max(d, 0)) + min(max(d.x, d.y), 0);
+}
+
+float4 main(float2 fragCoord) {
+    float d1 = (distance(fragCoord, center) - radius) / min(bounds.x, bounds.y);
+    float d2;
+    if (mode == 0) d2 = (distance(bounds - fragCoord, center) - radius) / min(bounds.x, bounds.y);
+    else if (mode == 1) d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
+    else d2 = 1 - (-sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y));
+    // return vec4(vec3(d2), 1.0);
+    float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
+    return d < 1 ? color : vec4(0);
+}
+""";
 
 fun showPeriodicTableDialog(activity: FragmentActivity) {
     val zoomableView = ZoomableView(activity)
