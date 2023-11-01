@@ -247,7 +247,7 @@ abstract class CodeGenerators : DefaultTask() {
                             val latitude = city.latitude
                             val longitude = city.longitude
                             // Elevation really degrades quality of calculations
-                            val elevation = if (countryCode == "ir") .0 else city.elevation
+                            val elevation = .0
                             withIndent {
                                 addStatement("%S to %L(", key, cityItemName)
                                 withIndent {
