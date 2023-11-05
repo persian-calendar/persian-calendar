@@ -589,16 +589,26 @@ private fun create4x2RemoteViews(
 
     if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
+        val nowMinutes = nowClock.toMinutes()
         val owghats = listOf(
             R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
         ).zip(
-            if (calculationMethod.isJafari) listOf(
-                R.string.fajr, R.string.sunrise,
-                R.string.dhuhr, R.string.maghrib,
-                R.string.midnight
-            ) else listOf(
+            if (calculationMethod.isJafari) {
+                if (
+                    nowMinutes < prayTimes.getFromStringId(R.string.dhuhr).toMinutes() ||
+                    nowMinutes > prayTimes.getFromStringId(R.string.isha).toMinutes()
+                ) listOf(
+                    R.string.fajr, R.string.sunrise,
+                    R.string.dhuhr, R.string.maghrib,
+                    R.string.midnight
+                ) else listOf(
+                    R.string.fajr, R.string.dhuhr,
+                    R.string.sunset, R.string.maghrib,
+                    R.string.midnight
+                )
+            } else listOf(
                 R.string.fajr, R.string.dhuhr,
                 R.string.asr, R.string.maghrib,
                 R.string.isha
@@ -613,7 +623,7 @@ private fun create4x2RemoteViews(
             Triple(textHolderViewId, owghatStringId, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
-            timeClock.toMinutes() > nowClock.toMinutes()
+            timeClock.toMinutes() > nowMinutes
         } ?: owghats[0]
 
         owghats.forEach { (viewId) ->
