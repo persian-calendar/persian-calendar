@@ -12,6 +12,8 @@ class EquinoxTests {
     @ParameterizedTest
     @CsvSource(
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1402.pdf
+        "2024, 3, 20, 6, 36, 24" /* should be 26 */,
+        // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1402.pdf
         "2023, 3, 21, 0, 54, 23" /* should be 28 */,
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1401.pdf
         "2022, 3, 20, 19, 3, 21" /* should be 26 */,
