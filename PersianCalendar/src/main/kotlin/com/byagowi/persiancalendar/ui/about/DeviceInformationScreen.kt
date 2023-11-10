@@ -367,15 +367,14 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
         ),
         Item(
             "Rounded corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
-                val windowInsets = activity.window?.decorView?.rootWindowInsets ?: return@run "None"
+                val insets = activity.window?.decorView?.rootWindowInsets ?: return@run "None"
                 listOf(
                     "Top left corner" to RoundedCorner.POSITION_TOP_LEFT,
                     "Top right corner" to RoundedCorner.POSITION_TOP_RIGHT,
                     "Bottom right corner" to RoundedCorner.POSITION_BOTTOM_RIGHT,
                     "Bottom left corner" to RoundedCorner.POSITION_BOTTOM_LEFT,
                 ).joinToString("\n") { (title, id) ->
-                    val corner =
-                        windowInsets.getRoundedCorner(id) ?: return@joinToString "$title: null"
+                    val corner = insets.getRoundedCorner(id) ?: return@joinToString "$title: null"
                     "$title: radius=${corner.radius} center=${corner.center}"
                 }
             } else "None"
