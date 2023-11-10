@@ -366,7 +366,7 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
             } else "None"
         ),
         Item(
-            "Rounded corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
+            "Display Rounded Corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
                 val insets = activity.window?.decorView?.rootWindowInsets ?: return@run "None"
                 listOf(
                     "Top left corner" to RoundedCorner.POSITION_TOP_LEFT,
