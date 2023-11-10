@@ -24,6 +24,7 @@ import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.InputDevice
 import android.view.MenuItem
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
@@ -361,6 +362,22 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
                     "Safe Inset Bottom" to cutout.safeInsetBottom,
                     "Safe Inset Left" to cutout.safeInsetLeft,
                     "Rects" to cutout.boundingRects.joinToString(",")
+                ).joinToString("\n") { (key, value) -> "$key: $value" }
+            } else "None"
+        ),
+        Item(
+            "Rounded corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
+                val windowInsets = activity.window?.decorView?.rootWindowInsets
+                val topLeftCorner = windowInsets?.getRoundedCorner(RoundedCorner.POSITION_TOP_LEFT)
+                    ?: return@run "None"
+                val topRightCorner = windowInsets.getRoundedCorner(RoundedCorner.POSITION_TOP_RIGHT)
+                val bottomRightCorner = windowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_RIGHT)
+                val bottomLeftCorner = windowInsets.getRoundedCorner(RoundedCorner.POSITION_BOTTOM_LEFT)
+                listOf(
+                    "Top left corner" to "radius=${topLeftCorner.radius} center=${topLeftCorner.center.toString()}",
+                    "Top right corner" to "radius=${topRightCorner?.radius} center=${topRightCorner?.center.toString()}",
+                    "Bottom right corner" to "radius=${bottomRightCorner?.radius} center=${bottomRightCorner?.center.toString()}",
+                    "Bottom left corner" to "radius=${bottomLeftCorner?.radius} center=${bottomLeftCorner?.center.toString()}"
                 ).joinToString("\n") { (key, value) -> "$key: $value" }
             } else "None"
         ),
