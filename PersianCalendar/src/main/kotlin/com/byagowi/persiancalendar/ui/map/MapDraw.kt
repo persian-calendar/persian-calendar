@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.scaleBy
@@ -346,6 +347,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
         it.color = Color.BLACK
         it.textSize = gridLinesWidth * 10
         it.textAlign = Paint.Align.CENTER
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
 
     private val parallelsLatitudes = listOf(

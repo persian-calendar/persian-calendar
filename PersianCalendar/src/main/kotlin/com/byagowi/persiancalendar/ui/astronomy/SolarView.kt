@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -157,6 +158,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.color = context.resolveColor(android.R.attr.textColorPrimary)
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
 
     private val textPath = Path()
@@ -203,6 +205,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.textAlign = Paint.Align.CENTER
         it.textSize = 14 * dp
         it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
 
     private fun drawEarthCentricView(canvas: Canvas) {
@@ -297,6 +300,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.strokeWidth = 1 * dp
         it.textSize = 10 * dp
         it.textAlign = Paint.Align.CENTER
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
     private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE

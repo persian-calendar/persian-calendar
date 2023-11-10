@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.SeasonsAdapter
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -641,6 +642,7 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
         it.style = Paint.Style.FILL
         it.textAlign = Paint.Align.CENTER
         it.color = Color.BLACK
+        it.typeface = FontUtils.getDefaultTypeface(activity)
     }
     zoomableView.onDraw = { canvas, matrix ->
         canvas.withMatrix(matrix) {
@@ -985,6 +987,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
             it.color = Color.BLACK
             it.textAlign = Paint.Align.CENTER
             it.textSize = 20 * resources.dp
+            it.typeface = FontUtils.getDefaultTypeface(activity)
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -1482,7 +1485,7 @@ fun showIconsDemoDialog(activity: FragmentActivity) {
                 val day = viewType / 2 + 1
                 when (viewType % 2) {
                     0 -> setImageResource(getDayIconResource(day))
-                    1 -> setImageBitmap(createStatusIcon(day))
+                    1 -> setImageBitmap(createStatusIcon(day, activity))
                 }
                 val dp = resources.dp
                 layoutParams =

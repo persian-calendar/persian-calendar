@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -124,16 +125,19 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val planetsPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
         it.textAlign = Paint.Align.CENTER
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
         it.textAlign = Paint.Align.CENTER
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
     private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
         it.strokeWidth = 5 * dp
         it.style = Paint.Style.STROKE
         it.textAlign = Paint.Align.CENTER
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
 
     private val angleDisplay = AngleDisplay(context, "0", "888")

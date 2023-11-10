@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import io.github.cosinekitty.astronomy.Ecliptic
@@ -42,7 +43,9 @@ class SunView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, @ColorInt textColor: Int? = null
 ) : View(context, attrs) {
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.typeface = FontUtils.getDefaultTypeface(context)
+    }
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
     private val linesColor = ColorUtils.setAlphaComponent(

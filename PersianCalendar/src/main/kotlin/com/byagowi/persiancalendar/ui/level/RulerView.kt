@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isPortrait
 
@@ -16,6 +17,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.color = Color.GRAY
         it.strokeWidth = 1 * dp
         it.textSize = textSize
+        it.typeface = FontUtils.getDefaultTypeface(context)
     }
     private val textSideOffset = 30 * dp
     private val firstLevel = 25 * dp

@@ -8,6 +8,7 @@ import android.graphics.Typeface
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import java.text.DecimalFormat

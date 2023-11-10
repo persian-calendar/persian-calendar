@@ -56,6 +56,7 @@
 
     <!-- Applied to all themes -->
     <style name="SharedStyle">
+        <item name="android:fontFamily">@font/vazirmatn_light</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>

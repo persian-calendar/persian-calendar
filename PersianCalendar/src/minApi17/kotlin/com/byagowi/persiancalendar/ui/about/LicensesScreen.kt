@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.nepaliEvents
 import com.byagowi.persiancalendar.generated.persianEvents
+import com.byagowi.persiancalendar.ui.utils.FontUtils
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -88,7 +89,9 @@ ${EventType.entries.joinToString("\n") { "${it.name}: ${it.source}" }}"""
 
         binding.railView.menu.also {
             fun createTextIcon(text: String): Drawable {
-                val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+                val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+                    it.typeface = FontUtils.getDefaultTypeface(view.context)
+                }
                 paint.textSize = 40f
                 val bounds = Rect()
                 paint.color = Color.WHITE
