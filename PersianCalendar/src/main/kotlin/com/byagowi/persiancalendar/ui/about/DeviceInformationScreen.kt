@@ -369,10 +369,10 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
             "Display Rounded Corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
                 val insets = activity.window?.decorView?.rootWindowInsets ?: return@run "None"
                 listOf(
-                    "Top left corner" to RoundedCorner.POSITION_TOP_LEFT,
-                    "Top right corner" to RoundedCorner.POSITION_TOP_RIGHT,
-                    "Bottom right corner" to RoundedCorner.POSITION_BOTTOM_RIGHT,
-                    "Bottom left corner" to RoundedCorner.POSITION_BOTTOM_LEFT,
+                    "Top Left Corner" to RoundedCorner.POSITION_TOP_LEFT,
+                    "Top Right Corner" to RoundedCorner.POSITION_TOP_RIGHT,
+                    "Bottom Right Corner" to RoundedCorner.POSITION_BOTTOM_RIGHT,
+                    "Bottom Left Corner" to RoundedCorner.POSITION_BOTTOM_LEFT,
                 ).joinToString("\n") { (title, id) ->
                     val corner = insets.getRoundedCorner(id) ?: return@joinToString "$title: null"
                     "$title: radius=${corner.radius} center=${corner.center}"
