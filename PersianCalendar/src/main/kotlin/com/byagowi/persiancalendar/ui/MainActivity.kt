@@ -431,7 +431,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     ).also {
         it.considerSystemBarsInsets()
         it.setAction(getString(R.string.update)) { bringMarketPage() }
-        it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()
 
     override fun setupToolbarWithDrawer(toolbar: Toolbar) {
