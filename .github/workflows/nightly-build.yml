@@ -43,7 +43,7 @@ jobs:
 
       - name: Build and send apks to telegram
         run: |
-          for TASK in assembleMinApi17Nightly assembleMinApi21Nightly; do
+          for TASK in assembleMinApi19Nightly assembleMinApi21Nightly; do
             ./gradlew $TASK
             apk_path="$(find . -type f -iname *.apk)"
             curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
@@ -56,7 +56,7 @@ jobs:
 
       - name: Update the runtime dependencies report
         run: |
-          ./gradlew PersianCalendar:dependencies --configuration minApi17ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
+          ./gradlew PersianCalendar:dependencies --configuration minApi19ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
           ./gradlew PersianCalendar:dependencies --configuration minApi21ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report-compose.txt
 
       - name: Add and commit the report

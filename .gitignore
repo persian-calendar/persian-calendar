@@ -130,7 +130,7 @@ Temporary Items
 /app/src/main/res/values/secret_info.xml
 
 PersianCalendar/release/
-PersianCalendar/minApi17/
+PersianCalendar/minApi19/
 PersianCalendar/minApi21/
 *.hprof
 

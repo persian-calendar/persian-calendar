@@ -478,18 +478,16 @@ private fun create4x1RemoteViews(
     subtitle: String
 ): RemoteViews {
     val weekDayName = jdn.dayOfWeekName
-    val enableClock =
-        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
-        context.packageName, if (enableClock) {
+        context.packageName, if (isWidgetClock) {
             if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
         } else {
             if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
-    if (enableClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
+    if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     remoteViews.setRoundBackground(R.id.widget_layout4x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x1, context)
     remoteViews.setupForegroundTextColors(
@@ -498,14 +496,14 @@ private fun create4x1RemoteViews(
     if (prefersWidgetsDynamicColors)
         remoteViews.setDynamicTextColor(R.id.textPlaceholder1_4x2, android.R.attr.colorAccent)
 
-    if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
+    if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
-        append(if (enableClock) widgetTitle else mainDateString)
+        append(if (isWidgetClock) widgetTitle else mainDateString)
         if (showOtherCalendars) append(spacedComma + subtitle)
     })
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
-        if (enableClock && isForcedIranTimeEnabled) "(" + context.getString(R.string.iran_time) + ")" else ""
+        if (isWidgetClock && isForcedIranTimeEnabled) "(" + context.getString(R.string.iran_time) + ")" else ""
     )
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, context.launchAppPendingIntent())
     return remoteViews
@@ -516,18 +514,16 @@ private fun create2x2RemoteViews(
     subtitle: String, owghat: String
 ): RemoteViews {
     val weekDayName = jdn.dayOfWeekName
-    val enableClock =
-        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
-        context.packageName, if (enableClock) {
+        context.packageName, if (isWidgetClock) {
             if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
         } else {
             if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
-    if (enableClock) remoteViews.configureClock(R.id.time_2x2)
+    if (isWidgetClock) remoteViews.configureClock(R.id.time_2x2)
     remoteViews.setRoundBackground(R.id.widget_layout2x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout2x2, context)
     remoteViews.setupForegroundTextColors(
@@ -545,9 +541,9 @@ private fun create2x2RemoteViews(
         remoteViews.setViewVisibility(R.id.owghat_2x2, View.GONE)
     }
 
-    if (!enableClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
+    if (!isWidgetClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
     remoteViews.setTextViewText(R.id.date_2x2, buildString {
-        append(if (enableClock) widgetTitle else mainDateString)
+        append(if (isWidgetClock) widgetTitle else mainDateString)
         if (showOtherCalendars) appendLine().append(subtitle)
     })
 
@@ -561,13 +557,11 @@ private fun create4x2RemoteViews(
 ): RemoteViews {
     val weekDayName = jdn.dayOfWeekName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
-    val enableClock =
-        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val remoteViews = RemoteViews(
-        context.packageName, if (enableClock) R.layout.widget4x2_clock else R.layout.widget4x2
+        context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
     )
 
-    if (enableClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
+    if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
     remoteViews.setRoundBackground(R.id.widget_layout4x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x2, context)
 
@@ -580,9 +574,9 @@ private fun create4x2RemoteViews(
     if (prefersWidgetsDynamicColors)
         remoteViews.setDynamicTextColor(R.id.textPlaceholder0_4x2, android.R.attr.colorAccent)
 
-    if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
+    if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
-        if (enableClock) append(jdn.dayOfWeekName + "\n")
+        if (isWidgetClock) append(jdn.dayOfWeekName + "\n")
         append(formatDate(date, calendarNameInLinear = showOtherCalendars))
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })

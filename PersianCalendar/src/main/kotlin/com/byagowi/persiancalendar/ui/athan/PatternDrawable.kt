@@ -110,7 +110,6 @@ private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : 
     private val s = sin(PI.toFloat() / 4) / 2
 
     private fun path(order: Boolean): Path {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
         val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath(true)
         val sumOfTwo = triangle or triangle.rotateBy(180f, .5f, .5f)
         val sum = sumOfTwo and sumOfTwo.rotateBy(90f, .5f, .5f)
