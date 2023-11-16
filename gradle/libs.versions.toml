@@ -18,6 +18,7 @@ compose-material3 = "1.1.2"
 coroutines = "1.7.3"
 dynamicanimation = "1.0.0"
 espresso = "3.5.1"
+glance = "1.0.0"
 jetbrains-kotlinx-serialization-json = "1.6.1"
 junit = "4.13.2"
 junit-runner = "1.10.1"
@@ -49,6 +50,8 @@ work-manager = "2.8.1"
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
+androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
+androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
