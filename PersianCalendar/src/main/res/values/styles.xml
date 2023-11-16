@@ -64,7 +64,7 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:typeface">sans</item>
         <!-- Make Arabic letters separated -->
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+        <item name="android:letterSpacing">0</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
@@ -226,7 +226,7 @@
 
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <!--<item name="textAllCaps">false</item>-->
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <!-- Transparent background for BottomSheetDialog, https://stackoverflow.com/a/50645769 -->

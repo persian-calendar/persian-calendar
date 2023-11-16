@@ -35,12 +35,13 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = 19
+        minSdk = 21
         targetSdk = 34
         versionCode = 840
         versionName = "8.4.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
+        // It lowers the APK size and prevents crash in AboutScreen in API 21-23
+        vectorDrawables.useSupportLibrary = true
         resourceConfigurations += listOf(
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
             "ne", "zh-rCN", "ru"

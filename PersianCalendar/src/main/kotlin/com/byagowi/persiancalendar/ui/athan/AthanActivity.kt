@@ -100,15 +100,10 @@ class AthanActivity : AppCompatActivity() {
                 if (it < THIRTY_SECONDS_IN_MILLIS) stopAtHalfMinute = true
             }
             ringtone = RingtoneManager.getRingtone(this, getAthanUri(this)).also {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    it.audioAttributes = AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                        .setUsage(AudioAttributes.USAGE_ALARM)
-                        .build()
-                } else {
-                    @Suppress("DEPRECATION")
-                    it.streamType = AudioManager.STREAM_ALARM
-                }
+                it.audioAttributes = AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_ALARM)
+                    .build()
                 volumeControlStream = AudioManager.STREAM_ALARM
                 it.play()
             }

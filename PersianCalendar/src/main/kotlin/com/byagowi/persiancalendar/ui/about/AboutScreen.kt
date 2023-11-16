@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.util.Linkify
@@ -167,14 +166,6 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             }
         }
 
-
-        // Chip view inflation crashes in Android 4 as lack RippleDrawable apparently and material's
-        // internal bug so let's just hide it there
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            binding.developersSection.isVisible = false
-            return
-        }
-
         listOf(
             R.string.about_developers_list to R.drawable.ic_developer,
             R.string.about_designers_list to R.drawable.ic_designer,
@@ -191,9 +182,7 @@ class AboutScreen : Fragment(R.layout.about_screen) {
                     chip.text = displayName
                     chip.chipIcon = icon
                     chip.setChipIconTintResource(chipsIconTintId)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        chip.elevation = resources.getDimension(R.dimen.chip_elevation)
-                    }
+                    chip.elevation = resources.getDimension(R.dimen.chip_elevation)
                 }
             }
         }.shuffled().forEach(binding.developers::addView)

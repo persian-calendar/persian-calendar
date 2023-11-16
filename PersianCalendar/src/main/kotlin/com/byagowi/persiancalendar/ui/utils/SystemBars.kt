@@ -43,10 +43,6 @@ class SystemBarsTransparency(activity: Activity) {
  * Also have a look at [com.google.android.material.internal.EdgeToEdgeUtils.applyEdgeToEdge]
  */
 fun Activity.transparentSystemBars() {
-    // Android 4 is hard to debug and apparently ViewCompat.setOnApplyWindowInsetsListener isn't
-    // reporting any value there so let's skip and simplify
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
-
     WindowCompat.setDecorFitsSystemWindows(window, false)
 
     val transparencyState = SystemBarsTransparency(this)
@@ -74,7 +70,6 @@ fun Activity.transparentSystemBars() {
 }
 
 fun Snackbar.considerSystemBarsInsets() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return // no insets tweak here either
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // not needed in 30 >=
     view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         // Not the best way but setOnApplyWindowInsetsListener refuses to give the value

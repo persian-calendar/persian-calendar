@@ -146,8 +146,7 @@ class DeviceInformationScreen : Fragment(R.layout.device_information_screen) {
                 ),
                 Triple(
                     R.drawable.ic_motorcycle,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
-                    else @Suppress("DEPRECATION") Build.CPU_ABI,
+                    Build.SUPPORTED_ABIS[0],
                     ::showInputDeviceTestDialog
                 ),
                 Triple(
@@ -175,7 +174,6 @@ class DeviceInformationScreen : Fragment(R.layout.device_information_screen) {
 
 // https://stackoverflow.com/a/52557989
 fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
     post {
         val viewWidth = width
         val viewHeight = height
@@ -254,7 +252,6 @@ class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context
 private fun createCheckerRoundedBoard(
     tileSize: Float, r: Float, @ColorInt color: Int
 ) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return@also
     val tileSize2x = tileSize.toInt() * 2
     val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
@@ -288,12 +285,7 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
     data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
     private val deviceInformationItems = listOf(
-        Item(
-            "CPU Instructions Sets", (when {
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> Build.SUPPORTED_ABIS
-                else -> @Suppress("DEPRECATION") arrayOf(Build.CPU_ABI, Build.CPU_ABI2)
-            }).joinToString(", ")
-        ),
+        Item("CPU Instructions Sets", Build.SUPPORTED_ABIS.joinToString(", ")),
         Item(
             "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
             Build.VERSION.SDK_INT.toString()

@@ -52,7 +52,7 @@ class EventsRecyclerViewAdapter(
 
     private val openInNewIconCache = lruCache(16, create = { color: Int ->
         val drawable = createEventIcon()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable.setTint(color)
+        drawable.setTint(color)
         val pad = (4 * dp).roundToInt()
         val result = InsetDrawable(drawable, if (isRtl) 0 else pad, 0, if (isRtl) pad else 0, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

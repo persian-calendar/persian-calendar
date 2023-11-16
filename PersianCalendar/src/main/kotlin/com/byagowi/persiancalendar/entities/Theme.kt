@@ -40,8 +40,7 @@ enum class Theme(
         private fun SharedPreferences?.getTheme() =
             this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
 
-        fun supportsGradient(context: Context) = getCurrent(context).hasGradient &&
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+        fun supportsGradient(context: Context) = getCurrent(context).hasGradient
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)

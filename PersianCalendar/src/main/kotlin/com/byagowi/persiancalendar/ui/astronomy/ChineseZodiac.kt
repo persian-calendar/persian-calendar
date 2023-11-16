@@ -46,7 +46,7 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
     PIG(R.string.animal_year_name_pig, "🐖");
 
     fun format(context: Context, withEmoji: Boolean) = buildString {
-        if (withEmoji && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) append("$emoji ")
+        if (withEmoji) append("$emoji ")
         append(context.getString(title))
     }
 

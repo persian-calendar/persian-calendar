@@ -56,9 +56,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             binding.appBar.toolbar.addView(spinnerBinding.root)
             spinnerBinding.spinner
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            spinner.setPopupBackgroundResource(R.drawable.popup_background)
-        }
+        spinner.setPopupBackgroundResource(R.drawable.popup_background)
         val availableModes = ConverterScreenMode.entries.filter {
             // Converter doesn't work in Android 5, let's hide it there
             it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

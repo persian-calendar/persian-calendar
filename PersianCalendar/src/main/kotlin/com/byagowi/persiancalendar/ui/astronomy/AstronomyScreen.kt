@@ -114,9 +114,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
             // Special case for moon icon
             buttons[AstronomyMode.Moon]?.icon = moonIconDrawable
             // Reset sun tint color as it can be set by other screens
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                buttons[AstronomyMode.Sun]?.icon?.setTintList(null)
-            }
+            buttons[AstronomyMode.Sun]?.icon?.setTintList(null)
         }
 
         val seasonsCache = lruCache(1024, create = ::seasons)

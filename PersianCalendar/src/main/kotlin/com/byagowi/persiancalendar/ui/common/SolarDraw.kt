@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.os.Build
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -27,9 +26,7 @@ class SolarDraw(context: Context) {
     ) {
         val drawable = if (small) smallSunDrawable else sunDrawable
         drawable.alpha = alpha
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            drawable.setTintList(color?.let(ColorStateList::valueOf))
-        }
+        drawable.setTintList(color?.let(ColorStateList::valueOf))
         drawable.setBounds((cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt())
         drawable.draw(canvas)
     }

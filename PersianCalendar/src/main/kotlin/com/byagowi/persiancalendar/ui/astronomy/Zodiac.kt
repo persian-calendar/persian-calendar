@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.Context
-import android.os.Build
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.PersianDate
@@ -56,7 +55,7 @@ enum class Zodiac(
     PISCES(348.58, "♓", R.string.pisces); // 345-15
 
     fun format(context: Context, withEmoji: Boolean, short: Boolean = false) = buildString {
-        if (withEmoji && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) append("$emoji ")
+        if (withEmoji) append("$emoji ")
         val result = context.getString(title)
         append(if (short) result.split(" (")[0] else result)
     }

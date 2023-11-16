@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="3"
         android:layoutDirection="locale"
-        android:timePickerMode="spinner"
-        tools:targetApi="lollipop" />
+        android:timePickerMode="spinner" />
 
 </LinearLayout>

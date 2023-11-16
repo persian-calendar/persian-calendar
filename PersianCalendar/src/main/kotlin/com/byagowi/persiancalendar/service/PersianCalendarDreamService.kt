@@ -73,10 +73,7 @@ class PersianCalendarDreamService : DreamService() {
                 pattern.rotationDegree = valueAnimator.animatedFraction * 360f
                 pattern.invalidateSelf()
             }
-            it.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) wakeUp()
-                else finish()
-            }
+            it.setOnClickListener { wakeUp() }
         }
 
         val button = AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme))

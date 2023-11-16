@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
 import android.content.DialogInterface
-import android.os.Build
 import android.text.InputFilter
 import android.view.View
 import android.view.ViewGroup
@@ -136,9 +135,7 @@ private class ShiftWorkItemsAdapter(
                 (1..14).map(::formatNumber)
             )
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                binding.lengthSpinner.setPopupBackgroundResource(R.drawable.popup_background)
-            }
+            binding.lengthSpinner.setPopupBackgroundResource(R.drawable.popup_background)
 
             binding.editText.also { editText ->
                 editText.setAdapter(object : ArrayAdapter<String>(

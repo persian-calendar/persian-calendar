@@ -205,7 +205,7 @@ fun Context.getAnimatedDrawable(@DrawableRes animatedDrawableRes: Int) =
 
 // https://stackoverflow.com/a/48421144 but doesn't seem to be needed anymore?
 fun AppBarLayout.hideToolbarBottomShadow() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) outlineProvider = null
+    outlineProvider = null
 }
 
 fun View.fadeIn(durationMillis: Long = 250) {
@@ -282,8 +282,7 @@ fun FragmentActivity.askForPostNotificationPermission(requestCode: Int) {
 }
 
 fun Window.makeWallpaperTransparency() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        this.navigationBarColor = Color.TRANSPARENT
+    this.navigationBarColor = Color.TRANSPARENT
     this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
     this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 }

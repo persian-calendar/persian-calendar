@@ -21,7 +21,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -208,9 +207,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun setNavHostBackground() {
-        if (!appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
-            || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-        ) binding.navHostFragment.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
+        if (!appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
+            binding.navHostFragment.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
         else binding.navHostFragment.setBackgroundResource(R.drawable.gradient_background)
     }
 

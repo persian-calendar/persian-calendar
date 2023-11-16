@@ -18,7 +18,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
 
 import android.annotation.SuppressLint
 import android.graphics.drawable.RippleDrawable
-import android.os.Build
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -51,9 +50,7 @@ class RecyclerListAdapter(private var items: List<Item>) :
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener { _, event ->
             val rippleDrawable = holder.itemView.background
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                rippleDrawable is RippleDrawable
-            ) rippleDrawable.setHotspot(event.x, event.y)
+            if (rippleDrawable is RippleDrawable) rippleDrawable.setHotspot(event.x, event.y)
 
             if (event.action == MotionEvent.ACTION_DOWN) {
                 itemTouchHelper.startDrag(holder)

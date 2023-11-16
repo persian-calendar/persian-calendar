@@ -267,7 +267,7 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
 
     root.addView(ProgressBar(activity).also { progressBar ->
         progressBar.isIndeterminate = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) ValueAnimator.ofArgb(
+        ValueAnimator.ofArgb(
             Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
         ).also { valueAnimator ->
             valueAnimator.duration = 3000
@@ -543,9 +543,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
                 lifecycle.launch { playSoundTick(diatonicScale[index].toDouble()) }
 
                 val rippleDrawable = background
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-                    rippleDrawable is RippleDrawable
-                ) {
+                if (rippleDrawable is RippleDrawable) {
                     isPressed = false
                     rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
                     rippleDrawable.setHotspot(x.value, y.value)
@@ -1132,9 +1130,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
         activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
     )
     val rippleDrawable = view.background
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-        rippleDrawable is RippleDrawable
-    ) {
+    if (rippleDrawable is RippleDrawable) {
         val handler = Handler(Looper.getMainLooper())
         fun next() {
             val delay = Random.nextLong(10, TWO_SECONDS_IN_MILLIS)
