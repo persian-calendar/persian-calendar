@@ -178,8 +178,8 @@ dependencies {
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)
 
-    implementation(libs.androidx.glance.appwidget)
-    implementation(libs.androidx.glance.material3)
+    // implementation(libs.androidx.glance.appwidget)
+    // implementation(libs.androidx.glance.material3)
 
     // debugImplementation(libs.leakcanary)
 
