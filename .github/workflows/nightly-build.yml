@@ -43,21 +43,18 @@ jobs:
 
       - name: Build and send apks to telegram
         run: |
-          for TASK in assembleMinApi19Nightly assembleMinApi21Nightly; do
-            ./gradlew $TASK
-            apk_path="$(find . -type f -iname *.apk)"
-            curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
-              -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-              -F "caption=Size: $(ls -l --block-size=K "$apk_path" | awk '{ print $5 }')" \
-              -F parse_mode=HTML \
-              -F document=@"$apk_path"
-            rm "$apk_path"
-          done
+          ./gradlew assembleNightly
+          apk_path="$(find . -type f -iname *.apk)"
+          curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
+            -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+            -F "caption=Size: $(ls -l --block-size=K "$apk_path" | awk '{ print $5 }')" \
+            -F parse_mode=HTML \
+            -F document=@"$apk_path"
+          rm "$apk_path"
 
       - name: Update the runtime dependencies report
         run: |
-          ./gradlew PersianCalendar:dependencies --configuration minApi19ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
-          ./gradlew PersianCalendar:dependencies --configuration minApi21ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report-compose.txt
+          ./gradlew PersianCalendar:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
 
       - name: Add and commit the report
         uses: EndBug/add-and-commit@db73408897f13b2878d08ac8b3f8e51cd492c8f2

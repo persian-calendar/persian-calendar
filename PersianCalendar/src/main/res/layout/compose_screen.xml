@@ -9,6 +9,9 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <!-- ComposeView will be added in the fragment to keep compatibility with minApi19 flavor -->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </LinearLayout>

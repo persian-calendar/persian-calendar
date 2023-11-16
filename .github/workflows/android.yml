@@ -26,8 +26,7 @@ jobs:
 
       - name: Build debug APK and run JVM tests
         run: |
-          ./gradlew assembleMinApi19Debug lintMinApi19Debug testMinApi19DebugUnitTest --stacktrace
-          ./gradlew assembleMinApi21Debug lintMinApi21Debug testMinApi21DebugUnitTest --stacktrace
+          ./gradlew assembleDebug lintDebug testDebugUnitTest --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
@@ -69,7 +68,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           arch: x86
-          script: ./gradlew connectedMinApi19DebugAndroidTest --stacktrace
+          script: ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: Upload results
         if: ${{ always() }}

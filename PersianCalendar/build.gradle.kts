@@ -12,8 +12,6 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
-val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
-
 val generatedAppSrcDir =
     layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
 android {
@@ -26,7 +24,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        if (isMinApi21Build) compose = true
+        compose = true
     }
 
     val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
@@ -91,18 +89,6 @@ android {
     }
     flavorDimensions += listOf("api")
 
-    productFlavors {
-        create("minApi19") {
-            dimension = "api"
-        }
-        create("minApi21") {
-            applicationIdSuffix = ".minApi21"
-            dimension = "api"
-            minSdk = 21
-            // versionCode = versionNumber + 1
-        }
-    }
-
     packaging {
         resources.excludes += "DebugProbesKt.bin"
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -136,8 +122,6 @@ android {
 
     lint { disable += listOf("MissingTranslation") }
 }
-
-val minApi21Implementation by configurations
 
 dependencies {
     // Project owned libraries
@@ -183,21 +167,16 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
 
-    // Only needed for debug builds for now, won't be needed for minApi21 builds either
-    debugImplementation(libs.multidex)
-
     implementation(libs.activity.ktx)
-    minApi21Implementation(libs.compose.activity)
+    implementation(libs.compose.activity)
 
-    minApi21Implementation(libs.bundles.compose.accompanist)
-    minApi21Implementation(libs.compose.ui)
-    minApi21Implementation(libs.compose.material3)
-    minApi21Implementation(libs.compose.ui.tooling.preview)
-    if (isMinApi21Build) {
-        implementation(libs.compose.runtime)
-        androidTestImplementation(libs.compose.ui.test.junit4)
-        debugImplementation(libs.compose.ui.tooling)
-    }
+    implementation(libs.bundles.compose.accompanist)
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.runtime)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.tooling)
 
     // debugImplementation(libs.leakcanary)
 
@@ -253,26 +232,7 @@ tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", f
 //    }
 //}
 
-// Called like: ./gradlew moveToApiFlavors -PfileName=
-tasks.register("moveToApiFlavors") {
-    doLast {
-        val source = gradle.startParameter.projectProperties["fileName"]
-            ?: error("Moves a source file to api flavors\nPass -P fileName=FILENAME to this")
-        if ("/main/" !in source) error("File name should be a source file in the main flavor")
-        if (!File(source).isFile) error("Source file name doesn't exist")
-        val minApi19Target = source.replace("/main/", "/minApi19/")
-        File(File(minApi19Target).parent).mkdirs()
-        val minApi21Target = source.replace("/main/", "/minApi21/")
-        File(File(minApi21Target).parent).mkdirs()
-        listOf(
-            "cp $source $minApi21Target",
-            "git add $minApi21Target",
-            "git mv $source $minApi19Target",
-            "git status",
-        ).forEach { println(it.execute().text) }
-    }
-}
-
+// Can be called like: ./gradlew mergeWeblate
 tasks.register("mergeWeblate") {
     doLast {
         val weblateRepository = "https://hosted.weblate.org/git/persian-calendar/persian-calendar/"
