@@ -618,9 +618,8 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showDayPickerDialog(
-                    activity ?: return@onClick, viewModel.selectedDay.value, R.string.go
-                ) { jdn -> bringDate(jdn) }
+                val activity = activity ?: return@onClick
+                showDayPickerDialog(activity, viewModel.selectedDay.value, R.string.go, ::bringDate)
             }
         }
         toolbar.menu.add(R.string.add_event).also {
