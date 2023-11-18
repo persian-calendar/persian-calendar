@@ -368,19 +368,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    // Checking for the ancient "menu" key
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = when (keyCode) {
-        KeyEvent.KEYCODE_MENU -> {
-            if (binding.root.isDrawerOpen(GravityCompat.START))
-                binding.root.closeDrawer(GravityCompat.START)
-            else
-                binding.root.openDrawer(GravityCompat.START)
-            true
-        }
-
-        else -> super.onKeyDown(keyCode, event)
-    }
-
     private fun restartToSettings() {
         val intent = intent
         intent?.action = "SETTINGS"
