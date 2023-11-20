@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.androidx.navigation.safeargs.kotlin)
     alias(libs.plugins.ksp)
-    id("io.github.persiancalendar.appbuildplugin") apply true
+    id("io.github.persiancalendar.appbuildplugin")
 }
 
 val generatedAppSrcDir =
