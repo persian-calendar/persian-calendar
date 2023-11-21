@@ -642,17 +642,13 @@ private fun create4x2RemoteViews(
             )
         )
 
-        if (//enableWorkManager && // no need for refresh icon, they get frequent updates
-            true
-        ) {
-            remoteViews.setImageViewResource(R.id.refresh_icon, R.drawable.ic_widget_refresh)
-            val pendingIntent = PendingIntent.getBroadcast(
-                context, 0, Intent(context, Widget4x2::class.java),
-                PendingIntent.FLAG_UPDATE_CURRENT or
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
-            )
-            remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
-        }
+        remoteViews.setImageViewResource(R.id.refresh_icon, R.drawable.ic_widget_refresh)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 0, Intent(context, Widget4x2::class.java),
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        )
+        remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
 
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
