@@ -63,8 +63,6 @@
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:typeface">sans</item>
-        <!-- Make Arabic letters separated -->
-        <item name="android:letterSpacing">0</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
@@ -213,20 +211,15 @@
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">3dp</item>
         <item name="android:textSize">@dimen/text_size_title</item>
-        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="tabBackground">?attr/colorSurface</item>
     </style>
 
     <style name="TabLayoutColored" parent="Widget.Material3.TabLayout.OnSurface">
         <item name="tabIndicatorColor">?attr/coloredTabIndicatorColor</item>
-        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
         <item name="tabBackground">@android:color/transparent</item>
         <item name="tabTextColor">?attr/colorOnAppBar</item>
-    </style>
-
-    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
-        <!--<item name="textAllCaps">false</item>-->
-        <item name="android:letterSpacing">0</item>
     </style>
 
     <!-- Transparent background for BottomSheetDialog, https://stackoverflow.com/a/50645769 -->
