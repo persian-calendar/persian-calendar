@@ -81,8 +81,8 @@ class AstronomyTests {
         ).zip(Zodiac.entries) { centerOfZodiac, zodiac ->
             assertThat(zodiac.iauRange.average()).isWithin(1.0e-10).of(centerOfZodiac)
         }
-        (1..12).zip(Zodiac.entries) { it, zodiac ->
-            assertThat(zodiac.tropicalRange.average()).isWithin(1.0e-10).of(it * 30.0)
+        (0..11).zip(enumValues<Zodiac>()) { it, zodiac ->
+            assertThat(zodiac.tropicalRange.average()).isWithin(1.0e-10).of(it * 30.0 + 15)
         }
     }
 
