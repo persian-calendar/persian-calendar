@@ -1,27 +1,66 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.content.DialogInterface
-import androidx.core.widget.doAfterTextChanged
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.EmailDialogBinding
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
-fun showEmailDialog(activity: FragmentActivity) {
-    val emailBinding = EmailDialogBinding.inflate(activity.layoutInflater)
-    val dialog = MaterialAlertDialogBuilder(activity)
-        .setView(emailBinding.root)
-        .setTitle(R.string.about_email_sum)
-        .setPositiveButton(R.string.continue_button) { _, _ ->
-            launchEmailIntent(activity, emailBinding.inputText.text?.toString() ?: "")
+fun showEmailDialog(activity: FragmentActivity) =
+    showComposeDialog(activity) { EmailAlertDialog(it) }
+
+@Composable
+private fun EmailAlertDialog(closeDialog: () -> Unit) {
+    var message by remember { mutableStateOf("") }
+    AlertDialog(
+        onDismissRequest = { closeDialog() },
+        confirmButton = {
+            val context = LocalContext.current
+            TextButton(onClick = {
+                closeDialog()
+                launchEmailIntent(context, message)
+            }) { Text(stringResource(R.string.continue_button)) }
+        },
+        dismissButton = {
+            TextButton(onClick = { closeDialog() }) { Text(stringResource(R.string.cancel)) }
+        },
+        title = { Text(stringResource(R.string.about_email_sum)) },
+        text = {
+            Column {
+                TextField(
+                    value = message,
+                    onValueChange = { message = it },
+                    singleLine = false,
+                    modifier = Modifier.defaultMinSize(minHeight = 200.dp)
+                )
+                Text(
+                    text = formatNumber(message.length),
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
         }
-        .setNegativeButton(R.string.cancel, null)
-        .show()
-
-    val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE).debugAssertNotNull
-    positiveButton?.isEnabled = false
-    emailBinding.inputText.doAfterTextChanged {
-        positiveButton?.isEnabled = (it?.toString() ?: "").isNotBlank()
-    }
+    )
 }
+
+@Preview
+@Composable
+private fun EmailAlertDialogPreview() = Mdc3Theme { EmailAlertDialog {} }
