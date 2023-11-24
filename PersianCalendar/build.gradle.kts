@@ -130,8 +130,7 @@ dependencies {
     implementation(libs.persiancalendar.calculator)
     implementation(libs.persiancalendar.qr)
 
-    // The only runtime third part dependency created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
-    // bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f is equal to v2.1.17, the latest release
+    // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation(libs.astronomy)
 
     // Google/JetBrains owned libraries (roughly platform libraries)
