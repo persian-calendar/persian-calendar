@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -138,7 +139,7 @@ private fun Rail() {
 private fun Licenses() {
     val sections = remember { getCreditsSections() }
     val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
-    val initialDegree = if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f
+    val initialDegree = if (LocalLayoutDirection.current == LayoutDirection.Rtl) -90f else 90f
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         LazyColumn {
             itemsIndexed(sections) { i, (title, license, text) ->
@@ -153,13 +154,13 @@ private fun Licenses() {
                     .animateContentSize()) {
                     FlowRow(
                         horizontalArrangement = Arrangement.Start,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Image(
                             imageVector = Icons.Default.KeyboardArrowDown,
                             contentDescription = stringResource(R.string.more),
                             modifier = Modifier.rotate(angle),
-                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Text(title)
@@ -169,14 +170,13 @@ private fun Licenses() {
                             //  Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                             license,
                             modifier = Modifier
-                                .background(
-                                    Color.LightGray, RoundedCornerShape(CornerSize(3.dp))
-                                )
+                                .background(Color.LightGray, RoundedCornerShape(CornerSize(3.dp)))
                                 .padding(horizontal = 4.dp),
                             style = TextStyle(Color.DarkGray, 12.sp)
                         )
                     }
-                    if (isExpanded) Text(text)
+                    if (isExpanded) SelectionContainer { Text(text) }
+
                 }
                 if (i != sections.size - 1)
                     Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
