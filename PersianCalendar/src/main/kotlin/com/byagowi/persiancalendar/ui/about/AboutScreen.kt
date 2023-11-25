@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -162,25 +163,37 @@ private fun AboutScreenRoot() {
             Modifier
                 .height(headerSize)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
         ) {
-            Text(
-                version,
-                modifier = Modifier
+            Box(
+                Modifier
                     .weight(1f)
+                    .fillMaxWidth()
+                    .fillMaxHeight()
                     .padding(start = 24.dp, end = 24.dp),
-                color = Color(context.resolveColor(R.attr.colorOnAppBar))
-            )
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    version,
+                    color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                )
+            }
             val image =
                 AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                Image(
-                    modifier = Modifier.graphicsLayer { renderEffect = logoEffect },
-                    painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
-                    contentDescription = stringResource(R.string.app_name),
-                    contentScale = ContentScale.Fit
-                )
+            Box(
+                Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                    Image(
+                        modifier = Modifier
+                            .graphicsLayer { renderEffect = logoEffect }
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
+                        contentDescription = stringResource(R.string.app_name),
+                        contentScale = ContentScale.Fit
+                    )
+                }
             }
         }
 
