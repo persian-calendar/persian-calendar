@@ -36,7 +36,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -96,6 +95,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.topRoundedCornerShape
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -148,18 +148,16 @@ private fun AboutScreenRoot() {
     }
     val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
 
-    Box(
-        modifier = Modifier.clip(
-            RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-        )
-    ) {
+    Box(modifier = Modifier.clip(topRoundedCornerShape)) {
         var logoAnimationAtEnd by remember { mutableStateOf(false) }
         LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
+
+        val headerSize = 250.dp
 
         @OptIn(ExperimentalAnimationGraphicsApi::class)
         Row(
             Modifier
-                .height(250.dp)
+                .height(headerSize)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
@@ -185,16 +183,14 @@ private fun AboutScreenRoot() {
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             Box(modifier = Modifier
                 .fillMaxWidth()
-                .height(250.dp)
+                .height(headerSize)
                 .clickable(onClickLabel = version.toString()) {
                     logoAnimationAtEnd = !logoAnimationAtEnd
                     clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
                     // TODO: hook createIconRandomEffects()
                 })
-            Surface(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
-                Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 0.dp)) {
-                    AboutScreenContent()
-                }
+            Surface(shape = topRoundedCornerShape) {
+                Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) { AboutScreenContent() }
             }
         }
     }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.core.view.minusAssign
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -37,3 +39,5 @@ fun showComposeDialog(
         }
     })
 }
+
+val topRoundedCornerShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
