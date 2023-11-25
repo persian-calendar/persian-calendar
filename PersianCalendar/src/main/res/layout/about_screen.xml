@@ -232,28 +232,10 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:id="@+id/developers_section"
-                            style="@style/AboutCard"
-                            android:background="?attr/colorSurface">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="5dp"
-                                android:text="@string/about_developers"
-                                android:textColor="?android:attr/textColorPrimary" />
-
-                            <com.google.android.material.chip.ChipGroup
-                                android:id="@+id/developers"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:clipToPadding="false"
-                                android:layoutDirection="ltr"
-                                android:orientation="vertical"
-                                android:paddingBottom="8dp" />
-
-                        </LinearLayout>
+                        <androidx.compose.ui.platform.ComposeView
+                            android:id="@+id/compose"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 

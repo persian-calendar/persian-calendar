@@ -10,6 +10,28 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.ElevatedFilterChip
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
@@ -34,12 +56,11 @@ import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
-import com.google.android.material.chip.Chip
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class AboutScreen : Fragment(R.layout.about_screen) {
 
@@ -138,7 +159,18 @@ class AboutScreen : Fragment(R.layout.about_screen) {
         binding.email.setOnClickListener click@{ showEmailDialog(activity ?: return@click) }
         binding.emailTitle.putLineStartIcon(R.drawable.ic_email)
 
-        setupContributorsList(binding)
+        binding.compose.setContent {
+            Mdc3Theme {
+                // Developers
+                Column {
+                    Text(
+                        stringResource(R.string.about_developers),
+                        modifier = Modifier.padding(all = 12.dp)
+                    )
+                    DevelopersChips()
+                }
+            }
+        }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -148,44 +180,6 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             }
             WindowInsetsCompat.CONSUMED
         }
-    }
-
-    private fun setupContributorsList(binding: AboutScreenBinding) {
-        val context = binding.root.context
-
-        val chipsIconTintId =
-            context.resolveResourceIdFromTheme(com.google.android.material.R.attr.colorAccent)
-
-        val chipClick = View.OnClickListener {
-            (it.tag as? String)?.also { user ->
-                if (user == "ImanSoltanian") return@also // The only person without GitHub account
-                runCatching {
-                    val uri = "https://github.com/$user".toUri()
-                    CustomTabsIntent.Builder().build().launchUrl(context, uri)
-                }.onFailure(logException)
-            }
-        }
-
-        listOf(
-            R.string.about_developers_list to R.drawable.ic_developer,
-            R.string.about_designers_list to R.drawable.ic_designer,
-            R.string.about_translators_list to R.drawable.ic_translator,
-            R.string.about_contributors_list to R.drawable.ic_developer
-        ).flatMap { (listId: Int, iconId: Int) ->
-            val icon = context.getCompatDrawable(iconId)
-            getString(listId).trim().split("\n").map {
-                Chip(context).also { chip ->
-                    chip.ensureAccessibleTouchTarget(0)
-                    chip.setOnClickListener(chipClick)
-                    val (username, displayName) = it.split(": ")
-                    chip.tag = username
-                    chip.text = displayName
-                    chip.chipIcon = icon
-                    chip.setChipIconTintResource(chipsIconTintId)
-                    chip.elevation = resources.getDimension(R.dimen.chip_elevation)
-                }
-            }
-        }.shuffled().forEach(binding.developers::addView)
     }
 
     private fun launchReportIntent() {
@@ -205,5 +199,51 @@ https://github.com/persian-calendar/persian-calendar"""
                 putExtra(Intent.EXTRA_TEXT, textToShare)
             }, getString(R.string.share)))
         }.onFailure(logException).onFailure { (activity ?: return).bringMarketPage() }
+    }
+}
+
+@Composable
+private fun DevelopersChips() {
+    val context = LocalContext.current
+    val developers = remember {
+        listOf(
+            R.string.about_developers_list to R.drawable.ic_developer,
+            R.string.about_designers_list to R.drawable.ic_designer,
+            R.string.about_translators_list to R.drawable.ic_translator,
+            R.string.about_contributors_list to R.drawable.ic_developer
+        ).flatMap { (listId: Int, iconId: Int) ->
+            context.getString(listId).trim().split("\n").map {
+                val (username, displayName) = it.split(": ")
+                Triple(username, displayName, iconId)
+            }
+        }.shuffled()
+    }
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+        FlowRow {
+            developers.forEach { (username, displayName, icon) ->
+                ElevatedFilterChip(
+                    modifier = Modifier.padding(2.dp),
+                    onClick = click@{
+                        if (username == "ImanSoltanian") return@click // The only person without GitHub account
+                        runCatching {
+                            val uri = "https://github.com/$username".toUri()
+                            CustomTabsIntent.Builder().build()
+                                .launchUrl(context, uri)
+                        }.onFailure(logException)
+                    },
+                    label = { Text(displayName) },
+                    selected = true,
+                    colors = FilterChipDefaults.elevatedFilterChipColors(),
+                    leadingIcon = {
+                        Icon(
+                            ImageVector.vectorResource(icon),
+                            contentDescription = displayName,
+                            Modifier.size(AssistChipDefaults.IconSize)
+                        )
+                    }
+                )
+            }
+        }
     }
 }
