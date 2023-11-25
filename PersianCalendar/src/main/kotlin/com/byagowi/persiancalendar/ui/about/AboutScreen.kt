@@ -153,8 +153,8 @@ private fun AboutScreenRoot() {
             RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         )
     ) {
-        var atEnd by remember { mutableStateOf(false) }
-        LaunchedEffect(key1 = "key") { atEnd = !atEnd }
+        var logoAnimationAtEnd by remember { mutableStateOf(false) }
+        LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
 
         @OptIn(ExperimentalAnimationGraphicsApi::class)
         Row(
@@ -175,7 +175,7 @@ private fun AboutScreenRoot() {
                 AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 Image(
-                    painter = rememberAnimatedVectorPainter(image, atEnd),
+                    painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
                     contentDescription = stringResource(R.string.app_name),
                     contentScale = ContentScale.Fit
                 )
@@ -187,7 +187,7 @@ private fun AboutScreenRoot() {
                 .fillMaxWidth()
                 .height(250.dp)
                 .clickable(onClickLabel = version.toString()) {
-                    atEnd = !atEnd
+                    logoAnimationAtEnd = !logoAnimationAtEnd
                     clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
                     // TODO: hook createIconRandomEffects()
                 })
@@ -418,8 +418,7 @@ private fun DevelopersChips() {
                         if (username == "ImanSoltanian") return@click // The only person without GitHub account
                         runCatching {
                             val uri = "https://github.com/$username".toUri()
-                            CustomTabsIntent.Builder().build()
-                                .launchUrl(context, uri)
+                            CustomTabsIntent.Builder().build().launchUrl(context, uri)
                         }.onFailure(logException)
                     },
                     label = { Text(displayName) },
