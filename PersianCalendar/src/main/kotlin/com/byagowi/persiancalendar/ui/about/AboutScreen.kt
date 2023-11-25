@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.about
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -61,6 +62,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.RenderEffect
+import androidx.compose.ui.graphics.asComposeRenderEffect
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
@@ -148,6 +152,7 @@ private fun AboutScreenRoot() {
 
     Box(modifier = Modifier.clip(topRoundedCornerShape)) {
         var logoAnimationAtEnd by remember { mutableStateOf(false) }
+        var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
         LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
 
         val headerSize = 250.dp
@@ -171,6 +176,7 @@ private fun AboutScreenRoot() {
                 AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 Image(
+                    modifier = Modifier.graphicsLayer { renderEffect = logoEffect },
                     painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
                     contentDescription = stringResource(R.string.app_name),
                     contentScale = ContentScale.Fit
@@ -178,15 +184,23 @@ private fun AboutScreenRoot() {
             }
         }
 
+        val effectsGenerator = remember {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) createIconRandomEffects()
+            else null
+        }
+
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(headerSize)
-                .clickable(onClickLabel = version.toString()) {
-                    logoAnimationAtEnd = !logoAnimationAtEnd
-                    clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
-                    // TODO: hook createIconRandomEffects()
-                })
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(headerSize)
+                    .clickable(onClickLabel = version.toString()) {
+                        logoAnimationAtEnd = !logoAnimationAtEnd
+                        clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
+                        logoEffect = effectsGenerator
+                            ?.invoke()
+                            ?.asComposeRenderEffect()
+                    })
             Surface(shape = topRoundedCornerShape) {
                 Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) { AboutScreenContent() }
             }

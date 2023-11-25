@@ -151,22 +151,18 @@ fun createEasterEggClickHandler(callback: (FragmentActivity) -> Unit): (Fragment
     }
 }
 
-fun createIconRandomEffects(view: View): () -> Unit {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return {}
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
+fun createIconRandomEffects(): () -> RenderEffect? {
     var clickCount = 0
     val colorShader by lazy(LazyThreadSafetyMode.NONE) { RuntimeShader(COLOR_SHIFT_EFFECT) }
     return {
-        runCatching {
-            view.setRenderEffect(
-                if (clickCount++ % 2 == 0) {
-                    colorShader.setFloatUniform("colorShift", Random.nextFloat())
-                    RenderEffect.createRuntimeShaderEffect(colorShader, "content")
-                } else {
-                    val r = Random.nextFloat() * 30
-                    RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
-                }
-            )
-        }.onFailure(logException)
+        if (clickCount++ % 2 == 0) {
+            colorShader.setFloatUniform("colorShift", Random.nextFloat())
+            RenderEffect.createRuntimeShaderEffect(colorShader, "content")
+        } else {
+            val r = Random.nextFloat() * 30
+            RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
+        }
     }
 }
 
