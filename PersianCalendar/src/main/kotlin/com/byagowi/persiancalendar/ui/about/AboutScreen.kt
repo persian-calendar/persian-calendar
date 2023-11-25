@@ -3,13 +3,20 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +28,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -42,84 +52,91 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
-import androidx.core.text.scale
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.AboutScreenBinding
+import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
-import com.byagowi.persiancalendar.ui.utils.getAnimatedDrawable
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
-class AboutScreen : Fragment(R.layout.about_screen) {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val binding = AboutScreenBinding.bind(view)
-        binding.appBar.toolbar.setTitle(R.string.about)
-        binding.appBar.toolbar.setupMenuNavigation()
-        binding.appBar.toolbar.menu.add(R.string.share).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick { shareApplication() }
-        }
-        binding.appBar.toolbar.menu.add(R.string.device_information).also {
-            it.icon =
-                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick {
-                findNavController().navigateSafe(AboutScreenDirections.actionAboutToDeviceInformation())
+class AboutScreen : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val root = ComposeView(inflater.context)
+        root.setContent {
+            Mdc3Theme {
+                Column {
+                    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+                    AboutScreenToolbar()
+                    AboutScreenRoot()
+                }
             }
         }
-        binding.appBar.root.hideToolbarBottomShadow()
+        return root.rootView
+    }
+}
 
-        // app
-        val version = buildSpannedString {
-            scale(1.5f) { bold { appendLine(getString(R.string.app_name)) } }
-            scale(.8f) {
+@Composable
+private fun AboutScreenRoot() {
+    val context = LocalContext.current
+    val version = remember {
+        buildAnnotatedString {
+            withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
+                appendLine(context.getString(R.string.app_name))
+            }
+            withStyle(style = SpanStyle(fontSize = 12.sp)) {
                 val version =
                     // Don't formatNumber it if is multi-parted
                     if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
                     else formatNumber(BuildConfig.VERSION_NAME)
-                append(getString(R.string.version, version))
-            }
-            if (language.isUserAbleToReadPersian) {
-                appendLine()
-                scale(.8f) {
+                append(context.getString(R.string.version, version))
+                if (language.isUserAbleToReadPersian) {
+                    appendLine()
                     append(
-                        getString(
+                        context.getString(
                             R.string.about_help_subtitle,
                             formatNumber(supportedYearOfIranCalendar - 1),
                             formatNumber(supportedYearOfIranCalendar)
@@ -128,54 +145,98 @@ class AboutScreen : Fragment(R.layout.about_screen) {
                 }
             }
         }
-        binding.aboutHeader.text = version
-        val animation = context?.getAnimatedDrawable(R.drawable.splash_icon_animation)
-        binding.icon.setImageDrawable(animation)
-        animation?.start()
-        val clickHandlerDialog = createEasterEggClickHandler(::showPeriodicTableDialog)
-        val clickHandlerIcon = createIconRandomEffects(binding.icon)
+    }
+    val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
 
-        binding.compose.setContent {
-            Mdc3Theme {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Box(modifier = Modifier
-                        .fillMaxWidth()
-                        .size(width = 0.dp, height = 250.dp)
-                        .clickable(onClickLabel = version.toString()) {
-                            animation?.stop()
-                            animation?.start()
-                            clickHandlerDialog(activity)
-                            clickHandlerIcon()
-                        })
-                    Surface(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
-                        Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 0.dp)) {
-                            AboutScreenContent()
-                        }
-                    }
+    Box(
+        modifier = Modifier.clip(
+            RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+        )
+    ) {
+        var atEnd by remember { mutableStateOf(false) }
+        LaunchedEffect(key1 = "key") { atEnd = !atEnd }
+
+        @OptIn(ExperimentalAnimationGraphicsApi::class)
+        Row(
+            Modifier
+                .height(250.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                version,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 24.dp, end = 24.dp),
+                color = Color(context.resolveColor(R.attr.colorOnAppBar))
+            )
+            val image =
+                AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                Image(
+                    painter = rememberAnimatedVectorPainter(image, atEnd),
+                    contentDescription = stringResource(R.string.app_name),
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Box(modifier = Modifier
+                .fillMaxWidth()
+                .height(250.dp)
+                .clickable(onClickLabel = version.toString()) {
+                    atEnd = !atEnd
+                    clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
+                    // TODO: hook createIconRandomEffects()
+                })
+            Surface(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
+                Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 0.dp)) {
+                    AboutScreenContent()
                 }
             }
         }
+    }
+}
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top
-            }
-            WindowInsetsCompat.CONSUMED
+@Composable
+private fun AboutScreenToolbar() {
+    AndroidView(modifier = Modifier.fillMaxWidth(), factory = { context ->
+        val appBar = AppBarBinding.inflate(context.layoutInflater)
+        appBar.toolbar.setTitle(R.string.about)
+        appBar.toolbar.setupMenuNavigation()
+        appBar.toolbar.menu.add(R.string.share).also {
+            it.icon =
+                appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick { shareApplication(context) }
         }
-    }
+        appBar.toolbar.menu.add(R.string.device_information).also {
+            it.icon =
+                appBar.toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick {
+                // TODO: Ugly cast
+                (context as? FragmentActivity)?.findNavController(R.id.navHostFragment)
+                    ?.navigateSafe(AboutScreenDirections.actionAboutToDeviceInformation())
+            }
+        }
+        appBar.root.hideToolbarBottomShadow()
+        appBar.root
+    })
+}
 
-    private fun shareApplication() {
-        runCatching {
-            startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                val textToShare = """${getString(R.string.app_name)}
+private fun shareApplication(context: Context) {
+    runCatching {
+        context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.app_name))
+            val textToShare = """${context.getString(R.string.app_name)}
 https://github.com/persian-calendar/persian-calendar"""
-                putExtra(Intent.EXTRA_TEXT, textToShare)
-            }, getString(R.string.share)))
-        }.onFailure(logException).onFailure { (activity ?: return).bringMarketPage() }
-    }
+            putExtra(Intent.EXTRA_TEXT, textToShare)
+        }, context.getString(R.string.share)))
+    }.onFailure(logException).onFailure { (context as? FragmentActivity)?.bringMarketPage() }
 }
 
 @Composable
@@ -270,7 +331,12 @@ private fun HelpItems() {
                 .clickable { expansionsState[i] = !expansionsState[i] }
                 .padding(6.dp)
                 .fillMaxWidth()
-                .animateContentSize()) {
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Image(
                         imageVector = Icons.Default.KeyboardArrowDown,
@@ -308,7 +374,7 @@ private fun AboutScreenButton(
             )
             Column {
                 Text(stringResource(title))
-                Spacer(modifier = Modifier.size(width = 0.dp, height = 4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(summary),
                     fontSize = 12.sp,

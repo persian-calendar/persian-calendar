@@ -144,6 +144,7 @@ dependencies {
 
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+    implementation(libs.androidx.animation.graphics)
     androidTestImplementation(libs.navigation.testing)
 
     implementation(libs.androidx.core.ktx)

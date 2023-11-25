@@ -50,7 +50,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
@@ -199,9 +198,6 @@ fun Context?.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable {
     return this?.let { AppCompatResources.getDrawable(it, drawableRes) }.debugAssertNotNull
         ?: ShapeDrawable()
 }
-
-fun Context.getAnimatedDrawable(@DrawableRes animatedDrawableRes: Int) =
-    AnimatedVectorDrawableCompat.create(this, animatedDrawableRes)
 
 // https://stackoverflow.com/a/48421144 but doesn't seem to be needed anymore?
 fun AppBarLayout.hideToolbarBottomShadow() {

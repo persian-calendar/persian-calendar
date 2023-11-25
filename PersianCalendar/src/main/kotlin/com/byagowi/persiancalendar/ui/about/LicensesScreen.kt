@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -187,7 +189,12 @@ private fun Licenses() {
                 .clickable { expansionsState[i] = !expansionsState[i] }
                 .padding(6.dp)
                 .fillMaxWidth()
-                .animateContentSize()) {
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
+                    )
+                )) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Image(
                         imageVector = Icons.Default.KeyboardArrowDown,
