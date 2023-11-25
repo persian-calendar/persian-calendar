@@ -144,7 +144,6 @@ dependencies {
 
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-    implementation(libs.androidx.animation.graphics)
     androidTestImplementation(libs.navigation.testing)
 
     implementation(libs.androidx.core.ktx)
@@ -173,6 +172,7 @@ dependencies {
     implementation(libs.bundles.compose.accompanist)
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+    implementation(libs.compose.animation)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.runtime)
     androidTestImplementation(libs.compose.ui.test.junit4)
