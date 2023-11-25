@@ -159,7 +159,7 @@ private fun Rail() {
                 selected = selectedItem == i,
                 onClick = {
                     selectedItem = i
-                    clickHandler(context as? FragmentActivity)
+                    clickHandler(context as? FragmentActivity) // TODO: Ugly cast
                 },
                 icon = {
                     Icon(
