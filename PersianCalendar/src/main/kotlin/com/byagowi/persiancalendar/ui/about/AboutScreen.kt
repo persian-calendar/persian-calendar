@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableString
@@ -9,12 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
@@ -42,6 +51,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.BuildConfig
@@ -152,20 +162,35 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             layoutManager = LinearLayoutManager(context)
         }
 
-        // report bug
-        binding.reportBug.setOnClickListener { launchReportIntent() }
-        binding.reportBugTitle.putLineStartIcon(R.drawable.ic_bug)
-
-        binding.email.setOnClickListener click@{ showEmailDialog(activity ?: return@click) }
-        binding.emailTitle.putLineStartIcon(R.drawable.ic_email)
-
         binding.compose.setContent {
             Mdc3Theme {
-                // Developers
                 Column {
+                    // Bug report
+                    Text(
+                        stringResource(R.string.about_support_developers),
+                        modifier = Modifier
+                            .padding(start = 12.dp, end = 12.dp, top = 12.dp),
+                    )
+                    AboutScreenButton(
+                        icon = ImageVector.vectorResource(R.drawable.ic_bug),
+                        action = ::launchReportIntent,
+                        title = R.string.about_report_bug,
+                        summary = R.string.about_report_bug_sum
+                    )
+                    AboutScreenButton(
+                        icon = Icons.Default.Email,
+                        action = click@{
+                            // TODO: Ugly cast
+                            showEmailDialog(context as? FragmentActivity ?: return@click)
+                        },
+                        title = R.string.about_sendMail,
+                        summary = R.string.about_email_sum
+                    )
+
+                    // Developers
                     Text(
                         stringResource(R.string.about_developers),
-                        modifier = Modifier.padding(all = 12.dp)
+                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
                     )
                     DevelopersChips()
                 }
@@ -182,13 +207,6 @@ class AboutScreen : Fragment(R.layout.about_screen) {
         }
     }
 
-    private fun launchReportIntent() {
-        runCatching {
-            val uri = "https://github.com/persian-calendar/persian-calendar/issues/new".toUri()
-            startActivity(Intent(Intent.ACTION_VIEW, uri))
-        }.onFailure(logException)
-    }
-
     private fun shareApplication() {
         runCatching {
             startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
@@ -200,6 +218,43 @@ https://github.com/persian-calendar/persian-calendar"""
             }, getString(R.string.share)))
         }.onFailure(logException).onFailure { (activity ?: return).bringMarketPage() }
     }
+}
+
+@Composable
+private fun AboutScreenButton(
+    icon: ImageVector,
+    action: (context: Context) -> Unit,
+    @StringRes title: Int,
+    @StringRes summary: Int,
+) {
+    val context = LocalContext.current
+    Box(modifier = Modifier
+        .clickable { action(context) }
+        .padding(start = 8.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
+        Row {
+            Icon(
+                modifier = Modifier.padding(end = 4.dp),
+                imageVector = icon,
+                contentDescription = stringResource(title)
+            )
+            Column {
+                Text(stringResource(title))
+                Spacer(modifier = Modifier.size(width = 0.dp, height = 4.dp))
+                Text(
+                    stringResource(summary),
+                    fontSize = 12.sp,
+                    lineHeight = 16.sp
+                )
+            }
+        }
+    }
+}
+
+private fun launchReportIntent(context: Context) {
+    runCatching {
+        val uri = "https://github.com/persian-calendar/persian-calendar/issues/new".toUri()
+        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }.onFailure(logException)
 }
 
 @Composable
