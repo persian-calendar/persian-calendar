@@ -9,8 +9,6 @@ import android.provider.CalendarContract
 import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.text.HtmlCompat
-import androidx.core.text.parseAsHtml
 import androidx.navigation.NavController
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID

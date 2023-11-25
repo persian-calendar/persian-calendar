@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.os.Build
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ZWJ
@@ -16,7 +15,6 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.ui.utils.sp
 
 class SharedDayViewData(

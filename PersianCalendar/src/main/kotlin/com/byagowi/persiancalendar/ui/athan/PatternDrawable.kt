@@ -11,7 +11,6 @@ import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and

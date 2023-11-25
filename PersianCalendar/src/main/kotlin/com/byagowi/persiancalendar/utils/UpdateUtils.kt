@@ -751,7 +751,7 @@ private data class NotificationData(
                 channel.enableVibration(false)
             }
             channel.setShowBadge(false)
-            notificationManager?.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)
         }
 
         // Prepend a right-to-left mark character to Android with sane text rendering stack

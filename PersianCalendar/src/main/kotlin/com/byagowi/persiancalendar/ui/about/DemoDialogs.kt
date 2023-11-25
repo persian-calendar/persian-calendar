@@ -619,7 +619,7 @@ float4 main(float2 fragCoord) {
     float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
     return d < 1 ? color : vec4(0);
 }
-""";
+"""
 
 fun showPeriodicTableDialog(activity: FragmentActivity) {
     val zoomableView = ZoomableView(activity)
