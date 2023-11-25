@@ -177,17 +177,16 @@ private fun Rail() {
 @Composable
 private fun Licenses() {
     val sections = remember { getCreditsSections() }
-    val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
+    var expandedItem by remember { mutableIntStateOf(-1) }
     val initialDegree = -90f
     LazyColumn {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
-            val isExpanded = expansionsState[i]
             val angle = animateFloatAsState(
-                if (isExpanded) 0f else initialDegree, label = "angle"
+                if (expandedItem == i) 0f else initialDegree, label = "angle"
             ).value
             Column(modifier = Modifier
-                .clickable { expansionsState[i] = !expansionsState[i] }
+                .clickable { expandedItem = if (i == expandedItem) -1 else i }
                 .padding(6.dp)
                 .fillMaxWidth()
                 .animateContentSize(
@@ -216,7 +215,7 @@ private fun Licenses() {
                         style = TextStyle(Color.DarkGray, 12.sp)
                     )
                 }
-                if (isExpanded) SelectionContainer { Text(text) }
+                if (expandedItem == i) SelectionContainer { Text(text) }
             }
         }
         item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }

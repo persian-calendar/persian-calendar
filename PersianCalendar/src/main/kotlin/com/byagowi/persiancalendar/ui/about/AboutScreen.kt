@@ -327,12 +327,7 @@ private fun HelpItems() {
                 .clickable { expansionsState[i] = !expansionsState[i] }
                 .padding(6.dp)
                 .fillMaxWidth()
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )) {
+                .animateContentSize()) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Image(
                         imageVector = Icons.Default.KeyboardArrowDown,
