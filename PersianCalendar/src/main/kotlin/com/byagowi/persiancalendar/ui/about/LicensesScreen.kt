@@ -37,7 +37,6 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -88,17 +87,15 @@ class LicensesScreen : Fragment() {
                         bar.toolbar.setupUpNavigation()
                         bar.root
                     })
-                    Surface(shape = RoundedCornerShape(24.dp)) {
+                    Surface(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
                         Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 0.dp)) {
-                            Surface {
-                                // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
-                                //  the latter ltr is ok
-                                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                                    Row {
-                                        Rail()
-                                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                                            Licenses()
-                                        }
+                            // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
+                            //  the latter ltr is ok
+                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                                Row {
+                                    Rail()
+                                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                        Licenses()
                                     }
                                 }
                             }
@@ -191,9 +188,7 @@ private fun Licenses() {
                 .padding(6.dp)
                 .fillMaxWidth()
                 .animateContentSize()) {
-                FlowRow(
-                    verticalArrangement = Arrangement.Center,
-                ) {
+                FlowRow(verticalArrangement = Arrangement.Center) {
                     Image(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(R.string.more),

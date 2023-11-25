@@ -3,36 +3,50 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.util.Linkify
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -47,13 +61,11 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.scale
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AboutScreenBinding
@@ -63,7 +75,6 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getAnimatedDrawable
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
-import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
@@ -118,88 +129,35 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             }
         }
         binding.aboutHeader.text = version
-        binding.accessibleVersion.contentDescription = version
-        run {
-            val animation =
-                context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@run
-            binding.icon.setImageDrawable(animation)
-            animation.start()
-            val clickHandlerDialog = createEasterEggClickHandler(::showPeriodicTableDialog)
-            val clickHandlerIcon = createIconRandomEffects(binding.icon)
-            binding.headerPlaceHolder.setOnClickListener {
-                animation.stop()
-                animation.start()
-                clickHandlerDialog(activity)
-                clickHandlerIcon()
-            }
-        }
-
-        fun TextView.putLineStartIcon(@DrawableRes icon: Int) {
-            if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
-            else setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
-        }
-
-        // licenses
-        binding.licenses.setOnClickListener {
-            findNavController().navigateSafe(AboutScreenDirections.actionAboutToLicenses())
-        }
-        binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
-
-        // help
-        binding.helpCard.isVisible = language.isUserAbleToReadPersian
-        binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
-        binding.helpSectionsRecyclerView.apply {
-            val sections = faq
-                .split(Regex("^={4}$", RegexOption.MULTILINE))
-                .map { it.trim().lines() }
-                .map { lines ->
-                    val title = lines.first()
-                    val body = SpannableString(lines.drop(1).joinToString("\n").trim())
-                    Linkify.addLinks(body, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                    title to body
-                }
-            adapter = ExpandableItemsAdapter(sections)
-            layoutManager = LinearLayoutManager(context)
-        }
+        val animation = context?.getAnimatedDrawable(R.drawable.splash_icon_animation)
+        binding.icon.setImageDrawable(animation)
+        animation?.start()
+        val clickHandlerDialog = createEasterEggClickHandler(::showPeriodicTableDialog)
+        val clickHandlerIcon = createIconRandomEffects(binding.icon)
 
         binding.compose.setContent {
             Mdc3Theme {
-                Column {
-                    // Bug report
-                    Text(
-                        stringResource(R.string.about_support_developers),
-                        modifier = Modifier
-                            .padding(start = 12.dp, end = 12.dp, top = 12.dp),
-                    )
-                    AboutScreenButton(
-                        icon = ImageVector.vectorResource(R.drawable.ic_bug),
-                        action = ::launchReportIntent,
-                        title = R.string.about_report_bug,
-                        summary = R.string.about_report_bug_sum
-                    )
-                    AboutScreenButton(
-                        icon = Icons.Default.Email,
-                        action = click@{
-                            // TODO: Ugly cast
-                            showEmailDialog(context as? FragmentActivity ?: return@click)
-                        },
-                        title = R.string.about_sendMail,
-                        summary = R.string.about_email_sum
-                    )
-
-                    // Developers
-                    Text(
-                        stringResource(R.string.about_developers),
-                        modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
-                    )
-                    DevelopersChips()
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    Box(modifier = Modifier
+                        .fillMaxWidth()
+                        .size(width = 0.dp, height = 250.dp)
+                        .clickable(onClickLabel = version.toString()) {
+                            animation?.stop()
+                            animation?.start()
+                            clickHandlerDialog(activity)
+                            clickHandlerIcon()
+                        })
+                    Surface(shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)) {
+                        Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 0.dp)) {
+                            AboutScreenContent()
+                        }
+                    }
                 }
             }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.contentRoot.updatePadding(bottom = insets.bottom)
             binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top
             }
@@ -221,6 +179,116 @@ https://github.com/persian-calendar/persian-calendar"""
 }
 
 @Composable
+private fun AboutScreenContent() {
+    Column {
+        // Licenses
+        val context = LocalContext.current
+        Text(
+            stringResource(R.string.licenses),
+            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
+        )
+        AboutScreenButton(
+            icon = ImageVector.vectorResource(R.drawable.ic_licences),
+            action = {
+                // TODO: Ugly cast
+                (context as? FragmentActivity)?.findNavController(R.id.navHostFragment)
+                    ?.navigateSafe(AboutScreenDirections.actionAboutToLicenses())
+            },
+            title = R.string.about_license_title,
+            summary = R.string.about_license_sum
+        )
+
+        // Help
+        if (language.isUserAbleToReadPersian) {
+            Row(modifier = Modifier.padding(top = 16.dp)) {
+                Icon(
+                    modifier = Modifier.padding(start = 8.dp, end = 4.dp),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_help),
+                    contentDescription = stringResource(R.string.help)
+                )
+                Column { Text(stringResource(R.string.help)) }
+            }
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                HelpItems()
+            }
+        }
+
+        // Bug report
+        Text(
+            stringResource(R.string.about_support_developers),
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
+        )
+        AboutScreenButton(
+            icon = ImageVector.vectorResource(R.drawable.ic_bug),
+            action = ::launchReportIntent,
+            title = R.string.about_report_bug,
+            summary = R.string.about_report_bug_sum
+        )
+        AboutScreenButton(
+            icon = Icons.Default.Email,
+            action = click@{
+                // TODO: Ugly cast
+                showEmailDialog(context as? FragmentActivity ?: return@click)
+            },
+            title = R.string.about_sendMail,
+            summary = R.string.about_email_sum
+        )
+
+        // Developers
+        Text(
+            stringResource(R.string.about_developers),
+            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
+        )
+        DevelopersChips()
+
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun HelpItems() {
+    val sections = remember {
+        faq
+            .split(Regex("^={4}$", RegexOption.MULTILINE))
+            .map { it.trim().lines() }
+            .map { lines ->
+                val title = lines.first()
+                val body = lines.drop(1).joinToString("\n").trim()
+                title to body
+            }
+    }
+    val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
+    val initialDegree = 90f
+    Column {
+        sections.forEachIndexed { i, (title, body) ->
+            val isExpanded = expansionsState[i]
+            val angle = animateFloatAsState(
+                if (isExpanded) 0f else initialDegree, label = "angle"
+            ).value
+            Column(modifier = Modifier
+                .clickable { expansionsState[i] = !expansionsState[i] }
+                .padding(6.dp)
+                .fillMaxWidth()
+                .animateContentSize()) {
+                FlowRow(verticalArrangement = Arrangement.Center) {
+                    Image(
+                        imageVector = Icons.Default.KeyboardArrowDown,
+                        contentDescription = stringResource(R.string.more),
+                        modifier = Modifier
+                            .rotate(angle)
+                            .size(24.dp, 24.dp),
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                    )
+                    Text(title)
+                }
+                if (isExpanded) SelectionContainer { Text(body) }
+            }
+        }
+    }
+}
+
+@Composable
 private fun AboutScreenButton(
     icon: ImageVector,
     action: (context: Context) -> Unit,
@@ -228,9 +296,10 @@ private fun AboutScreenButton(
     @StringRes summary: Int,
 ) {
     val context = LocalContext.current
-    Box(modifier = Modifier
-        .clickable { action(context) }
-        .padding(start = 8.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
+    Box(
+        modifier = Modifier
+            .clickable(onClickLabel = stringResource(title)) { action(context) }
+            .padding(start = 8.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
         Row {
             Icon(
                 modifier = Modifier.padding(end = 4.dp),
