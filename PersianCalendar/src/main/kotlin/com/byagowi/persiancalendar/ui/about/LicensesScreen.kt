@@ -1,178 +1,186 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.annotation.SuppressLint
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.text.SpannableString
-import android.text.style.ReplacementSpan
-import android.text.util.Linkify
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.createBitmap
-import androidx.core.os.postDelayed
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
-import androidx.core.text.scale
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.LicensesScreenBinding
-import com.byagowi.persiancalendar.generated.EventType
-import com.byagowi.persiancalendar.generated.gregorianEvents
-import com.byagowi.persiancalendar.generated.irregularRecurringEvents
-import com.byagowi.persiancalendar.generated.islamicEvents
-import com.byagowi.persiancalendar.generated.nepaliEvents
-import com.byagowi.persiancalendar.generated.persianEvents
-import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.google.android.material.sidesheet.SideSheetBehavior
-import com.google.android.material.sidesheet.SideSheetCallback
-import com.google.android.material.transition.MaterialFadeThrough
-import kotlin.math.roundToInt
+import com.byagowi.persiancalendar.ui.utils.createUpNavigationComposeView
 
-class LicensesScreen : Fragment(R.layout.licenses_screen) {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        exitTransition = MaterialFadeThrough()
-        enterTransition = MaterialFadeThrough()
-        returnTransition = MaterialFadeThrough()
-        reenterTransition = MaterialFadeThrough()
+class LicensesScreen : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?
+    ): View {
+        return createUpNavigationComposeView(inflater) @Composable { setTitle, _ ->
+            setTitle(stringResource(R.string.about_license_title))
+            Row { Rail(); Licenses() }
+        }
     }
+}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val binding = LicensesScreenBinding.bind(view)
-        binding.appBar.toolbar.setTitle(R.string.about_license_title)
-        binding.appBar.toolbar.setupUpNavigation()
+// TODO: Sidesheet content not used anymore as Material library of Jetpack Compose doesn't have sidesheet
+//    """Events count:
+//   Persian Events: ${persianEvents.size + 1}
+//   Islamic Events: ${islamicEvents.size + 1}
+//   Gregorian Events: ${gregorianEvents.size + 1}
+//   Nepali Events: ${nepaliEvents.size + 1}
+//   Irregular Recurring Events: ${irregularRecurringEvents.size + 1}
+//   \nSources:
+//   ${EventType.entries.joinToString("\n") { "${it.name}: ${it.source}" }}"""
+//  And as the result has link, it should be linkified https://stackoverflow.com/q/66130513
 
-        @SuppressLint("SetTextI18n")
-        binding.eventsStats.text = """Events count:
-Persian Events: ${persianEvents.size + 1}
-Islamic Events: ${islamicEvents.size + 1}
-Gregorian Events: ${gregorianEvents.size + 1}
-Nepali Events: ${nepaliEvents.size + 1}
-Irregular Recurring Events: ${irregularRecurringEvents.size + 1}
 
-Sources:
-${EventType.entries.joinToString("\n") { "${it.name}: ${it.source}" }}"""
-        Linkify.addLinks(binding.eventsStats, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-        val sideSheet = SideSheetBehavior.from(binding.standardSideSheet)
-        sideSheet.addCallback(object : SideSheetCallback() {
-            override fun onSlide(sheet: View, slideOffset: Float) = Unit
-            override fun onStateChanged(sheet: View, newState: Int) {
-                if (newState == SideSheetBehavior.STATE_EXPANDED)
-                    Handler(Looper.getMainLooper())
-                        .postDelayed(TWO_SECONDS_IN_MILLIS) { sideSheet.hide() }
-            }
-        })
-
-        binding.railView.menu.also {
-            fun createTextIcon(text: String): Drawable {
-                val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-                paint.textSize = 40f
-                val bounds = Rect()
-                paint.color = Color.WHITE
-                paint.getTextBounds(text, 0, text.length, bounds)
-                val padding = 1 * resources.dp
-                val width = bounds.width() + padding.toInt() * 2
-                val height = bounds.height()
-                val bitmap = createBitmap(width, height)
-                    .applyCanvas { drawText(text, padding, height.toFloat(), paint) }
-                return BitmapDrawable(view.context.resources, bitmap)
-            }
-            listOf(
-                Triple(
-                    "GPLv3",
-                    view.context.getCompatDrawable(R.drawable.ic_info),
-                    ::showShaderSandboxDialog
-                ),
-                Triple(
-                    KotlinVersion.CURRENT.toString(),
-                    createTextIcon("Kotlin"),
-                    ::showSpringDemoDialog
-                ),
-                Triple(
-                    "API ${Build.VERSION.SDK_INT}",
-                    view.context.getCompatDrawable(R.drawable.ic_motorcycle),
-                    ::showFlingDemoDialog
-                ),
-            ).forEach { (title, icon, dialog) ->
-                val clickHandler = createEasterEggClickHandler(dialog)
-                it.add(title).setIcon(icon).onClick { clickHandler(activity) }
-            }
+@Composable
+private fun Rail() {
+    var selectedItem by remember { mutableIntStateOf(0) }
+    NavigationRail {
+        listOf(
+            Triple(
+                "GPLv3", Icons.Default.Info, ::showShaderSandboxDialog
+            ), Triple(
+                KotlinVersion.CURRENT.toString(),
+                Icons.Default.Settings,
+                // TODO: Show "Kotlin" as a text here instead of settings icon
+                //  fun createTextIcon(text: String): Drawable {
+                //      val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+                //      paint.textSize = 40f
+                //      val bounds = Rect()
+                //      paint.color = android.graphics.Color.WHITE
+                //      paint.getTextBounds(text, 0, text.length, bounds)
+                //      val padding = 1 * resources.dp
+                //      val width = bounds.width() + padding.toInt() * 2
+                //      val height = bounds.height()
+                //      val bitmap = createBitmap(width, height)
+                //          .applyCanvas { drawText(text, padding, height.toFloat(), paint) }
+                //      return BitmapDrawable(view.context.resources, bitmap)
+                //  }
+                ::showSpringDemoDialog
+            ), Triple(
+                "API ${Build.VERSION.SDK_INT}",
+                ImageVector.vectorResource(R.drawable.ic_motorcycle),
+                ::showFlingDemoDialog
+            )
+        ).forEachIndexed { i, (title, icon, action) ->
+            val clickHandler = remember { createEasterEggClickHandler(action) }
+            val context = LocalContext.current
+            NavigationRailItem(
+                selected = selectedItem == i,
+                onClick = {
+                    selectedItem = i
+                    clickHandler(context as? FragmentActivity)
+                },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(24.dp), // = MaterialIconDimension.dp
+                        imageVector = icon, contentDescription = title
+                    )
+                },
+                label = { Text(title) },
+            )
         }
+    }
+}
 
-        // Based on https://stackoverflow.com/a/34623367
-        class BadgeSpan : ReplacementSpan() {
-            private val sidePadding = resources.sp(6f)
-
-            override fun getSize(
-                paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?
-            ) = (paint.measureText(text, start, end) + sidePadding * 2).roundToInt()
-
-            override fun draw(
-                canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int,
-                y: Int, bottom: Int, paint: Paint
-            ) {
-                val verticalReduce = resources.sp(5f)
-                val rect = RectF(
-                    x, top + verticalReduce,
-                    x + getSize(paint, text, start, end, null), bottom.toFloat()
-                )
-                paint.color =
-                    view.context.resolveColor(com.google.android.material.R.attr.colorSurfaceDim)
-                val dp = resources.dp
-                canvas.drawRoundRect(rect, 25 * dp, 25 * dp, paint)
-                paint.color = view.context.resolveColor(android.R.attr.textColorPrimary)
-                canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
-            }
-        }
-
-        val sections = getCreditsSections().map { (title, license, text) ->
-            buildSpannedString {
-                append(title)
-                if (license != null) {
-                    append("  ")
-                    scale(.7f) { inSpans(BadgeSpan()) { append(license) } }
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun Licenses() {
+    val sections = remember { getCreditsSections() }
+    val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
+    val initialDegree = if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        LazyColumn {
+            itemsIndexed(sections) { i, (title, license, text) ->
+                val isExpanded = expansionsState[i]
+                val angle = animateFloatAsState(
+                    if (isExpanded) 0f else initialDegree, label = "angle"
+                ).value
+                Column(modifier = Modifier
+                    .clickable { expansionsState[i] = !expansionsState[i] }
+                    .padding(6.dp)
+                    .fillMaxWidth()
+                    .animateContentSize()) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.Start,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Image(
+                            imageVector = Icons.Default.KeyboardArrowDown,
+                            contentDescription = stringResource(R.string.more),
+                            modifier = Modifier.rotate(angle),
+                            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(title)
+                        Spacer(modifier = Modifier.width(4.dp))
+                        if (license != null) Text(
+                            // TODO: Linkify them just like https://stackoverflow.com/q/66130513
+                            //  Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                            license,
+                            modifier = Modifier
+                                .background(
+                                    Color.LightGray, RoundedCornerShape(CornerSize(3.dp))
+                                )
+                                .padding(horizontal = 4.dp),
+                            style = TextStyle(Color.DarkGray, 12.sp)
+                        )
+                    }
+                    if (isExpanded) Text(text)
                 }
-            } to SpannableString(text).also {
-                Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                if (i != sections.size - 1)
+                    Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
             }
-        }
-
-        binding.recyclerView.adapter = ExpandableItemsAdapter(sections)
-        val layoutManager = LinearLayoutManager(context)
-        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
-        binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.addItemDecoration(itemDecoration)
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.recyclerView.updatePadding(bottom = insets.bottom)
-            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top
-            }
-            WindowInsetsCompat.CONSUMED
         }
     }
 }
