@@ -7,7 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
+import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 
 abstract class WidgetProvider : AppWidgetProvider() {
@@ -17,7 +17,7 @@ abstract class WidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
         context ?: return
-        startEitherServiceOrWorker(context)
+        startWorker(context)
         update(context, false)
     }
 

@@ -82,7 +82,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
-import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
@@ -692,11 +691,9 @@ private fun updateNotification(
     context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
 ) {
     if (!isNotifyDate) {
-        if (enableWorkManager) {
-            val notificationManager = context.getSystemService<NotificationManager>()
-            notificationManager?.cancel(NOTIFICATION_ID_LOW_PRIORITY)
-            notificationManager?.cancel(NOTIFICATION_ID_DEFAULT_PRIORITY)
-        }
+        val notificationManager = context.getSystemService<NotificationManager>()
+        notificationManager?.cancel(NOTIFICATION_ID_LOW_PRIORITY)
+        notificationManager?.cancel(NOTIFICATION_ID_DEFAULT_PRIORITY)
         return
     }
 
@@ -741,8 +738,7 @@ private data class NotificationData(
 ) {
     @CheckResult
     fun post(context: Context): Boolean {
-        val notificationManager = context.getSystemService<NotificationManager>()
-        if (enableWorkManager && notificationManager == null) return false
+        val notificationManager = context.getSystemService<NotificationManager>() ?: return false
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 notificationId.toString(),
@@ -850,10 +846,7 @@ private data class NotificationData(
 
         if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
 
-        if (enableWorkManager) notificationManager?.notify(notificationId, builder.build())
-        else context.runCatching {
-            ApplicationService.getInstance()?.startForeground(notificationId, builder.build())
-        }.onFailure(logException)
+        notificationManager.notify(notificationId, builder.build())
         return true
     }
 }

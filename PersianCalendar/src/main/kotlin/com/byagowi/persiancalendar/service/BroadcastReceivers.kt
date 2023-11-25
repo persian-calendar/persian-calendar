@@ -9,9 +9,8 @@ import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
 import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
-import com.byagowi.persiancalendar.utils.scheduleAlarmManagerUpdates
 import com.byagowi.persiancalendar.utils.startAthan
-import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
+import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugLog
 
@@ -24,17 +23,11 @@ class BroadcastReceivers : BroadcastReceiver() {
         when (intent?.action) {
             Intent.ACTION_BOOT_COMPLETED,
             TelephonyManager.ACTION_PHONE_STATE_CHANGED,
-            BROADCAST_RESTART_APP -> startEitherServiceOrWorker(context)
+            BROADCAST_RESTART_APP -> startWorker(context)
 
-            Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> {
-                update(context, true)
-                scheduleAlarmManagerUpdates(context)
-            }
-
-            Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON, BROADCAST_UPDATE_APP -> {
+            Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> update(context, true)
+            Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON, BROADCAST_UPDATE_APP ->
                 update(context, false)
-                scheduleAlarmManagerUpdates(context)
-            }
 
             BROADCAST_ALARM -> {
                 val key = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: return
