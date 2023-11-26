@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
@@ -349,19 +350,17 @@ private fun HelpItems() {
             }
     }
     val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
-    val initialDegree = 90f
     Column {
         sections.forEachIndexed { i, (title, body) ->
             val isExpanded = expansionsState[i]
-            val angle = animateFloatAsState(
-                if (isExpanded) 0f else initialDegree, label = "angle"
-            ).value
+            val angle = animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle").value
             Column(modifier = Modifier
                 .clickable { expansionsState[i] = !expansionsState[i] }
-                .padding(6.dp)
+                .padding(4.dp)
                 .fillMaxWidth()
                 .animateContentSize()) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
+                    Spacer(modifier = Modifier.width(4.dp))
                     Image(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(R.string.more),
@@ -370,7 +369,8 @@ private fun HelpItems() {
                             .size(24.dp, 24.dp),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     )
-                    Text(title)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                 }
                 if (isExpanded) SelectionContainer { Text(body) }
             }

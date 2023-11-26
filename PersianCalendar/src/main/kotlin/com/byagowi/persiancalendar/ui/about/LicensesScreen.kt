@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -50,6 +51,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -175,16 +177,14 @@ private fun Rail() {
 private fun Licenses() {
     val sections = remember { getCreditsSections() }
     var expandedItem by remember { mutableIntStateOf(-1) }
-    val initialDegree = -90f
     LazyColumn {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
-            val angle = animateFloatAsState(
-                if (expandedItem == i) 0f else initialDegree, label = "angle"
-            ).value
+            val angle =
+                animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle").value
             Column(modifier = Modifier
                 .clickable { expandedItem = if (i == expandedItem) -1 else i }
-                .padding(6.dp)
+                .padding(4.dp)
                 .fillMaxWidth()
                 .animateContentSize(
                     animationSpec = spring(
@@ -200,7 +200,7 @@ private fun Licenses() {
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(title)
+                    Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                     Spacer(modifier = Modifier.width(4.dp))
                     if (license != null) Text(
                         // TODO: Linkify them just like https://stackoverflow.com/q/66130513
@@ -208,6 +208,7 @@ private fun Licenses() {
                         license,
                         modifier = Modifier
                             .background(Color.LightGray, RoundedCornerShape(CornerSize(3.dp)))
+                            .align(alignment = Alignment.CenterVertically)
                             .padding(horizontal = 4.dp),
                         style = MaterialTheme.typography.bodySmall
                     )
