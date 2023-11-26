@@ -132,7 +132,7 @@ fun FragmentActivity.shareText(text: String) {
     }.onFailure(logException)
 }
 
-private fun FragmentActivity.shareUriFile(uri: Uri, mime: String) {
+private fun Context.shareUriFile(uri: Uri, mime: String) {
     runCatching {
         startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
             it.type = mime
@@ -141,10 +141,10 @@ private fun FragmentActivity.shareUriFile(uri: Uri, mime: String) {
     }.onFailure(logException)
 }
 
-fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) =
+fun Context.shareTextFile(text: String, fileName: String, mime: String) =
     shareUriFile(saveAsFile(fileName) { it.writeText(text) }, mime)
 
-fun FragmentActivity.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
+fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
     shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
 
 fun Toolbar.setupUpNavigation() {
