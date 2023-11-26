@@ -31,9 +31,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -164,13 +164,10 @@ private fun AboutScreenToolbar(items: List<Item>) {
 @Composable
 private fun DeviceInformationRoot(items: List<Item>) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-        ) {
-            Spacer(Modifier.height(16.dp))
-            Overview()
-            items.forEachIndexed { i, item ->
+        LazyColumn {
+            item { Spacer(Modifier.height(16.dp)) }
+            item { Overview() }
+            itemsIndexed(items) { i, item ->
                 if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
                 Column(Modifier.padding(4.dp)) {
                     Text(item.title, fontWeight = FontWeight.Bold)
@@ -185,7 +182,7 @@ private fun DeviceInformationRoot(items: List<Item>) {
                     }
                 }
             }
-            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+            item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
         }
     }
 }
