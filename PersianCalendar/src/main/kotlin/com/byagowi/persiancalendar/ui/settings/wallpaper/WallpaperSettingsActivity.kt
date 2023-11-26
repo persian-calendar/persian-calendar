@@ -3,15 +3,29 @@ package com.byagowi.persiancalendar.ui.settings.wallpaper
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
+import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.WallpaperSettingsBinding
 import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class WallpaperSettingsActivity : AppCompatActivity() {
 
@@ -28,16 +42,37 @@ class WallpaperSettingsActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
-        val binding = WallpaperSettingsBinding.inflate(layoutInflater).also {
-            setContentView(it.root)
+        setContent {
+            Mdc3Theme {
+                Column(modifier = Modifier.safeDrawingPadding()) {
+                    Column(
+                        Modifier
+                            .alpha(.8f)
+                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                            .background(
+                                MaterialTheme.colorScheme.surface,
+                                MaterialTheme.shapes.extraLarge
+                            )
+                            .padding(16.dp),
+                    ) {
+                        Button(
+                            onClick = { finish() },
+                            modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                        ) {
+                            Text(
+                                stringResource(R.string.accept),
+                                modifier = Modifier.padding(horizontal = 8.dp),
+                            )
+                        }
+                        SettingsSwitch(
+                            PREF_WALLPAPER_DARK,
+                            DEFAULT_WALLPAPER_DARK,
+                            stringResource(R.string.theme_dark)
+                        )
+                    }
+                }
+            }
         }
-
-        supportFragmentManager.commit {
-            replace(
-                R.id.preference_fragment_holder, WallpaperSettingsFragment::class.java, bundleOf()
-            )
-        }
-        binding.addWidgetButton.setOnClickListener { finish() }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
