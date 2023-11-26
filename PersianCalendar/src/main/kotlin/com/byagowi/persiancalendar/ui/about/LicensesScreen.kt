@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -64,8 +63,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
@@ -74,7 +71,6 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class LicensesScreen : Fragment() {
@@ -124,28 +120,9 @@ class LicensesScreen : Fragment() {
 //   ${EventType.entries.joinToString("\n") { "${it.name}: ${it.source}" }}"""
 //  And as the result has link, it should be linkified https://stackoverflow.com/q/66130513
 
-// Use Material's painter here instead of view system Drawable
-fun createTextIcon(context: Context, text: String): android.graphics.drawable.Drawable {
-    val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
-    paint.textSize = 40f
-    val bounds = android.graphics.Rect()
-    paint.color = android.graphics.Color.WHITE
-    paint.getTextBounds(text, 0, text.length, bounds)
-    val padding = 1f
-    val width = bounds.width() + padding.toInt() * 2
-    val height = bounds.height()
-    val bitmap =
-        createBitmap(width, height).applyCanvas { drawText(text, padding, height.toFloat(), paint) }
-    return android.graphics.drawable.BitmapDrawable(context.resources, bitmap)
-}
-
 @Composable
 private fun Sidebar() {
     var selectedItem by remember { mutableIntStateOf(0) }
-    val context = LocalContext.current
-    val kotlinPainter = rememberDrawablePainter(remember {
-        createTextIcon(context, "Kotlin")
-    })
     NavigationRail(windowInsets = WindowInsets(0, 0, 0, 0)) {
         listOf<Triple<String, @Composable () -> Unit, (FragmentActivity) -> Unit>>(
             Triple(
@@ -154,14 +131,9 @@ private fun Sidebar() {
                 ::showShaderSandboxDialog
             ),
             Triple(
-                KotlinVersion.CURRENT.toString(),
-                {
-                    Icon(
-                        modifier = Modifier.size(MaterialIconDimension.dp),
-                        painter = kotlinPainter, contentDescription = "Kotlin",
-                    )
-                },
-                ::showSpringDemoDialog
+                KotlinVersion.CURRENT.toString(), {
+                    Text("Kotlin", style = MaterialTheme.typography.bodySmall)
+                }, ::showSpringDemoDialog
             ), Triple(
                 "API ${Build.VERSION.SDK_INT}",
                 {
