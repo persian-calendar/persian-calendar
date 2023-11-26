@@ -1,48 +1,110 @@
 package com.byagowi.persiancalendar.ui.athan
 
-import android.animation.ValueAnimator
-import android.view.animation.LinearInterpolator
-import androidx.activity.ComponentActivity
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.paint
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.AthanActivityBinding
 import com.byagowi.persiancalendar.entities.Theme
-import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.fadeIn
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getPrayTimeName
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
-fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onClick: () -> Unit) {
-    val cityName = activity.appPrefs.cityName
-    activity.setContentView(AthanActivityBinding.inflate(activity.layoutInflater).also { binding ->
-        binding.athanName.setText(getPrayTimeName(prayerKey))
-        binding.place.fadeIn(TWO_SECONDS_IN_MILLIS)
-        binding.root.setOnClickListener { onClick() }
-        val pattern = PatternDrawable(
-            prayerKey, darkBaseColor = Theme.isNightMode(activity), dp = activity.resources.dp
-        )
-        val valueAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-            it.duration = 180000L
-            it.interpolator = LinearInterpolator()
-            it.repeatMode = ValueAnimator.RESTART
-            it.repeatCount = ValueAnimator.INFINITE
-            it.addUpdateListener { valueAnimator ->
-                pattern.rotationDegree = valueAnimator.animatedFraction * 360
-                pattern.invalidateSelf()
-            }
-            listOf(it::start, it::reverse).random()()
+@Composable
+fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Unit) {
+    Box(modifier = Modifier.clickable { onClick() }) {
+        val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
+        val context = LocalContext.current
+        val patternDrawable = remember {
+            PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(context), dp = dpAsPx)
         }
-        valueAnimator.start()
-        activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_PAUSE) {
-                valueAnimator.removeAllUpdateListeners()
-                valueAnimator.cancel()
+        val infiniteTransition = rememberInfiniteTransition(label = "rotation")
+        val rotation by infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 180_000, easing = LinearEasing)
+            ),
+            label = ""
+        )
+        val direction = remember { listOf(1, -1).random() }
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                // TODO: Previously rotation was handled by pattern drawable itself but now it's
+                //  handled in compose graphics layer, as a result different origin for rotation
+                //  was done inside the drawable now isn't supported.
+                .graphicsLayer(rotationZ = rotation * direction)
+                .paint(rememberDrawablePainter(patternDrawable))
+        )
+        Column(modifier = Modifier.padding(horizontal = 30.dp, vertical = 80.dp)) {
+            val textStyle = LocalTextStyle.current.copy(
+                color = Color.White, fontWeight = FontWeight.Bold,
+                shadow = Shadow(color = Color.Black, blurRadius = 2f, offset = Offset(1f, 1f))
+            )
+            Text(stringResource(getPrayTimeName(prayerKey)), fontSize = 36.sp, style = textStyle)
+            if (cityName != null) {
+                var visible by remember { mutableStateOf(false) }
+                LaunchedEffect(key1 = null) { visible = true }
+                val density = LocalDensity.current
+                // Just an exaggerated demo for https://developer.android.com/jetpack/compose/animation#animatedvisibility
+                AnimatedVisibility(
+                    visible = visible, enter = slideInVertically(
+                        animationSpec = keyframes { durationMillis = TWO_SECONDS_IN_MILLIS.toInt() }
+                    ) { with(density) { -20.dp.roundToPx() } } + fadeIn(
+                        initialAlpha = 0f,
+                        animationSpec = keyframes { durationMillis = TWO_SECONDS_IN_MILLIS.toInt() }
+                    )
+                ) {
+                    Text(
+                        stringResource(R.string.in_city_time, cityName),
+                        fontSize = 18.sp,
+                        style = textStyle,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                }
             }
-        })
-        binding.root.background = pattern
-        binding.place.text = cityName?.let { activity.getString(R.string.in_city_time, it) }
-    }.root)
+        }
+    }
 }
+
+@Preview
+@Composable
+private fun AthanActivityContentPreview() = AthanActivityContent(FAJR_KEY, "CITY NAME") {}

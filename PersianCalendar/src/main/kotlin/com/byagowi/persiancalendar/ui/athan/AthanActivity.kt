@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
@@ -21,8 +22,10 @@ import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
+import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
@@ -128,7 +131,8 @@ class AthanActivity : AppCompatActivity() {
             )
         }
 
-        setAthanActivityContent(this, prayerKey, onClick = ::stop)
+        val cityName = appPrefs.cityName
+        setContent { AthanActivityContent(prayerKey, cityName, ::stop) }
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 

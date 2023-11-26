@@ -204,13 +204,6 @@ fun AppBarLayout.hideToolbarBottomShadow() {
     outlineProvider = null
 }
 
-fun View.fadeIn(durationMillis: Long = 250) {
-    this.startAnimation(AlphaAnimation(0F, 1F).also {
-        it.duration = durationMillis
-        it.fillAfter = true
-    })
-}
-
 inline fun MenuItem.onClick(crossinline action: () -> Unit) {
     this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }
 }
