@@ -426,7 +426,7 @@ private fun DevelopersChips() {
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
-        FlowRow {
+        FlowRow(Modifier.fillMaxWidth()) {
             developers.forEach { (username, displayName, icon) ->
                 ElevatedFilterChip(
                     modifier = Modifier.padding(2.dp),
