@@ -67,9 +67,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.ui.utils.topRoundedCornerShape
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class LicensesScreen : Fragment() {
@@ -87,7 +87,7 @@ class LicensesScreen : Fragment() {
                         bar.toolbar.setupUpNavigation()
                         bar.root
                     })
-                    Surface(shape = topRoundedCornerShape) {
+                    Surface(shape = MaterialCornerExtraLargeTop()) {
                         Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) {
                             // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
                             //  the latter ltr is ok

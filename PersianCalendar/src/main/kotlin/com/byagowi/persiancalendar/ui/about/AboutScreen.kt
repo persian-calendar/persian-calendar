@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
@@ -95,7 +96,6 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.ui.utils.topRoundedCornerShape
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -124,7 +124,7 @@ private fun AboutScreenRoot() {
     val context = LocalContext.current
     val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
 
-    Box(modifier = Modifier.clip(topRoundedCornerShape)) {
+    Box(modifier = Modifier.clip(MaterialCornerExtraLargeTop())) {
         var logoAnimationAtEnd by remember { mutableStateOf(false) }
         var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
         LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
@@ -215,7 +215,7 @@ private fun AboutScreenRoot() {
                             ?.invoke()
                             ?.asComposeRenderEffect()
                     })
-            Surface(shape = topRoundedCornerShape) {
+            Surface(shape = MaterialCornerExtraLargeTop()) {
                 Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) { AboutScreenContent() }
             }
         }

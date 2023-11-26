@@ -63,13 +63,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
-import com.byagowi.persiancalendar.ui.utils.topRoundedCornerShape
 import com.byagowi.persiancalendar.utils.logException
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.snackbar.Snackbar
@@ -104,7 +104,7 @@ class DeviceInformationScreen : Fragment() {
                         createItemsList(context as? Activity ?: return@remember emptyList())
                     }
                     AboutScreenToolbar(items)
-                    Surface(shape = topRoundedCornerShape) {
+                    Surface(shape = MaterialCornerExtraLargeTop()) {
                         Box(modifier = Modifier.padding(16.dp, 0.dp, 16.dp)) {
                             DeviceInformationRoot(items)
                         }
