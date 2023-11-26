@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
-import android.appwidget.AppWidgetManager
 import android.os.Build
-import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
@@ -21,7 +19,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.INTERFAC
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.WIDGET_NOTIFICATION_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreenArgs
-import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureFragment
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
@@ -64,10 +61,6 @@ class FragmentsSmokeTest {
                 fragmentArgs = SettingsScreenArgs(it).toBundle()
             )
         }
-        launchFragmentInContainer<AgeWidgetConfigureFragment>(
-            themeResId = R.style.LightTheme,
-            fragmentArgs = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to 1)
-        )
         launchFragmentInContainer<InterfaceCalendarFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LocationAthanFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<WidgetNotificationFragment>(themeResId = R.style.LightTheme)
