@@ -89,6 +89,7 @@ import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
@@ -163,7 +164,7 @@ private fun AboutScreenRoot() {
                 Modifier
                     .weight(1f)
                     .fillMaxSize()
-                    .padding(start = 24.dp, end = 24.dp),
+                    .padding(horizontal = MaterialIconDimension.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Column {
@@ -366,7 +367,7 @@ private fun HelpItems() {
                         contentDescription = stringResource(R.string.more),
                         modifier = Modifier
                             .rotate(angle)
-                            .size(24.dp, 24.dp),
+                            .size(MaterialIconDimension.dp),
                         colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     )
                     Spacer(modifier = Modifier.width(4.dp))

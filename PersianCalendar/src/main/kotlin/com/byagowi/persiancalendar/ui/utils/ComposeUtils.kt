@@ -16,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.core.view.minusAssign
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -39,6 +40,11 @@ fun showComposeDialog(
         }
     })
 }
+
+/**
+ * As [androidx.compose.material.icons.MaterialIconDimension] isn't accessible despite saying otherwise
+ */
+const val MaterialIconDimension = 24f
 
 /**
  * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently

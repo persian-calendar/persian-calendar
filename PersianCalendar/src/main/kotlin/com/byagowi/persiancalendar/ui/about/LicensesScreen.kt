@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +21,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -37,7 +37,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -65,13 +64,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.createBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class LicensesScreen : Fragment() {
@@ -95,7 +98,7 @@ class LicensesScreen : Fragment() {
                             //  the latter ltr is ok
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                                 Row {
-                                    Rail()
+                                    Sidebar()
                                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                         Licenses()
                                     }
@@ -121,34 +124,53 @@ class LicensesScreen : Fragment() {
 //   ${EventType.entries.joinToString("\n") { "${it.name}: ${it.source}" }}"""
 //  And as the result has link, it should be linkified https://stackoverflow.com/q/66130513
 
+// Use Material's painter here instead of view system Drawable
+fun createTextIcon(context: Context, text: String): android.graphics.drawable.Drawable {
+    val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG)
+    paint.textSize = 40f
+    val bounds = android.graphics.Rect()
+    paint.color = android.graphics.Color.WHITE
+    paint.getTextBounds(text, 0, text.length, bounds)
+    val padding = 1f
+    val width = bounds.width() + padding.toInt() * 2
+    val height = bounds.height()
+    val bitmap =
+        createBitmap(width, height).applyCanvas { drawText(text, padding, height.toFloat(), paint) }
+    return android.graphics.drawable.BitmapDrawable(context.resources, bitmap)
+}
+
 @Composable
-private fun Rail() {
+private fun Sidebar() {
     var selectedItem by remember { mutableIntStateOf(0) }
+    val context = LocalContext.current
+    val kotlinPainter = rememberDrawablePainter(remember {
+        createTextIcon(context, "Kotlin")
+    })
     NavigationRail(windowInsets = WindowInsets(0, 0, 0, 0)) {
-        listOf(
+        listOf<Triple<String, @Composable () -> Unit, (FragmentActivity) -> Unit>>(
             Triple(
-                "GPLv3", Icons.Default.Info, ::showShaderSandboxDialog
-            ), Triple(
+                "GPLv3",
+                { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
+                ::showShaderSandboxDialog
+            ),
+            Triple(
                 KotlinVersion.CURRENT.toString(),
-                Icons.Default.Settings,
-                // TODO: Show "Kotlin" as a text here instead of settings icon
-                //  fun createTextIcon(text: String): Drawable {
-                //      val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-                //      paint.textSize = 40f
-                //      val bounds = Rect()
-                //      paint.color = android.graphics.Color.WHITE
-                //      paint.getTextBounds(text, 0, text.length, bounds)
-                //      val padding = 1 * resources.dp
-                //      val width = bounds.width() + padding.toInt() * 2
-                //      val height = bounds.height()
-                //      val bitmap = createBitmap(width, height)
-                //          .applyCanvas { drawText(text, padding, height.toFloat(), paint) }
-                //      return BitmapDrawable(view.context.resources, bitmap)
-                //  }
+                {
+                    Icon(
+                        modifier = Modifier.size(MaterialIconDimension.dp),
+                        painter = kotlinPainter, contentDescription = "Kotlin",
+                    )
+                },
                 ::showSpringDemoDialog
             ), Triple(
                 "API ${Build.VERSION.SDK_INT}",
-                ImageVector.vectorResource(R.drawable.ic_motorcycle),
+                {
+                    Icon(
+                        modifier = Modifier.size(MaterialIconDimension.dp),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_motorcycle),
+                        contentDescription = "API"
+                    )
+                },
                 ::showFlingDemoDialog
             )
         ).forEachIndexed { i, (title, icon, action) ->
@@ -160,12 +182,7 @@ private fun Rail() {
                     selectedItem = i
                     clickHandler(context as? FragmentActivity) // TODO: Ugly cast
                 },
-                icon = {
-                    Icon(
-                        modifier = Modifier.size(24.dp), // = MaterialIconDimension.dp
-                        imageVector = icon, contentDescription = title
-                    )
-                },
+                icon = icon,
                 label = { Text(title) },
             )
         }
