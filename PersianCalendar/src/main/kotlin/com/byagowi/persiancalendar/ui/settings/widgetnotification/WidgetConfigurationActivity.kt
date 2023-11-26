@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -14,7 +15,6 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
@@ -43,7 +43,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-        transparentSystemBars()
+        enableEdgeToEdge()
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 

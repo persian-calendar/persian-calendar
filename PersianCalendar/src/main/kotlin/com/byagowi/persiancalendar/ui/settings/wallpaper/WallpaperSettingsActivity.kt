@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.wallpaper
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -10,7 +11,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WallpaperSettingsBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 
 class WallpaperSettingsActivity : AppCompatActivity() {
@@ -24,7 +24,7 @@ class WallpaperSettingsActivity : AppCompatActivity() {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-        transparentSystemBars()
+        enableEdgeToEdge()
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
