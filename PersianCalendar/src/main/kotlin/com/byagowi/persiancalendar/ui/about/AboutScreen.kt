@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -74,10 +73,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -126,12 +122,18 @@ class AboutScreen : Fragment() {
 @Composable
 private fun AboutScreenRoot() {
     val context = LocalContext.current
-    val version = remember {
-        buildAnnotatedString {
-            withStyle(style = SpanStyle(fontSize = 20.sp, fontWeight = FontWeight.Bold)) {
-                appendLine(context.getString(R.string.app_name))
-            }
-            withStyle(style = SpanStyle(fontSize = 12.sp)) {
+    val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
+
+    Box(modifier = Modifier.clip(topRoundedCornerShape)) {
+        var logoAnimationAtEnd by remember { mutableStateOf(false) }
+        var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
+        LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
+
+        val headerSize = 250.dp
+
+        val aboutTitle = stringResource(R.string.app_name)
+        val aboutSubtitle = remember {
+            buildString {
                 val version =
                     // Don't formatNumber it if is multi-parted
                     if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
@@ -149,15 +151,6 @@ private fun AboutScreenRoot() {
                 }
             }
         }
-    }
-    val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
-
-    Box(modifier = Modifier.clip(topRoundedCornerShape)) {
-        var logoAnimationAtEnd by remember { mutableStateOf(false) }
-        var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
-        LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
-
-        val headerSize = 250.dp
 
         @OptIn(ExperimentalAnimationGraphicsApi::class)
         Row(
@@ -172,10 +165,19 @@ private fun AboutScreenRoot() {
                     .padding(start = 24.dp, end = 24.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    version,
-                    color = Color(context.resolveColor(R.attr.colorOnAppBar))
-                )
+                Column {
+                    Text(
+                        aboutTitle,
+                        style = MaterialTheme.typography.headlineMedium
+                            .copy(fontWeight = FontWeight.Bold),
+                        color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                    )
+                    Text(
+                        aboutSubtitle,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                    )
+                }
             }
             val image =
                 AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
@@ -206,7 +208,7 @@ private fun AboutScreenRoot() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(headerSize)
-                    .clickable(onClickLabel = version.toString()) {
+                    .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
                         logoAnimationAtEnd = !logoAnimationAtEnd
                         clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
                         logoEffect = effectsGenerator
@@ -265,7 +267,7 @@ private fun AboutScreenContent() {
         // Licenses
         val context = LocalContext.current
         Text(
-            stringResource(R.string.licenses),
+            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
             modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
         )
         AboutScreenButton(
@@ -287,7 +289,12 @@ private fun AboutScreenContent() {
                     imageVector = ImageVector.vectorResource(R.drawable.ic_help),
                     contentDescription = stringResource(R.string.help)
                 )
-                Column { Text(stringResource(R.string.help)) }
+                Column {
+                    Text(
+                        stringResource(R.string.help),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                }
             }
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
                 HelpItems()
@@ -297,6 +304,7 @@ private fun AboutScreenContent() {
         // Bug report
         Text(
             stringResource(R.string.about_support_developers),
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
         )
         AboutScreenButton(
@@ -318,6 +326,7 @@ private fun AboutScreenContent() {
         // Developers
         Text(
             stringResource(R.string.about_developers),
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
         )
         DevelopersChips()
@@ -388,11 +397,11 @@ private fun AboutScreenButton(
                 contentDescription = stringResource(title)
             )
             Column {
-                Text(stringResource(title))
+                Text(stringResource(title), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     stringResource(summary),
-                    fontSize = 12.sp,
+                    style = MaterialTheme.typography.bodySmall,
                     lineHeight = 16.sp
                 )
             }

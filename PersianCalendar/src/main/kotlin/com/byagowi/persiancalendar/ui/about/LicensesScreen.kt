@@ -60,10 +60,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -211,7 +209,7 @@ private fun Licenses() {
                         modifier = Modifier
                             .background(Color.LightGray, RoundedCornerShape(CornerSize(3.dp)))
                             .padding(horizontal = 4.dp),
-                        style = TextStyle(Color.DarkGray, 12.sp)
+                        style = MaterialTheme.typography.bodySmall
                     )
                 }
                 if (expandedItem == i) SelectionContainer { Text(text) }
