@@ -4,11 +4,12 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
+import com.byagowi.persiancalendar.R
 
 class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageView(context, attr) {
 
     init {
-        setImageResource(androidx.preference.R.drawable.ic_arrow_down_24dp)
+        setImageResource(R.drawable.ic_arrow_down)
     }
 
     private val animator = ValueAnimator().also {
