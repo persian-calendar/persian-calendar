@@ -39,7 +39,7 @@ fun SettingsSwitch(key: String, defaultValue: Boolean, title: String, subtitle: 
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
     var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
-    var toggle = remember {
+    val toggle = remember {
         {
             currentValue = !currentValue
             appPrefs.edit { putBoolean(key, currentValue) }
