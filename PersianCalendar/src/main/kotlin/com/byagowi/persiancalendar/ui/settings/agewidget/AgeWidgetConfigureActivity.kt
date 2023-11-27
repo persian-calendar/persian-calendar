@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -138,67 +140,68 @@ private fun AgeWidgetConfigureContent(
                 .fillMaxSize()
                 .alpha(.8f)
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
-                .padding(16.dp),
+                .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
         ) {
-            Button(
-                onClick = { confirm() },
-                modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
-            ) {
-                Text(
-                    stringResource(R.string.accept),
-                    modifier = Modifier.padding(horizontal = 8.dp),
-                )
-            }
-
-            val initialTitle = remember {
-                appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
-            }
-            var text by rememberSaveable { mutableStateOf(initialTitle) }
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                value = text,
-                onValueChange = {
-                    text = it
-                    appPrefs.edit {
-                        putString(
-                            PREF_TITLE_AGE_WIDGET + appWidgetId,
-                            text
-                        )
-                    }
-                },
-                label = { Text(stringResource(R.string.age_widget_title)) },
-            )
-
-            SettingsClickable(stringResource(id = R.string.select_date)) {
-                val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
-                showDayPickerDialog(
-                    activity, jdn, R.string.accept
-                ) { result -> appPrefs.edit { putJdn(key, result) } }
-            }
-            val showColorOptions = remember {
-                !(Theme.isDynamicColor(appPrefs) &&
-                        appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
-            }
-            if (showColorOptions) {
-                SettingsClickable(
-                    stringResource(R.string.widget_text_color),
-                    stringResource(R.string.select_widgets_text_color)
+            Column(Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+                Button(
+                    onClick = { confirm() },
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                 ) {
-                    showColorPickerDialog(
-                        activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
+                    Text(
+                        stringResource(R.string.accept),
+                        modifier = Modifier.padding(horizontal = 8.dp),
                     )
                 }
-                SettingsClickable(
-                    stringResource(R.string.widget_background_color),
-                    stringResource(R.string.select_widgets_background_color)
-                ) {
-                    showColorPickerDialog(
-                        activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId
-                    )
+
+                val initialTitle = remember {
+                    appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
+                }
+                var text by rememberSaveable { mutableStateOf(initialTitle) }
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    value = text,
+                    onValueChange = {
+                        text = it
+                        appPrefs.edit {
+                            putString(
+                                PREF_TITLE_AGE_WIDGET + appWidgetId,
+                                text
+                            )
+                        }
+                    },
+                    label = { Text(stringResource(R.string.age_widget_title)) },
+                )
+
+                SettingsClickable(stringResource(id = R.string.select_date)) {
+                    val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
+                    val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
+                    showDayPickerDialog(
+                        activity, jdn, R.string.accept
+                    ) { result -> appPrefs.edit { putJdn(key, result) } }
+                }
+                val showColorOptions = remember {
+                    !(Theme.isDynamicColor(appPrefs) &&
+                            appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
+                }
+                if (showColorOptions) {
+                    SettingsClickable(
+                        stringResource(R.string.widget_text_color),
+                        stringResource(R.string.select_widgets_text_color)
+                    ) {
+                        showColorPickerDialog(
+                            activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
+                        )
+                    }
+                    SettingsClickable(
+                        stringResource(R.string.widget_background_color),
+                        stringResource(R.string.select_widgets_background_color)
+                    ) {
+                        showColorPickerDialog(
+                            activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId
+                        )
+                    }
                 }
             }
         }

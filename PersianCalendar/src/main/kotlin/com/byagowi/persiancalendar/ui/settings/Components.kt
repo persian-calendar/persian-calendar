@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.settings
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,13 +16,32 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @Composable
-fun SettingsClickable(title: String, subtitle: String? = null, action: () -> Unit) {
+fun SettingsSection(title: String) {
+    Spacer(Modifier.padding(top = 16.dp))
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+    ) {
+        Text(
+            title,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.primary,
+        )
+    }
+}
+
+@Composable
+fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -30,42 +49,71 @@ fun SettingsClickable(title: String, subtitle: String? = null, action: () -> Uni
             .padding(16.dp),
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
-        if (subtitle != null) Text(subtitle, style = MaterialTheme.typography.bodyMedium)
+        if (summary != null) Text(
+            summary, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.alpha(.8f)
+        )
     }
 }
 
 @Composable
-fun SettingsSwitch(key: String, defaultValue: Boolean, title: String, subtitle: String? = null) {
+fun SettingsMultiSelect(
+    key: String,
+    entries: List<String>, entryValues: List<String>, defaultValue: Set<String>,
+    dialogTitleResId: Int,
+    title: String,
+    summary: String? = null,
+) {
+    val context = LocalContext.current
+    SettingsClickable(title = title, summary = summary) {
+        val result = (context.appPrefs.getStringSet(key, null) ?: defaultValue).toMutableSet()
+        val checkedItems = entryValues.map { it in result }.toBooleanArray()
+        MaterialAlertDialogBuilder(context).setTitle(dialogTitleResId)
+            .setMultiChoiceItems(entries.toTypedArray(), checkedItems) { _, which, isChecked ->
+                if (isChecked) result.add(entryValues[which])
+                else result.remove(entryValues[which])
+            }.setNegativeButton(R.string.cancel, null).setPositiveButton(R.string.accept) { _, _ ->
+                context.appPrefs.edit { putStringSet(key, result) }
+            }.show()
+    }
+}
+
+@Composable
+fun SettingsSwitch(
+    key: String,
+    defaultValue: Boolean,
+    title: String,
+    summary: String? = null,
+    onBeforeToggle: (Boolean) -> Boolean = { it }
+) {
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
     var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
     val toggle = remember {
         {
-            currentValue = !currentValue
-            appPrefs.edit { putBoolean(key, currentValue) }
+            val previousValue = currentValue
+            currentValue = onBeforeToggle(!currentValue)
+            if (previousValue != currentValue) appPrefs.edit { putBoolean(key, currentValue) }
         }
     }
-    Row(
+    Box(
         Modifier
             .fillMaxWidth()
             .clickable(onClickLabel = title, onClick = toggle),
     ) {
         Column(
             Modifier
-                .align(alignment = Alignment.CenterVertically)
-                .padding(16.dp)
+                .align(alignment = Alignment.CenterStart)
+                // 68 is brought from androidx.preferences
+                .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = (16 + 68).dp)
         ) {
             Text(title, style = MaterialTheme.typography.bodyLarge)
-            if (subtitle != null) Text(subtitle, style = MaterialTheme.typography.bodyMedium)
+            if (summary != null) Text(
+                summary, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.alpha(.8f)
+            )
         }
-        Spacer(
-            Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        )
         Switch(
             modifier = Modifier
-                .align(alignment = Alignment.CenterVertically)
+                .align(alignment = Alignment.CenterEnd)
                 .padding(end = 16.dp),
             checked = currentValue,
             onCheckedChange = { toggle() },

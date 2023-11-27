@@ -4,13 +4,31 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
-import androidx.fragment.app.commit
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -19,9 +37,9 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.update
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class WidgetConfigurationActivity : AppCompatActivity() {
-
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
@@ -47,40 +65,80 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
-        val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {
-            setContentView(it.root)
-        }
-
-        val width = (200 * resources.dp).toInt()
-        val height = (60 * resources.dp).toInt()
-        fun updateWidget() {
-            binding.preview.addView(
-                createSampleRemoteViews(this, width, height)
-                    .apply(applicationContext, binding.preview)
-            )
-        }
-        updateWidget()
-
-        val appPrefs = appPrefs
-        appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
-            // TODO: Investigate why sometimes gets out of sync
-            binding.preview.post {
-                binding.preview.removeAllViews()
-                updateWidget()
-            }
-        }
-
-        supportFragmentManager.commit {
-            replace(
-                R.id.preference_fragment_holder, WidgetNotificationFragment::class.java,
-                bundleOf(WidgetNotificationFragment.IS_WIDGETS_CONFIGURATION to true)
-            )
-        }
-        binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
+        setContent { Mdc3Theme { WidgetConfigurationContent(this, ::finishAndSuccess) } }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         applyAppLanguage(this)
+    }
+}
+
+@Composable
+private fun WidgetConfigurationContent(
+    activity: FragmentActivity,
+    finishAndSuccess: () -> Unit,
+) {
+    Column(Modifier.safeDrawingPadding()) {
+        AndroidView(
+            factory = { context ->
+                val preview = FrameLayout(context)
+
+                val width = (200 * activity.resources.dp).toInt()
+                val height = (60 * activity.resources.dp).toInt()
+                fun updateWidget() {
+                    preview.addView(
+                        createSampleRemoteViews(
+                            activity, width, height
+                        ).apply(activity.applicationContext, preview)
+                    )
+                }
+                updateWidget()
+
+                activity.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
+                    // TODO: Investigate why sometimes gets out of sync
+                    preview.post {
+                        preview.removeAllViews()
+                        updateWidget()
+                    }
+                }
+                preview
+            }, modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        )
+        Column(
+            Modifier
+                .alpha(.8f)
+                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+        ) {
+            Column(
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge
+                    )
+            ) {
+                Column(
+                    Modifier
+                        .verticalScroll(rememberScrollState())
+                        .padding(16.dp)
+                ) {
+                    Button(
+                        onClick = { finishAndSuccess() },
+                        modifier = Modifier
+                            .align(alignment = Alignment.CenterHorizontally)
+                            .padding(bottom = 8.dp)
+                    ) {
+                        Text(
+                            stringResource(R.string.accept),
+                            modifier = Modifier.padding(horizontal = 8.dp),
+                        )
+                    }
+
+                    WidgetConfiguration(activity)
+                }
+            }
+        }
     }
 }

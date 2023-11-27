@@ -1,17 +1,32 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.Manifest
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.TwoStatePreference
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -36,148 +51,148 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.settings.SettingsScreen
-import com.byagowi.persiancalendar.ui.settings.build
-import com.byagowi.persiancalendar.ui.settings.clickable
+import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
+import com.byagowi.persiancalendar.ui.settings.SettingsSection
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
-import com.byagowi.persiancalendar.ui.settings.multiSelect
-import com.byagowi.persiancalendar.ui.settings.section
-import com.byagowi.persiancalendar.ui.settings.summary
-import com.byagowi.persiancalendar.ui.settings.switch
-import com.byagowi.persiancalendar.ui.settings.title
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import java.util.TimeZone
 
-// Consider that it is used both in MainActivity and WidgetConfigurationActivity
-class WidgetNotificationFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private var widgetTextColorPreferences: Preference? = null
-    private var widgetBackgroundColorPreferences: Preference? = null
-    private var notifyDatePreference: TwoStatePreference? = null
-    private var notifyDateLockScreenPreference: Preference? = null
-
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val activity = activity ?: return
-        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
-            section(R.string.pref_notification) {
-                // Hide notification category if we are in widgets configuration
-                if (arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true)
-                    isVisible = false
-                switch(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE) {
-                    title(R.string.notify_date)
-                    summary(R.string.enable_notify)
-                    setOnPreferenceChangeListener { _, _ ->
-                        isChecked = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                            ActivityCompat.checkSelfPermission(
-                                activity, Manifest.permission.POST_NOTIFICATIONS
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            activity.askForPostNotificationPermission(
-                                POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
-                            )
-                            false
-                        } else {
-                            !isChecked
-                        }
-                        false
-                    }
-                    notifyDatePreference = this
-                }
-                switch(PREF_NOTIFY_DATE_LOCK_SCREEN, true) {
-                    title(R.string.notify_date_lock_screen)
-                    summary(R.string.notify_date_lock_screen_summary)
-                    notifyDateLockScreenPreference = this
+class WidgetNotificationFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val root = ComposeView(inflater.context)
+        val activity = activity ?: return root
+        root.setContent {
+            Mdc3Theme {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    SettingsSection(stringResource(R.string.pref_notification))
+                    NotificationSettings(activity)
+                    Divider()
+                    SettingsSection(stringResource(R.string.pref_widget))
+                    WidgetConfiguration(activity)
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                 }
             }
-            section(R.string.pref_widget) {
-                val isIranTimeVisible =
-                    (language.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) &&
-                            TimeZone.getDefault().id != IRAN_TIMEZONE_ID
-                // Mark the rest of options as advanced
-                initialExpandedChildrenCount = 6 - if (isIranTimeVisible) 0 else 1
-                switch(PREF_WIDGETS_PREFER_SYSTEM_COLORS, Theme.isDynamicColor(activity.appPrefs)) {
-                    title(R.string.widget_prefer_device_colors)
-                    isVisible = Theme.isDynamicColor(activity.appPrefs)
-                }
-                clickable(onClick = {
-                    showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
-                }) {
-                    title(R.string.widget_text_color)
-                    summary(R.string.select_widgets_text_color)
-                    widgetTextColorPreferences = this
-                }
-                clickable(onClick = {
-                    showColorPickerDialog(activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
-                }) {
-                    title(R.string.widget_background_color)
-                    summary(R.string.select_widgets_background_color)
-                    widgetBackgroundColorPreferences = this
-                }
-                switch(PREF_NUMERICAL_DATE_PREFERRED, false) {
-                    title(R.string.prefer_linear_date)
-                    summary(R.string.prefer_linear_date_summary)
-                }
-                switch(PREF_WIDGET_CLOCK, true) {
-                    title(R.string.clock_on_widget)
-                    summary(R.string.showing_clock_on_widget)
-                }
-                switch(PREF_WIDGET_IN_24, false) {
-                    title(R.string.clock_in_24)
-                    summary(R.string.showing_clock_in_24)
-                }
-                switch(PREF_CENTER_ALIGN_WIDGETS, true) {
-                    title(R.string.center_align_widgets)
-                    summary(R.string.center_align_widgets_summary)
-                }
-                switch(PREF_IRAN_TIME, false) {
-                    title(R.string.iran_time)
-                    summary(R.string.showing_iran_time)
-                    isVisible = isIranTimeVisible
-                }
-                val widgetCustomizations = listOf(
-                    OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
-                    NON_HOLIDAYS_EVENTS_KEY to R.string.widget_customization_non_holiday_events,
-                    OWGHAT_KEY to R.string.widget_customization_owghat,
-                    OWGHAT_LOCATION_KEY to R.string.widget_customization_owghat_location
+        }
+        return root
+    }
+}
+
+@Composable
+fun NotificationSettings(activity: FragmentActivity) {
+    val appPrefs = remember { activity.appPrefs }
+    var showDateLockScreen by remember {
+        mutableStateOf(appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
+    }
+    SettingsSwitch(key = PREF_NOTIFY_DATE,
+        defaultValue = DEFAULT_NOTIFY_DATE,
+        title = stringResource(R.string.notify_date),
+        summary = stringResource(R.string.enable_notify),
+        onBeforeToggle = { value: Boolean ->
+            if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                    activity, Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                activity.askForPostNotificationPermission(
+                    POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
                 )
-                multiSelect(
-                    PREF_WHAT_TO_SHOW_WIDGETS,
-                    widgetCustomizations.map { (_, title) -> getString(title) },
-                    widgetCustomizations.map { (key, _) -> key },
-                    DEFAULT_WIDGET_CUSTOMIZATIONS, R.string.which_one_to_show
-                ) {
-                    title(R.string.customize_widget)
-                    summary(R.string.customize_widget_summary)
-                }
+                false
+            } else {
+                showDateLockScreen = value
+                value
             }
-        }
-
-        val appPrefs = activity.appPrefs
-        onSharedPreferenceChanged(appPrefs, null)
-        appPrefs.registerOnSharedPreferenceChangeListener(this)
+        })
+    AnimatedVisibility(showDateLockScreen) {
+        SettingsSwitch(
+            key = PREF_NOTIFY_DATE_LOCK_SCREEN,
+            defaultValue = true,
+            title = stringResource(R.string.notify_date_lock_screen),
+            summary = stringResource(R.string.notify_date_lock_screen_summary)
+        )
     }
+}
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        sharedPreferences ?: return
-        val isNotifyDate = sharedPreferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
-        notifyDatePreference?.isChecked = isNotifyDate
-        notifyDateLockScreenPreference?.isVisible = isNotifyDate
-        if (Theme.isDynamicColor(sharedPreferences)) {
-            val prefersSystemColors =
-                sharedPreferences.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
-            widgetTextColorPreferences?.isVisible = !prefersSystemColors
-            widgetBackgroundColorPreferences?.isVisible = !prefersSystemColors
-        }
+// Consider that it is used both in MainActivity and WidgetConfigurationActivity
+@Composable
+fun WidgetConfiguration(activity: FragmentActivity) {
+    val appPrefs = remember { activity.appPrefs }
+    val isDynamicTheme = remember { Theme.isDynamicColor(appPrefs) }
+    var preferSystemColors by remember {
+        mutableStateOf(appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, isDynamicTheme))
     }
-
-    override fun onCreateRecyclerView(
-        inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?
-    ): RecyclerView =
-        SettingsScreen.insetsFix(super.onCreateRecyclerView(inflater, parent, savedInstanceState))
-
-    companion object {
-        const val IS_WIDGETS_CONFIGURATION = "IS_WIDGETS_CONFIGURATION"
+    if (isDynamicTheme) {
+        SettingsSwitch(
+            PREF_WIDGETS_PREFER_SYSTEM_COLORS, true,
+            stringResource(R.string.widget_prefer_device_colors),
+            onBeforeToggle = { preferSystemColors = it; it },
+        )
     }
+    AnimatedVisibility(!preferSystemColors) {
+        SettingsClickable(
+            title = stringResource(R.string.widget_text_color),
+            summary = stringResource(R.string.select_widgets_text_color)
+        ) { showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR) }
+    }
+    AnimatedVisibility(!preferSystemColors) {
+        SettingsClickable(
+            title = stringResource(R.string.widget_background_color),
+            summary = stringResource(R.string.select_widgets_background_color)
+        ) { showColorPickerDialog(activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR) }
+    }
+    SettingsSwitch(
+        key = PREF_NUMERICAL_DATE_PREFERRED,
+        defaultValue = false,
+        title = stringResource(R.string.prefer_linear_date),
+        summary = stringResource(R.string.prefer_linear_date_summary)
+    )
+    SettingsSwitch(
+        key = PREF_WIDGET_CLOCK,
+        defaultValue = true,
+        title = stringResource(R.string.clock_on_widget),
+        summary = stringResource(R.string.showing_clock_on_widget)
+    )
+    SettingsSwitch(
+        key = PREF_WIDGET_IN_24,
+        defaultValue = false,
+        title = stringResource(R.string.clock_in_24),
+        summary = stringResource(R.string.showing_clock_in_24)
+    )
+    SettingsSwitch(
+        key = PREF_CENTER_ALIGN_WIDGETS,
+        defaultValue = true,
+        title = stringResource(R.string.center_align_widgets),
+        summary = stringResource(R.string.center_align_widgets_summary)
+    )
+    val isInIranTimeVisible = remember {
+        (language.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+    }
+    if (isInIranTimeVisible) {
+        SettingsSwitch(
+            key = PREF_IRAN_TIME,
+            defaultValue = false,
+            title = stringResource(R.string.iran_time),
+            summary = stringResource(R.string.showing_iran_time)
+        )
+    }
+    val widgetCustomizations = remember {
+        mapOf(
+            OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
+            NON_HOLIDAYS_EVENTS_KEY to R.string.widget_customization_non_holiday_events,
+            OWGHAT_KEY to R.string.widget_customization_owghat,
+            OWGHAT_LOCATION_KEY to R.string.widget_customization_owghat_location
+        )
+    }
+    SettingsMultiSelect(
+        PREF_WHAT_TO_SHOW_WIDGETS,
+        widgetCustomizations.values.map { stringResource(it) },
+        widgetCustomizations.keys.toList(),
+        DEFAULT_WIDGET_CUSTOMIZATIONS, R.string.which_one_to_show,
+        stringResource(R.string.customize_widget),
+        stringResource(R.string.customize_widget_summary),
+    )
 }
