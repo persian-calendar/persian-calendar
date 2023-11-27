@@ -82,8 +82,6 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
 class LocationAthanFragment : Fragment() {
-    private val defaultAthanName get() = context?.getString(R.string.default_athan) ?: ""
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -112,9 +110,15 @@ class LocationAthanFragment : Fragment() {
                     var showAsrCalculationMethod by remember {
                         mutableStateOf(!calculationMethod.isJafari)
                     }
-                    var athanSoundName by remember { mutableStateOf<String?>(defaultAthanName) }
                     val context = LocalContext.current
                     val appPrefs = remember { context.appPrefs }
+                    var athanSoundName by remember {
+                        mutableStateOf(
+                            appPrefs.getString(
+                                PREF_ATHAN_NAME, context.getString(R.string.default_athan)
+                            )
+                        )
+                    }
                     var showAscendingAthanVolume by remember {
                         mutableStateOf(
                             !appPrefs.getBoolean(
@@ -132,13 +136,15 @@ class LocationAthanFragment : Fragment() {
                         )
                     }
                     DisposableEffect(null) {
-                        val listener = { prefs: SharedPreferences, _: String? ->
+                        val listener = { _: SharedPreferences, _: String? ->
                             updateStoredPreference(context)
                             // TODO: Perhaps coordinates can be listened directly?
                             isLocationSet = coordinates.value != null
                             showHighLatitudesMethod = enableHighLatitudesConfiguration
                             showAsrCalculationMethod = !calculationMethod.isJafari
-                            athanSoundName = prefs.getString(PREF_ATHAN_NAME, defaultAthanName)
+                            athanSoundName = appPrefs.getString(
+                                PREF_ATHAN_NAME, context.getString(R.string.default_athan)
+                            )
                             showAscendingAthanVolume = !appPrefs.getBoolean(
                                 PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
                             )
