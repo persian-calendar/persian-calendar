@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings
 
 import android.content.SharedPreferences
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @Composable
-fun SettingsSection(title: String) {
+fun SettingsSection(title: String, subtitle: String? = null) {
     Spacer(Modifier.padding(top = 16.dp))
     Column(
         Modifier
@@ -39,6 +40,13 @@ fun SettingsSection(title: String) {
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary,
         )
+        AnimatedVisibility(visible = subtitle != null) {
+            Text(
+                subtitle ?: "",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.alpha(.8f)
+            )
+        }
     }
 }
 
@@ -120,12 +128,12 @@ fun SettingsSwitch(
     title: String,
     summary: String? = null,
     onBeforeToggle: (Boolean) -> Boolean = { it },
-    watchChanges: Boolean = false,
+    followChanges: Boolean = false,
 ) {
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
     var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
-    if (watchChanges) {
+    if (followChanges) {
         DisposableEffect(null) {
             val listener = { prefs: SharedPreferences, changeKey: String? ->
                 if (changeKey == key) currentValue = prefs.getBoolean(key, defaultValue)

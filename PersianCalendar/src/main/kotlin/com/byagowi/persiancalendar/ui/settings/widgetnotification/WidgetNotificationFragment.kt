@@ -118,7 +118,7 @@ fun NotificationSettings(activity: FragmentActivity) {
                 value
             }
         },
-        watchChanges = true,
+        followChanges = true,
     )
     AnimatedVisibility(showDateLockScreen) {
         SettingsSwitch(

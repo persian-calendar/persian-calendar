@@ -141,7 +141,7 @@ class InterfaceCalendarFragment : Fragment(), SharedPreferences.OnSharedPreferen
                                 false
                             } else it
                         },
-                        watchChanges = true,
+                        followChanges = true,
                     )
                     SettingsClickable(
                         stringResource(R.string.calendars_priority),

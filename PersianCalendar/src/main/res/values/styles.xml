@@ -61,7 +61,6 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="android:typeface">sans</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>

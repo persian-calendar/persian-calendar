@@ -135,7 +135,6 @@ dependencies {
 
     // Google/JetBrains owned libraries (roughly platform libraries)
     implementation(libs.appcompat)
-    implementation(libs.preference.ktx)
     implementation(libs.recyclerview)
     implementation(libs.cardview)
     implementation(libs.viewpager2)

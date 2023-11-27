@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -30,7 +29,11 @@ import com.byagowi.persiancalendar.global.overrideCoordinatesGlobalVariable
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Locale
 
-val Context.appPrefs: SharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
+// Instead of:
+//   androidx.preference.PreferenceManager.getDefaultSharedPreferences(this)
+// Per https://stackoverflow.com/a/62897591
+val Context.appPrefs: SharedPreferences
+    get() = getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
 
 fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) {
     putLong(key, jdn.value)

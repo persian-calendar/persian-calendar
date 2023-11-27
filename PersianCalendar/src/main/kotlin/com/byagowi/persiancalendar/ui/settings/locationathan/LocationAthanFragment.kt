@@ -11,18 +11,32 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
-import androidx.preference.forEach
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -43,9 +57,10 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.settings.SettingsScreen
-import com.byagowi.persiancalendar.ui.settings.build
-import com.byagowi.persiancalendar.ui.settings.clickable
+import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsSection
+import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
@@ -54,185 +69,226 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSel
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showLocationPreferenceDialog
-import com.byagowi.persiancalendar.ui.settings.section
-import com.byagowi.persiancalendar.ui.settings.singleSelect
-import com.byagowi.persiancalendar.ui.settings.summary
-import com.byagowi.persiancalendar.ui.settings.switch
-import com.byagowi.persiancalendar.ui.settings.title
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
-import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.titleStringId
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
-class LocationAthanFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+class LocationAthanFragment : Fragment() {
     private val defaultAthanName get() = context?.getString(R.string.default_athan) ?: ""
 
-    private var coordinatesPreference: Preference? = null
-    private var ringtonePreference: Preference? = null
-    private var selectedLocationPreference: Preference? = null
-    private var athanPreferenceCategory: PreferenceCategory? = null
-    private var asrCalculationHanafiJuristicPreference: Preference? = null
-    private var highLatitudesMethodPreference: Preference? = null
-    private var ascendingAthanVolumePreference: Preference? = null
-    private var athanVolumeDialogPreference: Preference? = null
-    private var midnightMethodSelectPreference: Preference? = null
-    private var notificationAthanSwitchPreference: SwitchPreferenceCompat? = null
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val root = ComposeView(inflater.context)
+        val activity = activity ?: return root
+        root.setContent {
+            Mdc3Theme {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    SettingsSection(stringResource(R.string.location))
+                    SettingsClickable(
+                        title = stringResource(R.string.gps_location),
+                        summary = stringResource(R.string.gps_location_help),
+                    ) { showGPSLocationDialog(activity, viewLifecycleOwner) }
+                    SettingsClickable(
+                        title = stringResource(R.string.location),
+                        summary = stringResource(R.string.location_help),
+                    ) { showLocationPreferenceDialog(activity) }
+                    SettingsClickable(stringResource(R.string.coordination)) {
+                        showCoordinatesDialog(activity, viewLifecycleOwner)
+                    }
 
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val activity = activity ?: return
-        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
-            section(R.string.location) {
-                clickable(onClick = { showGPSLocationDialog(activity, viewLifecycleOwner) }) {
-                    title(R.string.gps_location)
-                    summary(R.string.gps_location_help)
-                }
-                clickable(onClick = { showLocationPreferenceDialog(activity) }) {
-                    title(R.string.location)
-                    summary(R.string.location_help)
-                    this@LocationAthanFragment.selectedLocationPreference = this
-                }
-                clickable(onClick = { showCoordinatesDialog(activity, viewLifecycleOwner) }) {
-                    title(R.string.coordination)
-                    this@LocationAthanFragment.coordinatesPreference = this
-                }
-            }
-            section(R.string.athan) {
-                this@LocationAthanFragment.athanPreferenceCategory = this
-                singleSelect(
-                    PREF_PRAY_TIME_METHOD,
-                    CalculationMethod.entries.map { getString(it.titleStringId) },
-                    CalculationMethod.entries.map { it.name },
-                    DEFAULT_PRAY_TIME_METHOD,
-                    R.string.pray_methods_calculation
-                ) { title(R.string.pray_methods) }
-                singleSelect(
-                    PREF_HIGH_LATITUDES_METHOD,
-                    HighLatitudesMethod.entries.map { getString(it.titleStringId) },
-                    HighLatitudesMethod.entries.map { it.name },
-                    DEFAULT_HIGH_LATITUDES_METHOD,
-                    R.string.high_latitudes_method
-                ) {
-                    title(R.string.high_latitudes_method)
-                    this@LocationAthanFragment.highLatitudesMethodPreference = this
-                }
-                switch(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority) {
-                    asrCalculationHanafiJuristicPreference = this
-                    title(R.string.asr_hanafi_juristic)
-                }
-                clickable(onClick = { showAthanGapDialog(activity) }) {
-                    title(R.string.athan_gap)
-                    summary(R.string.athan_gap_summary)
-                }
-                clickable(onClick = { showPrayerSelectDialog(activity) }) {
-                    title(R.string.athan_alarm)
-                    summary(R.string.athan_alarm_summary)
-                }
-                clickable(onClick = { showAthanSelectDialog(activity, pickRingtone) }) {
-                    title(R.string.custom_athan)
-                    this@LocationAthanFragment.ringtonePreference = this
-                }
-                clickable(onClick = { showPrayerSelectPreviewDialog(activity) }) {
-                    title(R.string.preview)
-                }
-                switch(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN) {
-                    title(R.string.notification_athan)
-                    summary(R.string.enable_notification_athan)
-                    disableDependentsState = true
-                    setOnPreferenceChangeListener { _, _ ->
-                        isChecked = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                            ActivityCompat.checkSelfPermission(
-                                activity, Manifest.permission.POST_NOTIFICATIONS
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            activity.askForPostNotificationPermission(
-                                POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
+                    var isLocationSet by remember { mutableStateOf(coordinates.value != null) }
+                    var showHighLatitudesMethod by remember {
+                        mutableStateOf(enableHighLatitudesConfiguration)
+                    }
+                    var showAsrCalculationMethod by remember {
+                        mutableStateOf(!calculationMethod.isJafari)
+                    }
+                    var athanSoundName by remember { mutableStateOf<String?>(defaultAthanName) }
+                    val context = LocalContext.current
+                    val appPrefs = remember { context.appPrefs }
+                    var showAscendingAthanVolume by remember {
+                        mutableStateOf(
+                            !appPrefs.getBoolean(
+                                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
                             )
-                            false
-                        } else {
-                            !isChecked
+                        )
+                    }
+                    var showAthanVolume by remember {
+                        mutableStateOf(
+                            !appPrefs.getBoolean(
+                                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
+                            ) && !appPrefs.getBoolean(
+                                PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME
+                            )
+                        )
+                    }
+                    DisposableEffect(null) {
+                        val listener = { prefs: SharedPreferences, _: String? ->
+                            updateStoredPreference(context)
+                            // TODO: Perhaps coordinates can be listened directly?
+                            isLocationSet = coordinates.value != null
+                            showHighLatitudesMethod = enableHighLatitudesConfiguration
+                            showAsrCalculationMethod = !calculationMethod.isJafari
+                            athanSoundName = prefs.getString(PREF_ATHAN_NAME, defaultAthanName)
+                            showAscendingAthanVolume = !appPrefs.getBoolean(
+                                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
+                            )
+                            showAthanVolume = !appPrefs.getBoolean(
+                                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
+                            ) && !appPrefs.getBoolean(
+                                PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME
+                            )
                         }
-                        false
+                        appPrefs.registerOnSharedPreferenceChangeListener(listener)
+                        onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
                     }
-                    this@LocationAthanFragment.notificationAthanSwitchPreference = this
-                }
-                switch(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME) {
-                    title(R.string.ascending_athan_volume)
-                    summary(R.string.enable_ascending_athan_volume)
-                    ascendingAthanVolumePreference = this
-                }
-                clickable(onClick = { showAthanVolumeDialog(activity) }) {
-                    title(R.string.athan_volume)
-                    summary(R.string.athan_volume_summary)
-                    athanVolumeDialogPreference = this
-                }
-                clickable(
-                    onClick = {
-                        val methodsToShow = MidnightMethod.entries
-                            .filter { !it.isJafariOnly || calculationMethod.isJafari }
-                        val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
-                        val entries = listOf(midnightDefaultTitle()) +
-                                methodsToShow.map(::midnightMethodToString)
-                        MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.midnight)
-                            .setNegativeButton(R.string.cancel, null)
-                            .setSingleChoiceItems(
-                                entries.toTypedArray(),
-                                entryValues.indexOf(
-                                    context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
-                                        ?: "DEFAULT"
-                                )
-                            ) { dialog, which ->
-                                context.appPrefs.edit {
-                                    if (which == 0) remove(PREF_MIDNIGHT_METHOD)
-                                    else putString(PREF_MIDNIGHT_METHOD, entryValues[which])
-                                }
-                                midnightMethodSelectPreference?.summary = entries[which]
-                                dialog.dismiss()
-                            }
-                            .show()
+                    Divider()
+                    SettingsSection(
+                        stringResource(R.string.athan),
+                        if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
+                    )
+                    AnimatedVisibility(isLocationSet) {
+                        SettingsSingleSelect(
+                            PREF_PRAY_TIME_METHOD,
+                            CalculationMethod.entries.map { stringResource(it.titleStringId) },
+                            CalculationMethod.entries.map { it.name },
+                            DEFAULT_PRAY_TIME_METHOD,
+                            dialogTitleResId = R.string.pray_methods_calculation,
+                            title = stringResource(R.string.pray_methods)
+                        )
                     }
-                ) {
-                    this@LocationAthanFragment.midnightMethodSelectPreference = this
-                    setTitle(R.string.midnight)
-                    setMidnightMethodPreferenceSummary()
+                    AnimatedVisibility(isLocationSet && showHighLatitudesMethod) {
+                        SettingsSingleSelect(
+                            PREF_HIGH_LATITUDES_METHOD,
+                            HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
+                            HighLatitudesMethod.entries.map { it.name },
+                            DEFAULT_HIGH_LATITUDES_METHOD,
+                            dialogTitleResId = R.string.high_latitudes_method,
+                            title = stringResource(R.string.high_latitudes_method)
+                        )
+                    }
+                    AnimatedVisibility(isLocationSet && showAsrCalculationMethod) {
+                        SettingsSwitch(
+                            PREF_ASR_HANAFI_JURISTIC,
+                            language.isHanafiMajority,
+                            stringResource(R.string.asr_hanafi_juristic)
+                        )
+                    }
+                    AnimatedVisibility(isLocationSet) {
+                        SettingsClickable(
+                            stringResource(R.string.athan_gap),
+                            stringResource(R.string.athan_gap_summary),
+                        ) { showAthanGapDialog(activity) }
+                    }
+                    AnimatedVisibility(isLocationSet) {
+                        SettingsClickable(
+                            stringResource(R.string.athan_alarm),
+                            stringResource(R.string.athan_alarm_summary),
+                        ) { showPrayerSelectDialog(activity) }
+                    }
+                    AnimatedVisibility(isLocationSet) {
+                        SettingsClickable(stringResource(R.string.custom_athan), athanSoundName) {
+                            showAthanSelectDialog(activity, pickRingtone)
+                        }
+                    }
+                    AnimatedVisibility(isLocationSet) {
+                        SettingsClickable(stringResource(R.string.preview)) {
+                            showPrayerSelectPreviewDialog(activity)
+                        }
+                    }
+                    AnimatedVisibility(isLocationSet) {
+                        SettingsSwitch(
+                            PREF_NOTIFICATION_ATHAN,
+                            DEFAULT_NOTIFICATION_ATHAN,
+                            stringResource(R.string.notification_athan),
+                            stringResource(R.string.enable_notification_athan),
+                            onBeforeToggle = { value ->
+                                if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                                        activity, Manifest.permission.POST_NOTIFICATIONS
+                                    ) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                                    activity.askForPostNotificationPermission(
+                                        POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
+                                    )
+                                    false
+                                } else value
+                            },
+                            followChanges = true,
+                        )
+                    }
+                    AnimatedVisibility(isLocationSet && showAscendingAthanVolume) {
+                        SettingsSwitch(
+                            PREF_ASCENDING_ATHAN_VOLUME,
+                            DEFAULT_ASCENDING_ATHAN_VOLUME,
+                            stringResource(R.string.ascending_athan_volume),
+                            stringResource(R.string.enable_ascending_athan_volume),
+                        )
+                    }
+                    AnimatedVisibility(isLocationSet && showAthanVolume) {
+                        SettingsClickable(
+                            stringResource(R.string.athan_volume),
+                            stringResource(R.string.athan_volume_summary)
+                        ) { showAthanVolumeDialog(activity) }
+                    }
+                    AnimatedVisibility(isLocationSet) {
+                        var midnightSummary by remember {
+                            mutableStateOf(getMidnightMethodPreferenceSummary())
+                        }
+                        SettingsClickable(stringResource(R.string.midnight), midnightSummary) {
+                            val methodsToShow =
+                                MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
+                            val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
+                            val entries =
+                                listOf(midnightDefaultTitle()) + methodsToShow.map(::midnightMethodToString)
+                            MaterialAlertDialogBuilder(context).setTitle(R.string.midnight)
+                                .setNegativeButton(R.string.cancel, null).setSingleChoiceItems(
+                                    entries.toTypedArray(), entryValues.indexOf(
+                                        context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
+                                            ?: "DEFAULT"
+                                    )
+                                ) { dialog, which ->
+                                    context.appPrefs.edit {
+                                        if (which == 0) remove(PREF_MIDNIGHT_METHOD)
+                                        else putString(PREF_MIDNIGHT_METHOD, entryValues[which])
+                                    }
+                                    midnightSummary = entries[which]
+                                    dialog.dismiss()
+                                }.show()
+                        }
+                    }
+
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                 }
             }
         }
-
-        val appPrefs = activity.appPrefs
-        onSharedPreferenceChanged(appPrefs, null)
-        appPrefs.registerOnSharedPreferenceChangeListener(this)
+        return root
     }
 
     private fun midnightDefaultTitle(): String {
-        return getString(calculationMethod.titleStringId) + spacedComma +
-                midnightMethodToString(calculationMethod.defaultMidnight)
+        return getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
+            calculationMethod.defaultMidnight
+        )
     }
 
-    private fun setMidnightMethodPreferenceSummary() {
-        val context = context ?: return
-        midnightMethodSelectPreference?.summary =
-            context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
-                ?.let { midnightMethodToString(MidnightMethod.valueOf(it)) }
-                ?: midnightDefaultTitle()
+    private fun getMidnightMethodPreferenceSummary(): String {
+        return context?.appPrefs?.getString(PREF_MIDNIGHT_METHOD, null)
+            ?.let { midnightMethodToString(MidnightMethod.valueOf(it)) } ?: midnightDefaultTitle()
     }
 
     private fun midnightMethodToString(method: MidnightMethod): String {
         return when (method) {
-            MidnightMethod.MidSunsetToSunrise ->
-                listOf(R.string.sunset, R.string.sunrise)
+            MidnightMethod.MidSunsetToSunrise -> listOf(R.string.sunset, R.string.sunrise)
 
-            MidnightMethod.MidSunsetToFajr ->
-                listOf(R.string.sunset, R.string.fajr)
+            MidnightMethod.MidSunsetToFajr -> listOf(R.string.sunset, R.string.fajr)
 
             MidnightMethod.MidMaghribToSunrise ->
                 listOf(R.string.maghrib, R.string.sunrise)
@@ -277,42 +333,4 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 .also { snackBar -> snackBar.considerSystemBarsInsets() }.show()
         }
     }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        val context = context ?: return
-        sharedPreferences ?: return
-        updateStoredPreference(context) // So vital to have this to have updated preferences here
-        athanPreferenceCategory?.forEach { it.isVisible = coordinates.value != null }
-        asrCalculationHanafiJuristicPreference?.isVisible = !calculationMethod.isJafari
-        highLatitudesMethodPreference?.isVisible = enableHighLatitudesConfiguration
-
-        val isNotificationAthan =
-            sharedPreferences.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
-        ascendingAthanVolumePreference?.isVisible = !isNotificationAthan
-        athanVolumeDialogPreference?.isVisible = !isNotificationAthan &&
-                !sharedPreferences.getBoolean(
-                    PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME
-                )
-
-        ringtonePreference?.summary = sharedPreferences.getString(PREF_ATHAN_NAME, defaultAthanName)
-        val cityName = sharedPreferences.cityName
-        selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)
-        athanPreferenceCategory?.setSummary(
-            if (coordinates.value == null) R.string.athan_disabled_summary else R.string.empty
-        )
-        coordinatesPreference?.summary = coordinates.value
-            ?.run { formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != .0 }) }
-        athanPreferenceCategory?.forEach {
-            it.isVisible = it.isVisible && coordinates.value != null
-        }
-        setMidnightMethodPreferenceSummary()
-        if (key == PREF_NOTIFICATION_ATHAN)
-            notificationAthanSwitchPreference?.isChecked =
-                sharedPreferences.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
-    }
-
-    override fun onCreateRecyclerView(
-        inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?
-    ): RecyclerView =
-        SettingsScreen.insetsFix(super.onCreateRecyclerView(inflater, parent, savedInstanceState))
 }
