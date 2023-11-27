@@ -8,7 +8,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -27,9 +26,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
@@ -80,7 +79,7 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         binding.appBar.root.hideToolbarBottomShadow()
         binding.appBar.toolbar.setTitle(R.string.settings)
         binding.appBar.toolbar.setupMenuNavigation()
-        setupMenu(binding.appBar.toolbar, binding, layoutInflater)
+        setupMenu(activity, binding.appBar.toolbar)
 
         val args by navArgs<SettingsScreenArgs>()
         val viewModel by viewModels<SettingsViewModel>()
@@ -146,126 +145,121 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         const val LOCATION_ATHAN_TAB = 2
     }
 
-    private val tabs = listOf<Pair<() -> (PreferenceFragmentCompat), List<Int>>>(
+    private val tabs = listOf<Pair<() -> (Fragment), List<Int>>>(
         ::InterfaceCalendarFragment to listOf(R.string.pref_interface, R.string.calendar),
         ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
         ::LocationAthanFragment to listOf(R.string.location, R.string.athan)
     )
+}
 
-    // Development only functionalities
-    private fun setupMenu(
-        toolbar: Toolbar, binding: SettingsScreenBinding, inflater: LayoutInflater
-    ) {
-        toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
-            runCatching { startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER)) }
-                .onFailure(logException).getOrNull().debugAssertNotNull
-        }
-        toolbar.menu.add(R.string.screensaver_settings).onClick {
-            runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
-                .onFailure(logException).getOrNull().debugAssertNotNull
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            toolbar.menu.add(R.string.add_quick_settings_tile).onClick {
-                val context = toolbar.context
-                context.getSystemService<StatusBarManager>()?.requestAddTileService(
-                    ComponentName(
-                        context.packageName,
-                        PersianCalendarTileService::class.qualifiedName ?: ""
-                    ),
-                    getString(R.string.app_name),
-                    Icon.createWithResource(context, R.drawable.day19),
-                    {},
-                    {}
-                )
-            }
-        }
-
-        // Rest are development features
-        if (!BuildConfig.DEVELOPMENT) return
-        val activity = activity ?: return
-        toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog(activity) }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            toolbar.menu.add("Dynamic Colors").onClick { showDynamicColorsDialog(activity) }
-        }
-        toolbar.menu.add("Typography").onClick { showTypographyDemoDialog(activity) }
-        toolbar.menu.add("Clear preferences store and exit").onClick {
-            activity.appPrefs.edit { clear() }
-            activity.finish()
-        }
-        toolbar.menu.add("Schedule an alarm").onClick {
-            val numericBinding = NumericBinding.inflate(inflater)
-            numericBinding.edit.setText("5")
-            MaterialAlertDialogBuilder(activity)
-                .setTitle("Enter seconds to schedule alarm")
-                .setView(numericBinding.root)
-                .setPositiveButton(R.string.accept) { _, _ ->
-                    val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
-                    val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
-                        .setInitialDelay(
-                            TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
-                        )
-                        .build()
-                    WorkManager.getInstance(binding.root.context)
-                        .beginUniqueWork(
-                            "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
-                        )
-                        .enqueue()
-                    Toast.makeText(context, "Alarm in ${seconds}s", Toast.LENGTH_SHORT)
-                        .show()
-                }
-                .show()
-        }
-        fun viewCommandResult(command: String) {
-            val dialogBuilder = MaterialAlertDialogBuilder(activity)
-            val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
-            val button = ImageButton(activity).also { button ->
-                button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
-                button.setOnClickListener {
-                    activity.shareTextFile(result, "log.txt", "text/plain")
-                }
-            }
-            dialogBuilder.setCustomTitle(
-                LinearLayout(activity).also {
-                    it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-                    it.addView(button)
-                }
+private fun setupMenu(activity: FragmentActivity?, toolbar: Toolbar) {
+    activity ?: return
+    toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
+        runCatching {
+            activity.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
+        }.onFailure(logException).getOrNull().debugAssertNotNull
+    }
+    toolbar.menu.add(R.string.screensaver_settings).onClick {
+        runCatching { activity.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
+            .onFailure(logException).getOrNull().debugAssertNotNull
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        toolbar.menu.add(R.string.add_quick_settings_tile).onClick {
+            val context = toolbar.context
+            context.getSystemService<StatusBarManager>()?.requestAddTileService(
+                ComponentName(
+                    context.packageName,
+                    PersianCalendarTileService::class.qualifiedName ?: ""
+                ),
+                context.getString(R.string.app_name),
+                Icon.createWithResource(context, R.drawable.day19),
+                {},
+                {}
             )
-            dialogBuilder.setView(
-                ScrollView(context).also { scrollView ->
-                    scrollView.addView(TextView(context).also {
-                        it.text = result
-                        it.textDirection = View.TEXT_DIRECTION_LTR
-                    })
-                    // Scroll to bottom, https://stackoverflow.com/a/3080483
-                    scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-                }
-            )
-            dialogBuilder.show()
-        }
-        toolbar.menu.addSubMenu("Log Viewer").also {
-            it.add("Filtered").onClick {
-                viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
-            }
-            it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
-        }
-        toolbar.menu.addSubMenu("Log").also {
-            it.add("Log 'Hello'").onClick { debugLog("Hello!") }
-            it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
-            it.add("Crash!").onClick { error("Unhandled Crash!") }
-        }
-        toolbar.menu.add("Start Dream").onClick {
-            // https://stackoverflow.com/a/23112947
-            runCatching {
-                startActivity(
-                    Intent(Intent.ACTION_MAIN).setClassName(
-                        "com.android.systemui",
-                        "com.android.systemui.Somnambulator"
-                    )
-                )
-            }.onFailure(logException).getOrNull().debugAssertNotNull
-        }
-        toolbar.menu.add("Start Carousel").onClick {
-            showCarouselDialog(activity)
         }
     }
+
+    if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
+    toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog(activity) }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        toolbar.menu.add("Dynamic Colors").onClick { showDynamicColorsDialog(activity) }
+    }
+    toolbar.menu.add("Typography").onClick { showTypographyDemoDialog(activity) }
+    toolbar.menu.add("Clear preferences store and exit").onClick {
+        activity.appPrefs.edit { clear() }
+        activity.finish()
+    }
+    toolbar.menu.add("Schedule an alarm").onClick {
+        val numericBinding = NumericBinding.inflate(activity.layoutInflater)
+        numericBinding.edit.setText("5")
+        MaterialAlertDialogBuilder(activity)
+            .setTitle("Enter seconds to schedule alarm")
+            .setView(numericBinding.root)
+            .setPositiveButton(R.string.accept) { _, _ ->
+                val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
+                val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
+                    .setInitialDelay(
+                        TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
+                    )
+                    .build()
+                WorkManager.getInstance(activity)
+                    .beginUniqueWork(
+                        "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
+                    )
+                    .enqueue()
+                Toast.makeText(activity, "Alarm in ${seconds}s", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            .show()
+    }
+    fun viewCommandResult(command: String) {
+        val dialogBuilder = MaterialAlertDialogBuilder(activity)
+        val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
+        val button = ImageButton(activity).also { button ->
+            button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
+            button.setOnClickListener {
+                activity.shareTextFile(result, "log.txt", "text/plain")
+            }
+        }
+        dialogBuilder.setCustomTitle(
+            LinearLayout(activity).also {
+                it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+                it.addView(button)
+            }
+        )
+        dialogBuilder.setView(
+            ScrollView(activity).also { scrollView ->
+                scrollView.addView(TextView(activity).also {
+                    it.text = result
+                    it.textDirection = View.TEXT_DIRECTION_LTR
+                })
+                // Scroll to bottom, https://stackoverflow.com/a/3080483
+                scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+            }
+        )
+        dialogBuilder.show()
+    }
+    toolbar.menu.addSubMenu("Log Viewer").also {
+        it.add("Filtered").onClick {
+            viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
+        }
+        it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
+    }
+    toolbar.menu.addSubMenu("Log").also {
+        it.add("Log 'Hello'").onClick { debugLog("Hello!") }
+        it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
+        it.add("Crash!").onClick { error("Unhandled Crash!") }
+    }
+    toolbar.menu.add("Start Dream").onClick {
+        // https://stackoverflow.com/a/23112947
+        runCatching {
+            activity.startActivity(
+                Intent(Intent.ACTION_MAIN).setClassName(
+                    "com.android.systemui",
+                    "com.android.systemui.Somnambulator"
+                )
+            )
+        }.onFailure(logException).getOrNull().debugAssertNotNull
+    }
+    toolbar.menu.add("Start Carousel").onClick { showCarouselDialog(activity) }
 }
