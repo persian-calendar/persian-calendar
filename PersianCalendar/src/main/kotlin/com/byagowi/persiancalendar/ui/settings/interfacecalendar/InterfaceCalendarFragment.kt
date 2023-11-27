@@ -7,15 +7,31 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
-import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
-import androidx.preference.PreferenceFragmentCompat
-import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
@@ -38,194 +54,212 @@ import com.byagowi.persiancalendar.databinding.ColorGradientSwitchBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
+import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsScreenDirections
-import com.byagowi.persiancalendar.ui.settings.build
-import com.byagowi.persiancalendar.ui.settings.clickable
+import com.byagowi.persiancalendar.ui.settings.SettingsSection
+import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
-import com.byagowi.persiancalendar.ui.settings.multiSelect
-import com.byagowi.persiancalendar.ui.settings.section
-import com.byagowi.persiancalendar.ui.settings.singleSelect
-import com.byagowi.persiancalendar.ui.settings.summary
-import com.byagowi.persiancalendar.ui.settings.switch
-import com.byagowi.persiancalendar.ui.settings.title
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.random.Random
 
-class InterfaceCalendarFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val activity = activity ?: return
+class InterfaceCalendarFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         val destination = arguments?.getString(SettingsScreen.PREF_DESTINATION)
+        val root = ComposeView(inflater.context)
+        val activity = activity ?: return root
         if (destination == PREF_HOLIDAY_TYPES) {
             showHolidaysTypesDialog(activity)
             arguments?.remove(SettingsScreen.PREF_DESTINATION)
         }
-
-        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
-            section(R.string.pref_interface) {
-                themeSelect()
-                clickable(onClick = { showLanguagePreferenceDialog(activity) }) {
-                    if (destination == PREF_APP_LANGUAGE) title = "Language"
-                    else title(R.string.language)
-                    summary = language.nativeName
-                }
-                switch(
-                    PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
-                ) {
+        run { // reset Islamic offset if is already expired
+            val appPrefs = activity.appPrefs
+            if (PREF_ISLAMIC_OFFSET in appPrefs && appPrefs.isIslamicOffsetExpired)
+                appPrefs.edit { putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET) }
+        }
+        root.setContent {
+            Mdc3Theme {
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    SettingsSection(stringResource(R.string.pref_interface))
+                    ThemeSelect(activity)
+                    SettingsClickable(
+                        title = if (destination == PREF_APP_LANGUAGE) "Language"
+                        else stringResource(R.string.language),
+                        summary = language.nativeName,
+                    ) { showLanguagePreferenceDialog(activity) }
                     if (language.isArabic) {
-                        title = "السنة الميلادية بالاسماء الشرقية"
-                        summary = "كانون الثاني، شباط، آذار، …"
-                    } else isVisible = false
-                }
-                switch(
-                    PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
-                ) {
+                        SettingsSwitch(
+                            PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
+                            DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
+                            "السنة الميلادية بالاسماء الشرقية",
+                            "كانون الثاني، شباط، آذار، …"
+                        )
+                    }
                     if (language.isPersian) {
-                        title = "ماه‌های میلادی با نام انگلیسی"
-                        summary = "جون، جولای، آگوست، …"
-                    } else isVisible = false
-                }
-                // TODO: To be integrated into the language selection dialog one day
-                switch(PREF_LOCAL_DIGITS, true) {
-                    title(R.string.native_digits)
-                    summary(R.string.enable_native_digits)
-                    if (!language.canHaveLocalDigits) isVisible = false
-                }
-            }
-            section(R.string.calendar) {
-                // Mark the rest of options as advanced
-                initialExpandedChildrenCount = 5
-                clickable(onClick = { showHolidaysTypesDialog(activity) }) {
-                    title(R.string.events)
-                    summary(R.string.events_summary)
-                }
-                switch(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) {
-                    title(R.string.show_device_calendar_events)
-                    summary(R.string.show_device_calendar_events_summary)
-                    this.setOnPreferenceChangeListener { _, _ ->
-                        isChecked = if (ActivityCompat.checkSelfPermission(
-                                activity, Manifest.permission.READ_CALENDAR
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            activity.askForCalendarPermission()
-                            false
-                        } else {
-                            !isChecked
-                        }
-                        false
+                        SettingsSwitch(
+                            PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+                            DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+                            "ماه‌های میلادی با نام انگلیسی",
+                            "جون، جولای، آگوست، …"
+                        )
                     }
-                }
-                clickable(onClick = {
-                    showCalendarPreferenceDialog(activity, onEmpty = {
-                        // Easter egg when empty result is rejected
-                        val view = view?.rootView ?: return@showCalendarPreferenceDialog
-                        val animator = ValueAnimator.ofFloat(0f, 1f)
-                        animator.duration = 3000L
-                        animator.interpolator = AccelerateDecelerateInterpolator()
-                        animator.addUpdateListener { view.rotation = it.animatedFraction * 360f }
-                        if (Random.nextBoolean()) animator.start() else animator.reverse()
-                    })
-                }) {
-                    title(R.string.calendars_priority)
-                    summary(R.string.calendars_priority_summary)
-                }
-                switch(PREF_ASTRONOMICAL_FEATURES, false) {
-                    title(R.string.astronomy)
-                    summary(R.string.astronomical_info_summary)
-                }
-                switch(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false) {
-                    title(R.string.week_number)
-                    summary(R.string.week_number_summary)
-                }
-                run { // reset Islamic offset if is already expired
-                    val appPrefs = context.appPrefs
-                    if (PREF_ISLAMIC_OFFSET in appPrefs && appPrefs.isIslamicOffsetExpired)
-                        appPrefs.edit { putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET) }
-                }
-                singleSelect(
-                    PREF_ISLAMIC_OFFSET,
-                    // One is formatted with locale's numerals and the other used for keys isn't
-                    (-2..2).map { formatNumber(it.toString()) }, (-2..2).map { it.toString() },
-                    DEFAULT_ISLAMIC_OFFSET, R.string.islamic_offset,
-                    R.string.islamic_offset_summary
-                ) { title(R.string.islamic_offset) }
-                val weekDaysValues = (0..6).map { it.toString() }
-                singleSelect(
-                    PREF_WEEK_START, weekDays, weekDaysValues, language.defaultWeekStart,
-                    R.string.week_start_summary
-                ) { title(R.string.week_start) }
-                multiSelect(
-                    PREF_WEEK_ENDS, weekDays, weekDaysValues, language.defaultWeekEnds,
-                    R.string.week_ends_summary
-                ) {
-                    title(R.string.week_ends)
-                    summary(R.string.week_ends_summary)
+                    // TODO: To be integrated into the language selection dialog one day
+                    if (language.canHaveLocalDigits) {
+                        SettingsSwitch(
+                            PREF_LOCAL_DIGITS,
+                            true,
+                            stringResource(R.string.native_digits),
+                            stringResource(R.string.enable_native_digits)
+                        )
+                    }
+
+                    Divider()
+                    SettingsSection(stringResource(R.string.calendar))
+                    SettingsClickable(
+                        stringResource(R.string.events), stringResource(R.string.events_summary)
+                    ) { showHolidaysTypesDialog(activity) }
+                    SettingsSwitch(
+                        PREF_SHOW_DEVICE_CALENDAR_EVENTS, false,
+                        stringResource(R.string.show_device_calendar_events),
+                        stringResource(R.string.show_device_calendar_events_summary),
+                        onBeforeToggle = {
+                            if (it && ActivityCompat.checkSelfPermission(
+                                    activity, Manifest.permission.READ_CALENDAR
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                activity.askForCalendarPermission()
+                                false
+                            } else it
+                        },
+                        watchChanges = true,
+                    )
+                    SettingsClickable(
+                        stringResource(R.string.calendars_priority),
+                        stringResource(R.string.calendars_priority_summary)
+                    ) {
+                        showCalendarPreferenceDialog(activity, onEmpty = {
+                            // Easter egg when empty result is rejected
+                            val view = view?.rootView ?: return@showCalendarPreferenceDialog
+                            val animator = ValueAnimator.ofFloat(0f, 1f)
+                            animator.duration = 3000L
+                            animator.interpolator = AccelerateDecelerateInterpolator()
+                            animator.addUpdateListener {
+                                view.rotation = it.animatedFraction * 360f
+                            }
+                            if (Random.nextBoolean()) animator.start() else animator.reverse()
+                        })
+                    }
+                    SettingsSwitch(
+                        PREF_ASTRONOMICAL_FEATURES, false,
+                        stringResource(R.string.astronomy),
+                        stringResource(R.string.astronomical_info_summary)
+                    )
+                    SettingsSwitch(
+                        PREF_SHOW_WEEK_OF_YEAR_NUMBER, false,
+                        stringResource(R.string.week_number),
+                        stringResource(R.string.week_number_summary)
+                    )
+                    SettingsSingleSelect(
+                        PREF_ISLAMIC_OFFSET,
+                        // One is formatted with locale's numerals and the other used for keys isn't
+                        (-2..2).map { formatNumber(it.toString()) },
+                        (-2..2).map { it.toString() },
+                        DEFAULT_ISLAMIC_OFFSET,
+                        R.string.islamic_offset,
+                        stringResource(R.string.islamic_offset),
+                        R.string.islamic_offset_summary,
+                    )
+                    val weekDaysValues = (0..6).map { it.toString() }
+                    SettingsSingleSelect(
+                        key = PREF_WEEK_START,
+                        entries = weekDays,
+                        entryValues = weekDaysValues,
+                        defaultValue = language.defaultWeekStart,
+                        dialogTitleResId = R.string.week_start_summary,
+                        title = stringResource(R.string.week_start),
+                        summaryResId = R.string.week_start_summary,
+                    )
+                    SettingsMultiSelect(
+                        key = PREF_WEEK_ENDS,
+                        entries = weekDays,
+                        entryValues = weekDaysValues,
+                        defaultValue = language.defaultWeekEnds,
+                        dialogTitleResId = R.string.week_ends_summary,
+                        title = stringResource(R.string.week_ends),
+                        summary = stringResource(R.string.week_ends),
+                    )
+
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                 }
             }
         }
 
-        val appPrefs = activity.appPrefs
-        appPrefs.registerOnSharedPreferenceChangeListener(this)
+        activity.appPrefs.registerOnSharedPreferenceChangeListener(this)
+        return root
     }
-
-    private fun PreferenceCategory.themeSelect() {
-        val entries = Theme.entries.map { getString(it.title) }
-        val entryValues = Theme.entries.map { it.key }
-        var preference: Preference? = null
-        clickable(
-            onClick = {
-                val currentValue = entryValues.indexOf(
-                    context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
-                )
-                val dialog = MaterialAlertDialogBuilder(context)
-                    .setTitle(R.string.select_skin)
-                    .setNegativeButton(R.string.cancel, null)
-                    .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
-                        context.appPrefs.edit { putString(PREF_THEME, entryValues[which]) }
-                        preference?.summary = entries[which]
-                        dialog.dismiss()
-                    }
-                    .show()
-
-                val activity = activity ?: return@clickable
-                if (!Theme.supportsGradient(activity)) return@clickable
-                val binding = ColorGradientSwitchBinding.inflate(activity.layoutInflater)
-                (dialog.getButton(DialogInterface.BUTTON_NEGATIVE)?.parent as? ViewGroup)
-                    ?.addView(binding.root, 0)
-                if (activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
-                    binding.button.isChecked = true
-                binding.label.setOnClickListener {
-                    binding.button.isChecked = !binding.button.isChecked
-                }
-                binding.button.setOnCheckedChangeListener { _, isChecked ->
-                    activity.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, isChecked) }
-                }
-            }
-        ) {
-            preference = this
-            summary = entries[entryValues.indexOf(
-                context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
-            )]
-            title(R.string.select_skin)
-        }
-    }
-
-    override fun onCreateRecyclerView(
-        inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?
-    ): RecyclerView =
-        SettingsScreen.insetsFix(super.onCreateRecyclerView(inflater, parent, savedInstanceState))
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == PREF_APP_LANGUAGE) {
             val navController = activity?.findNavController(R.id.navHostFragment)
-            if (navController?.currentDestination?.id == R.id.settings)
-                navController.navigateSafe(SettingsScreenDirections.navigateToSelf())
+            if (navController?.currentDestination?.id == R.id.settings) navController.navigateSafe(
+                SettingsScreenDirections.navigateToSelf()
+            )
+        }
+    }
+}
+
+@Composable
+private fun ThemeSelect(activity: FragmentActivity) {
+    val entries = Theme.entries.map { activity.getString(it.title) }
+    val entryValues = Theme.entries.map { it.key }
+    val context = LocalContext.current
+    var themeDisplayName by remember {
+        mutableStateOf(
+            entries[entryValues.indexOf(
+                context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
+            )]
+        )
+    }
+    SettingsClickable(
+        title = stringResource(R.string.select_skin), summary = themeDisplayName
+    ) clickable@{
+        val currentValue = entryValues.indexOf(
+            context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
+        )
+        val dialog = MaterialAlertDialogBuilder(context).setTitle(R.string.select_skin)
+            .setNegativeButton(R.string.cancel, null)
+            .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
+                context.appPrefs.edit { putString(PREF_THEME, entryValues[which]) }
+                themeDisplayName = entries[which]
+                dialog.dismiss()
+            }.show()
+
+        if (!Theme.supportsGradient(activity)) return@clickable
+        val binding = ColorGradientSwitchBinding.inflate(activity.layoutInflater)
+        (dialog.getButton(DialogInterface.BUTTON_NEGATIVE)?.parent as? ViewGroup)?.addView(
+            binding.root,
+            0
+        )
+        if (activity.appPrefs.getBoolean(
+                PREF_THEME_GRADIENT,
+                DEFAULT_THEME_GRADIENT
+            )
+        ) binding.button.isChecked = true
+        binding.label.setOnClickListener {
+            binding.button.isChecked = !binding.button.isChecked
+        }
+        binding.button.setOnCheckedChangeListener { _, isChecked ->
+            activity.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, isChecked) }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.Manifest
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -17,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -89,7 +91,16 @@ fun NotificationSettings(activity: FragmentActivity) {
     var showDateLockScreen by remember {
         mutableStateOf(appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
     }
-    SettingsSwitch(key = PREF_NOTIFY_DATE,
+    DisposableEffect(null) {
+        val listener = { prefs: SharedPreferences, changeKey: String? ->
+            if (changeKey == PREF_NOTIFY_DATE)
+                showDateLockScreen = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+        }
+        appPrefs.registerOnSharedPreferenceChangeListener(listener)
+        onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
+    }
+    SettingsSwitch(
+        key = PREF_NOTIFY_DATE,
         defaultValue = DEFAULT_NOTIFY_DATE,
         title = stringResource(R.string.notify_date),
         summary = stringResource(R.string.enable_notify),
@@ -106,7 +117,9 @@ fun NotificationSettings(activity: FragmentActivity) {
                 showDateLockScreen = value
                 value
             }
-        })
+        },
+        watchChanges = true,
+    )
     AnimatedVisibility(showDateLockScreen) {
         SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,

@@ -389,7 +389,7 @@ private fun AboutScreenButton(
     val context = LocalContext.current
     Box(
         modifier = Modifier
-            .clickable(onClickLabel = stringResource(title)) { action(context) }
+            .clickable { action(context) }
             .padding(start = 8.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
         Row {
             Icon(

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.content.SharedPreferences
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +47,7 @@ fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable(onClickLabel = title) { action() }
+            .clickable { action() }
             .padding(16.dp),
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
@@ -56,9 +58,43 @@ fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit
 }
 
 @Composable
+fun SettingsSingleSelect(
+    key: String,
+    entries: List<String>,
+    entryValues: List<String>,
+    defaultValue: String,
+    dialogTitleResId: Int,
+    title: String,
+    summaryResId: Int? = null
+) {
+    val context = LocalContext.current
+    var summary by remember {
+        mutableStateOf(
+            if (summaryResId == null) entries[entryValues.indexOf(
+                context.appPrefs.getString(key, null) ?: defaultValue
+            )] else context.getString(summaryResId)
+        )
+    }
+    SettingsClickable(title = title, summary = summary) {
+        val currentValue = entryValues.indexOf(
+            context.appPrefs.getString(key, null) ?: defaultValue
+        )
+        MaterialAlertDialogBuilder(context).setTitle(dialogTitleResId)
+            .setNegativeButton(R.string.cancel, null)
+            .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
+                context.appPrefs.edit { putString(key, entryValues[which]) }
+                if (summaryResId == null) summary = entries[which]
+                dialog.dismiss()
+            }.show()
+    }
+}
+
+@Composable
 fun SettingsMultiSelect(
     key: String,
-    entries: List<String>, entryValues: List<String>, defaultValue: Set<String>,
+    entries: List<String>,
+    entryValues: List<String>,
+    defaultValue: Set<String>,
     dialogTitleResId: Int,
     title: String,
     summary: String? = null,
@@ -83,11 +119,21 @@ fun SettingsSwitch(
     defaultValue: Boolean,
     title: String,
     summary: String? = null,
-    onBeforeToggle: (Boolean) -> Boolean = { it }
+    onBeforeToggle: (Boolean) -> Boolean = { it },
+    watchChanges: Boolean = false,
 ) {
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
     var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
+    if (watchChanges) {
+        DisposableEffect(null) {
+            val listener = { prefs: SharedPreferences, changeKey: String? ->
+                if (changeKey == key) currentValue = prefs.getBoolean(key, defaultValue)
+            }
+            appPrefs.registerOnSharedPreferenceChangeListener(listener)
+            onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
+        }
+    }
     val toggle = remember {
         {
             val previousValue = currentValue
@@ -98,7 +144,7 @@ fun SettingsSwitch(
     Box(
         Modifier
             .fillMaxWidth()
-            .clickable(onClickLabel = title, onClick = toggle),
+            .clickable(onClick = toggle),
     ) {
         Column(
             Modifier
