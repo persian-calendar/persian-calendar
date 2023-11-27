@@ -419,8 +419,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun setupToolbarWithDrawer(toolbar: Toolbar) {
         val listener = ActionBarDrawerToggle(
-            this, binding.root, toolbar,
-            androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.close
+            this, binding.root, toolbar, R.string.open_drawer, R.string.close
         ).also { it.syncState() }
 
         binding.root.addDrawerListener(listener)

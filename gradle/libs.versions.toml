@@ -92,7 +92,6 @@ mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", versio
 multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidx-navigation" }
-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
 openlocationcode = { group = "com.google.openlocationcode", name = "openlocationcode", version.ref = "openlocationcode" }
 persiancalendar-calculator = { group = "com.github.persian-calendar", name = "calculator", version.ref = "persiancalendar-calculator" }
 persiancalendar-calendar = { group = "com.github.persian-calendar", name = "calendar", version.ref = "persiancalendar-calendar" }

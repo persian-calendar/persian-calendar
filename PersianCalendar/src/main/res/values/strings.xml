@@ -390,6 +390,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="color_gradient">Color gradient</string>
     <string name="time_zones">Time zones</string>
     <string name="qr_code">QR Code</string>
+    <string name="navigate_up">Navigate up</string>
+    <string name="open_drawer">Open navigation drawer</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

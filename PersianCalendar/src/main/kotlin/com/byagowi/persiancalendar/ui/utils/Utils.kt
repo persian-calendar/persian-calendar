@@ -149,7 +149,7 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 
 fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
-    setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
+    setNavigationContentDescription(R.string.navigate_up)
     setNavigationOnClickListener { findNavController().navigateUp() }
 }
 

@@ -400,4 +400,6 @@
     <string name="color_gradient">طیف رنگی</string>
     <string name="time_zones">مناطق زمانی</string>
     <string name="qr_code">کیوآر کد</string>
+    <string name="navigate_up">پیمایش به بالا</string>
+    <string name="open_drawer">باز کردن کشوی پیمایش</string>
 </resources>

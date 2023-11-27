@@ -143,7 +143,6 @@ dependencies {
     implementation(libs.material)
 
     implementation(libs.navigation.fragment.ktx)
-    implementation(libs.navigation.ui.ktx)
     androidTestImplementation(libs.navigation.testing)
 
     implementation(libs.androidx.core.ktx)
