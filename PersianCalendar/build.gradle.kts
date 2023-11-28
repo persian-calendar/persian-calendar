@@ -8,7 +8,7 @@ plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.androidx.navigation.safeargs.kotlin)
-    alias(libs.plugins.ksp)
+    // alias(libs.plugins.ksp)
     id("io.github.persiancalendar.appbuildplugin")
 }
 
@@ -162,7 +162,7 @@ dependencies {
     // Not used directly on the app but is used by work manager anyway
     implementation(libs.bundles.room)
     annotationProcessor(libs.room.compiler)
-    ksp(libs.room.compiler)
+    // ksp(libs.room.compiler)
 
     implementation(libs.activity.ktx)
     implementation(libs.compose.activity)
