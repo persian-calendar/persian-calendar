@@ -56,6 +56,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -350,13 +351,12 @@ private fun HelpItems() {
                 title to body
             }
     }
-    val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
     Column {
         sections.forEachIndexed { i, (title, body) ->
-            val isExpanded = expansionsState[i]
+            var isExpanded by rememberSaveable { mutableStateOf(false) }
             val angle = animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle").value
             Column(modifier = Modifier
-                .clickable { expansionsState[i] = !expansionsState[i] }
+                .clickable { isExpanded = !isExpanded }
                 .padding(4.dp)
                 .fillMaxWidth()
                 .animateContentSize()) {

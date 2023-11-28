@@ -48,6 +48,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -164,7 +165,7 @@ private fun Sidebar() {
 @Composable
 private fun Licenses() {
     val sections = remember { getCreditsSections() }
-    var expandedItem by remember { mutableIntStateOf(-1) }
+    var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     LazyColumn {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
