@@ -113,7 +113,7 @@
 
     <fragment
         android:id="@+id/about"
-        android:name="com.byagowi.persiancalendar.ui.about.AboutScreen"
+        android:name="com.byagowi.persiancalendar.ui.about.AboutFragment"
         android:label="@string/about"
         tools:layout="@layout/about_screen">
     </fragment>

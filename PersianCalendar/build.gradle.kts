@@ -175,6 +175,7 @@ dependencies {
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.runtime)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
 
     // implementation(libs.androidx.glance.appwidget)

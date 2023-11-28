@@ -38,6 +38,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -204,7 +205,7 @@ private fun SettingsScreenContent(
     val selectedTabIndex = pagerState.currentPage
     TabRow(
         selectedTabIndex = selectedTabIndex,
-        contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         containerColor = Color.Transparent,
         divider = {},
         indicator = @Composable { tabPositions ->
@@ -213,8 +214,7 @@ private fun SettingsScreenContent(
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    color = Color(context.resolveColor(R.attr.colorOnAppBar))
-                        .copy(alpha = AppBlendAlpha),
+                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = AppBlendAlpha),
                     height = 2.dp,
                 )
             }

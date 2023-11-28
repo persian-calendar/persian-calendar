@@ -55,6 +55,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -65,6 +66,11 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
+
+@Preview
+@Composable
+private fun Preview() = LicensesScreen {}
 
 @Composable
 fun LicensesScreen(popNavigation: () -> Unit) {

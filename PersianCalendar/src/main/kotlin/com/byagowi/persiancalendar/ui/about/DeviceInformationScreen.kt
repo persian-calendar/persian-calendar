@@ -50,6 +50,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -81,6 +82,10 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 import java.util.Locale
+
+@Preview
+@Composable
+private fun Preview() = DeviceInformationScreen {}
 
 @Composable
 fun DeviceInformationScreen(popNavigation: () -> Unit) {

@@ -68,6 +68,7 @@ compose-navigation = { group = "androidx.navigation", name = "navigation-compose
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }

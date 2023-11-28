@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -62,7 +63,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.RenderEffect
 import androidx.compose.ui.graphics.asComposeRenderEffect
@@ -75,6 +75,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -97,7 +98,6 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
@@ -105,7 +105,7 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 
-class AboutScreen : Fragment() {
+class AboutFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -118,9 +118,12 @@ class AboutScreen : Fragment() {
                 val deviceInformationRoute = "deviceInformation"
                 NavHost(navController = navController, startDestination = aboutRoute) {
                     composable(aboutRoute) {
-                        AboutScreenRoot(navigateToDeviceInformation = {
-                            navController.navigate(deviceInformationRoute)
-                        }, navigateToLicenses = { navController.navigate(licensesRoute) })
+                        AboutScreen(
+                            navigateToLicenses = { navController.navigate(licensesRoute) },
+                            navigateToDeviceInformation = {
+                                navController.navigate(deviceInformationRoute)
+                            },
+                        )
                     }
                     composable(licensesRoute) {
                         LicensesScreen { navController.popBackStack() }
@@ -135,9 +138,13 @@ class AboutScreen : Fragment() {
     }
 }
 
-// TODO: To be renamed to AboutScreen once we can get rid of all fragments
+@Preview
 @Composable
-private fun AboutScreenRoot(
+private fun Preview() = AboutScreen({}, {})
+
+@Composable
+@VisibleForTesting
+fun AboutScreen(
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
 ) {
@@ -207,12 +214,12 @@ private fun AboutScreenRoot(
                         Text(
                             aboutTitle,
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                            color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                         Text(
                             aboutSubtitle,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
                 }
