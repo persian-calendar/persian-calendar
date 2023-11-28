@@ -43,6 +43,7 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -196,10 +197,14 @@ private fun Licenses() {
                         //  Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                         license,
                         modifier = Modifier
-                            .background(Color.LightGray, RoundedCornerShape(CornerSize(3.dp)))
+                            .background(
+                                MaterialTheme.colorScheme.secondaryContainer,
+                                RoundedCornerShape(CornerSize(4.dp)),
+                            )
                             .align(alignment = Alignment.CenterVertically)
                             .padding(horizontal = 4.dp),
-                        style = MaterialTheme.typography.bodySmall
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
                     )
                 }
                 if (expandedItem == i) SelectionContainer { Text(text) }
