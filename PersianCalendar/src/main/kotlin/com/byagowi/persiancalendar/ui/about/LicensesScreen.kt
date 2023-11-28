@@ -1,10 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.os.Build
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -55,7 +51,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -63,7 +58,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
@@ -71,41 +65,31 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
-class LicensesScreen : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, viewGroup: ViewGroup?, bundle: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        root.setContent {
-            Mdc3Theme {
-                Column {
-                    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-                    AndroidView(modifier = Modifier.fillMaxWidth(), factory = {
-                        val bar = AppBarBinding.inflate(it.layoutInflater)
-                        bar.toolbar.title = it.getString(R.string.about_license_title)
-                        bar.toolbar.setupUpNavigation()
-                        bar.root
-                    })
-                    Surface(shape = MaterialCornerExtraLargeTop()) {
-                        Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) {
-                            // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
-                            //  the latter ltr is ok
-                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                                Row {
-                                    Sidebar()
-                                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                                        Licenses()
-                                    }
-                                }
-                            }
+@Composable
+fun LicensesScreen(popNavigation: () -> Unit) {
+    Column {
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+        AndroidView(modifier = Modifier.fillMaxWidth(), factory = {
+            val bar = AppBarBinding.inflate(it.layoutInflater)
+            bar.toolbar.title = it.getString(R.string.about_license_title)
+            bar.toolbar.setupUpNavigation(popNavigation)
+            bar.root
+        })
+        Surface(shape = MaterialCornerExtraLargeTop()) {
+            Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) {
+                // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
+                //  the latter ltr is ok
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    Row {
+                        Sidebar()
+                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                            Licenses()
                         }
                     }
                 }
             }
         }
-        return root
     }
 }
 

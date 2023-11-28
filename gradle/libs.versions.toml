@@ -64,6 +64,7 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "compose" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
+compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
 compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }

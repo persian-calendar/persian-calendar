@@ -11,13 +11,9 @@ import android.opengl.GLES10
 import android.opengl.GLES20
 import android.os.BatteryManager
 import android.os.Build
-import android.os.Bundle
 import android.view.InputDevice
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.RoundedCorner
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +44,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -59,7 +54,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
@@ -71,7 +65,6 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.html.body
 import kotlinx.html.h1
@@ -89,47 +82,36 @@ import kotlinx.html.tr
 import kotlinx.html.unsafe
 import java.util.Locale
 
-class DeviceInformationScreen : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        root.setContent {
-            Mdc3Theme {
-                Column {
-                    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-                    val context = LocalContext.current
-                    val items = remember {
-                        // TODO: Ugly cast
-                        createItemsList(context as? Activity ?: return@remember emptyList())
-                    }
-                    AboutScreenToolbar(items)
-                    Surface(shape = MaterialCornerExtraLargeTop()) {
-                        Box(modifier = Modifier.padding(16.dp, 0.dp, 16.dp)) {
-                            DeviceInformationRoot(items)
-                        }
-                    }
-                }
+@Composable
+fun DeviceInformationScreen(popNavigation: () -> Unit) {
+    Column {
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+        val context = LocalContext.current
+        val items = remember {
+            // TODO: Ugly cast
+            createItemsList(context as? Activity ?: return@remember emptyList())
+        }
+        DeviceInformationScreenToolbar(items, popNavigation)
+        Surface(shape = MaterialCornerExtraLargeTop()) {
+            Box(modifier = Modifier.padding(16.dp, 0.dp, 16.dp)) {
+                DeviceInformationRoot(items)
             }
         }
-        return root
     }
 }
 
 @Composable
-private fun AboutScreenToolbar(items: List<Item>) {
+private fun DeviceInformationScreenToolbar(items: List<Item>, popNavigation: () -> Unit) {
     AndroidView(modifier = Modifier.fillMaxWidth(), factory = { context ->
         val appBar = AppBarBinding.inflate(context.layoutInflater)
         appBar.toolbar.setTitle(R.string.device_information)
-        appBar.toolbar.setupUpNavigation()
+        appBar.toolbar.setupUpNavigation(popNavigation)
         appBar.toolbar.menu.add(R.string.share).also { menu ->
             menu.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
             menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             context.shareTextFile(
-                generateHtmlReport(items),
-                "device.html",
-                "text/html"
+                generateHtmlReport(items), "device.html", "text/html"
             )
         }
         appBar.toolbar.menu.add("Print").also { menu ->

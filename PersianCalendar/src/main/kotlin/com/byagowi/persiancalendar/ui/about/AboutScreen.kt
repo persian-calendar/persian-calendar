@@ -82,7 +82,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.navigation.findNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AppBarBinding
@@ -94,7 +96,6 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
@@ -103,6 +104,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
+
 class AboutScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -110,10 +112,22 @@ class AboutScreen : Fragment() {
         val root = ComposeView(inflater.context)
         root.setContent {
             Mdc3Theme {
-                Column {
-                    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-                    AboutScreenToolbar()
-                    AboutScreenRoot()
+                val navController = rememberNavController()
+                val aboutRoute = "about"
+                val licensesRoute = "licenses"
+                val deviceInformationRoute = "deviceInformation"
+                NavHost(navController = navController, startDestination = aboutRoute) {
+                    composable(aboutRoute) {
+                        AboutScreenRoot(navigateToDeviceInformation = {
+                            navController.navigate(deviceInformationRoute)
+                        }, navigateToLicenses = { navController.navigate(licensesRoute) })
+                    }
+                    composable(licensesRoute) {
+                        LicensesScreen { navController.popBackStack() }
+                    }
+                    composable(deviceInformationRoute) {
+                        DeviceInformationScreen { navController.popBackStack() }
+                    }
                 }
             }
         }
@@ -121,93 +135,110 @@ class AboutScreen : Fragment() {
     }
 }
 
+// TODO: To be renamed to AboutScreen once we can get rid of all fragments
 @Composable
-private fun AboutScreenRoot() {
-    val context = LocalContext.current
-    val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
+private fun AboutScreenRoot(
+    navigateToDeviceInformation: () -> Unit,
+    navigateToLicenses: () -> Unit,
+) {
+    Column {
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+        AndroidView(modifier = Modifier.fillMaxWidth(), factory = { context ->
+            val appBar = AppBarBinding.inflate(context.layoutInflater)
+            appBar.toolbar.setTitle(R.string.about)
+            appBar.toolbar.setupMenuNavigation()
+            appBar.toolbar.menu.add(R.string.share).also {
+                it.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                it.onClick { shareApplication(context) }
+            }
+            appBar.toolbar.menu.add(R.string.device_information).also {
+                it.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                it.onClick(navigateToDeviceInformation)
+            }
+            appBar.root.hideToolbarBottomShadow()
+            appBar.root
+        })
+        val context = LocalContext.current
+        val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
 
-    Box(modifier = Modifier.clip(MaterialCornerExtraLargeTop())) {
-        var logoAnimationAtEnd by remember { mutableStateOf(false) }
-        var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
-        LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
+        Box(modifier = Modifier.clip(MaterialCornerExtraLargeTop())) {
+            var logoAnimationAtEnd by remember { mutableStateOf(false) }
+            var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
+            LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
 
-        val headerSize = 250.dp
+            val headerSize = 250.dp
 
-        val aboutTitle = stringResource(R.string.app_name)
-        val aboutSubtitle = remember {
-            buildString {
-                val version =
-                    // Don't formatNumber it if is multi-parted
-                    if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
-                    else formatNumber(BuildConfig.VERSION_NAME)
-                append(context.getString(R.string.version, version))
-                if (language.isUserAbleToReadPersian) {
-                    appendLine()
-                    append(
-                        context.getString(
-                            R.string.about_help_subtitle,
-                            formatNumber(supportedYearOfIranCalendar - 1),
-                            formatNumber(supportedYearOfIranCalendar)
+            val aboutTitle = stringResource(R.string.app_name)
+            val aboutSubtitle = remember {
+                buildString {
+                    val version =
+                        // Don't formatNumber it if is multi-parted
+                        if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
+                        else formatNumber(BuildConfig.VERSION_NAME)
+                    append(context.getString(R.string.version, version))
+                    if (language.isUserAbleToReadPersian) {
+                        appendLine()
+                        append(
+                            context.getString(
+                                R.string.about_help_subtitle,
+                                formatNumber(supportedYearOfIranCalendar - 1),
+                                formatNumber(supportedYearOfIranCalendar)
+                            )
                         )
-                    )
+                    }
                 }
             }
-        }
 
-        @OptIn(ExperimentalAnimationGraphicsApi::class)
-        Row(
-            Modifier
-                .height(headerSize)
-                .fillMaxWidth(),
-        ) {
-            Box(
+            @OptIn(ExperimentalAnimationGraphicsApi::class) Row(
                 Modifier
-                    .weight(1f)
-                    .fillMaxSize()
-                    .padding(horizontal = MaterialIconDimension.dp),
-                contentAlignment = Alignment.Center
+                    .height(headerSize)
+                    .fillMaxWidth(),
             ) {
-                Column {
-                    Text(
-                        aboutTitle,
-                        style = MaterialTheme.typography.headlineMedium
-                            .copy(fontWeight = FontWeight.Bold),
-                        color = Color(context.resolveColor(R.attr.colorOnAppBar))
-                    )
-                    Text(
-                        aboutSubtitle,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color(context.resolveColor(R.attr.colorOnAppBar))
-                    )
+                Box(
+                    Modifier
+                        .weight(1f)
+                        .fillMaxSize()
+                        .padding(horizontal = MaterialIconDimension.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column {
+                        Text(
+                            aboutTitle,
+                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                            color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                        )
+                        Text(
+                            aboutSubtitle,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                        )
+                    }
                 }
-            }
-            val image =
-                AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
-            Box(
-                Modifier.weight(1f),
-                contentAlignment = Alignment.Center
-            ) {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    Image(
-                        modifier = Modifier
+                val image =
+                    AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
+                Box(
+                    Modifier.weight(1f), contentAlignment = Alignment.Center
+                ) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        Image(modifier = Modifier
                             .graphicsLayer { renderEffect = logoEffect }
                             .fillMaxSize(),
-                        painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
-                        contentDescription = stringResource(R.string.app_name),
-                        contentScale = ContentScale.Fit
-                    )
+                            painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
+                            contentDescription = stringResource(R.string.app_name),
+                            contentScale = ContentScale.Fit)
+                    }
                 }
             }
-        }
 
-        val effectsGenerator = remember {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) createIconRandomEffects()
-            else null
-        }
+            val effectsGenerator = remember {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) createIconRandomEffects()
+                else null
+            }
 
-        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            Box(
-                modifier = Modifier
+            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                Box(modifier = Modifier
                     .fillMaxWidth()
                     .height(headerSize)
                     .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
@@ -217,38 +248,14 @@ private fun AboutScreenRoot() {
                             ?.invoke()
                             ?.asComposeRenderEffect()
                     })
-            Surface(shape = MaterialCornerExtraLargeTop()) {
-                Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) { AboutScreenContent() }
+                Surface(shape = MaterialCornerExtraLargeTop()) {
+                    Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) {
+                        AboutScreenContent(navigateToLicenses)
+                    }
+                }
             }
         }
     }
-}
-
-@Composable
-private fun AboutScreenToolbar() {
-    AndroidView(modifier = Modifier.fillMaxWidth(), factory = { context ->
-        val appBar = AppBarBinding.inflate(context.layoutInflater)
-        appBar.toolbar.setTitle(R.string.about)
-        appBar.toolbar.setupMenuNavigation()
-        appBar.toolbar.menu.add(R.string.share).also {
-            it.icon =
-                appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick { shareApplication(context) }
-        }
-        appBar.toolbar.menu.add(R.string.device_information).also {
-            it.icon =
-                appBar.toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick {
-                // TODO: Ugly cast
-                (context as? FragmentActivity)?.findNavController(R.id.navHostFragment)
-                    ?.navigateSafe(AboutScreenDirections.actionAboutToDeviceInformation())
-            }
-        }
-        appBar.root.hideToolbarBottomShadow()
-        appBar.root
-    })
 }
 
 private fun shareApplication(context: Context) {
@@ -264,7 +271,7 @@ https://github.com/persian-calendar/persian-calendar"""
 }
 
 @Composable
-private fun AboutScreenContent() {
+private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
     Column {
         // Licenses
         val context = LocalContext.current
@@ -274,11 +281,7 @@ private fun AboutScreenContent() {
         )
         AboutScreenButton(
             icon = ImageVector.vectorResource(R.drawable.ic_licences),
-            action = {
-                // TODO: Ugly cast
-                (context as? FragmentActivity)?.findNavController(R.id.navHostFragment)
-                    ?.navigateSafe(AboutScreenDirections.actionAboutToLicenses())
-            },
+            action = { navigateToLicenses() },
             title = R.string.about_license_title,
             summary = R.string.about_license_sum
         )

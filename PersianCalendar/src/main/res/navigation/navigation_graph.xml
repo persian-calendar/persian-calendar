@@ -116,31 +116,7 @@
         android:name="com.byagowi.persiancalendar.ui.about.AboutScreen"
         android:label="@string/about"
         tools:layout="@layout/about_screen">
-        <action
-            android:id="@+id/action_about_to_device_information"
-            app:destination="@id/deviceInformation"
-            app:enterAnim="@anim/nav_enter_anim"
-            app:exitAnim="@anim/nav_exit_anim"
-            app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim" />
-        <action
-            android:id="@+id/action_about_to_licenses"
-            app:destination="@id/licenses"
-            app:enterAnim="@anim/nav_enter_anim"
-            app:exitAnim="@anim/nav_exit_anim"
-            app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim" />
     </fragment>
-
-    <fragment
-        android:id="@+id/deviceInformation"
-        android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationScreen"
-        android:label="@string/device_information" />
-
-    <fragment
-        android:id="@+id/licenses"
-        android:name="com.byagowi.persiancalendar.ui.about.LicensesScreen"
-        android:label="@string/licenses" />
 
     <fragment
         android:id="@+id/astronomy"

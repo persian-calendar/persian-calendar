@@ -155,7 +155,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             "CONVERTER" -> R.id.converter
             "ASTRONOMY" -> R.id.astronomy
             "SETTINGS" -> R.id.settings
-            "DEVICE" -> R.id.deviceInformation
             else -> null // unsupported action. ignore
         }?.also {
             navigateTo(it)

@@ -145,10 +145,10 @@ fun Context.shareTextFile(text: String, fileName: String, mime: String) =
 fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
     shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
 
-fun Toolbar.setupUpNavigation() {
+fun Toolbar.setupUpNavigation(onUpClick: () -> Unit = { findNavController().navigateUp() }) {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
     setNavigationContentDescription(R.string.navigate_up)
-    setNavigationOnClickListener { findNavController().navigateUp() }
+    setNavigationOnClickListener { onUpClick() }
 }
 
 fun Toolbar.setupMenuNavigation() {
