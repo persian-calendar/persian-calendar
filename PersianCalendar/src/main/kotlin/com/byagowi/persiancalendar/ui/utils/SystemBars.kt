@@ -40,7 +40,8 @@ class SystemBarsTransparency(activity: Activity) {
  * decor view insets so we should consider the insets ourselves.
  *
  * From https://stackoverflow.com/a/76018821 with some modifications
- * Also have a look at [com.google.android.material.internal.EdgeToEdgeUtils.applyEdgeToEdge]
+ * Also have a look at [androidx.activity.enableEdgeToEdge] which provides the same functionality
+ * but in non-gesture navigation is less immersive.
  */
 fun Activity.transparentSystemBars() {
     WindowCompat.setDecorFitsSystemWindows(window, false)
