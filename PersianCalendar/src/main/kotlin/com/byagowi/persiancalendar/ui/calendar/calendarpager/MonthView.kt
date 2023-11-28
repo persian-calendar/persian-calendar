@@ -22,9 +22,9 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.math.MathUtils
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlin.math.min
 
@@ -178,8 +178,8 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
-            lastY = MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
+            lastX = lerp(currentX, dayView.left.toFloat(), fraction)
+            lastY = lerp(currentY, dayView.top.toFloat(), fraction)
             lastRadius = DayView.radius(dayView)
             canvas.drawCircle(
                 lastX + dayView.width / 2f, lastY + dayView.height / 2f, lastRadius, paint

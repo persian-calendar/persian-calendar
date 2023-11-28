@@ -24,8 +24,8 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.variants.debugLog
-import com.google.android.material.math.MathUtils
 import java.util.GregorianCalendar
 import java.util.Locale
 import kotlin.math.PI
@@ -60,12 +60,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             monthsIndicator.color =
                 ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt())
             ranges.indices.forEach {
-                ranges[it][0] = MathUtils.lerp(
-                    iauRanges[it][0], tropicalRanges[it][0], fraction
-                )
-                ranges[it][1] = MathUtils.lerp(
-                    iauRanges[it][1], tropicalRanges[it][1], fraction
-                )
+                ranges[it][0] = lerp(iauRanges[it][0], tropicalRanges[it][0], fraction)
+                ranges[it][1] = lerp(iauRanges[it][1], tropicalRanges[it][1], fraction)
             }
             invalidate()
         }

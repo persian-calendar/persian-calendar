@@ -72,4 +72,9 @@ val HighLatitudesMethod.titleStringId
         HighLatitudesMethod.None -> R.string.none
     }
 
-fun Bundle.putJdn(key: String, jdn: Jdn) = putLong(key, jdn.value)
+/**
+ * Returns the linear interpolation of `amount` between `start` and `stop`.
+ *
+ * Brought from [com.google.android.material.math.MathUtils.lerp]
+ */
+fun lerp(start: Float, stop: Float, amount: Float): Float = (1 - amount) * start + amount * stop

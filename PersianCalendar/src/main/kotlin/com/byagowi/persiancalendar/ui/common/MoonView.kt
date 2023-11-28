@@ -8,7 +8,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
-import com.google.android.material.math.MathUtils
+import com.byagowi.persiancalendar.utils.lerp
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
@@ -36,7 +36,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             val from = if (field == value) value - 29f else field.coerceIn(value - 30f, value + 30f)
             animator.removeAllUpdateListeners()
             animator.addUpdateListener { _ ->
-                field = MathUtils.lerp(from, value, animator.animatedFraction)
+                field = lerp(from, value, animator.animatedFraction)
                 update()
             }
             animator.start()
