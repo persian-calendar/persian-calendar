@@ -4,18 +4,7 @@ import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -23,11 +12,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
@@ -60,29 +46,15 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import java.util.TimeZone
 
-class WidgetNotificationFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        val activity = activity ?: return root
-        root.setContent {
-            Mdc3Theme {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    SettingsSection(stringResource(R.string.pref_notification))
-                    NotificationSettings(activity)
-                    Divider()
-                    SettingsSection(stringResource(R.string.pref_widget))
-                    WidgetConfiguration(activity)
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-                }
-            }
-        }
-        return root
-    }
+@Composable
+fun WidgetNotificationSettings(activity: FragmentActivity) {
+    SettingsSection(stringResource(R.string.pref_notification))
+    NotificationSettings(activity)
+    Divider()
+    SettingsSection(stringResource(R.string.pref_widget))
+    WidgetConfiguration(activity)
 }
 
 @Composable

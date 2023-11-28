@@ -3,11 +3,15 @@ package com.byagowi.persiancalendar.ui.settings
 import android.app.StatusBarManager
 import android.app.WallpaperManager
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.provider.Settings
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -15,141 +19,231 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.Px
-import androidx.annotation.StyleRes
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
+import com.byagowi.persiancalendar.PREF_ATHAN_NAME
+import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
-import com.byagowi.persiancalendar.databinding.SettingsScreenBinding
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.showCarouselDialog
 import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
-import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
-import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
+import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.shape.ShapeAppearanceModel
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-/**
- * @author MEHDI DIMYADI
- * MEHDIMYADI
- */
-
-class SettingsScreen : Fragment(R.layout.settings_screen) {
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val binding = SettingsScreenBinding.bind(view)
-        binding.appBar.root.hideToolbarBottomShadow()
-        binding.appBar.toolbar.setTitle(R.string.settings)
-        binding.appBar.toolbar.setupMenuNavigation()
-        setupMenu(activity, binding.appBar.toolbar)
-
+class SettingsScreen : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val root = ComposeView(inflater.context)
+        val activity = activity ?: return root
         val args by navArgs<SettingsScreenArgs>()
-        val viewModel by viewModels<SettingsViewModel>()
-        if (viewModel.selectedTab.value == SettingsViewModel.DEFAULT_SELECTED_TAB)
-            viewModel.changeSelectedTab(args.tab)
-        val initiallySelectedTab = viewModel.selectedTab.value
-
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-            override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                viewModel.changeSelectedTab(tab.position)
-            }
-        })
-        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount() = tabs.size
-            override fun createFragment(position: Int) = tabs[position].first().also {
-                if (position == args.tab && args.preferenceKey.isNotEmpty()) {
-                    it.arguments = bundleOf(PREF_DESTINATION to args.preferenceKey)
+        root.setContent {
+            Mdc3Theme {
+                Column {
+                    SettingsScreenContent(
+                        activity, viewLifecycleOwner, args.tab, args.preferenceKey, pickRingtone
+                    )
                 }
             }
         }
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
-            tab.text = tabs[i].second.joinToString(getString(R.string.spaced_and)) { getString(it) }
-        }.attach()
-        view.post {
-            binding.viewPager.setCurrentItem(initiallySelectedTab, true)
-            view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
-        }
+        root.post { root.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
+        return root
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar.root) { appBar, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            appBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top
-            }
-            windowInsets
-        }
+    private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
+        override fun createIntent(context: Context, input: Unit): Intent =
+            Intent(RingtoneManager.ACTION_RINGTONE_PICKER).putExtra(
+                RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL
+            ).putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true).putExtra(
+                    RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                    Settings.System.DEFAULT_NOTIFICATION_URI
+                )
 
-        @StyleRes var shape = R.style.shapeAppearanceTopCornerLarge
-        @Px var pad = 0
-        if (language.isArabicScript) {
-            shape = R.style.shapeAppearanceTopCornerExtraLarge
-            pad = (8 * resources.dp).toInt()
+        override fun parseResult(resultCode: Int, intent: Intent?): String? =
+            if (resultCode == AppCompatActivity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
+                RingtoneManager.EXTRA_RINGTONE_PICKED_URI
+            )?.toString()
+            else null
+    }
+
+    private val pickRingtone = registerForActivityResult(PickRingtoneContract()) { uri ->
+        uri ?: return@registerForActivityResult
+        val ringtone = RingtoneManager.getRingtone(context, uri.toUri())
+        // If no ringtone has been found better to skip touching preferences store
+        ringtone ?: return@registerForActivityResult
+        val ringtoneTitle = ringtone.getTitle(context) ?: ""
+        context?.appPrefs?.edit {
+            putString(PREF_ATHAN_NAME, ringtoneTitle)
+            putString(PREF_ATHAN_URI, uri)
         }
-        binding.viewPager.updatePadding(left = pad, right = pad)
-        binding.roundnessFrame.shapeAppearanceModel =
-            ShapeAppearanceModel.builder(binding.root.context, shape, 0).build()
+        view?.let { view ->
+            Snackbar.make(
+                view, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
+            ).also { snackBar -> snackBar.considerSystemBarsInsets() }.show()
+        }
     }
 
     companion object {
-        fun insetsFix(recyclerView: RecyclerView): RecyclerView {
-            ViewCompat.setOnApplyWindowInsetsListener(recyclerView) { _, windowInsets ->
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                recyclerView.updatePadding(bottom = insets.bottom)
-                windowInsets
-            }
-            return recyclerView
-        }
-
-        const val PREF_DESTINATION = "DESTINATION"
         const val INTERFACE_CALENDAR_TAB = 0
         const val WIDGET_NOTIFICATION_TAB = 1
         const val LOCATION_ATHAN_TAB = 2
     }
+}
 
-    private val tabs = listOf<Pair<() -> (Fragment), List<Int>>>(
-        ::InterfaceCalendarFragment to listOf(R.string.pref_interface, R.string.calendar),
-        ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
-        ::LocationAthanFragment to listOf(R.string.location, R.string.athan)
-    )
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun SettingsScreenContent(
+    activity: FragmentActivity,
+    viewLifecycleOwner: LifecycleOwner,
+    initialPage: Int,
+    destination: String,
+    pickRingtone: ActivityResultLauncher<Unit>,
+) {
+    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+
+    AndroidView(modifier = Modifier.fillMaxWidth(), factory = {
+        val appBar = AppBarBinding.inflate(it.layoutInflater)
+        appBar.toolbar.setTitle(R.string.settings)
+        appBar.toolbar.setupMenuNavigation()
+        setupMenu(activity, appBar.toolbar)
+        appBar.root
+    })
+
+    val tabs = remember {
+        listOf(
+            @Composable {
+                InterfaceCalendarSettings(activity, destination)
+            } to listOf(R.string.pref_interface, R.string.calendar),
+
+            @Composable {
+                WidgetNotificationSettings(activity)
+            } to listOf(R.string.pref_notification, R.string.pref_widget),
+
+            @Composable {
+                LocationAthanSettings(activity, viewLifecycleOwner, pickRingtone)
+            } to listOf(R.string.location, R.string.athan),
+        )
+    }
+
+    val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    val selectedTabIndex = pagerState.currentPage
+    TabRow(
+        selectedTabIndex = selectedTabIndex,
+        contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
+        containerColor = Color.Transparent,
+        divider = {},
+        indicator = @Composable { tabPositions ->
+            if (selectedTabIndex < tabPositions.size) {
+                TabRowDefaults.Indicator(
+                    Modifier
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                        .padding(horizontal = ExtraLargeShapeCornerSize.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                )
+            }
+        },
+    ) {
+        tabs.forEachIndexed { index, (_, titlesResId) ->
+            val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
+                context.getString(it)
+            }
+            Tab(text = { Text(title) },
+                selected = pagerState.currentPage == index,
+                onClick = { scope.launch { pagerState.animateScrollToPage(index) } })
+        }
+    }
+
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
+    ) { index ->
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column(
+                Modifier
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 8.dp),
+            ) {
+                tabs[index].first()
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+            }
+        }
+    }
 }
 
 private fun setupMenu(activity: FragmentActivity?, toolbar: Toolbar) {

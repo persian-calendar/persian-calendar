@@ -201,7 +201,7 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
     val root = LinearLayout(activity)
     root.orientation = LinearLayout.VERTICAL
     root.addView(
-        TabLayout(activity, null, R.style.TabLayoutColored).also { tabLayout ->
+        TabLayout(activity).also { tabLayout ->
             listOf(
                 R.drawable.ic_developer to -1,
                 R.drawable.ic_translator to 0,

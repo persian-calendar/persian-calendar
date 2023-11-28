@@ -209,7 +209,8 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             binding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
                     CalendarScreenDirections.navigateToSettings(
-                        SettingsScreen.INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
+                        tab = SettingsScreen.INTERFACE_CALENDAR_TAB,
+                        preferenceKey = PREF_HOLIDAY_TYPES
                     )
                 )
             }
@@ -267,7 +268,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         binding.buttonsBar.header.setText(R.string.ask_user_to_set_location)
         binding.buttonsBar.settings.setOnClickListener {
             findNavController().navigateSafe(
-                CalendarScreenDirections.navigateToSettings(SettingsScreen.LOCATION_ATHAN_TAB)
+                CalendarScreenDirections.navigateToSettings(tab = SettingsScreen.LOCATION_ATHAN_TAB)
             )
         }
         binding.buttonsBar.discard.setOnClickListener {

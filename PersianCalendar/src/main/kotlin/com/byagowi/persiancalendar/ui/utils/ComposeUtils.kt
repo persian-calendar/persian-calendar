@@ -16,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
 import androidx.core.view.minusAssign
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -54,3 +53,6 @@ const val MaterialIconDimension = 24f
 fun MaterialCornerExtraLargeTop(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0), bottomEnd = CornerSize(0))
 }
+
+// When something needs to match with corner size
+const val ExtraLargeShapeCornerSize = 28f

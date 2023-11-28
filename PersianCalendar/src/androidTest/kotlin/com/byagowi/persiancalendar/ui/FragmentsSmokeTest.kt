@@ -19,9 +19,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.INTERFAC
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.WIDGET_NOTIFICATION_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreenArgs
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
-import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
-import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -61,8 +58,5 @@ class FragmentsSmokeTest {
                 fragmentArgs = SettingsScreenArgs(it).toBundle()
             )
         }
-        launchFragmentInContainer<InterfaceCalendarFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<LocationAthanFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<WidgetNotificationFragment>(themeResId = R.style.LightTheme)
     }
 }

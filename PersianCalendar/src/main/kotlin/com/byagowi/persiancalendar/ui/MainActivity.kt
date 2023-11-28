@@ -402,7 +402,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             it.setAction("Settings") {
                 navHostFragment?.navController?.navigateSafe(
                     CalendarScreenDirections.navigateToSettings(
-                        SettingsScreen.INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
+                        tab = SettingsScreen.INTERFACE_CALENDAR_TAB,
+                        preferenceKey = PREF_APP_LANGUAGE
                     )
                 )
             }
