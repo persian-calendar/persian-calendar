@@ -38,7 +38,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -83,6 +82,7 @@ import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
@@ -214,7 +214,9 @@ private fun SettingsScreenContent(
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    color = MaterialTheme.colorScheme.surface,
+                    color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                        .copy(alpha = AppBlendAlpha),
+                    height = 2.dp,
                 )
             }
         },
@@ -223,9 +225,11 @@ private fun SettingsScreenContent(
             val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
                 context.getString(it)
             }
-            Tab(text = { Text(title) },
+            Tab(
+                text = { Text(title) },
                 selected = pagerState.currentPage == index,
-                onClick = { scope.launch { pagerState.animateScrollToPage(index) } })
+                onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+            )
         }
     }
 

@@ -56,3 +56,6 @@ fun MaterialCornerExtraLargeTop(): CornerBasedShape {
 
 // When something needs to match with corner size
 const val ExtraLargeShapeCornerSize = 28f
+
+// Common alpha value to blend a component with it's background
+const val AppBlendAlpha = .75f

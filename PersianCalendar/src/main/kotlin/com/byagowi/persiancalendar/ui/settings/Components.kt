@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -44,7 +45,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
             Text(
                 subtitle ?: "",
                 style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.alpha(.8f)
+                modifier = Modifier.alpha(AppBlendAlpha)
             )
         }
     }
@@ -60,7 +61,9 @@ fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
         if (summary != null) Text(
-            summary, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.alpha(.8f)
+            summary,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.alpha(AppBlendAlpha)
         )
     }
 }
@@ -162,7 +165,9 @@ fun SettingsSwitch(
         ) {
             Text(title, style = MaterialTheme.typography.bodyLarge)
             if (summary != null) Text(
-                summary, style = MaterialTheme.typography.bodyMedium, modifier = Modifier.alpha(.8f)
+                summary,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.alpha(AppBlendAlpha)
             )
         }
         Switch(

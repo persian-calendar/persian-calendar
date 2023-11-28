@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
@@ -47,7 +48,7 @@ class WallpaperSettingsActivity : AppCompatActivity() {
                 Column(modifier = Modifier.safeDrawingPadding()) {
                     Column(
                         Modifier
-                            .alpha(.8f)
+                            .alpha(AppBlendAlpha)
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                             .background(
                                 MaterialTheme.colorScheme.surface,

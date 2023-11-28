@@ -46,6 +46,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -138,7 +139,7 @@ private fun AgeWidgetConfigureContent(
         Column(
             Modifier
                 .fillMaxSize()
-                .alpha(.8f)
+                .alpha(AppBlendAlpha)
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                 .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
         ) {

@@ -31,6 +31,7 @@ import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -109,7 +110,7 @@ private fun WidgetConfigurationContent(
         )
         Column(
             Modifier
-                .alpha(.8f)
+                .alpha(AppBlendAlpha)
                 .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
         ) {
             Column(
