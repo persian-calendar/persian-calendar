@@ -58,7 +58,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -352,7 +351,7 @@ private fun HelpItems() {
             }
     }
     Column {
-        sections.forEachIndexed { i, (title, body) ->
+        sections.forEach { (title, body) ->
             var isExpanded by rememberSaveable { mutableStateOf(false) }
             val angle = animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle").value
             Column(modifier = Modifier
