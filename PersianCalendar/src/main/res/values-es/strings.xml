@@ -410,4 +410,6 @@
         <item quantity="many">%1$s días laborables</item>
         <item quantity="other">%1$s días laborables</item>
     </plurals>
+    <string name="navigate_up">Navegar hacia arriba</string>
+    <string name="open_drawer">Abra el cajón de navegación</string>
 </resources>
