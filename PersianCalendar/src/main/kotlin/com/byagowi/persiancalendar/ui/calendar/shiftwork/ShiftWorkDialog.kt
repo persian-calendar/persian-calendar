@@ -26,7 +26,6 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
@@ -60,7 +59,7 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
     binding.recurs.setOnCheckedChangeListener { _, isChecked -> viewModel.changeRecurs(isChecked) }
     binding.root.onCheckIsTextEditor()
 
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             viewModel.changeShiftWorks(shiftWorkItemAdapter.rows)

@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showAthanSelectDialog(activity: FragmentActivity, pickRingtone: ActivityResultLauncher<Unit>) {
     val items = listOf(
@@ -28,7 +27,7 @@ fun showAthanSelectDialog(activity: FragmentActivity, pickRingtone: ActivityResu
     } + (R.string.more to {
         runCatching { pickRingtone.launch(Unit) }.onFailure(logException).getOrNull()
     })
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.custom_athan)
         .setItems(items.map { activity.getString(it.first) }.toTypedArray()) { dialog, which ->
             items[which].second()

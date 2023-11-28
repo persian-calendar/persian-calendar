@@ -7,7 +7,9 @@
     <!-- its v31 version is more interesting -->
     <color name="widget_background">@android:color/transparent</color>
 
-    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog" />
+    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="dialogCornerRadius">@dimen/extra_large_shape_corner_size</item>
+    </style>
 
     <style name="BottomSheetAppearance">
         <item name="cornerFamily">rounded</item>
@@ -42,6 +44,8 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
+        <!--<item name="dialogBackgroundColor">#70606060</item>-->
+        <item name="dialogBackgroundColor">#C0101010</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
@@ -52,6 +56,8 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
+        <!--<item name="dialogBackgroundColor">#C0FFFFFF</item>-->
+        <item name="dialogBackgroundColor">#D8FFFFFF</item>
     </style>
 
     <!-- Applied to all themes -->
@@ -59,7 +65,7 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="android:typeface">sans</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>

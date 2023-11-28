@@ -50,7 +50,6 @@ import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.random.Random
 
 @Composable
@@ -207,13 +206,14 @@ private fun ThemeSelect(activity: FragmentActivity) {
         val currentValue = entryValues.indexOf(
             context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
         )
-        val dialog = MaterialAlertDialogBuilder(context).setTitle(R.string.select_skin)
-            .setNegativeButton(R.string.cancel, null)
-            .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
-                context.appPrefs.edit { putString(PREF_THEME, entryValues[which]) }
-                themeDisplayName = entries[which]
-                dialog.dismiss()
-            }.show()
+        val dialog =
+            androidx.appcompat.app.AlertDialog.Builder(context).setTitle(R.string.select_skin)
+                .setNegativeButton(R.string.cancel, null)
+                .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
+                    context.appPrefs.edit { putString(PREF_THEME, entryValues[which]) }
+                    themeDisplayName = entries[which]
+                    dialog.dismiss()
+                }.show()
 
         if (!Theme.supportsGradient(activity)) return@clickable
         val binding = ColorGradientSwitchBinding.inflate(activity.layoutInflater)

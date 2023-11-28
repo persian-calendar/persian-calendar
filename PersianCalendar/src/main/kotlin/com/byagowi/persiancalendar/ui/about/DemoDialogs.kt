@@ -103,7 +103,6 @@ import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.carousel.CarouselLayoutManager
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.shape.CornerFamily
@@ -322,7 +321,7 @@ fun showShaderSandboxDialog(activity: FragmentActivity) {
         binding.inputText.setText(sandboxFragmentShader)
         frame.addView(binding.root)
     }
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(frame)
         .show()
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
@@ -347,7 +346,7 @@ fun showColorPickerDialog(activity: FragmentActivity) {
             it.valueTo = 100f
         })
     }
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -582,7 +581,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
         }
     }
 
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -662,7 +661,7 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
             .parseAsHtml(HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(
             formatTitle(
                 "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6"
@@ -678,7 +677,7 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
             dialog.setTitle(formatTitle("$atomicNumber ${info[0]} ${info[1]}<br>${info[2]}"))
         }
         if (index == 161) {
-            MaterialAlertDialogBuilder(activity)
+            androidx.appcompat.app.AlertDialog.Builder(activity)
                 .setView(EditText(activity).also {
                     it.layoutDirection = View.LAYOUT_DIRECTION_LTR
                     it.textDirection = View.TEXT_DIRECTION_LTR
@@ -927,7 +926,7 @@ fun showRotationalSpringDemoDialog(activity: FragmentActivity) {
         }
     }
 
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -1034,7 +1033,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
         .flowOn(Dispatchers.Unconfined)
         .launchIn(viewLifecycle.coroutineScope)
 
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(view)
         .setOnCancelListener { previousAudioTrack?.stop() }
         .show()
@@ -1118,7 +1117,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
         private val lifecycle = activity.lifecycleScope
     }
 
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(view)
         .show()
 
@@ -1244,7 +1243,7 @@ fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
                 }.forEach(::addView)
         }
     }
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -1422,7 +1421,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
             listenToSensor()
     }
 
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(root)
         .setPositiveButton(R.string.close, null)
         .setCancelable(false)
@@ -1432,7 +1431,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
 
 
 fun showInputDeviceTestDialog(activity: FragmentActivity) {
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(object : AppCompatEditText(activity) {
             init {
                 setPadding((8 * resources.dp).toInt())
@@ -1487,7 +1486,7 @@ fun showIconsDemoDialog(activity: FragmentActivity) {
                 setBackgroundColor(Color.DKGRAY)
             }) {}
     }
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = recyclerViewAdapter
             it.layoutManager = GridLayoutManager(activity, 8)
@@ -1561,7 +1560,7 @@ fun showDynamicColorsDialog(activity: FragmentActivity) {
                 }
             }) {}
     }
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = recyclerViewAdapter
             it.layoutManager = GridLayoutManager(activity, 6)
@@ -1585,7 +1584,8 @@ fun showTypographyDemoDialog(activity: FragmentActivity) {
             appendLine()
         }
     }
-    MaterialAlertDialogBuilder(activity).setView(TextView(activity).also { it.text = text }).show()
+    androidx.appcompat.app.AlertDialog.Builder(activity)
+        .setView(TextView(activity).also { it.text = text }).show()
 }
 
 private val textAppearances = listOf(
@@ -1607,17 +1607,18 @@ private val textAppearances = listOf(
 )
 
 fun showCarouselDialog(activity: FragmentActivity) {
-    MaterialAlertDialogBuilder(activity).setView(FrameLayout(activity).also { root ->
-        root.addView(RecyclerView(activity).also {
-            it.layoutManager = CarouselLayoutManager()
-            it.adapter = SeasonsAdapter()
-            it.setHasFixedSize(true) // Just as an optimization
-            it.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                (196 * activity.resources.dp).toInt()
-            )
-            // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
-            PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
+        .setView(FrameLayout(activity).also { root ->
+            root.addView(RecyclerView(activity).also {
+                it.layoutManager = CarouselLayoutManager()
+                it.adapter = SeasonsAdapter()
+                it.setHasFixedSize(true) // Just as an optimization
+                it.layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    (196 * activity.resources.dp).toInt()
+                )
+                // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
+                PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
             it.scrollToPosition(0)
             it.smoothScrollToPosition(12)
         })

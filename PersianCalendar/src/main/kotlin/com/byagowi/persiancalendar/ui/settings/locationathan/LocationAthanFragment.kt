@@ -55,7 +55,6 @@ import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.titleStringId
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
@@ -227,7 +226,7 @@ fun LocationAthanSettings(
             val entries = listOf(midnightDefaultTitle(context)) + methodsToShow.map {
                 midnightMethodToString(context, it)
             }
-            MaterialAlertDialogBuilder(context).setTitle(R.string.midnight)
+            androidx.appcompat.app.AlertDialog.Builder(context).setTitle(R.string.midnight)
                 .setNegativeButton(R.string.cancel, null).setSingleChoiceItems(
                     entries.toTypedArray(), entryValues.indexOf(
                         context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"

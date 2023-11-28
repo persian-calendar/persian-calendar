@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.PI
 
 fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
@@ -65,7 +64,7 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         })
     }
 
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(frame)
         .setOnCancelListener { image.recycle() }
         .show()

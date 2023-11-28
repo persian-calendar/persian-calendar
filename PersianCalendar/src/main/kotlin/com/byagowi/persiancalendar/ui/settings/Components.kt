@@ -26,7 +26,6 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
@@ -90,7 +89,7 @@ fun SettingsSingleSelect(
         val currentValue = entryValues.indexOf(
             context.appPrefs.getString(key, null) ?: defaultValue
         )
-        MaterialAlertDialogBuilder(context).setTitle(dialogTitleResId)
+        androidx.appcompat.app.AlertDialog.Builder(context).setTitle(dialogTitleResId)
             .setNegativeButton(R.string.cancel, null)
             .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
                 context.appPrefs.edit { putString(key, entryValues[which]) }
@@ -114,7 +113,7 @@ fun SettingsMultiSelect(
     SettingsClickable(title = title, summary = summary) {
         val result = (context.appPrefs.getStringSet(key, null) ?: defaultValue).toMutableSet()
         val checkedItems = entryValues.map { it in result }.toBooleanArray()
-        MaterialAlertDialogBuilder(context).setTitle(dialogTitleResId)
+        androidx.appcompat.app.AlertDialog.Builder(context).setTitle(dialogTitleResId)
             .setMultiChoiceItems(entries.toTypedArray(), checkedItems) { _, which, isChecked ->
                 if (isChecked) result.add(entryValues[which])
                 else result.remove(entryValues[which])

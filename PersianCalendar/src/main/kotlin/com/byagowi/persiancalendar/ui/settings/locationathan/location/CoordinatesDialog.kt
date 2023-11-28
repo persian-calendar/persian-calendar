@@ -20,7 +20,6 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.saveLocation
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -66,7 +65,7 @@ fun showCoordinatesDialog(
     binding.latitude.addTextChangedListener { showGeocoderResult() }
     binding.longitude.addTextChangedListener { showGeocoderResult() }
 
-    val dialogBuilder = MaterialAlertDialogBuilder(activity)
+    val dialogBuilder = AlertDialog.Builder(activity)
         .setView(binding.root)
         .setTitle(R.string.coordination)
         .setPositiveButton(R.string.accept) { _, _ ->

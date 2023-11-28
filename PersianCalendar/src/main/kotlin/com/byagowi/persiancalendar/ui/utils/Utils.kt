@@ -26,7 +26,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
@@ -62,7 +61,6 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.color.MaterialColors
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -233,7 +231,7 @@ fun ViewGroup.setupLayoutTransition() {
 
 fun FragmentActivity.askForLocationPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-    MaterialAlertDialogBuilder(this)
+    androidx.appcompat.app.AlertDialog.Builder(this)
         .setTitle(R.string.location_access)
         .setMessage(R.string.phone_location_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->
@@ -253,7 +251,7 @@ fun FragmentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it
     // didn't go well in Android 6.0 so better not risk I guess
-    MaterialAlertDialogBuilder(this)
+    androidx.appcompat.app.AlertDialog.Builder(this)
         .setTitle(R.string.calendar_access)
         .setMessage(R.string.phone_calendar_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->

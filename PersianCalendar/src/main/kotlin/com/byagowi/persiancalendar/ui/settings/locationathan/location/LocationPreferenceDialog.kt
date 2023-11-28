@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveCity
 import com.byagowi.persiancalendar.utils.sortCityNames
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 /**
  * persian_calendar
@@ -19,7 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
  */
 fun showLocationPreferenceDialog(activity: FragmentActivity) {
     val binding = LocationPreferenceDialogBinding.inflate(activity.layoutInflater)
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.location)
         .setView(binding.root)
         .create()

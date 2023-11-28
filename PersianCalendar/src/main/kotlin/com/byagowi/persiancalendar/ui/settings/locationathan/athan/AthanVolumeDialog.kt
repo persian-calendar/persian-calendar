@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 
 fun showAthanVolumeDialog(activity: FragmentActivity) {
@@ -37,7 +36,7 @@ fun showAthanVolumeDialog(activity: FragmentActivity) {
         audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
     }
 
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.athan_volume)
         .setView(slider)
         .setPositiveButton(R.string.accept) { _, _ ->

@@ -4,7 +4,6 @@ import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.utils.titleStringId
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time
@@ -25,7 +24,7 @@ private fun formatAngle(value: Double): String {
 
 fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
     val time = Time.fromMillisecondsSince1970(date.time)
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setMessage(listOf(
             Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
             Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto

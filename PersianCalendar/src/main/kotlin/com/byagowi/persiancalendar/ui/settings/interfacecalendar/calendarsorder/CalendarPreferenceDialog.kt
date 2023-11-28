@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showCalendarPreferenceDialog(activity: FragmentActivity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = enabledCalendars
@@ -26,7 +25,7 @@ fun showCalendarPreferenceDialog(activity: FragmentActivity, onEmpty: () -> Unit
         )
     })
 
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(RecyclerView(activity).also {
             it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(activity)

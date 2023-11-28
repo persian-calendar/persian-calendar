@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.saveLocation
 import com.byagowi.persiancalendar.variants.debugLog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
@@ -122,7 +121,7 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
 
         runCatching {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                MaterialAlertDialogBuilder(activity)
+                androidx.appcompat.app.AlertDialog.Builder(activity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
                         runCatching {
@@ -169,7 +168,7 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
     val handler = Handler(Looper.getMainLooper())
     val checkGPSProviderCallback =
         handler.postDelayed(THIRTY_SECONDS_IN_MILLIS) { checkGPSProvider() }
-    val dialog = MaterialAlertDialogBuilder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(binding.root)
         .create()
 

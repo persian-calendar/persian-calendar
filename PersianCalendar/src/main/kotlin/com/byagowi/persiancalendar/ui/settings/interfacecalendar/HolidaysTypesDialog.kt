@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.checkbox.MaterialCheckBox
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showHolidaysTypesDialog(activity: FragmentActivity) {
     val binding = HolidaysTypesDialogBinding.inflate(activity.layoutInflater)
@@ -87,7 +86,7 @@ fun showHolidaysTypesDialog(activity: FragmentActivity) {
     }
 
     // Run the dialog
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.events)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->

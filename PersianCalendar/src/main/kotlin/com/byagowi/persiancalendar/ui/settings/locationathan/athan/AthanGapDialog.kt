@@ -6,14 +6,13 @@ import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showAthanGapDialog(activity: FragmentActivity) {
     val binding = NumericBinding.inflate(activity.layoutInflater)
     val gap = activity.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0
     binding.edit.setText(gap.toString())
     binding.root.setHint(R.string.athan_gap_summary)
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             val value = binding.edit.text.toString().toDoubleOrNull() ?: .0

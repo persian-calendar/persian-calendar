@@ -41,7 +41,6 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -125,10 +124,11 @@ class MapScreen : Fragment(R.layout.map_screen) {
                     // Hide moon visibilities for now unless is a development build
                     .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
                 val titles = options.map { context.getString(it.title) }
-                MaterialAlertDialogBuilder(context).setItems(titles.toTypedArray()) { dialog, i ->
-                    viewModel.changeMapType(options[i])
-                    dialog.dismiss()
-                }.show()
+                androidx.appcompat.app.AlertDialog.Builder(context)
+                    .setItems(titles.toTypedArray()) { dialog, i ->
+                        viewModel.changeMapType(options[i])
+                        dialog.dismiss()
+                    }.show()
             } else viewModel.changeMapType(MapType.None)
         }
         globeViewButton.onClick {

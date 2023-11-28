@@ -97,7 +97,6 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -290,7 +289,7 @@ private fun setupMenu(activity: FragmentActivity?, toolbar: Toolbar) {
     toolbar.menu.add("Schedule an alarm").onClick {
         val numericBinding = NumericBinding.inflate(activity.layoutInflater)
         numericBinding.edit.setText("5")
-        MaterialAlertDialogBuilder(activity)
+        androidx.appcompat.app.AlertDialog.Builder(activity)
             .setTitle("Enter seconds to schedule alarm")
             .setView(numericBinding.root)
             .setPositiveButton(R.string.accept) { _, _ ->
@@ -311,7 +310,7 @@ private fun setupMenu(activity: FragmentActivity?, toolbar: Toolbar) {
             .show()
     }
     fun viewCommandResult(command: String) {
-        val dialogBuilder = MaterialAlertDialogBuilder(activity)
+        val dialogBuilder = androidx.appcompat.app.AlertDialog.Builder(activity)
         val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
         val button = ImageButton(activity).also { button ->
             button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))

@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.Locale
 
 fun showColorPickerDialog(activity: FragmentActivity, isBackgroundPick: Boolean, key: String) {
@@ -35,7 +34,7 @@ private fun showColorPickerDialog(
         it.setPickedColor(initialColor)
         it.setPadding((10 * activity.resources.dp).toInt())
     }
-    MaterialAlertDialogBuilder(activity)
+    androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color)
         .setView(colorPickerView)
         .setPositiveButton(R.string.accept) { _, _ ->
