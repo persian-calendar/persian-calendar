@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.animation.ArgbEvaluator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
@@ -9,16 +10,15 @@ import android.graphics.RectF
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import kotlin.math.abs
 import kotlin.math.cos
 
 class SolarDraw(context: Context) {
-
-    fun sunColor(progress: Float) =
-        ArgbEvaluatorCompat.getInstance().evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt())
+    private val argbEvaluator = ArgbEvaluator()
+    fun sunColor(progress: Float): Int =
+        (argbEvaluator.evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt()) as? Int) ?: 0
 
     fun sun(
         canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false,

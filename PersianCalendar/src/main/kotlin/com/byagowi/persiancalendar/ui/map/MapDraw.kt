@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.animation.ArgbEvaluator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -29,7 +30,6 @@ import com.byagowi.persiancalendar.ui.utils.translateBy
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Direction
@@ -374,6 +374,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
         color = mapForegroundColor ?: 0x80393CC4.toInt()
     }
     private val matrixProperties = FloatArray(9)
+    private val argbEvaluator = ArgbEvaluator()
 
     fun draw(
         canvas: Canvas, matrix: Matrix,
@@ -423,9 +424,9 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                     if (i >= points.size - 1) return@forEachIndexed
                     val (x2, y2) = points[i + 1]
                     if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
-                    pathPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
+                    pathPaint.color = (argbEvaluator.evaluate(
                         i.toFloat() / points.size, Color.BLACK, Color.RED
-                    )
+                    ) as? Int) ?: 0
                     drawLine(x1, y1, x2, y2, pathPaint)
                 }
                 val center = points[points.size / 2]
