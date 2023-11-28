@@ -11,8 +11,8 @@
 
     <style name="BottomSheetAppearance">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">@dimen/common_radius</item>
-        <item name="cornerSizeTopRight">@dimen/common_radius</item>
+        <item name="cornerSizeTopLeft">@dimen/extra_large_shape_corner_size</item>
+        <item name="cornerSizeTopRight">@dimen/extra_large_shape_corner_size</item>
     </style>
 
     <style name="BottomSheetStyle" parent="Widget.Material3.BottomSheet.Modal">

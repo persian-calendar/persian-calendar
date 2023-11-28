@@ -112,7 +112,7 @@
                     android:layout_marginTop="@dimen/card_margin"
                     android:layout_marginRight="@dimen/view_padding"
                     android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="@dimen/common_radius"
+                    app:cardCornerRadius="@dimen/extra_large_shape_corner_size"
                     app:cardElevation="@dimen/card_elevation">
 
                     <com.byagowi.persiancalendar.ui.common.CalendarsView

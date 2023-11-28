@@ -6,7 +6,8 @@
     <dimen name="arrow_size">26dp</dimen>
     <dimen name="padding_item">8dp</dimen>
 
-    <dimen name="common_radius">24dp</dimen>
+    <!-- Matches with Material's extra large shape -->
+    <dimen name="extra_large_shape_corner_size">28dp</dimen>
     <dimen name="card_elevation">8dp</dimen>
     <dimen name="chip_elevation">4dp</dimen>
 
