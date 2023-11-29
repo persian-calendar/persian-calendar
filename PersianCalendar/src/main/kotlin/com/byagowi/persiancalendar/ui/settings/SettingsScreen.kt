@@ -21,31 +21,40 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -53,7 +62,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -65,15 +73,14 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.about.showCarouselDialog
 import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
@@ -86,15 +93,11 @@ import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.byagowi.persiancalendar.variants.debugLog
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
@@ -166,7 +169,7 @@ class SettingsScreen : Fragment() {
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 private fun SettingsScreenContent(
     activity: FragmentActivity,
     viewLifecycleOwner: LifecycleOwner,
@@ -174,15 +177,38 @@ private fun SettingsScreenContent(
     destination: String,
     pickRingtone: () -> Unit,
 ) {
-    Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-
-    AndroidView(modifier = Modifier.fillMaxWidth(), factory = {
-        val appBar = AppBarBinding.inflate(it.layoutInflater)
-        appBar.toolbar.setTitle(R.string.settings)
-        appBar.toolbar.setupMenuNavigation()
-        setupMenu(activity, appBar.toolbar)
-        appBar.root
-    })
+    val context = LocalContext.current
+    // TODO: Ideally this should be onPrimary
+    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+    TopAppBar(
+        title = { Text(stringResource(R.string.settings)) },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            navigationIconContentColor = colorOnAppBar,
+            actionIconContentColor = colorOnAppBar,
+            titleContentColor = colorOnAppBar,
+        ),
+        navigationIcon = {
+            IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = stringResource(R.string.open_drawer)
+                )
+            }
+        },
+        actions = {
+            var showMenu by remember { mutableStateOf(false) }
+            IconButton(onClick = { showMenu = !showMenu }) {
+                Icon(
+                    imageVector = Icons.Default.MoreVert,
+                    contentDescription = stringResource(R.string.more_options),
+                )
+            }
+            DropdownMenu(
+                expanded = showMenu, onDismissRequest = { showMenu = false },
+            ) { MenuItems(activity) { showMenu = false } }
+        },
+    )
 
     val tabs = remember {
         listOf(
@@ -202,7 +228,6 @@ private fun SettingsScreenContent(
 
     val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current
 
     val selectedTabIndex = pagerState.currentPage
     TabRow(
@@ -252,66 +277,86 @@ private fun SettingsScreenContent(
     }
 }
 
-private fun setupMenu(activity: FragmentActivity?, toolbar: Toolbar) {
-    activity ?: return
-    toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
-        runCatching {
-            activity.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
-        }.onFailure(logException).getOrNull().debugAssertNotNull
-    }
-    toolbar.menu.add(R.string.screensaver_settings).onClick {
-        runCatching { activity.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
-            .onFailure(logException).getOrNull().debugAssertNotNull
-    }
+@Composable
+private fun MenuItems(activity: FragmentActivity, closeMenu: () -> Unit) {
+    DropdownMenuItem(
+        text = { Text(stringResource(R.string.live_wallpaper_settings)) },
+        onClick = {
+            closeMenu()
+            runCatching {
+                activity.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
+            }.onFailure(logException).getOrNull().debugAssertNotNull
+        },
+    )
+    DropdownMenuItem(
+        text = { Text(stringResource(R.string.screensaver_settings)) },
+        onClick = {
+            closeMenu()
+            runCatching { activity.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }.onFailure(
+                logException
+            ).getOrNull().debugAssertNotNull
+        },
+    )
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        toolbar.menu.add(R.string.add_quick_settings_tile).onClick {
-            val context = toolbar.context
-            context.getSystemService<StatusBarManager>()?.requestAddTileService(
-                ComponentName(
-                    context.packageName,
-                    PersianCalendarTileService::class.qualifiedName ?: ""
-                ),
-                context.getString(R.string.app_name),
-                Icon.createWithResource(context, R.drawable.day19),
-                {},
-                {}
-            )
-        }
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.add_quick_settings_tile)) },
+            onClick = {
+                closeMenu()
+                activity.getSystemService<StatusBarManager>()?.requestAddTileService(
+                    ComponentName(
+                        activity.packageName, PersianCalendarTileService::class.qualifiedName ?: "",
+                    ),
+                    activity.getString(R.string.app_name),
+                    Icon.createWithResource(activity, R.drawable.day19),
+                    {},
+                    {},
+                )
+            },
+        )
     }
 
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
-    toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog(activity) }
+    DropdownMenuItem(
+        text = { Text("Static vs generated icons") },
+        onClick = { showIconsDemoDialog(activity) },
+    )
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        toolbar.menu.add("Dynamic Colors").onClick { showDynamicColorsDialog(activity) }
+        DropdownMenuItem(
+            text = { Text("Dynamic Colors") },
+            onClick = { showDynamicColorsDialog(activity) },
+        )
     }
-    toolbar.menu.add("Typography").onClick { showTypographyDemoDialog(activity) }
-    toolbar.menu.add("Clear preferences store and exit").onClick {
-        activity.appPrefs.edit { clear() }
-        activity.finish()
-    }
-    toolbar.menu.add("Schedule an alarm").onClick {
-        val numericBinding = NumericBinding.inflate(activity.layoutInflater)
-        numericBinding.edit.setText("5")
-        androidx.appcompat.app.AlertDialog.Builder(activity)
-            .setTitle("Enter seconds to schedule alarm")
-            .setView(numericBinding.root)
-            .setPositiveButton(R.string.accept) { _, _ ->
-                val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
-                val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
-                    .setInitialDelay(
-                        TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
-                    )
-                    .build()
-                WorkManager.getInstance(activity)
-                    .beginUniqueWork(
+    DropdownMenuItem(
+        text = { Text("Typography") },
+        onClick = { showTypographyDemoDialog(activity) },
+    )
+    DropdownMenuItem(
+        text = { Text("Clear preferences store and exit") },
+        onClick = {
+            activity.appPrefs.edit { clear() }
+            activity.finish()
+        },
+    )
+    DropdownMenuItem(
+        text = { Text("Schedule an alarm") },
+        onClick = {
+            val numericBinding = NumericBinding.inflate(activity.layoutInflater)
+            numericBinding.edit.setText("5")
+            androidx.appcompat.app.AlertDialog.Builder(activity)
+                .setTitle("Enter seconds to schedule alarm").setView(numericBinding.root)
+                .setPositiveButton(R.string.accept) { _, _ ->
+                    val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
+                    val alarmWorker =
+                        OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
+                            TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
+                        ).build()
+                    WorkManager.getInstance(activity).beginUniqueWork(
                         "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
-                    )
-                    .enqueue()
-                Toast.makeText(activity, "Alarm in ${seconds}s", Toast.LENGTH_SHORT)
-                    .show()
-            }
-            .show()
-    }
+                    ).enqueue()
+                    Toast.makeText(activity, "Alarm in ${seconds}s", Toast.LENGTH_SHORT).show()
+                }.show()
+        },
+    )
     fun viewCommandResult(command: String) {
         val dialogBuilder = androidx.appcompat.app.AlertDialog.Builder(activity)
         val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
@@ -321,45 +366,46 @@ private fun setupMenu(activity: FragmentActivity?, toolbar: Toolbar) {
                 activity.shareTextFile(result, "log.txt", "text/plain")
             }
         }
-        dialogBuilder.setCustomTitle(
-            LinearLayout(activity).also {
-                it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-                it.addView(button)
-            }
-        )
-        dialogBuilder.setView(
-            ScrollView(activity).also { scrollView ->
-                scrollView.addView(TextView(activity).also {
-                    it.text = result
-                    it.textDirection = View.TEXT_DIRECTION_LTR
-                })
-                // Scroll to bottom, https://stackoverflow.com/a/3080483
-                scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-            }
-        )
+        dialogBuilder.setCustomTitle(LinearLayout(activity).also {
+            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            it.addView(button)
+        })
+        dialogBuilder.setView(ScrollView(activity).also { scrollView ->
+            scrollView.addView(TextView(activity).also {
+                it.text = result
+                it.textDirection = View.TEXT_DIRECTION_LTR
+            })
+            // Scroll to bottom, https://stackoverflow.com/a/3080483
+            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+        })
         dialogBuilder.show()
     }
-    toolbar.menu.addSubMenu("Log Viewer").also {
-        it.add("Filtered").onClick {
-            viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
-        }
-        it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
-    }
-    toolbar.menu.addSubMenu("Log").also {
-        it.add("Log 'Hello'").onClick { debugLog("Hello!") }
-        it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
-        it.add("Crash!").onClick { error("Unhandled Crash!") }
-    }
-    toolbar.menu.add("Start Dream").onClick {
-        // https://stackoverflow.com/a/23112947
-        runCatching {
-            activity.startActivity(
-                Intent(Intent.ACTION_MAIN).setClassName(
-                    "com.android.systemui",
-                    "com.android.systemui.Somnambulator"
+//    toolbar.menu.addSubMenu("Log Viewer").also {
+//        it.add("Filtered").onClick {
+//            viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
+//        }
+//        it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
+//    }
+//    toolbar.menu.addSubMenu("Log").also {
+//        it.add("Log 'Hello'").onClick { debugLog("Hello!") }
+//        it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
+//        it.add("Crash!").onClick { error("Unhandled Crash!") }
+//    }
+    DropdownMenuItem(
+        text = { Text("Start Dream") },
+        onClick = {
+            // https://stackoverflow.com/a/23112947
+            runCatching {
+                activity.startActivity(
+                    Intent(Intent.ACTION_MAIN).setClassName(
+                        "com.android.systemui", "com.android.systemui.Somnambulator"
+                    )
                 )
-            )
-        }.onFailure(logException).getOrNull().debugAssertNotNull
-    }
-    toolbar.menu.add("Start Carousel").onClick { showCarouselDialog(activity) }
+            }.onFailure(logException).getOrNull().debugAssertNotNull
+        },
+    )
+    DropdownMenuItem(
+        text = { Text("Start Carousel") },
+        onClick = { showCarouselDialog(activity) },
+    )
 }
