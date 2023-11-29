@@ -12,6 +12,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -57,6 +58,8 @@ import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @Composable
 fun LocationAthanSettings(
@@ -107,11 +110,11 @@ fun LocationAthanSettings(
             )
         )
     }
+    val scope = rememberCoroutineScope()
+    scope.launch { coordinates.collectLatest { isLocationSet = coordinates.value != null } }
     DisposableEffect(null) {
         val listener = { _: SharedPreferences, _: String? ->
             updateStoredPreference(context)
-            // TODO: Perhaps coordinates can be listened directly?
-            isLocationSet = coordinates.value != null
             showHighLatitudesMethod = enableHighLatitudesConfiguration
             showAsrCalculationMethod = !calculationMethod.isJafari
             athanSoundName = appPrefs.getString(
