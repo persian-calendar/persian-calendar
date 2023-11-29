@@ -205,7 +205,7 @@ private fun SettingsScreenContent(
     val selectedTabIndex = pagerState.currentPage
     TabRow(
         selectedTabIndex = selectedTabIndex,
-        contentColor = MaterialTheme.colorScheme.onPrimary,
+        contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
         containerColor = Color.Transparent,
         divider = {},
         indicator = @Composable { tabPositions ->
@@ -214,7 +214,8 @@ private fun SettingsScreenContent(
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    color = MaterialTheme.colorScheme.onPrimary.copy(alpha = AppBlendAlpha),
+                    color = Color(context.resolveColor(R.attr.colorOnAppBar))
+                        .copy(alpha = AppBlendAlpha),
                     height = 2.dp,
                 )
             }

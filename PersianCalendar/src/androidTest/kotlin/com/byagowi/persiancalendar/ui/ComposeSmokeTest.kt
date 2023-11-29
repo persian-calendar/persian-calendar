@@ -1,7 +1,10 @@
 package com.byagowi.persiancalendar.ui
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
@@ -14,12 +17,21 @@ class ComposeSmokeTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @Test
-    fun aboutScreenSmokeTest() = composeTestRule.setContent { AboutScreen({}, {}) }
+    private fun test(body: @Composable () -> Unit) {
+        composeTestRule.setContent {
+            // TODO: To get rid of when all the theme system is moved to compose
+            val context = LocalContext.current
+            context.setTheme(R.style.DynamicDarkTheme); context.setTheme(R.style.SharedStyle)
+            body()
+        }
+    }
 
     @Test
-    fun deviceInformationSmokeTest() = composeTestRule.setContent { DeviceInformationScreen {} }
+    fun aboutScreenSmokeTest() = test { AboutScreen({}, {}) }
 
     @Test
-    fun licensesSmokeTest() = composeTestRule.setContent { LicensesScreen {} }
+    fun deviceInformationSmokeTest() = test { DeviceInformationScreen {} }
+
+    @Test
+    fun licensesSmokeTest() = test { LicensesScreen {} }
 }
