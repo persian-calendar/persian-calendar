@@ -101,8 +101,7 @@ import kotlin.math.roundToInt
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener,
-    DrawerHost {
+    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
 
     private var creationDateJdn = Jdn.today()
     private var settingHasChanged = false
@@ -417,7 +416,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         it.setAction(getString(R.string.update)) { bringMarketPage() }
     }.show()
 
-    override fun setupToolbarWithDrawer(toolbar: Toolbar) {
+    // TODO: Ugly, to get rid of after full Compose migration
+    fun setupToolbarWithDrawer(toolbar: Toolbar) {
         val listener = ActionBarDrawerToggle(
             this, binding.root, toolbar, R.string.open_drawer, R.string.close
         ).also { it.syncState() }
@@ -431,6 +431,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         })
     }
+
+    // TODO: Ugly, to get rid of after full Compose migration
+    fun openDrawer() = binding.root.openDrawer(GravityCompat.START)
 
     private fun createDrawerListener() = object : DrawerLayout.SimpleDrawerListener() {
         val slidingDirection = if (resources.isRtl) -1f else +1f

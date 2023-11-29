@@ -48,14 +48,13 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.DrawerHost
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
@@ -152,7 +151,7 @@ fun Toolbar.setupUpNavigation(onUpClick: () -> Unit) {
 }
 
 fun Toolbar.setupMenuNavigation() {
-    (context.getActivity() as? DrawerHost)?.setupToolbarWithDrawer(this)
+    (context.getActivity() as? MainActivity)?.setupToolbarWithDrawer(this)
 }
 
 // https://stackoverflow.com/a/58249983

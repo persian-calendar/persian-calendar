@@ -56,7 +56,7 @@ fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit
         Modifier
             .fillMaxWidth()
             .clickable { action() }
-            .padding(16.dp),
+            .padding(all = 16.dp),
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
         if (summary != null) Text(

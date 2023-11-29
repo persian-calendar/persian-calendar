@@ -18,27 +18,31 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Motorcycle
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -49,24 +53,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Preview
 @Composable
@@ -75,15 +74,29 @@ private fun Preview() = LicensesScreen {}
 @Composable
 fun LicensesScreen(popNavigation: () -> Unit) {
     Column {
-        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-        AndroidView(modifier = Modifier.fillMaxWidth(), factory = {
-            val bar = AppBarBinding.inflate(it.layoutInflater)
-            bar.toolbar.title = it.getString(R.string.about_license_title)
-            bar.toolbar.setupUpNavigation(popNavigation)
-            bar.root
-        })
+        val context = LocalContext.current
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+        @OptIn(ExperimentalMaterial3Api::class)
+        TopAppBar(
+            title = { Text(stringResource(R.string.licenses)) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = popNavigation) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.open_drawer)
+                    )
+                }
+            },
+        )
         Surface(shape = MaterialCornerExtraLargeTop()) {
-            Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) {
+            Box(modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
                 // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
                 //  the latter ltr is ok
                 CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -129,7 +142,7 @@ private fun Sidebar() {
                 {
                     Icon(
                         modifier = Modifier.size(MaterialIconDimension.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_motorcycle),
+                        imageVector = Icons.Default.Motorcycle,
                         contentDescription = "API"
                     )
                 },
@@ -163,7 +176,7 @@ private fun Licenses() {
                 animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle").value
             Column(modifier = Modifier
                 .clickable { expandedItem = if (i == expandedItem) -1 else i }
-                .padding(4.dp)
+                .padding(all = 4.dp)
                 .fillMaxWidth()
                 .animateContentSize(
                     animationSpec = spring(

@@ -134,7 +134,7 @@ private fun AgeWidgetConfigureContent(
                 preview
             }, modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(all = 16.dp)
         )
         Column(
             Modifier
@@ -146,7 +146,7 @@ private fun AgeWidgetConfigureContent(
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
-                    .padding(16.dp),
+                    .padding(all = 16.dp),
             ) {
                 Button(
                     onClick = { confirm() },

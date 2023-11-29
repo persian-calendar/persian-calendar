@@ -174,6 +174,8 @@ dependencies {
     implementation(libs.compose.animation)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.runtime)
+    implementation(libs.compose.material.icons.core)
+    implementation(libs.compose.material.icons.extended)
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)

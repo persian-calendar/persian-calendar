@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
@@ -31,26 +30,38 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.automirrored.twotone.Help
+import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material.icons.filled.FormatPaint
+import androidx.compose.material.icons.filled.GTranslate
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PermDeviceInformation
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -80,7 +91,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -89,18 +99,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -151,26 +156,42 @@ fun AboutScreen(
     navigateToLicenses: () -> Unit,
 ) {
     Column {
-        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
-        AndroidView(modifier = Modifier.fillMaxWidth(), factory = { context ->
-            val appBar = AppBarBinding.inflate(context.layoutInflater)
-            appBar.toolbar.setTitle(R.string.about)
-            appBar.toolbar.setupMenuNavigation()
-            appBar.toolbar.menu.add(R.string.share).also {
-                it.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                it.onClick { shareApplication(context) }
-            }
-            appBar.toolbar.menu.add(R.string.device_information).also {
-                it.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                it.onClick(navigateToDeviceInformation)
-            }
-            appBar.root.hideToolbarBottomShadow()
-            appBar.root
-        })
         val context = LocalContext.current
-        val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+
+        @OptIn(ExperimentalMaterial3Api::class)
+        TopAppBar(
+            title = { Text(stringResource(R.string.about)) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(R.string.open_drawer)
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = { shareApplication(context) }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = stringResource(R.string.share)
+                    )
+                }
+                IconButton(onClick = navigateToDeviceInformation) {
+                    Icon(
+                        imageVector = Icons.Default.PermDeviceInformation,
+                        contentDescription = stringResource(R.string.device_information)
+                    )
+                }
+            },
+        )
 
         Box(modifier = Modifier.clip(MaterialCornerExtraLargeTop())) {
             var logoAnimationAtEnd by remember { mutableStateOf(false) }
@@ -216,20 +237,18 @@ fun AboutScreen(
                         Text(
                             aboutTitle,
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                            color = Color(context.resolveColor(R.attr.colorOnAppBar)),
+                            color = colorOnAppBar,
                         )
                         Text(
                             aboutSubtitle,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(context.resolveColor(R.attr.colorOnAppBar)),
+                            color = colorOnAppBar,
                         )
                     }
                 }
                 val image =
                     AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
-                Box(
-                    Modifier.weight(1f), contentAlignment = Alignment.Center
-                ) {
+                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                         Image(modifier = Modifier
                             .graphicsLayer { renderEffect = logoEffect }
@@ -247,6 +266,8 @@ fun AboutScreen(
             }
 
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                val clickHandlerDialog =
+                    remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
                 Box(modifier = Modifier
                     .fillMaxWidth()
                     .height(headerSize)
@@ -258,7 +279,7 @@ fun AboutScreen(
                             ?.asComposeRenderEffect()
                     })
                 Surface(shape = MaterialCornerExtraLargeTop()) {
-                    Box(modifier = Modifier.padding(16.dp, 16.dp, 16.dp)) {
+                    Box(modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
                         AboutScreenContent(navigateToLicenses)
                     }
                 }
@@ -289,7 +310,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
             modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
         )
         AboutScreenButton(
-            icon = ImageVector.vectorResource(R.drawable.ic_licences),
+            icon = Icons.Default.Folder,
             action = { navigateToLicenses() },
             title = R.string.about_license_title,
             summary = R.string.about_license_sum
@@ -300,7 +321,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
             Row(modifier = Modifier.padding(top = 16.dp)) {
                 Icon(
                     modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_help),
+                    imageVector = Icons.AutoMirrored.Default.Help,
                     contentDescription = stringResource(R.string.help)
                 )
                 Column {
@@ -322,7 +343,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
             modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
         )
         AboutScreenButton(
-            icon = ImageVector.vectorResource(R.drawable.ic_bug),
+            icon = Icons.Default.BugReport,
             action = ::launchReportIntent,
             title = R.string.about_report_bug,
             summary = R.string.about_report_bug_sum
@@ -368,7 +389,7 @@ private fun HelpItems() {
             val angle = animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle").value
             Column(modifier = Modifier
                 .clickable { isExpanded = !isExpanded }
-                .padding(4.dp)
+                .padding(all = 4.dp)
                 .fillMaxWidth()
                 .animateContentSize()) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
@@ -433,14 +454,14 @@ private fun DevelopersChips() {
     val context = LocalContext.current
     val developers = remember {
         listOf(
-            R.string.about_developers_list to R.drawable.ic_developer,
-            R.string.about_designers_list to R.drawable.ic_designer,
-            R.string.about_translators_list to R.drawable.ic_translator,
-            R.string.about_contributors_list to R.drawable.ic_developer
-        ).flatMap { (listId: Int, iconId: Int) ->
+            R.string.about_developers_list to Icons.Default.Android,
+            R.string.about_designers_list to Icons.Default.FormatPaint,
+            R.string.about_translators_list to Icons.Default.Translate,
+            R.string.about_contributors_list to Icons.Default.Android,
+        ).flatMap { (listId: Int, icon: ImageVector) ->
             context.getString(listId).trim().split("\n").map {
                 val (username, displayName) = it.split(": ")
-                Triple(username, displayName, iconId)
+                Triple(username, displayName, icon)
             }
         }.shuffled()
     }
@@ -449,7 +470,7 @@ private fun DevelopersChips() {
         FlowRow(Modifier.fillMaxWidth()) {
             developers.forEach { (username, displayName, icon) ->
                 ElevatedFilterChip(
-                    modifier = Modifier.padding(2.dp),
+                    modifier = Modifier.padding(all = 2.dp),
                     onClick = click@{
                         if (username == "ImanSoltanian") return@click // The only person without GitHub account
                         runCatching {
@@ -462,7 +483,7 @@ private fun DevelopersChips() {
                     colors = FilterChipDefaults.elevatedFilterChipColors(),
                     leadingIcon = {
                         Icon(
-                            ImageVector.vectorResource(icon),
+                            icon,
                             contentDescription = displayName,
                             Modifier.size(AssistChipDefaults.IconSize)
                         )

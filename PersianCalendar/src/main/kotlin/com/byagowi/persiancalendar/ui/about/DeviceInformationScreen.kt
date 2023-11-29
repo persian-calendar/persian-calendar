@@ -12,8 +12,8 @@ import android.opengl.GLES20
 import android.os.BatteryManager
 import android.os.Build
 import android.view.InputDevice
-import android.view.MenuItem
 import android.view.RoundedCorner
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,19 +23,31 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Android
+import androidx.compose.material.icons.filled.Gamepad
+import androidx.compose.material.icons.filled.Motorcycle
+import androidx.compose.material.icons.filled.PermDeviceInformation
+import androidx.compose.material.icons.filled.Print
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarDefaults.exitUntilCollapsedScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -43,7 +55,9 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -53,20 +67,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.AppBarBinding
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -88,64 +96,77 @@ import java.util.Locale
 private fun Preview() = DeviceInformationScreen {}
 
 @Composable
+@OptIn(ExperimentalMaterial3Api::class)
 fun DeviceInformationScreen(popNavigation: () -> Unit) {
-    Column {
-        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
+    val scrollBehavior = exitUntilCollapsedScrollBehavior()
+    Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
         val items = remember {
             // TODO: Ugly cast
             createItemsList(context as? Activity ?: return@remember emptyList())
         }
-        DeviceInformationScreenToolbar(items, popNavigation)
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+        LargeTopAppBar(
+            scrollBehavior = scrollBehavior,
+            title = { Text(stringResource(R.string.about)) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = popNavigation) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.open_drawer)
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = {
+                    context.shareTextFile(generateHtmlReport(items), "device.html", "text/html")
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = stringResource(R.string.share)
+                    )
+                }
+                IconButton(onClick = { context.openHtmlInBrowser(generateHtmlReport(items)) }) {
+                    Icon(
+                        imageVector = Icons.Default.Print,
+                        contentDescription = "Print"
+                    )
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    IconButton(onClick = {
+                        runCatching {
+                            context.startActivity(
+                                Intent(Intent.ACTION_MAIN).setClassName(
+                                    "com.android.systemui", "com.android.systemui.egg.MLandActivity"
+                                ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            )
+                        }.onFailure(logException).onFailure {
+                            Toast.makeText(
+                                context, R.string.device_does_not_support, Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Gamepad,
+                            contentDescription = "Game"
+                        )
+                    }
+                }
+            },
+        )
         Surface(shape = MaterialCornerExtraLargeTop()) {
-            Box(modifier = Modifier.padding(16.dp, 0.dp, 16.dp)) {
+            Box(modifier = Modifier.padding(start = 16.dp, top = 0.dp, end = 16.dp)) {
                 DeviceInformationRoot(items)
             }
         }
     }
-}
-
-@Composable
-private fun DeviceInformationScreenToolbar(items: List<Item>, popNavigation: () -> Unit) {
-    AndroidView(modifier = Modifier.fillMaxWidth(), factory = { context ->
-        val appBar = AppBarBinding.inflate(context.layoutInflater)
-        appBar.toolbar.setTitle(R.string.device_information)
-        appBar.toolbar.setupUpNavigation(popNavigation)
-        appBar.toolbar.menu.add(R.string.share).also { menu ->
-            menu.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
-            menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
-            context.shareTextFile(
-                generateHtmlReport(items), "device.html", "text/html"
-            )
-        }
-        appBar.toolbar.menu.add("Print").also { menu ->
-            menu.setIcon(R.drawable.ic_print)
-            menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { context.openHtmlInBrowser(generateHtmlReport(items)) }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            appBar.toolbar.menu.add("Game").also {
-                it.icon = appBar.toolbar.context.getCompatDrawable(R.drawable.ic_esports)
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick {
-                runCatching {
-                    context.startActivity(
-                        Intent(Intent.ACTION_MAIN).setClassName(
-                            "com.android.systemui", "com.android.systemui.egg.MLandActivity"
-                        ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    )
-                }.onFailure(logException).onFailure {
-                    Snackbar.make(
-                        appBar.root,
-                        R.string.device_does_not_support,
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-        appBar.root
-    })
 }
 
 @Composable
@@ -156,7 +177,7 @@ private fun DeviceInformationRoot(items: List<Item>) {
             item { Overview() }
             itemsIndexed(items) { i, item ->
                 if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
-                Column(Modifier.padding(4.dp)) {
+                Column(Modifier.padding(all = 4.dp)) {
                     Text(item.title, fontWeight = FontWeight.Bold)
                     Row {
                         SelectionContainer { Text(item.content.toString()) }
@@ -180,18 +201,18 @@ private fun Overview() {
         val keyItems = remember {
             listOf(
                 Triple(
-                    R.drawable.ic_developer, Build.VERSION.RELEASE, ::showHiddenUiDialog
+                    Icons.Default.Android, Build.VERSION.RELEASE, ::showHiddenUiDialog
                 ),
                 Triple(
-                    R.drawable.ic_settings, "API " + Build.VERSION.SDK_INT,
+                    Icons.Default.Settings, "API " + Build.VERSION.SDK_INT,
                     ::showSensorTestDialog
                 ),
                 Triple(
-                    R.drawable.ic_motorcycle, Build.SUPPORTED_ABIS[0],
+                    Icons.Default.Motorcycle, Build.SUPPORTED_ABIS[0],
                     ::showInputDeviceTestDialog
                 ),
                 Triple(
-                    R.drawable.ic_device_information_white, Build.MODEL,
+                    Icons.Default.PermDeviceInformation, Build.MODEL,
                     ::showColorPickerDialog
                 ),
             )
@@ -211,7 +232,7 @@ private fun Overview() {
                 icon = {
                     Icon(
                         modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                        imageVector = ImageVector.vectorResource(icon),
+                        imageVector = icon,
                         contentDescription = stringResource(R.string.help)
                     )
                 },

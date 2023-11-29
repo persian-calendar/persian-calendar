@@ -54,7 +54,7 @@ class WallpaperSettingsActivity : AppCompatActivity() {
                                 MaterialTheme.colorScheme.surface,
                                 MaterialTheme.shapes.extraLarge
                             )
-                            .padding(16.dp),
+                            .padding(all = 16.dp),
                     ) {
                         Button(
                             onClick = { finish() },

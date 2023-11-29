@@ -11,7 +11,7 @@ appcompat = "1.6.1"
 astronomy = "bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f" # is equal to v2.1.17
 browser = "1.7.0"
 cardview = "1.0.0"
-compose = "1.5.4"
+compose = "1.6.0-beta01"
 compose-accompanist = "0.32.0"
 compose-compiler = "1.5.4" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 compose-material3 = "1.1.2"
@@ -31,6 +31,7 @@ ksp = "1.9.21-1.0.15"
 leakcanary = "2.12"
 lifecycle-runtime = "2.6.2"
 material = "1.10.0"
+material-icons-core = "1.6.0-beta01"
 mockito-core = "5.7.0"
 mockito-kotlin = "5.1.0"
 multidex = "2.0.1"
@@ -63,6 +64,8 @@ compose-accompanist-themeadapter-material3 = { group = "com.google.accompanist",
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "compose" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
+compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
