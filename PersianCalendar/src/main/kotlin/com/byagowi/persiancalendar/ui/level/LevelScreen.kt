@@ -20,6 +20,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.LevelScreenBinding
@@ -44,7 +45,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         setupRotationLock()
         val binding = LevelScreenBinding.bind(view)
         binding.appBar.toolbar.setTitle(R.string.level)
-        binding.appBar.toolbar.setupUpNavigation()
+        binding.appBar.toolbar.setupUpNavigation { findNavController().navigateUp() }
         val activity = activity ?: return
         provider = OrientationProvider(activity, binding.levelView)
         val announcer = SensorEventAnnouncer(R.string.level)

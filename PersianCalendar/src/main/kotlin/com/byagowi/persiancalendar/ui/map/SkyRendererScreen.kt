@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.graphics.createBitmap
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SkyRendererScreenBinding
@@ -29,7 +30,7 @@ class SkyRendererScreen : Fragment(R.layout.sky_renderer_screen) {
         super.onViewCreated(view, savedInstanceState)
         val binding = SkyRendererScreenBinding.bind(view)
         binding.appBar.toolbar.title = "PanoRendo"
-        binding.appBar.toolbar.setupUpNavigation()
+        binding.appBar.toolbar.setupUpNavigation { findNavController().navigateUp() }
 
         binding.toneMap.adapter = ArrayAdapter(
             view.context,

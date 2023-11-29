@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.BuildConfig
@@ -67,7 +68,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
 
         // Don't set the title as we got lots of icons
         // binding.toolbar.setTitle(R.string.map)
-        binding.toolbar.setupUpNavigation()
+        binding.toolbar.setupUpNavigation { findNavController().navigateUp() }
 
         // Set time from Astronomy screen state if we are brought from the screen to here directly
         if (ifNavAvailable && findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
