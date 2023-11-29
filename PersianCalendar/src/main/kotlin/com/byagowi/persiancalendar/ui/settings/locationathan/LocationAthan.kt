@@ -15,11 +15,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -62,11 +62,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
-fun LocationAthanSettings(
-    activity: FragmentActivity,
-    viewLifecycleOwner: LifecycleOwner,
-    pickRingtone: () -> Unit
-) {
+fun LocationAthanSettings(activity: FragmentActivity, pickRingtone: () -> Unit) {
+    val viewLifecycleOwner = LocalLifecycleOwner.current
     SettingsSection(stringResource(R.string.location))
     SettingsClickable(
         title = stringResource(R.string.gps_location),

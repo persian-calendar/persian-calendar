@@ -67,7 +67,6 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.navArgs
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
@@ -115,7 +114,6 @@ class SettingsScreen : Fragment() {
                 Column {
                     SettingsScreenContent(
                         activity,
-                        viewLifecycleOwner,
                         args.tab,
                         args.preferenceKey,
                         pickRingtone = { pickRingtone.launch(Unit) },
@@ -172,7 +170,6 @@ class SettingsScreen : Fragment() {
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 private fun SettingsScreenContent(
     activity: FragmentActivity,
-    viewLifecycleOwner: LifecycleOwner,
     initialPage: Int,
     destination: String,
     pickRingtone: () -> Unit,
@@ -221,7 +218,7 @@ private fun SettingsScreenContent(
             } to listOf(R.string.pref_notification, R.string.pref_widget),
 
             @Composable {
-                LocationAthanSettings(activity, viewLifecycleOwner, pickRingtone)
+                LocationAthanSettings(activity, pickRingtone)
             } to listOf(R.string.location, R.string.athan),
         )
     }
