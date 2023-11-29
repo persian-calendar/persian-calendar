@@ -43,9 +43,9 @@ import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.FormatPaint
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PermDeviceInformation
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
@@ -452,7 +452,7 @@ private fun DevelopersChips() {
     val developers = remember {
         listOf(
             R.string.about_developers_list to Icons.Default.Android,
-            R.string.about_designers_list to Icons.Default.FormatPaint,
+            R.string.about_designers_list to Icons.Default.Palette,
             R.string.about_translators_list to Icons.Default.Translate,
             R.string.about_contributors_list to Icons.Default.Android,
         ).flatMap { (listId: Int, icon: ImageVector) ->
