@@ -199,33 +199,33 @@ half4 main(float2 fragCoord) {
 fun showHiddenUiDialog(activity: FragmentActivity) {
     val root = LinearLayout(activity)
     root.orientation = LinearLayout.VERTICAL
-    root.addView(
-        TabLayout(activity).also { tabLayout ->
-            listOf(
-                R.drawable.ic_developer to -1,
-                R.drawable.ic_translator to 0,
-                R.drawable.ic_motorcycle to 1,
-                R.drawable.ic_help to 33,
-                R.drawable.ic_bug to 9999
-            ).map { (iconId: Int, badgeNumber: Int) ->
-                tabLayout.addTab(tabLayout.newTab().also { tab ->
-                    tab.setIcon(iconId)
-                    tab.orCreateBadge.also { badge ->
-                        badge.isVisible = badgeNumber >= 0
-                        if (badgeNumber > 0) badge.number = badgeNumber
-                    }
-                })
-            }
-            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    tab?.orCreateBadge?.isVisible = false
-                }
-            })
-            tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
-            tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
-        })
+//    root.addView(
+//        TabLayout(activity).also { tabLayout ->
+//            listOf(
+//                R.drawable.ic_developer to -1,
+//                R.drawable.ic_translator to 0,
+//                R.drawable.ic_motorcycle to 1,
+//                R.drawable.ic_help to 33,
+//                R.drawable.ic_bug to 9999
+//            ).map { (iconId: Int, badgeNumber: Int) ->
+//                tabLayout.addTab(tabLayout.newTab().also { tab ->
+//                    tab.setIcon(iconId)
+//                    tab.orCreateBadge.also { badge ->
+//                        badge.isVisible = badgeNumber >= 0
+//                        if (badgeNumber > 0) badge.number = badgeNumber
+//                    }
+//                })
+//            }
+//            tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+//                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+//                override fun onTabSelected(tab: TabLayout.Tab?) {
+//                    tab?.orCreateBadge?.isVisible = false
+//                }
+//            })
+//            tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
+//            tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
+//        })
     root.addView(LinearProgressIndicator(activity).also { indicator ->
         indicator.isIndeterminate = true
         indicator.setIndicatorColor(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
