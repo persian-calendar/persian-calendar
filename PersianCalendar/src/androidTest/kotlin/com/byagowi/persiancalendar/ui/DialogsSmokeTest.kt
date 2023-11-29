@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
 import android.content.Intent
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.core.app.ActivityOptionsCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -52,13 +49,7 @@ class DialogsSmokeTest {
             { showHolidaysTypesDialog(it) },
             { showCalendarPreferenceDialog(it) {} },
             { showAthanGapDialog(it) },
-            {
-                showAthanSelectDialog(it, object : ActivityResultLauncher<Unit>() {
-                    override fun launch(input: Unit?, options: ActivityOptionsCompat?) = Unit
-                    override fun unregister() = Unit
-                    override fun getContract(): ActivityResultContract<Unit, *> = TODO()
-                })
-            },
+            { showAthanSelectDialog(it) {} },
             { showAthanVolumeDialog(it) },
             { showPrayerSelectDialog(it) },
             { showPrayerSelectPreviewDialog(it) },

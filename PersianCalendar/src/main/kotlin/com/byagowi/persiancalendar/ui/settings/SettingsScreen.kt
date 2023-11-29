@@ -19,7 +19,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -112,7 +111,11 @@ class SettingsScreen : Fragment() {
             Mdc3Theme {
                 Column {
                     SettingsScreenContent(
-                        activity, viewLifecycleOwner, args.tab, args.preferenceKey, pickRingtone
+                        activity,
+                        viewLifecycleOwner,
+                        args.tab,
+                        args.preferenceKey,
+                        pickRingtone = { pickRingtone.launch(Unit) },
                     )
                 }
             }
@@ -169,7 +172,7 @@ private fun SettingsScreenContent(
     viewLifecycleOwner: LifecycleOwner,
     initialPage: Int,
     destination: String,
-    pickRingtone: ActivityResultLauncher<Unit>,
+    pickRingtone: () -> Unit,
 ) {
     Spacer(Modifier.windowInsetsTopHeight(WindowInsets.safeDrawing))
 

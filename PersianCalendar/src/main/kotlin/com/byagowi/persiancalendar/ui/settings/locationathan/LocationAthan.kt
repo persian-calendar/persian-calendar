@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
@@ -63,7 +62,7 @@ import io.github.persiancalendar.praytimes.MidnightMethod
 fun LocationAthanSettings(
     activity: FragmentActivity,
     viewLifecycleOwner: LifecycleOwner,
-    pickRingtone: ActivityResultLauncher<Unit>
+    pickRingtone: () -> Unit
 ) {
     SettingsSection(stringResource(R.string.location))
     SettingsClickable(

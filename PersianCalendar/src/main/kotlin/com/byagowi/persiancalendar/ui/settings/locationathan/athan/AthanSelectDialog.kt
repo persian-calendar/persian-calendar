@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
-import androidx.activity.result.ActivityResultLauncher
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
@@ -10,7 +9,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 
-fun showAthanSelectDialog(activity: FragmentActivity, pickRingtone: ActivityResultLauncher<Unit>) {
+fun showAthanSelectDialog(activity: FragmentActivity, pickRingtone: () -> Unit) {
     val items = listOf(
         R.string.default_athan to R.raw.special,
         R.string.abdulbasit to R.raw.abdulbasit,
@@ -24,9 +23,7 @@ fun showAthanSelectDialog(activity: FragmentActivity, pickRingtone: ActivityResu
                 putString(PREF_ATHAN_NAME, activity.getString(stringId))
             }
         }
-    } + (R.string.more to {
-        runCatching { pickRingtone.launch(Unit) }.onFailure(logException).getOrNull()
-    })
+    } + (R.string.more to { runCatching { pickRingtone() }.onFailure(logException).getOrNull() })
     androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.custom_athan)
         .setItems(items.map { activity.getString(it.first) }.toTypedArray()) { dialog, which ->
