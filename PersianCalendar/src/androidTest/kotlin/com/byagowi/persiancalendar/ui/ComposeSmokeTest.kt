@@ -21,7 +21,7 @@ class ComposeSmokeTest {
         composeTestRule.setContent {
             // TODO: To get rid of when all the theme system is moved to compose
             val context = LocalContext.current
-            context.setTheme(R.style.DynamicDarkTheme); context.setTheme(R.style.SharedStyle)
+            context.setTheme(R.style.LightTheme); context.setTheme(R.style.SharedStyle)
             body()
         }
     }
