@@ -107,7 +107,7 @@ fun DeviceInformationScreen(popNavigation: () -> Unit) {
         val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
-            title = { Text(stringResource(R.string.about)) },
+            title = { Text(stringResource(R.string.device_information)) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
                 navigationIconContentColor = colorOnAppBar,
