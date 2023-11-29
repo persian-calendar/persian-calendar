@@ -412,4 +412,5 @@
     </plurals>
     <string name="navigate_up">Navegar hacia arriba</string>
     <string name="open_drawer">Abra el cajón de navegación</string>
+    <string name="more_options">Más opciones</string>
 </resources>
