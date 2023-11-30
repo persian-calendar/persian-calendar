@@ -12,21 +12,21 @@ import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 
 class AstronomyInformationHolder(context: Context, attrs: AttributeSet? = null) :
     LinearLayoutCompat(context, attrs) {
-    var setTitle = fun(_: String) {}
-        private set
-    var setColor = fun(@ColorInt _: Int) {}
-        private set
-    var setValue = fun(_: String) {}
-        private set
+    private val binding = AstronomyInformationHolderBinding.inflate(context.layoutInflater)
+    fun setTitle(title: String) {
+        binding.title.text = title
+    }
+
+    fun setColor(@ColorInt color: Int) {
+        binding.title.chipBackgroundColor =
+            ColorStateList.valueOf(if (context.isDynamicGrayscale) 0xcc808080.toInt() else color)
+    }
+
+    fun setValue(value: String) {
+        binding.value.text = value
+    }
 
     init {
-        val binding = AstronomyInformationHolderBinding.inflate(context.layoutInflater)
-        setColor = {
-            @ColorInt val color = if (context.isDynamicGrayscale) 0xcc808080.toInt() else it
-            binding.title.chipBackgroundColor = ColorStateList.valueOf(color)
-        }
-        setTitle = binding.title::setText
-        setValue = binding.value::setText
         addView(binding.root)
         setupLayoutTransition()
     }
