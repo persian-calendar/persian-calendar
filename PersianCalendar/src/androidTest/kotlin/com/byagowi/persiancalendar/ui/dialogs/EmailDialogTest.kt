@@ -16,16 +16,16 @@ class EmailDialogTest {
 
     @Test
     fun cancelButtonTest() {
-        var isOpen = true
+        var showDialog = true
         var cancelString = ""
         composeTestRule.setContent {
             cancelString = stringResource(R.string.cancel)
-            if (isOpen) EmailDialog { isOpen = false }
+            if (showDialog) EmailDialog { showDialog = false }
         }
-        assert(isOpen)
+        assert(showDialog)
         composeTestRule.onNodeWithText(cancelString)
             .assertHasClickAction()
             .performClick()
-        assert(!isOpen)
+        assert(!showDialog)
     }
 }

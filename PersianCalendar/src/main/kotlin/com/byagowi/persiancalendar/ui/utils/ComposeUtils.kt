@@ -12,7 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
@@ -28,14 +28,14 @@ fun showComposeDialog(
     val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
-            var isDialogOpen by remember { mutableStateOf(true) }
-            if (isDialogOpen) Mdc3Theme {
+            var showDialog by rememberSaveable { mutableStateOf(true) }
+            if (showDialog) Mdc3Theme {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(brush = SolidColor(MaterialTheme.colorScheme.surface.copy(alpha = .4f)))
                         .safeDrawingPadding()
-                ) { dialog { isDialogOpen = false } }
+                ) { dialog { showDialog = false } }
             } else decorView.post { decorView -= composeView }
         }
     })

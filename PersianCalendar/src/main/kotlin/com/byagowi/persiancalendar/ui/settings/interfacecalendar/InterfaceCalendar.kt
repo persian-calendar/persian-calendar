@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -57,12 +58,12 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
     SettingsSection(stringResource(R.string.pref_interface))
     ThemeSelect(activity)
     run {
-        var isOpen by remember { mutableStateOf(destination == PREF_APP_LANGUAGE) }
+        var showDialog by rememberSaveable { mutableStateOf(destination == PREF_APP_LANGUAGE) }
         SettingsClickable(
             title = if (destination == PREF_APP_LANGUAGE) "Language" else stringResource(R.string.language),
             summary = language.nativeName,
-        ) { isOpen = true }
-        if (isOpen) LanguagePreferenceDialog { isOpen = false }
+        ) { showDialog = true }
+        if (showDialog) LanguagePreferenceDialog { showDialog = false }
     }
     if (language.isArabic) {
         SettingsSwitch(
