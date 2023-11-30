@@ -125,7 +125,7 @@ fun LicensesScreen(popNavigation: () -> Unit) {
 
 @Composable
 private fun Sidebar() {
-    var selectedItem by remember { mutableIntStateOf(0) }
+    var selectedItem by rememberSaveable { mutableIntStateOf(0) }
     NavigationRail(windowInsets = WindowInsets(0, 0, 0, 0)) {
         listOf<Triple<String, @Composable () -> Unit, (FragmentActivity) -> Unit>>(
             Triple(

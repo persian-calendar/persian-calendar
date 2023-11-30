@@ -53,6 +53,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -215,7 +216,7 @@ private fun Overview() {
                 ),
             )
         }
-        var selectedIndex by remember { mutableIntStateOf(0) }
+        var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
         keyItems.forEachIndexed { i, (icon, title, action) ->
             val context = LocalContext.current
             val clickHandler = remember { createEasterEggClickHandler(action) }
