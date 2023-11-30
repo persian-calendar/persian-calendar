@@ -20,7 +20,6 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.LevelScreenBinding

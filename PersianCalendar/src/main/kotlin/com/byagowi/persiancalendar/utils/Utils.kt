@@ -1,12 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
-import android.os.Bundle
 import android.util.Log
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import io.github.cosinekitty.astronomy.Observer
 import io.github.persiancalendar.praytimes.AsrMethod

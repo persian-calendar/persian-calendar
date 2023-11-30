@@ -52,7 +52,10 @@ const val MaterialIconDimension = 24f
  */
 @Composable
 fun MaterialCornerExtraLargeTop(): CornerBasedShape {
-    return MaterialTheme.shapes.extraLarge.copy(bottomStart = CornerSize(0), bottomEnd = CornerSize(0))
+    return MaterialTheme.shapes.extraLarge.copy(
+        bottomStart = CornerSize(0),
+        bottomEnd = CornerSize(0),
+    )
 }
 
 // When something needs to match with corner size

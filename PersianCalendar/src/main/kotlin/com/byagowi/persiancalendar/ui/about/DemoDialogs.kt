@@ -1619,10 +1619,10 @@ fun showCarouselDialog(activity: ComponentActivity) {
                 )
                 // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
                 PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
-            it.scrollToPosition(0)
-            it.smoothScrollToPosition(12)
-        })
-    }).show()
+                it.scrollToPosition(0)
+                it.smoothScrollToPosition(12)
+            })
+        }).show()
 }
 
 // Lindenmayer system: https://en.wikipedia.org/wiki/L-system
