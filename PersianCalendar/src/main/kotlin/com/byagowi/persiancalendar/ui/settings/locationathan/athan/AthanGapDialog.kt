@@ -1,13 +1,13 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
+import androidx.activity.ComponentActivity
 import androidx.core.content.edit
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.utils.appPrefs
 
-fun showAthanGapDialog(activity: FragmentActivity) {
+fun showAthanGapDialog(activity: ComponentActivity) {
     val binding = NumericBinding.inflate(activity.layoutInflater)
     val gap = activity.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0
     binding.edit.setText(gap.toString())

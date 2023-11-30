@@ -13,11 +13,11 @@ import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
 import com.byagowi.persiancalendar.ui.map.SkyRendererScreen
-import com.byagowi.persiancalendar.ui.settings.SettingsScreen
-import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.LOCATION_ATHAN_TAB
-import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.WIDGET_NOTIFICATION_TAB
-import com.byagowi.persiancalendar.ui.settings.SettingsScreenArgs
+import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.settings.SettingsFragment
+import com.byagowi.persiancalendar.ui.settings.SettingsFragmentArgs
+import com.byagowi.persiancalendar.ui.settings.WIDGET_NOTIFICATION_TAB
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -49,9 +49,9 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<MapScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<SkyRendererScreen>(themeResId = R.style.LightTheme)
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
-            launchFragmentInContainer<SettingsScreen>(
+            launchFragmentInContainer<SettingsFragment>(
                 themeResId = R.style.LightTheme,
-                fragmentArgs = SettingsScreenArgs(it).toBundle()
+                fragmentArgs = SettingsFragmentArgs(it).toBundle()
             )
         }
     }

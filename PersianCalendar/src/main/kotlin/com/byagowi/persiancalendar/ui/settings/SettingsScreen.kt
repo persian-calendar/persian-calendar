@@ -19,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -50,6 +51,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -66,7 +68,6 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.fragment.navArgs
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
@@ -102,26 +103,23 @@ import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-class SettingsScreen : Fragment() {
+class SettingsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val root = ComposeView(inflater.context)
         val activity = activity ?: return root
-        val args by navArgs<SettingsScreenArgs>()
+        val args by navArgs<SettingsFragmentArgs>()
         root.setContent {
             Mdc3Theme {
-                Column {
-                    SettingsScreenContent(
-                        activity,
-                        args.tab,
-                        args.preferenceKey,
-                        pickRingtone = { pickRingtone.launch(Unit) },
-                    )
-                }
+                SettingsScreen(
+                    activity,
+                    args.tab,
+                    args.preferenceKey,
+                    pickRingtone = { pickRingtone.launch(Unit) },
+                )
             }
         }
-        root.post { root.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
         return root
     }
 
@@ -158,23 +156,22 @@ class SettingsScreen : Fragment() {
             ).also { snackBar -> snackBar.considerSystemBarsInsets() }.show()
         }
     }
-
-    companion object {
-        const val INTERFACE_CALENDAR_TAB = 0
-        const val WIDGET_NOTIFICATION_TAB = 1
-        const val LOCATION_ATHAN_TAB = 2
-    }
 }
+
+const val INTERFACE_CALENDAR_TAB = 0
+const val WIDGET_NOTIFICATION_TAB = 1
+const val LOCATION_ATHAN_TAB = 2
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-private fun SettingsScreenContent(
-    activity: FragmentActivity,
+fun SettingsScreen(
+    activity: ComponentActivity,
     initialPage: Int,
     destination: String,
     pickRingtone: () -> Unit,
-) {
+) = Column {
     val context = LocalContext.current
+    LaunchedEffect(null) { context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
     TopAppBar(
@@ -275,7 +272,7 @@ private fun SettingsScreenContent(
 }
 
 @Composable
-private fun MenuItems(activity: FragmentActivity, closeMenu: () -> Unit) {
+private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
     DropdownMenuItem(
         text = { Text(stringResource(R.string.live_wallpaper_settings)) },
         onClick = {

@@ -12,11 +12,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import androidx.activity.ComponentActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: LifecycleOwner) {
+fun showGPSLocationDialog(activity: ComponentActivity, viewLifecycleOwner: LifecycleOwner) {
     if (ActivityCompat.checkSelfPermission(
             activity, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(

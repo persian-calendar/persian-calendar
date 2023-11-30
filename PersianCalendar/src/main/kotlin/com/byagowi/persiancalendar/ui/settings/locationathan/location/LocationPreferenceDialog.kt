@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
+import androidx.activity.ComponentActivity
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.LocationPreferenceDialogBinding
@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.utils.sortCityNames
  * Author: hamidsafdari22@gmail.com
  * Date: 1/17/16
  */
-fun showLocationPreferenceDialog(activity: FragmentActivity) {
+fun showLocationPreferenceDialog(activity: ComponentActivity) {
     val binding = LocationPreferenceDialogBinding.inflate(activity.layoutInflater)
     val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.location)

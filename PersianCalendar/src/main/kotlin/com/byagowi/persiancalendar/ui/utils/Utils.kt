@@ -27,6 +27,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
@@ -45,7 +46,6 @@ import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.byagowi.persiancalendar.BuildConfig
@@ -84,7 +84,7 @@ fun Context?.copyToClipboard(text: CharSequence?) {
     }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
-fun FragmentActivity.bringMarketPage() {
+fun ComponentActivity.bringMarketPage() {
     runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
     }.onFailure(logException).onFailure {
@@ -119,7 +119,7 @@ fun Context.openHtmlInBrowser(html: String) {
     }.onFailure(logException)
 }
 
-fun FragmentActivity.shareText(text: String) {
+fun ComponentActivity.shareText(text: String) {
     runCatching {
         ShareCompat.IntentBuilder(this)
             .setType("text/plain")
@@ -156,7 +156,7 @@ fun Toolbar.setupMenuNavigation() {
 
 // https://stackoverflow.com/a/58249983
 // Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
-private tailrec fun Context.getActivity(): FragmentActivity? = this as? FragmentActivity
+private tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 @ColorInt
@@ -228,7 +228,7 @@ fun ViewGroup.setupLayoutTransition() {
     }
 }
 
-fun FragmentActivity.askForLocationPermission() {
+fun ComponentActivity.askForLocationPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     androidx.appcompat.app.AlertDialog.Builder(this)
         .setTitle(R.string.location_access)
@@ -246,7 +246,7 @@ fun FragmentActivity.askForLocationPermission() {
         .show()
 }
 
-fun FragmentActivity.askForCalendarPermission() {
+fun ComponentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it
     // didn't go well in Android 6.0 so better not risk I guess
@@ -263,7 +263,7 @@ fun FragmentActivity.askForCalendarPermission() {
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun FragmentActivity.askForPostNotificationPermission(requestCode: Int) {
+fun ComponentActivity.askForPostNotificationPermission(requestCode: Int) {
     requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), requestCode)
 }
 

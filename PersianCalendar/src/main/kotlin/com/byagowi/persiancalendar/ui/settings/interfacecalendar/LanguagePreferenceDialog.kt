@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
@@ -31,7 +31,7 @@ import com.byagowi.persiancalendar.utils.saveLanguage
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import java.util.TimeZone
 
-fun showLanguagePreferenceDialog(activity: FragmentActivity) =
+fun showLanguagePreferenceDialog(activity: ComponentActivity) =
     showComposeDialog(activity) { LanguagePreferenceDialog(it) }
 
 @Composable

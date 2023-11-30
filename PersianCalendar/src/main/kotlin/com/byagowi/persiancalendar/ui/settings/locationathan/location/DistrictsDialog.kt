@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
+import androidx.activity.ComponentActivity
 import androidx.annotation.VisibleForTesting
-import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
 
-fun showProvinceDialog(activity: FragmentActivity) {
+fun showProvinceDialog(activity: ComponentActivity) {
     val recyclerView = RecyclerView(activity)
     val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         // i18n is no concern here as it is shown only in specific locales
@@ -28,7 +28,7 @@ fun showProvinceDialog(activity: FragmentActivity) {
 }
 
 @VisibleForTesting
-fun showDistrictsDialog(activity: FragmentActivity, provinceDetails: List<String>) {
+fun showDistrictsDialog(activity: ComponentActivity, provinceDetails: List<String>) {
     val recyclerView = RecyclerView(activity)
     val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setTitle(R.string.location)

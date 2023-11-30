@@ -93,7 +93,7 @@
 
     <fragment
         android:id="@+id/settings"
-        android:name="com.byagowi.persiancalendar.ui.settings.SettingsScreen"
+        android:name="com.byagowi.persiancalendar.ui.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/calendar_screen">
         <argument

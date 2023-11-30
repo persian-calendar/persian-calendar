@@ -48,6 +48,7 @@ import android.widget.ProgressBar
 import android.widget.Scroller
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatEditText
@@ -109,7 +110,6 @@ import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.TriangleEdgeTreatment
 import com.google.android.material.slider.Slider
-import com.google.android.material.tabs.TabLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
@@ -1463,7 +1463,7 @@ fun showInputDeviceTestDialog(activity: FragmentActivity) {
 }
 
 // Debug only dialog to check validity of dynamic icons generation
-fun showIconsDemoDialog(activity: FragmentActivity) {
+fun showIconsDemoDialog(activity: ComponentActivity) {
     val recyclerViewAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
         override fun getItemCount() = 62
@@ -1497,7 +1497,7 @@ fun showIconsDemoDialog(activity: FragmentActivity) {
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
-fun showDynamicColorsDialog(activity: FragmentActivity) {
+fun showDynamicColorsDialog(activity: ComponentActivity) {
     val dynamicColors = listOf(
         android.R.color.system_accent1_0, android.R.color.system_accent1_10,
         android.R.color.system_accent1_50, android.R.color.system_accent1_100,
@@ -1568,7 +1568,7 @@ fun showDynamicColorsDialog(activity: FragmentActivity) {
         .show()
 }
 
-fun showTypographyDemoDialog(activity: FragmentActivity) {
+fun showTypographyDemoDialog(activity: ComponentActivity) {
     val text = buildSpannedString {
         textAppearances.forEach { (appearanceName, appearanceId) ->
             val textAppearance = TextAppearanceSpan(activity, appearanceId)
@@ -1606,7 +1606,7 @@ private val textAppearances = listOf(
     "LabelSmall" to com.google.android.material.R.style.TextAppearance_Material3_LabelSmall
 )
 
-fun showCarouselDialog(activity: FragmentActivity) {
+fun showCarouselDialog(activity: ComponentActivity) {
     androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(FrameLayout(activity).also { root ->
             root.addView(RecyclerView(activity).also {

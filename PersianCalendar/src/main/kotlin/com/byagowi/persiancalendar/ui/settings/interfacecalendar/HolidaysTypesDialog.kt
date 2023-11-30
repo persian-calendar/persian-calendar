@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.text.method.LinkMovementMethod
+import androidx.activity.ComponentActivity
 import androidx.core.content.edit
 import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.checkbox.MaterialCheckBox
 
-fun showHolidaysTypesDialog(activity: FragmentActivity) {
+fun showHolidaysTypesDialog(activity: ComponentActivity) {
     val binding = HolidaysTypesDialogBinding.inflate(activity.layoutInflater)
 
     val pattern = """%s$spacedComma<a href="%s">${activity.getString(R.string.view_source)}</a>"""

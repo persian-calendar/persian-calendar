@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
@@ -14,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -49,7 +49,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.TimeZone
 
 @Composable
-fun WidgetNotificationSettings(activity: FragmentActivity) {
+fun WidgetNotificationSettings(activity: ComponentActivity) {
     SettingsSection(stringResource(R.string.pref_notification))
     NotificationSettings(activity)
     Divider()
@@ -58,7 +58,7 @@ fun WidgetNotificationSettings(activity: FragmentActivity) {
 }
 
 @Composable
-fun NotificationSettings(activity: FragmentActivity) {
+fun NotificationSettings(activity: ComponentActivity) {
     val appPrefs = remember { activity.appPrefs }
     var showDateLockScreen by remember {
         mutableStateOf(appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
@@ -104,7 +104,7 @@ fun NotificationSettings(activity: FragmentActivity) {
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
-fun WidgetConfiguration(activity: FragmentActivity) {
+fun WidgetConfiguration(activity: ComponentActivity) {
     val appPrefs = remember { activity.appPrefs }
     val isDynamicTheme = remember { Theme.isDynamicColor(appPrefs) }
     var preferSystemColors by remember {

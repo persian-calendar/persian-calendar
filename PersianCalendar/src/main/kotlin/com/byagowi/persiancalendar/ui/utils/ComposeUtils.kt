@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,12 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.minusAssign
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 fun showComposeDialog(
-    activity: FragmentActivity,
+    activity: ComponentActivity,
     dialog: @Composable ((closeDialog: () -> Unit) -> Unit)
 ) {
     val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return

@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.activity.ComponentActivity
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,7 +18,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
@@ -53,7 +53,7 @@ import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import kotlin.random.Random
 
 @Composable
-fun InterfaceCalendarSettings(activity: FragmentActivity, destination: String? = null) {
+fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? = null) {
     SettingsSection(stringResource(R.string.pref_interface))
     ThemeSelect(activity)
     run {
@@ -189,7 +189,7 @@ fun InterfaceCalendarSettings(activity: FragmentActivity, destination: String? =
 }
 
 @Composable
-private fun ThemeSelect(activity: FragmentActivity) {
+private fun ThemeSelect(activity: ComponentActivity) {
     val entries = Theme.entries.map { activity.getString(it.title) }
     val entryValues = Theme.entries.map { it.key }
     val context = LocalContext.current
