@@ -345,7 +345,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
             summary = R.string.about_report_bug_sum
         )
         run {
-            var showDialog by remember { mutableStateOf(false) }
+            var showDialog by rememberSaveable { mutableStateOf(false) }
             AboutScreenButton(
                 icon = Icons.Default.Email,
                 action = { showDialog = true },
