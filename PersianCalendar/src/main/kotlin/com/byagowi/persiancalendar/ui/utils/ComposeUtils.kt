@@ -34,7 +34,8 @@ fun showComposeDialog(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(brush = SolidColor(MaterialTheme.colorScheme.surface.copy(alpha = .4f)))
-                ) { Box(Modifier.safeDrawingPadding()) { dialog { isDialogOpen = false } } }
+                        .safeDrawingPadding()
+                ) { dialog { isDialogOpen = false } }
             } else decorView.post { decorView -= composeView }
         }
     })

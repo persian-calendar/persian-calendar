@@ -18,17 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
-
-fun showEmailDialog(activity: FragmentActivity) =
-    showComposeDialog(activity) { EmailAlertDialog(it) }
 
 @Composable
-private fun EmailAlertDialog(closeDialog: () -> Unit) {
+fun EmailDialog(closeDialog: () -> Unit) {
     var message by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = { closeDialog() },
@@ -63,4 +57,4 @@ private fun EmailAlertDialog(closeDialog: () -> Unit) {
 
 @Preview
 @Composable
-private fun EmailAlertDialogPreview() = Mdc3Theme { EmailAlertDialog {} }
+private fun EmailDialogPreview() = EmailDialog {}

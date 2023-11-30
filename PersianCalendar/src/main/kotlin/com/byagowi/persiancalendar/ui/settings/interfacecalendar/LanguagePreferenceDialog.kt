@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,17 +24,12 @@ import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLanguage
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import java.util.TimeZone
 
-fun showLanguagePreferenceDialog(activity: ComponentActivity) =
-    showComposeDialog(activity) { LanguagePreferenceDialog(it) }
-
 @Composable
-private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
+fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
     AlertDialog(
         onDismissRequest = { closeDialog() },
         title = { Text(stringResource(R.string.language)) },
@@ -79,4 +73,4 @@ private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
 
 @Preview
 @Composable
-private fun LanguagePreferenceDialogPreview() = Mdc3Theme { LanguagePreferenceDialog {} }
+private fun LanguagePreferenceDialogPreview() = LanguagePreferenceDialog {}

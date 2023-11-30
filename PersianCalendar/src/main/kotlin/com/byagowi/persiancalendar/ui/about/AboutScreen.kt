@@ -301,7 +301,6 @@ https://github.com/persian-calendar/persian-calendar"""
 private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
     Column {
         // Licenses
-        val context = LocalContext.current
         Text(
             stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
             modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
@@ -345,15 +344,16 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
             title = R.string.about_report_bug,
             summary = R.string.about_report_bug_sum
         )
-        AboutScreenButton(
-            icon = Icons.Default.Email,
-            action = click@{
-                // TODO: Ugly cast
-                showEmailDialog(context as? FragmentActivity ?: return@click)
-            },
-            title = R.string.about_sendMail,
-            summary = R.string.about_email_sum
-        )
+        run {
+            var showDialog by remember { mutableStateOf(false) }
+            AboutScreenButton(
+                icon = Icons.Default.Email,
+                action = { showDialog = true },
+                title = R.string.about_sendMail,
+                summary = R.string.about_email_sum
+            )
+            if (showDialog) EmailDialog { showDialog = false }
+        }
 
         // Developers
         Text(

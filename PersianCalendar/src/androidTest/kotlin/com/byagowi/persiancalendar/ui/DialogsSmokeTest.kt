@@ -8,7 +8,6 @@ import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.about.showEmailDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
@@ -17,7 +16,6 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.showHolidaysTypesDialog
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.showLanguagePreferenceDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
@@ -58,8 +56,6 @@ class DialogsSmokeTest {
             { showDistrictsDialog(it, listOf("a", "b", "c")) },
             { showGPSLocationDialog(it, it) },
             { showGPSLocationDialog(it, it) },
-            { showEmailDialog(it) },
-            { showLanguagePreferenceDialog(it) },
             { showLocationPreferenceDialog(it) },
         ).forEach { launcher ->
             ActivityScenario.launch<MainActivity>(

@@ -57,13 +57,12 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
     SettingsSection(stringResource(R.string.pref_interface))
     ThemeSelect(activity)
     run {
+        var isOpen by remember { mutableStateOf(destination == PREF_APP_LANGUAGE) }
         SettingsClickable(
             title = if (destination == PREF_APP_LANGUAGE) "Language" else stringResource(R.string.language),
             summary = language.nativeName,
-        ) { showLanguagePreferenceDialog(activity) }
-        LaunchedEffect(null) {
-            if (destination == PREF_APP_LANGUAGE) showLanguagePreferenceDialog(activity)
-        }
+        ) { isOpen = true }
+        if (isOpen) LanguagePreferenceDialog { isOpen = false }
     }
     if (language.isArabic) {
         SettingsSwitch(
