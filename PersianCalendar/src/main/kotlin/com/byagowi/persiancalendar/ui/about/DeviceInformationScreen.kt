@@ -15,7 +15,6 @@ import android.view.InputDevice
 import android.view.RoundedCorner
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -161,42 +160,38 @@ fun DeviceInformationScreen(popNavigation: () -> Unit) {
             },
         )
         Surface(shape = MaterialCornerExtraLargeTop()) {
-            Box(modifier = Modifier.padding(start = 16.dp, top = 0.dp, end = 16.dp)) {
-                DeviceInformationRoot(items)
-            }
-        }
-    }
-}
-
-@Composable
-private fun DeviceInformationRoot(items: List<Item>) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        LazyColumn {
-            item { Spacer(Modifier.height(16.dp)) }
-            item { Overview() }
-            itemsIndexed(items) { i, item ->
-                if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
-                Column(Modifier.padding(all = 4.dp)) {
-                    Text(item.title, fontWeight = FontWeight.Bold)
-                    Row {
-                        SelectionContainer { Text(item.content.toString()) }
-                        Spacer(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth()
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                LazyColumn {
+                    item { Spacer(Modifier.height(16.dp)) }
+                    item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
+                    itemsIndexed(items) { i, item ->
+                        if (i > 0) Divider(
+                            Modifier.padding(horizontal = 20.dp),
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
                         )
-                        Text(item.version)
+                        Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
+                            Text(item.title, fontWeight = FontWeight.Bold)
+                            Row {
+                                SelectionContainer { Text(item.content.toString()) }
+                                Spacer(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .fillMaxWidth()
+                                )
+                                Text(item.version)
+                            }
+                        }
                     }
+                    item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
                 }
             }
-            item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
         }
     }
 }
 
 @Composable
-private fun Overview() {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+private fun OverviewTopBar(modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
             listOf(
                 Triple(
