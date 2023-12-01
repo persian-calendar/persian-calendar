@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.athan
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.InfiniteRepeatableSpec
+import androidx.compose.animation.core.InfiniteTransition
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
@@ -25,11 +27,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.paint
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -42,35 +46,30 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.getPrayTimeName
-import com.google.accompanist.drawablepainter.rememberDrawablePainter
 
 @Composable
 fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Unit) {
-    Box(modifier = Modifier.clickable { onClick() }) {
-        val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
-        val context = LocalContext.current
-        val patternDrawable = remember {
-            PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(context), dp = dpAsPx)
-        }
-        val infiniteTransition = rememberInfiniteTransition(label = "rotation")
-        val rotation by infiniteTransition.animateFloat(
-            initialValue = 0f,
-            targetValue = 360f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 180_000, easing = LinearEasing)
-            ),
-            label = ""
-        )
+    val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
+    val context = LocalContext.current
+    val patternDrawable = remember {
+        // We like to reuse our drawable for now but can reconsider in future
+        PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(context), dp = dpAsPx)
+    }
+    Box(
+        modifier = Modifier
+            .clickable { onClick() }
+            .fillMaxSize()
+            .onSizeChanged {
+                val rect = android.graphics.Rect(0, 0, it.height, it.width)
+                patternDrawable.onBoundsChange(rect)
+            },
+    ) {
         val direction = remember { listOf(1, -1).random() }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                // TODO: Previously rotation was handled by pattern drawable itself but now it's
-                //  handled in compose graphics layer, as a result different origin for rotation
-                //  was done inside the drawable now isn't supported.
-                .graphicsLayer(rotationZ = rotation * direction)
-                .paint(rememberDrawablePainter(patternDrawable))
+        val infiniteTransition = rememberInfiniteTransition(label = "rotation")
+        val animationSpec = infiniteRepeatable<Float>(
+            animation = tween(durationMillis = 180_000, easing = LinearEasing)
         )
+        DrawBackground(patternDrawable, direction, infiniteTransition, animationSpec)
         Column(modifier = Modifier.padding(horizontal = 30.dp, vertical = 80.dp)) {
             val textStyle = LocalTextStyle.current.copy(
                 color = Color.White, fontWeight = FontWeight.Bold,
@@ -103,6 +102,27 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
             }
         }
     }
+}
+
+@Composable
+private fun DrawBackground(
+    patternDrawable: PatternDrawable,
+    direction: Int,
+    infiniteTransition: InfiniteTransition,
+    animationSpec: InfiniteRepeatableSpec<Float>,
+) {
+    val rotation by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = animationSpec,
+        label = "Rotation"
+    )
+    patternDrawable.rotationDegree = rotation * direction
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .drawBehind { drawIntoCanvas { patternDrawable.draw(it.nativeCanvas) } }
+    )
 }
 
 @Preview

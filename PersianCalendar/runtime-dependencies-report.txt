@@ -685,10 +685,6 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.20 (*)
 |    +--- androidx.activity:activity:1.8.1 (c)
 |    \--- androidx.activity:activity-ktx:1.8.1 (c)
-+--- com.google.accompanist:accompanist-drawablepainter:0.32.0
-|    +--- androidx.compose.ui:ui:1.5.0 -> 1.6.0-beta01 (*)
-|    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 -> 1.7.3 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0 -> 1.9.10 (*)
 +--- com.google.accompanist:accompanist-flowlayout:0.32.0
 |    +--- androidx.compose.foundation:foundation:1.5.0 -> 1.6.0-beta01
 |    |    \--- androidx.compose.foundation:foundation-android:1.6.0-beta01

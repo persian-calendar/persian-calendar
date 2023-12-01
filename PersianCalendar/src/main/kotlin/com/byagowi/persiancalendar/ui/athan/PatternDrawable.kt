@@ -58,7 +58,7 @@ class PatternDrawable(
     private var centerX = 0f
     private var centerY = 0f
 
-    override fun onBoundsChange(bounds: Rect) {
+    public override fun onBoundsChange(bounds: Rect) {
         super.onBoundsChange(bounds)
         backgroundPaint.shader = LinearGradient(
             0f, 0f, 0f, bounds.bottom.toFloat(),
