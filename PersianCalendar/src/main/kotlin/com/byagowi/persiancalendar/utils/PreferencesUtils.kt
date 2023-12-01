@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.preferencesDataStore
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -34,6 +36,13 @@ import java.util.Locale
 // Per https://stackoverflow.com/a/62897591
 val Context.appPrefs: SharedPreferences
     get() = getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
+
+//val Context.dataStore by preferencesDataStore(
+//    name = "preferences",
+//    produceMigrations = { context ->
+//        listOf(SharedPreferencesMigration(context, "${context.packageName}_preferences"))
+//    }
+//)
 
 fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) {
     putLong(key, jdn.value)

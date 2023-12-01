@@ -16,6 +16,7 @@ compose-accompanist = "0.32.0"
 compose-compiler = "1.5.5" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 compose-material3 = "1.1.2"
 coroutines = "1.7.3"
+datastore = "1.0.0"
 dynamicanimation = "1.0.0"
 espresso = "3.5.1"
 glance = "1.0.0"
@@ -73,6 +74,7 @@ compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
 espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }

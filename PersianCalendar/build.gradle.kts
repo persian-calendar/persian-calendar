@@ -180,6 +180,8 @@ dependencies {
     debugImplementation(libs.compose.ui.test.manifest)
     debugImplementation(libs.compose.ui.tooling)
 
+//    implementation(libs.datastore.preferences)
+
     // implementation(libs.androidx.glance.appwidget)
     // implementation(libs.androidx.glance.material3)
 

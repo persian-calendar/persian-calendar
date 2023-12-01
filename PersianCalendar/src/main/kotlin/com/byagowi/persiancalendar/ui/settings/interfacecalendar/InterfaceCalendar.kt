@@ -214,6 +214,25 @@ private fun ThemeSelect(activity: ComponentActivity) {
                     themeDisplayName = entries[which]
                     dialog.dismiss()
                 }.show()
+//    val scope = rememberCoroutineScope()
+//    val key = stringPreferencesKey(PREF_THEME)
+//    var currentIndex by remember { mutableStateOf(0) }
+//    scope.launch {
+//        context.dataStore.data.collectLatest {
+//            currentIndex = entryValues.indexOf(it[key] ?: Theme.SYSTEM_DEFAULT.key)
+//        }
+//    }
+//    SettingsClickable(
+//        title = stringResource(R.string.select_skin),
+//        summary = entries[currentIndex],
+//    ) clickable@{
+//        val dialog =
+//            androidx.appcompat.app.AlertDialog.Builder(context).setTitle(R.string.select_skin)
+//                .setNegativeButton(R.string.cancel, null)
+//                .setSingleChoiceItems(entries.toTypedArray(), currentIndex) { dialog, which ->
+//                    scope.launch { context.dataStore.edit { it[key] = entryValues[which] } }
+//                    dialog.dismiss()
+//                }.show()
 
         if (!Theme.supportsGradient(activity)) return@clickable
         val binding = ColorGradientSwitchBinding.inflate(activity.layoutInflater)
