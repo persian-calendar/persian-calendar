@@ -4,6 +4,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,6 +48,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 fun HolidaysTypesDialog(closeDialog: () -> Unit) {
@@ -157,7 +159,8 @@ fun HolidaysTypesDialog(closeDialog: () -> Unit) {
 private fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
 
 @Composable
-private fun CountryEvents(
+@VisibleForTesting
+fun ColumnScope.CountryEvents(
     calendarCenterName: String,
     sourceLink: String,
     holidaysTitle: String,
@@ -187,8 +190,7 @@ private fun CountryEvents(
                 holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes ->
                     ToggleableState.On
 
-                holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes ->
-                    ToggleableState.Indeterminate
+                holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
 
                 else -> ToggleableState.Off
             },
@@ -197,18 +199,21 @@ private fun CountryEvents(
                 .padding(start = 20.dp)
                 .size(32.dp, 32.dp),
         )
-        Text(calendarCenterName + spacedComma)
+        Text(calendarCenterName)
         val context = LocalContext.current
-        if (sourceLink.isNotEmpty()) ClickableText(
-            AnnotatedString(stringResource(R.string.view_source)),
-            style = MaterialTheme.typography.bodySmall.copy(
-                color = MaterialTheme.colorScheme.primary,
-                textDecoration = TextDecoration.Underline
-            ),
-        ) {
-            runCatching {
-                CustomTabsIntent.Builder().build().launchUrl(context, sourceLink.toUri())
-            }.onFailure(logException)
+        if (sourceLink.isNotEmpty()) {
+            Text(spacedComma)
+            ClickableText(
+                AnnotatedString(stringResource(R.string.view_source)),
+                style = MaterialTheme.typography.bodySmall.copy(
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                ),
+            ) {
+                runCatching {
+                    CustomTabsIntent.Builder().build().launchUrl(context, sourceLink.toUri())
+                }.onFailure(logException)
+            }
         }
     }
     IndentedCheckBox(holidaysTitle, enabledTypes, holidaysKey)
