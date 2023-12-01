@@ -3,8 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import androidx.datastore.preferences.SharedPreferencesMigration
-import androidx.datastore.preferences.preferencesDataStore
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
