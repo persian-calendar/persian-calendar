@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -95,17 +94,14 @@ fun LicensesScreen(popNavigation: () -> Unit) {
                 }
             },
         )
-        Surface(shape = MaterialCornerExtraLargeTop()) {
-            Box(modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
-                // TODO: Remove this rtl use, horizontalArrangement = Arrangement.End didn't do the trick,
-                //  the latter ltr is ok
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                    Row {
-                        Sidebar()
-                        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                            Licenses()
-                        }
-                    }
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            Surface(shape = MaterialCornerExtraLargeTop()) {
+                Licenses()
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp))
                 }
             }
         }
@@ -124,9 +120,13 @@ fun LicensesScreen(popNavigation: () -> Unit) {
 //  And as the result has link, it should be linkified https://stackoverflow.com/q/66130513
 
 @Composable
-private fun Sidebar() {
+private fun Sidebar(modifier: Modifier = Modifier) {
     var selectedItem by rememberSaveable { mutableIntStateOf(0) }
-    NavigationRail(windowInsets = WindowInsets(0, 0, 0, 0)) {
+    NavigationRail(
+        modifier,
+        windowInsets = WindowInsets(0, 0, 0, 0),
+        containerColor = Color.Transparent,
+    ) {
         listOf<Triple<String, @Composable () -> Unit, (FragmentActivity) -> Unit>>(
             Triple(
                 "GPLv3",
@@ -171,12 +171,20 @@ private fun Licenses() {
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     LazyColumn {
         itemsIndexed(sections) { i, (title, license, text) ->
-            if (i > 0) Divider(color = MaterialTheme.colorScheme.outline.copy(alpha = .5f))
+            if (i > 0) Divider(
+                modifier = Modifier.padding(start = 16.dp, end = 88.dp),
+                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
+            )
             val angle =
                 animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle").value
             Column(modifier = Modifier
                 .clickable { expandedItem = if (i == expandedItem) -1 else i }
-                .padding(all = 4.dp)
+                .padding(
+                    start = 16.dp,
+                    end = 88.dp,
+                    top = if (i == 0) 16.dp else 4.dp,
+                    bottom = 4.dp,
+                )
                 .fillMaxWidth()
                 .animateContentSize(
                     animationSpec = spring(
