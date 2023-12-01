@@ -276,9 +276,7 @@ fun AboutScreen(
                             ?.asComposeRenderEffect()
                     })
                 Surface(shape = MaterialCornerExtraLargeTop()) {
-                    Box(modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp)) {
-                        AboutScreenContent(navigateToLicenses)
-                    }
+                    AboutScreenContent(navigateToLicenses)
                 }
             }
         }
@@ -298,73 +296,70 @@ https://github.com/persian-calendar/persian-calendar"""
 }
 
 @Composable
-private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
-    Column {
-        // Licenses
-        Text(
-            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 4.dp),
-        )
-        AboutScreenButton(
-            icon = Icons.Default.Folder,
-            action = { navigateToLicenses() },
-            title = R.string.about_license_title,
-            summary = R.string.about_license_sum
-        )
+private fun AboutScreenContent(navigateToLicenses: () -> Unit) = Column {
+    // Licenses
+    Text(
+        stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
+        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
+    )
+    AboutScreenButton(
+        icon = Icons.Default.Folder,
+        action = { navigateToLicenses() },
+        title = R.string.about_license_title,
+        summary = R.string.about_license_sum
+    )
 
-        // Help
-        if (language.isUserAbleToReadPersian) {
-            Row(modifier = Modifier.padding(top = 16.dp)) {
-                Icon(
-                    modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                    imageVector = Icons.AutoMirrored.Default.Help,
-                    contentDescription = stringResource(R.string.help)
-                )
-                Column {
-                    Text(
-                        stringResource(R.string.help),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                HelpItems()
-            }
-        }
-
-        // Bug report
-        Text(
-            stringResource(R.string.about_support_developers),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
-        )
-        AboutScreenButton(
-            icon = Icons.Default.BugReport,
-            action = ::launchReportIntent,
-            title = R.string.about_report_bug,
-            summary = R.string.about_report_bug_sum
-        )
-        run {
-            var showDialog by rememberSaveable { mutableStateOf(false) }
-            AboutScreenButton(
-                icon = Icons.Default.Email,
-                action = { showDialog = true },
-                title = R.string.about_sendMail,
-                summary = R.string.about_email_sum
+    // Help
+    if (language.isUserAbleToReadPersian) {
+        Row(modifier = Modifier.padding(top = 16.dp, start = 12.dp)) {
+            Icon(
+                modifier = Modifier.padding(start = 8.dp, end = 4.dp),
+                imageVector = Icons.AutoMirrored.Default.Help,
+                contentDescription = stringResource(R.string.help)
             )
-            if (showDialog) EmailDialog { showDialog = false }
+            Column {
+                Text(
+                    stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
-
-        // Developers
-        Text(
-            stringResource(R.string.about_developers),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 12.dp),
-        )
-        DevelopersChips()
-
-        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            HelpItems()
+        }
     }
+
+    // Bug report
+    Text(
+        stringResource(R.string.about_support_developers),
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
+    )
+    AboutScreenButton(
+        icon = Icons.Default.BugReport,
+        action = ::launchReportIntent,
+        title = R.string.about_report_bug,
+        summary = R.string.about_report_bug_sum
+    )
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        AboutScreenButton(
+            icon = Icons.Default.Email,
+            action = { showDialog = true },
+            title = R.string.about_sendMail,
+            summary = R.string.about_email_sum
+        )
+        if (showDialog) EmailDialog { showDialog = false }
+    }
+
+    // Developers
+    Text(
+        stringResource(R.string.about_developers),
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
+    )
+    DevelopersChips()
+
+    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -384,13 +379,15 @@ private fun HelpItems() {
         sections.forEach { (title, body) ->
             var isExpanded by rememberSaveable { mutableStateOf(false) }
             val angle = animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle").value
-            Column(modifier = Modifier
-                .clickable { isExpanded = !isExpanded }
-                .padding(all = 4.dp)
-                .fillMaxWidth()
-                .animateContentSize()) {
+            Column(
+                modifier = Modifier
+                    .clickable { isExpanded = !isExpanded }
+                    .padding(all = 4.dp)
+                    .fillMaxWidth()
+                    .animateContentSize(),
+            ) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
                     Image(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(R.string.more),
@@ -402,7 +399,9 @@ private fun HelpItems() {
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                 }
-                if (isExpanded) SelectionContainer { Text(body) }
+                if (isExpanded) SelectionContainer {
+                    Text(body, Modifier.padding(horizontal = 16.dp))
+                }
             }
         }
     }
@@ -419,7 +418,7 @@ private fun AboutScreenButton(
     Box(
         modifier = Modifier
             .clickable { action(context) }
-            .padding(start = 8.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)) {
+            .padding(start = 20.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)) {
         Row {
             Icon(
                 modifier = Modifier.padding(end = 4.dp),
@@ -464,7 +463,11 @@ private fun DevelopersChips() {
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
-        FlowRow(Modifier.fillMaxWidth()) {
+        FlowRow(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+        ) {
             developers.forEach { (username, displayName, icon) ->
                 ElevatedFilterChip(
                     modifier = Modifier.padding(all = 2.dp),
