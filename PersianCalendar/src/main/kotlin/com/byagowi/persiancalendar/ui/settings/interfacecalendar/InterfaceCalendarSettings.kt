@@ -94,14 +94,12 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
     SettingsDivider()
     SettingsSection(stringResource(R.string.calendar))
     run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.events), stringResource(R.string.events_summary)
-        ) { showHolidaysTypesDialog(activity) }
-        LaunchedEffect(null) {
-            if (destination == PREF_HOLIDAY_TYPES) {
-                showHolidaysTypesDialog(activity)
-            }
-        }
+        ) { showDialog = true }
+        LaunchedEffect(null) { if (destination == PREF_HOLIDAY_TYPES) showDialog = true }
+        if (showDialog) HolidaysTypesDialog { showDialog = false }
     }
     SettingsSwitch(
         PREF_SHOW_DEVICE_CALENDAR_EVENTS, false,
