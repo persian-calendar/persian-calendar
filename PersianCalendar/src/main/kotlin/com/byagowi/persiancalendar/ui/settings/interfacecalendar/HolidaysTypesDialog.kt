@@ -166,18 +166,19 @@ private fun CountryEvents(
     holidaysKey: String,
     nonHolidaysKey: String,
 ) {
+    fun onParentClick() {
+        if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
+            enabledTypes.remove(holidaysKey)
+            enabledTypes.remove(nonHolidaysKey)
+        } else {
+            if (holidaysKey !in enabledTypes) enabledTypes.add(holidaysKey)
+            if (nonHolidaysKey !in enabledTypes) enabledTypes.add(nonHolidaysKey)
+        }
+    }
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable {
-                if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-                    enabledTypes.remove(holidaysKey)
-                    enabledTypes.remove(nonHolidaysKey)
-                } else {
-                    enabledTypes.add(holidaysKey)
-                    enabledTypes.add(nonHolidaysKey)
-                }
-            }
+            .clickable { onParentClick() }
             .padding(vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -191,15 +192,7 @@ private fun CountryEvents(
 
                 else -> ToggleableState.Off
             },
-            onClick = {
-                if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-                    enabledTypes.remove(holidaysKey)
-                    enabledTypes.remove(nonHolidaysKey)
-                } else {
-                    enabledTypes.add(holidaysKey)
-                    enabledTypes.add(nonHolidaysKey)
-                }
-            },
+            onClick = { onParentClick() },
             modifier = Modifier
                 .padding(start = 20.dp)
                 .size(32.dp, 32.dp),
