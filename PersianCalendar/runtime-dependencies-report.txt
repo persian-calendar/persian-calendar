@@ -533,9 +533,9 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.21 -> 1.9.20 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 -> 1.7.3 (*)
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3 (*)
-+--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1
-|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.20 -> 1.9.20 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20 -> 1.9.20 (*)
++--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.10.1
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.10 -> 1.9.20 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10 -> 1.9.20 (*)
 +--- com.google.openlocationcode:openlocationcode:1.0.4
 +--- androidx.room:room-ktx:2.6.0
 |    +--- androidx.room:room-common:2.6.0 (*)
