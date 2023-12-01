@@ -91,7 +91,7 @@ import java.util.Locale
 
 @Preview
 @Composable
-private fun Preview() = DeviceInformationScreen {}
+private fun DeviceInformationScreenPreview() = DeviceInformationScreen {}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)

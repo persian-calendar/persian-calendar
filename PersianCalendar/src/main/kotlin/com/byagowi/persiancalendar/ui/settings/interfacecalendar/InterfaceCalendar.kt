@@ -63,7 +63,7 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
             title = if (destination == PREF_APP_LANGUAGE) "Language" else stringResource(R.string.language),
             summary = language.nativeName,
         ) { showDialog = true }
-        if (showDialog) LanguagePreferenceDialog { showDialog = false }
+        if (showDialog) LanguageDialog { showDialog = false }
     }
     if (language.isArabic) {
         SettingsSwitch(

@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.utils.saveLanguage
 import java.util.TimeZone
 
 @Composable
-fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
+fun LanguageDialog(closeDialog: () -> Unit) {
     AlertDialog(
         onDismissRequest = { closeDialog() },
         title = { Text(stringResource(R.string.language)) },
@@ -77,4 +77,4 @@ fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
 
 @Preview
 @Composable
-private fun LanguagePreferenceDialogPreview() = LanguagePreferenceDialog {}
+private fun LanguagePreferenceDialogPreview() = LanguageDialog {}

@@ -68,7 +68,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Preview
 @Composable
-private fun Preview() = LicensesScreen {}
+private fun LicensesScreenPreview() = LicensesScreen {}
 
 @Composable
 fun LicensesScreen(popNavigation: () -> Unit) {

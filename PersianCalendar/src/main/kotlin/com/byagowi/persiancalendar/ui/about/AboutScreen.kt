@@ -144,7 +144,7 @@ class AboutFragment : Fragment() {
 
 @Preview
 @Composable
-private fun Preview() = AboutScreen({}, {})
+private fun AboutScreenPreview() = AboutScreen({}, {})
 
 @Composable
 @VisibleForTesting

@@ -7,11 +7,11 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.LanguagePreferenceDialog
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.LanguageDialog
 import org.junit.Rule
 import org.junit.Test
 
-class DialogsTest {
+class LanguageDialogTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -20,7 +20,7 @@ class DialogsTest {
         var languageString = ""
         composeTestRule.setContent {
             languageString = stringResource(R.string.language)
-            LanguagePreferenceDialog {}
+            LanguageDialog {}
         }
         composeTestRule.onNodeWithText(languageString)
 

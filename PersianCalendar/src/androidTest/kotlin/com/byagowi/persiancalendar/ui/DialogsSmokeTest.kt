@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSel
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showDistrictsDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showLocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,7 +55,6 @@ class DialogsSmokeTest {
             { showDistrictsDialog(it, listOf("a", "b", "c")) },
             { showGPSLocationDialog(it, it) },
             { showGPSLocationDialog(it, it) },
-            { showLocationPreferenceDialog(it) },
         ).forEach { launcher ->
             ActivityScenario.launch<MainActivity>(
                 Intent(

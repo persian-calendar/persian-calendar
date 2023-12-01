@@ -48,9 +48,10 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSele
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showLocationPreferenceDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -69,10 +70,16 @@ fun LocationAthanSettings(activity: ComponentActivity, pickRingtone: () -> Unit)
         title = stringResource(R.string.gps_location),
         summary = stringResource(R.string.gps_location_help),
     ) { showGPSLocationDialog(activity, viewLifecycleOwner) }
-    SettingsClickable(
-        title = stringResource(R.string.location),
-        summary = stringResource(R.string.location_help),
-    ) { showLocationPreferenceDialog(activity) }
+    run {
+        var showDialog by remember { mutableStateOf(false) }
+        SettingsClickable(
+            title = stringResource(R.string.location),
+            summary = stringResource(R.string.location_help),
+        ) { showDialog = true }
+        if (showDialog) {
+            LocationDialog({ showProvinceDialog(activity) }) { showDialog = false }
+        }
+    }
     SettingsClickable(stringResource(R.string.coordination)) {
         showCoordinatesDialog(activity, viewLifecycleOwner)
     }
