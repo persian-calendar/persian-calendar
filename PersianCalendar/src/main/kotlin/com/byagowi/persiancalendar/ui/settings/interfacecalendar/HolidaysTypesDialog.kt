@@ -4,7 +4,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +23,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
@@ -53,13 +53,10 @@ import org.jetbrains.annotations.VisibleForTesting
 @Composable
 fun HolidaysTypesDialog(closeDialog: () -> Unit) {
     val context = LocalContext.current
-    val enabledTypes = remember {
-        EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList()
-    }
-    Dialog(
-        properties = DialogProperties(),
-        onDismissRequest = { closeDialog() }
-    ) {
+    val enabledTypes = rememberSaveable(
+        saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
+    ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
+    Dialog(properties = DialogProperties(), onDismissRequest = { closeDialog() }) {
         Surface(
             shape = AlertDialogDefaults.shape,
             color = AlertDialogDefaults.containerColor,
@@ -160,7 +157,7 @@ private fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
 
 @Composable
 @VisibleForTesting
-fun ColumnScope.CountryEvents(
+fun CountryEvents(
     calendarCenterName: String,
     sourceLink: String,
     holidaysTitle: String,
