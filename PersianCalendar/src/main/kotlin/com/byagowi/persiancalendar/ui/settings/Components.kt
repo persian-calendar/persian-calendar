@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -33,7 +34,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 24.dp, vertical = 8.dp),
     ) {
         Text(
             title,
@@ -51,12 +52,15 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 }
 
 @Composable
+fun SettingsDivider() = Divider(Modifier.padding(horizontal = 8.dp))
+
+@Composable
 fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
             .clickable { action() }
-            .padding(all = 16.dp),
+            .padding(vertical = 16.dp, horizontal = 24.dp),
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
         if (summary != null) Text(
@@ -154,7 +158,8 @@ fun SettingsSwitch(
     Box(
         Modifier
             .fillMaxWidth()
-            .clickable(onClick = toggle),
+            .clickable(onClick = toggle)
+            .padding(horizontal = 8.dp),
     ) {
         Column(
             Modifier

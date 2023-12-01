@@ -146,7 +146,7 @@ private fun AgeWidgetConfigureContent(
             Column(
                 Modifier
                     .verticalScroll(rememberScrollState())
-                    .padding(all = 16.dp),
+                    .padding(vertical = 16.dp),
             ) {
                 Button(
                     onClick = { confirm() },
@@ -165,7 +165,7 @@ private fun AgeWidgetConfigureContent(
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                        .padding(vertical = 8.dp, horizontal = 16.dp),
                     value = text,
                     onValueChange = {
                         text = it

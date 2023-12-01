@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.ComponentActivity
-import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -42,6 +41,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
@@ -91,7 +91,7 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
         )
     }
 
-    Divider()
+    SettingsDivider()
     SettingsSection(stringResource(R.string.calendar))
     run {
         SettingsClickable(

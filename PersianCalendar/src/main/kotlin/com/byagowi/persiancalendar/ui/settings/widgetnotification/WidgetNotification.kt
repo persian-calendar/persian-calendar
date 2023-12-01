@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +39,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
@@ -52,7 +52,7 @@ import java.util.TimeZone
 fun WidgetNotificationSettings(activity: ComponentActivity) {
     SettingsSection(stringResource(R.string.pref_notification))
     NotificationSettings(activity)
-    Divider()
+    SettingsDivider()
     SettingsSection(stringResource(R.string.pref_widget))
     WidgetConfiguration(activity)
 }

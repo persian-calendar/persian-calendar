@@ -9,6 +9,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,12 +51,13 @@ class WallpaperSettingsActivity : AppCompatActivity() {
                     Column(
                         Modifier
                             .alpha(AppBlendAlpha)
+                            .verticalScroll(rememberScrollState())
                             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                             .background(
                                 MaterialTheme.colorScheme.surface,
                                 MaterialTheme.shapes.extraLarge
                             )
-                            .padding(all = 16.dp),
+                            .padding(vertical = 16.dp),
                     ) {
                         Button(
                             onClick = { finish() },

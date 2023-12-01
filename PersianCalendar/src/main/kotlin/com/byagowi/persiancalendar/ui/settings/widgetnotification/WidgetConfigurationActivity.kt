@@ -123,7 +123,7 @@ private fun WidgetConfigurationContent(
                 Column(
                     Modifier
                         .verticalScroll(rememberScrollState())
-                        .padding(all = 16.dp)
+                        .padding(vertical = 16.dp)
                 ) {
                     Button(
                         onClick = { finishAndSuccess() },

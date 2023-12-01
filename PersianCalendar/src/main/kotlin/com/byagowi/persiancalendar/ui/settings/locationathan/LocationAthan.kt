@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
@@ -40,6 +39,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
@@ -129,7 +129,7 @@ fun LocationAthanSettings(activity: ComponentActivity, pickRingtone: () -> Unit)
         appPrefs.registerOnSharedPreferenceChangeListener(listener)
         onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
-    Divider()
+    SettingsDivider()
     SettingsSection(
         stringResource(R.string.athan),
         if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)

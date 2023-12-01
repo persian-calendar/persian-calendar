@@ -259,11 +259,7 @@ fun SettingsScreen(
         modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
     ) { index ->
         Surface(modifier = Modifier.fillMaxSize()) {
-            Column(
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 8.dp),
-            ) {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
                 tabs[index].first()
                 Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
             }
