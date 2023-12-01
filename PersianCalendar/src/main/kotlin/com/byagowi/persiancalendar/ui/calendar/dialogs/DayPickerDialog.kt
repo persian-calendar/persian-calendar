@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.content.DialogInterface
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
@@ -22,7 +21,7 @@ fun showDayPickerDialog(
     val binding = DayPickerDialogBinding.inflate(activity.layoutInflater)
     binding.dayPickerView.value = jdn
     binding.root.setupLayoutTransition()
-    val dialog = AlertDialog.Builder(activity)
+    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
         .setView(binding.root)
         .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(binding.dayPickerView.value) }
         .setNeutralButton(R.string.today, null)
