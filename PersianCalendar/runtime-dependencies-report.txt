@@ -850,7 +850,6 @@
 |         +--- androidx.compose.ui:ui-unit:1.6.0-beta01 (c)
 |         \--- androidx.compose.ui:ui-util:1.6.0-beta01 (c)
 +--- androidx.compose.runtime:runtime:1.6.0-beta01 (*)
-+--- androidx.compose.material:material-icons-core:1.6.0-beta01 (*)
 \--- androidx.compose.material:material-icons-extended:1.6.0-beta01
      \--- androidx.compose.material:material-icons-extended-android:1.6.0-beta01
           +--- androidx.compose.material:material-icons-core:1.6.0-beta01 (*)
