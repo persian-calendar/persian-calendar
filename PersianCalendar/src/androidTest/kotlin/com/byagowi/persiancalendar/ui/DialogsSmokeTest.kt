@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
-import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
@@ -39,7 +38,6 @@ class DialogsSmokeTest {
             { showMonthOverviewDialog(it, Jdn.today().toCalendar(mainCalendar)) },
             { showShiftWorkDialog(it, Jdn.today()) },
             { showIconsDemoDialog(it) },
-            { showTypographyDemoDialog(it) },
             { showColorPickerDialog(it, true, "ABC") },
             { showColorPickerDialog(it, false, "ABC") },
             { showCalendarPreferenceDialog(it) {} },

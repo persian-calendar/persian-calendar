@@ -56,6 +56,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -81,10 +82,12 @@ import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
+import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
+import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
 import com.byagowi.persiancalendar.ui.about.showCarouselDialog
 import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
-import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
@@ -316,10 +319,30 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
             onClick = { showDynamicColorsDialog(activity) },
         )
     }
-    DropdownMenuItem(
-        text = { Text("Typography") },
-        onClick = { showTypographyDemoDialog(activity) },
-    )
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        DropdownMenuItem(
+            text = { Text("Color Scheme") },
+            onClick = { showDialog = true },
+        )
+        if (showDialog) ColorSchemeDemoDialog { showDialog = false }
+    }
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        DropdownMenuItem(
+            text = { Text("Typography") },
+            onClick = { showDialog = true },
+        )
+        if (showDialog) TypographyDemoDialog { showDialog = false }
+    }
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        DropdownMenuItem(
+            text = { Text("Shapes") },
+            onClick = { showDialog = true },
+        )
+        if (showDialog) ShapesDemoDialog { showDialog = false }
+    }
     DropdownMenuItem(
         text = { Text("Clear preferences store and exit") },
         onClick = {
