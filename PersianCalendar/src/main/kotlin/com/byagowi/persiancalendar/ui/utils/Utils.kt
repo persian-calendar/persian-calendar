@@ -58,7 +58,6 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
-import com.google.android.material.appbar.AppBarLayout
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -197,11 +196,6 @@ fun NavController.navigateSafe(directions: NavDirections) {
 fun Context?.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable {
     return this?.let { AppCompatResources.getDrawable(it, drawableRes) }.debugAssertNotNull
         ?: ShapeDrawable()
-}
-
-// https://stackoverflow.com/a/48421144 but doesn't seem to be needed anymore?
-fun AppBarLayout.hideToolbarBottomShadow() {
-    outlineProvider = null
 }
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) {

@@ -83,7 +83,6 @@ import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -362,7 +361,6 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         }
 
         binding.appBar.toolbar.setupMenuNavigation()
-        binding.appBar.root.hideToolbarBottomShadow()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
