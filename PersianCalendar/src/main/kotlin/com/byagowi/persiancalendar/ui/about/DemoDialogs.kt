@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
@@ -36,14 +35,14 @@ import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.LinearInterpolator
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.ProgressBar
 import android.widget.Scroller
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -53,8 +52,6 @@ import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.getSystemService
-import androidx.core.graphics.BlendModeColorFilterCompat
-import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.component1
 import androidx.core.graphics.component2
@@ -81,6 +78,7 @@ import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
@@ -95,13 +93,6 @@ import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.progressindicator.LinearProgressIndicator
-import com.google.android.material.shape.CornerFamily
-import com.google.android.material.shape.ShapeAppearanceModel
-import com.google.android.material.shape.TriangleEdgeTreatment
-import com.google.android.material.slider.Slider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
@@ -189,8 +180,11 @@ half4 main(float2 fragCoord) {
 """
 
 fun showHiddenUiDialog(activity: FragmentActivity) {
-    val root = LinearLayout(activity)
-    root.orientation = LinearLayout.VERTICAL
+    if (BuildConfig.DEVELOPMENT) {
+        Toast.makeText(activity, "Hi!", Toast.LENGTH_LONG).show()
+    }
+//    val root = LinearLayout(activity)
+//    root.orientation = LinearLayout.VERTICAL
 //    root.addView(
 //        TabLayout(activity).also { tabLayout ->
 //            listOf(
@@ -218,14 +212,14 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
 //            tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
 //            tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
 //        })
-    root.addView(LinearProgressIndicator(activity).also { indicator ->
-        indicator.isIndeterminate = true
-        indicator.setIndicatorColor(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
-        indicator.layoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-    })
-
+//    root.addView(LinearProgressIndicator(activity).also { indicator ->
+//        indicator.isIndeterminate = true
+//        indicator.setIndicatorColor(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
+//        indicator.layoutParams = ViewGroup.LayoutParams(
+//            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+//        )
+//    })
+//
 //    val morphedPathView = object : View(activity) {
 //        private val pathMorph = MorphedPath(
 //            "m 100 0 l -100 100 l 100 100 l 100 -100 z",
@@ -251,27 +245,27 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
 //    root.addView(Slider(activity).also {
 //        it.addOnChangeListener { _, value, _ -> morphedPathView.setFraction(value) }
 //    })
-
-    root.addView(ProgressBar(activity).also { progressBar ->
-        progressBar.isIndeterminate = true
-        ValueAnimator.ofArgb(
-            Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-        ).also { valueAnimator ->
-            valueAnimator.duration = 3000
-            valueAnimator.interpolator = LinearInterpolator()
-            valueAnimator.repeatMode = ValueAnimator.REVERSE
-            valueAnimator.repeatCount = 1
-            valueAnimator.addUpdateListener {
-                progressBar.indeterminateDrawable?.colorFilter =
-                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                        it.animatedValue as? Int ?: 0, BlendModeCompat.SRC_ATOP
-                    )
-            }
-        }.start()
-        progressBar.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600)
-    })
-
-    BottomSheetDialog(activity).also { it.setContentView(root) }.show()
+//
+//    root.addView(ProgressBar(activity).also { progressBar ->
+//        progressBar.isIndeterminate = true
+//        ValueAnimator.ofArgb(
+//            Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+//        ).also { valueAnimator ->
+//            valueAnimator.duration = 3000
+//            valueAnimator.interpolator = LinearInterpolator()
+//            valueAnimator.repeatMode = ValueAnimator.REVERSE
+//            valueAnimator.repeatCount = 1
+//            valueAnimator.addUpdateListener {
+//                progressBar.indeterminateDrawable?.colorFilter =
+//                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+//                        it.animatedValue as? Int ?: 0, BlendModeCompat.SRC_ATOP
+//                    )
+//            }
+//        }.start()
+//        progressBar.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600)
+//    })
+//
+//    BottomSheetDialog(activity).also { it.setContentView(root) }.show()
 }
 
 //class MorphedPath(fromPath: String, toPath: String) {
@@ -331,11 +325,15 @@ fun showColorPickerDialog(activity: FragmentActivity) {
         )
         val colorCircle = CircleColorPickerView(activity).also { it.layoutParams = layoutParams }
         addView(colorCircle)
-        addView(Slider(activity).also {
+        addView(SeekBar(activity).also {
             it.layoutParams = layoutParams
-            it.addOnChangeListener { _, value, _ -> colorCircle.setBrightness(value) }
-            it.valueFrom = 0f
-            it.valueTo = 100f
+            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+                override fun onStopTrackingTouch(seekBar: SeekBar?) = Unit
+                override fun onProgressChanged(
+                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
+                ) = colorCircle.setBrightness(progress.toFloat())
+            })
         })
     }
     androidx.appcompat.app.AlertDialog.Builder(activity)
@@ -1461,20 +1459,19 @@ fun showIconsDemoDialog(activity: ComponentActivity) {
         override fun getItemCount() = 62
         override fun getItemViewType(position: Int) = position
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            object : RecyclerView.ViewHolder(ShapeableImageView(activity).apply {
+            object : RecyclerView.ViewHolder(ImageView(activity).apply {
                 val day = viewType / 2 + 1
                 when (viewType % 2) {
                     0 -> setImageResource(getDayIconResource(day))
                     1 -> setImageBitmap(createStatusIcon(day))
                 }
                 val dp = resources.dp
-                layoutParams =
-                    ViewGroup.MarginLayoutParams((36 * dp).toInt(), (36 * dp).toInt())
-                        .apply { setMargins((4 * dp).toInt()) }
-                shapeAppearanceModel = ShapeAppearanceModel.Builder()
-                    .setAllCorners(CornerFamily.ROUNDED, 8 * dp)
-                    .setAllEdges(TriangleEdgeTreatment(4 * dp, true))
-                    .build()
+                layoutParams = ViewGroup.MarginLayoutParams((36 * dp).toInt(), (36 * dp).toInt())
+                    .apply { setMargins((4 * dp).toInt()) }
+                // shapeAppearanceModel = ShapeAppearanceModel.Builder()
+                //     .setAllCorners(CornerFamily.ROUNDED, 8 * dp)
+                //     .setAllEdges(TriangleEdgeTreatment(4 * dp, true))
+                //     .build()
                 setBackgroundColor(Color.DKGRAY)
             }) {}
     }
