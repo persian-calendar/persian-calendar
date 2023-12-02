@@ -85,7 +85,6 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
-import com.byagowi.persiancalendar.ui.about.showCarouselDialog
 import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
@@ -416,9 +415,5 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
                 )
             }.onFailure(logException).getOrNull().debugAssertNotNull
         },
-    )
-    DropdownMenuItem(
-        text = { Text("Start Carousel") },
-        onClick = { showCarouselDialog(activity) },
     )
 }

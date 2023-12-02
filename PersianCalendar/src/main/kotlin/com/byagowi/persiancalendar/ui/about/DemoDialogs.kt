@@ -31,9 +31,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.text.Spanned
-import android.text.style.TextAppearanceSpan
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -66,8 +64,6 @@ import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.os.postDelayed
 import androidx.core.text.HtmlCompat
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
 import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
@@ -84,12 +80,10 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
-import com.byagowi.persiancalendar.ui.SeasonsAdapter
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
@@ -97,13 +91,11 @@ import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.shape.CornerFamily
@@ -1568,24 +1560,24 @@ fun showDynamicColorsDialog(activity: ComponentActivity) {
         .show()
 }
 
-fun showCarouselDialog(activity: ComponentActivity) {
-    androidx.appcompat.app.AlertDialog.Builder(activity)
-        .setView(FrameLayout(activity).also { root ->
-            root.addView(RecyclerView(activity).also {
-                it.layoutManager = CarouselLayoutManager()
-                it.adapter = SeasonsAdapter()
-                it.setHasFixedSize(true) // Just as an optimization
-                it.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    (196 * activity.resources.dp).toInt()
-                )
-                // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
-                PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
-                it.scrollToPosition(0)
-                it.smoothScrollToPosition(12)
-            })
-        }).show()
-}
+//fun showCarouselDialog(activity: ComponentActivity) {
+//    androidx.appcompat.app.AlertDialog.Builder(activity)
+//        .setView(FrameLayout(activity).also { root ->
+//            root.addView(RecyclerView(activity).also {
+//                it.layoutManager = CarouselLayoutManager()
+//                it.adapter = SeasonsAdapter()
+//                it.setHasFixedSize(true) // Just as an optimization
+//                it.layoutParams = ViewGroup.LayoutParams(
+//                    ViewGroup.LayoutParams.MATCH_PARENT,
+//                    (196 * activity.resources.dp).toInt()
+//                )
+//                // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
+//                PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)
+//                it.scrollToPosition(0)
+//                it.smoothScrollToPosition(12)
+//            })
+//        }).show()
+//}
 
 // Lindenmayer system: https://en.wikipedia.org/wiki/L-system
 class LSystem(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
