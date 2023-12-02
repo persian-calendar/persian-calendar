@@ -137,19 +137,6 @@
     <fragment
         android:id="@+id/map"
         android:name="com.byagowi.persiancalendar.ui.map.MapScreen"
-        android:label="@string/map">
-        <action
-            android:id="@+id/action_map_to_sky_renderer"
-            app:destination="@id/sky_renderer"
-            app:enterAnim="@anim/nav_enter_anim"
-            app:exitAnim="@anim/nav_exit_anim"
-            app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/sky_renderer"
-        android:name="com.byagowi.persiancalendar.ui.map.SkyRendererScreen"
-        android:label="Sky Renderer Screen" />
+        android:label="@string/map" />
 
 </navigation>

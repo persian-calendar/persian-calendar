@@ -5,6 +5,7 @@ import android.graphics.Matrix
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.graphics.createBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -154,7 +155,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
             if (abs(latitude) < 90 && abs(longitude) < 180) {
                 // Easter egg like feature, bring sky renderer fragment
                 if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.value.displayGrid) {
-                    findNavController().navigateSafe(MapScreenDirections.actionMapToSkyRenderer())
+                    Toast.makeText(binding.root.context, "Null Island!", Toast.LENGTH_SHORT).show()
                 } else {
                     val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
                     if (viewModel.state.value.isDirectPathMode)
