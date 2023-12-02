@@ -96,7 +96,7 @@
                     android:layout_marginRight="16dp"
                     android:visibility="gone" />
 
-                <com.google.android.material.card.MaterialCardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/result_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </com.google.android.material.card.MaterialCardView>
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
 
