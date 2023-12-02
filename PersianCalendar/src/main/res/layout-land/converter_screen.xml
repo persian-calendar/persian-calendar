@@ -39,27 +39,19 @@
                         android:id="@+id/first_time_zone_clock_picker"
                         layout="@layout/time_zone_clock_picker" />
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/input_text_wrapper"
-                        style="@style/AppTextInputLayoutFilledBox"
+                    <EditText
+                        android:id="@+id/input_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/view_padding"
+                        android:layout_marginStart="@dimen/view_padding"
                         android:layout_marginTop="4dp"
-                        android:layout_marginRight="@dimen/view_padding"
+                        android:layout_marginEnd="@dimen/view_padding"
                         android:layout_marginBottom="@dimen/card_margin"
-                        android:layoutDirection="ltr">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/input_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/card_margin"
-                            android:gravity="top"
-                            android:inputType="textMultiLine"
-                            android:minLines="5" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
+                        android:autofillHints=""
+                        android:hint="@string/empty"
+                        android:inputType="textMultiLine"
+                        android:layoutDirection="ltr"
+                        android:minLines="5" />
 
                     <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
                         android:id="@+id/calendars_types"

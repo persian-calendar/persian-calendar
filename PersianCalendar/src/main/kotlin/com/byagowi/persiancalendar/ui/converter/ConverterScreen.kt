@@ -268,7 +268,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             ConverterScreenMode.Converter -> {
                                 binding.firstTimeZoneClockPicker.root.isVisible = false
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.inputTextWrapper.isVisible = false
+                                binding.inputText.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.dayPickerView.isVisible = true
                                 binding.calendarsTypes.isVisible = true
@@ -283,7 +283,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
                                 binding.secondDayPickerView.calendarType = viewModel.calendar.value
 
-                                binding.inputTextWrapper.isVisible = false
+                                binding.inputText.isVisible = false
                                 binding.dayPickerView.isVisible = true
                                 binding.calendarsTypes.isVisible = true
                                 binding.secondDayPickerView.isVisible = true
@@ -296,7 +296,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             ConverterScreenMode.Calculator -> {
                                 binding.firstTimeZoneClockPicker.root.isVisible = false
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.inputTextWrapper.isVisible = true
+                                binding.inputText.isVisible = true
                                 binding.dayPickerView.isVisible = false
                                 binding.calendarsTypes.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
@@ -309,7 +309,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             ConverterScreenMode.QrCode -> {
                                 binding.firstTimeZoneClockPicker.root.isVisible = false
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.inputTextWrapper.isVisible = true
+                                binding.inputText.isVisible = true
                                 binding.dayPickerView.isVisible = false
                                 binding.calendarsTypes.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
@@ -323,7 +323,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 initializeTimeZones()
                                 binding.firstTimeZoneClockPicker.root.isVisible = true
                                 binding.secondTimeZoneClockPicker.root.isVisible = true
-                                binding.inputTextWrapper.isVisible = false
+                                binding.inputText.isVisible = false
                                 binding.dayPickerView.isVisible = false
                                 binding.calendarsTypes.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
