@@ -59,7 +59,7 @@ class ShapeableFrameLayout(context: Context, attrs: AttributeSet? = null) :
     }
 
     private fun clampCornerSize(cornerSize: CornerSize): CornerSize {
-        /** See [com.google.android.material.carousel.MaskableFrameLayout.setShapeAppearanceModel] */
+        // Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/carousel/MaskableFrameLayout.java#L100
         return if (cornerSize is AbsoluteCornerSize) {
             // Enforce that the corners of the shape appearance are never larger than half the
             // width of the shortest edge. As the size of the mask changes, we never want the

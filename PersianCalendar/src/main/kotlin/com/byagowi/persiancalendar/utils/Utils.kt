@@ -1,7 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
+import android.graphics.Color
 import android.util.Log
+import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
+import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
@@ -73,6 +76,14 @@ val HighLatitudesMethod.titleStringId
 /**
  * Returns the linear interpolation of `amount` between `start` and `stop`.
  *
- * Brought from [com.google.android.material.math.MathUtils.lerp]
+ * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/math/MathUtils.java#L36)
  */
 fun lerp(start: Float, stop: Float, amount: Float): Float = (1 - amount) * start + amount * stop
+
+/**
+ * Determines if a color should be considered light or dark.
+ *
+ * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
+ */
+fun isColorLight(@ColorInt color: Int): Boolean =
+    color != Color.TRANSPARENT && ColorUtils.calculateLuminance(color) > 0.5

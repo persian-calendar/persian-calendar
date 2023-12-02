@@ -39,6 +39,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.app.ShareCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.toDrawable
@@ -48,7 +49,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
@@ -59,7 +59,6 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.color.MaterialColors
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -159,16 +158,20 @@ fun Toolbar.setupMenuNavigation() {
 private tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
+/**
+ * Returns the color int for the provided theme color attribute
+ *
+ * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L92
+ */
 @ColorInt
-fun Context.resolveColor(@AttrRes attribute: Int): Int {
-    return if (BuildConfig.DEBUG) MaterialColors.getColor(this, attribute, "ui/Utils")
-    else MaterialColors.getColor(this, attribute, Color.TRANSPARENT)
+fun Context.resolveColor(@AttrRes attributeResId: Int): Int {
+    return ContextCompat.getColor(this, resolveResourceIdFromTheme(attributeResId));
 }
 
 /**
  * Turns an attribute to a resource id from the theme
  *
- * See also [com.google.android.material.resources.MaterialAttributes] which currently isn't exposed
+ * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/resources/MaterialAttributes.java#L45
  */
 @AnyRes
 fun Context.resolveResourceIdFromTheme(@AttrRes attributeId: Int): Int {

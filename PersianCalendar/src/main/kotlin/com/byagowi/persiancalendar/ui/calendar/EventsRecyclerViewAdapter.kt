@@ -18,8 +18,8 @@ import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
+import com.byagowi.persiancalendar.utils.isColorLight
 import com.byagowi.persiancalendar.utils.logException
-import com.google.android.material.color.MaterialColors
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -97,8 +97,7 @@ class EventsRecyclerViewAdapter(
             }
 
             val foregroundColor =
-                if (MaterialColors.isColorLight(resolvedBackgroundColor)) Color.BLACK
-                else Color.WHITE
+                if (isColorLight(resolvedBackgroundColor)) Color.BLACK else Color.WHITE
             binding.title.setTextColor(foregroundColor)
 
             val text = when {
