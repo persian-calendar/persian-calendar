@@ -449,11 +449,11 @@
     </plurals>
     <string name="navigate_up">انتقال للأعلى</string>
     <plurals name="n_seconds">
-        <item quantity="zero">صفر ثانية</item>
-        <item quantity="one">ثانية واحدة</item>
-        <item quantity="two">ثانيتين</item>
-        <item quantity="few">بضع ثواني</item>
-        <item quantity="many">عدة ثواني</item>
+        <item quantity="zero">%1$s ثانية</item>
+        <item quantity="one">%1$s ثانية</item>
+        <item quantity="two">%1$s ثانيتين</item>
+        <item quantity="few">%1$s ثواني</item>
+        <item quantity="many">%1$s ثانية</item>
         <item quantity="other">%1$s ثانية</item>
     </plurals>
     <string name="open_drawer">فتح درج التنقل</string>
