@@ -23,7 +23,7 @@ import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 fun showComposeDialog(
     activity: ComponentActivity,
-    dialog: @Composable ((closeDialog: () -> Unit) -> Unit)
+    dialog: @Composable ((onDismissRequest: () -> Unit) -> Unit)
 ) {
     val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->

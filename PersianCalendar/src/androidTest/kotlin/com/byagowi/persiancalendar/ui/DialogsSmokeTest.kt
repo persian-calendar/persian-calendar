@@ -19,7 +19,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSele
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showDistrictsDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
@@ -46,7 +45,6 @@ class DialogsSmokeTest {
             { showAthanVolumeDialog(it) },
             { showPrayerSelectDialog(it) },
             { showPrayerSelectPreviewDialog(it) },
-            { showCoordinatesDialog(it, it) },
             { showProvinceDialog(it) },
             { showDistrictsDialog(it, listOf("a", "b", "c")) },
             { showGPSLocationDialog(it, it) },

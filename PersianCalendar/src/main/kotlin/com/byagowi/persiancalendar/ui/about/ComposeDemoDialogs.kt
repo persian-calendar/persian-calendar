@@ -23,9 +23,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ColorSchemeDemoDialog(closeDialog: () -> Unit) {
+fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
     AlertDialog(
-        onDismissRequest = { closeDialog() },
+        onDismissRequest = onDismissRequest,
         confirmButton = {},
         dismissButton = {},
         title = {},
@@ -75,9 +75,9 @@ fun ColorSchemeDemoDialog(closeDialog: () -> Unit) {
 }
 
 @Composable
-fun TypographyDemoDialog(closeDialog: () -> Unit) {
+fun TypographyDemoDialog(onDismissRequest: () -> Unit) {
     AlertDialog(
-        onDismissRequest = { closeDialog() },
+        onDismissRequest = onDismissRequest,
         confirmButton = {},
         dismissButton = {},
         title = {},
@@ -118,14 +118,14 @@ fun TypographyDemoDialog(closeDialog: () -> Unit) {
 }
 
 @Composable
-fun ShapesDemoDialog(closeDialog: () -> Unit) {
+fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
     fun f(cornerSize: CornerSize): String {
         return cornerSize.toString()
             .replace("CornerSize", "")
             .replace("size = ", "")
     }
     AlertDialog(
-        onDismissRequest = { closeDialog() },
+        onDismissRequest = onDismissRequest,
         confirmButton = {},
         dismissButton = {},
         title = {},

@@ -13,12 +13,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -48,8 +50,8 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSele
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
@@ -80,8 +82,12 @@ fun LocationAthanSettings(activity: ComponentActivity, pickRingtone: () -> Unit)
             LocationDialog({ showProvinceDialog(activity) }) { showDialog = false }
         }
     }
-    SettingsClickable(stringResource(R.string.coordination)) {
-        showCoordinatesDialog(activity, viewLifecycleOwner)
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        SettingsClickable(stringResource(R.string.coordination)) { showDialog = true }
+        if (showDialog) CoordinatesDialog(
+            navigateToMap = { activity.findNavController(R.id.navHostFragment).navigate(R.id.map) },
+        ) { showDialog = false }
     }
 
     var isLocationSet by remember { mutableStateOf(coordinates.value != null) }

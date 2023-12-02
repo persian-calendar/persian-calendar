@@ -24,7 +24,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
@@ -34,12 +33,9 @@ import com.byagowi.persiancalendar.utils.sortCityNames
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 @Composable
-fun LocationDialog(onMoreButtonClick: () -> Unit, closeDialog: () -> Unit) {
+fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) {
     val cities = remember { citiesStore.values.sortCityNames }
-    Dialog(
-        properties = DialogProperties(),
-        onDismissRequest = { closeDialog() }
-    ) {
+    Dialog(onDismissRequest = onDismissRequest) {
         Surface(
             shape = AlertDialogDefaults.shape,
             color = AlertDialogDefaults.containerColor,
@@ -76,7 +72,7 @@ fun LocationDialog(onMoreButtonClick: () -> Unit, closeDialog: () -> Unit) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-                                        closeDialog()
+                                        onDismissRequest()
                                         context.appPrefs.saveCity(city)
                                     }
                                     .padding(vertical = 16.dp, horizontal = 24.dp)
@@ -89,7 +85,7 @@ fun LocationDialog(onMoreButtonClick: () -> Unit, closeDialog: () -> Unit) {
                         TextButton(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = {
-                                closeDialog()
+                                onDismissRequest()
                                 onMoreButtonClick()
                             },
                         ) { Text(stringResource(R.string.more), Modifier.padding(8.dp)) }

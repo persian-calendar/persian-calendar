@@ -28,16 +28,16 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -160,8 +160,14 @@ class MapScreen : Fragment(R.layout.map_screen) {
                     val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
                     if (viewModel.state.value.isDirectPathMode)
                         viewModel.changeDirectPathDestination(coordinates)
-                    else
-                        activity?.let { showCoordinatesDialog(it, viewLifecycleOwner, coordinates) }
+                    else activity?.let {
+                        showComposeDialog(it) { onDismissRequest ->
+                            CoordinatesDialog(
+                                inputCoordinates = coordinates,
+                                onDismissRequest = onDismissRequest,
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -2,22 +2,14 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
@@ -36,8 +28,6 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -46,107 +36,79 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
-fun HolidaysTypesDialog(closeDialog: () -> Unit) {
+fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
-    Dialog(properties = DialogProperties(), onDismissRequest = { closeDialog() }) {
-        Surface(
-            shape = AlertDialogDefaults.shape,
-            color = AlertDialogDefaults.containerColor,
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-        ) {
-            Column {
-                run {
-                    Text(
-                        stringResource(R.string.events),
-                        modifier = Modifier.padding(top = 24.dp, start = 24.dp),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                }
-                CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
-                ) {
-                    Column(
-                        Modifier
-                            .weight(weight = 1f, fill = false)
-                            .fillMaxWidth()
-                            .verticalScroll(rememberScrollState())
-                            .padding(vertical = 4.dp)
-                    ) {
-                        if (!language.showNepaliCalendar) {
-                            CountryEvents(
-                                stringResource(R.string.iran_official_events),
-                                EventType.Iran.source,
-                                stringResource(R.string.iran_holidays),
-                                stringResource(R.string.iran_others),
-                                enabledTypes,
-                                EventsRepository.iranHolidaysKey,
-                                EventsRepository.iranOthersKey,
-                            )
-                            CountryEvents(
-                                stringResource(R.string.afghanistan_events),
-                                EventType.Afghanistan.source,
-                                stringResource(R.string.afghanistan_holidays),
-                                stringResource(R.string.afghanistan_others),
-                                enabledTypes,
-                                EventsRepository.afghanistanHolidaysKey,
-                                EventsRepository.afghanistanOthersKey,
-                            )
-                        } else {
-                            CountryEvents(
-                                stringResource(R.string.nepal),
-                                EventType.Nepal.source,
-                                stringResource(R.string.holiday),
-                                stringResource(R.string.other_holidays),
-                                enabledTypes,
-                                EventsRepository.nepalHolidaysKey,
-                                EventsRepository.nepalOthersKey,
-                            )
-                        }
-                        Text(
-                            stringResource(R.string.other_holidays),
-                            modifier = Modifier.padding(horizontal = 32.dp, vertical = 4.dp),
-                        )
-                        IndentedCheckBox(
-                            stringResource(R.string.iran_ancient),
-                            enabledTypes,
-                            EventsRepository.iranAncientKey,
-                        )
-                        IndentedCheckBox(
-                            stringResource(R.string.international),
-                            enabledTypes,
-                            EventsRepository.internationalKey,
-                        )
-                    }
-                }
-                Box(
-                    Modifier
-                        .align(Alignment.End)
-                        .padding(bottom = 16.dp, end = 24.dp),
-                ) {
-                    Row {
-                        TextButton(onClick = { closeDialog() }) {
-                            Text(stringResource(R.string.cancel))
-                        }
-                        Spacer(Modifier.width(8.dp))
-                        TextButton(onClick = {
-                            closeDialog()
-                            context.appPrefs.edit {
-                                putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet())
-                            }
-                        }) {
-                            Text(stringResource(R.string.accept))
-                        }
-                    }
-                }
+    Dialog(
+        title = { Text(stringResource(R.string.events)) },
+        negativeButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.cancel))
             }
+        },
+        positiveButton = {
+            TextButton(onClick = {
+                onDismissRequest()
+                context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
+            }) { Text(stringResource(R.string.accept)) }
+        },
+        onDismissRequest = onDismissRequest
+    ) {
+        CompositionLocalProvider(
+            LocalTextStyle provides MaterialTheme.typography.bodyMedium
+        ) {
+            if (!language.showNepaliCalendar) {
+                CountryEvents(
+                    stringResource(R.string.iran_official_events),
+                    EventType.Iran.source,
+                    stringResource(R.string.iran_holidays),
+                    stringResource(R.string.iran_others),
+                    enabledTypes,
+                    EventsRepository.iranHolidaysKey,
+                    EventsRepository.iranOthersKey,
+                )
+                CountryEvents(
+                    stringResource(R.string.afghanistan_events),
+                    EventType.Afghanistan.source,
+                    stringResource(R.string.afghanistan_holidays),
+                    stringResource(R.string.afghanistan_others),
+                    enabledTypes,
+                    EventsRepository.afghanistanHolidaysKey,
+                    EventsRepository.afghanistanOthersKey,
+                )
+            } else {
+                CountryEvents(
+                    stringResource(R.string.nepal),
+                    EventType.Nepal.source,
+                    stringResource(R.string.holiday),
+                    stringResource(R.string.other_holidays),
+                    enabledTypes,
+                    EventsRepository.nepalHolidaysKey,
+                    EventsRepository.nepalOthersKey,
+                )
+            }
+            Text(
+                stringResource(R.string.other_holidays),
+                modifier = Modifier.padding(horizontal = 32.dp, vertical = 4.dp),
+            )
+            IndentedCheckBox(
+                stringResource(R.string.iran_ancient),
+                enabledTypes,
+                EventsRepository.iranAncientKey,
+            )
+            IndentedCheckBox(
+                stringResource(R.string.international),
+                enabledTypes,
+                EventsRepository.internationalKey,
+            )
         }
     }
 }
