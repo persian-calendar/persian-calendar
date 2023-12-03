@@ -1,8 +1,13 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import androidx.fragment.app.FragmentActivity
+import androidx.activity.ComponentActivity
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -22,27 +27,39 @@ private fun formatAngle(value: Double): String {
     return "${degrees.toInt()}°${((value - degrees) * 60).roundToInt()}’"
 }
 
-fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
+@Composable
+fun HoroscopesDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
     val time = Time.fromMillisecondsSince1970(date.time)
-    androidx.appcompat.app.AlertDialog.Builder(activity)
-        .setMessage(listOf(
-            Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
-            Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-        ).joinToString("\n") { body ->
-            val (longitude, distance) = when (body) {
-                Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
-                Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
-                else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
-                    .let { it.elon to it.vec.length() }
-            }
-            val name = activity.getString(body.titleStringId)
-            name + ": %s%s %s %,d km".format(
-                Locale.ENGLISH,
-                LRM,
-                formatAngle(longitude % 30), // Remaining angle
-                Zodiac.fromTropical(longitude).emoji,
-                (distance * AU_IN_KM).roundToLong()
+    AlertDialog(
+        confirmButton = {},
+        onDismissRequest = onDismissRequest,
+        text = {
+            Text(
+                listOf(
+                    Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
+                    Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+                ).map { body ->
+                    val (longitude, distance) = when (body) {
+                        Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
+                        Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
+                        else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
+                            .let { it.elon to it.vec.length() }
+                    }
+                    stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
+                        Locale.ENGLISH,
+                        LRM,
+                        formatAngle(longitude % 30), // Remaining angle
+                        Zodiac.fromTropical(longitude).emoji,
+                        (distance * AU_IN_KM).roundToLong()
+                    )
+                }.joinToString("\n"),
             )
-        })
-        .show()
+        },
+    )
+}
+
+fun showHoroscopesDialog(activity: ComponentActivity, date: Date = Date()) {
+    showComposeDialog(activity) { onDismissRequest ->
+        HoroscopesDialog(date, onDismissRequest)
+    }
 }
