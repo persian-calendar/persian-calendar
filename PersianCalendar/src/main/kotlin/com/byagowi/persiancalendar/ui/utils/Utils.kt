@@ -164,7 +164,7 @@ private tailrec fun Context.getActivity(): ComponentActivity? = this as? Compone
  */
 @ColorInt
 fun Context.resolveColor(@AttrRes attributeResId: Int): Int {
-    return ContextCompat.getColor(this, resolveResourceIdFromTheme(attributeResId));
+    return ContextCompat.getColor(this, resolveResourceIdFromTheme(attributeResId))
 }
 
 /**
