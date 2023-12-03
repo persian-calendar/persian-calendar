@@ -241,27 +241,11 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <style name="shapeAppearanceTopCornerLarge" parent="ShapeAppearance.Material3.Corner.Large">
-        <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-    </style>
-
-    <style name="shapeAppearanceBottomCornerExtraLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
-        <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSizeTopLeft">0dp</item>
-        <item name="cornerSizeTopRight">0dp</item>
-    </style>
-
     <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
 
     <style name="AppTextButton" parent="Widget.Material3.Button.TextButton" />
 
-    <style name="AppChipChoice" parent="Widget.Material3.Chip.Assist" />
-
     <style name="AppTextInputLayoutFilledBox" parent="Widget.Material3.TextInputLayout.FilledBox" />
-
-    <style name="AppTextInputLayoutOutlinedBox" parent="Widget.Material3.TextInputLayout.OutlinedBox" />
 
     <style name="AppTextInputLayoutFilledBoxDenseExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu" />
 
