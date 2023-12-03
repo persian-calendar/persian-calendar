@@ -1,44 +1,98 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import android.content.DialogInterface
+import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
-import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.DayPickerDialogBinding
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
+import com.byagowi.persiancalendar.ui.common.CalendarsTypes
+import com.byagowi.persiancalendar.ui.common.DayPicker
+import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 fun showDayPickerDialog(
-    activity: FragmentActivity,
+    activity: ComponentActivity,
     jdn: Jdn,
     @StringRes positiveButtonTitle: Int,
     onSuccess: (jdn: Jdn) -> Unit
 ) {
-    val binding = DayPickerDialogBinding.inflate(activity.layoutInflater)
-    binding.dayPickerView.value = jdn
-    binding.root.setupLayoutTransition()
-    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
-        .setView(binding.root)
-        .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(binding.dayPickerView.value) }
-        .setNeutralButton(R.string.today, null)
-        .show()
+    showComposeDialog(activity) { onDismissRequest ->
+        DayPickerDialog(jdn, positiveButtonTitle, onSuccess, onDismissRequest) {
+            activity.window.decorView.performHapticFeedbackVirtualKey()
+        }
+    }
+}
 
-    binding.calendarsTypes.onValueChangeListener = { binding.dayPickerView.calendarType = it }
+@Composable
+fun DayPickerDialog(
+    initialJdn: Jdn,
+    @StringRes positiveButtonTitle: Int,
+    onSuccess: (jdn: Jdn) -> Unit,
+    onDismissRequest: () -> Unit,
+    performHapticFeedback: () -> Unit,
+) {
+    var jdn by remember { mutableStateOf(initialJdn) }
+    val today = remember { Jdn.today() }
+    var changeToken by remember { mutableIntStateOf(0) }
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        positiveButton = {
+            TextButton(onClick = {
+                onDismissRequest()
+                onSuccess(jdn)
+            }) { Text(stringResource(positiveButtonTitle)) }
+        },
+        neutralButton = {
+            if (jdn != today) TextButton(onClick = {
+                jdn = today
+                ++changeToken
+            }) { Text(stringResource(R.string.today)) }
+        }
+    ) {
 
-    val today = Jdn.today()
-    val todayButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull
-    todayButton?.setOnClickListener { binding.dayPickerView.value = today }
-    todayButton?.isVisible = jdn != today
-    binding.dayPickerView.onValueChangeListener = {
-        todayButton?.isVisible = it != today
-        binding.daysDistance.text = if (it == today) "" else listOf(
-            activity.getString(R.string.days_distance),
-            spacedColon,
-            calculateDaysDifference(activity.resources, it)
-        ).joinToString("")
+        var calendarType by remember { mutableStateOf(mainCalendar) }
+        CalendarsTypes(current = calendarType) {
+            performHapticFeedback()
+            calendarType = it
+        }
+
+        var previousCalendarType by remember { mutableStateOf(calendarType) }
+        if (previousCalendarType != calendarType) ++changeToken
+        previousCalendarType = calendarType
+        DayPicker(calendarType, changeToken, jdn) { jdn = it }
+        SelectionContainer {
+            Text(
+                if (jdn == today) " " else listOf(
+                    stringResource(R.string.days_distance),
+                    spacedColon,
+                    calculateDaysDifference(LocalContext.current.resources, jdn)
+                ).joinToString(""),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }

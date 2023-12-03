@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
@@ -33,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
@@ -42,11 +42,12 @@ import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -104,7 +105,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
 
 @Composable
 private fun AgeWidgetConfigureContent(
-    activity: FragmentActivity,
+    activity: ComponentActivity,
     appWidgetId: Int,
     appPrefs: SharedPreferences,
     confirm: () -> Unit,
@@ -179,12 +180,19 @@ private fun AgeWidgetConfigureContent(
                     label = { Text(stringResource(R.string.age_widget_title)) },
                 )
 
-                SettingsClickable(stringResource(id = R.string.select_date)) {
-                    val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
-                    showDayPickerDialog(
-                        activity, jdn, R.string.accept
-                    ) { result -> appPrefs.edit { putJdn(key, result) } }
+                run {
+                    var showDialog by rememberSaveable { mutableStateOf(false) }
+                    SettingsClickable(stringResource(R.string.select_date)) { showDialog = true }
+                    if (showDialog) {
+                        val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
+                        val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
+                        DayPickerDialog(
+                            initialJdn = jdn,
+                            positiveButtonTitle = R.string.accept,
+                            onSuccess = { appPrefs.edit { putJdn(key, it) } },
+                            onDismissRequest = { showDialog = false },
+                        ) { activity.window.decorView.performHapticFeedbackVirtualKey() }
+                    }
                 }
                 val showColorOptions = remember {
                     !(Theme.isDynamicColor(appPrefs) &&
