@@ -119,10 +119,10 @@ QiblaCompassView.java
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ----
-Android-ItemTouchHelper-Demo - Apache 2
-https://github.com/iPaulPro/Android-ItemTouchHelper-Demo
+Reorderable - Apache 2
+https://github.com/Calvin-LL/Reorderable
 
-  Copyright (C) 2015 Paul Burke
+  Copyright 2023 Calvin Liang
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.

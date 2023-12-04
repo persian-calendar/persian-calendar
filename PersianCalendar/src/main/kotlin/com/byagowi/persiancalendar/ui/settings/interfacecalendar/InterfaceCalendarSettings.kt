@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -40,7 +41,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -121,21 +122,13 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
         },
         followChanges = true,
     )
-    SettingsClickable(
-        stringResource(R.string.calendars_priority),
-        stringResource(R.string.calendars_priority_summary)
-    ) {
-        showCalendarPreferenceDialog(activity, onEmpty = {
-            // Easter egg when empty result is rejected
-            val view = activity.window.decorView
-            val animator = ValueAnimator.ofFloat(0f, 1f)
-            animator.duration = 3000L
-            animator.interpolator = AccelerateDecelerateInterpolator()
-            animator.addUpdateListener {
-                view.rotation = it.animatedFraction * 360f
-            }
-            if (Random.nextBoolean()) animator.start() else animator.reverse()
-        })
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        SettingsClickable(
+            stringResource(R.string.calendars_priority),
+            stringResource(R.string.calendars_priority_summary)
+        ) { showDialog = true }
+        if (showDialog) CalendarPreferenceDialog { showDialog = false }
     }
     SettingsSwitch(
         PREF_ASTRONOMICAL_FEATURES,

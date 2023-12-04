@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
-import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
@@ -39,7 +38,6 @@ class DialogsSmokeTest {
             { showIconsDemoDialog(it) },
             { showColorPickerDialog(it, true, "ABC") },
             { showColorPickerDialog(it, false, "ABC") },
-            { showCalendarPreferenceDialog(it) {} },
             { showAthanGapDialog(it) },
             { showAthanSelectDialog(it) {} },
             { showAthanVolumeDialog(it) },
