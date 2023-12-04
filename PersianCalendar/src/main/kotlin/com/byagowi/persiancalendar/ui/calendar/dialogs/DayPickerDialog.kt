@@ -2,8 +2,11 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -69,7 +71,6 @@ fun DayPickerDialog(
             }) { Text(stringResource(R.string.today)) }
         }
     ) {
-
         var calendarType by remember { mutableStateOf(mainCalendar) }
         CalendarsTypes(current = calendarType) {
             performHapticFeedback()
@@ -80,19 +81,35 @@ fun DayPickerDialog(
         if (previousCalendarType != calendarType) ++changeToken
         previousCalendarType = calendarType
         DayPicker(calendarType, changeToken, jdn) { jdn = it }
-        SelectionContainer {
-            Text(
-                if (jdn == today) " " else listOf(
-                    stringResource(R.string.days_distance),
-                    spacedColon,
-                    calculateDaysDifference(LocalContext.current.resources, jdn)
-                ).joinToString(""),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                style = MaterialTheme.typography.bodySmall,
-                textAlign = TextAlign.Center,
-            )
+        AnimatedContent(
+            targetState = if (jdn == today) " " else listOf(
+                stringResource(R.string.days_distance),
+                spacedColon,
+                calculateDaysDifference(
+                    LocalContext.current.resources,
+                    jdn,
+                    calendarType = calendarType,
+                )
+            ).joinToString(""),
+            transitionSpec = {
+                slideIntoContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(durationMillis = 500)
+                ) togetherWith slideOutOfContainer(
+                    towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                    animationSpec = tween(durationMillis = 500)
+                )
+            },
+            label = ""
+        ) { state ->
+            SelectionContainer {
+                Text(
+                    state,
+                    modifier = Modifier.fillMaxSize(),
+                    style = MaterialTheme.typography.bodySmall,
+                    textAlign = TextAlign.Center,
+                )
+            }
         }
     }
 }

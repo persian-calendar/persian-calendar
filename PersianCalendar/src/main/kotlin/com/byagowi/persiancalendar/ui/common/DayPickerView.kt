@@ -230,7 +230,6 @@ fun Picker(
             .drawWithContent {
                 drawContent()
                 val visibleItemsCount = extra * 2 + 1
-                val height = this.size.height
                 drawLine(
                     dividerColor,
                     Offset(0f, this.size.height / visibleItemsCount * extra),
