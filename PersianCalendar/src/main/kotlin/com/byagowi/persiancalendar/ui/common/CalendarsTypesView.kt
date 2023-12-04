@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -26,6 +28,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
@@ -42,14 +45,16 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     init {
         val root = ComposeView(context)
         root.setContent {
-            var current by remember { mutableStateOf(mainCalendar) }
-            val scope = rememberCoroutineScope()
-            remember { scope.launch { valueFlow.collect { if (value != it) value = it } } }
-            onValueChangeListener(current)
-            valueFlow.value = current
-            CalendarsTypes(current) {
-                performHapticFeedbackVirtualKey()
-                current = it
+            Mdc3Theme {
+                var current by remember { mutableStateOf(mainCalendar) }
+                val scope = rememberCoroutineScope()
+                remember { scope.launch { valueFlow.collect { if (value != it) value = it } } }
+                onValueChangeListener(current)
+                valueFlow.value = current
+                CalendarsTypes(current) {
+                    performHapticFeedbackVirtualKey()
+                    current = it
+                }
             }
         }
         addView(root)
@@ -62,6 +67,7 @@ fun CalendarsTypes(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
     TabRow(
         selectedTabIndex = enabledCalendars.indexOf(current),
         divider = {},
+        containerColor = Color.Transparent,
         indicator = @Composable { tabPositions ->
             TabRowDefaults.Indicator(
                 Modifier
@@ -79,7 +85,7 @@ fun CalendarsTypes(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
             Tab(
                 text = { Text(title) },
                 selected = current == calendarType,
-                selectedContentColor = LocalTextStyle.current.color,
+                selectedContentColor = MaterialTheme.colorScheme.onSurface,
                 onClick = { setCurrent(calendarType) },
             )
         }
