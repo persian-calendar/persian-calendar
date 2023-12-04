@@ -10,6 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,13 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
@@ -141,10 +140,9 @@ fun CoordinatesDialog(
                 .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp),
         )
-        val lifecycleScope = LocalLifecycleOwner.current.lifecycleScope
         val context = LocalContext.current
-        remember(changeCounter) {
-            lifecycleScope.launch(Dispatchers.IO) {
+        LaunchedEffect(changeCounter) {
+            launch(Dispatchers.IO) {
                 runCatching {
                     val latitude = state[0].value.toDoubleOrNull() ?: 0.0
                     val longitude = state[1].value.toDoubleOrNull() ?: 0.0
