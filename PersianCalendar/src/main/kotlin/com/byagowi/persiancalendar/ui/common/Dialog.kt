@@ -48,7 +48,11 @@ fun Dialog(
                         .weight(weight = 1f, fill = false)
                         .fillMaxWidth()
                         .verticalScroll(rememberScrollState())
-                ) { content() }
+                ) {
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                    ) { content() }
+                }
                 Spacer(modifier = Modifier.height(8.dp))
                 if (neutralButton != null || negativeButton != null || positiveButton != null) {
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {

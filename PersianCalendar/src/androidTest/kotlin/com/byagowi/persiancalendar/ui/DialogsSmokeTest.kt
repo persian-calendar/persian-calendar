@@ -45,8 +45,7 @@ class DialogsSmokeTest {
             { showPrayerSelectPreviewDialog(it) },
             { showProvinceDialog(it) },
             { showDistrictsDialog(it, listOf("a", "b", "c")) },
-            { showGPSLocationDialog(it, it) },
-            { showGPSLocationDialog(it, it) },
+            { showGPSLocationDialog(it) },
         ).forEach { launcher ->
             ActivityScenario.launch<MainActivity>(
                 Intent(

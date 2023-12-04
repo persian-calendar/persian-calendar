@@ -16,7 +16,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -51,8 +50,8 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolu
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -66,12 +65,15 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun LocationAthanSettings(activity: ComponentActivity, pickRingtone: () -> Unit) {
-    val viewLifecycleOwner = LocalLifecycleOwner.current
     SettingsSection(stringResource(R.string.location))
-    SettingsClickable(
-        title = stringResource(R.string.gps_location),
-        summary = stringResource(R.string.gps_location_help),
-    ) { showGPSLocationDialog(activity, viewLifecycleOwner) }
+    run {
+        var showDialog by remember { mutableStateOf(false) }
+        SettingsClickable(
+            title = stringResource(R.string.gps_location),
+            summary = stringResource(R.string.gps_location_help),
+        ) { showDialog = true }
+        if (showDialog) GPSLocationDialog { showDialog = false }
+    }
     run {
         var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(

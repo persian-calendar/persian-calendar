@@ -225,24 +225,6 @@ fun ViewGroup.setupLayoutTransition() {
     }
 }
 
-fun ComponentActivity.askForLocationPermission() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-    androidx.appcompat.app.AlertDialog.Builder(this)
-        .setTitle(R.string.location_access)
-        .setMessage(R.string.phone_location_required)
-        .setPositiveButton(R.string.continue_button) { _, _ ->
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
-        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-        .show()
-}
-
 fun ComponentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it

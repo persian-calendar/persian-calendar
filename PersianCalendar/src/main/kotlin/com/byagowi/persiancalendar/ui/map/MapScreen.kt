@@ -108,7 +108,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
         }
         binding.date.setOnLongClickListener { viewModel.changeToTime(Date()); true }
 
-        fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
+        fun bringGps() = activity?.let { showGPSLocationDialog(it) }.let { }
         directPathButton.onClick {
             if (coordinates.value == null) bringGps() else viewModel.toggleDirectPathMode()
         }
