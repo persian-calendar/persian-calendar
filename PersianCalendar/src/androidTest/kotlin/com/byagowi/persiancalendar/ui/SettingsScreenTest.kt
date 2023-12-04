@@ -33,7 +33,7 @@ class SettingsScreenTest {
         var settingsString = ""
         composeTestRule.setContentWithTheme {
             settingsString = stringResource(R.string.device_information)
-            SettingsScreen(LocalContext.current as ComponentActivity, 0, "") {}
+            SettingsScreen(LocalContext.current as ComponentActivity, 0, "")
         }
         composeTestRule.onNodeWithContentDescription(settingsString)
     }
@@ -41,7 +41,7 @@ class SettingsScreenTest {
     @Test
     fun bringInterfaceCalendarTab() {
         composeTestRule.setContentWithTheme {
-            SettingsScreen(LocalContext.current as ComponentActivity, INTERFACE_CALENDAR_TAB, "") {}
+            SettingsScreen(LocalContext.current as ComponentActivity, INTERFACE_CALENDAR_TAB, "")
         }
     }
 
@@ -52,14 +52,14 @@ class SettingsScreenTest {
                 LocalContext.current as ComponentActivity,
                 WIDGET_NOTIFICATION_TAB,
                 ""
-            ) {}
+            )
         }
     }
 
     @Test
     fun bringLocationAthanTab() {
         composeTestRule.setContentWithTheme {
-            SettingsScreen(LocalContext.current as ComponentActivity, LOCATION_ATHAN_TAB, "") {}
+            SettingsScreen(LocalContext.current as ComponentActivity, LOCATION_ATHAN_TAB, "")
         }
     }
 }
