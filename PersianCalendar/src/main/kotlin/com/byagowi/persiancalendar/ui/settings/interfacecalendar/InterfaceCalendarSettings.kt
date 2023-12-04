@@ -1,15 +1,12 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
-import android.animation.ValueAnimator
 import android.content.pm.PackageManager
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -46,7 +43,6 @@ import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
-import kotlin.random.Random
 
 @Composable
 fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? = null) {
