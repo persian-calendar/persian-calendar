@@ -26,8 +26,8 @@ fun Dialog(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
     neutralButton: (@Composable () -> Unit)? = null,
-    positiveButton: (@Composable () -> Unit)? = null,
-    negativeButton: (@Composable () -> Unit)? = null,
+    confirmButton: (@Composable () -> Unit)? = null,
+    dismissButton: (@Composable () -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Dialog(onDismissRequest = onDismissRequest) {
@@ -54,13 +54,13 @@ fun Dialog(
                     ) { content() }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-                if (neutralButton != null || negativeButton != null || positiveButton != null) {
+                if (neutralButton != null || dismissButton != null || confirmButton != null) {
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
                         neutralButton?.invoke()
                         Spacer(Modifier.weight(1f))
-                        negativeButton?.invoke()
+                        dismissButton?.invoke()
                         Spacer(Modifier.width(8.dp))
-                        positiveButton?.invoke()
+                        confirmButton?.invoke()
                     }
                 }
             }

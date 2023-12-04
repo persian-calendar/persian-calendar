@@ -40,7 +40,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
     Dialog(
         title = { Text(stringResource(R.string.select_skin)) },
         onDismissRequest = onDismissRequest,
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) {
                 Text(stringResource(R.string.cancel))
             }

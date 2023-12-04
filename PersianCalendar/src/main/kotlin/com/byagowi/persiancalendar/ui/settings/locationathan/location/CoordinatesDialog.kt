@@ -71,10 +71,10 @@ fun CoordinatesDialog(
                 }) { Text(stringResource(R.string.map)) }
             }
         },
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
-        positiveButton = {
+        confirmButton = {
             val context = LocalContext.current
             TextButton(onClick = {
                 onDismissRequest()

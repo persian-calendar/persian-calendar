@@ -49,12 +49,12 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
     Dialog(
         title = { Text(stringResource(R.string.events)) },
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) {
                 Text(stringResource(R.string.cancel))
             }
         },
-        positiveButton = {
+        confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
                 context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }

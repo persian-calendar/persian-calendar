@@ -32,7 +32,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
     Dialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.language)) },
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         }
     ) {

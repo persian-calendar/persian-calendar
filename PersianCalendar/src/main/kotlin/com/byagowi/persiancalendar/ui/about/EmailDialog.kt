@@ -26,14 +26,14 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
     var message by rememberSaveable { mutableStateOf("") }
     Dialog(
         onDismissRequest = onDismissRequest,
-        positiveButton = {
+        confirmButton = {
             val context = LocalContext.current
             TextButton(onClick = {
                 onDismissRequest()
                 launchEmailIntent(context, message)
             }) { Text(stringResource(R.string.continue_button)) }
         },
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         title = { Text(stringResource(R.string.about_email_sum)) },

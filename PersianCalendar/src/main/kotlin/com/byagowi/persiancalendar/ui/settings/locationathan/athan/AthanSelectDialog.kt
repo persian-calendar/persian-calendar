@@ -50,7 +50,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
 
     Dialog(
         onDismissRequest = onDismissRequest,
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         title = { Text(stringResource(R.string.custom_athan)) }

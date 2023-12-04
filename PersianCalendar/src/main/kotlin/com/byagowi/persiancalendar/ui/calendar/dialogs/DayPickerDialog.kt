@@ -53,7 +53,7 @@ fun DayPickerDialog(
     var changeToken by remember { mutableIntStateOf(0) }
     Dialog(
         onDismissRequest = onDismissRequest,
-        positiveButton = {
+        confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
                 onSuccess(jdn)

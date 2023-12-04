@@ -61,10 +61,10 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
 
     Dialog(
         title = { Text(stringResource(R.string.calendars_priority)) },
-        negativeButton = {
+        dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
-        positiveButton = {
+        confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
                 val result = list.mapNotNull { if (it.second) it.first.name else null }
