@@ -13,6 +13,8 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -25,6 +27,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,7 +37,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.Dialog
@@ -53,28 +55,30 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-private fun AskForLocationPermissionDialog(onDismissRequest: () -> Unit) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return onDismissRequest()
-    val context = LocalContext.current
-    AlertDialog(
+private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return setGranted(true)
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { setGranted(it.entries.any()) }
+
+    var showDialog by rememberSaveable { mutableStateOf(true) }
+    if (showDialog) AlertDialog(
         title = { Text(stringResource(R.string.location_access)) },
         confirmButton = {
             TextButton(onClick = {
-                onDismissRequest()
-                // TODO: Ugly cast
-                (context as? Activity)?.requestPermissions(
+                showDialog = false
+                launcher.launch(
                     arrayOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
                         Manifest.permission.ACCESS_FINE_LOCATION
-                    ),
-                    LOCATION_PERMISSION_REQUEST_CODE
+                    )
                 )
             }) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = { setGranted(false) }) { Text(stringResource(R.string.cancel)) }
         },
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = { setGranted(false) },
         text = { Text(stringResource(R.string.phone_location_required)) }
     )
 }
@@ -85,12 +89,16 @@ fun showGPSLocationDialog(activity: ComponentActivity) =
 @Composable
 fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
+    var isGranted by remember { mutableStateOf<Boolean?>(null) }
     if (ActivityCompat.checkSelfPermission(
             context, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
             context, Manifest.permission.ACCESS_COARSE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED
-    ) return AskForLocationPermissionDialog(onDismissRequest)
+    ) {
+        isGranted ?: return AskForLocationPermissionDialog { isGranted = it }
+        return onDismissRequest()
+    }
 
     var message by remember { mutableStateOf(context.getString(R.string.pleasewaitgps)) }
     var coordinates by remember { mutableStateOf<Coordinates?>(null) }

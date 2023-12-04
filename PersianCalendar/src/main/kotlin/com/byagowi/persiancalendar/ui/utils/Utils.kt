@@ -50,7 +50,6 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
-import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.language
