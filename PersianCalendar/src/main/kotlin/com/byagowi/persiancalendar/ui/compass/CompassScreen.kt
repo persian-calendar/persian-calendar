@@ -13,7 +13,6 @@ import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.edit
@@ -42,9 +41,7 @@ import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.slider.Slider
-import com.google.android.material.snackbar.Snackbar
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -135,14 +132,9 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         }
     }
 
-    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) {
-        val rootView = view ?: return
-        Snackbar.make(rootView, messageId, duration).apply {
-            view.setOnClickListener { dismiss() }
-            view.findViewById<TextView?>(com.google.android.material.R.id.snackbar_text)
-                .debugAssertNotNull?.maxLines = 5
-            anchorView = binding?.fab
-        }.show()
+    // TODO: Snackbar should be better here, just make sure it will support long messages
+    private fun showLongToast(@StringRes messageId: Int, duration: Int) {
+        Toast.makeText(context ?: return, messageId, duration).show()
     }
 
     override fun onDestroyView() {
@@ -180,7 +172,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                showLongSnackbar(
+                showLongToast(
                     if (sensorNotFound) R.string.compass_not_found
                     else R.string.calibrate_compass_summary, 5000
                 )
@@ -330,9 +322,9 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             )
             if (BuildConfig.DEVELOPMENT)
                 Toast.makeText(context, "dev: orientation", Toast.LENGTH_LONG).show()
-            if (coordinates.value == null) showLongSnackbar(
+            if (coordinates.value == null) showLongToast(
                 R.string.set_location,
-                Snackbar.LENGTH_SHORT
+                Toast.LENGTH_SHORT
             )
         } else if (accelerometerSensor != null && magnetometerSensor != null) {
             sensorManager.registerListener(
@@ -346,9 +338,9 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             if (BuildConfig.DEVELOPMENT)
                 Toast.makeText(context, "dev: acc+magnet", Toast.LENGTH_LONG).show()
             if (coordinates.value == null)
-                showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
+                showLongToast(R.string.set_location, Toast.LENGTH_SHORT)
         } else {
-            showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
+            showLongToast(R.string.compass_not_found, Toast.LENGTH_SHORT)
             sensorNotFound = true
         }
     }
