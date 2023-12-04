@@ -283,7 +283,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     }
     private val circlesPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val zodiacSeparatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
+        it.color = context.resolveColor(R.attr.colorSurface)
         it.strokeWidth = .5f * dp
         it.style = Paint.Style.STROKE
     }

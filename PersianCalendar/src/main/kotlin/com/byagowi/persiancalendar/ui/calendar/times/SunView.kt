@@ -46,7 +46,7 @@ class SunView @JvmOverloads constructor(
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
     private val linesColor = ColorUtils.setAlphaComponent(
-        textColor ?: context.resolveColor(com.google.android.material.R.attr.colorControlNormal),
+        textColor ?: context.resolveColor(R.attr.colorControlNormal),
         0x60
     )
     private val isInWidgetRender = textColor != null

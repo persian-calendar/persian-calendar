@@ -19,5 +19,9 @@
         <attr name="sunViewNightColor" format="reference" />
         <attr name="sunViewDayColor" format="reference" />
         <attr name="sunViewMidDayColor" format="reference" />
+        <attr name="colorAccent" format="color" />
+        <attr name="colorSurface" format="color" />
+        <attr name="colorControlNormal" format="color" />
+        <attr name="colorButtonNormal" format="color" />
     </declare-styleable>
 </resources>

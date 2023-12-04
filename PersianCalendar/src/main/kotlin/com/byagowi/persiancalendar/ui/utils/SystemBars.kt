@@ -14,9 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 
 class SystemBarsTransparency(activity: Activity) {
     val isPrimaryColorLight = !isColorLight(activity.resolveColor(R.attr.colorOnAppBar))
-    val isSurfaceColorLight = isColorLight(
-        activity.resolveColor(com.google.android.material.R.attr.colorSurface)
-    )
+    val isSurfaceColorLight = isColorLight(activity.resolveColor(R.attr.colorSurface))
     val needsVisibleStatusBarPlaceHolder = !isPrimaryColorLight && isSurfaceColorLight
 
     private val isLightStatusBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

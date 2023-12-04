@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -13,7 +14,7 @@ import kotlin.math.cos
 class SliderView(context: Context, attrs: AttributeSet? = null) : BaseSlider(context, attrs) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = 2 * resources.dp
-        it.color = context.resolveColor(com.google.android.material.R.attr.colorAccent)
+        it.color = context.resolveColor(R.attr.colorAccent)
     }
     private val space = 10 * resources.dp
 

@@ -130,7 +130,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.textAlign = Paint.Align.CENTER
     }
     private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
+        it.color = context.resolveColor(R.attr.colorSurface)
         it.strokeWidth = 5 * dp
         it.style = Paint.Style.STROKE
         it.textAlign = Paint.Align.CENTER

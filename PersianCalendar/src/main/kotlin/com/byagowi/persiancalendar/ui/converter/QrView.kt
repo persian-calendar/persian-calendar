@@ -18,6 +18,7 @@ import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareBinaryFile
 import com.byagowi.persiancalendar.ui.utils.toByteArray
@@ -106,7 +107,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     fun share(activity: FragmentActivity?) {
         val size = 1280f
         val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
-            drawColor(context.resolveColor(com.google.android.material.R.attr.colorSurface))
+            drawColor(context.resolveColor(R.attr.colorSurface))
             withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
                 drawQr(this, size.toInt(), 1f, qr, qr)
             }

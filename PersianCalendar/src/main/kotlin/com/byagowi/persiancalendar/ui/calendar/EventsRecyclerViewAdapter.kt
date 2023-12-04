@@ -81,11 +81,11 @@ class EventsRecyclerViewAdapter(
                     // should be turned to long then int otherwise gets stupid alpha
                     if (event.color.isEmpty()) null else event.color.toLong().toInt()
                 }.onFailure(logException).getOrNull()
-                    ?: context.resolveColor(com.google.android.material.R.attr.colorAccent)
+                    ?: context.resolveColor(R.attr.colorAccent)
             } else null
             val backgroundColorAttribute =
                 if (event.isHoliday) R.attr.colorTextHoliday
-                else com.google.android.material.R.attr.colorButtonNormal
+                else R.attr.colorButtonNormal
 
             val resolvedBackgroundColor = if (backgroundColor == null) {
                 val resourceId = context.resolveResourceIdFromTheme(backgroundColorAttribute)
