@@ -47,7 +47,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -190,8 +189,7 @@ private fun AgeWidgetConfigureContent(
                             initialJdn = jdn,
                             positiveButtonTitle = R.string.accept,
                             onSuccess = { appPrefs.edit { putJdn(key, it) } },
-                            onDismissRequest = { showDialog = false },
-                        ) { activity.window.decorView.performHapticFeedbackVirtualKey() }
+                        ) { showDialog = false }
                     }
                 }
                 val showColorOptions = remember {

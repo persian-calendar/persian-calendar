@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,13 +39,7 @@ fun showDayPickerDialog(
     jdn: Jdn,
     @StringRes positiveButtonTitle: Int,
     onSuccess: (jdn: Jdn) -> Unit
-) {
-    showComposeDialog(activity) { onDismissRequest ->
-        DayPickerDialog(jdn, positiveButtonTitle, onSuccess, onDismissRequest) {
-            activity.window.decorView.performHapticFeedbackVirtualKey()
-        }
-    }
-}
+) = showComposeDialog(activity) { DayPickerDialog(jdn, positiveButtonTitle, onSuccess, it) }
 
 @Composable
 fun DayPickerDialog(
@@ -52,7 +47,6 @@ fun DayPickerDialog(
     @StringRes positiveButtonTitle: Int,
     onSuccess: (jdn: Jdn) -> Unit,
     onDismissRequest: () -> Unit,
-    performHapticFeedback: () -> Unit,
 ) {
     var jdn by remember { mutableStateOf(initialJdn) }
     val today = remember { Jdn.today() }
@@ -73,8 +67,9 @@ fun DayPickerDialog(
         }
     ) {
         var calendarType by remember { mutableStateOf(mainCalendar) }
+        val view = LocalView.current
         CalendarsTypes(current = calendarType) {
-            performHapticFeedback()
+            view.performHapticFeedbackVirtualKey()
             calendarType = it
         }
 
