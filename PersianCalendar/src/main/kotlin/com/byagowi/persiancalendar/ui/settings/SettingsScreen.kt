@@ -3,13 +3,10 @@ package com.byagowi.persiancalendar.ui.settings
 import android.app.StatusBarManager
 import android.app.WallpaperManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
-import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -20,8 +17,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContract
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -67,15 +62,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.PREF_ATHAN_NAME
-import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.NumericBinding
@@ -93,7 +85,6 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotifica
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
@@ -101,7 +92,6 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -113,50 +103,9 @@ class SettingsFragment : Fragment() {
         val activity = activity ?: return root
         val args by navArgs<SettingsFragmentArgs>()
         root.setContent {
-            Mdc3Theme {
-                SettingsScreen(
-                    activity,
-                    args.tab,
-                    args.preferenceKey,
-                    pickRingtone = { pickRingtone.launch(Unit) },
-                )
-            }
+            Mdc3Theme { SettingsScreen(activity, args.tab, args.preferenceKey) }
         }
         return root
-    }
-
-    private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
-        override fun createIntent(context: Context, input: Unit): Intent =
-            Intent(RingtoneManager.ACTION_RINGTONE_PICKER).putExtra(
-                RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL
-            ).putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true).putExtra(
-                    RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                    Settings.System.DEFAULT_NOTIFICATION_URI
-                )
-
-        override fun parseResult(resultCode: Int, intent: Intent?): String? =
-            if (resultCode == AppCompatActivity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
-                RingtoneManager.EXTRA_RINGTONE_PICKED_URI
-            )?.toString()
-            else null
-    }
-
-    private val pickRingtone = registerForActivityResult(PickRingtoneContract()) { uri ->
-        uri ?: return@registerForActivityResult
-        val ringtone = RingtoneManager.getRingtone(context, uri.toUri())
-        // If no ringtone has been found better to skip touching preferences store
-        ringtone ?: return@registerForActivityResult
-        val ringtoneTitle = ringtone.getTitle(context) ?: ""
-        context?.appPrefs?.edit {
-            putString(PREF_ATHAN_NAME, ringtoneTitle)
-            putString(PREF_ATHAN_URI, uri)
-        }
-        view?.let { view ->
-            Snackbar.make(
-                view, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
-            ).also { snackBar -> snackBar.considerSystemBarsInsets() }.show()
-        }
     }
 }
 
@@ -170,7 +119,6 @@ fun SettingsScreen(
     activity: ComponentActivity,
     initialPage: Int,
     destination: String,
-    pickRingtone: () -> Unit,
 ) = Column {
     val context = LocalContext.current
     LaunchedEffect(null) { context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
@@ -217,7 +165,7 @@ fun SettingsScreen(
             } to listOf(R.string.pref_notification, R.string.pref_widget),
 
             @Composable {
-                LocationAthanSettings(activity, pickRingtone)
+                LocationAthanSettings(activity)
             } to listOf(R.string.location, R.string.athan),
         )
     }

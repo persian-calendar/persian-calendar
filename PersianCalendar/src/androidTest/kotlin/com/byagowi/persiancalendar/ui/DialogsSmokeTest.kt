@@ -14,7 +14,6 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanGapDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
@@ -39,7 +38,6 @@ class DialogsSmokeTest {
             { showColorPickerDialog(it, true, "ABC") },
             { showColorPickerDialog(it, false, "ABC") },
             { showAthanGapDialog(it) },
-            { showAthanSelectDialog(it) {} },
             { showAthanVolumeDialog(it) },
             { showPrayerSelectDialog(it) },
             { showPrayerSelectPreviewDialog(it) },

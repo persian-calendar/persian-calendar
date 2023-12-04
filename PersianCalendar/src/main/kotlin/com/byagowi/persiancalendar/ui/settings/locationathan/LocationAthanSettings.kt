@@ -44,8 +44,8 @@ import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanGapDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
@@ -64,7 +64,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @Composable
-fun LocationAthanSettings(activity: ComponentActivity, pickRingtone: () -> Unit) {
+fun LocationAthanSettings(activity: ComponentActivity) {
     SettingsSection(stringResource(R.string.location))
     run {
         var showDialog by remember { mutableStateOf(false) }
@@ -189,9 +189,11 @@ fun LocationAthanSettings(activity: ComponentActivity, pickRingtone: () -> Unit)
         ) { showPrayerSelectDialog(activity) }
     }
     AnimatedVisibility(isLocationSet) {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(stringResource(R.string.custom_athan), athanSoundName) {
-            showAthanSelectDialog(activity, pickRingtone)
+            showDialog = true
         }
+        if (showDialog) AthanSelectDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(stringResource(R.string.preview)) { showPrayerSelectPreviewDialog(activity) }
