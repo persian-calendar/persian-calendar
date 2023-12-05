@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -51,6 +52,7 @@ const val MaterialIconDimension = 24f
  * let's build our own based on Material's
  */
 @Composable
+@Stable
 fun MaterialCornerExtraLargeTop(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(
         bottomStart = CornerSize(0),

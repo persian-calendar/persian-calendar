@@ -12,9 +12,6 @@ import java.util.GregorianCalendar
 import kotlin.math.roundToInt
 
 class AstronomyViewModel : ViewModel() {
-    private val _isTropical = MutableStateFlow(false)
-    val isTropical: StateFlow<Boolean> = _isTropical
-
     private val _mode = MutableStateFlow(AstronomyMode.entries[0])
     val mode: StateFlow<AstronomyMode> = _mode
 
@@ -32,11 +29,6 @@ class AstronomyViewModel : ViewModel() {
     // The separation has the benefit of not making reset button visible on initial animation
     // of the screen entrance and makes one day button to exactly jump 24h regardless of current
     // animation of the screen.
-
-    // Events
-    val resetButtonVisibilityEvent = minutesOffset
-        .map { it != 0 }
-        .distinctUntilChanged()
 
     // Commands
     private fun setAstronomyState(value: Int) {
@@ -82,14 +74,6 @@ class AstronomyViewModel : ViewModel() {
         _minutesOffset.value =
             ((time - System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS).toFloat().roundToInt()
         setAstronomyState(_minutesOffset.value)
-    }
-
-    fun changeTropicalStatus(value: Boolean) {
-        _isTropical.value = value
-    }
-
-    fun changeScreenMode(value: AstronomyMode) {
-        _mode.value = value
     }
 
     companion object {

@@ -57,9 +57,3 @@ fun HoroscopesDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
         },
     )
 }
-
-fun showHoroscopesDialog(activity: ComponentActivity, date: Date = Date()) {
-    showComposeDialog(activity) { onDismissRequest ->
-        HoroscopesDialog(date, onDismissRequest)
-    }
-}

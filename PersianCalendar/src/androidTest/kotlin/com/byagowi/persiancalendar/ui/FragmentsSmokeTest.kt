@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutFragment
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
@@ -44,7 +44,7 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<CompassScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LevelScreen>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<AstronomyScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<AstronomyFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<MapScreen>(themeResId = R.style.LightTheme)
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
             launchFragmentInContainer<SettingsFragment>(

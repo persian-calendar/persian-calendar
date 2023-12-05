@@ -141,7 +141,7 @@ fun SettingsScreen(
             }
         },
         actions = {
-            var showMenu by remember { mutableStateOf(false) }
+            var showMenu by rememberSaveable { mutableStateOf(false) }
             IconButton(onClick = { showMenu = !showMenu }) {
                 Icon(
                     imageVector = Icons.Default.MoreVert,
