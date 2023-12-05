@@ -73,6 +73,7 @@ fun DayPickerDialog(
             calendarType = it
         }
 
+        // Ugly code
         var previousCalendarType by remember { mutableStateOf(calendarType) }
         if (previousCalendarType != calendarType) ++changeToken
         previousCalendarType = calendarType

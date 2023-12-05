@@ -47,6 +47,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
             Mdc3Theme {
                 var current by remember { mutableStateOf(mainCalendar) }
                 val scope = rememberCoroutineScope()
+                // Ugly code
                 remember { scope.launch { valueFlow.collect { if (value != it) value = it } } }
                 onValueChangeListener(current)
                 valueFlow.value = current

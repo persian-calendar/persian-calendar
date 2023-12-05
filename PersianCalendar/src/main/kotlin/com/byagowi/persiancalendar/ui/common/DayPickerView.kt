@@ -78,6 +78,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 var jdn by remember { mutableStateOf(value) }
                 val scope = rememberCoroutineScope()
                 var changeToken by remember { mutableStateOf(0) }
+                // Ugly code
                 remember {
                     scope.launch {
                         calendarFlow.collect {

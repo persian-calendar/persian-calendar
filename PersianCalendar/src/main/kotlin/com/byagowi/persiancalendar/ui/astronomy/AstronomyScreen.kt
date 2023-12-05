@@ -47,6 +47,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,7 +95,6 @@ import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.coroutines.flow.collectLatest
 import java.util.Date
 import kotlin.math.abs
 
@@ -146,11 +146,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
 
     var isTropical by rememberSaveable { mutableStateOf(false) }
     var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
-    // Saved by view model, perhaps for now
-    var state by remember { mutableStateOf(viewModel.astronomyState.value) }
-    LaunchedEffect(null) {
-        viewModel.astronomyState.collectLatest { state = it }
-    }
+    val state by viewModel.astronomyState.collectAsState()
 
     TopAppBar(
         title = { Text(stringResource(R.string.astronomy)) },
