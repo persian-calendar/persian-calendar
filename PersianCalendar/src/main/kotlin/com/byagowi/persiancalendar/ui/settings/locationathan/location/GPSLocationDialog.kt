@@ -41,7 +41,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
-import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
@@ -111,7 +112,8 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     run {
         var showPhoneSettingsDialog by remember { mutableStateOf(false) }
         LaunchedEffect(null) {
-            delay(THIRTY_SECONDS_IN_MILLIS)
+            delay(TWO_SECONDS_IN_MILLIS)
+            if (isOneProviderEnabled) delay(TEN_SECONDS_IN_MILLIS)
             runCatching {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     showPhoneSettingsDialog = true
@@ -203,7 +205,8 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         val textModifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
-        val coord = coordinates ?: return@Dialog Text(message, textModifier)
+        val coord =
+            coordinates ?: return@Dialog Text(message, textModifier, textAlign = TextAlign.Center)
         val text = buildAnnotatedString {
             appendLine(formatCoordinate(context, coord, "\n"))
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
