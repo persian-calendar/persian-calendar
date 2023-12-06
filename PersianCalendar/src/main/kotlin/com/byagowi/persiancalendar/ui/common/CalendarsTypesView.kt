@@ -11,14 +11,12 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.CalendarType
@@ -29,7 +27,6 @@ import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
@@ -45,16 +42,9 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         val root = ComposeView(context)
         root.setContent {
             Mdc3Theme {
-                var current by remember { mutableStateOf(mainCalendar) }
-                val scope = rememberCoroutineScope()
-                // Ugly code
-                remember { scope.launch { valueFlow.collect { if (value != it) value = it } } }
+                val current by valueFlow.collectAsState()
                 onValueChangeListener(current)
-                valueFlow.value = current
-                CalendarsTypes(current) {
-                    performHapticFeedbackVirtualKey()
-                    current = it
-                }
+                CalendarsTypes(current) { valueFlow.value = it }
             }
         }
         addView(root)
@@ -82,11 +72,15 @@ fun CalendarsTypes(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
                 if (language.betterToUseShortCalendarName) calendarType.shortTitle
                 else calendarType.title
             )
+            val view = LocalView.current
             Tab(
                 text = { Text(title) },
                 selected = current == calendarType,
                 selectedContentColor = MaterialTheme.colorScheme.onSurface,
-                onClick = { setCurrent(calendarType) },
+                onClick = {
+                    setCurrent(calendarType)
+                    view.performHapticFeedbackVirtualKey()
+                },
             )
         }
     }
