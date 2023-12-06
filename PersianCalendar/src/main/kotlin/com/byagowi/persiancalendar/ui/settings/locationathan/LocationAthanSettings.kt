@@ -44,8 +44,8 @@ import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
@@ -173,11 +173,15 @@ fun LocationAthanSettings(activity: ComponentActivity) {
             stringResource(R.string.asr_hanafi_juristic)
         )
     }
-    AnimatedVisibility(isLocationSet) {
-        SettingsClickable(
-            stringResource(R.string.athan_gap),
-            stringResource(R.string.athan_gap_summary),
-        ) { showAthanGapDialog(activity) }
+    run {
+        var showDialog by remember { mutableStateOf(false) }
+        AnimatedVisibility(isLocationSet) {
+            SettingsClickable(
+                stringResource(R.string.athan_gap),
+                stringResource(R.string.athan_gap_summary),
+            ) { showDialog = true }
+        }
+        if (showDialog) AthanGapDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(

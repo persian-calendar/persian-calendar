@@ -303,25 +303,26 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
             onClick = { showDialog = true },
         )
         if (showDialog) {
-            var seconds by remember { mutableStateOf(5) }
+            var seconds by remember { mutableStateOf("5") }
             Dialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
-                TextButton(onClick = {
+                TextButton(onClick = onClick@{
                     closeMenu()
+                    val value = seconds.toIntOrNull() ?: return@onClick
                     val alarmWorker =
                         OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
-                            TimeUnit.SECONDS.toMillis(seconds.toLong()), TimeUnit.MILLISECONDS
+                            TimeUnit.SECONDS.toMillis(value.toLong()), TimeUnit.MILLISECONDS
                         ).build()
                     WorkManager.getInstance(activity).beginUniqueWork(
                         "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
                     ).enqueue()
-                    Toast.makeText(activity, "Alarm in ${seconds}s", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
                 }) { Text(stringResource(R.string.accept)) }
             }, onDismissRequest = { closeMenu() }) {
                 TextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = seconds.toString(),
+                    value = seconds,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    onValueChange = { seconds = it.toIntOrNull() ?: seconds },
+                    onValueChange = { seconds = it },
                 )
             }
         }
