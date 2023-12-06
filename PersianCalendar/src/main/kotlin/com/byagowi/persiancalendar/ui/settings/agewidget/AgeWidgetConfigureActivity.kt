@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -48,7 +49,6 @@ import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
@@ -59,11 +59,10 @@ import com.byagowi.persiancalendar.utils.update
 
 class AgeWidgetConfigureActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        Theme.apply(this)
         applyAppLanguage(this)
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-        transparentSystemBars()
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.

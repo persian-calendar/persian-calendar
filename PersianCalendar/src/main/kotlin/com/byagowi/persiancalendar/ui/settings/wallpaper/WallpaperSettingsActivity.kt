@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -22,12 +23,10 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 
 class WallpaperSettingsActivity : AppCompatActivity() {
@@ -37,11 +36,10 @@ class WallpaperSettingsActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Theme.apply(this)
         applyAppLanguage(this)
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-        transparentSystemBars()
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
@@ -52,7 +50,7 @@ class WallpaperSettingsActivity : AppCompatActivity() {
                         Modifier
                             .alpha(AppBlendAlpha)
                             .verticalScroll(rememberScrollState())
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                            .padding(all = 16.dp)
                             .background(
                                 MaterialTheme.colorScheme.surface,
                                 MaterialTheme.shapes.extraLarge
