@@ -33,6 +33,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Surface
@@ -275,19 +276,21 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
             menu.forEach { (icon, title, action) ->
                 NavigationRailItem(
                     modifier = Modifier.weight(1f),
-                    // We need more than Triple or defining a new class, oh well
-                    selected = when (title) {
-                        R.string.show_grid_label -> state.displayGrid
-                        R.string.show_location_label -> coord != null && state.displayLocation
-                        R.string.show_direct_path_label -> state.isDirectPathMode
-                        R.string.show_night_mask_label -> state.mapType != MapType.None
-                        else -> false
-                    },
                     onClick = action,
+                    selected = false,
                     icon = {
                         Icon(
                             ImageVector.vectorResource(icon),
                             contentDescription = stringResource(title),
+                            // We need more than Triple or defining a new class, oh well
+                            tint = if (when (title) {
+                                    R.string.show_grid_label -> state.displayGrid
+                                    R.string.show_location_label -> coord != null && state.displayLocation
+                                    R.string.show_direct_path_label -> state.isDirectPathMode
+                                    R.string.show_night_mask_label -> state.mapType != MapType.None
+                                    else -> false
+                                }
+                            ) MaterialTheme.colorScheme.inversePrimary else LocalContentColor.current
                         )
                     },
                 )
