@@ -1,221 +1,376 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.MapScreenBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
-import com.byagowi.persiancalendar.ui.common.ArrowView
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
-import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.isLandscape
-import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
-import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
-import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.abs
 
-class MapScreen : Fragment(R.layout.map_screen) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val binding = MapScreenBinding.bind(view)
-        binding.toolbar.inflateMenu(R.menu.map_menu)
-        val directPathButton = binding.toolbar.menu.findItem(R.id.menu_direct_path)
-        val gridButton = binding.toolbar.menu.findItem(R.id.menu_grid)
-        val myLocationButton = binding.toolbar.menu.findItem(R.id.menu_my_location)
-        val locationButton = binding.toolbar.menu.findItem(R.id.menu_location)
-        val mapTypeButton = binding.toolbar.menu.findItem(R.id.menu_map_type)
-        val globeViewButton = binding.toolbar.menu.findItem(R.id.menu_globe_view)
+class MapFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        val root = ComposeView(inflater.context)
 
         // Just that our UI tests don't have access to the nav controllers, let's don't access nav there
         val ifNavAvailable = runCatching { findNavController() }.getOrNull() != null
         val viewModel =
             if (ifNavAvailable) navGraphViewModels<MapViewModel>(R.id.map).value else MapViewModel()
-
-        // Don't set the title as we got lots of icons
-        // binding.toolbar.setTitle(R.string.map)
-        binding.toolbar.setupUpNavigation { findNavController().navigateUp() }
-
         // Set time from Astronomy screen state if we are brought from the screen to here directly
         if (ifNavAvailable && findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
             val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
             viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
             // Let's apply changes here to astronomy screen's view model also
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.state
-                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                    .collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
+                viewModel.state.flowWithLifecycle(
+                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
+                ).collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
             }
         }
 
-        val mapDraw = MapDraw(view.context)
+        root.setContent { Mdc3Theme { MapScreen(viewModel) { findNavController().navigateUp() } } }
+        return root
+    }
+}
 
-        binding.startArrow.rotateTo(ArrowView.Direction.START)
-        binding.startArrow.setOnClickListener {
-            binding.startArrow.performHapticFeedbackLongPress()
-            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
-            else viewModel.subtractOneHour()
-        }
-        binding.startArrow.setOnLongClickListener { viewModel.addDays(-10); true }
-        binding.endArrow.rotateTo(ArrowView.Direction.END)
-        binding.endArrow.setOnClickListener {
-            binding.endArrow.performHapticFeedbackLongPress()
-            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
-            else viewModel.addOneHour()
-        }
-        binding.endArrow.setOnLongClickListener { viewModel.addDays(10); true }
-        binding.timeBar.setupLayoutTransition()
-        binding.date.setOnClickListener {
-            val currentJdn =
-                Jdn(Date(viewModel.state.value.time).toGregorianCalendar().toCivilDate())
-            showDayPickerDialog(
-                activity ?: return@setOnClickListener, currentJdn, R.string.accept
-            ) { jdn -> viewModel.addDays(jdn - currentJdn) }
-        }
-        binding.date.setOnLongClickListener { viewModel.changeToTime(Date()); true }
+private const val menuHeight = 56
 
-        fun bringGps() = activity?.let { showGPSLocationDialog(it) }.let { }
-        directPathButton.onClick {
-            if (coordinates.value == null) bringGps() else viewModel.toggleDirectPathMode()
-        }
-        gridButton.onClick { viewModel.toggleDisplayGrid() }
-        myLocationButton.onClick { bringGps() }
-        locationButton.onClick {
-            if (coordinates.value == null) bringGps() else viewModel.toggleDisplayLocation()
-        }
-        mapTypeButton.onClick {
-            if (viewModel.state.value.mapType == MapType.None) {
-                val context = context ?: return@onClick
-                val options = MapType.entries
-                    .drop(1) // Hide "None" option
-                    // Hide moon visibilities for now unless is a development build
-                    .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
-                val titles = options.map { context.getString(it.title) }
-                androidx.appcompat.app.AlertDialog.Builder(context)
-                    .setItems(titles.toTypedArray()) { dialog, i ->
-                        viewModel.changeMapType(options[i])
-                        dialog.dismiss()
-                    }.show()
-            } else viewModel.changeMapType(MapType.None)
-        }
-        globeViewButton.onClick {
-            val textureSize = 2048
-            val bitmap = runCatching { createBitmap(textureSize, textureSize) }
-                .onFailure(logException).getOrNull() ?: return@onClick
-            val matrix = Matrix()
-            matrix.setScale(
-                textureSize.toFloat() / mapDraw.mapWidth, textureSize.toFloat() / mapDraw.mapHeight
-            )
-            binding.map.onDraw(Canvas(bitmap), matrix)
-            showGlobeDialog(activity ?: return@onClick, bitmap) // DO NOT use bitmap after this
-        }
+@Composable
+fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
+    val state by viewModel.state.collectAsState()
+    val coord by coordinates.collectAsState()
+    val context = LocalContext.current
+    val mapDraw = remember { MapDraw(context) }
 
-        binding.root.setupLayoutTransition()
-        view.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
-            if (key == PREF_LATITUDE) viewModel.turnOnDisplayLocation()
-        }
+    LaunchedEffect(null) { coordinates.collectLatest { viewModel.turnOnDisplayLocation() } }
 
-        binding.map.onClick = { x: Float, y: Float ->
-            val latitude = 90 - y / mapDraw.mapScaleFactor
-            val longitude = x / mapDraw.mapScaleFactor - 180
-            if (abs(latitude) < 90 && abs(longitude) < 180) {
-                // Easter egg like feature, bring sky renderer fragment
-                if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.value.displayGrid) {
-                    Toast.makeText(binding.root.context, "Null Island!", Toast.LENGTH_SHORT).show()
-                } else {
-                    val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                    if (viewModel.state.value.isDirectPathMode)
-                        viewModel.changeDirectPathDestination(coordinates)
-                    else activity?.let {
-                        showComposeDialog(it) { onDismissRequest ->
-                            CoordinatesDialog(
-                                inputCoordinates = coordinates,
-                                onDismissRequest = onDismissRequest,
+    var showGpsDialog by rememberSaveable { mutableStateOf(false) }
+    if (showGpsDialog) GPSLocationDialog { showGpsDialog = false }
+
+    var clickedCoordinates by remember { mutableStateOf<Coordinates?>(null) }
+    var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
+    if (showCoordinatesDialog) CoordinatesDialog(
+        inputCoordinates = clickedCoordinates,
+        onDismissRequest = { showCoordinatesDialog = false },
+    )
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val menu = remember {
+        listOf<Triple<@DrawableRes Int, @DrawableRes Int, () -> Unit>>(
+            Triple(R.drawable.ic_3d_rotation, R.string.show_globe_view_label) onClick@{
+                val textureSize = 2048
+                val bitmap =
+                    runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
+                        .getOrNull() ?: return@onClick
+                val matrix = Matrix()
+                matrix.setScale(
+                    textureSize.toFloat() / mapDraw.mapWidth,
+                    textureSize.toFloat() / mapDraw.mapHeight
+                )
+                mapDraw.draw(
+                    Canvas(bitmap),
+                    matrix,
+                    state.displayLocation,
+                    state.directPathDestination,
+                    state.displayGrid
+                )
+                showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
+                // DO NOT use bitmap after this
+            },
+            Triple(R.drawable.ic_distance_icon, R.string.show_direct_path_label) {
+                if (coordinates.value == null) showGpsDialog = true
+                else viewModel.toggleDirectPathMode()
+            },
+            Triple(R.drawable.ic_grid_3x3, R.string.show_grid_label) {
+                viewModel.toggleDisplayGrid()
+            },
+            Triple(R.drawable.ic_my_location, R.string.show_my_location_label) {
+                viewModel.toggleDirectPathMode()
+            },
+            Triple(R.drawable.ic_location_on, R.string.show_location_label) {
+                if (coordinates.value == null) showGpsDialog = true
+                else viewModel.toggleDisplayLocation()
+            },
+            Triple(R.drawable.ic_nightlight, R.string.show_night_mask_label) onClick@{
+                if (viewModel.state.value.mapType == MapType.None) {
+                    val options = MapType.entries.drop(1) // Hide "None" option
+                        // Hide moon visibilities for now unless is a development build
+                        .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
+                    val titles = options.map { context.getString(it.title) }
+                    androidx.appcompat.app.AlertDialog.Builder(context)
+                        .setItems(titles.toTypedArray()) { dialog, i ->
+                            viewModel.changeMapType(options[i])
+                            dialog.dismiss()
+                        }.show()
+                } else viewModel.changeMapType(MapType.None)
+            },
+        )
+    }
+    val showKaaba = remember { context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true) }
+    var formattedTime by remember { mutableStateOf("") }
+    Box {
+        // Best effort solution for landscape view till figuring out something better
+        if (LocalConfiguration.current.orientation != Configuration.ORIENTATION_LANDSCAPE) {
+            Column {
+                Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+                Spacer(Modifier.height((16 + menuHeight + 16).dp))
+                Surface(Modifier.fillMaxSize(), shape = MaterialCornerExtraLargeTop()) {}
+            }
+        }
+        AndroidView(
+            modifier = Modifier.fillMaxSize(),
+            factory = {
+                val root = ZoomableView(it)
+                root.contentWidth = mapDraw.mapWidth.toFloat()
+                root.contentHeight = mapDraw.mapHeight.toFloat()
+                root.maxScale = 512f
+                root.contentDescription = it.getString(R.string.map)
+                root.onClick = { x: Float, y: Float ->
+                    val latitude = 90 - y / mapDraw.mapScaleFactor
+                    val longitude = x / mapDraw.mapScaleFactor - 180
+                    if (abs(latitude) < 90 && abs(longitude) < 180) {
+                        // Easter egg like feature, bring sky renderer fragment
+                        if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.value.displayGrid) {
+                            Toast.makeText(context, "Null Island!", Toast.LENGTH_SHORT).show()
+                        } else {
+                            val coordinates =
+                                Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                            if (viewModel.state.value.isDirectPathMode) viewModel.changeDirectPathDestination(
+                                coordinates
                             )
+                            else {
+                                clickedCoordinates = coordinates
+                                showCoordinatesDialog = true
+                            }
                         }
                     }
                 }
-            }
-        }
+                root
+            },
+            update = {
+                it.onDraw = { canvas, matrix ->
+                    mapDraw.draw(
+                        canvas,
+                        matrix,
+                        state.displayLocation,
+                        state.directPathDestination,
+                        state.displayGrid
+                    )
+                }
+                mapDraw.drawKaaba = coord != null && state.displayLocation && showKaaba
+                mapDraw.updateMap(state.time, state.mapType)
+                formattedTime = mapDraw.maskFormattedTime
+                it.invalidate()
+            },
+        )
+    }
 
-        binding.map.onDraw = { canvas, matrix ->
-            val state = viewModel.state.value
-            mapDraw.draw(
-                canvas, matrix, state.displayLocation, state.directPathDestination,
-                state.displayGrid
+    Column {
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+        Row(
+            Modifier
+                .alpha(.85f)
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+                .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge)
+                .height(menuHeight.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            NavigationRailItem(
+                modifier = Modifier.weight(1f),
+                selected = false,
+                onClick = popNavigation,
+                icon = {
+                    Icon(
+                        Icons.AutoMirrored.Default.ArrowBack,
+                        contentDescription = stringResource(R.string.navigate_up),
+                    )
+                },
             )
-        }
-        binding.map.contentWidth = mapDraw.mapWidth.toFloat()
-        binding.map.contentHeight = mapDraw.mapHeight.toFloat()
-        binding.map.maxScale = 512f
-
-        // Best effort solution for landscape view till figuring out something better
-        if (resources.isLandscape)
-            binding.map.setBackgroundColor(view.context.resolveColor(R.attr.screenBackgroundColor))
-
-        val showKaaba = view.context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
-
-        fun onStateUpdate(state: MapState) {
-            mapDraw.drawKaaba = coordinates.value != null && state.displayLocation && showKaaba
-            mapDraw.updateMap(state.time, state.mapType)
-            binding.map.invalidate()
-            binding.date.text = mapDraw.maskFormattedTime
-            binding.timeBar.isVisible = mapDraw.maskFormattedTime.isNotEmpty()
-            directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
-        }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.appBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top
+            menu.forEach { (icon, title, action) ->
+                NavigationRailItem(
+                    modifier = Modifier.weight(1f),
+                    // We need more than Triple or defining a new class, oh well
+                    selected = when (title) {
+                        R.string.show_grid_label -> state.displayGrid
+                        R.string.show_location_label -> coord != null && state.displayLocation
+                        R.string.show_direct_path_label -> state.isDirectPathMode
+                        R.string.show_night_mask_label -> state.mapType != MapType.None
+                        else -> false
+                    },
+                    onClick = action,
+                    icon = {
+                        Icon(
+                            ImageVector.vectorResource(icon),
+                            contentDescription = stringResource(title),
+                        )
+                    },
+                )
             }
-            binding.timeBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom + (16 * resources.dp).toInt()
-            }
-            WindowInsetsCompat.CONSUMED
         }
+    }
 
-        // Setup view model change listener
-        // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { viewModel.state.collectLatest(::onStateUpdate) }
-                launch { coordinates.collectLatest { onStateUpdate(viewModel.state.value) } }
+    var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDayPickerDialog) {
+        val currentJdn = Jdn(
+            Date(viewModel.state.value.time).toGregorianCalendar().toCivilDate()
+        )
+        DayPickerDialog(currentJdn, R.string.accept, { jdn ->
+            viewModel.addDays(jdn - currentJdn)
+        }) { showDayPickerDialog = false }
+    }
+
+    AnimatedVisibility(visible = formattedTime.isNotEmpty()) {
+        Box {
+            @OptIn(ExperimentalFoundationApi::class) Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .safeDrawingPadding()
+                    .height(46.dp)
+                    .padding(bottom = 16.dp)
+                    .fillMaxWidth(),
+            ) {
+                val view = LocalView.current
+                Spacer(modifier = Modifier.width(16.dp))
+                Icon(
+                    Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                    contentDescription = null,
+                    Modifier.combinedClickable(
+                        onClick = {
+                            view.performHapticFeedbackLongPress()
+                            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
+                            else viewModel.subtractOneHour()
+                        },
+                        onClickLabel = stringResource(
+                            R.string.previous_x, stringResource(R.string.day)
+                        ),
+                        onLongClick = { viewModel.addDays(-10) },
+                    ),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                AnimatedContent(
+                    modifier = Modifier.weight(1f, fill = false),
+                    targetState = formattedTime,
+                    label = "time"
+                ) { state ->
+                    Text(
+                        state,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
+                                onClick = { showDayPickerDialog = true },
+                                onClickLabel = stringResource(R.string.goto_date),
+                                onLongClick = { viewModel.changeToTime(Date()) },
+                                onLongClickLabel = stringResource(R.string.today),
+                            )
+                    )
+                }
+                Icon(
+                    Icons.AutoMirrored.Default.KeyboardArrowRight,
+                    contentDescription = null,
+                    Modifier.combinedClickable(
+                        onClick = {
+                            view.performHapticFeedbackLongPress()
+                            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
+                            else viewModel.addOneHour()
+                        },
+                        onClickLabel = stringResource(
+                            R.string.next_x, stringResource(R.string.day)
+                        ),
+                        onLongClick = { viewModel.addDays(10) },
+                    ),
+                    tint = MaterialTheme.colorScheme.primary,
+                )
+                Spacer(modifier = Modifier.width(16.dp))
             }
+            Spacer(Modifier.height(8.dp))
         }
     }
 }

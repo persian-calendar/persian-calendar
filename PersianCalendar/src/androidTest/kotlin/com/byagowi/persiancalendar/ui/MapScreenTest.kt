@@ -13,6 +13,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
+import com.byagowi.persiancalendar.ui.map.MapScreen
+import com.byagowi.persiancalendar.ui.map.MapViewModel
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
@@ -20,7 +22,7 @@ import com.byagowi.persiancalendar.ui.settings.WIDGET_NOTIFICATION_TAB
 import org.junit.Rule
 import org.junit.Test
 
-class AstronomyScreenTest {
+class MapScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -34,26 +36,16 @@ class AstronomyScreenTest {
     }
 
     @Test
-    fun basicSmokeTest() {
-        var astronomyString = ""
+    fun aboutScreenNavigateToMap() {
+        var navigateUpIsCalled = false
+        var navigateUpString = ""
         composeTestRule.setContentWithTheme {
-            astronomyString = stringResource(R.string.astronomy)
-            AstronomyScreen(AstronomyViewModel()) {}
+            navigateUpString = stringResource(R.string.navigate_up)
+            MapScreen(MapViewModel()) { navigateUpIsCalled = true }
         }
-        composeTestRule.onNodeWithContentDescription(astronomyString)
-    }
-
-    @Test
-    fun astronomyScreenNavigateToMap() {
-        var navigateToMapIsCalled = false
-        var mapString = ""
-        composeTestRule.setContentWithTheme {
-            mapString = stringResource(R.string.map)
-            AstronomyScreen(AstronomyViewModel()) { navigateToMapIsCalled = true }
-        }
-        composeTestRule.onNodeWithContentDescription(mapString)
+        composeTestRule.onNodeWithContentDescription(navigateUpString)
             .assertHasClickAction()
             .performClick()
-        assert(navigateToMapIsCalled)
+        assert(navigateUpIsCalled)
     }
 }

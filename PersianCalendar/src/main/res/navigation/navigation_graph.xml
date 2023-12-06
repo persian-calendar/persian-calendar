@@ -136,7 +136,7 @@
 
     <fragment
         android:id="@+id/map"
-        android:name="com.byagowi.persiancalendar.ui.map.MapScreen"
+        android:name="com.byagowi.persiancalendar.ui.map.MapFragment"
         android:label="@string/map" />
 
 </navigation>

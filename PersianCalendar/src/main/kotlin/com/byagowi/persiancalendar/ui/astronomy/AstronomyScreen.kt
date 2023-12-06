@@ -63,6 +63,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
@@ -86,6 +87,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -343,17 +345,23 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                         .fillMaxWidth()
                         .combinedClickable(
                             onClick = { showDayPickerDialog = true },
+                            onClickLabel = stringResource(R.string.goto_date),
                             onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
+                            onLongClickLabel = stringResource(R.string.today),
                         )
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    val view = LocalView.current
                     Spacer(modifier = Modifier.width(16.dp))
                     Icon(
                         Icons.AutoMirrored.Default.KeyboardArrowLeft,
                         contentDescription = null,
                         Modifier.combinedClickable(
-                            onClick = { buttonScrollSlider(-1) },
+                            onClick = {
+                                view.performHapticFeedbackLongPress()
+                                buttonScrollSlider(-1)
+                            },
                             onClickLabel = stringResource(
                                 R.string.previous_x, stringResource(R.string.day)
                             ),
@@ -361,7 +369,8 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                             onLongClickLabel = stringResource(
                                 R.string.previous_x, stringResource(R.string.year)
                             ),
-                        )
+                        ),
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                     AndroidView(
@@ -394,7 +403,10 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                         Icons.AutoMirrored.Default.KeyboardArrowRight,
                         contentDescription = null,
                         Modifier.combinedClickable(
-                            onClick = { buttonScrollSlider(+1) },
+                            onClick = {
+                                view.performHapticFeedbackLongPress()
+                                buttonScrollSlider(+1)
+                            },
                             onClickLabel = stringResource(
                                 R.string.next_x, stringResource(R.string.day)
                             ),
@@ -402,7 +414,8 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                             onLongClickLabel = stringResource(
                                 R.string.next_x, stringResource(R.string.year)
                             ),
-                        )
+                        ),
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                 }

@@ -118,7 +118,7 @@ fun DeviceInformationScreen(popNavigation: () -> Unit) {
                 IconButton(onClick = popNavigation) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.open_drawer)
+                        contentDescription = stringResource(R.string.navigate_up)
                     )
                 }
             },

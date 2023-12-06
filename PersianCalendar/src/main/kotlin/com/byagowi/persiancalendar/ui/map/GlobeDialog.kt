@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
@@ -9,14 +10,15 @@ import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import kotlin.math.PI
 
-fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
-    val frame = FrameLayout(activity)
+fun showGlobeDialog(context: Context, image: Bitmap, lifecycle: Lifecycle) {
+    val frame = FrameLayout(context)
     frame.post {
-        val glView = GLSurfaceView(activity)
+        val glView = GLSurfaceView(context)
         glView.setOnClickListener { glView.requestRender() }
         glView.setEGLContextClientVersion(2)
         val renderer = GLRenderer(onSurfaceCreated = { it.loadTexture(image) })
@@ -24,7 +26,7 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         renderer.fragmentShader = globeFragmentShader
         frame.addView(glView)
-        frame.addView(object : BaseSlider(activity) {
+        frame.addView(object : BaseSlider(context) {
             init {
                 val startTime = System.nanoTime()
                 enableVerticalSlider = true
@@ -64,13 +66,13 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         })
     }
 
-    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
+    val dialog = android.app.AlertDialog.Builder(context)
         .setView(frame)
         .setOnCancelListener { image.recycle() }
         .show()
 
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
-    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+    lifecycle.addObserver(LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
     })
 }

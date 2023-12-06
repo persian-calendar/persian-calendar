@@ -12,7 +12,6 @@ import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,7 +39,6 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.Dialog
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -84,9 +82,6 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
     )
 }
 
-fun showGPSLocationDialog(activity: ComponentActivity) =
-    showComposeDialog(activity) { GPSLocationDialog(it) }
-
 @Composable
 fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
@@ -97,8 +92,8 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
             context, Manifest.permission.ACCESS_COARSE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED
     ) {
-        isGranted ?: return AskForLocationPermissionDialog { isGranted = it }
-        return onDismissRequest()
+        return if (isGranted == null) AskForLocationPermissionDialog { isGranted = it }
+        else onDismissRequest()
     }
 
     var message by remember { mutableStateOf(context.getString(R.string.pleasewaitgps)) }

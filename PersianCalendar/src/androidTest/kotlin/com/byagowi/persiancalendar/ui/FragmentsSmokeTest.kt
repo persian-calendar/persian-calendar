@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.level.LevelScreen
-import com.byagowi.persiancalendar.ui.map.MapScreen
+import com.byagowi.persiancalendar.ui.map.MapFragment
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsFragment
@@ -45,7 +45,7 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LevelScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AstronomyFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<MapScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme)
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
             launchFragmentInContainer<SettingsFragment>(
                 themeResId = R.style.LightTheme,

@@ -1,69 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <View xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" /><!--<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent" /><!--<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:importantForAccessibility="no"
+    android:orientation="horizontal">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
-
-    <LinearLayout
+    <com.byagowi.persiancalendar.ui.common.ZoomableView
+        android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:importantForAccessibility="no"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:contentDescription="@string/empty" />
 
-        <com.byagowi.persiancalendar.ui.common.ZoomableView
-            android:id="@+id/image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/empty" />
+</LinearLayout>
 
-    </LinearLayout>
+<LinearLayout
+    android:id="@+id/parameters"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:layout_margin="16dp"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    tools:ignore="HardcodedText">
+
+    <Spinner
+        android:id="@+id/tone_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
-        android:id="@+id/parameters"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_margin="16dp"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        tools:ignore="HardcodedText">
+        android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/tone_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <LinearLayout
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="Zoom" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Zoom" />
-
-            <EditText
-                android:id="@+id/zoom"
-                android:autofillHints="@string/empty"
-                android:hint="@string/empty"
-                android:labelFor="@string/empty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:inputType="number|numberDecimal|numberSigned"
-                android:text="1" />
-
-        </LinearLayout>
+        <EditText
+            android:id="@+id/zoom"
+            android:autofillHints="@string/empty"
+            android:hint="@string/empty"
+            android:labelFor="@string/empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number|numberDecimal|numberSigned"
+            android:text="1" />
 
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+</LinearLayout>-->
