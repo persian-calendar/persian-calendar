@@ -11,10 +11,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -22,12 +18,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -43,6 +41,8 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -59,6 +59,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -70,7 +71,6 @@ import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -79,15 +79,14 @@ import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
 import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
+import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -297,49 +296,59 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
             activity.finish()
         },
     )
-    DropdownMenuItem(
-        text = { Text("Schedule an alarm") },
-        onClick = {
-            val numericBinding = NumericBinding.inflate(activity.layoutInflater)
-            numericBinding.edit.setText("5")
-            androidx.appcompat.app.AlertDialog.Builder(activity)
-                .setTitle("Enter seconds to schedule alarm").setView(numericBinding.root)
-                .setPositiveButton(R.string.accept) { _, _ ->
-                    val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
+    run {
+        var showDialog by remember { mutableStateOf(false) }
+        DropdownMenuItem(
+            text = { Text("Schedule an alarm") },
+            onClick = { showDialog = true },
+        )
+        if (showDialog) {
+            var seconds by remember { mutableStateOf(5) }
+            Dialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
+                TextButton(onClick = {
+                    closeMenu()
                     val alarmWorker =
                         OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
-                            TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
+                            TimeUnit.SECONDS.toMillis(seconds.toLong()), TimeUnit.MILLISECONDS
                         ).build()
                     WorkManager.getInstance(activity).beginUniqueWork(
                         "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
                     ).enqueue()
                     Toast.makeText(activity, "Alarm in ${seconds}s", Toast.LENGTH_SHORT).show()
-                }.show()
-        },
-    )
-    fun viewCommandResult(command: String) {
-        val dialogBuilder = androidx.appcompat.app.AlertDialog.Builder(activity)
-        val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
-        val button = ImageButton(activity).also { button ->
-            button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
-            button.setOnClickListener {
-                activity.shareTextFile(result, "log.txt", "text/plain")
+                }) { Text(stringResource(R.string.accept)) }
+            }, onDismissRequest = { closeMenu() }) {
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = seconds.toString(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = { seconds = it.toIntOrNull() ?: seconds },
+                )
             }
         }
-        dialogBuilder.setCustomTitle(LinearLayout(activity).also {
-            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-            it.addView(button)
-        })
-        dialogBuilder.setView(ScrollView(activity).also { scrollView ->
-            scrollView.addView(TextView(activity).also {
-                it.text = result
-                it.textDirection = View.TEXT_DIRECTION_LTR
-            })
-            // Scroll to bottom, https://stackoverflow.com/a/3080483
-            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-        })
-        dialogBuilder.show()
     }
+//    fun viewCommandResult(command: String) {
+//        val dialogBuilder = AlertDialog.Builder(activity)
+//        val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
+//        val button = ImageButton(activity).also { button ->
+//            button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
+//            button.setOnClickListener {
+//                activity.shareTextFile(result, "log.txt", "text/plain")
+//            }
+//        }
+//        dialogBuilder.setCustomTitle(LinearLayout(activity).also {
+//            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+//            it.addView(button)
+//        })
+//        dialogBuilder.setView(ScrollView(activity).also { scrollView ->
+//            scrollView.addView(TextView(activity).also {
+//                it.text = result
+//                it.textDirection = View.TEXT_DIRECTION_LTR
+//            })
+//            // Scroll to bottom, https://stackoverflow.com/a/3080483
+//            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+//        })
+//        dialogBuilder.show()
+//    }
 //    toolbar.menu.addSubMenu("Log Viewer").also {
 //        it.add("Filtered").onClick {
 //            viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
