@@ -168,7 +168,7 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
                 viewModel.toggleDisplayGrid()
             },
             Triple(R.drawable.ic_my_location, R.string.show_my_location_label) {
-                viewModel.toggleDirectPathMode()
+                showGpsDialog = true
             },
             Triple(R.drawable.ic_location_on, R.string.show_location_label) {
                 if (coordinates.value == null) showGpsDialog = true
