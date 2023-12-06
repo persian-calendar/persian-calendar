@@ -29,12 +29,9 @@ class AstronomyScreenTest {
 
     @Test
     fun basicSmokeTest() {
-        var astronomyString = ""
         composeTestRule.setContentWithTheme {
-            astronomyString = stringResource(R.string.astronomy)
             AstronomyScreen(AstronomyViewModel()) {}
         }
-        composeTestRule.onNodeWithContentDescription(astronomyString)
     }
 
     @Test

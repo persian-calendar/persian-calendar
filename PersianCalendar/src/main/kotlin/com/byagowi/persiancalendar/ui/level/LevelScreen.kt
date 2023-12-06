@@ -112,18 +112,25 @@ fun LevelScreen(
     val isFullscreen by derivedStateOf { fullscreenToken != null }
     val context = LocalContext.current
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    // Rotation lock, https://stackoverflow.com/a/75984863
-    lifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+    LocalLifecycleOwner.current.lifecycle.addObserver(LifecycleEventObserver { _, event ->
         if (event != Lifecycle.Event.ON_PAUSE && event != Lifecycle.Event.ON_RESUME) return@LifecycleEventObserver
-        val destination = if (event == Lifecycle.Event.ON_PAUSE) null
-        else @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
+
+        // Rotation lock, https://stackoverflow.com/a/75984863
+        val destination = if (event == Lifecycle.Event.ON_PAUSE) null else {
+            @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
+        }
         activity.requestedOrientation = when (destination) {
             Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
             Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
             Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        }
+
+        if (event == Lifecycle.Event.ON_PAUSE) {
+            if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
+        } else {
+            if (orientationProvider?.isListening == false && !isStopped) orientationProvider?.startListening()
         }
     })
 
@@ -222,9 +229,7 @@ fun LevelScreen(
                                 IconButton(onClick = navigateToCompass) {
                                     Icon(
                                         ImageVector.vectorResource(R.drawable.ic_compass_menu),
-                                        contentDescription = stringResource(
-                                            if (isStopped) R.string.resume else R.string.stop
-                                        )
+                                        contentDescription = stringResource(R.string.compass)
                                     )
                                 }
                             }

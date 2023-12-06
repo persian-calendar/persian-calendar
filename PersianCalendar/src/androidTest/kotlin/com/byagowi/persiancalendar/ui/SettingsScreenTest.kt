@@ -30,12 +30,9 @@ class SettingsScreenTest {
 
     @Test
     fun basicSmokeTest() {
-        var settingsString = ""
         composeTestRule.setContentWithTheme {
-            settingsString = stringResource(R.string.device_information)
             SettingsScreen(LocalContext.current as ComponentActivity, 0, "")
         }
-        composeTestRule.onNodeWithContentDescription(settingsString)
     }
 
     @Test
