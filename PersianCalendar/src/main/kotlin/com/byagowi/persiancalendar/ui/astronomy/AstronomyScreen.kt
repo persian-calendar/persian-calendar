@@ -219,7 +219,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
     val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
     else Zodiac.fromIau(state.moon.lon)
 
-    val jdn = derivedStateOf { Jdn(state.date.toCivilDate()) }
+    val jdn by derivedStateOf { Jdn(state.date.toCivilDate()) }
 
     val headerCache = remember {
         lruCache(1024, create = { jdn: Jdn ->
@@ -247,12 +247,12 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                 Column(Modifier.padding(horizontal = 24.dp)) {
                     SelectionContainer {
                         Text(
-                            headerCache[jdn.value],
+                            headerCache[jdn],
                             style = MaterialTheme.typography.bodyMedium,
                             maxLines = 3
                         )
                     }
-                    Seasons(jdn.value)
+                    Seasons(jdn)
                     AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
                         Row(Modifier.padding(top = 8.dp)) {
                             Box(Modifier.weight(1f)) {

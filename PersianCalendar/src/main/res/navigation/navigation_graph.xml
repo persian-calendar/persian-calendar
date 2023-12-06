@@ -80,7 +80,7 @@
 
     <fragment
         android:id="@+id/level"
-        android:name="com.byagowi.persiancalendar.ui.level.LevelScreen"
+        android:name="com.byagowi.persiancalendar.ui.level.LevelFragment"
         android:label="@string/level">
         <action
             android:id="@+id/action_level_to_compass"

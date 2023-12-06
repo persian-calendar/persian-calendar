@@ -25,6 +25,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.view.Surface
+import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.utils.logException
@@ -33,7 +34,7 @@ import kotlin.math.asin
 import kotlin.math.hypot
 import kotlin.math.min
 
-class OrientationProvider(activity: FragmentActivity, private val view: LevelView) :
+class OrientationProvider(activity: ComponentActivity, private val view: LevelView) :
     SensorEventListener {
 
     /**

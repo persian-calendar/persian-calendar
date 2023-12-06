@@ -18,7 +18,7 @@ class AthanActivityContentTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun aboutScreenNavigateToDeviceInformation() {
+    fun clickToExit() {
         var athanName = ""
         var isClicked = false
         composeTestRule.setContent {

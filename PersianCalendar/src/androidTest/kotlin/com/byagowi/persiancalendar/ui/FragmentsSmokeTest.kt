@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
-import com.byagowi.persiancalendar.ui.level.LevelScreen
+import com.byagowi.persiancalendar.ui.level.LevelFragment
 import com.byagowi.persiancalendar.ui.map.MapFragment
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
@@ -23,7 +23,6 @@ import org.junit.runner.RunWith
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class FragmentsSmokeTest {
-
     @Test
     fun themesSmokeTest() {
         listOf(
@@ -43,7 +42,7 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<AboutFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<CompassScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<LevelScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<LevelFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AstronomyFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme)
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {

@@ -28,7 +28,7 @@ class MapScreenTest {
     }
 
     @Test
-    fun aboutScreenNavigateToMap() {
+    fun mapScreenNavigateUp() {
         var navigateUpIsCalled = false
         var navigateUpString = ""
         composeTestRule.setContentWithTheme {
