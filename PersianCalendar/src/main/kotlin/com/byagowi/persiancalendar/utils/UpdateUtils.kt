@@ -8,12 +8,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
@@ -33,7 +34,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withClip
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
@@ -95,9 +95,6 @@ import com.byagowi.persiancalendar.ui.utils.isPortrait
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.variants.debugLog
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
-import com.google.android.material.shape.ShapeAppearancePathProvider
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
@@ -280,17 +277,19 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
 
 private fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
     val roundPath = Path()
-    val appearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
     val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
-    ShapeAppearancePathProvider().calculatePath(appearanceModel, 1f, rect, roundPath)
+    roundPath.addRoundRect(rect, roundSize, roundSize, Path.Direction.CW)
     return roundPath
 }
 
-private fun createRoundDrawable(@ColorInt color: Int, roundSize: Float): Drawable {
-    val shapeDrawable = MaterialShapeDrawable()
-    shapeDrawable.fillColor = ColorStateList.valueOf(color)
-    shapeDrawable.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
-    return shapeDrawable
+private fun createRoundedBitmap(
+    width: Int, height: Int, @ColorInt color: Int, roundSize: Float
+): Bitmap {
+    val bitmap = createBitmap(width, height)
+    val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+    val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = color }
+    Canvas(bitmap).drawRoundRect(rect, roundSize, roundSize, paint)
+    return bitmap
 }
 
 private fun getWidgetBackgroundColor(
@@ -859,7 +858,7 @@ private fun RemoteViews.setRoundBackground(
         prefersWidgetsDynamicColors -> setImageViewResource(viewId, R.drawable.widget_background)
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
         else -> {
-            val roundBackground = createRoundDrawable(color, roundPixelSize).toBitmap(width, height)
+            val roundBackground = createRoundedBitmap(width, height, color, roundPixelSize)
             setImageViewBitmap(viewId, roundBackground)
         }
     }
