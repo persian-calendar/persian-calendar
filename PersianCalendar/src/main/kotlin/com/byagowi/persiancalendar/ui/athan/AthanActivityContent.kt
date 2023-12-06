@@ -60,7 +60,7 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
             .clickable { onClick() }
             .fillMaxSize()
             .onSizeChanged {
-                val rect = android.graphics.Rect(0, 0, it.height, it.width)
+                val rect = android.graphics.Rect(0, 0, it.width, it.height)
                 patternDrawable.onBoundsChange(rect)
             },
     ) {
