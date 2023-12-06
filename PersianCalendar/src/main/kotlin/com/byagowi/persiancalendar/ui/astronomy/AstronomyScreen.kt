@@ -45,7 +45,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -66,6 +65,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -313,13 +314,18 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                             it.mode = mode
                         },
                     )
+                    val map = stringResource(R.string.map)
                     NavigationRailItem(
                         modifier = Modifier
                             .size(56.dp, 56.dp)
                             .align(Alignment.CenterEnd),
-                        selected = false, onClick = navigateToMap,
+                        selected = false,
+                        onClick = navigateToMap,
                         icon = {
-                            Text(if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺")
+                            Text(
+                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
+                                modifier = Modifier.semantics { this.contentDescription = map }
+                            )
                         },
                     )
                 }
