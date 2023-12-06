@@ -114,8 +114,7 @@
     <fragment
         android:id="@+id/about"
         android:name="com.byagowi.persiancalendar.ui.about.AboutFragment"
-        android:label="@string/about"
-        tools:layout="@layout/about_screen" />
+        android:label="@string/about" />
 
     <fragment
         android:id="@+id/astronomy"

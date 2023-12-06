@@ -112,8 +112,6 @@ android {
         //   Actually could be useful as makes use of java.time.Duration possible instead
         //   java.util.concurrent.TimeUnit but needs multidex as it says:
         //     In order to use core library desugaring, please enable multidex.
-        //   And multidex doesn't play that well for older Android versions so let's
-        //   skip it.
     }
 
     kotlinOptions {
