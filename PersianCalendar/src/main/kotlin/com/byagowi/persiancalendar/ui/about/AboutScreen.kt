@@ -99,6 +99,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -106,8 +107,6 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
-
 
 class AboutFragment : Fragment() {
     override fun onCreateView(
@@ -115,7 +114,7 @@ class AboutFragment : Fragment() {
     ): View {
         val root = ComposeView(inflater.context)
         root.setContent {
-            Mdc3Theme {
+            AppTheme {
                 val navController = rememberNavController()
                 val aboutRoute = "about"
                 val licensesRoute = "licenses"

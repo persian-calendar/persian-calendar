@@ -17,8 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.minusAssign
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 fun showComposeDialog(
     activity: ComponentActivity,
@@ -28,7 +28,7 @@ fun showComposeDialog(
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
             var showDialog by remember { mutableStateOf(true) }
-            if (showDialog) Mdc3Theme {
+            if (showDialog) AppTheme {
                 Box(
                     modifier = Modifier
                         .fillMaxSize()

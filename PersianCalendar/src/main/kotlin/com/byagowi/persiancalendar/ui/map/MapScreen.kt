@@ -77,13 +77,13 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -112,7 +112,7 @@ class MapFragment : Fragment() {
             }
         }
 
-        root.setContent { Mdc3Theme { MapScreen(viewModel) { findNavController().navigateUp() } } }
+        root.setContent { AppTheme { MapScreen(viewModel) { findNavController().navigateUp() } } }
         return root
     }
 }

@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -90,7 +91,6 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -102,7 +102,7 @@ class SettingsFragment : Fragment() {
         val activity = activity ?: return root
         val args by navArgs<SettingsFragmentArgs>()
         root.setContent {
-            Mdc3Theme { SettingsScreen(activity, args.tab, args.preferenceKey) }
+            AppTheme { SettingsScreen(activity, args.tab, args.preferenceKey) }
         }
         return root
     }

@@ -30,6 +30,7 @@ import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -38,7 +39,6 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.update
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class WidgetConfigurationActivity : AppCompatActivity() {
     private fun finishAndSuccess() {
@@ -66,7 +66,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
-        setContent { Mdc3Theme { WidgetConfigurationContent(this, ::finishAndSuccess) } }
+        setContent { SystemTheme { WidgetConfigurationContent(this, ::finishAndSuccess) } }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

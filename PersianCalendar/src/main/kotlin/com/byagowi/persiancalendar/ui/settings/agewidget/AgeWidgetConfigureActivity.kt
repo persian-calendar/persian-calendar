@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
+import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
@@ -55,7 +56,6 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class AgeWidgetConfigureActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +92,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             appPrefs.edit { putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today()) }
 
         setContent {
-            Mdc3Theme { AgeWidgetConfigureContent(this, appWidgetId, appPrefs, ::confirm) }
+            SystemTheme { AgeWidgetConfigureContent(this, appWidgetId, appPrefs, ::confirm) }
         }
     }
 

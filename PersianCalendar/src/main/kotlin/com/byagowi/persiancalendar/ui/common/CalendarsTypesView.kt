@@ -23,9 +23,9 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
@@ -41,7 +41,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     init {
         val root = ComposeView(context)
         root.setContent {
-            Mdc3Theme {
+            AppTheme {
                 val current by valueFlow.collectAsState()
                 onValueChangeListener(current)
                 CalendarsTypes(current) { valueFlow.value = it }

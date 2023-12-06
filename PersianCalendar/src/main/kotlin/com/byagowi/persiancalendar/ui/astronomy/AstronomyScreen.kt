@@ -84,6 +84,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -94,7 +95,6 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -115,7 +115,7 @@ class AstronomyFragment : Fragment() {
 
         val root = ComposeView(inflater.context)
         root.setContent {
-            Mdc3Theme {
+            AppTheme {
                 AstronomyScreen(viewModel) {
                     // Pass time also
                     findNavController().navigateSafe(

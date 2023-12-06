@@ -24,11 +24,11 @@ import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 class WallpaperSettingsActivity : AppCompatActivity() {
 
@@ -46,7 +46,7 @@ class WallpaperSettingsActivity : AppCompatActivity() {
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
         setContent {
-            Mdc3Theme {
+            SystemTheme {
                 Column(modifier = Modifier.safeDrawingPadding()) {
                     Column(
                         Modifier

@@ -46,10 +46,10 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -73,7 +73,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     init {
         val root = ComposeView(context)
         root.setContent {
-            Mdc3Theme {
+            AppTheme {
                 var calendar by remember { mutableStateOf(calendarType) }
                 var jdn by remember { mutableStateOf(value) }
                 val scope = rememberCoroutineScope()

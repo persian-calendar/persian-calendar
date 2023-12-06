@@ -13,12 +13,13 @@ import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
+import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -75,7 +76,7 @@ class AthanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        transparentSystemBars()
+        enableEdgeToEdge()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
@@ -136,7 +137,7 @@ class AthanActivity : AppCompatActivity() {
         }
 
         val cityName = appPrefs.cityName
-        setContent { AthanActivityContent(prayerKey, cityName, ::stop) }
+        setContent { SystemTheme { AthanActivityContent(prayerKey, cityName, ::stop) } }
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 

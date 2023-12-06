@@ -27,10 +27,10 @@ import androidx.compose.ui.window.Dialog
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveCity
 import com.byagowi.persiancalendar.utils.sortCityNames
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 @Composable
 fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) {
@@ -98,4 +98,4 @@ fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) 
 
 @Preview
 @Composable
-private fun LocationPreferenceDialogPreview() = Mdc3Theme { LocationDialog({}, {}) }
+private fun LocationPreferenceDialogPreview() = AppTheme { LocationDialog({}, {}) }
