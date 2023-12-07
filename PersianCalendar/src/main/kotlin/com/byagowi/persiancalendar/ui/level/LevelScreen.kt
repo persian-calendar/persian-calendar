@@ -8,6 +8,7 @@ import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
@@ -209,16 +210,18 @@ fun LevelScreen(
             )
         ) {
             Box {
-                AndroidView(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .then(
-                            if (isFullscreen) Modifier.safeDrawingPadding()
-                            else Modifier.padding(top = topCornersRoundness)
-                        ),
-                    factory = ::RulerView,
-                    update = { it.cmInchFlip = cmInchFlip },
-                )
+                AnimatedContent(targetState = cmInchFlip, label = "ruler") { state ->
+                    AndroidView(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .then(
+                                if (isFullscreen) Modifier.safeDrawingPadding()
+                                else Modifier.padding(top = topCornersRoundness)
+                            ),
+                        factory = ::RulerView,
+                        update = { it.cmInchFlip = state },
+                    )
+                }
                 Column {
                     AndroidView(
                         modifier = Modifier
