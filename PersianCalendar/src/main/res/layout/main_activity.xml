@@ -14,13 +14,10 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/navigation_graph" />
 
-    <com.google.android.material.navigation.NavigationView
+    <androidx.compose.ui.platform.ComposeView
         android:id="@+id/navigation"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:headerLayout="@layout/navigation_header"
-        app:itemIconTint="?attr/colorAccent"
-        app:itemTextColor="?android:attr/textColorPrimary" />
+        android:layout_gravity="start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

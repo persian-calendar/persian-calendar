@@ -9,8 +9,6 @@ import android.graphics.RenderEffect
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
@@ -19,12 +17,42 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.isInvisible
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
@@ -35,6 +63,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
@@ -58,7 +87,6 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MainActivityBinding
-import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -74,6 +102,7 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -92,8 +121,8 @@ import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.roundToInt
 
 
@@ -101,7 +130,7 @@ import kotlin.math.roundToInt
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
+    NavController.OnDestinationChangedListener {
 
     private var creationDateJdn = Jdn.today()
     private var settingHasChanged = false
@@ -133,18 +162,101 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.root.addDrawerListener(createDrawerListener())
 
-        listOf(
+        val drawerEntries = listOf(
             Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
             Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
             Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
             Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomy),
             Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
             Triple(R.id.about, R.drawable.ic_info, R.string.about),
-            Triple(R.id.exit, R.drawable.ic_cancel, R.string.exit)
-        ).forEach { (id, icon, title) ->
-            binding.navigation.menu.add(Menu.NONE, id, Menu.NONE, title).setIcon(icon)
+            Triple(R.id.exit, R.drawable.ic_cancel, R.string.exit),
+        )
+
+        val needsVisibleStatusBarPlaceHolder =
+            SystemBarsTransparency(this@MainActivity).needsVisibleStatusBarPlaceHolder
+        binding.navigation.setContent {
+            AppTheme {
+                ModalDrawerSheet(
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                    modifier = Modifier.verticalScroll(rememberScrollState())
+                ) {
+                    Box(
+                        if (needsVisibleStatusBarPlaceHolder) Modifier
+                            .fillMaxWidth()
+                            .background(
+                                Brush.verticalGradient(
+                                    0f to Color(0x70000000), 1f to Color.Transparent
+                                )
+                            )
+                        else Modifier
+                    ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
+                    val isDrawerOpen by isDrawerOpen.collectAsState()
+                    // TODO: Turn this into compose
+                    AndroidView(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
+                            .height(196.dp)
+                            .clip(MaterialTheme.shapes.extraLarge),
+                        factory = {
+                            val root = ViewPager2(it)
+                            root.adapter = SeasonsAdapter()
+                            root.currentItem =
+                                SeasonsAdapter.getCurrentIndex() - if (drawerOpenedOnce) 0 else 3
+                            root.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
+                            root
+                        },
+                        update = {
+                            val currentSeason = SeasonsAdapter.getCurrentIndex()
+                            if (isDrawerOpen) {
+//                                smoothSeasonTransition = true
+//                                currentSeason.value = SeasonsAdapter.getCurrentIndex()
+//                                // Make sure drawer seasons pager won't be in an inconsistent position if navigated too fast
+//                                // smoothSeasonTransition = false
+//                                currentSeason.value = SeasonsAdapter.getCurrentIndex()
+                                // Recreating on every resume to react to system theme change (Android 14's monotone theme)
+                                // TODO: Reenable this somehow
+//        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
+//            it.adapter = SeasonsAdapter()
+//        }
+                                it.setCurrentItem(currentSeason, true)
+                            }
+                        },
+                    )
+                    val selectedId by selectedMenuItem.collectAsState()
+                    drawerEntries.forEach { (id, icon, title) ->
+                        NavigationDrawerItem(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            label = {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        ImageVector.vectorResource(icon),
+                                        modifier = Modifier.size(24.dp, 24.dp),
+                                        contentDescription = null
+                                    )
+                                    Spacer(Modifier.width(16.dp))
+                                    Text(stringResource(title))
+                                }
+                            },
+                            selected = id == selectedId,
+                            onClick = {
+                                when (id) {
+                                    R.id.exit -> finish()
+                                    else -> {
+                                        binding.root.closeDrawer(GravityCompat.START)
+                                        if (navHostFragment?.navController?.currentDestination?.id != id) {
+                                            clickedItem = id
+                                        }
+                                        selectedMenuItem.value = id
+                                        applyAppLanguage(this@MainActivity)
+                                    }
+                                }
+                            },
+                        )
+                    }
+                }
+            }
         }
-        binding.navigation.setNavigationItemSelectedListener(this)
 
         navHostFragment?.navController?.addOnDestinationChangedListener(this)
         when (intent?.action) {
@@ -173,9 +285,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
         }
 
-        if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar
-        ) showAppIsOutDatedSnackbar()
+        if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar) {
+            showAppIsOutDatedSnackbar()
+        }
 
         applyAppLanguage(this)
 
@@ -193,19 +305,19 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 bottomMargin =
                     if (transparencyState.shouldNavigationBarBeTransparent) 0 else insets.bottom
             }
-            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-                .statusBarPlaceHolder.let { placeHolder ->
-                    placeHolder.layoutParams.height =
-                        if (transparencyState.shouldStatusBarBeTransparent) insets.top else 0
-                    placeHolder.isInvisible = !transparencyState.needsVisibleStatusBarPlaceHolder
-                }
             windowInsets
         }
     }
 
+    private val selectedMenuItem = MutableStateFlow(R.id.calendar)
+    private val isDrawerOpen = MutableStateFlow(false)
+    private var drawerOpenedOnce = false
+
     private fun setNavHostBackground() {
-        if (!appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
-            binding.navHostFragment.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
+        if (!appPrefs.getBoolean(
+                PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT
+            )
+        ) binding.navHostFragment.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
         else binding.navHostFragment.setBackgroundResource(R.drawable.gradient_background)
     }
 
@@ -219,22 +331,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var previousAppThemeValue: String? = null
 
     private val navHostFragment by lazy {
-        (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment)
-            .debugAssertNotNull
+        (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment).debugAssertNotNull
     }
 
     override fun onDestinationChanged(
         controller: NavController, destination: NavDestination, arguments: Bundle?
     ) {
-        binding.navigation.menu.findItem(
-            when (destination.id) {
-                // We don't have a menu entry for compass, so
-                R.id.level -> R.id.compass
-                else -> destination.id
-            }
-        )?.also {
-            it.isCheckable = true
-            it.isChecked = true
+        selectedMenuItem.value = when (destination.id) {
+            // We don't have a menu entry for compass, so
+            R.id.level -> R.id.compass
+            else -> destination.id
         }
 
         if (settingHasChanged) { // update when checked menu item is changed
@@ -245,16 +351,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun navigateTo(@IdRes id: Int) {
-        navHostFragment?.navController?.navigate(
-            id, null, navOptions {
-                anim {
-                    enter = R.anim.nav_enter_anim
-                    exit = R.anim.nav_exit_anim
-                    popEnter = R.anim.nav_enter_anim
-                    popExit = R.anim.nav_exit_anim
-                }
+        navHostFragment?.navController?.navigate(id, null, navOptions {
+            anim {
+                enter = R.anim.nav_enter_anim
+                exit = R.anim.nav_exit_anim
+                popEnter = R.anim.nav_enter_anim
+                popExit = R.anim.nav_exit_anim
             }
-        )
+        })
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
@@ -268,12 +372,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (key) {
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
-            PREF_ISLAMIC_OFFSET ->
-                prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
+            PREF_ISLAMIC_OFFSET -> prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
 
             PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
-                if (prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) &&
-                    ActivityCompat.checkSelfPermission(
+                if (prefs.getBoolean(
+                        PREF_SHOW_DEVICE_CALENDAR_EVENTS, true
+                    ) && ActivityCompat.checkSelfPermission(
                         this, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
                 ) askForCalendarPermission()
@@ -302,9 +406,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         updateStoredPreference(this)
         update(applicationContext, true)
 
-        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS ||
-            key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS || key == PREF_APP_LANGUAGE
-        ) loadLanguageResources(this)
+        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS || key == PREF_APP_LANGUAGE) {
+            loadLanguageResources(this)
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -312,8 +416,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            CALENDAR_READ_PERMISSION_REQUEST_CODE ->
+            CALENDAR_READ_PERMISSION_REQUEST_CODE -> {
                 enableDeviceCalendar(this, navHostFragment?.navController)
+            }
 
             POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
@@ -342,8 +447,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         ensureDirectionality()
     }
 
-    private var drawerOpenedOnce = false
-
     override fun onResume() {
         super.onResume()
         applyAppLanguage(this)
@@ -356,13 +459,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
             }
         }
-
-        // Recreating on every resume to react to system theme change (Android 14's monotone theme)
-        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
-            it.adapter = SeasonsAdapter()
-            it.currentItem = SeasonsAdapter.getCurrentIndex() - if (drawerOpenedOnce) 0 else 3
-            it.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
-        }
     }
 
     private fun restartToSettings() {
@@ -373,20 +469,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private var clickedItem = 0
-
-    override fun onNavigationItemSelected(selectedMenuItem: MenuItem): Boolean {
-        when (val itemId = selectedMenuItem.itemId) {
-            R.id.exit -> finish()
-            else -> {
-                binding.root.closeDrawer(GravityCompat.START)
-                if (navHostFragment?.navController?.currentDestination?.id != itemId) {
-                    clickedItem = itemId
-                }
-                applyAppLanguage(this)
-            }
-        }
-        return true
-    }
 
     @VisibleForTesting
     fun showChangeLanguageSnackbar() {
@@ -400,8 +482,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             it.setAction("Settings") {
                 navHostFragment?.navController?.navigateSafe(
                     CalendarScreenDirections.navigateToSettings(
-                        tab = INTERFACE_CALENDAR_TAB,
-                        preferenceKey = PREF_APP_LANGUAGE
+                        tab = INTERFACE_CALENDAR_TAB, preferenceKey = PREF_APP_LANGUAGE
                     )
                 )
             }
@@ -443,12 +524,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             slidingAnimation(drawerView, slideOffset)
         }
 
-        private val blurs = if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && windowManager.isCrossWindowBlurEnabled
-        ) (0..9).map {
-            if (it == 0) null
-            else RenderEffect.createBlurEffect(it * 2f, it * 2f, Shader.TileMode.CLAMP)
-        } else emptyList()
+        private val blurs =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && windowManager.isCrossWindowBlurEnabled) (0..9).map {
+                if (it == 0) null
+                else RenderEffect.createBlurEffect(it * 2f, it * 2f, Shader.TileMode.CLAMP)
+            } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
             binding.navHostFragment.translationX =
@@ -467,8 +547,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             super.onDrawerOpened(drawerView)
             onBackPressedCloseDrawerCallback.isEnabled = true
 
-            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-                .seasonsPager.setCurrentItem(SeasonsAdapter.getCurrentIndex(), true)
+            isDrawerOpen.value = true
 
             drawerOpenedOnce = true
         }
@@ -481,9 +560,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 clickedItem = 0
             }
 
-            // Make sure drawer seasons pager won't be in an inconsistent position if navigated too fast
-            val header = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            header.seasonsPager.setCurrentItem(header.seasonsPager.currentItem, false)
+            isDrawerOpen.value = false
         }
     }
 }
