@@ -27,7 +27,6 @@ class DialogsSmokeTest {
     @Test
     fun testDialog() {
         listOf<(MainActivity) -> Unit>(
-            { it.showAppIsOutDatedSnackbar() },
             { showDayPickerDialog(it, Jdn.today(), R.string.accept) {} },
             { showMonthOverviewDialog(it, Jdn.today().toCalendar(mainCalendar)) },
             { showShiftWorkDialog(it, Jdn.today()) },
