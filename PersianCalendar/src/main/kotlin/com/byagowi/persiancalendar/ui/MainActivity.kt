@@ -280,11 +280,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
-        if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
-            showChangeLanguageSnackbar()
-            appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
-        }
-
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar) {
             showAppIsOutDatedSnackbar()
         }
@@ -469,25 +464,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private var clickedItem = 0
-
-    @VisibleForTesting
-    fun showChangeLanguageSnackbar() {
-        if (Language.userDeviceLanguage == Language.FA.language) return
-        Snackbar.make(
-            binding.root, "✖  Change app language?", Snackbar.LENGTH_INDEFINITE
-        ).also {
-            it.considerSystemBarsInsets()
-            it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
-            it.view.setOnClickListener { _ -> it.dismiss() }
-            it.setAction("Settings") {
-                navHostFragment?.navController?.navigateSafe(
-                    CalendarScreenDirections.navigateToSettings(
-                        tab = INTERFACE_CALENDAR_TAB, preferenceKey = PREF_APP_LANGUAGE
-                    )
-                )
-            }
-        }.show()
-    }
 
     @VisibleForTesting
     fun showAppIsOutDatedSnackbar() = Snackbar.make(
