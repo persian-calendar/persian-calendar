@@ -14,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
@@ -80,7 +81,6 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
-import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
@@ -111,7 +111,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.collectLatest
@@ -177,11 +176,11 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             createEventIcon = { context.getCompatDrawable(R.drawable.ic_open_in_new) },
             onEventClick = { id: Int ->
                 runCatching { viewEvent.launch(id.toLong()) }.onFailure {
-                    Snackbar.make(
-                        binding.root,
+                    Toast.makeText(
+                        binding.root.context,
                         R.string.device_does_not_support,
-                        Snackbar.LENGTH_SHORT
-                    ).also { it.considerSystemBarsInsets() }.show()
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }.onFailure(logException)
             }
         )
@@ -454,10 +453,10 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         ) activity.askForCalendarPermission() else {
             if (!isShowDeviceCalendarEvents) enableDeviceCalendar(activity, findNavController())
             else runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
-                Snackbar.make(
-                    view ?: return, R.string.device_does_not_support,
-                    Snackbar.LENGTH_SHORT
-                ).also { it.considerSystemBarsInsets() }.show()
+                Toast.makeText(
+                    view?.context ?: return, R.string.device_does_not_support,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -518,14 +517,14 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         viewModel.changeSelectedDay(jdn)
 
         // a11y
-        if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
-            mainBinding?.root ?: return,
+        if (isTalkBackEnabled && !isToday && monthChange) Toast.makeText(
+            mainBinding?.root?.context ?: return,
             getA11yDaySummary(
                 context ?: return, jdn, false, EventsStore.empty(),
                 withZodiac = true, withOtherCalendars = true, withTitle = true
             ),
-            Snackbar.LENGTH_SHORT
-        ).also { it.considerSystemBarsInsets() }.show()
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     private fun setOwghat(owghatBinding: OwghatTabContentBinding, jdn: Jdn, isToday: Boolean) {

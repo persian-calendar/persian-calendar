@@ -3,14 +3,11 @@ package com.byagowi.persiancalendar.ui.utils
 import android.app.Activity
 import android.graphics.Color
 import android.os.Build
-import android.view.ViewGroup
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.updateLayoutParams
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.isColorLight
-import com.google.android.material.snackbar.Snackbar
 
 class SystemBarsTransparency(activity: Activity) {
     val isPrimaryColorLight = !isColorLight(activity.resolveColor(R.attr.colorOnAppBar))
@@ -63,13 +60,5 @@ fun Activity.transparentSystemBars() {
     // isn't as effective in dark themes.
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         window.isNavigationBarContrastEnforced = false
-    }
-}
-
-fun Snackbar.considerSystemBarsInsets() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // not needed in 30 >=
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        // Not the best way but setOnApplyWindowInsetsListener refuses to give the value
-        bottomMargin = ((48 + 8) * context.resources.dp).toInt()
     }
 }
