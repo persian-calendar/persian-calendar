@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGesturesPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Fullscreen
@@ -45,11 +49,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -64,7 +68,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.theme.AppTheme
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -188,14 +192,29 @@ fun LevelScreen(
             )
         }
 
-        Surface(shape = if (isFullscreen) RectangleShape else MaterialCornerExtraLargeTop()) {
+        val topCornersRoundness by animateDpAsState(
+            if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
+            animationSpec = tween(
+                durationMillis = integerResource(android.R.integer.config_longAnimTime),
+                easing = LinearEasing
+            ),
+            label = "corner",
+        )
+        Surface(
+            shape = RoundedCornerShape(
+                topStart = topCornersRoundness,
+                topEnd = topCornersRoundness,
+                bottomStart = 0.dp,
+                bottomEnd = 0.dp,
+            )
+        ) {
             Box {
                 AndroidView(
                     modifier = Modifier
                         .fillMaxSize()
                         .then(
                             if (isFullscreen) Modifier.safeDrawingPadding()
-                            else Modifier.padding(top = 25.dp)
+                            else Modifier.padding(top = topCornersRoundness)
                         ),
                     factory = ::RulerView,
                     update = { it.cmInchFlip = cmInchFlip },
