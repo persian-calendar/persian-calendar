@@ -27,8 +27,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.SyncAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -68,6 +66,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -297,17 +296,5 @@ fun LevelScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun StopButton(isStopped: Boolean, setStop: (Boolean) -> Unit) {
-    FloatingActionButton(onClick = { setStop(!isStopped) }) {
-        Icon(
-            if (isStopped) Icons.Default.PlayArrow else Icons.Default.Stop,
-            contentDescription = stringResource(
-                if (isStopped) R.string.resume else R.string.stop
-            )
-        )
     }
 }

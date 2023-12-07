@@ -10,11 +10,12 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import org.junit.Rule
 import org.junit.Test
 
-class LevelScreenTest {
+class CompassScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -30,45 +31,45 @@ class LevelScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            LevelScreen(LocalContext.current as ComponentActivity, {}, {})
+            CompassScreen(LocalContext.current as ComponentActivity, {}, {})
         }
     }
 
     @Test
-    fun navigateUpIsCalled() {
-        var navigateUpString = ""
-        var navigateUpIsCalled = false
+    fun navigateToLevelIsCalled() {
+        var levelString = ""
+        var navigateToLevelIsCalled = false
         composeTestRule.setContentWithTheme {
-            navigateUpString = stringResource(R.string.navigate_up)
-            LevelScreen(
+            levelString = stringResource(R.string.level)
+            CompassScreen(
                 activity = LocalContext.current as ComponentActivity,
-                popNavigation = { navigateUpIsCalled = true },
-                navigateToCompass = { assert(false) }
+                navigateToLevel = { navigateToLevelIsCalled = true },
+                navigateToMap = { assert(false) }
             )
         }
-        assert(!navigateUpIsCalled)
-        composeTestRule.onNodeWithContentDescription(navigateUpString)
+        assert(!navigateToLevelIsCalled)
+        composeTestRule.onNodeWithContentDescription(levelString)
             .assertHasClickAction()
             .performClick()
-        assert(navigateUpIsCalled)
+        assert(navigateToLevelIsCalled)
     }
 
     @Test
-    fun navigateToCompassIsCalled() {
-        var compassString = ""
-        var navigateToCompassIsCalled = false
+    fun navigateToMapIsCalled() {
+        var mapString = ""
+        var navigateToMapIsCalled = false
         composeTestRule.setContentWithTheme {
-            compassString = stringResource(R.string.compass)
-            LevelScreen(
+            mapString = stringResource(R.string.map)
+            CompassScreen(
                 activity = LocalContext.current as ComponentActivity,
-                popNavigation = { assert(false) },
-                navigateToCompass = { navigateToCompassIsCalled = true }
+                navigateToLevel = { assert(false) },
+                navigateToMap = { navigateToMapIsCalled = true }
             )
         }
-        assert(!navigateToCompassIsCalled)
-        composeTestRule.onNodeWithContentDescription(compassString)
+        assert(!navigateToMapIsCalled)
+        composeTestRule.onNodeWithContentDescription(mapString)
             .assertHasClickAction()
             .performClick()
-        assert(navigateToCompassIsCalled)
+        assert(navigateToMapIsCalled)
     }
 }

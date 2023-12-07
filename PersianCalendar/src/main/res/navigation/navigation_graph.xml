@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/calendar">
+    app:startDestination="@id/compass">
 
     <activity
         android:id="@+id/main_activity"
@@ -59,7 +59,7 @@
 
     <fragment
         android:id="@+id/compass"
-        android:name="com.byagowi.persiancalendar.ui.compass.CompassScreen"
+        android:name="com.byagowi.persiancalendar.ui.compass.CompassFragment"
         android:label="@string/compass"
         tools:layout="@layout/compass_screen">
         <action
