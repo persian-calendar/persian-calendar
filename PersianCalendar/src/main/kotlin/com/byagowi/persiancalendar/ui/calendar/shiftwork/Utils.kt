@@ -1,7 +1,8 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
+import android.content.Context
+import androidx.activity.ComponentActivity
 import androidx.core.content.edit
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
@@ -15,22 +16,19 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.putJdn
 
-fun saveShiftWorkState(activity: FragmentActivity, viewModel: ShiftWorkViewModel) {
+fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
     val result = viewModel.shiftWorks.value.filter { it.length != 0 }.joinToString(",") {
         "${it.type.replace("=", "").replace(",", "")}=${it.length}"
     }
 
-    activity.appPrefs.edit {
+    context.appPrefs.edit {
         if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
         else putJdn(PREF_SHIFT_WORK_STARTING_JDN, viewModel.startingDate.value)
         putString(PREF_SHIFT_WORK_SETTING, result)
         putBoolean(PREF_SHIFT_WORK_RECURS, viewModel.recurs.value)
     }
 
-    updateStoredPreference(activity)
-
-    activity.findNavController(R.id.navHostFragment)
-        .navigateSafe(CalendarScreenDirections.navigateToSelf())
+    updateStoredPreference(context)
 }
 
 fun fillViewModelFromGlobalVariables(shiftWorkViewModel: ShiftWorkViewModel, selectedJdn: Jdn) {

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import androidx.annotation.VisibleForTesting
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -39,7 +40,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
-import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
 fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {

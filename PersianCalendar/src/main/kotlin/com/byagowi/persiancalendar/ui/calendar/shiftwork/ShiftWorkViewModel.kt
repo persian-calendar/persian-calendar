@@ -24,6 +24,22 @@ class ShiftWorkViewModel : ViewModel() {
         _shiftWorks.value = value
     }
 
+    fun changeShiftWorkTypeOfPosition(position: Int, type: String) {
+        _shiftWorks.value = shiftWorks.value.mapIndexed { i, (currentType, length) ->
+            ShiftWorkRecord(if (position == i) type else currentType, length)
+        }
+    }
+
+    fun changeShiftWorkLengthOfPosition(position: Int, length: Int) {
+        _shiftWorks.value = shiftWorks.value.mapIndexed { i, (type, currentLength) ->
+            ShiftWorkRecord(type, if (position == i) length else currentLength)
+        }
+    }
+
+    fun removeShiftWorkPosition(position: Int) {
+        _shiftWorks.value = shiftWorks.value.filterIndexed { i, _ -> i != position }
+    }
+
     fun changeStartingDate(value: Jdn) {
         _startingDate.value = value
     }
