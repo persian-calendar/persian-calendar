@@ -70,13 +70,6 @@ enum class Theme(
             } else activity.setTheme(theme.styleRes)
 
             activity.setTheme(R.style.SharedStyle)
-
-            // Apply blur considerations only if is supported by the device
-            // TODO: Doesn't work with compose dialogs and causes the dim also to go, disable for now
-            // if (
-            //     Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            //     activity.windowManager.isCrossWindowBlurEnabled
-            // ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
         }
 
         private fun getCurrent(context: Context): Theme {
