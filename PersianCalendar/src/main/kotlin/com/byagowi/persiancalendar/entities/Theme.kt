@@ -44,7 +44,7 @@ enum class Theme(
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
-            val isDynamicColorAvailable = DynamicColors.isDynamicColorAvailable()
+            val isDynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
             if (theme == SYSTEM_DEFAULT || (isDynamicColorAvailable && theme.hasDynamicColors)) {
                 val isNightModeEnabled = isNightMode(activity)
 
@@ -90,7 +90,7 @@ enum class Theme(
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
         fun isDynamicColor(prefs: SharedPreferences?): Boolean {
             val themeKey = prefs.getTheme()
-            return DynamicColors.isDynamicColorAvailable() &&
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
                     entries.firstOrNull { it.key == themeKey }?.hasDynamicColors ?: false
         }
 

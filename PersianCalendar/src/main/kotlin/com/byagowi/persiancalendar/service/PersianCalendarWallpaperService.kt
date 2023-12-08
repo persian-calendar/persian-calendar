@@ -6,6 +6,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
@@ -21,7 +22,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
-import com.google.android.material.color.DynamicColors
 
 class PersianCalendarWallpaperService : WallpaperService() {
     override fun onCreateEngine() = object : Engine() {
@@ -51,7 +51,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private fun initPatternDrawable() {
             val context = this@PersianCalendarWallpaperService
             val isNightMode = Theme.isNightMode(context)
-            val accentColor = if (DynamicColors.isDynamicColorAvailable()) context.getColor(
+            val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) context.getColor(
                 if (isNightMode) android.R.color.system_accent1_500
                 else android.R.color.system_accent1_300
             ) else null
