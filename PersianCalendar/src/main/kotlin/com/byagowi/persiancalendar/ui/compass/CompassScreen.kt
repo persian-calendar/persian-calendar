@@ -44,6 +44,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -82,9 +83,12 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import kotlinx.coroutines.delay
+import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -152,10 +156,18 @@ fun CompassScreen(
     }
     val sliderValue by derivedStateOf { if (isTimeShiftAnimate) timeShiftAnimate else timeShift }
     val isSliderShown by derivedStateOf { sliderValue != 0f }
+    var baseTime by remember { mutableStateOf(Date()) }
+    LaunchedEffect(null) {
+        while (true) {
+            delay(THIRTY_SECONDS_IN_MILLIS)
+            baseTime = Date()
+        }
+    }
     val time by derivedStateOf {
-        val time = GregorianCalendar()
-        time.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
-        time
+        GregorianCalendar().also {
+            it.time = baseTime
+            it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
+        }
     }
     var isStopped by remember { mutableStateOf(false) }
     // Ugly, for now
