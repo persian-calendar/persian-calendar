@@ -225,7 +225,8 @@ fun Picker(
             }
     }
 
-    LazyColumn(state = listState,
+    LazyColumn(
+        state = listState,
         flingBehavior = flingBehavior,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
@@ -247,7 +248,8 @@ fun Picker(
                     DividerDefaults.Thickness.toPx(),
                 )
             }
-            .fadingEdge(fadingEdgeGradient)) {
+            .fadingEdge(fadingEdgeGradient),
+    ) {
         items(listScrollCount) { index ->
             Box(modifier = Modifier.height(itemHeight), contentAlignment = Alignment.Center) {
                 Text(

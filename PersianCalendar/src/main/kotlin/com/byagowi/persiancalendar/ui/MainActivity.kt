@@ -17,11 +17,14 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +32,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
@@ -36,18 +41,30 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
@@ -62,8 +79,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
-import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
@@ -88,8 +103,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MainActivityBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -102,7 +119,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
-import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -117,6 +134,9 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import java.util.Date
 import kotlin.math.roundToInt
 
 
@@ -156,97 +176,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.root.addDrawerListener(createDrawerListener())
 
-        val drawerEntries = listOf(
-            Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
-            Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
-            Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
-            Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomy),
-            Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
-            Triple(R.id.about, R.drawable.ic_info, R.string.about),
-            Triple(R.id.exit, R.drawable.ic_cancel, R.string.exit),
-        )
-
-        val needsVisibleStatusBarPlaceHolder =
-            SystemBarsTransparency(this@MainActivity).needsVisibleStatusBarPlaceHolder
         binding.navigation.setContent {
             AppTheme {
-                ModalDrawerSheet(
-                    windowInsets = WindowInsets(0, 0, 0, 0),
-                    modifier = Modifier.verticalScroll(rememberScrollState())
-                ) {
-                    Box(
-                        if (needsVisibleStatusBarPlaceHolder) Modifier
-                            .fillMaxWidth()
-                            .background(
-                                Brush.verticalGradient(
-                                    0f to Color(0x70000000), 1f to Color.Transparent
-                                )
-                            )
-                        else Modifier
-                    ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
-                    val isDrawerOpen by isDrawerOpen.collectAsState()
-                    // TODO: Turn this into compose
-                    AndroidView(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
-                            .height(196.dp)
-                            .clip(MaterialTheme.shapes.extraLarge),
-                        factory = {
-                            val root = ViewPager2(it)
-                            root.adapter = SeasonsAdapter()
-                            root.currentItem =
-                                SeasonsAdapter.getCurrentIndex() - if (drawerOpenedOnce) 0 else 3
-                            root.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
-                            root
-                        },
-                        update = {
-                            val currentSeason = SeasonsAdapter.getCurrentIndex()
-                            if (isDrawerOpen) {
-//                                smoothSeasonTransition = true
-//                                currentSeason.value = SeasonsAdapter.getCurrentIndex()
-//                                // Make sure drawer seasons pager won't be in an inconsistent position if navigated too fast
-//                                // smoothSeasonTransition = false
-//                                currentSeason.value = SeasonsAdapter.getCurrentIndex()
-                                // Recreating on every resume to react to system theme change (Android 14's monotone theme)
-                                // TODO: Reenable this somehow
-//        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
-//            it.adapter = SeasonsAdapter()
-//        }
-                                it.setCurrentItem(currentSeason, true)
+                AppDrawer(
+                    isDrawerOpen,
+                    selectedMenuItem,
+                ) { id ->
+                    when (id) {
+                        R.id.exit -> finish()
+                        else -> {
+                            binding.root.closeDrawer(GravityCompat.START)
+                            if (navHostFragment?.navController?.currentDestination?.id != id) {
+                                clickedItem = id
                             }
-                        },
-                    )
-                    val selectedId by selectedMenuItem.collectAsState()
-                    drawerEntries.forEach { (id, icon, title) ->
-                        NavigationDrawerItem(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            label = {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        ImageVector.vectorResource(icon),
-                                        modifier = Modifier.size(24.dp, 24.dp),
-                                        contentDescription = null
-                                    )
-                                    Spacer(Modifier.width(16.dp))
-                                    Text(stringResource(title))
-                                }
-                            },
-                            selected = id == selectedId,
-                            onClick = {
-                                when (id) {
-                                    R.id.exit -> finish()
-                                    else -> {
-                                        binding.root.closeDrawer(GravityCompat.START)
-                                        if (navHostFragment?.navController?.currentDestination?.id != id) {
-                                            clickedItem = id
-                                        }
-                                        selectedMenuItem.value = id
-                                        applyAppLanguage(this@MainActivity)
-                                    }
-                                }
-                            },
-                        )
+                            selectedMenuItem.value = id
+                            applyAppLanguage(this)
+                        }
                     }
                 }
             }
@@ -525,6 +470,104 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
 
             isDrawerOpen.value = false
+        }
+    }
+}
+
+@Composable
+fun AppDrawer(
+    isDrawerOpenFlow: StateFlow<Boolean>,
+    selectedMenuItemFlow: StateFlow<Int>,
+    onIdClicked: (Int) -> Unit
+) {
+    @OptIn(ExperimentalFoundationApi::class)
+    ModalDrawerSheet(
+        windowInsets = WindowInsets(0, 0, 0, 0),
+        modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
+        val context = LocalContext.current
+        val needsVisibleStatusBarPlaceHolder = remember {
+            SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
+        }
+        Box(
+            if (needsVisibleStatusBarPlaceHolder) Modifier
+                .fillMaxWidth()
+                .background(
+                    Brush.verticalGradient(
+                        0f to Color(0x70000000), 1f to Color.Transparent
+                    )
+                )
+            else Modifier
+        ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
+        val isDrawerOpen by isDrawerOpenFlow.collectAsState()
+
+        val actualSeason = remember { Season.fromDate(Date(), coordinates.value).ordinal }
+        val pageSize = 200
+        val seasonState = rememberPagerState(
+            initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
+            pageCount = { pageSize },
+        )
+        val scope = rememberCoroutineScope()
+        if (isDrawerOpen) {
+            scope.launch { seasonState.animateScrollToPage(100 + actualSeason) }
+        }
+        val imageFilter = remember(LocalConfiguration.current) {
+            // Consider gray scale themes of Android 14
+            // And apply a gray scale filter https://stackoverflow.com/a/75698731
+            if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale)
+                ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
+            else null
+        }
+        HorizontalPager(
+            state = seasonState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
+                .height(196.dp)
+                .clip(MaterialTheme.shapes.extraLarge)
+                .semantics {
+                    @OptIn(ExperimentalComposeUiApi::class)
+                    this.invisibleToUser()
+                },
+            pageSpacing = 8.dp,
+        ) {
+            Image(
+                ImageBitmap.imageResource(Season.entries[it % 4].imageId),
+                contentScale = ContentScale.FillWidth,
+                contentDescription = null,
+                colorFilter = imageFilter,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(MaterialTheme.shapes.extraLarge),
+            )
+        }
+
+        val selectedMenuItem by selectedMenuItemFlow.collectAsState()
+        listOf(
+            Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
+            Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
+            Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
+            Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomy),
+            Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
+            Triple(R.id.about, R.drawable.ic_info, R.string.about),
+            Triple(R.id.exit, R.drawable.ic_cancel, R.string.exit),
+        ).forEach { (id, icon, title) ->
+            NavigationDrawerItem(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                label = {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            ImageVector.vectorResource(icon),
+                            modifier = Modifier.size(24.dp, 24.dp),
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Text(stringResource(title))
+                    }
+                },
+                selected = id == selectedMenuItem,
+                onClick = { onIdClicked(id) },
+            )
         }
     }
 }

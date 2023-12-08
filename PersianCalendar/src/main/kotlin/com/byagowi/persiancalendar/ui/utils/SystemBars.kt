@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import androidx.core.graphics.ColorUtils
@@ -9,9 +10,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.isColorLight
 
-class SystemBarsTransparency(activity: Activity) {
-    val isPrimaryColorLight = !isColorLight(activity.resolveColor(R.attr.colorOnAppBar))
-    val isSurfaceColorLight = isColorLight(activity.resolveColor(R.attr.colorSurface))
+class SystemBarsTransparency(context: Context) {
+    val isPrimaryColorLight = !isColorLight(context.resolveColor(R.attr.colorOnAppBar))
+    val isSurfaceColorLight = isColorLight(context.resolveColor(R.attr.colorSurface))
     val needsVisibleStatusBarPlaceHolder = !isPrimaryColorLight && isSurfaceColorLight
 
     private val isLightStatusBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
