@@ -1,22 +1,43 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.content.Context
-import android.graphics.Color
-import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import androidx.annotation.ColorInt
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Print
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.ConcatAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -26,13 +47,9 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.utils.copyToClipboard
-import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -45,8 +62,6 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.html.DIV
 import kotlinx.html.body
@@ -67,71 +82,97 @@ import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
-import kotlin.math.roundToInt
 
-fun showMonthOverviewDialog(activity: FragmentActivity, date: AbstractDate) {
-    val events = createEventsList(activity, date)
+fun showMonthOverviewDialog(activity: ComponentActivity, date: AbstractDate) =
+    showComposeDialog(activity) { MonthOverview(activity, date, it) }
 
-    BottomSheetDialog(activity, R.style.TransparentBottomSheetDialog).also { dialog ->
-        fun showPrintReport(isLongClick: Boolean) {
-            runCatching {
-                activity.openHtmlInBrowser(
-                    createEventsReport(activity, date, wholeYear = isLongClick)
-                )
-            }.onFailure(logException)
-            dialog.dismiss()
-            createEventsReport(activity, date, wholeYear = isLongClick)
-        }
+@Composable
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+private fun MonthOverview(
+    activity: ComponentActivity, date: AbstractDate, onDismissRequest: () -> Unit
+) {
+    val events = formatComposeEventsList(
+        createEventsList(activity, date), MaterialTheme.colorScheme.primary
+    )
 
-        dialog.setContentView(
-            RecyclerView(activity).also { recyclerView ->
-                recyclerView.layoutManager = LinearLayoutManager(activity)
-                recyclerView.adapter = ConcatAdapter(
-                    object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                        override fun getItemCount() = 1
-                        override fun onBindViewHolder(
-                            holder: RecyclerView.ViewHolder, position: Int
-                        ) = Unit
+    fun showPrintReport(isLongClick: Boolean) {
+        runCatching {
+            activity.openHtmlInBrowser(
+                createEventsReport(activity, date, wholeYear = isLongClick)
+            )
+        }.onFailure(logException)
+        onDismissRequest()
+        createEventsReport(activity, date, wholeYear = isLongClick)
+    }
 
-                        override fun onCreateViewHolder(
-                            parent: ViewGroup, viewType: Int
-                        ) = object : RecyclerView.ViewHolder(FrameLayout(activity).also { root ->
-                            root.addView(
-                                FloatingActionButton(activity).also {
-                                    it.contentDescription = "Print"
-                                    it.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_print))
-                                    it.setOnClickListener { showPrintReport(isLongClick = false) }
-                                    it.setOnLongClickListener {
-                                        showPrintReport(isLongClick = true)
-                                        true
-                                    }
-                                    it.layoutParams = FrameLayout.LayoutParams(
-                                        FrameLayout.LayoutParams.MATCH_PARENT,
-                                        FrameLayout.LayoutParams.WRAP_CONTENT
-                                    ).also { p ->
-                                        p.gravity = Gravity.CENTER_HORIZONTAL
-                                        p.bottomMargin = (8 * it.context.resources.dp).roundToInt()
-                                    }
-                                }
-                            )
-                            root.layoutParams = FrameLayout.LayoutParams(
-                                FrameLayout.LayoutParams.MATCH_PARENT,
-                                FrameLayout.LayoutParams.WRAP_CONTENT
-                            )
-                        }) {}
-                    },
-                    MonthOverviewItemAdapter(
-                        activity,
-                        formatEventsList(
-                            events,
-                            false,
-                            activity.resolveColor(R.attr.colorTextHoliday)
-                        ),
-                    )
-                )
+    BottomSheetScaffold(
+        containerColor = Color.Transparent,
+        contentColor = Color.Transparent,
+        sheetPeekHeight = 200.dp,
+        sheetContent = {
+            LazyColumn {
+                stickyHeader {
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp)
+                            // TODO: Apply long click on the button itself
+                            .combinedClickable(
+                                onClick = { showPrintReport(isLongClick = false) },
+                                onClickLabel = "Print",
+                                onLongClick = { showPrintReport(isLongClick = false) },
+                                onLongClickLabel = stringResource(R.string.year),
+                            ),
+                    ) {
+                        FloatingActionButton(
+                            onClick = { showPrintReport(isLongClick = false) },
+                            modifier = Modifier.align(Alignment.Center)
+                        ) { Icon(Icons.Default.Print, contentDescription = "Print") }
+                    }
+                }
+                if (events.isEmpty()) item {
+                    Card(
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(all = 16.dp),
+                    ) {
+                        Text(
+                            stringResource(R.string.warn_if_events_not_set),
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(all = 16.dp)
+                        )
+                    }
+                }
+                items(events) { (jdn, text) ->
+                    Card(
+                        shape = MaterialTheme.shapes.large,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                    ) {
+                        Text(
+                            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                        )
+                        SelectionContainer(
+                            Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                        ) { Text(text) }
+                    }
+                }
+                item { Spacer(Modifier.height(8.dp)) }
             }
-        )
-    }.show()
+        },
+        content = {
+            Box(
+                Modifier
+                    .background(Color.Transparent)
+                    .fillMaxSize()
+                    .clickable { onDismissRequest() },
+            )
+        },
+    )
 }
 
 private fun createEventsList(
@@ -139,35 +180,73 @@ private fun createEventsList(
 ): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
-    return (0..<mainCalendar.getMonthLength(date.year, date.month))
-        .map { baseJdn + it }
+    return (0..<mainCalendar.getMonthLength(date.year, date.month)).map { baseJdn + it }
         .associateWith { eventsRepository?.getEvents(it, deviceEvents) ?: emptyList() }
 }
 
-private fun formatEventsList(
-    events: Map<Jdn, List<CalendarEvent<*>>>, isPrint: Boolean, @ColorInt holidayColor: Int
-): List<Pair<Jdn, CharSequence>> {
-    val result = events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
+private fun formatComposeEventsList(
+    events: Map<Jdn, List<CalendarEvent<*>>>, holidayColor: Color
+): List<Pair<Jdn, AnnotatedString>> {
+    return events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
         val holidays = getEventsTitle(
-            events, holiday = true, compact = isPrint, showDeviceCalendarEvents = false,
-            insertRLM = false, addIsHoliday = isPrint
+            events,
+            holiday = true,
+            compact = false,
+            showDeviceCalendarEvents = false,
+            insertRLM = false,
+            addIsHoliday = false
         )
         val nonHolidays = getEventsTitle(
-            events, holiday = false, compact = isPrint, showDeviceCalendarEvents = true,
-            insertRLM = false, addIsHoliday = isPrint
+            events,
+            holiday = false,
+            compact = false,
+            showDeviceCalendarEvents = true,
+            insertRLM = false,
+            addIsHoliday = false
         )
         if (holidays.isEmpty() && nonHolidays.isEmpty()) null
-        else jdn to buildSpannedString {
-            if (holidays.isNotEmpty()) color(holidayColor) { append(holidays) }
+        else jdn to buildAnnotatedString {
+            if (holidays.isNotEmpty()) withStyle(SpanStyle(color = holidayColor)) {
+                append(holidays)
+            }
             if (nonHolidays.isNotEmpty()) {
                 if (holidays.isNotEmpty()) appendLine()
                 append(nonHolidays)
             }
         }
     }
-    return if (isPrint) result.map { (jdn, title) ->
+}
+
+private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): List<Pair<Jdn, CharSequence>> {
+    val result = events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
+        val holidays = getEventsTitle(
+            events,
+            holiday = true,
+            compact = true,
+            showDeviceCalendarEvents = false,
+            insertRLM = false,
+            addIsHoliday = true
+        )
+        val nonHolidays = getEventsTitle(
+            events,
+            holiday = false,
+            compact = true,
+            showDeviceCalendarEvents = true,
+            insertRLM = false,
+            addIsHoliday = true
+        )
+        if (holidays.isEmpty() && nonHolidays.isEmpty()) null
+        else jdn to buildSpannedString {
+            if (holidays.isNotEmpty()) color(android.graphics.Color.RED) { append(holidays) }
+            if (nonHolidays.isNotEmpty()) {
+                if (holidays.isNotEmpty()) appendLine()
+                append(nonHolidays)
+            }
+        }
+    }
+    return result.map { (jdn, title) ->
         jdn to title.toString().replace("\n", " $EN_DASH ")
-    } else result
+    }
 }
 
 private fun createEventsReport(
@@ -255,8 +334,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                                 val secondaryDateDay = jdn.toCalendar(it).dayOfMonth
                                 val digits = secondaryCalendarDigits
                                 formatNumber(secondaryDateDay, digits)
-                            },
-                            getShiftWorkTitle(jdn)
+                            }, getShiftWorkTitle(jdn)
                         ).joinToString(" ").takeIf { it.isNotEmpty() }?.let { sup { +" $it" } }
                     }
                 }
@@ -265,10 +343,10 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     }
     table("events") {
         tr {
-            val titles = formatEventsList(events, true, Color.RED)
+            val titles = formatPrintEventsList(events)
             if (titles.isEmpty()) return@tr
-            val sizes = titles.map { it.second.toString().length }
-                .runningFold(0) { acc, it -> acc + it }
+            val sizes =
+                titles.map { it.second.toString().length }.runningFold(0) { acc, it -> acc + it }
             val halfOfTotal = sizes.last() / 2
             val center = sizes.indexOfFirst { it > halfOfTotal }
             listOf(titles.take(center), titles.drop(center)).forEach {
@@ -284,46 +362,6 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                     }
                 }
             }
-        }
-    }
-}
-
-private class MonthOverviewItemAdapter(
-    private val context: Context,
-    private val rows: List<Pair<Jdn, CharSequence>>
-) : RecyclerView.Adapter<MonthOverviewItemAdapter.ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        MonthOverviewItemBinding.inflate(parent.context.layoutInflater, parent, false)
-    )
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
-
-    override fun getItemCount(): Int = if (rows.isEmpty()) 1 else rows.size
-
-    inner class ViewHolder(private val binding: MonthOverviewItemBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-
-        init {
-            binding.root.setOnClickListener(this)
-        }
-
-        private var title = ""
-
-        fun bind(position: Int) = if (rows.isEmpty()) {
-            binding.title.text = context.getString(R.string.warn_if_events_not_set)
-            binding.body.isVisible = false
-        } else rows[position].let { (jdn, body) ->
-            title = dayTitleSummary(jdn, jdn.toCalendar(mainCalendar))
-            binding.title.text = title
-            binding.body.text = body
-            binding.body.isVisible = body.isNotEmpty()
-        }
-
-        override fun onClick(v: View?) {
-            if (rows.isEmpty()) return
-            val (_, body) = rows[bindingAdapterPosition]
-            if (body.isNotEmpty()) v?.context.copyToClipboard(title + "\n" + body)
         }
     }
 }
