@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Canvas
@@ -43,14 +44,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Scroller
 import android.widget.SeekBar
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
-import androidx.appcompat.widget.AppCompatEditText
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.component1
@@ -307,7 +306,7 @@ fun showShaderSandboxDialog(activity: FragmentActivity) {
         binding.inputText.setText(sandboxFragmentShader)
         frame.addView(binding.root)
     }
-    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
+    val dialog = AlertDialog.Builder(activity)
         .setView(frame)
         .show()
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
@@ -336,7 +335,7 @@ fun showColorPickerDialog(activity: FragmentActivity) {
             })
         })
     }
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -571,7 +570,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
         }
     }
 
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -651,7 +650,7 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
             .parseAsHtml(HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
-    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
+    val dialog = AlertDialog.Builder(activity)
         .setTitle(
             formatTitle(
                 "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6"
@@ -667,7 +666,7 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
             dialog.setTitle(formatTitle("$atomicNumber ${info[0]} ${info[1]}<br>${info[2]}"))
         }
         if (index == 161) {
-            androidx.appcompat.app.AlertDialog.Builder(activity)
+            AlertDialog.Builder(activity)
                 .setView(EditText(activity).also {
                     it.layoutDirection = View.LAYOUT_DIRECTION_LTR
                     it.textDirection = View.TEXT_DIRECTION_LTR
@@ -916,7 +915,7 @@ fun showRotationalSpringDemoDialog(activity: FragmentActivity) {
         }
     }
 
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -1023,7 +1022,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
         .flowOn(Dispatchers.Unconfined)
         .launchIn(viewLifecycle.coroutineScope)
 
-    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
+    val dialog = AlertDialog.Builder(activity)
         .setView(view)
         .setOnCancelListener { previousAudioTrack?.stop() }
         .show()
@@ -1107,7 +1106,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
         private val lifecycle = activity.lifecycleScope
     }
 
-    val dialog = androidx.appcompat.app.AlertDialog.Builder(activity)
+    val dialog = AlertDialog.Builder(activity)
         .setView(view)
         .show()
 
@@ -1233,7 +1232,7 @@ fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
                 }.forEach(::addView)
         }
     }
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(view)
         .show()
 }
@@ -1309,7 +1308,7 @@ suspend fun playSoundTick(offset: Double) {
 fun showSensorTestDialog(activity: FragmentActivity) {
     val sensorManager = activity.getSystemService<SensorManager>() ?: return
     val root = LinearLayout(activity)
-    val spinner = AppCompatSpinner(activity)
+    val spinner = Spinner(activity)
     root.orientation = LinearLayout.VERTICAL
     root.addView(spinner)
     var width = 1
@@ -1322,7 +1321,8 @@ fun showSensorTestDialog(activity: FragmentActivity) {
         log.addAll(List(width) { emptyFloat })
     }
 
-    val textView = object : AppCompatTextView(activity) {
+    @SuppressLint("AppCompatCustomView")
+    val textView = object : TextView(activity) {
         override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
             super.onSizeChanged(w, h, oldw, oldh)
             width = w
@@ -1360,7 +1360,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
     root.addView(textView)
     val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
     spinner.adapter = ArrayAdapter(
-        spinner.context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+        spinner.context, android.R.layout.simple_spinner_dropdown_item,
         listOf("Select a sensor") + sensors
     )
     textView.setPadding((8 * activity.resources.dp).toInt())
@@ -1411,7 +1411,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
             listenToSensor()
     }
 
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(root)
         .setPositiveButton(R.string.close, null)
         .setCancelable(false)
@@ -1419,36 +1419,37 @@ fun showSensorTestDialog(activity: FragmentActivity) {
         .show()
 }
 
-
+@SuppressLint("AppCompatCustomView")
 fun showInputDeviceTestDialog(activity: FragmentActivity) {
-    androidx.appcompat.app.AlertDialog.Builder(activity)
-        .setView(object : AppCompatEditText(activity) {
-            init {
-                setPadding((8 * resources.dp).toInt())
-                textSize = 4 * resources.dp
-                text?.append("Input Devices Monitor:")
-            }
+    AlertDialog.Builder(activity)
+        .setView(
+            object : EditText(activity) {
+                init {
+                    setPadding((8 * resources.dp).toInt())
+                    textSize = 4 * resources.dp
+                    text?.append("Input Devices Monitor:")
+                }
 
-            fun log(any: Any?) {
-                text?.appendLine()
-                text?.appendLine(any.toString())
-            }
+                fun log(any: Any?) {
+                    text?.appendLine()
+                    text?.appendLine(any.toString())
+                }
 
-            override fun onGenericMotionEvent(event: MotionEvent?): Boolean {
-                log(event)
-                return super.onGenericMotionEvent(event)
-            }
+                override fun onGenericMotionEvent(event: MotionEvent?): Boolean {
+                    log(event)
+                    return super.onGenericMotionEvent(event)
+                }
 
-            override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-                log(event)
-                return super.onKeyDown(keyCode, event)
-            }
+                override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+                    log(event)
+                    return super.onKeyDown(keyCode, event)
+                }
 
-            override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
-                log(event)
-                return super.onKeyUp(keyCode, event)
-            }
-        })
+                override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+                    log(event)
+                    return super.onKeyUp(keyCode, event)
+                }
+            })
         .show()
 }
 
@@ -1475,7 +1476,7 @@ fun showIconsDemoDialog(activity: ComponentActivity) {
                 setBackgroundColor(Color.DKGRAY)
             }) {}
     }
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = recyclerViewAdapter
             it.layoutManager = GridLayoutManager(activity, 8)
@@ -1549,7 +1550,7 @@ fun showDynamicColorsDialog(activity: ComponentActivity) {
                 }
             }) {}
     }
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = recyclerViewAdapter
             it.layoutManager = GridLayoutManager(activity, 6)
@@ -1558,7 +1559,7 @@ fun showDynamicColorsDialog(activity: ComponentActivity) {
 }
 
 //fun showCarouselDialog(activity: ComponentActivity) {
-//    androidx.appcompat.app.AlertDialog.Builder(activity)
+//    AlertDialog.Builder(activity)
 //        .setView(FrameLayout(activity).also { root ->
 //            root.addView(RecyclerView(activity).also {
 //                it.layoutManager = CarouselLayoutManager()
