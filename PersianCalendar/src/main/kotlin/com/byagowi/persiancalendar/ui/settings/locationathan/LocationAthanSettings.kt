@@ -46,7 +46,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showAthanVolumeDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
@@ -228,9 +228,11 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         )
     }
     AnimatedVisibility(isLocationSet && showAthanVolume) {
+        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary)
-        ) { showAthanVolumeDialog(activity) }
+        ) { showDialog = true }
+        if (showDialog) AthanVolumeDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
         var midnightSummary by remember {
