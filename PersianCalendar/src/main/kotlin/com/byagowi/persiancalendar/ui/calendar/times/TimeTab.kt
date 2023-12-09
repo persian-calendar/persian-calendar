@@ -94,8 +94,10 @@ fun TimesTab(
     val prayTimes by derivedStateOf { coordinates.calculatePrayTimes(jdn.toGregorianCalendar()) }
 
     Column(
-        Modifier.clickable(onClickLabel = stringResource(R.string.more),
-            onClick = { isExpanded = !isExpanded }),
+        Modifier.clickable(
+            onClickLabel = stringResource(R.string.more),
+            onClick = { isExpanded = !isExpanded },
+        ),
     ) {
         Spacer(Modifier.height(16.dp))
         AstronomicalOverview(viewModel, today, prayTimes, now, navigateToAstronomy)
@@ -148,8 +150,6 @@ private fun AstronomicalOverview(
             )
         },
     ) { state ->
-        // Weird, if the following line is moved to above changing day won't trigger the animation
-        if (jdn != today) animatedOnce = false
         if (state) AndroidView(
             factory = ::SunView,
             update = {
@@ -160,6 +160,7 @@ private fun AstronomicalOverview(
             },
             modifier = Modifier.fillMaxHeight(),
         ) else Box {
+            animatedOnce = false // If moon view is shown, animated the sun view the next time
             AndroidView(
                 factory = ::MoonView,
                 update = { if (jdn != today) it.jdn = jdn.value.toFloat() },

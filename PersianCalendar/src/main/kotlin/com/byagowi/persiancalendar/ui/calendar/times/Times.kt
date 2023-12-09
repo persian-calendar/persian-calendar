@@ -3,8 +3,10 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -45,8 +47,8 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
                     com.byagowi.persiancalendar.R.string.fajr, com.byagowi.persiancalendar.R.string.dhuhr, com.byagowi.persiancalendar.R.string.maghrib -> true
                     else -> false
                 },
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically(),
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally(),
             ) {
                 AnimatedContent(
                     targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
