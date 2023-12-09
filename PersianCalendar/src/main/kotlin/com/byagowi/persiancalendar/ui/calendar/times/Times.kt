@@ -36,7 +36,7 @@ import io.github.persiancalendar.praytimes.PrayTimes
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class Times(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
-    val root = ComposeView(context)
+    private val root = ComposeView(context)
 
     init {
         addView(root)
@@ -48,8 +48,7 @@ class Times(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
     }
 
     fun update(prayTimes: PrayTimes) {
-        @OptIn(ExperimentalLayoutApi::class)
-        root.setContent {
+        @OptIn(ExperimentalLayoutApi::class) root.setContent {
             AppTheme {
                 val isExpanded by isExpanded.collectAsState()
                 FlowRow(
@@ -68,13 +67,13 @@ class Times(context: Context, attrs: AttributeSet? = null) : FrameLayout(context
                         ) {
                             AnimatedContent(
                                 targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
-                                label = "time"
+                                label = "time",
                             ) { state ->
                                 Column(
                                     modifier = Modifier.defaultMinSize(
                                         minWidth = dimensionResource(R.dimen.time_item_size),
                                     ),
-                                    horizontalAlignment = Alignment.CenterHorizontally
+                                    horizontalAlignment = Alignment.CenterHorizontally,
                                 ) {
                                     Text(stringResource(timeId))
                                     Text(state, modifier = Modifier.alpha(AppBlendAlpha))

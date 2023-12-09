@@ -35,25 +35,12 @@
 
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/calendars_types"
+    <com.byagowi.persiancalendar.ui.common.CalendarsFlow
+        android:id="@+id/calendars_flow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:paddingTop="@dimen/padding_item"
-        android:paddingBottom="@dimen/padding_item">
-
-        <com.byagowi.persiancalendar.ui.common.CalendarsFlow
-            android:id="@+id/calendars_flow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:flow_wrapMode="chain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="@dimen/padding_item"
+        android:layout_marginBottom="@dimen/padding_item" />
 
     <TextView
         android:id="@+id/equinox"

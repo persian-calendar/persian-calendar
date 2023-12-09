@@ -178,16 +178,6 @@ fun Context.resolveResourceIdFromTheme(@AttrRes attributeId: Int): Int {
     return typedValue.resourceId
 }
 
-fun Flow.addViewsToFlow(viewList: List<View>) {
-    val parentView = (this.parent as? ViewGroup).debugAssertNotNull ?: return
-    this.referencedIds = viewList.map {
-        View.generateViewId().also { id ->
-            it.id = id
-            parentView.addView(it)
-        }
-    }.toIntArray()
-}
-
 fun NavController.navigateSafe(directions: NavDirections) {
     runCatching { navigate(directions) }.onFailure(logException).getOrNull().debugAssertNotNull
 }
