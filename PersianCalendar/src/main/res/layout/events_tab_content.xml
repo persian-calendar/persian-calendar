@@ -53,17 +53,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp" />
 
-    <FrameLayout
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/buttons_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/card_padding"
-        android:layout_marginRight="@dimen/card_padding">
-
-        <include
-            android:id="@+id/buttons_bar"
-            layout="@layout/settings_buttons_bar" />
-
-    </FrameLayout>
+        android:layout_height="wrap_content" />
 
     <!-- Reverse space as the end of the tab for event addition floating action button -->
     <Space

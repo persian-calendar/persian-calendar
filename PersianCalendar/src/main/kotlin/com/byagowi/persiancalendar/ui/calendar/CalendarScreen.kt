@@ -17,9 +17,33 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.appcompat.widget.Toolbar
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
@@ -54,7 +78,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarScreenBinding
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
-import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -79,6 +102,7 @@ import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -204,28 +228,33 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         }
 
         if (PREF_HOLIDAY_TYPES !in inflater.context.appPrefs && language.isIranExclusive) {
-            binding.buttonsBar.header.setText(R.string.warn_if_events_not_set)
-            binding.buttonsBar.settings.setOnClickListener {
-                findNavController().navigateSafe(
-                    CalendarScreenDirections.navigateToSettings(
-                        tab = INTERFACE_CALENDAR_TAB,
-                        preferenceKey = PREF_HOLIDAY_TYPES
-                    )
-                )
-            }
-            binding.buttonsBar.discard.setOnClickListener {
-                binding.buttonsBar.root.context.appPrefs.edit {
-                    putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+            binding.buttonsBar.setContent {
+                AppTheme {
+                    val context = LocalContext.current
+                    ButtonsBar(
+                        header = R.string.warn_if_events_not_set,
+                        discardAction = {
+                            context.appPrefs.edit {
+                                putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+                            }
+                        },
+                    ) {
+                        findNavController().navigateSafe(
+                            CalendarScreenDirections.navigateToSettings(
+                                tab = INTERFACE_CALENDAR_TAB,
+                                preferenceKey = PREF_HOLIDAY_TYPES
+                            )
+                        )
+                    }
                 }
-                binding.buttonsBar.root.isVisible = false
             }
-        } else binding.buttonsBar.root.isVisible = false
+        }
 
         return binding.root
     }
 
     private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): View {
-        coordinates.value ?: return createOwghatTabPlaceholder(inflater, container)
+        coordinates.value ?: return createOwghatTabPlaceholder(inflater.context)
         val binding = OwghatTabContentBinding.inflate(inflater, container, false)
 
         var isExpanded = false
@@ -260,21 +289,27 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         return binding.root
     }
 
-    private fun createOwghatTabPlaceholder(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding = OwghatTabPlaceholderBinding.inflate(inflater, container, false)
-        binding.buttonsBar.header.setText(R.string.ask_user_to_set_location)
-        binding.buttonsBar.settings.setOnClickListener {
-            findNavController().navigateSafe(
-                CalendarScreenDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
-            )
+    private fun createOwghatTabPlaceholder(context: Context): View {
+        val tab = ComposeView(context)
+        tab.setContent {
+            AppTheme {
+                ButtonsBar(
+                    modifier = Modifier.padding(top = 24.dp),
+                    header = R.string.ask_user_to_set_location,
+                    discardAction = {
+                        context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+                        findNavController().navigateSafe(
+                            CalendarScreenDirections.navigateToSelf()
+                        )
+                    },
+                ) {
+                    findNavController().navigateSafe(
+                        CalendarScreenDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
+                    )
+                }
+            }
         }
-        binding.buttonsBar.discard.setOnClickListener {
-            context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-            findNavController().navigateSafe(
-                CalendarScreenDirections.navigateToSelf()
-            )
-        }
-        return binding.root
+        return tab
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -425,19 +460,21 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             ) != PackageManager.PERMISSION_GRANTED &&
             PREF_NOTIFY_IGNORED !in context.appPrefs
         ) {
-            calendarsView.buttonsBar.settings.setOnClickListener {
-                calendarsView.buttonsBar.root.isVisible = false
-                activity?.askForPostNotificationPermission(
-                    POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
-                )
+            calendarsView.buttonsBar.setContent {
+                AppTheme {
+                    ButtonsBar(
+                        header = R.string.enable_notification,
+                        acceptButton = R.string.notify_date,
+                        discardAction = {
+                            context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                        }
+                    ) {
+                        activity?.askForPostNotificationPermission(
+                            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
+                        )
+                    }
+                }
             }
-            calendarsView.buttonsBar.discard.setOnClickListener {
-                calendarsView.buttonsBar.root.isVisible = false
-                context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
-            }
-            calendarsView.buttonsBar.header.text = getString(R.string.enable_notification)
-            calendarsView.buttonsBar.root.isVisible = true
-            calendarsView.buttonsBar.settings.setText(R.string.notify_date)
         }
 
         return calendarsView
@@ -732,5 +769,51 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         private const val CALENDARS_TAB = 0
         private const val EVENTS_TAB = 1
         private const val OWGHAT_TAB = 2
+    }
+}
+
+@Composable
+private fun ButtonsBar(
+    modifier: Modifier = Modifier,
+    @StringRes header: Int,
+    @StringRes acceptButton: Int = R.string.settings,
+    discardAction: () -> Unit = {},
+    acceptAction: () -> Unit,
+) {
+    var shown by remember { mutableStateOf(true) }
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = shown,
+    ) {
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        ) {
+            Text(
+                stringResource(header),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row {
+                OutlinedButton(
+                    onClick = {
+                        discardAction()
+                        shown = false
+                    },
+                    Modifier.weight(1f)
+                ) { Text(stringResource(R.string.ignore)) }
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    onClick = {
+                        shown = false
+                        acceptAction()
+                    },
+                    Modifier.weight(1f)
+                ) { Text(stringResource(acceptButton)) }
+            }
+        }
     }
 }
