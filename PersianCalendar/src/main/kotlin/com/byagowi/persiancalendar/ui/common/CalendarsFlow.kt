@@ -6,8 +6,10 @@ import android.widget.FrameLayout
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -57,8 +59,8 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     enabledCalendars.forEach { calendarType ->
                         AnimatedVisibility(
                             visible = calendarType in calendarsToShow,
-                            enter = fadeIn() + slideInVertically(),
-                            exit = fadeOut() + slideOutVertically(),
+                            enter = fadeIn() + slideInVertically() + expandHorizontally(),
+                            exit = fadeOut() + slideOutVertically() + shrinkHorizontally(),
                         ) {
                             AnimatedContent(
                                 targetState = jdn,
