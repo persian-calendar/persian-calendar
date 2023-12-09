@@ -45,6 +45,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -91,6 +92,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -98,6 +100,7 @@ import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
@@ -135,21 +138,32 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
 
+    val state by viewModel.astronomyState.collectAsState()
+
     var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDayPickerDialog) DayPickerDialog(initialJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate()),
+    if (showDayPickerDialog) DayPickerDialog(initialJdn = Jdn(state.date.toCivilDate()),
         positiveButtonTitle = R.string.accept,
         onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }) {
         showDayPickerDialog = false
     }
 
+    LaunchedEffect(null) {
+        while (true) {
+            delay(ONE_MINUTE_IN_MILLIS)
+            viewModel.addMinutesOffset(1)
+        }
+    }
+
+    // Bad practice, for now
+    var slider by remember { mutableStateOf<SliderView?>(null) }
+
     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-    if (showHoroscopeDialog) HoroscopesDialog(viewModel.astronomyState.value.date.time) {
+    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
         showHoroscopeDialog = false
     }
 
     var isTropical by rememberSaveable { mutableStateOf(false) }
     var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
-    val state by viewModel.astronomyState.collectAsState()
 
     TopAppBar(
         title = { Text(stringResource(R.string.astronomy)) },
@@ -223,15 +237,15 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
 
     val headerCache = remember {
         lruCache(1024, create = { jdn: Jdn ->
-            viewModel.astronomyState.value.generateHeader(context, jdn).joinToString("\n")
+            state.generateHeader(context, jdn).joinToString("\n")
         })
     }
 
     var lastButtonClickTimestamp by remember { mutableStateOf(System.currentTimeMillis()) }
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     fun buttonScrollSlider(days: Int): Boolean {
         lastButtonClickTimestamp = System.currentTimeMillis()
-        // TODO: Bring back arrow keys causing slider scroll
-        //  binding.slider.smoothScrollBy(250f * days * viewDirection, 0f)
+        slider?.smoothScrollBy(250f * days * if (isRtl) 1 else -1, 0f)
         viewModel.animateToRelativeDayOffset(days)
         return true
     }
@@ -302,8 +316,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                             }
                             solarView.rotationalMinutesChange = { offset ->
                                 viewModel.addMinutesOffset(offset)
-                                // TODO: Bring this back rotating in solar view causing slider scroll
-                                //  binding.slider.manualScrollBy(offset / 200f, 0f)
+                                slider?.manualScrollBy(offset / 200f, 0f)
                             }
                             solarView
                         },
@@ -372,18 +385,18 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                         ),
                         tint = MaterialTheme.colorScheme.primary,
                     )
-                    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
                     AndroidView(
                         factory = { context ->
-                            val slider = SliderView(context)
+                            val root = SliderView(context)
+                            slider = root
                             var latestVibration = 0L
-                            slider.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
-                            slider.onScrollListener = { dx, _ ->
+                            root.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
+                            root.onScrollListener = { dx, _ ->
                                 if (dx != 0f) {
                                     val current = System.currentTimeMillis()
                                     if (current - lastButtonClickTimestamp > 2000) {
                                         if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                                            slider.performHapticFeedbackVirtualKey()
+                                            root.performHapticFeedbackVirtualKey()
                                             latestVibration = current
                                         }
                                         viewModel.addMinutesOffset(
@@ -392,7 +405,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                                     }
                                 }
                             }
-                            slider
+                            root
                         },
                         modifier = Modifier
                             .padding(horizontal = 16.dp)

@@ -80,11 +80,13 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocatio
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
+import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.Coordinates
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -127,6 +129,13 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
     val mapDraw = remember { MapDraw(context) }
 
     LaunchedEffect(null) { coordinates.collectLatest { viewModel.turnOnDisplayLocation() } }
+
+    LaunchedEffect(null) {
+        while (true) {
+            delay(ONE_MINUTE_IN_MILLIS)
+            viewModel.addOneMinute()
+        }
+    }
 
     var showGpsDialog by rememberSaveable { mutableStateOf(false) }
     if (showGpsDialog) GPSLocationDialog { showGpsDialog = false }

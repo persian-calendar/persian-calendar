@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.map
 import androidx.lifecycle.ViewModel
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
+import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +21,10 @@ class MapViewModel : ViewModel() {
 
     fun addOneHour() {
         _state.update { it.copy(time = it.time + ONE_HOUR_IN_MILLIS) }
+    }
+
+    fun addOneMinute() {
+        _state.update { it.copy(time = it.time + ONE_MINUTE_IN_MILLIS) }
     }
 
     fun addDays(days: Int) {
