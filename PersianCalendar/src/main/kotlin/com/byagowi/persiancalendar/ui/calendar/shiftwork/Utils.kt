@@ -1,18 +1,13 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
 import android.content.Context
-import androidx.activity.ComponentActivity
 import androidx.core.content.edit
-import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.putJdn
 
@@ -34,7 +29,7 @@ fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
 fun fillViewModelFromGlobalVariables(shiftWorkViewModel: ShiftWorkViewModel, selectedJdn: Jdn) {
     shiftWorkViewModel.changeShiftWorks(
         com.byagowi.persiancalendar.global.shiftWorks
-            .takeIf { it.isNotEmpty() } ?: listOf(ShiftWorkRecord("d", 0))
+            .takeIf { it.isNotEmpty() } ?: listOf(ShiftWorkRecord(shiftWorkKeyToString("d"), 1))
     )
     shiftWorkViewModel.changeIsFirstSetup(false)
     shiftWorkViewModel.changeStartingDate(
