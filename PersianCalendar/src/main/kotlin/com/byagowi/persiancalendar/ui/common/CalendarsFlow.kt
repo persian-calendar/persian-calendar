@@ -4,9 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,6 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.formatDate
@@ -50,39 +54,47 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     verticalArrangement = Arrangement.SpaceEvenly,
                 ) {
                     val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
-                    calendarsToShow.forEach { calendarType ->
-                        AnimatedContent(
-                            targetState = jdn,
-                            label = "jdn",
-                            transitionSpec = {
-                                (fadeIn(animationSpec = tween(animationTime)))
-                                    .togetherWith(fadeOut(animationSpec = tween(animationTime)))
-                            },
-                        ) { state ->
-                            val date = state.toCalendar(calendarType)
-                            Column(
-                                modifier = Modifier.defaultMinSize(
-                                    minWidth = dimensionResource(R.dimen.calendar_item_size),
-                                ), horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
+                    enabledCalendars.forEach { calendarType ->
+                        AnimatedVisibility(
+                            visible = calendarType in calendarsToShow,
+                            enter = fadeIn() + slideInVertically(),
+                            exit = fadeOut() + slideOutVertically(),
+                        ) {
+                            AnimatedContent(
+                                targetState = jdn,
+                                label = "jdn",
+                                transitionSpec = {
+                                    (fadeIn(animationSpec = tween(animationTime)))
+                                        .togetherWith(fadeOut(animationSpec = tween(animationTime)))
+                                },
+                            ) { state ->
+                                val date = state.toCalendar(calendarType)
                                 Column(
-                                    horizontalAlignment = Alignment.CenterHorizontally,
-                                    modifier = Modifier
-                                        .clickable { context.copyToClipboard(formatDate(date)) }
-                                        .semantics { this.contentDescription = formatDate(date) },
+                                    modifier = Modifier.defaultMinSize(
+                                        minWidth = dimensionResource(R.dimen.calendar_item_size),
+                                    ), horizontalAlignment = Alignment.CenterHorizontally
                                 ) {
+                                    Column(
+                                        horizontalAlignment = Alignment.CenterHorizontally,
+                                        modifier = Modifier
+                                            .clickable { context.copyToClipboard(formatDate(date)) }
+                                            .semantics {
+                                                this.contentDescription = formatDate(date)
+                                            },
+                                    ) {
+                                        Text(
+                                            formatNumber(date.dayOfMonth),
+                                            style = MaterialTheme.typography.displayMedium,
+                                        )
+                                        Text(date.monthName)
+                                    }
+                                    val linear = date.toLinearDate()
                                     Text(
-                                        formatNumber(date.dayOfMonth),
-                                        style = MaterialTheme.typography.displayMedium,
+                                        linear,
+                                        modifier = Modifier
+                                            .clickable { context.copyToClipboard(linear) },
                                     )
-                                    Text(date.monthName)
                                 }
-                                val linear = date.toLinearDate()
-                                Text(
-                                    linear,
-                                    modifier = Modifier
-                                        .clickable { context.copyToClipboard(linear) },
-                                )
                             }
                         }
                     }
