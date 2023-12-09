@@ -92,7 +92,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -149,8 +149,10 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
 
     LaunchedEffect(null) {
         while (true) {
-            delay(ONE_MINUTE_IN_MILLIS)
+            delay(THIRTY_SECONDS_IN_MILLIS)
+            // Ugly, just to make the offset
             viewModel.addMinutesOffset(1)
+            viewModel.addMinutesOffset(-1)
         }
     }
 
