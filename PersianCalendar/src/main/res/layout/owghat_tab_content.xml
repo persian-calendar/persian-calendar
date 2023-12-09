@@ -22,22 +22,11 @@
         android:layout_marginBottom="28dp"
         android:visibility="gone" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.byagowi.persiancalendar.ui.calendar.times.Times
         android:id="@+id/times"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_item">
-
-        <com.byagowi.persiancalendar.ui.calendar.times.TimesFlow
-            android:id="@+id/times_flow"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:flow_wrapMode="chain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="@dimen/padding_item" />
 
     <LinearLayout
         android:layout_width="match_parent"

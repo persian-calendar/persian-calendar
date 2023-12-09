@@ -231,7 +231,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         var isExpanded = false
         binding.root.setOnClickListener {
             isExpanded = !isExpanded
-            binding.timesFlow.toggle()
+            binding.times.toggle()
             binding.expansionArrow.animateTo(
                 if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
             )
@@ -239,8 +239,6 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         }
         binding.root.setupExpandableAccessibilityDescription()
         binding.cityName.text = binding.root.context.appPrefs.cityName
-        binding.times.setupLayoutTransition()
-        binding.timesFlow.setup()
 
         // Follows https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
         viewLifecycleOwner.lifecycleScope.launch {
@@ -532,7 +530,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
         val date = jdn.toGregorianCalendar()
         val prayTimes = coordinates.calculatePrayTimes(date)
-        owghatBinding.timesFlow.update(prayTimes)
+        owghatBinding.times.update(prayTimes)
         owghatBinding.moonView.isVisible = !isToday
         owghatBinding.moonView.setOnClickListener {
             findNavController().navigateSafe(
