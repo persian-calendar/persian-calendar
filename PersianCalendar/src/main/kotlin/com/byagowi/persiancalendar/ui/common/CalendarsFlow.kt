@@ -66,7 +66,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : FrameLayout
                                 targetState = jdn,
                                 label = "jdn",
                                 transitionSpec = {
-                                    (fadeIn(animationSpec = tween(animationTime)))
+                                    fadeIn(animationSpec = tween(animationTime))
                                         .togetherWith(fadeOut(animationSpec = tween(animationTime)))
                                 },
                             ) { state ->

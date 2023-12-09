@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.os.Build
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -175,8 +176,7 @@ private fun Licenses() {
                 modifier = Modifier.padding(start = 16.dp, end = 88.dp),
                 color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
             )
-            val angle =
-                animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle").value
+            val angle by animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle")
             Column(modifier = Modifier
                 .clickable { expandedItem = if (i == expandedItem) -1 else i }
                 .padding(
@@ -193,11 +193,11 @@ private fun Licenses() {
                     )
                 )) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
-                    Image(
+                    Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(R.string.more),
                         modifier = Modifier.rotate(angle),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
@@ -217,7 +217,9 @@ private fun Licenses() {
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                     )
                 }
-                if (expandedItem == i) SelectionContainer { Text(text) }
+                AnimatedVisibility(visible = expandedItem == i) {
+                    SelectionContainer { Text(text) }
+                }
             }
         }
         item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }

@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
@@ -377,7 +378,7 @@ private fun HelpItems() {
     Column {
         sections.forEach { (title, body) ->
             var isExpanded by rememberSaveable { mutableStateOf(false) }
-            val angle = animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle").value
+            val angle by animateFloatAsState(if (isExpanded) 0f else 90f, label = "angle")
             Column(
                 modifier = Modifier
                     .clickable { isExpanded = !isExpanded }
@@ -387,19 +388,21 @@ private fun HelpItems() {
             ) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Spacer(modifier = Modifier.width(16.dp))
-                    Image(
+                    Icon(
                         imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = stringResource(R.string.more),
                         modifier = Modifier
                             .rotate(angle)
                             .size(MaterialIconDimension.dp),
-                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                        tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                 }
-                if (isExpanded) SelectionContainer {
-                    Text(body, Modifier.padding(horizontal = 16.dp))
+                AnimatedVisibility(visible = isExpanded) {
+                    SelectionContainer {
+                        Text(body, Modifier.padding(horizontal = 16.dp))
+                    }
                 }
             }
         }

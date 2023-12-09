@@ -58,12 +58,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.ChangeBounds
-import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
@@ -77,7 +74,6 @@ import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarScreenBinding
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
-import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -98,7 +94,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
-import com.byagowi.persiancalendar.ui.common.ArrowView
+import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
@@ -111,7 +107,6 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
@@ -253,60 +248,28 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         return binding.root
     }
 
-    private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): View {
-        coordinates.value ?: return createOwghatTabPlaceholder(inflater.context)
-        val binding = OwghatTabContentBinding.inflate(inflater, container, false)
-
-        var isExpanded = false
-        binding.root.setOnClickListener {
-            isExpanded = !isExpanded
-            binding.times.toggle()
-            binding.expansionArrow.animateTo(
-                if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
-            )
-            TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
-        }
-        binding.root.setupExpandableAccessibilityDescription()
-        binding.cityName.text = binding.root.context.appPrefs.cityName
-
-        // Follows https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.selectedDayChangeEvent.collectLatest { jdn ->
-                        setOwghat(binding, jdn, jdn == Jdn.today())
-                    }
-                }
-                launch {
-                    viewModel.selectedTabIndex.collectLatest {
-                        if (it == OWGHAT_TAB) binding.sunView.startAnimate()
-                        else binding.sunView.clear()
-                    }
-                }
-            }
-        }
-
-        return binding.root
-    }
-
-    private fun createOwghatTabPlaceholder(context: Context): View {
+    private fun createTimesTab(context: Context): View {
         val tab = ComposeView(context)
         tab.setContent {
             AppTheme {
-                ButtonsBar(
-                    modifier = Modifier.padding(top = 24.dp),
-                    header = R.string.ask_user_to_set_location,
-                    discardAction = {
-                        context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+                TimesTab(
+                    navigateToSelf = {
                         findNavController().navigateSafe(
                             CalendarScreenDirections.navigateToSelf()
                         )
                     },
-                ) {
-                    findNavController().navigateSafe(
-                        CalendarScreenDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
-                    )
-                }
+                    navigateToSettingsLocationTab = {
+                        findNavController().navigateSafe(
+                            CalendarScreenDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
+                        )
+                    },
+                    navigateToAstronomy = { dayOffset ->
+                        findNavController().navigateSafe(
+                            CalendarScreenDirections.actionCalendarToAstronomy(dayOffset)
+                        )
+                    },
+                    viewModel,
+                )
             }
         }
         return tab
@@ -322,7 +285,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             R.string.calendar to createCalendarsTab(view.context),
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
             if (enableOwghatTab(view.context)) // The optional third tab
-                R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
+                R.string.owghat to createTimesTab(view.context)
             else null
         )
 
@@ -562,29 +525,6 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         ).show()
     }
 
-    private fun setOwghat(owghatBinding: OwghatTabContentBinding, jdn: Jdn, isToday: Boolean) {
-        val coordinates = coordinates.value ?: return
-
-        val date = jdn.toGregorianCalendar()
-        val prayTimes = coordinates.calculatePrayTimes(date)
-        owghatBinding.times.update(prayTimes)
-        owghatBinding.moonView.isVisible = !isToday
-        owghatBinding.moonView.setOnClickListener {
-            findNavController().navigateSafe(
-                CalendarScreenDirections.actionCalendarToAstronomy(jdn - Jdn.today())
-            )
-        }
-        if (!isToday) owghatBinding.moonView.jdn = jdn.value.toFloat()
-        owghatBinding.sunView.let { sunView ->
-            sunView.isVisible = if (isToday) {
-                sunView.prayTimes = prayTimes
-                sunView.setTime(date)
-                true
-            } else false
-            if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()
-        }
-    }
-
     private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
         val toolbarContext = toolbar.context // context wrapped with toolbar related theme
         val context = calendarPager.context // context usable for normal dialogs
@@ -764,16 +704,14 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             script { unsafe { +"print()" } }
         }
     }
-
-    companion object {
-        private const val CALENDARS_TAB = 0
-        private const val EVENTS_TAB = 1
-        private const val OWGHAT_TAB = 2
-    }
 }
 
+const val CALENDARS_TAB = 0
+const val EVENTS_TAB = 1
+const val OWGHAT_TAB = 2
+
 @Composable
-private fun ButtonsBar(
+fun ButtonsBar(
     modifier: Modifier = Modifier,
     @StringRes header: Int,
     @StringRes acceptButton: Int = R.string.settings,
