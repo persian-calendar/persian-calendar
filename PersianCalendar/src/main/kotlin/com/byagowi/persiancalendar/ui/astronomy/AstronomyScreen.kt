@@ -186,7 +186,8 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
             }
         },
         actions = {
-            AnimatedVisibility(visible = viewModel.minutesOffset.value != 0) {
+            val minutesOffset by viewModel.minutesOffset.collectAsState()
+            AnimatedVisibility(visible = minutesOffset != 0) {
                 IconButton(onClick = { viewModel.animateToAbsoluteMinutesOffset(0) }) {
                     Icon(
                         ImageVector.vectorResource(R.drawable.ic_restore_modified),

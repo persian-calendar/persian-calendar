@@ -3,16 +3,38 @@ package com.byagowi.persiancalendar.ui.converter
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ExpandMore
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -21,14 +43,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,21 +62,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ConverterScreenBinding
-import com.byagowi.persiancalendar.databinding.ConverterSpinnerBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.theme.AppTheme
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
-import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -59,7 +82,6 @@ import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -70,30 +92,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
         val viewModel by viewModels<ConverterViewModel>()
 
         val binding = ConverterScreenBinding.bind(view)
-        val spinner = run {
-            val toolbarContext = binding.appBar.toolbar.context
-            val spinnerBinding = ConverterSpinnerBinding.inflate(toolbarContext.layoutInflater)
-            binding.appBar.toolbar.addView(spinnerBinding.root)
-            spinnerBinding.spinner
-        }
-        spinner.setPopupBackgroundResource(R.drawable.popup_background)
-        val availableModes = ConverterScreenMode.entries.filter {
-            // Converter doesn't work in Android 5, let's hide it there
-            it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-        }
-        spinner.adapter = ArrayAdapter(
-            spinner.context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-            availableModes.map { it.title }.map(spinner.context::getString)
-        )
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) = viewModel.changeScreenMode(availableModes[position])
-        }
-        spinner.setSelection(viewModel.screenMode.value.ordinal)
-
-        binding.appBar.toolbar.setupMenuNavigation()
 
         binding.calendarsView.setContent {
             AppTheme {
@@ -113,7 +111,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                     ) { isExpanded = !isExpanded }
                 }
                 if (isLandscape) Content() else {
-                    @OptIn(ExperimentalMaterial3Api::class)
                     Card(
                         shape = MaterialTheme.shapes.extraLarge,
                         elevation = CardDefaults.cardElevation(8.dp),
@@ -121,19 +118,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                         modifier = Modifier.padding(16.dp),
                     ) { Content() }
                 }
-            }
-        }
-
-        val todayJdn = Jdn.today()
-
-        val todayButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
-            it.icon =
-                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.onClick {
-                viewModel.changeSelectedDate(todayJdn)
-                viewModel.changeSecondSelectedDate(todayJdn)
-                viewModel.resetTimeZoneClock()
             }
         }
 
@@ -174,34 +158,39 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
             }
         }
 
-        binding.appBar.toolbar.menu.add(R.string.share).also { menu ->
-            menu.icon =
-                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
-            menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
-            val jdn = viewModel.selectedDate.value
-            if (viewModel.screenMode.value != ConverterScreenMode.QrCode) activity?.shareText(
-                when (viewModel.screenMode.value) {
-                    ConverterScreenMode.Converter -> listOf(
-                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                        getString(R.string.equivalent_to),
-                        dateStringOfOtherCalendars(jdn, spacedComma)
-                    ).joinToString(" ")
+        binding.content.setContent {
+            AppTheme {
+                ConverterScreen(viewModel) {
+                    val jdn = viewModel.selectedDate.value
+                    if (viewModel.screenMode.value != ConverterScreenMode.QrCode) activity?.shareText(
+                        when (viewModel.screenMode.value) {
+                            ConverterScreenMode.Converter -> listOf(
+                                dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                                getString(R.string.equivalent_to),
+                                dateStringOfOtherCalendars(jdn, spacedComma)
+                            ).joinToString(" ")
 
-                    ConverterScreenMode.Calculator, ConverterScreenMode.Distance ->
-                        binding.resultText.text.toString()
+                            ConverterScreenMode.Calculator, ConverterScreenMode.Distance ->
+                                binding.resultText.text.toString()
 
-                    ConverterScreenMode.TimeZones -> timeZonePickerBindingFlowPairs.joinToString("\n") { (pickerBinding) ->
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            zoneNames[pickerBinding.timeZone.value] + ": " +
-                                    Clock(pickerBinding.clock.hour, pickerBinding.clock.minute)
-                                        .toBasicFormatString()
-                        } else ""
-                    }
+                            ConverterScreenMode.TimeZones -> timeZonePickerBindingFlowPairs.joinToString(
+                                "\n"
+                            ) { (pickerBinding) ->
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    zoneNames[pickerBinding.timeZone.value] + ": " +
+                                            Clock(
+                                                pickerBinding.clock.hour,
+                                                pickerBinding.clock.minute
+                                            )
+                                                .toBasicFormatString()
+                                } else ""
+                            }
 
-                    ConverterScreenMode.QrCode -> ""
+                            ConverterScreenMode.QrCode -> ""
+                        }
+                    ) else binding.qrView.share(activity)
                 }
-            ) else binding.qrView.share(activity)
+            }
         }
 
         binding.dayPickerView.setContent {
@@ -285,15 +274,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
         binding.contentRoot.setupLayoutTransition()
         binding.landscapeSecondPane?.setupLayoutTransition()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.contentRoot.updatePadding(bottom = insets.bottom)
-            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top
-            }
-            WindowInsetsCompat.CONSUMED
-        }
-
         var qrLongClickCount = 0
         binding.qrView.setOnLongClickListener {
             binding.inputText.setText(
@@ -353,11 +333,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                                 binding.qrView.update(binding.inputText.text?.toString() ?: "")
                         }
                     }
-                }
-                launch {
-                    viewModel.todayButtonVisibilityEvent
-                        .distinctUntilChanged()
-                        .collectLatest(todayButton::setVisible)
                 }
                 launch {
                     viewModel.screenModeChangeEvent.collectLatest {
@@ -427,6 +402,103 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                     }
                 }
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConverterScreen(viewModel: ConverterViewModel, onShareClick: () -> Unit) {
+    val context = LocalContext.current
+    // TODO: Ideally this should be onPrimary
+    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+    Column {
+        TopAppBar(
+            title = {
+                var showMenu by remember { mutableStateOf(false) }
+                Box(
+                    Modifier
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .background(Color.Gray.copy(alpha = .5f))
+                        .clickable { showMenu = !showMenu },
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    ) {
+                        Spacer(Modifier.width(16.dp))
+                        Text(stringResource(viewModel.screenMode.value.title))
+                        Icon(Icons.Default.ExpandMore, contentDescription = null)
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        ConverterScreenMode.entries.filter {
+                            // Converter doesn't work in Android 5, let's hide it there
+                            it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                        }.forEach {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(it.title)) },
+                                onClick = {
+                                    showMenu = false
+                                    viewModel.changeScreenMode(it)
+                                },
+                            )
+                        }
+                    }
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(R.string.open_drawer)
+                    )
+                }
+            },
+            actions = {
+                val todayButtonVisibility by viewModel.todayButtonVisibilityEvent
+                    .collectAsState(initial = false)
+                AnimatedVisibility(todayButtonVisibility) {
+                    IconButton(onClick = {
+                        val todayJdn = Jdn.today()
+                        viewModel.changeSelectedDate(todayJdn)
+                        viewModel.changeSecondSelectedDate(todayJdn)
+                        viewModel.resetTimeZoneClock()
+                    }) {
+                        Icon(
+                            ImageVector.vectorResource(R.drawable.ic_restore_modified),
+                            contentDescription = stringResource(R.string.return_to_today),
+                        )
+                    }
+                }
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = onShareClick) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = stringResource(R.string.share),
+                        )
+                    }
+                }
+            },
+        )
+
+        Surface(shape = MaterialCornerExtraLargeTop()) {
+            // Just as a placeholder
+            Spacer(
+                modifier = Modifier
+                    .height(24.dp)
+                    .fillMaxWidth(),
+            )
         }
     }
 }

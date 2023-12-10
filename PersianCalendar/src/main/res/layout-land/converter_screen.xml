@@ -4,9 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/content_root"
@@ -16,7 +17,6 @@
         android:baselineAligned="false"
         android:orientation="horizontal"
         android:paddingStart="8dp"
-        android:paddingTop="16dp"
         android:paddingEnd="8dp">
 
         <ScrollView
