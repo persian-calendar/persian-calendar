@@ -7,5 +7,5 @@
     android:ellipsize="marquee"
     android:singleLine="true"
     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-    android:textColor="?attr/colorControlNormal"
+    android:textColor="?android:attr/colorControlNormal"
     android:textSize="20sp" />

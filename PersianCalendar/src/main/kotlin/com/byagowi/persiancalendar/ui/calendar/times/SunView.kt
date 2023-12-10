@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
@@ -45,10 +46,7 @@ class SunView @JvmOverloads constructor(
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
-    private val linesColor = ColorUtils.setAlphaComponent(
-        textColor ?: context.resolveColor(R.attr.colorControlNormal),
-        0x60
-    )
+    private val linesColor = ColorUtils.setAlphaComponent(textColor ?: Color.GRAY, 0x60)
     private val isInWidgetRender = textColor != null
     private val nightColor =
         if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_night_color)
