@@ -17,6 +17,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -42,6 +44,7 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
+import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -128,8 +131,8 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.onClick {
-                binding.dayPickerView.value = todayJdn
-                binding.secondDayPickerView.value = todayJdn
+                viewModel.changeSelectedDate(todayJdn)
+                viewModel.changeSecondSelectedDate(todayJdn)
                 viewModel.resetTimeZoneClock()
             }
         }
@@ -176,7 +179,7 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
             menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
-            val jdn = binding.dayPickerView.value
+            val jdn = viewModel.selectedDate.value
             if (viewModel.screenMode.value != ConverterScreenMode.QrCode) activity?.shareText(
                 when (viewModel.screenMode.value) {
                     ConverterScreenMode.Converter -> listOf(
@@ -201,12 +204,79 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
             ) else binding.qrView.share(activity)
         }
 
+        binding.dayPickerView.setContent {
+            AppTheme {
+                // Super ugly code
+                var calendar by remember { mutableStateOf(viewModel.calendar.value) }
+                var jdn by remember { mutableStateOf(viewModel.selectedDate.value) }
+                val scope = rememberCoroutineScope()
+                var changeToken by remember { mutableStateOf(0) }
+                remember {
+                    scope.launch {
+                        viewModel.calendar.collect {
+                            if (calendar != it) {
+                                calendar = it
+                                ++changeToken
+                            }
+                        }
+                    }
+                }
+                remember {
+                    scope.launch {
+                        viewModel.selectedDate.collect {
+                            if (jdn != it) {
+                                jdn = it
+                                ++changeToken
+                            }
+                        }
+                    }
+                }
+                DayPicker(
+                    calendarType = calendar,
+                    changeToken = 0,
+                    jdn = jdn,
+                    setJdn = viewModel::changeSelectedDate
+                )
+            }
+        }
+        binding.secondDayPickerView.setContent {
+            AppTheme {
+                // Super ugly code
+                var calendar by remember { mutableStateOf(viewModel.calendar.value) }
+                var jdn by remember { mutableStateOf(viewModel.secondSelectedDate.value) }
+                val scope = rememberCoroutineScope()
+                var changeToken by remember { mutableStateOf(0) }
+                remember {
+                    scope.launch {
+                        viewModel.calendar.collect {
+                            if (calendar != it) {
+                                calendar = it
+                                ++changeToken
+                            }
+                        }
+                    }
+                }
+                remember {
+                    scope.launch {
+                        viewModel.secondSelectedDate.collect {
+                            if (jdn != it) {
+                                jdn = it
+                                ++changeToken
+                            }
+                        }
+                    }
+                }
+                DayPicker(
+                    calendarType = calendar,
+                    changeToken = 0,
+                    jdn = jdn,
+                    setJdn = viewModel::changeSecondSelectedDate
+                )
+            }
+        }
+
         binding.calendarsTypes.value = viewModel.calendar.value
         binding.calendarsTypes.onValueChangeListener = viewModel::changeCalendar
-        binding.dayPickerView.value = viewModel.selectedDate.value
-        binding.dayPickerView.onValueChangeListener = viewModel::changeSelectedDate
-        binding.secondDayPickerView.value = viewModel.secondSelectedDate.value
-        binding.secondDayPickerView.onValueChangeListener = viewModel::changeSecondSelectedDate
         binding.inputText.setText(viewModel.inputText.value)
         binding.inputText.doOnTextChanged { text, _, _, _ ->
             viewModel.changeCalculatorInput(text?.toString() ?: "")
@@ -285,13 +355,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                     }
                 }
                 launch {
-                    viewModel.calendar.collectLatest {
-                        binding.dayPickerView.calendarType = it
-                        if (viewModel.screenMode.value == ConverterScreenMode.Distance)
-                            binding.secondDayPickerView.calendarType = it
-                    }
-                }
-                launch {
                     viewModel.todayButtonVisibilityEvent
                         .distinctUntilChanged()
                         .collectLatest(todayButton::setVisible)
@@ -314,7 +377,6 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                             ConverterScreenMode.Distance -> {
                                 binding.firstTimeZoneClockPicker.root.isVisible = false
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.secondDayPickerView.calendarType = viewModel.calendar.value
 
                                 binding.inputText.isVisible = false
                                 binding.dayPickerView.isVisible = true
