@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,124 +7,116 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
+    <LinearLayout
+        android:id="@+id/content_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
+        android:background="?attr/colorSurface"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="8dp">
 
-        <LinearLayout
-            android:id="@+id/content_root"
-            android:layout_width="match_parent"
+        <ScrollView
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorSurface"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:paddingStart="8dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="8dp">
+            android:layout_weight="1">
 
-            <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <include
+                    android:id="@+id/first_time_zone_clock_picker"
+                    layout="@layout/time_zone_clock_picker" />
+
+                <EditText
+                    android:id="@+id/input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginStart="@dimen/view_padding"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="@dimen/view_padding"
+                    android:layout_marginBottom="@dimen/card_margin"
+                    android:autofillHints=""
+                    android:hint="@string/empty"
+                    android:inputType="textMultiLine"
+                    android:layoutDirection="ltr"
+                    android:minLines="5" />
 
-                    <include
-                        android:id="@+id/first_time_zone_clock_picker"
-                        layout="@layout/time_zone_clock_picker" />
-
-                    <EditText
-                        android:id="@+id/input_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/view_padding"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="@dimen/view_padding"
-                        android:layout_marginBottom="@dimen/card_margin"
-                        android:autofillHints=""
-                        android:hint="@string/empty"
-                        android:inputType="textMultiLine"
-                        android:layoutDirection="ltr"
-                        android:minLines="5" />
-
-                    <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
-                        android:id="@+id/calendars_types"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <com.byagowi.persiancalendar.ui.common.DayPickerView
-                        android:id="@+id/day_picker_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/view_padding"
-                        android:layout_marginRight="@dimen/view_padding" />
-
-                </LinearLayout>
-
-            </ScrollView>
-
-            <ScrollView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <LinearLayout
-                    android:id="@+id/landscape_second_pane"
+                <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
+                    android:id="@+id/calendars_types"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <com.byagowi.persiancalendar.ui.common.DayPickerView
+                    android:id="@+id/day_picker_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/view_padding"
+                    android:layout_marginRight="@dimen/view_padding" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <LinearLayout
+                android:id="@+id/landscape_second_pane"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/second_time_zone_clock_picker"
+                    layout="@layout/time_zone_clock_picker" />
+
+                <TextView
+                    android:id="@+id/result_text"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_gravity="center"
+                    android:layout_margin="19dp"
+                    android:textAlignment="center"
+                    android:textIsSelectable="true"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
 
-                    <include
-                        android:id="@+id/second_time_zone_clock_picker"
-                        layout="@layout/time_zone_clock_picker" />
+                <com.byagowi.persiancalendar.ui.converter.QrView
+                    android:id="@+id/qr_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="@dimen/view_padding"
+                    android:layout_marginTop="@dimen/card_margin"
+                    android:layout_marginRight="@dimen/view_padding"
+                    android:importantForAccessibility="no"
+                    android:visibility="gone" />
 
-                    <TextView
-                        android:id="@+id/result_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_margin="19dp"
-                        android:textAlignment="center"
-                        android:textIsSelectable="true"
-                        android:textSize="16sp"
-                        android:visibility="gone" />
+                <com.byagowi.persiancalendar.ui.common.DayPickerView
+                    android:id="@+id/second_day_picker_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="16dp"
+                    android:visibility="gone" />
 
-                    <com.byagowi.persiancalendar.ui.converter.QrView
-                        android:id="@+id/qr_view"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/view_padding"
-                        android:layout_marginTop="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/view_padding"
-                        android:importantForAccessibility="no"
-                        android:visibility="gone" />
+                <com.byagowi.persiancalendar.ui.common.CalendarsView
+                    android:id="@+id/calendars_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-                    <com.byagowi.persiancalendar.ui.common.DayPickerView
-                        android:id="@+id/second_day_picker_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="16dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="16dp"
-                        android:visibility="gone" />
+            </LinearLayout>
 
-                    <com.byagowi.persiancalendar.ui.common.CalendarsView
-                        android:id="@+id/calendars_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+        </ScrollView>
 
-                </LinearLayout>
-
-            </ScrollView>
-
-        </LinearLayout>
-
-    </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

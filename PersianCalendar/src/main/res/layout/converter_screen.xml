@@ -9,115 +9,108 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
+        android:background="?attr/colorSurface"
+        android:orientation="vertical">
 
-        <ScrollView
+        <LinearLayout
+            android:id="@+id/content_root"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="?attr/colorSurface"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingTop="16dp"
+            android:paddingRight="8dp">
 
-            <LinearLayout
-                android:id="@+id/content_root"
+            <include
+                android:id="@+id/first_time_zone_clock_picker"
+                layout="@layout/time_zone_clock_picker" />
+
+            <include
+                android:id="@+id/second_time_zone_clock_picker"
+                layout="@layout/time_zone_clock_picker" />
+
+            <EditText
+                android:id="@+id/input_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="8dp"
-                android:paddingTop="16dp"
-                android:paddingRight="8dp">
+                android:layout_marginStart="@dimen/view_padding"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="@dimen/view_padding"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:autofillHints=""
+                android:hint="@string/empty"
+                android:inputType="textMultiLine"
+                android:layoutDirection="ltr"
+                android:minLines="5" />
 
-                <include
-                    android:id="@+id/first_time_zone_clock_picker"
-                    layout="@layout/time_zone_clock_picker" />
+            <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
+                android:id="@+id/calendars_types"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-                <include
-                    android:id="@+id/second_time_zone_clock_picker"
-                    layout="@layout/time_zone_clock_picker" />
+            <com.byagowi.persiancalendar.ui.common.DayPickerView
+                android:id="@+id/day_picker_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginRight="@dimen/view_padding" />
 
-                <EditText
-                    android:id="@+id/input_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/view_padding"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="@dimen/view_padding"
-                    android:layout_marginBottom="@dimen/card_margin"
-                    android:autofillHints=""
-                    android:hint="@string/empty"
-                    android:inputType="textMultiLine"
-                    android:layoutDirection="ltr"
-                    android:minLines="5" />
+            <TextView
+                android:id="@+id/result_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:textAlignment="center"
+                android:textIsSelectable="true"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
-                <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
-                    android:id="@+id/calendars_types"
+            <com.byagowi.persiancalendar.ui.converter.QrView
+                android:id="@+id/qr_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:importantForAccessibility="no"
+                android:visibility="gone" />
+
+            <com.byagowi.persiancalendar.ui.common.DayPickerView
+                android:id="@+id/second_day_picker_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="16dp"
+                android:visibility="gone" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/result_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginRight="@dimen/view_padding"
+                android:layout_marginBottom="32dp"
+                app:cardCornerRadius="@dimen/extra_large_shape_corner_size"
+                app:cardElevation="@dimen/card_elevation">
+
+                <com.byagowi.persiancalendar.ui.common.CalendarsView
+                    android:id="@+id/calendars_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
-                <com.byagowi.persiancalendar.ui.common.DayPickerView
-                    android:id="@+id/day_picker_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/view_padding"
-                    android:layout_marginRight="@dimen/view_padding" />
+            </androidx.cardview.widget.CardView>
 
-                <TextView
-                    android:id="@+id/result_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:textAlignment="center"
-                    android:textIsSelectable="true"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
+        </LinearLayout>
 
-                <com.byagowi.persiancalendar.ui.converter.QrView
-                    android:id="@+id/qr_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:importantForAccessibility="no"
-                    android:visibility="gone" />
-
-                <com.byagowi.persiancalendar.ui.common.DayPickerView
-                    android:id="@+id/second_day_picker_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="16dp"
-                    android:visibility="gone" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/result_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/view_padding"
-                    android:layout_marginTop="@dimen/card_margin"
-                    android:layout_marginRight="@dimen/view_padding"
-                    android:layout_marginBottom="32dp"
-                    app:cardCornerRadius="@dimen/extra_large_shape_corner_size"
-                    app:cardElevation="@dimen/card_elevation">
-
-                    <com.byagowi.persiancalendar.ui.common.CalendarsView
-                        android:id="@+id/calendars_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
+    </ScrollView>
 
 </LinearLayout>
