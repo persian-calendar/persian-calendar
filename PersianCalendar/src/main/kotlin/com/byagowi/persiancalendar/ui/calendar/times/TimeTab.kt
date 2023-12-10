@@ -48,7 +48,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.ButtonsBar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.calendar.OWGHAT_TAB
+import com.byagowi.persiancalendar.ui.calendar.TIMES_TAB
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -90,7 +90,7 @@ fun TimesTab(
             now = GregorianCalendar()
         }
     }
-    val jdn by viewModel.selectedDayChangeEvent.collectAsState(today)
+    val jdn by viewModel.selectedDay.collectAsState(today)
     val prayTimes by derivedStateOf { coordinates.calculatePrayTimes(jdn.toGregorianCalendar()) }
 
     Column(
@@ -133,8 +133,8 @@ private fun AstronomicalOverview(
 ) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     var animatedOnce by remember { mutableStateOf(false) }
-    if (selectedTabIndex != OWGHAT_TAB) animatedOnce = false
-    val jdn by viewModel.selectedDayChangeEvent.collectAsState(today)
+    if (selectedTabIndex != TIMES_TAB) animatedOnce = false
+    val jdn by viewModel.selectedDay.collectAsState(today)
 
     val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
     AnimatedContent(
@@ -155,7 +155,7 @@ private fun AstronomicalOverview(
             update = {
                 it.prayTimes = prayTimes
                 it.setTime(now)
-                if (jdn == today && selectedTabIndex == OWGHAT_TAB && !animatedOnce) it.startAnimate()
+                if (jdn == today && selectedTabIndex == TIMES_TAB && !animatedOnce) it.startAnimate()
                 animatedOnce = true
             },
             modifier = Modifier.fillMaxHeight(),

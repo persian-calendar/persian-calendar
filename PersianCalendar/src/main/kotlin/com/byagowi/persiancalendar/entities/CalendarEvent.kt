@@ -23,7 +23,7 @@ sealed class CalendarEvent<T : AbstractDate>(
         CalendarEvent<NepaliDate>(title, isHoliday, date)
 
     class DeviceCalendarEvent(
-        date: CivilDate, title: String, isHoliday: Boolean, val id: Int, val description: String,
+        date: CivilDate, title: String, isHoliday: Boolean, val id: Long, val description: String,
         val start: Date, val end: Date, val color: String
     ) : CalendarEvent<CivilDate>(title, isHoliday, date)
 

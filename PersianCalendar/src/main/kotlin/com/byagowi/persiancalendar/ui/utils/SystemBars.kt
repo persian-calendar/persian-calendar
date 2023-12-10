@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.isColorLight
 
 class SystemBarsTransparency(context: Context) {
     val isPrimaryColorLight = !isColorLight(context.resolveColor(R.attr.colorOnAppBar))
@@ -28,6 +28,14 @@ class SystemBarsTransparency(context: Context) {
     // we at least use isAppearanceLightStatusBars.
     val shouldNavigationBarBeTransparent = !isSurfaceColorLight || isLightNavigationBarAvailable
 }
+
+/**
+ * Determines if a color should be considered light or dark.
+ *
+ * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
+ */
+private fun isColorLight(@ColorInt color: Int): Boolean =
+    color != Color.TRANSPARENT && ColorUtils.calculateLuminance(color) > 0.5
 
 /**
  * Make system bars (status and navigation bars) transparent as far as possible, also disables
@@ -62,4 +70,5 @@ fun Activity.transparentSystemBars() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         window.isNavigationBarContrastEnforced = false
     }
+
 }

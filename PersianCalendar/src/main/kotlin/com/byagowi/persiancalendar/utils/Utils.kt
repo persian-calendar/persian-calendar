@@ -79,11 +79,3 @@ val HighLatitudesMethod.titleStringId
  * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/math/MathUtils.java#L36)
  */
 fun lerp(start: Float, stop: Float, amount: Float): Float = (1 - amount) * start + amount * stop
-
-/**
- * Determines if a color should be considered light or dark.
- *
- * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
- */
-fun isColorLight(@ColorInt color: Int): Boolean =
-    color != Color.TRANSPARENT && ColorUtils.calculateLuminance(color) > 0.5

@@ -40,7 +40,6 @@ class CalendarViewModel @JvmOverloads constructor(
     val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
     // Events
-    val selectedDayChangeEvent: Flow<Jdn> get() = _selectedDay
     val todayButtonVisibilityEvent = _selectedDay.combine(_selectedMonth) { day, month ->
         val todayJdn = Jdn.today()
         val todayDate = todayJdn.toCalendar(mainCalendar)

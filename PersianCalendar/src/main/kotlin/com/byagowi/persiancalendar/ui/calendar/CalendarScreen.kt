@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
-import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,7 +8,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -40,7 +38,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,7 +46,6 @@ import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnNextLayout
-import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
@@ -59,7 +55,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
@@ -73,15 +68,12 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarScreenBinding
-import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
-import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
@@ -107,7 +99,6 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
@@ -121,13 +112,10 @@ import com.byagowi.persiancalendar.utils.enableDeviceCalendar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getFromStringId
-import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.tabs.TabLayoutMediator
@@ -176,7 +164,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         activity?.onBackPressedDispatcher?.addCallback(this, onBackPressedCloseSearchCallback)
     }
 
-    private fun enableOwghatTab(context: Context): Boolean {
+    private fun enableTimesTab(context: Context): Boolean {
         val appPrefs = context.appPrefs
         return coordinates.value != null || // if coordinates is set, should be shown
                 (language.isPersian && // The placeholder isn't translated to other languages
@@ -186,66 +174,27 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                         PREF_APP_LANGUAGE !in appPrefs)
     }
 
-    private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): View {
-        val binding = EventsTabContentBinding.inflate(inflater, container, false)
-        binding.eventsTabHeader.setupLayoutTransition()
-        binding.events.layoutManager = LinearLayoutManager(binding.events.context)
-        val adapter = EventsRecyclerViewAdapter(
-            isRtl = resources.isRtl, dp = resources.dp,
-            createEventIcon = { context.getCompatDrawable(R.drawable.ic_open_in_new) },
-            onEventClick = { id: Int ->
-                runCatching { viewEvent.launch(id.toLong()) }.onFailure {
-                    Toast.makeText(
-                        binding.root.context,
-                        R.string.device_does_not_support,
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }.onFailure(logException)
-            }
-        )
-        binding.events.adapter = adapter
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.selectedDayChangeEvent
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collectLatest { jdn ->
-                    val activity = activity ?: return@collectLatest
-                    val shiftWorkTitle = getShiftWorkTitle(jdn)
-                    binding.shiftWorkTitle.isVisible = shiftWorkTitle != null
-                    binding.shiftWorkTitle.text = shiftWorkTitle
-                    val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn, activity)
-                    binding.shiftWorkInDaysDistance.isVisible = shiftWorkInDaysDistance != null
-                    binding.shiftWorkInDaysDistance.text = shiftWorkInDaysDistance
-                    val events = eventsRepository?.getEvents(jdn, activity.readDayDeviceEvents(jdn))
-                        ?: emptyList()
-                    binding.noEvent.isVisible = events.isEmpty()
-                    adapter.showEvents(events)
-                }
-        }
-
-        if (PREF_HOLIDAY_TYPES !in inflater.context.appPrefs && language.isIranExclusive) {
-            binding.buttonsBar.setContent {
-                AppTheme {
-                    val context = LocalContext.current
-                    ButtonsBar(
-                        header = R.string.warn_if_events_not_set,
-                        discardAction = {
-                            context.appPrefs.edit {
-                                putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
-                            }
-                        },
-                    ) {
+    private fun createEventsTab(context: Context): View {
+        val root = ComposeView(context)
+        root.setContent {
+            AppTheme {
+                EventsTab(
+                    navigateToHolidaysSettings = {
                         findNavController().navigateSafe(
                             CalendarScreenDirections.navigateToSettings(
                                 tab = INTERFACE_CALENDAR_TAB,
                                 preferenceKey = PREF_HOLIDAY_TYPES
                             )
                         )
-                    }
-                }
+                    },
+                    refreshCalendarPagerForEvents = {
+                        mainBinding?.calendarPager?.refresh(isEventsModified = true)
+                    },
+                    viewModel = viewModel,
+                )
             }
         }
-
-        return binding.root
+        return root
     }
 
     private fun createTimesTab(context: Context): View {
@@ -283,8 +232,8 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
         val tabs = listOfNotNull(
             R.string.calendar to createCalendarsTab(view.context),
-            R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
-            if (enableOwghatTab(view.context)) // The optional third tab
+            R.string.events to createEventsTab(view.context),
+            if (enableTimesTab(view.context)) // The optional third tab
                 R.string.owghat to createTimesTab(view.context)
             else null
         )
@@ -410,7 +359,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         val calendarsView = CalendarsView(context)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.selectedDayChangeEvent
+            viewModel.selectedDay
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { jdn ->
                     calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
@@ -487,15 +436,6 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
                     .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
             }
-        }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
-
-    private val viewEvent =
-        registerForActivityResult(object : ActivityResultContract<Long, Void?>() {
-            override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-            override fun createIntent(context: Context, input: Long): Intent =
-                Intent(Intent.ACTION_VIEW).setData(
-                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input)
-                )
         }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
 
     override fun onResume() {
@@ -708,7 +648,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
 const val CALENDARS_TAB = 0
 const val EVENTS_TAB = 1
-const val OWGHAT_TAB = 2
+const val TIMES_TAB = 2
 
 @Composable
 fun ButtonsBar(
@@ -719,10 +659,7 @@ fun ButtonsBar(
     acceptAction: () -> Unit,
 ) {
     var shown by remember { mutableStateOf(true) }
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = shown,
-    ) {
+    AnimatedVisibility(modifier = modifier, visible = shown) {
         Column(
             Modifier
                 .fillMaxWidth()

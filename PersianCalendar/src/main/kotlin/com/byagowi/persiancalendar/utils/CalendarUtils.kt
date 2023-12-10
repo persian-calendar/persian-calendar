@@ -188,7 +188,7 @@ private fun readDeviceEvents(
             val endCalendar = endDate.toGregorianCalendar()
             fun GregorianCalendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
-                id = it.getInt(0),
+                id = it.getLong(0),
                 title =
                 if (it.getString(6) == "1") it.getString(1) ?: ""
                 else "${it.getString(1) ?: ""} (${startCalendar.clock()}${
