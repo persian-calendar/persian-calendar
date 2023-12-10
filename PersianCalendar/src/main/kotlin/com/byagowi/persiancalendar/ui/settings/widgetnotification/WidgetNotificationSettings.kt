@@ -35,7 +35,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
-import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable

@@ -1,124 +1,106 @@
 package com.byagowi.persiancalendar.ui.theme
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
+import androidx.activity.ComponentActivity
+import androidx.annotation.ChecksSdkIntAtLeast
+import androidx.annotation.StringRes
+import androidx.annotation.StyleRes
+import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.appPrefs
 
-@Composable
-fun AppTheme(content: @Composable () -> Unit) {
-// Need more work for modern and black theme who have dynamic variant
-//    val context = LocalContext.current
-//    val dynamicColor = Theme.isDynamicColor(context.appPrefs)
-//    if (dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//        val darkTheme = isSystemInDarkTheme()
-//        val colorScheme =
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        MaterialTheme(colorScheme = colorScheme) {
-//            // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
-//            //  We update the LocalContentColor to match our onBackground. This allows the default
-//            //  content color to be more appropriate to the theme background
-//            CompositionLocalProvider(
-//                LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-//                content = content
-//            )
-//        }
-//    } else
-//    Mdc3Theme { content() }
-    // For now
-    SystemTheme(content)
-}
+enum class Theme(
+    val key: String,
+    @StringRes val title: Int,
+    @StyleRes private val styleRes: Int,
+    val hasGradient: Boolean = true,
+    val hasDynamicColors: Boolean = false,
+    val isDark: Boolean = false,
+) {
+    SYSTEM_DEFAULT(
+        "SystemDefault", R.string.theme_default, R.style.LightTheme,
+        hasDynamicColors = true
+    ),
+    LIGHT("LightTheme", R.string.theme_light, R.style.LightTheme),
+    DARK("DarkTheme", R.string.theme_dark, R.style.DarkTheme, isDark = true),
+    MODERN(
+        "ClassicTheme"/*legacy*/, R.string.theme_modern, R.style.ModernTheme,
+        hasDynamicColors = true,
+    ),
+    AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua, R.style.AquaTheme),
+    BLACK(
+        "BlackTheme", R.string.theme_black, R.style.BlackTheme,
+        hasGradient = false, hasDynamicColors = true,
+        isDark = true
+    );
 
-// Best effort theme matching system, used for widget and wallpaper configuration screen meant to
-// not affected by app's internals
-@Composable
-fun SystemTheme(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-    val isInDarkMode = isSystemInDarkTheme()
-    val colorScheme = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        if (isInDarkMode) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else {
-        if (isInDarkMode) DarkColorScheme else LightColorScheme
+    companion object {
+        private fun SharedPreferences?.getTheme() =
+            this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
+
+        fun supportsGradient(context: Context) = getCurrent(context).hasGradient
+
+        fun apply(activity: ComponentActivity) {
+            val theme = getCurrent(activity)
+            val isDynamicColorAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            if (theme == SYSTEM_DEFAULT || (isDynamicColorAvailable && theme.hasDynamicColors)) {
+                val isNightModeEnabled = isNightMode(activity)
+
+                if (isDynamicColorAvailable) {
+                    activity.setTheme(
+                        when {
+                            theme == BLACK -> R.style.DynamicBlackTheme
+                            theme == MODERN -> R.style.DynamicModernTheme
+                            isNightModeEnabled -> R.style.DynamicDarkTheme
+                            else -> R.style.DynamicLightTheme
+                        }
+                    )
+                    // DynamicColors.applyToActivityIfAvailable(activity)
+                    activity.setTheme(
+                        when {
+                            theme == BLACK -> R.style.DynamicBlackSurfaceOverride
+                            theme == MODERN -> R.style.DynamicModernSurfaceOverride
+                            isNightModeEnabled -> R.style.DynamicDarkSurfaceOverride
+                            else -> R.style.DynamicLightSurfaceOverride
+                        }
+                    )
+                } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
+            } else activity.setTheme(theme.styleRes)
+
+            activity.setTheme(R.style.SharedStyle)
+        }
+
+        fun getCurrent(context: Context): Theme {
+            val key = context.appPrefs.getTheme()
+            return entries.find { it.key == key } ?: SYSTEM_DEFAULT
+        }
+
+        fun getCurrent(prefs: SharedPreferences): Theme {
+            val key = prefs.getTheme()
+            return entries.find { it.key == key } ?: SYSTEM_DEFAULT
+        }
+
+        @StyleRes
+        fun getWidgetSuitableStyle(context: Context, prefersWidgetsDynamicColors: Boolean): Int {
+            val isNightMode = isNightMode(context)
+            return if (prefersWidgetsDynamicColors) {
+                if (isNightMode) R.style.DynamicDarkTheme else R.style.DynamicModernTheme
+            } else MODERN.styleRes
+        }
+
+        fun isDefault(prefs: SharedPreferences?) = prefs.getTheme() == SYSTEM_DEFAULT.key
+
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+        fun isDynamicColor(prefs: SharedPreferences?): Boolean {
+            val themeKey = prefs.getTheme()
+            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    entries.firstOrNull { it.key == themeKey }?.hasDynamicColors ?: false
+        }
+
+        fun isNightMode(context: Context): Boolean =
+            context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
     }
-    MaterialTheme(colorScheme = colorScheme) {
-        // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
-        //  We update the LocalContentColor to match our onBackground. This allows the default
-        //  content color to be more appropriate to the theme background
-        CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.onBackground, content = content
-        )
-    }
 }
-
-// These two color schemes are taken from Android 14, they are in sRGB color space
-private val DarkColorScheme = darkColorScheme(
-    primary = Color(0.4627451f, 0.81960785f, 1.0f, 1.0f),
-    onPrimary = Color(0.0f, 0.20784314f, 0.28627452f, 1.0f),
-    primaryContainer = Color(0.0f, 0.29803923f, 0.4117647f, 1.0f),
-    onPrimaryContainer = Color(0.75686276f, 0.9098039f, 1.0f, 1.0f),
-    inversePrimary = Color(0.0f, 0.4f, 0.54509807f, 1.0f),
-    secondary = Color(0.70980394f, 0.7921569f, 0.84313726f, 1.0f),
-    onSecondary = Color(0.1254902f, 0.2f, 0.23921569f, 1.0f),
-    secondaryContainer = Color(0.21568628f, 0.28627452f, 0.33333334f, 1.0f),
-    onSecondaryContainer = Color(0.81960785f, 0.8980392f, 0.95686275f, 1.0f),
-    tertiary = Color(0.7921569f, 0.75686276f, 0.91764706f, 1.0f),
-    onTertiary = Color(0.19607843f, 0.17254902f, 0.29803923f, 1.0f),
-    tertiaryContainer = Color(0.28235295f, 0.25882354f, 0.39215687f, 1.0f),
-    onTertiaryContainer = Color(0.9019608f, 0.87058824f, 1.0f, 1.0f),
-    background = Color(0.09803922f, 0.10980392f, 0.11764706f, 1.0f),
-    onBackground = Color(0.88235295f, 0.8901961f, 0.8980392f, 1.0f),
-    surface = Color(0.09803922f, 0.10980392f, 0.11764706f, 1.0f),
-    onSurface = Color(0.88235295f, 0.8901961f, 0.8980392f, 1.0f),
-    surfaceVariant = Color(0.2509804f, 0.28235295f, 0.3019608f, 1.0f),
-    onSurfaceVariant = Color(0.7529412f, 0.78039217f, 0.8039216f, 1.0f),
-    surfaceTint = Color(0.4627451f, 0.81960785f, 1.0f, 1.0f),
-    inverseSurface = Color(0.88235295f, 0.8901961f, 0.8980392f, 1.0f),
-    inverseOnSurface = Color(0.18039216f, 0.19215687f, 0.2f, 1.0f),
-    error = Color(0.9490196f, 0.72156864f, 0.70980394f, 1.0f),
-    onError = Color(0.3764706f, 0.078431375f, 0.0627451f, 1.0f),
-    errorContainer = Color(0.54901963f, 0.11372549f, 0.09411765f, 1.0f),
-    onErrorContainer = Color(0.9764706f, 0.87058824f, 0.8627451f, 1.0f),
-    outline = Color(0.5411765f, 0.57254905f, 0.5921569f, 1.0f),
-    outlineVariant = Color(0.28627452f, 0.27058825f, 0.30980393f, 1.0f),
-    scrim = Color(0.0f, 0.0f, 0.0f, 1.0f),
-)
-
-private val LightColorScheme = lightColorScheme(
-    primary = Color(0.0f, 0.4f, 0.54509807f, 1.0f),
-    onPrimary = Color(1.0f, 1.0f, 1.0f, 1.0f),
-    primaryContainer = Color(0.75686276f, 0.9098039f, 1.0f, 1.0f),
-    onPrimaryContainer = Color(0.0f, 0.11764706f, 0.17254902f, 1.0f),
-    inversePrimary = Color(0.4627451f, 0.81960785f, 1.0f, 1.0f),
-    secondary = Color(0.30588236f, 0.38039216f, 0.42352942f, 1.0f),
-    onSecondary = Color(1.0f, 1.0f, 1.0f, 1.0f),
-    secondaryContainer = Color(0.81960785f, 0.8980392f, 0.95686275f, 1.0f),
-    onSecondaryContainer = Color(0.03529412f, 0.11764706f, 0.15686275f, 1.0f),
-    tertiary = Color(0.3764706f, 0.3529412f, 0.4862745f, 1.0f),
-    onTertiary = Color(1.0f, 1.0f, 1.0f, 1.0f),
-    tertiaryContainer = Color(0.9019608f, 0.87058824f, 1.0f, 1.0f),
-    onTertiaryContainer = Color(0.11372549f, 0.09019608f, 0.21176471f, 1.0f),
-    background = Color(0.9882353f, 0.9882353f, 1.0f, 1.0f),
-    onBackground = Color(0.09803922f, 0.10980392f, 0.11764706f, 1.0f),
-    surface = Color(0.9882353f, 0.9882353f, 1.0f, 1.0f),
-    onSurface = Color(0.09803922f, 0.10980392f, 0.11764706f, 1.0f),
-    surfaceVariant = Color(0.8627451f, 0.8901961f, 0.9137255f, 1.0f),
-    onSurfaceVariant = Color(0.2509804f, 0.28235295f, 0.3019608f, 1.0f),
-    surfaceTint = Color(0.0f, 0.4f, 0.54509807f, 1.0f),
-    inverseSurface = Color(0.18039216f, 0.19215687f, 0.2f, 1.0f),
-    inverseOnSurface = Color(0.9411765f, 0.9411765f, 0.9529412f, 1.0f),
-    error = Color(0.7019608f, 0.14901961f, 0.11764706f, 1.0f),
-    onError = Color(1.0f, 1.0f, 1.0f, 1.0f),
-    errorContainer = Color(0.9764706f, 0.87058824f, 0.8627451f, 1.0f),
-    onErrorContainer = Color(0.25490198f, 0.05490196f, 0.043137256f, 1.0f),
-    outline = Color(0.4392157f, 0.46666667f, 0.4862745f, 1.0f),
-    outlineVariant = Color(0.7921569f, 0.76862746f, 0.8156863f, 1.0f),
-    scrim = Color(0.0f, 0.0f, 0.0f, 1.0f),
-)

@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.utils.appPrefs
 
