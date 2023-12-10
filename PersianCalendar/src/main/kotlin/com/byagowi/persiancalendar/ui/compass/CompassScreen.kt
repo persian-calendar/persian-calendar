@@ -38,11 +38,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -200,22 +204,40 @@ fun CompassScreen(
                 }
             },
             actions = {
-                IconButton(onClick = { isTimeShiftAnimate = true }) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
-                        contentDescription = stringResource(
-                            R.string.show_sun_and_moon_path_in_24_hours
-                        ),
-                    )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip {
+                            Text(stringResource(R.string.show_sun_and_moon_path_in_24_hours))
+                        }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = { isTimeShiftAnimate = true }) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
+                            contentDescription = stringResource(
+                                R.string.show_sun_and_moon_path_in_24_hours
+                            ),
+                        )
+                    }
                 }
                 var showMenu by rememberSaveable { mutableStateOf(false) }
                 if (cityName != null || BuildConfig.DEVELOPMENT) IconButton(
                     onClick = { showMenu = !showMenu },
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = stringResource(R.string.more_options),
-                    )
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = stringResource(R.string.more_options),
+                        )
+                    }
                 }
                 var showTrueNorth by rememberSaveable {
                     mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
@@ -387,9 +409,7 @@ fun CompassScreen(
                     context, "dev: acc+magnet", Toast.LENGTH_LONG
                 ).show()
                 if (coordinates.value == null) showLongToast(
-                    context,
-                    R.string.set_location,
-                    Toast.LENGTH_SHORT
+                    context, R.string.set_location, Toast.LENGTH_SHORT
                 )
             } else {
                 showLongToast(context, R.string.compass_not_found, Toast.LENGTH_SHORT)

@@ -35,6 +35,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -43,8 +44,11 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -141,11 +145,19 @@ fun SettingsScreen(
         },
         actions = {
             var showMenu by rememberSaveable { mutableStateOf(false) }
-            IconButton(onClick = { showMenu = !showMenu }) {
-                Icon(
-                    imageVector = Icons.Default.MoreVert,
-                    contentDescription = stringResource(R.string.more_options),
-                )
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                tooltip = {
+                    PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                },
+                state = rememberTooltipState()
+            ) {
+                IconButton(onClick = { showMenu = !showMenu }) {
+                    Icon(
+                        imageVector = Icons.Default.MoreVert,
+                        contentDescription = stringResource(R.string.more_options),
+                    )
+                }
             }
             DropdownMenu(
                 expanded = showMenu, onDismissRequest = { showMenu = false },
@@ -184,8 +196,7 @@ fun SettingsScreen(
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    color = Color(context.resolveColor(R.attr.colorOnAppBar))
-                        .copy(alpha = AppBlendAlpha),
+                    color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha),
                     height = 2.dp,
                 )
             }

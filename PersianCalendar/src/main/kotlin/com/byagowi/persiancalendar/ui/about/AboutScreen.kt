@@ -57,10 +57,14 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -174,17 +178,33 @@ fun AboutScreen(
                 }
             },
             actions = {
-                IconButton(onClick = { shareApplication(context) }) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = stringResource(R.string.share)
-                    )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip { Text(text = stringResource(R.string.share)) }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = { shareApplication(context) }) {
+                        Icon(
+                            imageVector = Icons.Default.Share,
+                            contentDescription = stringResource(R.string.share)
+                        )
+                    }
                 }
-                IconButton(onClick = navigateToDeviceInformation) {
-                    Icon(
-                        imageVector = Icons.Default.PermDeviceInformation,
-                        contentDescription = stringResource(R.string.device_information)
-                    )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip { Text(text = stringResource(R.string.device_information)) }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = navigateToDeviceInformation) {
+                        Icon(
+                            imageVector = Icons.Default.PermDeviceInformation,
+                            contentDescription = stringResource(R.string.device_information)
+                        )
+                    }
                 }
             },
         )

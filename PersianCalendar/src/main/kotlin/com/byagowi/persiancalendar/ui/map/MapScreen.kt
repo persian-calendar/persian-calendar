@@ -32,12 +32,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -121,6 +126,7 @@ class MapFragment : Fragment() {
 
 private const val menuHeight = 56
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
     val state by viewModel.state.collectAsState()
@@ -288,19 +294,25 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
                     onClick = action,
                     selected = false,
                     icon = {
-                        Icon(
-                            ImageVector.vectorResource(icon),
-                            contentDescription = stringResource(title),
-                            // We need more than Triple or defining a new class, oh well
-                            tint = if (when (title) {
-                                    R.string.show_grid_label -> state.displayGrid
-                                    R.string.show_location_label -> coord != null && state.displayLocation
-                                    R.string.show_direct_path_label -> state.isDirectPathMode
-                                    R.string.show_night_mask_label -> state.mapType != MapType.None
-                                    else -> false
-                                }
-                            ) MaterialTheme.colorScheme.inversePrimary else LocalContentColor.current
-                        )
+                        TooltipBox(
+                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                            tooltip = { PlainTooltip { Text(text = stringResource(title)) } },
+                            state = rememberTooltipState()
+                        ) {
+                            Icon(
+                                ImageVector.vectorResource(icon),
+                                contentDescription = stringResource(title),
+                                // We need more than Triple or defining a new class, oh well
+                                tint = if (when (title) {
+                                        R.string.show_grid_label -> state.displayGrid
+                                        R.string.show_location_label -> coord != null && state.displayLocation
+                                        R.string.show_direct_path_label -> state.isDirectPathMode
+                                        R.string.show_night_mask_label -> state.mapType != MapType.None
+                                        else -> false
+                                    }
+                                ) MaterialTheme.colorScheme.inversePrimary else LocalContentColor.current
+                            )
+                        }
                     },
                 )
             }
