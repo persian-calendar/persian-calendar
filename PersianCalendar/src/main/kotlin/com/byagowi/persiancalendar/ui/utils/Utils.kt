@@ -138,19 +138,9 @@ fun Context.shareTextFile(text: String, fileName: String, mime: String) =
 fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
     shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
 
-fun Toolbar.setupUpNavigation(onUpClick: () -> Unit) {
-    navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
-    setNavigationContentDescription(R.string.navigate_up)
-    setNavigationOnClickListener { onUpClick() }
-}
-
-fun Toolbar.setupMenuNavigation() {
-    (context.getActivity() as? MainActivity)?.setupToolbarWithDrawer(this)
-}
-
 // https://stackoverflow.com/a/58249983
 // Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
-private tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
+tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 /**

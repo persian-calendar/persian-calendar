@@ -68,7 +68,6 @@ import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -99,6 +98,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
@@ -116,12 +116,12 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -271,7 +271,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
             binding.content.minimumHeight = (220 * resources.dp).toInt()
         }
 
-        setupMenu(binding.appBar.toolbar, binding.calendarPager)
+        setupMenu(binding.toolbar, binding.calendarPager)
 
         binding.root.post {
             binding.root.context.appPrefs.edit {
@@ -285,12 +285,13 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
         }
 
-        binding.appBar.toolbar.setupMenuNavigation()
+        // Ugly, to get rid of soon
+        (context?.getActivity() as? MainActivity)?.setupToolbarWithDrawer(binding.toolbar)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             // tabs.forEach { (_, view) -> view.updatePadding(bottom = systemBarsInsets.bottom) }
-            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = systemBarsInsets.top
             }
             // val allInsets =
@@ -349,7 +350,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
     }
 
     private fun updateToolbar(binding: CalendarScreenBinding, date: AbstractDate) {
-        val toolbar = binding.appBar.toolbar
+        val toolbar = binding.toolbar
         val secondaryCalendar = secondaryCalendar
         if (secondaryCalendar == null) {
             toolbar.title = date.monthName
@@ -360,23 +361,20 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         }
     }
 
-    private val addEvent =
-        registerForActivityResult(object : ActivityResultContract<Jdn, Void?>() {
-            override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-            override fun createIntent(context: Context, input: Jdn): Intent {
-                val time = input.toGregorianCalendar().timeInMillis
-                return Intent(Intent.ACTION_INSERT)
-                    .setData(CalendarContract.Events.CONTENT_URI)
-                    .putExtra(
-                        CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                            input, input.toCalendar(mainCalendar)
-                        )
+    private val addEvent = registerForActivityResult(object : ActivityResultContract<Jdn, Void?>() {
+        override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
+        override fun createIntent(context: Context, input: Jdn): Intent {
+            val time = input.toGregorianCalendar().timeInMillis
+            return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(
+                    CalendarContract.Events.DESCRIPTION, dayTitleSummary(
+                        input, input.toCalendar(mainCalendar)
                     )
-                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
-                    .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
-                    .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
-            }
-        }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
+                ).putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
+                .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+        }
+    }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
 
     override fun onResume() {
         super.onResume()
@@ -428,8 +426,8 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         }
         // Remove search edit view below bar
         searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull?.setBackgroundColor(
-                android.graphics.Color.TRANSPARENT
-            )
+            android.graphics.Color.TRANSPARENT
+        )
         searchView.findViewById<SearchAutoComplete?>(
             androidx.appcompat.R.id.search_src_text
         ).debugAssertNotNull?.let {
