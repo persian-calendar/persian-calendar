@@ -82,12 +82,13 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
                 val density = LocalDensity.current
                 // Just an exaggerated demo for https://developer.android.com/jetpack/compose/animation#animatedvisibility
                 AnimatedVisibility(
-                    visible = visible, enter = slideInVertically(
+                    visible = visible,
+                    enter = slideInVertically(
                         animationSpec = keyframes { durationMillis = TWO_SECONDS_IN_MILLIS.toInt() }
                     ) { with(density) { -20.dp.roundToPx() } } + fadeIn(
                         initialAlpha = 0f,
                         animationSpec = keyframes { durationMillis = TWO_SECONDS_IN_MILLIS.toInt() }
-                    )
+                    ),
                 ) {
                     Text(
                         stringResource(R.string.in_city_time, cityName),

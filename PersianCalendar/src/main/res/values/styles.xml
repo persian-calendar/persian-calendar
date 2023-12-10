@@ -194,12 +194,6 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
-    <!-- It has an override in ldrtl -->
-    <style name="shapeAppearanceLandscapeCalendarThreeCorners" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
-        <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-    </style>
-
     <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
 
     <style name="AppTextButton" parent="Widget.Material3.Button.TextButton" />

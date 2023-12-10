@@ -15,14 +15,14 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGesturesPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Fullscreen
@@ -30,16 +30,15 @@ import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.SyncAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,6 +65,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
@@ -73,8 +73,6 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
-import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
-import kotlinx.coroutines.delay
 import java.util.UUID
 
 class LevelFragment : Fragment() {
@@ -201,11 +199,11 @@ fun LevelScreen(
             label = "corner",
         )
         Surface(
-            shape = RoundedCornerShape(
-                topStart = topCornersRoundness,
-                topEnd = topCornersRoundness,
-                bottomStart = 0.dp,
-                bottomEnd = 0.dp,
+            shape = MaterialTheme.shapes.large.copy(
+                topStart = CornerSize(topCornersRoundness),
+                topEnd = CornerSize(topCornersRoundness),
+                bottomStart = ZeroCornerSize,
+                bottomEnd = ZeroCornerSize,
             )
         ) {
             Box {
@@ -266,34 +264,16 @@ fun LevelScreen(
                         .padding(horizontal = 20.dp, vertical = 32.dp),
                 ) { StopButton(isStopped) { isStopped = it } }
 
-                var showFullScreenLabel by remember { mutableStateOf(true) }
-                if (isFullscreen) {
-                    LaunchedEffect(null) {
-                        delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
-                        showFullScreenLabel = false
-                    }
-                    FloatingActionButton(
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .safeGesturesPadding()
-                            .padding(top = 32.dp),
-                        onClick = { fullscreenToken = null },
-                        content = {
-                            Row(
-                                Modifier.padding(horizontal = if (showFullScreenLabel) 16.dp else 0.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                            ) {
-                                Icon(
-                                    Icons.Default.FullscreenExit,
-                                    contentDescription = stringResource(R.string.exit_full_screen),
-                                )
-                                AnimatedVisibility(visible = showFullScreenLabel) {
-                                    Text(stringResource(R.string.exit_full_screen))
-                                }
-                            }
-                        },
-                    )
-                }
+                ShrinkingFloatingActionButton(
+                    Modifier
+                        .align(Alignment.TopCenter)
+                        .safeGesturesPadding()
+                        .padding(top = 32.dp),
+                    isVisible = isFullscreen,
+                    action = { fullscreenToken = null },
+                    icon = Icons.Default.FullscreenExit,
+                    title = stringResource(R.string.exit_full_screen),
+                )
             }
         }
     }

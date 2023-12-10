@@ -115,7 +115,7 @@ import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
@@ -392,7 +392,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             creationDateJdn = today
             val navController = navHostFragment?.navController
             if (navController?.currentDestination?.id == R.id.calendar) {
-                navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
+                navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
             }
         }
     }

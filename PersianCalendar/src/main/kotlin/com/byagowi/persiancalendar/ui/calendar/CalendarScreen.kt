@@ -4,7 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -20,25 +20,46 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -46,8 +67,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.doOnNextLayout
-import androidx.core.view.postDelayed
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -56,8 +75,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -89,9 +106,13 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
+import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.theme.AppTheme
+import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
+import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -101,8 +122,6 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -119,7 +138,6 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -142,7 +160,7 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-class CalendarScreen : Fragment(R.layout.calendar_screen) {
+class CalendarFragment : Fragment(R.layout.calendar_screen) {
 
     private var mainBinding: CalendarScreenBinding? = null
     private var searchView: SearchView? = null
@@ -175,54 +193,43 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                         PREF_APP_LANGUAGE !in appPrefs)
     }
 
-    private fun createEventsTab(context: Context): View {
-        val root = ComposeView(context)
-        root.setContent {
-            AppTheme {
-                EventsTab(
-                    navigateToHolidaysSettings = {
-                        findNavController().navigateSafe(
-                            CalendarScreenDirections.navigateToSettings(
-                                tab = INTERFACE_CALENDAR_TAB,
-                                preferenceKey = PREF_HOLIDAY_TYPES
-                            )
-                        )
-                    },
-                    refreshCalendarPagerForEvents = {
-                        mainBinding?.calendarPager?.refresh(isEventsModified = true)
-                    },
-                    viewModel = viewModel,
+    @Composable
+    private fun EventsTab() {
+        EventsTab(
+            navigateToHolidaysSettings = {
+                findNavController().navigateSafe(
+                    CalendarFragmentDirections.navigateToSettings(
+                        tab = INTERFACE_CALENDAR_TAB, preferenceKey = PREF_HOLIDAY_TYPES
+                    )
                 )
-            }
-        }
-        return root
+            },
+            refreshCalendarPagerForEvents = {
+                mainBinding?.calendarPager?.refresh(isEventsModified = true)
+            },
+            viewModel = viewModel,
+        )
     }
 
-    private fun createTimesTab(context: Context): View {
-        val tab = ComposeView(context)
-        tab.setContent {
-            AppTheme {
-                TimesTab(
-                    navigateToSelf = {
-                        findNavController().navigateSafe(
-                            CalendarScreenDirections.navigateToSelf()
-                        )
-                    },
-                    navigateToSettingsLocationTab = {
-                        findNavController().navigateSafe(
-                            CalendarScreenDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
-                        )
-                    },
-                    navigateToAstronomy = { dayOffset ->
-                        findNavController().navigateSafe(
-                            CalendarScreenDirections.actionCalendarToAstronomy(dayOffset)
-                        )
-                    },
-                    viewModel,
+    @Composable
+    private fun TimesTab() {
+        TimesTab(
+            navigateToSelf = {
+                findNavController().navigateSafe(
+                    CalendarFragmentDirections.navigateToSelf()
                 )
-            }
-        }
-        return tab
+            },
+            navigateToSettingsLocationTab = {
+                findNavController().navigateSafe(
+                    CalendarFragmentDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
+                )
+            },
+            navigateToAstronomy = { dayOffset ->
+                findNavController().navigateSafe(
+                    CalendarFragmentDirections.actionCalendarToAstronomy(dayOffset)
+                )
+            },
+            viewModel,
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -230,21 +237,6 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
         val binding = CalendarScreenBinding.bind(view)
         mainBinding = binding
-
-        val tabs = listOfNotNull(
-            R.string.calendar to createCalendarsTab(view.context),
-            R.string.events to createEventsTab(view.context),
-            if (enableTimesTab(view.context)) // The optional third tab
-                R.string.owghat to createTimesTab(view.context)
-            else null
-        )
-
-        // tabs should fill their parent otherwise view pager can't handle it
-        tabs.forEach { (_: Int, tabView: View) ->
-            tabView.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
 
         binding.calendarPager.also {
             it.onDayClicked = { jdn -> bringDate(jdn, monthChange = false) }
@@ -254,43 +246,31 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             )
             it.onMonthSelected = { viewModel.changeSelectedMonth(it.selectedMonth) }
         }
-        binding.addEvent.setOnClickListener { addEventOnCalendar(viewModel.selectedDay.value) }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.selectedMonth
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collectLatest { updateToolbar(binding, it) }
+            viewModel.selectedMonth.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
+            ).collectLatest { updateToolbar(binding, it) }
         }
 
-        val tabsViewPager = binding.viewPager
-        tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            override fun getItemCount(): Int = tabs.size
-            override fun getItemViewType(position: Int) = position // set viewtype equal to position
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                object : RecyclerView.ViewHolder(tabs[viewType].second) {}
-        }
-        TabLayoutMediator(binding.tabLayout, tabsViewPager) { tab, i ->
-            tab.setText(tabs[i].first)
-        }.attach()
-        tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                viewModel.changeSelectedTabIndex(position)
-                binding.root.doOnNextLayout {
-                    makeViewPagerHeightToAtLeastFitTheScreen(binding, tabs)
-                }
-                if (position == EVENTS_TAB) {
-                    binding.addEvent.show()
-                    binding.addEvent.postDelayed(THREE_SECONDS_AND_HALF_IN_MILLIS) {
-                        binding.addEvent.shrink()
-                    }
-                } else binding.addEvent.hide()
-            }
-        })
-
-        tabsViewPager.setCurrentItem(
-            viewModel.selectedTabIndex.value.coerceAtMost(tabs.size - 1), false
+        val tabs = listOfNotNull<Pair<Int, @Composable () -> Unit>>(
+            R.string.calendar to { CalendarsTab() },
+            R.string.events to { EventsTab() },
+            // The optional third tab
+            if (enableTimesTab(view.context)) R.string.owghat to { TimesTab() } else null,
         )
+
+        binding.content.setContent {
+            AppTheme {
+                CalendarScreen(tabs, viewModel) { addEventOnCalendar(viewModel.selectedDay.value) }
+            }
+        }
+
+        binding.content.post {
+            // Just to trick it for relayout, for now
+            binding.content.minimumHeight = (220 * resources.dp).toInt()
+        }
+
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
         binding.root.post {
@@ -309,86 +289,48 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
             val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            tabs.forEach { (_, view) -> view.updatePadding(bottom = systemBarsInsets.bottom) }
+            // tabs.forEach { (_, view) -> view.updatePadding(bottom = systemBarsInsets.bottom) }
             binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = systemBarsInsets.top
             }
-            val allInsets =
-                insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
-            binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = allInsets.bottom + (20 * resources.dp).toInt()
-            }
+            // val allInsets =
+            //     insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
+            // binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            //     bottomMargin = allInsets.bottom + (20 * resources.dp).toInt()
+            // }
             // Content root is only available in portrait mode
-            binding.portraitContentRoot?.updatePadding(
-                bottom = (allInsets.bottom - systemBarsInsets.bottom).coerceAtLeast(0)
-            )
+            // binding.portraitContentRoot?.updatePadding(
+            //     bottom = (allInsets.bottom - systemBarsInsets.bottom).coerceAtLeast(0)
+            // )
             WindowInsetsCompat.CONSUMED
         }
     }
 
-    private fun makeViewPagerHeightToAtLeastFitTheScreen(
-        binding: CalendarScreenBinding,
-        tabs: List<Pair<Int, View>>
-    ) {
-        val width = binding.root.width.takeIf { it != 0 } ?: return
-        val tabWidth = binding.viewPager.width.takeIf { it != 0 } ?: return
-        binding.viewPager.minimumHeight = 0
-        val selectedTab = tabs[binding.viewPager.currentItem].second
-        selectedTab.minimumHeight = 0
-        binding.root.measure(
-            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-        selectedTab.measure(
-            View.MeasureSpec.makeMeasureSpec(tabWidth, View.MeasureSpec.EXACTLY),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-        )
-        val minimumHeight = listOfNotNull(
-            selectedTab.measuredHeight,
-            binding.portraitContentRoot?.let {
-                val calendarHeight = binding.calendarPager.measuredHeight
-                binding.root.measuredHeight -
-                        (calendarHeight + binding.tabLayout.measuredHeight)
-            },
-            resources.sp(220f).toInt()
-        ).max()
-        binding.viewPager.minimumHeight = minimumHeight
-        selectedTab.minimumHeight = minimumHeight
-    }
+    @Composable
+    private fun CalendarsTab() {
+        Column {
+            val jdn by viewModel.selectedDay.collectAsState()
+            var isExpanded by remember { mutableStateOf(false) }
+            CalendarsOverview(jdn, mainCalendar, enabledCalendars, isExpanded) {
+                isExpanded = !isExpanded
+            }
 
-    private fun createCalendarsTab(context: Context): View {
-        val root = ComposeView(context)
-        root.setContent {
-            AppTheme {
-                Column {
-                    val jdn by viewModel.selectedDay.collectAsState()
-                    var isExpanded by remember { mutableStateOf(false) }
-                    CalendarsOverview(jdn, mainCalendar, enabledCalendars, isExpanded) {
-                        isExpanded = !isExpanded
-                    }
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                        ActivityCompat.checkSelfPermission(
-                            context, Manifest.permission.POST_NOTIFICATIONS
-                        ) != PackageManager.PERMISSION_GRANTED &&
-                        PREF_NOTIFY_IGNORED !in context.appPrefs
-                    ) {
-                        ButtonsBar(
-                            header = R.string.enable_notification,
-                            acceptButton = R.string.notify_date,
-                            discardAction = {
-                                context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
-                            }
-                        ) {
-                            activity?.askForPostNotificationPermission(
-                                POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
-                            )
-                        }
-                    }
+            val context = LocalContext.current
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                    context, Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.appPrefs
+            ) {
+                ButtonsBar(header = R.string.enable_notification,
+                    acceptButton = R.string.notify_date,
+                    discardAction = {
+                        context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                    }) {
+                    activity?.askForPostNotificationPermission(
+                        POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
+                    )
                 }
             }
         }
-        return root
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {
@@ -400,8 +342,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             if (!isShowDeviceCalendarEvents) enableDeviceCalendar(activity, findNavController())
             else runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Toast.makeText(
-                    view?.context ?: return, R.string.device_does_not_support,
-                    Toast.LENGTH_SHORT
+                    view?.context ?: return, R.string.device_does_not_support, Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -445,7 +386,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
     private val viewModel by viewModels<CalendarViewModel>()
     private fun bringDate(
-        jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
+        jdn: Jdn,
+        highlight: Boolean = true,
+        monthChange: Boolean = true,
         smoothScroll: Boolean = true
     ) {
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
@@ -455,12 +398,15 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
         // a11y
         if (isTalkBackEnabled && !isToday && monthChange) Toast.makeText(
-            mainBinding?.root?.context ?: return,
-            getA11yDaySummary(
-                context ?: return, jdn, false, EventsStore.empty(),
-                withZodiac = true, withOtherCalendars = true, withTitle = true
-            ),
-            Toast.LENGTH_SHORT
+            mainBinding?.root?.context ?: return, getA11yDaySummary(
+                context ?: return,
+                jdn,
+                false,
+                EventsStore.empty(),
+                withZodiac = true,
+                withOtherCalendars = true,
+                withTitle = true
+            ), Toast.LENGTH_SHORT
         ).show()
     }
 
@@ -481,8 +427,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             }
         }
         // Remove search edit view below bar
-        searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull
-            ?.setBackgroundColor(Color.TRANSPARENT)
+        searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull?.setBackgroundColor(
+                android.graphics.Color.TRANSPARENT
+            )
         searchView.findViewById<SearchAutoComplete?>(
             androidx.appcompat.R.id.search_src_text
         ).debugAssertNotNull?.let {
@@ -494,8 +441,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 bringDate(
                     Jdn(
                         type,
-                        if (date.year == -1)
-                            (today.year + if (date.month < today.month) 1 else 0)
+                        if (date.year == -1) (today.year + if (date.month < today.month) 1 else 0)
                         else date.year,
                         date.month,
                         date.dayOfMonth
@@ -507,9 +453,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 SearchEventsAdapter(context, onQueryChanged = viewModel::searchEvent)
             it.setAdapter(eventsAdapter)
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.eventsFlow
-                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                    .collectLatest(eventsAdapter::setData)
+                viewModel.eventsFlow.flowWithLifecycle(
+                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
+                ).collectLatest(eventsAdapter::setData)
             }
         }
 
@@ -518,10 +464,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.onClick { bringDate(Jdn.today(), highlight = false) }
             viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.todayButtonVisibilityEvent
-                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                    .distinctUntilChanged()
-                    .collectLatest(it::setVisible)
+                viewModel.todayButtonVisibilityEvent.flowWithLifecycle(
+                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
+                ).distinctUntilChanged().collectLatest(it::setVisible)
             }
         }
         toolbar.menu.add(R.string.search_in_events).also {
@@ -580,7 +525,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                             }
                         }
                         updateStoredPreference(context)
-                        findNavController().navigateSafe(CalendarScreenDirections.navigateToSelf())
+                        findNavController().navigateSafe(
+                            CalendarFragmentDirections.navigateToSelf()
+                        )
                     }
                 }
                 menu.setGroupCheckable(groupId, true, true)
@@ -624,8 +571,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     (0..<mainCalendar.getMonthLength(date.year, date.month)).forEach { day ->
                         tr {
                             val prayTimes = coordinates.calculatePrayTimes(
-                                Jdn(mainCalendar.createDate(date.year, date.month, day))
-                                    .toGregorianCalendar()
+                                Jdn(
+                                    mainCalendar.createDate(date.year, date.month, day)
+                                ).toGregorianCalendar()
                             )
                             th { +formatNumber(day + 1) }
                             getTimeNames().forEach {
@@ -677,7 +625,7 @@ fun ButtonsBar(
                         discardAction()
                         shown = false
                     },
-                    Modifier.weight(1f)
+                    Modifier.weight(1f),
                 ) { Text(stringResource(R.string.ignore)) }
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
@@ -685,8 +633,77 @@ fun ButtonsBar(
                         shown = false
                         acceptAction()
                     },
-                    Modifier.weight(1f)
+                    Modifier.weight(1f),
                 ) { Text(stringResource(acceptButton)) }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CalendarScreen(
+    tabs: List<Pair<Int, @Composable () -> Unit>>,
+    viewModel: CalendarViewModel,
+    addEvent: () -> Unit,
+) {
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val currentTab by viewModel.selectedTabIndex.collectAsState()
+    Surface(
+        shape = if (isLandscape) MaterialCornerExtraLargeNoBottomEnd() else MaterialCornerExtraLargeTop(),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        @OptIn(ExperimentalFoundationApi::class) Column {
+            val pagerState = rememberPagerState(
+                initialPage = currentTab.coerceAtMost(tabs.size - 1),
+                pageCount = tabs::size,
+            )
+            val scope = rememberCoroutineScope()
+            viewModel.changeSelectedTabIndex(pagerState.currentPage)
+
+            TabRow(
+                selectedTabIndex = currentTab,
+                divider = {},
+                indicator = @Composable { tabPositions ->
+                    if (currentTab < tabPositions.size) {
+                        TabRowDefaults.Indicator(
+                            Modifier
+                                .tabIndicatorOffset(tabPositions[currentTab])
+                                .padding(horizontal = ExtraLargeShapeCornerSize.dp),
+                            height = 2.dp,
+                        )
+                    }
+                },
+            ) {
+                tabs.forEachIndexed { index, (titlesResId, _) ->
+                    Tab(
+                        text = { Text(stringResource(titlesResId)) },
+                        selected = pagerState.currentPage == index,
+                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                    )
+                }
+            }
+
+            Box {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
+                ) { index ->
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        Column(Modifier.verticalScroll(rememberScrollState())) {
+                            tabs[index].second()
+                            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+                        }
+                    }
+                }
+                ShrinkingFloatingActionButton(
+                    Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(24.dp),
+                    isVisible = currentTab == EVENTS_TAB,
+                    action = addEvent,
+                    icon = Icons.Default.Add,
+                    title = stringResource(R.string.add_event),
+                )
             }
         }
     }

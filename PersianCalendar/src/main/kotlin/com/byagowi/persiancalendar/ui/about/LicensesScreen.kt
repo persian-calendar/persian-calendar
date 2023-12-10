@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -207,7 +205,7 @@ private fun Licenses() {
                         modifier = Modifier
                             .background(
                                 MaterialTheme.colorScheme.secondaryContainer,
-                                RoundedCornerShape(CornerSize(4.dp)),
+                                MaterialTheme.shapes.extraSmall,
                             )
                             .align(alignment = Alignment.CenterVertically)
                             .padding(horizontal = 4.dp),

@@ -162,7 +162,7 @@ fun EventsTab(
                 @OptIn(ExperimentalFoundationApi::class) Modifier
                     .fillMaxWidth()
                     // TODO: Match it with a better number with page's fab
-                    .padding(horizontal = 20.dp, vertical = 4.dp)
+                    .padding(horizontal = 24.dp, vertical = 4.dp)
                     .clip(MaterialTheme.shapes.medium)
                     .background(backgroundColor)
                     .combinedClickable(

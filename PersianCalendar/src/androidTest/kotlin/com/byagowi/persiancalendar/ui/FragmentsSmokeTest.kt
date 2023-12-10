@@ -7,7 +7,7 @@ import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutFragment
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment
-import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.level.LevelFragment
@@ -33,12 +33,12 @@ class FragmentsSmokeTest {
                 R.style.DynamicLightTheme, R.style.DynamicBlackTheme, R.style.DynamicDarkTheme,
                 R.style.DynamicModernTheme
             ) else it
-        }.forEach { launchFragmentInContainer<CalendarScreen>(themeResId = it) }
+        }.forEach { launchFragmentInContainer<CalendarFragment>(themeResId = it) }
     }
 
     @Test
     fun fragmentsSmokeTest() {
-        launchFragmentInContainer<CalendarScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<CalendarFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AboutFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<CompassFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)

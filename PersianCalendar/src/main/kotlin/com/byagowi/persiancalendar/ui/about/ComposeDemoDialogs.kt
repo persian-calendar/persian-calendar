@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
@@ -65,8 +64,7 @@ fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
                     Text(
                         title,
                         color = MaterialTheme.colorScheme.contentColorFor(color),
-                        modifier = Modifier
-                            .background(color, RoundedCornerShape(CornerSize(4.dp))),
+                        modifier = Modifier.background(color, MaterialTheme.shapes.extraSmall),
                     )
                 }
             }

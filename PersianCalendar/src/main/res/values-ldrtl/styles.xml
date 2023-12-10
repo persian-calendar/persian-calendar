@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <style name="shapeAppearanceLandscapeCalendarThreeCorners" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
-        <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-    </style>
-</resources>

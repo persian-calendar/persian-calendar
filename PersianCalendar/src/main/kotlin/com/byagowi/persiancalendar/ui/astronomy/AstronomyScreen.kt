@@ -23,8 +23,6 @@ import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -513,7 +511,7 @@ private fun Cell(modifier: Modifier, @ColorInt color: Int, label: String, value:
             modifier = Modifier
                 .background(
                     Color(if (isDynamicGrayscale) 0xcc808080.toInt() else color),
-                    RoundedCornerShape(CornerSize(8.dp)),
+                    MaterialTheme.shapes.small,
                 )
                 .align(alignment = Alignment.CenterVertically)
                 .padding(vertical = 4.dp, horizontal = 8.dp),

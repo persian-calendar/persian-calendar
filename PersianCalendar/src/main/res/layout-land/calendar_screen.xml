@@ -20,54 +20,11 @@
             android:layout_width="@dimen/grid_calendar_land_width"
             android:layout_height="match_parent" />
 
-        <com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout
+        <androidx.compose.ui.platform.ComposeView
+            android:id="@+id/content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:shapeAppearance="@style/shapeAppearanceLandscapeCalendarThreeCorners">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorSurface"
-                android:orientation="vertical">
-
-                <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tabLayout"
-                    style="@style/TabLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorSurface" />
-
-                <ScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:scrollbars="none">
-
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/viewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:minHeight="220sp" />
-
-                </ScrollView>
-
-            </LinearLayout>
-
-        </com.byagowi.persiancalendar.ui.common.ShapeableFrameLayout>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
-
-    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/add_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:text="@string/add_event"
-        android:visibility="gone"
-        app:icon="@drawable/ic_add"
-        app:layout_anchor="@id/viewPager"
-        app:layout_anchorGravity="bottom|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

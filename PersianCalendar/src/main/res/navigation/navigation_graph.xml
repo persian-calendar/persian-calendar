@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/calendar"
-        android:name="com.byagowi.persiancalendar.ui.calendar.CalendarScreen"
+        android:name="com.byagowi.persiancalendar.ui.calendar.CalendarFragment"
         android:label="@string/calendar"
         tools:layout="@layout/calendar_screen">
         <action

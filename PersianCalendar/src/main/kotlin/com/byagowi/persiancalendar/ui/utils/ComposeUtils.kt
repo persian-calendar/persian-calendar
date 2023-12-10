@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.shape.CornerBasedShape
-import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
@@ -52,9 +52,15 @@ const val MaterialIconDimension = 24f
 @Stable
 fun MaterialCornerExtraLargeTop(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(
-        bottomStart = CornerSize(0),
-        bottomEnd = CornerSize(0),
+        bottomStart = ZeroCornerSize,
+        bottomEnd = ZeroCornerSize,
     )
+}
+
+@Composable
+@Stable
+fun MaterialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
+    return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
 }
 
 // When something needs to match with corner size

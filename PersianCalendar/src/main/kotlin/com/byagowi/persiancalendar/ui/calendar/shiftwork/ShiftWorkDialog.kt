@@ -58,7 +58,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.formatDate
@@ -82,7 +82,7 @@ fun showShiftWorkDialog(activity: ComponentActivity, selectedJdn: Jdn) {
                     ) {
                         ShiftWorkDialogContent(viewModel, selectedJdn, onDismissRequest) {
                             activity.findNavController(R.id.navHostFragment)
-                                .navigateSafe(CalendarScreenDirections.navigateToSelf())
+                                .navigateSafe(CalendarFragmentDirections.navigateToSelf())
                         }
                     }
                 }

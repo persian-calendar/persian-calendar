@@ -40,7 +40,7 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
-import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
@@ -358,6 +358,6 @@ fun enableDeviceCalendar(context: Context, navController: NavController?) {
     context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
     if (isGranted && navController != null && navController.currentDestination?.id == R.id.calendar) {
         updateStoredPreference(context)
-        navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
+        navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
     }
 }
