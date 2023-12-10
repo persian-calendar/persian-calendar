@@ -12,7 +12,7 @@
     <string name="farvardin">Farvardin</string>
     <string name="esfand">Esfand</string>
     <string name="warn_if_events_not_set">Tercih edilen tatilleri ve etkinlikleri seçmek ve göstermek için \"Ayarlar\"ı ziyaret edin</string>
-    <string name="pleasewaitgps">Lütfen bekleyin… Bir dakika sonra yine hiçbir şey görünmüyorsa, diğer seçenekleri deneyin.</string>
+    <string name="pleasewaitgps">Lütfen bekleyin… Bir dakika sonra yine hiçbir şey görünmüyorsa, diğer seçenekleri deneyin</string>
     <string name="customize_widget_summary">Daha belirgin hale getirmek için bildirim ve widget\'larda ne gösterilmelidir</string>
     <string name="shift_work_starting_date_edit">%1$s, daha önce seçilen vardiyalı çalışma başlangıç günüdür.</string>
     <string name="sunriseSunView">Gündoğumu</string>
@@ -380,12 +380,12 @@
     <string name="true_north">Gerçek kuzey</string>
     <string name="lock">Kilitle</string>
     <plurals name="n_weeks">
-        <item quantity="one">Hafta</item>
-        <item quantity="other">Hafta</item>
+        <item quantity="one">%1$s hafta</item>
+        <item quantity="other">%1$s hafta</item>
     </plurals>
     <plurals name="n_seconds">
-        <item quantity="one">Dakika</item>
-        <item quantity="other">Dakika</item>
+        <item quantity="one">%1$s saniye</item>
+        <item quantity="other">%1$s saniye</item>
     </plurals>
     <string name="qr_code">Kare Kod</string>
     <string name="color_gradient">Renk Eğimi</string>
@@ -393,7 +393,10 @@
     <string name="exit_full_screen">Tam Ekrandan Çık</string>
     <string name="full_screen">Tam Ekran</string>
     <plurals name="n_work_days">
-        <item quantity="one">%1$s İş Günü</item>
-        <item quantity="other">%1$s İş Günü</item>
+        <item quantity="one">%1$s iş günü</item>
+        <item quantity="other">%1$s iş günü</item>
     </plurals>
+    <string name="navigate_up">Yukarı git</string>
+    <string name="open_drawer">Gezinme çekmecesini aç</string>
+    <string name="more_options">Daha fazla seçenek</string>
 </resources>
