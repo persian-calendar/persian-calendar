@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.ui.about.AboutFragment
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
-import com.byagowi.persiancalendar.ui.converter.ConverterScreen
+import com.byagowi.persiancalendar.ui.converter.ConverterFragment
 import com.byagowi.persiancalendar.ui.level.LevelFragment
 import com.byagowi.persiancalendar.ui.map.MapFragment
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
@@ -41,7 +41,7 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<CalendarFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AboutFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<CompassFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LevelFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AstronomyFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme)

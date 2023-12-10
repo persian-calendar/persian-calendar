@@ -10,7 +10,6 @@ androidx-test-ext-junit = "1.1.5"
 appcompat = "1.6.1"
 astronomy = "bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f" # is equal to v2.1.17
 browser = "1.7.0"
-cardview = "1.0.0"
 compose = "1.6.0-beta02"
 compose-accompanist = "0.32.0"
 compose-compiler = "1.5.6" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
@@ -55,7 +54,6 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
-cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 compose-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "compose-accompanist" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "compose" }

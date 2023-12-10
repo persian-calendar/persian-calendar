@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,6 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.dp
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -26,6 +41,8 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.CalendarsOverview
+import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -44,7 +61,7 @@ import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import java.util.TimeZone
 
-class ConverterScreen : Fragment(R.layout.converter_screen) {
+class ConverterFragment : Fragment(R.layout.converter_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel by viewModels<ConverterViewModel>()
@@ -75,7 +92,34 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
 
         binding.appBar.toolbar.setupMenuNavigation()
 
-        binding.calendarsView.toggleExpansion()
+        binding.calendarsView.setContent {
+            AppTheme {
+                var isExpanded by rememberSaveable { mutableStateOf(true) }
+                val isLandscape =
+                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                val jdn by viewModel.selectedDate.collectAsState()
+                val selectedCalendar by viewModel.calendar.collectAsState()
+
+                @Composable
+                fun Content() {
+                    CalendarsOverview(
+                        jdn = jdn,
+                        selectedCalendar = selectedCalendar,
+                        shownCalendars = enabledCalendars - selectedCalendar,
+                        isExpanded = isExpanded
+                    ) { isExpanded = !isExpanded }
+                }
+                if (isLandscape) Content() else {
+                    @OptIn(ExperimentalMaterial3Api::class)
+                    Card(
+                        shape = MaterialTheme.shapes.extraLarge,
+                        elevation = CardDefaults.cardElevation(8.dp),
+                        onClick = { isExpanded = !isExpanded },
+                        modifier = Modifier.padding(16.dp),
+                    ) { Content() }
+                }
+            }
+        }
 
         val todayJdn = Jdn.today()
 
@@ -199,14 +243,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                 launch {
                     viewModel.updateEvent.collectLatest {
                         when (viewModel.screenMode.value) {
-                            ConverterScreenMode.Converter -> {
-                                val selectedCalendar = viewModel.calendar.value
-                                binding.calendarsView.update(
-                                    viewModel.selectedDate.value,
-                                    selectedCalendar,
-                                    enabledCalendars - selectedCalendar
-                                )
-                            }
+                            ConverterScreenMode.Converter -> {}
 
                             ConverterScreenMode.Distance -> {
                                 binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
@@ -272,7 +309,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.resultText.isVisible = false
                                 binding.qrView.isVisible = false
                                 binding.calendarsView.isVisible = true
-                                binding.resultCard?.isVisible = true
                             }
 
                             ConverterScreenMode.Distance -> {
@@ -287,7 +323,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.resultText.isVisible = true
                                 binding.qrView.isVisible = false
                                 binding.calendarsView.isVisible = false
-                                binding.resultCard?.isVisible = false
                             }
 
                             ConverterScreenMode.Calculator -> {
@@ -300,7 +335,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.resultText.isVisible = true
                                 binding.qrView.isVisible = false
                                 binding.calendarsView.isVisible = false
-                                binding.resultCard?.isVisible = false
                             }
 
                             ConverterScreenMode.QrCode -> {
@@ -313,7 +347,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.resultText.isVisible = false
                                 binding.qrView.isVisible = true
                                 binding.calendarsView.isVisible = false
-                                binding.resultCard?.isVisible = false
                             }
 
                             ConverterScreenMode.TimeZones -> {
@@ -327,7 +360,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.resultText.isVisible = false
                                 binding.qrView.isVisible = false
                                 binding.calendarsView.isVisible = false
-                                binding.resultCard?.isVisible = false
                             }
                         }
                     }

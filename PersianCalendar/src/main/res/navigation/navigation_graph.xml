@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/converter"
-        android:name="com.byagowi.persiancalendar.ui.converter.ConverterScreen"
+        android:name="com.byagowi.persiancalendar.ui.converter.ConverterFragment"
         android:label="@string/date_converter"
         tools:layout="@layout/converter_screen" />
 
