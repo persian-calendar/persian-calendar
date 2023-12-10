@@ -156,7 +156,7 @@ fun CountryEvents(
             onClick = { onParentClick() },
             modifier = Modifier
                 .padding(start = 20.dp)
-                .size(32.dp, 32.dp),
+                .size(32.dp),
         )
         Text(calendarCenterName)
         val context = LocalContext.current
@@ -201,7 +201,7 @@ private fun IndentedCheckBox(
             },
             modifier = Modifier
                 .padding(start = 20.dp)
-                .size(32.dp, 32.dp),
+                .size(32.dp),
         )
         Text(label)
     }

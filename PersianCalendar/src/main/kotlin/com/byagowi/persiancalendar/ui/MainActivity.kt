@@ -558,7 +558,7 @@ fun AppDrawer(
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(
                             ImageVector.vectorResource(icon),
-                            modifier = Modifier.size(24.dp, 24.dp),
+                            modifier = Modifier.size(24.dp),
                             contentDescription = null
                         )
                         Spacer(Modifier.width(16.dp))

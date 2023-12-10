@@ -295,13 +295,13 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                     Column(Modifier.align(Alignment.CenterStart)) {
                         AstronomyMode.entries.forEach {
                             NavigationRailItem(
-                                modifier = Modifier.size(56.dp, 56.dp),
+                                modifier = Modifier.size(56.dp),
                                 selected = mode == it,
                                 onClick = { mode = it },
                                 icon = {
                                     if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
                                         ImageVector.vectorResource(it.icon),
-                                        modifier = Modifier.size(24.dp, 24.dp),
+                                        modifier = Modifier.size(24.dp),
                                         contentDescription = null,
                                         tint = Color.Unspecified,
                                     )
@@ -323,7 +323,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                             solarView
                         },
                         modifier = Modifier
-                            .size(290.dp, 290.dp)
+                            .size(290.dp)
                             .align(Alignment.Center),
                         update = {
                             it.isTropicalDegree = isTropical
@@ -334,7 +334,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
                     val map = stringResource(R.string.map)
                     NavigationRailItem(
                         modifier = Modifier
-                            .size(56.dp, 56.dp)
+                            .size(56.dp)
                             .align(Alignment.CenterEnd),
                         selected = false,
                         onClick = navigateToMap,
@@ -488,7 +488,7 @@ private fun MoonIcon(astronomyState: AstronomyState) {
     val context = LocalContext.current
     val solarDraw = remember { SolarDraw(context) }
     Box(modifier = Modifier
-        .size(24.dp, 24.dp)
+        .size(24.dp)
         .drawBehind {
             drawIntoCanvas {
                 val radius = size.minDimension / 2f

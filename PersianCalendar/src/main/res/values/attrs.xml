@@ -22,6 +22,5 @@
         <attr name="colorAccent" format="color" />
         <attr name="colorSurface" format="color" />
         <attr name="colorControlNormal" format="color" />
-        <attr name="colorButtonNormal" format="color" />
     </declare-styleable>
 </resources>

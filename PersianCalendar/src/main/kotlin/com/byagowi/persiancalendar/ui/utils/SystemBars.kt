@@ -30,14 +30,6 @@ class SystemBarsTransparency(context: Context) {
 }
 
 /**
- * Determines if a color should be considered light or dark.
- *
- * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
- */
-private fun isColorLight(@ColorInt color: Int): Boolean =
-    color != Color.TRANSPARENT && ColorUtils.calculateLuminance(color) > 0.5
-
-/**
  * Make system bars (status and navigation bars) transparent as far as possible, also disables
  * decor view insets so we should consider the insets ourselves.
  *

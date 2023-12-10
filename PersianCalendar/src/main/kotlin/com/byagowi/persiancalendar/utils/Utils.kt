@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
-import android.graphics.Color
 import android.util.Log
-import androidx.annotation.ColorInt
 import androidx.annotation.StringRes
-import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R

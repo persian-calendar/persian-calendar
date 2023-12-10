@@ -75,10 +75,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
 
         binding.appBar.toolbar.setupMenuNavigation()
 
-        binding.calendarsView.post { // is in 'post' as otherwise will show ann empty circular indicator
-            binding.calendarsView.toggle()
-        }
-        binding.calendarsView.hideMoreIcon()
+        binding.calendarsView.toggleExpansion()
 
         val todayJdn = Jdn.today()
 
@@ -203,11 +200,11 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                     viewModel.updateEvent.collectLatest {
                         when (viewModel.screenMode.value) {
                             ConverterScreenMode.Converter -> {
-                                val selectedCalendarType = viewModel.calendar.value
-                                binding.calendarsView.showCalendars(
+                                val selectedCalendar = viewModel.calendar.value
+                                binding.calendarsView.update(
                                     viewModel.selectedDate.value,
-                                    selectedCalendarType,
-                                    enabledCalendars - selectedCalendarType
+                                    selectedCalendar,
+                                    enabledCalendars - selectedCalendar
                                 )
                             }
 

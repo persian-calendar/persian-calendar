@@ -37,16 +37,13 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
@@ -191,22 +188,6 @@ inline fun MenuItem.onClick(crossinline action: () -> Unit) {
     this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }
 }
 
-fun View.setupExpandableAccessibilityDescription() {
-    ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
-        override fun onInitializeAccessibilityNodeInfo(
-            host: View,
-            info: AccessibilityNodeInfoCompat
-        ) {
-            super.onInitializeAccessibilityNodeInfo(host, info)
-            info.addAction(
-                AccessibilityNodeInfoCompat.AccessibilityActionCompat(
-                    AccessibilityNodeInfoCompat.ACTION_CLICK, resources.getString(R.string.more)
-                )
-            )
-        }
-    })
-}
-
 fun ViewGroup.setupLayoutTransition() {
     this.layoutTransition = LayoutTransition().also {
         it.enableTransitionType(LayoutTransition.CHANGING)
@@ -287,3 +268,11 @@ fun View.performHapticFeedbackLongPress() {
     debugLog("Preformed a haptic feedback long press")
     performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
 }
+
+/**
+ * Determines if a color should be considered light or dark.
+ *
+ * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
+ */
+fun isColorLight(@ColorInt color: Int): Boolean =
+    color != Color.TRANSPARENT && ColorUtils.calculateLuminance(color) > 0.5

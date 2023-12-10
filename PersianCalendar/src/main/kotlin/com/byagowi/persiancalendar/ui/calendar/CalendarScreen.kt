@@ -32,6 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -87,7 +88,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
-import com.byagowi.persiancalendar.ui.common.CalendarsView
+import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.theme.AppTheme
@@ -356,40 +357,38 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
     }
 
     private fun createCalendarsTab(context: Context): View {
-        val calendarsView = CalendarsView(context)
+        val root = ComposeView(context)
+        root.setContent {
+            AppTheme {
+                Column {
+                    val jdn by viewModel.selectedDay.collectAsState()
+                    var isExpanded by remember { mutableStateOf(false) }
+                    CalendarsOverview(jdn, mainCalendar, enabledCalendars, isExpanded) {
+                        isExpanded = !isExpanded
+                    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.selectedDay
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collectLatest { jdn ->
-                    calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
-                }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED &&
-            PREF_NOTIFY_IGNORED !in context.appPrefs
-        ) {
-            calendarsView.buttonsBar.setContent {
-                AppTheme {
-                    ButtonsBar(
-                        header = R.string.enable_notification,
-                        acceptButton = R.string.notify_date,
-                        discardAction = {
-                            context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
-                        }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        ActivityCompat.checkSelfPermission(
+                            context, Manifest.permission.POST_NOTIFICATIONS
+                        ) != PackageManager.PERMISSION_GRANTED &&
+                        PREF_NOTIFY_IGNORED !in context.appPrefs
                     ) {
-                        activity?.askForPostNotificationPermission(
-                            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
-                        )
+                        ButtonsBar(
+                            header = R.string.enable_notification,
+                            acceptButton = R.string.notify_date,
+                            discardAction = {
+                                context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                            }
+                        ) {
+                            activity?.askForPostNotificationPermission(
+                                POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
+                            )
+                        }
                     }
                 }
             }
         }
-
-        return calendarsView
+        return root
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {

@@ -27,7 +27,6 @@ import android.os.Build
 import android.view.Surface
 import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.abs
 import kotlin.math.asin

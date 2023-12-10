@@ -165,7 +165,7 @@ private fun AstronomicalOverview(
                 factory = ::MoonView,
                 update = { if (jdn != today) it.jdn = jdn.value.toFloat() },
                 modifier = Modifier
-                    .size(70.dp, 70.dp)
+                    .size(70.dp)
                     .align(Alignment.Center)
                     .clickable { navigateToAstronomy(jdn - Jdn.today()) },
             )

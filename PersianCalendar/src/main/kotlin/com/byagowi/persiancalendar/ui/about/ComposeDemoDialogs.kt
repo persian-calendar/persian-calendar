@@ -142,7 +142,7 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
                         color = MaterialTheme.colorScheme.onSurface,
                         shape = shape,
                         modifier = Modifier
-                            .size(160.dp, 160.dp)
+                            .size(160.dp)
                             .padding(4.dp)
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {

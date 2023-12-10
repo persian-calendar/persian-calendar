@@ -12,7 +12,6 @@
 //import androidx.navigation.fragment.findNavController
 //import androidx.navigation.navGraphViewModels
 //import com.byagowi.persiancalendar.R
-//import com.byagowi.persiancalendar.databinding.SkyRendererScreenBinding
 //import com.byagowi.persiancalendar.global.coordinates
 //import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 //import com.byagowi.persiancalendar.utils.logException
@@ -28,9 +27,9 @@
 //class SkyRendererScreen : Fragment(R.layout.sky_renderer_screen) {
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
-//        val binding = SkyRendererScreenBinding.bind(view)
+//        val binding = SkyRendererScreen.bind(view)
 //        binding.appBar.toolbar.title = "PanoRendo"
-//        binding.appBar.toolbar.setupUpNavigation { findNavController().navigateUp() }
+//        binding.appBar.toolbar.setupUpNavigation { navigateUp() }
 //
 //        binding.toneMap.adapter = ArrayAdapter(
 //            view.context,

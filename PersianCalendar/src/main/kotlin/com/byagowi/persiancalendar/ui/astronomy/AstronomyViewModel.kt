@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import java.util.GregorianCalendar
 import kotlin.math.roundToInt
 

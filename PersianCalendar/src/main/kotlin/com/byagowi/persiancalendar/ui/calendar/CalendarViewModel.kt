@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsReposito
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.utils.appPrefs
 import io.github.persiancalendar.calendar.AbstractDate
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
