@@ -62,7 +62,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         }
         spinner.adapter = ArrayAdapter(
-            spinner.context, R.layout.toolbar_dropdown_item,
+            spinner.context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
             availableModes.map { it.title }.map(spinner.context::getString)
         )
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

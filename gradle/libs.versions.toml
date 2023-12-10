@@ -57,7 +57,6 @@ astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref 
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 compose-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "compose-accompanist" }
-compose-accompanist-themeadapter-material3 = { group = "com.google.accompanist", name = "accompanist-themeadapter-material3", version.ref = "compose-accompanist" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android", version.ref = "compose" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
@@ -122,7 +121,6 @@ kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization"
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
-compose-accompanist = ["compose-accompanist-flowlayout", "compose-accompanist-themeadapter-material3"]
 espresso = ["espresso-core", "espresso-contrib"]
 mockito = ["mockito-core", "mockito-kotlin"]
 room = ["room-ktx", "room-paging", "room-runtime", "sqlite", "sqlite-framework", "sqlite-ktx"]

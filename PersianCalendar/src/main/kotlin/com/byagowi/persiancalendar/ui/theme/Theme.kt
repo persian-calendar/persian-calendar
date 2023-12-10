@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -33,7 +32,9 @@ fun AppTheme(content: @Composable () -> Unit) {
 //            )
 //        }
 //    } else
-    Mdc3Theme { content() }
+//    Mdc3Theme { content() }
+    // For now
+    SystemTheme(content)
 }
 
 // Best effort theme matching system, used for widget and wallpaper configuration screen meant to

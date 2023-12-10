@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.google.android.material.color.DynamicColors
 
 enum class Theme(
     val key: String,
@@ -57,7 +56,7 @@ enum class Theme(
                             else -> R.style.DynamicLightTheme
                         }
                     )
-                    DynamicColors.applyToActivityIfAvailable(activity)
+                    // DynamicColors.applyToActivityIfAvailable(activity)
                     activity.setTheme(
                         when {
                             theme == BLACK -> R.style.DynamicBlackSurfaceOverride

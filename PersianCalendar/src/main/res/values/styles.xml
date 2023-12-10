@@ -7,11 +7,7 @@
     <!-- its v31 version is more interesting -->
     <color name="widget_background">@android:color/transparent</color>
 
-    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="dialogCornerRadius">@dimen/extra_large_shape_corner_size</item>
-    </style>
-
-    <style name="SplashScreenTheme" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="SplashScreenTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
@@ -22,11 +18,9 @@
         <item name="colorPrimary">@color/light_primary</item>
     </style>
 
-    <style name="BaseDarkTheme" parent="Theme.Material3.DynamicColors.Dark">
-        <item name="colorPrimaryContainer">@color/primary_container_dark</item>
-        <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
-        <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
+    <style name="BaseDarkTheme" parent="Theme.AppCompat">
+        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
+        <item name="appToolbarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
@@ -34,11 +28,9 @@
         <item name="dialogBackgroundColor">#C0101010</item>
     </style>
 
-    <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
-        <item name="colorPrimaryContainer">@color/primary_container_light</item>
-        <item name="colorSecondaryContainer">@color/secondary_container_light</item>
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
-        <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
+    <style name="BaseLightTheme" parent="Theme.AppCompat.Light">
+        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="appToolbarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
@@ -51,9 +43,9 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+<!--        <item name="alertDialogTheme">@style/AlertDialogTheme</item>-->
         <item name="android:typeface">sans</item>
-        <item name="popupMenuBackground">@drawable/popup_background</item>
+<!--        <item name="popupMenuBackground">@drawable/popup_background</item>-->
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
@@ -114,7 +106,7 @@
         <item name="colorAppointment">@color/dark_accent</item>
 
         <!-- As has a relatively dark app toolbar color -->
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
     <style name="AquaTheme" parent="BaseLightTheme">
@@ -136,7 +128,7 @@
         <item name="colorAppointment">@color/dark_accent</item>
 
         <!-- As has a relatively dark app toolbar color -->
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
     <style name="ModernTheme" parent="BaseLightTheme">
@@ -173,33 +165,11 @@
         <item name="fontFamily">sans-serif</item>
     </style>
 
-    <style name="TabLayout" parent="Widget.Material3.TabLayout">
-        <item name="tabIndicatorColor">?attr/colorAccent</item>
-        <item name="tabIndicatorHeight">3dp</item>
-        <item name="android:textSize">@dimen/text_size_title</item>
-        <item name="tabTextAppearance">@style/TextAppearance.Design.Tab</item>
-        <item name="tabBackground">?attr/colorSurface</item>
-    </style>
-
     <!-- Don't apply auto size to sun and moon text as it causes text get smaller and smaller -->
     <style name="commonAutoSize">
         <item name="android:maxLines">1</item>
         <item name="autoSizeMinTextSize">8dp</item>
         <item name="autoSizeTextType">uniform</item>
     </style>
-
-    <style name="shapeAppearanceTopCornerExtraLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
-        <item name="cornerFamily">?attr/shapeCornerFamily</item>
-        <item name="cornerSizeBottomLeft">0dp</item>
-        <item name="cornerSizeBottomRight">0dp</item>
-    </style>
-
-    <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
-
-    <style name="AppTextButton" parent="Widget.Material3.Button.TextButton" />
-
-    <style name="AppTextInputLayoutFilledBox" parent="Widget.Material3.TextInputLayout.FilledBox" />
-
-    <style name="AppTextInputLayoutFilledBoxDenseExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu" />
 
 </resources>

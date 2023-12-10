@@ -137,7 +137,6 @@ dependencies {
     implementation(libs.cardview)
     implementation(libs.viewpager2)
     implementation(libs.dynamicanimation)
-    implementation(libs.material)
 
     implementation(libs.navigation.fragment.ktx)
     androidTestImplementation(libs.navigation.testing)
@@ -165,7 +164,7 @@ dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.compose.activity)
 
-    implementation(libs.bundles.compose.accompanist)
+    implementation(libs.compose.accompanist.flowlayout)
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.compose.navigation)
