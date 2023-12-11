@@ -45,11 +45,6 @@
                 android:layoutDirection="ltr"
                 android:minLines="5" />
 
-            <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
-                android:id="@+id/calendars_types"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
             <androidx.compose.ui.platform.ComposeView
                 android:id="@+id/day_picker_view"
                 android:layout_width="match_parent"

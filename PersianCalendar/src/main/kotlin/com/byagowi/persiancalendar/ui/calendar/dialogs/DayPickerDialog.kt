@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.common.CalendarsTypes
+import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -68,7 +68,7 @@ fun DayPickerDialog(
     ) {
         var calendarType by remember { mutableStateOf(mainCalendar) }
         val view = LocalView.current
-        CalendarsTypes(current = calendarType) {
+        CalendarsTypesPicker(current = calendarType) {
             view.performHapticFeedbackVirtualKey()
             calendarType = it
         }
