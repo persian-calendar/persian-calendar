@@ -19,5 +19,6 @@
         <attr name="sunViewMidDayColor" format="reference" />
         <attr name="colorAccent" format="color" />
         <attr name="colorSurface" format="color" />
+        <attr name="colorPrimary" format="color" />
     </declare-styleable>
 </resources>

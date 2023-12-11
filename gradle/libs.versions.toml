@@ -7,7 +7,6 @@ androidx-core = "1.12.0"
 androidx-fragment = "1.6.2"
 androidx-navigation = "2.7.5"
 androidx-test-ext-junit = "1.1.5"
-appcompat = "1.6.1"
 astronomy = "bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f" # is equal to v2.1.17
 browser = "1.7.0"
 compose = "1.6.0-beta02"
@@ -16,6 +15,7 @@ compose-compiler = "1.5.6" # https://developer.android.com/jetpack/androidx/rele
 compose-material3 = "1.2.0-alpha12"
 coroutines = "1.7.3"
 datastore = "1.0.0"
+drawerlayout = "1.2.0"
 dynamicanimation = "1.0.0"
 espresso = "3.5.1"
 glance = "1.0.0"
@@ -51,7 +51,6 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 compose-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "compose-accompanist" }
@@ -67,7 +66,8 @@ compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+drawerlayout = { group = "androidx.drawerlayout", name = "drawerlayout", version.ref = "drawerlayout" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
 espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }

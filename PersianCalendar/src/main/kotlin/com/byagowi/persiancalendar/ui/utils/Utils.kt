@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
 import android.animation.LayoutTransition
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -34,7 +35,6 @@ import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
@@ -167,9 +167,11 @@ fun NavController.navigateSafe(directions: NavDirections) {
     runCatching { navigate(directions) }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
+@SuppressLint("UseCompatLoadingForDrawables") // for now
 fun Context?.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable {
-    return this?.let { AppCompatResources.getDrawable(it, drawableRes) }.debugAssertNotNull
-        ?: ShapeDrawable()
+    return runCatching {
+        this?.getDrawable(drawableRes)
+    }.onFailure(logException).getOrNull().debugAssertNotNull ?: ShapeDrawable()
 }
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) {

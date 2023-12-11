@@ -132,7 +132,7 @@ dependencies {
     implementation(libs.astronomy)
 
     // Google/JetBrains owned libraries (roughly platform libraries)
-    implementation(libs.appcompat)
+    implementation(libs.drawerlayout)
     implementation(libs.recyclerview)
     implementation(libs.viewpager2)
     implementation(libs.dynamicanimation)

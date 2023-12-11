@@ -4,11 +4,15 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.doOnAttach
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -111,6 +115,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
         }
 
+        @OptIn(ExperimentalFoundationApi::class)
         inner class ViewHolder(val binding: MonthPageBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
@@ -119,48 +124,52 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             init {
                 doOnAttach { monthViewInitializer(binding) }
 
-                binding.previous.let {
-                    it.contentDescription = it.context.getString(
-                        R.string.previous_x, it.context.getString(R.string.month)
+                binding.previous.setContent {
+                    // TODO: Ideally this should be onPrimary
+                    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+                    Icon(
+                        Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                        contentDescription = null,
+                        tint = colorOnAppBar,
+                        modifier = Modifier.combinedClickable(
+                            onClick = {
+                                viewPager.setCurrentItem(viewPager.currentItem - 1, true)
+                            },
+                            onClickLabel = stringResource(
+                                R.string.previous_x, stringResource(R.string.month)
+                            ),
+                            onLongClick = {
+                                viewPager.setCurrentItem(viewPager.currentItem - 12, false)
+                            },
+                            onLongClickLabel = stringResource(
+                                R.string.previous_x, stringResource(R.string.year)
+                            ),
+                        ),
                     )
-                    it.setContent {
-                        // TODO: Ideally this should be onPrimary
-                        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-                        Icon(
-                            Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                            contentDescription = null,
-                            tint = colorOnAppBar,
-                        )
-                    }
-                    it.setOnClickListener {
-                        viewPager.setCurrentItem(viewPager.currentItem - 1, true)
-                    }
-                    it.setOnLongClickListener {
-                        viewPager.setCurrentItem(viewPager.currentItem - 12, false)
-                        true
-                    }
                 }
 
-                binding.next.let {
-                    it.contentDescription = it.context.getString(
-                        R.string.next_x, it.context.getString(R.string.month)
+                binding.next.setContent {
+                    // TODO: Ideally this should be onPrimary
+                    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+                    Icon(
+                        Icons.AutoMirrored.Default.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = colorOnAppBar,
+                        modifier = Modifier.combinedClickable(
+                            onClick = {
+                                viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+                            },
+                            onClickLabel = stringResource(
+                                R.string.next_x, stringResource(R.string.month)
+                            ),
+                            onLongClick = {
+                                viewPager.setCurrentItem(viewPager.currentItem + 12, false)
+                            },
+                            onLongClickLabel = stringResource(
+                                R.string.next_x, stringResource(R.string.year)
+                            ),
+                        ),
                     )
-                    it.setContent {
-                        // TODO: Ideally this should be onPrimary
-                        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-                        Icon(
-                            Icons.AutoMirrored.Default.KeyboardArrowRight,
-                            contentDescription = null,
-                            tint = colorOnAppBar,
-                        )
-                    }
-                    it.setOnClickListener {
-                        viewPager.setCurrentItem(viewPager.currentItem + 1, true)
-                    }
-                    it.setOnLongClickListener {
-                        viewPager.setCurrentItem(viewPager.currentItem + 12, false)
-                        true
-                    }
                 }
 
                 addViewHolder(this)
