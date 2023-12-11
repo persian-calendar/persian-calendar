@@ -5,10 +5,10 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
+import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,7 +39,7 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.update
 
-class WidgetConfigurationActivity : AppCompatActivity() {
+class WidgetConfigurationActivity : ComponentActivity() {
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
@@ -75,7 +75,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
 @Composable
 private fun WidgetConfigurationContent(
-    activity: FragmentActivity,
+    activity: ComponentActivity,
     finishAndSuccess: () -> Unit,
 ) {
     Column(Modifier.safeDrawingPadding()) {

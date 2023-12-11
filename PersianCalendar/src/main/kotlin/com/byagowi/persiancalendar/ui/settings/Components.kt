@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.app.AlertDialog
 import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
@@ -93,7 +94,7 @@ fun SettingsSingleSelect(
         val currentValue = entryValues.indexOf(
             context.appPrefs.getString(key, null) ?: defaultValue
         )
-        androidx.appcompat.app.AlertDialog.Builder(context).setTitle(dialogTitleResId)
+        AlertDialog.Builder(context).setTitle(dialogTitleResId)
             .setNegativeButton(R.string.cancel, null)
             .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
                 context.appPrefs.edit { putString(key, entryValues[which]) }
@@ -117,7 +118,7 @@ fun SettingsMultiSelect(
     SettingsClickable(title = title, summary = summary) {
         val result = (context.appPrefs.getStringSet(key, null) ?: defaultValue).toMutableSet()
         val checkedItems = entryValues.map { it in result }.toBooleanArray()
-        androidx.appcompat.app.AlertDialog.Builder(context).setTitle(dialogTitleResId)
+        AlertDialog.Builder(context).setTitle(dialogTitleResId)
             .setMultiChoiceItems(entries.toTypedArray(), checkedItems) { _, which, isChecked ->
                 if (isChecked) result.add(entryValues[which])
                 else result.remove(entryValues[which])

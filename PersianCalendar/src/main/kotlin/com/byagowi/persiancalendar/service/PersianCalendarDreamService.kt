@@ -12,7 +12,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import androidx.appcompat.widget.AppCompatImageView
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
@@ -75,7 +75,7 @@ class PersianCalendarDreamService : DreamService() {
             it.setOnClickListener { wakeUp() }
         }
 
-        val button = AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme))
+        val button = ImageView(ContextThemeWrapper(this, R.style.LightTheme))
         run {
             button.setImageResource(R.drawable.ic_play)
             var play = false

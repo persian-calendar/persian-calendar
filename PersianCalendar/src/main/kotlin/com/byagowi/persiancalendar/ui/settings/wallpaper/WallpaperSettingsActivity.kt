@@ -2,10 +2,10 @@ package com.byagowi.persiancalendar.ui.settings.wallpaper
 
 import android.content.res.Configuration
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 
-class WallpaperSettingsActivity : AppCompatActivity() {
+class WallpaperSettingsActivity : ComponentActivity() {
 
     private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = finish()

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
+import android.app.AlertDialog
 import androidx.activity.ComponentActivity
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.ATHANS_LIST
@@ -17,7 +18,7 @@ fun showPrayerSelectDialog(activity: ComponentActivity) {
 
     val checked = ATHANS_LIST.map { it in alarms }.toBooleanArray()
     val prayTimesNames = ATHANS_LIST.map { activity.getString(getPrayTimeName(it)) }.toTypedArray()
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.athan_alarm)
         .setMultiChoiceItems(prayTimesNames, checked) { _, which, isChecked ->
             val key = ATHANS_LIST.getOrNull(which) ?: FAJR_KEY
@@ -32,7 +33,7 @@ fun showPrayerSelectDialog(activity: ComponentActivity) {
 
 fun showPrayerSelectPreviewDialog(activity: ComponentActivity) {
     val prayTimesNames = ATHANS_LIST.map { activity.getString(getPrayTimeName(it)) }.toTypedArray()
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.preview)
         .setItems(prayTimesNames) { _, which ->
             startAthan(activity, ATHANS_LIST.getOrNull(which) ?: FAJR_KEY, null)

@@ -6,9 +6,9 @@ import android.media.RingtoneManager
 import android.os.Parcelable
 import android.provider.Settings
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -96,7 +96,7 @@ private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
             )
 
     override fun parseResult(resultCode: Int, intent: Intent?): String? =
-        if (resultCode == AppCompatActivity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
+        if (resultCode == ComponentActivity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
             RingtoneManager.EXTRA_RINGTONE_PICKED_URI
         )?.toString()
         else null

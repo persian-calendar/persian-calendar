@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.app.AlertDialog
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
@@ -196,7 +197,7 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
                         // Hide moon visibilities for now unless is a development build
                         .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
                     val titles = options.map { context.getString(it.title) }
-                    androidx.appcompat.app.AlertDialog.Builder(context)
+                    AlertDialog.Builder(context)
                         .setItems(titles.toTypedArray()) { dialog, i ->
                             viewModel.changeMapType(options[i])
                             dialog.dismiss()

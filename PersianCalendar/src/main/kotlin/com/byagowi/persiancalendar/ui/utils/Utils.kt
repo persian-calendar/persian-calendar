@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
 import android.animation.LayoutTransition
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -34,8 +35,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
-import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
@@ -50,7 +49,6 @@ import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
@@ -189,7 +187,7 @@ fun ComponentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it
     // didn't go well in Android 6.0 so better not risk I guess
-    androidx.appcompat.app.AlertDialog.Builder(this)
+    AlertDialog.Builder(this)
         .setTitle(R.string.calendar_access)
         .setMessage(R.string.phone_calendar_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->

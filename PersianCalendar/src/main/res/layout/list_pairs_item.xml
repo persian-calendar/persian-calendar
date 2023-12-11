@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/padding_item"
         android:paddingRight="@dimen/padding_item"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/second"

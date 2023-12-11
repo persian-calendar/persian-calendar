@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
+import android.app.AlertDialog
 import android.graphics.Color
 import androidx.activity.ComponentActivity
 import androidx.annotation.ColorInt
@@ -34,7 +35,7 @@ private fun showColorPickerDialog(
         it.setPickedColor(initialColor)
         it.setPadding((10 * activity.resources.dp).toInt())
     }
-    androidx.appcompat.app.AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setTitle(if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color)
         .setView(colorPickerView)
         .setPositiveButton(R.string.accept) { _, _ ->

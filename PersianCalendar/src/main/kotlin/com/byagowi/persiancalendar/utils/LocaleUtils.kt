@@ -1,9 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
+import android.app.LocaleManager
 import android.content.Context
 import android.os.Build
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.os.LocaleListCompat
+import android.os.LocaleList
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
@@ -12,8 +13,9 @@ import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
     val locale = language.asSystemLocale()
-    AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(locale))
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.getSystemService<LocaleManager>()?.applicationLocales = LocaleList(locale)
+    } else {
         Locale.setDefault(locale)
         val resources = context.resources
         val config = resources.configuration

@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -245,7 +246,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
             val entries = listOf(midnightDefaultTitle(context)) + methodsToShow.map {
                 midnightMethodToString(context, it)
             }
-            androidx.appcompat.app.AlertDialog.Builder(context).setTitle(R.string.midnight)
+            AlertDialog.Builder(context).setTitle(R.string.midnight)
                 .setNegativeButton(R.string.cancel, null).setSingleChoiceItems(
                     entries.toTypedArray(), entryValues.indexOf(
                         context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
