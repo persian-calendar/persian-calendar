@@ -104,7 +104,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         canvas.drawRoundRect(rect, r, r, paint)
     }
 
-    fun share(activity: FragmentActivity?) {
+    fun share() {
         val size = 1280f
         val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
             drawColor(context.resolveColor(R.attr.colorSurface))
@@ -112,7 +112,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
                 drawQr(this, size.toInt(), 1f, qr, qr)
             }
         }
-        activity?.shareBinaryFile(bitmap.toByteArray(), "result.png", "image/png")
+        context.shareBinaryFile(bitmap.toByteArray(), "result.png", "image/png")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

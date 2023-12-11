@@ -25,8 +25,11 @@ class ConverterViewModel : ViewModel() {
     private val _screenMode = MutableStateFlow(ConverterScreenMode.entries[0])
     val screenMode: StateFlow<ConverterScreenMode> get() = _screenMode
 
-    private val _inputText = MutableStateFlow("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
-    val inputText: StateFlow<String> get() = _inputText
+    private val _calculatorInputText = MutableStateFlow("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
+    val calculatorInputText: StateFlow<String> get() = _calculatorInputText
+
+    private val _qrCodeInputText = MutableStateFlow("https://example.com")
+    val qrCodeInputText: StateFlow<String> get() = _qrCodeInputText
 
     private val _firstTimeZone = MutableStateFlow(TimeZone.getDefault())
     val firstTimeZone: StateFlow<TimeZone> get() = _firstTimeZone
@@ -38,7 +41,6 @@ class ConverterViewModel : ViewModel() {
     val clock: StateFlow<GregorianCalendar> get() = _clock
 
     // Events
-    val screenModeChangeEvent: Flow<ConverterScreenMode> get() = _screenMode
     val todayButtonVisibilityEvent = merge(
         _selectedDate, _secondSelectedDate, _screenMode, _clock
     ).map {
@@ -59,10 +61,6 @@ class ConverterViewModel : ViewModel() {
             }
         }
     }
-    val updateEvent = merge(
-        _calendar, _selectedDate, _secondSelectedDate, _screenMode, _inputText,
-        _clock, _firstTimeZone, _secondTimeZone
-    )
 
     // Commands
     fun changeCalendar(calendarType: CalendarType) {
@@ -82,7 +80,11 @@ class ConverterViewModel : ViewModel() {
     }
 
     fun changeCalculatorInput(text: String) {
-        _inputText.value = text
+        _calculatorInputText.value = text
+    }
+
+    fun changeQrCodeInput(text: String) {
+        _qrCodeInputText.value = text
     }
 
     fun changeClock(hourOfDay: Int, minute: Int, timeZone: TimeZone) {

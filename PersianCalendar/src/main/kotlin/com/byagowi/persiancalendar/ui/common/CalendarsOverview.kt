@@ -184,7 +184,6 @@ fun CalendarsOverview(
             }
         }
 
-
         val showIsMoonInScorpio by derivedStateOf {
             if (isAstronomicalExtraFeaturesEnabled) isMoonInScorpio(context, jdn) else ""
         }

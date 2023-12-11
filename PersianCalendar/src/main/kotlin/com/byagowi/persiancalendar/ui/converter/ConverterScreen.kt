@@ -3,7 +3,10 @@ package com.byagowi.persiancalendar.ui.converter
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -11,10 +14,16 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Menu
@@ -27,20 +36,22 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -48,20 +59,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.view.isVisible
-import androidx.core.widget.doOnTextChanged
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ConverterScreenBinding
+import com.byagowi.persiancalendar.databinding.TimeZoneClockPickerBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -73,97 +84,30 @@ import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import io.github.persiancalendar.calculator.eval
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.StateFlow
 import java.util.GregorianCalendar
 import java.util.TimeZone
 
-class ConverterFragment : Fragment(R.layout.converter_screen) {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+class ConverterFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
         val viewModel by viewModels<ConverterViewModel>()
-
-        val binding = ConverterScreenBinding.bind(view)
-
-        binding.calendarsView.setContent {
-            AppTheme {
-                var isExpanded by rememberSaveable { mutableStateOf(true) }
-                val isLandscape =
-                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                val jdn by viewModel.selectedDate.collectAsState()
-                val selectedCalendar by viewModel.calendar.collectAsState()
-
-                @Composable
-                fun Content() {
-                    CalendarsOverview(
-                        jdn = jdn,
-                        selectedCalendar = selectedCalendar,
-                        shownCalendars = enabledCalendars - selectedCalendar,
-                        isExpanded = isExpanded
-                    ) { isExpanded = !isExpanded }
-                }
-                if (isLandscape) Content() else {
-                    Card(
-                        shape = MaterialTheme.shapes.extraLarge,
-                        elevation = CardDefaults.cardElevation(8.dp),
-                        onClick = { isExpanded = !isExpanded },
-                        modifier = Modifier.padding(16.dp),
-                    ) { Content() }
-                }
-            }
-        }
-
-        val zones by lazy(LazyThreadSafetyMode.NONE) {
-            TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
-        }
-        val zoneNames by lazy(LazyThreadSafetyMode.NONE) {
-            zones.map {
-                val offset = Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
-                    .toTimeZoneOffsetFormat()
-                val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
-                "$id ($offset)"
-            }.toTypedArray()
-        }
-        val timeZonePickerBindingFlowPairs = listOf(
-            binding.firstTimeZoneClockPicker to viewModel.firstTimeZone,
-            binding.secondTimeZoneClockPicker to viewModel.secondTimeZone
-        )
-        var timeZonesIsEverInitialized = false
-        fun initializeTimeZones() {
-            if (timeZonesIsEverInitialized) return
-            timeZonesIsEverInitialized = true
-            timeZonePickerBindingFlowPairs.forEach { (pickerBinding, timeZoneFlow) ->
-                pickerBinding.timeZone.minValue = 0
-                pickerBinding.timeZone.maxValue = zones.size - 1
-                pickerBinding.timeZone.displayedValues = zoneNames
-                pickerBinding.timeZone.value = zones.indexOf(timeZoneFlow.value)
-                pickerBinding.timeZone.setOnValueChangedListener { picker, _, index ->
-                    picker.performHapticFeedbackVirtualKey()
-                    if (timeZoneFlow == viewModel.firstTimeZone)
-                        viewModel.changeFirstTimeZone(zones[index])
-                    else viewModel.changeSecondTimeZone(zones[index])
-                }
-                pickerBinding.clock.setOnTimeChangedListener { view, hourOfDay, minute ->
-                    view.performHapticFeedbackVirtualKey()
-                    viewModel.changeClock(hourOfDay, minute, timeZoneFlow.value)
-                }
-            }
-        }
-
-        binding.content.setContent {
+        val root = ComposeView(inflater.context)
+        root.setContent {
             AppTheme {
                 ConverterScreen(viewModel) {
                     val jdn = viewModel.selectedDate.value
-                    if (viewModel.screenMode.value != ConverterScreenMode.QrCode) activity?.shareText(
+                    activity?.shareText(
                         when (viewModel.screenMode.value) {
                             ConverterScreenMode.Converter -> listOf(
                                 dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
@@ -171,195 +115,22 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
                                 dateStringOfOtherCalendars(jdn, spacedComma)
                             ).joinToString(" ")
 
-                            ConverterScreenMode.Calculator, ConverterScreenMode.Distance ->
-                                binding.resultText.text.toString()
-
-                            ConverterScreenMode.TimeZones -> timeZonePickerBindingFlowPairs.joinToString(
-                                "\n"
-                            ) { (pickerBinding) ->
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    zoneNames[pickerBinding.timeZone.value] + ": " +
-                                            Clock(
-                                                pickerBinding.clock.hour,
-                                                pickerBinding.clock.minute
-                                            )
-                                                .toBasicFormatString()
-                                } else ""
-                            }
-
-                            ConverterScreenMode.QrCode -> ""
+                            else -> ""
                         }
-                    ) else binding.qrView.share(activity)
-                }
-            }
-        }
-
-        binding.dayPickerView.setContent {
-            AppTheme {
-                Column {
-                    val calendar by viewModel.calendar.collectAsState()
-                    CalendarsTypesPicker(calendar, viewModel::changeCalendar)
-
-                    val jdn by viewModel.selectedDate.collectAsState()
-                    DayPicker(
-                        calendarType = calendar,
-                        jdn = jdn,
-                        setJdn = viewModel::changeSelectedDate
                     )
                 }
             }
         }
-        binding.secondDayPickerView.setContent {
-            AppTheme {
-                val calendar by viewModel.calendar.collectAsState()
-                val jdn by viewModel.secondSelectedDate.collectAsState()
-                DayPicker(
-                    calendarType = calendar,
-                    jdn = jdn,
-                    setJdn = viewModel::changeSecondSelectedDate
-                )
-            }
-        }
-
-        binding.inputText.setText(viewModel.inputText.value)
-        binding.inputText.doOnTextChanged { text, _, _, _ ->
-            viewModel.changeCalculatorInput(text?.toString() ?: "")
-        }
-
-        binding.contentRoot.setupLayoutTransition()
-        binding.landscapeSecondPane?.setupLayoutTransition()
-
-        var qrLongClickCount = 0
-        binding.qrView.setOnLongClickListener {
-            binding.inputText.setText(
-                when (qrLongClickCount++ % 3) {
-                    0 -> "https://example.com"
-                    1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
-                    else -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
-                }
-            )
-            true
-        }
-
-        // Setup view model change listeners
-        // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.updateEvent.collectLatest {
-                        when (viewModel.screenMode.value) {
-                            ConverterScreenMode.Converter -> {}
-
-                            ConverterScreenMode.Distance -> {
-                                binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
-                                binding.resultText.text = calculateDaysDifference(
-                                    resources, viewModel.selectedDate.value,
-                                    viewModel.secondSelectedDate.value,
-                                    calendarType = viewModel.calendar.value
-                                )
-                            }
-
-                            ConverterScreenMode.Calculator -> {
-                                binding.resultText.textDirection = View.TEXT_DIRECTION_LTR
-                                binding.resultText.text = runCatching {
-                                    // running this inside a runCatching block is absolutely important
-                                    eval(binding.inputText.text?.toString() ?: "")
-                                }.getOrElse { it.message }
-                            }
-
-                            ConverterScreenMode.TimeZones -> {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    timeZonePickerBindingFlowPairs.forEach { (pickerBinding, timeZoneFlow) ->
-                                        val clock = GregorianCalendar(timeZoneFlow.value)
-                                        clock.timeInMillis = viewModel.clock.value.timeInMillis
-                                        val hour = clock[GregorianCalendar.HOUR_OF_DAY]
-                                        val clockView = pickerBinding.clock
-                                        if (clockView.hour != hour) clockView.hour = hour
-                                        val minute = clock[GregorianCalendar.MINUTE]
-                                        if (clockView.minute != minute) clockView.minute = minute
-                                        val zoneView = pickerBinding.timeZone
-                                        val zoneIndex = zones.indexOf(timeZoneFlow.value)
-                                        if (zoneView.value != zoneIndex) zoneView.value = zoneIndex
-                                    }
-                                }
-                            }
-
-                            ConverterScreenMode.QrCode ->
-                                binding.qrView.update(binding.inputText.text?.toString() ?: "")
-                        }
-                    }
-                }
-                launch {
-                    viewModel.screenModeChangeEvent.collectLatest {
-                        when (viewModel.screenMode.value) {
-                            ConverterScreenMode.Converter -> {
-                                binding.firstTimeZoneClockPicker.root.isVisible = false
-                                binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.inputText.isVisible = false
-                                binding.secondDayPickerView.isVisible = false
-                                binding.dayPickerView.isVisible = true
-                                binding.resultText.isVisible = false
-                                binding.qrView.isVisible = false
-                                binding.calendarsView.isVisible = true
-                            }
-
-                            ConverterScreenMode.Distance -> {
-                                binding.firstTimeZoneClockPicker.root.isVisible = false
-                                binding.secondTimeZoneClockPicker.root.isVisible = false
-
-                                binding.inputText.isVisible = false
-                                binding.dayPickerView.isVisible = true
-                                binding.secondDayPickerView.isVisible = true
-                                binding.resultText.isVisible = true
-                                binding.qrView.isVisible = false
-                                binding.calendarsView.isVisible = false
-                            }
-
-                            ConverterScreenMode.Calculator -> {
-                                binding.firstTimeZoneClockPicker.root.isVisible = false
-                                binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.inputText.isVisible = true
-                                binding.dayPickerView.isVisible = false
-                                binding.secondDayPickerView.isVisible = false
-                                binding.resultText.isVisible = true
-                                binding.qrView.isVisible = false
-                                binding.calendarsView.isVisible = false
-                            }
-
-                            ConverterScreenMode.QrCode -> {
-                                binding.firstTimeZoneClockPicker.root.isVisible = false
-                                binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.inputText.isVisible = true
-                                binding.dayPickerView.isVisible = false
-                                binding.secondDayPickerView.isVisible = false
-                                binding.resultText.isVisible = false
-                                binding.qrView.isVisible = true
-                                binding.calendarsView.isVisible = false
-                            }
-
-                            ConverterScreenMode.TimeZones -> {
-                                initializeTimeZones()
-                                binding.firstTimeZoneClockPicker.root.isVisible = true
-                                binding.secondTimeZoneClockPicker.root.isVisible = true
-                                binding.inputText.isVisible = false
-                                binding.dayPickerView.isVisible = false
-                                binding.secondDayPickerView.isVisible = false
-                                binding.resultText.isVisible = false
-                                binding.qrView.isVisible = false
-                                binding.calendarsView.isVisible = false
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        return root
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConverterScreen(viewModel: ConverterViewModel, onShareClick: () -> Unit) {
+fun ConverterScreen(viewModel: ConverterViewModel, onShareText: (String) -> Unit) {
     val context = LocalContext.current
+    val shareActionMap = remember { mutableMapOf<ConverterScreenMode, () -> String?>() }
+    val screenMode = viewModel.screenMode.collectAsState()
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
     Column {
@@ -384,7 +155,9 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareClick: () -> Unit) {
                     DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
                         ConverterScreenMode.entries.filter {
                             // Converter doesn't work in Android 5, let's hide it there
-                            it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                            it != ConverterScreenMode.TimeZones
+                            // Disable timezone for now
+                            // || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                         }.forEach {
                             DropdownMenuItem(
                                 text = { Text(stringResource(it.title)) },
@@ -412,8 +185,9 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareClick: () -> Unit) {
                 }
             },
             actions = {
-                val todayButtonVisibility by viewModel.todayButtonVisibilityEvent
-                    .collectAsState(initial = false)
+                val todayButtonVisibility by viewModel.todayButtonVisibilityEvent.collectAsState(
+                    initial = false
+                )
                 AnimatedVisibility(todayButtonVisibility) {
                     IconButton(onClick = {
                         val todayJdn = Jdn.today()
@@ -427,12 +201,15 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareClick: () -> Unit) {
                         )
                     }
                 }
-                TooltipBox(
+                if ((false)) TooltipBox(
                     positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                     tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
                     state = rememberTooltipState()
                 ) {
-                    IconButton(onClick = onShareClick) {
+                    IconButton(onClick = {
+                        val result = shareActionMap[screenMode.value]?.invoke()
+                        if (result != null) onShareText(result)
+                    }) {
                         Icon(
                             imageVector = Icons.Default.Share,
                             contentDescription = stringResource(R.string.share),
@@ -442,13 +219,329 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareClick: () -> Unit) {
             },
         )
 
-        Surface(shape = MaterialCornerExtraLargeTop()) {
-            // Just as a placeholder
-            Spacer(
+        Surface(
+            shape = MaterialCornerExtraLargeTop(),
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            Column(Modifier.verticalScroll(rememberScrollState())) {
+                Spacer(modifier = Modifier.height(24.dp))
+
+                val isLandscape =
+                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+                // Timezones
+                AnimatedVisibility(screenMode.value == ConverterScreenMode.TimeZones) {
+                    // TODO: Enable timezone and add this
+//                    shareActionMap[ConverterScreenMode.TimeZones] =
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                                    zoneNames[pickerBinding.timeZone.value] + ": " +
+//                                            Clock(
+//                                                pickerBinding.clock.hour,
+//                                                pickerBinding.clock.minute
+//                                            )
+//                                                .toBasicFormatString()
+//                                } else ""
+                    val zones = remember {
+                        TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
+                            .sortedBy { it.rawOffset }
+                    }
+                    val zoneNames = remember {
+                        zones.map {
+                            val offset =
+                                Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
+                                    .toTimeZoneOffsetFormat()
+                            val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
+                            "$id ($offset)"
+                        }.toTypedArray()
+                    }
+                    if (isLandscape) Row {
+                        Box(Modifier.weight(1f)) {
+                            TimezoneClock(viewModel, zones, zoneNames, viewModel.firstTimeZone, 0)
+                        }
+                        Box(Modifier.weight(1f)) {
+                            TimezoneClock(viewModel, zones, zoneNames, viewModel.secondTimeZone, 1)
+                        }
+                    } else Column {
+                        TimezoneClock(viewModel, zones, zoneNames, viewModel.firstTimeZone, 0)
+                        TimezoneClock(viewModel, zones, zoneNames, viewModel.secondTimeZone, 1)
+                    }
+                }
+
+                AnimatedVisibility(
+                    screenMode.value == ConverterScreenMode.Converter ||
+                            screenMode.value == ConverterScreenMode.Distance
+                ) {
+                    Column(Modifier.padding(horizontal = 24.dp)) {
+                        ConverterAndDistance(viewModel, shareActionMap)
+                    }
+                }
+
+                AnimatedVisibility(screenMode.value == ConverterScreenMode.Calculator) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        Calculator(viewModel, shareActionMap)
+                    }
+                }
+
+                AnimatedVisibility(screenMode.value == ConverterScreenMode.QrCode) {
+                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                        QrCode(viewModel, shareActionMap)
+                    }
+                }
+
+                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+            }
+        }
+    }
+}
+
+@Composable
+private fun Calculator(
+    viewModel: ConverterViewModel,
+    setShareAction: MutableMap<ConverterScreenMode, () -> String?>
+) {
+    val inputText = viewModel.calculatorInputText.collectAsState()
+    val result = runCatching {
+        // running this inside a runCatching block is absolutely important
+        eval(inputText.value)
+    }.getOrElse { it.message } ?: ""
+    setShareAction[ConverterScreenMode.Calculator] = { result }
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
+        TextField(
+            value = inputText.value,
+            onValueChange = viewModel::changeCalculatorInput,
+            minLines = 6,
+            modifier = Modifier.weight(1f),
+        )
+        AnimatedContent(
+            result,
+            label = "calculator result",
+            modifier = Modifier.weight(1f),
+        ) { it ->
+            Text(
+                it,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .height(24.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+            )
+        }
+    } else Column(Modifier.padding(horizontal = 24.dp)) {
+        TextField(
+            value = inputText.value,
+            onValueChange = viewModel::changeCalculatorInput,
+            minLines = 10,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.height(16.dp))
+        AnimatedContent(result, label = "calculator result") {
+            Text(
+                it,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
             )
         }
     }
+}
+
+@Composable
+private fun QrCode(
+    viewModel: ConverterViewModel,
+    shareActionMap: MutableMap<ConverterScreenMode, () -> String?>
+) {
+    val inputText = viewModel.qrCodeInputText.collectAsState()
+    Column {
+        val isLandscape =
+            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+        if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
+            TextField(
+                value = inputText.value,
+                onValueChange = viewModel::changeQrCodeInput,
+                minLines = 6,
+                modifier = Modifier.weight(1f),
+            )
+            AndroidView(
+                factory = {
+                    val root = QrView(it)
+                    shareActionMap[ConverterScreenMode.QrCode] = {
+                        root.share()
+                        null
+                    }
+                    root
+                },
+                update = { it.update(inputText.value) },
+                modifier = Modifier.weight(1f),
+            )
+        } else Column(Modifier.padding(horizontal = 24.dp)) {
+            TextField(
+                value = inputText.value,
+                onValueChange = viewModel::changeQrCodeInput,
+                minLines = 10,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(Modifier.height(24.dp))
+            AndroidView(
+                factory = ::QrView,
+                update = { it.update(inputText.value) }
+            )
+        }
+
+        var qrLongClickCount by remember { mutableStateOf(0) }
+        OutlinedButton(
+            onClick = {
+                viewModel.changeQrCodeInput(
+                    when (qrLongClickCount++ % 3) {
+                        0 -> "https://example.com"
+                        1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
+                        else -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
+                    }
+                )
+            },
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 16.dp)
+        ) { Text("Sample inputs") }
+    }
+}
+
+@Composable
+private fun ConverterAndDistance(
+    viewModel: ConverterViewModel,
+    shareActionMap: MutableMap<ConverterScreenMode, () -> String?>,
+) {
+    val screenMode by viewModel.screenMode.collectAsState()
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val calendar by viewModel.calendar.collectAsState()
+    val jdn by viewModel.selectedDate.collectAsState()
+    val secondJdn by viewModel.secondSelectedDate.collectAsState()
+    var isExpanded by rememberSaveable { mutableStateOf(true) }
+    val context = LocalContext.current
+    shareActionMap[ConverterScreenMode.Converter] = {
+        listOf(
+            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+            context.getString(R.string.equivalent_to),
+            dateStringOfOtherCalendars(jdn, spacedComma)
+        ).joinToString(" ")
+    }
+    shareActionMap[ConverterScreenMode.Distance] = {
+        calculateDaysDifference(
+            context.resources, jdn, secondJdn, calendarType = viewModel.calendar.value
+        )
+    }
+    if (isLandscape) Row {
+        Column(Modifier.weight(1f)) {
+            CalendarsTypesPicker(calendar, viewModel::changeCalendar)
+            DayPicker(
+                calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+            )
+        }
+        Spacer(Modifier.width(8.dp))
+        AnimatedContent(
+            screenMode == ConverterScreenMode.Converter,
+            Modifier.weight(1f),
+            label = "converter/distance second pane",
+        ) { state ->
+            if (state) CalendarsOverview(
+                jdn = jdn,
+                selectedCalendar = calendar,
+                shownCalendars = enabledCalendars - calendar,
+                isExpanded = isExpanded
+            ) { isExpanded = !isExpanded } else Column {
+                Text(
+                    calculateDaysDifference(
+                        context.resources, jdn, secondJdn, calendarType = viewModel.calendar.value
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                )
+                DayPicker(
+                    calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+                )
+            }
+        }
+    } else {
+        CalendarsTypesPicker(calendar, viewModel::changeCalendar)
+        DayPicker(
+            calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+        )
+        AnimatedVisibility(screenMode == ConverterScreenMode.Converter) {
+            Card(
+                shape = MaterialTheme.shapes.extraLarge,
+                elevation = CardDefaults.cardElevation(8.dp),
+                onClick = { isExpanded = !isExpanded },
+                modifier = Modifier.padding(top = 16.dp),
+            ) {
+                CalendarsOverview(
+                    jdn = jdn,
+                    selectedCalendar = calendar,
+                    shownCalendars = enabledCalendars - calendar,
+                    isExpanded = isExpanded
+                ) { isExpanded = !isExpanded }
+            }
+        }
+        AnimatedVisibility(screenMode == ConverterScreenMode.Distance) {
+            Column {
+                Text(
+                    calculateDaysDifference(
+                        context.resources, jdn, secondJdn, calendarType = viewModel.calendar.value
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
+                )
+                DayPicker(
+                    calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TimezoneClock(
+    viewModel: ConverterViewModel,
+    zones: List<TimeZone>,
+    zoneNames: Array<String>,
+    flow: StateFlow<TimeZone>,
+    i: Int
+) {
+    val commonClock = viewModel.clock.collectAsState()
+    AndroidView(
+        factory = {
+            val binding = TimeZoneClockPickerBinding.inflate(it.layoutInflater)
+            binding.timeZone.minValue = 0
+            binding.timeZone.maxValue = zones.size - 1
+            binding.timeZone.displayedValues = zoneNames
+            binding.timeZone.value = zones.indexOf(flow.value)
+            binding.timeZone.setOnValueChangedListener { picker, _, index ->
+                picker.performHapticFeedbackVirtualKey()
+                if (i == 0) viewModel.changeFirstTimeZone(zones[index])
+                else viewModel.changeSecondTimeZone(zones[index])
+            }
+            binding.clock.setOnTimeChangedListener { view, hourOfDay, minute ->
+                view.performHapticFeedbackVirtualKey()
+                viewModel.changeClock(hourOfDay, minute, flow.value)
+            }
+            binding.root
+        },
+        update = {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@AndroidView
+            val binding = TimeZoneClockPickerBinding.bind(it)
+            val clock = GregorianCalendar(flow.value)
+            clock.timeInMillis = commonClock.value.timeInMillis
+            val hour = clock[GregorianCalendar.HOUR_OF_DAY]
+            val clockView = binding.clock
+            if (clockView.hour != hour) clockView.hour = hour
+            val minute = clock[GregorianCalendar.MINUTE]
+            if (clockView.minute != minute) clockView.minute = minute
+            val zoneView = binding.timeZone
+            val zoneIndex = zones.indexOf(flow.value)
+            if (zoneView.value != zoneIndex) zoneView.value = zoneIndex
+        },
+    )
 }
