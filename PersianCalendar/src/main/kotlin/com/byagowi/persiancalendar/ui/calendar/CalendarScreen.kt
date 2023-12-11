@@ -68,6 +68,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -79,6 +80,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
@@ -408,6 +411,8 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         val events by viewModel.eventsFlow.collectAsState(initial = emptyList())
         val isActive by derivedStateOf { query.length >= 2 && events.isNotEmpty() }
         val padding by animateDpAsState(if (isActive) 0.dp else 16.dp, label = "padding")
+        val focusRequester = remember { FocusRequester() }
+        LaunchedEffect(null) { focusRequester.requestFocus() }
         SearchBar(
             query = query,
             placeholder = { Text(stringResource(R.string.search_in_events)) },
@@ -423,7 +428,9 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                     )
                 }
             },
-            modifier = Modifier.padding(horizontal = padding),
+            modifier = Modifier
+                .padding(horizontal = padding)
+                .focusRequester(focusRequester),
         ) {
             if (padding.value != 0f) return@SearchBar
             events.take(10).forEach { event ->
