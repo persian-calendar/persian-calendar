@@ -35,16 +35,13 @@ fun AppTheme(content: @Composable () -> Unit) {
         onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
 
+    val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
     val colorScheme =
         if (theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
             val result =
                 if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             if (theme == Theme.BLACK) result.copy(surface = Color.Black) else result
-        } else {
-            if (theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme()))
-                DarkColorScheme else LightColorScheme
-        }
+        } else if (darkTheme) DarkColorScheme else LightColorScheme
 
     MaterialTheme(colorScheme = colorScheme) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
