@@ -15,7 +15,6 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -72,6 +71,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.findViewTreeLifecycleOwner
@@ -143,7 +143,7 @@ import kotlin.math.roundToInt
 /**
  * Program activity for android
  */
-class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
+class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     NavController.OnDestinationChangedListener {
 
     private var creationDateJdn = Jdn.today()
