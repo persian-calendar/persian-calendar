@@ -22,6 +22,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -46,6 +48,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -615,6 +618,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
             if (coordinates != null) DropdownMenuItem(
                 text = { Text(stringResource(R.string.month_pray_times)) },
                 onClick = {
+                    closeMenu()
                     context?.openHtmlInBrowser(createOwghatHtmlReport(viewModel.selectedMonth.value))
                 },
             )
@@ -630,7 +634,10 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
 
             val context = LocalContext.current
             if (showSecondaryCalendarSubMenu) (listOf(null) + enabledCalendars.drop(1)).forEach {
-                fun onClick() {
+                DropdownMenuRadioItem(
+                    stringResource(it?.title ?: R.string.none),
+                    it == secondaryCalendar
+                ) { _ ->
                     context.appPrefs.edit {
                         if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
                         else {
@@ -638,27 +645,13 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                             putString(
                                 PREF_OTHER_CALENDARS_KEY,
                                 // Put the chosen calendars at the first of calendars priorities
-                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(
-                                    ","
-                                )
+                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
                             )
                         }
                     }
                     updateStoredPreference(context)
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
-                DropdownMenuItem(
-                    text = {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                stringResource(it?.title ?: R.string.none),
-                                modifier = Modifier.weight(1f, fill = true),
-                            )
-                            RadioButton(selected = it == secondaryCalendar, onClick = ::onClick)
-                        }
-                    },
-                    onClick = ::onClick,
-                )
             }
         }
 
@@ -847,4 +840,33 @@ private fun CalendarScreen(
             }
         }
     }
+}
+
+@Composable
+private fun DropdownMenuRadioItem(
+    text: String,
+    isSelected: Boolean,
+    setSelected: (Boolean) -> Unit,
+) {
+    DropdownMenuItem(
+        text = {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End,
+            ) {
+                Text(text)
+                Spacer(
+                    Modifier
+                        .weight(1f)
+                        .width(16.dp),
+                )
+                RadioButton(
+                    modifier = Modifier.size(24.dp),
+                    selected = isSelected,
+                    onClick = { setSelected(!isSelected) },
+                )
+            }
+        },
+        onClick = { setSelected(!isSelected) },
+    )
 }
