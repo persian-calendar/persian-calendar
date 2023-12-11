@@ -370,6 +370,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
     }
 
     private val viewModel by viewModels<CalendarViewModel>()
+
     private fun bringDate(
         jdn: Jdn,
         highlight: Boolean = true,

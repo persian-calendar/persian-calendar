@@ -79,7 +79,6 @@ fun TimesTab(
     )
     var isExpanded by remember { mutableStateOf(false) }
 
-
     var today by remember { mutableStateOf(Jdn.today()) }
     // TODO: Maybe move this logic to view model and listen to it from there
     var now by remember { mutableStateOf(GregorianCalendar()) }
