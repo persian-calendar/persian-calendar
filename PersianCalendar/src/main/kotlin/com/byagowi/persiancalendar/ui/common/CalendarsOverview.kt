@@ -253,7 +253,9 @@ fun CalendarsOverview(
                             }
                             .padding(all = 8.dp),
                     ) {
-                        CircularProgressIndicator(indicatorValues[i])
+                        CircularProgressIndicator(
+                            progress = { indicatorValues[i] },
+                        )
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(title, style = MaterialTheme.typography.bodyMedium)
                     }

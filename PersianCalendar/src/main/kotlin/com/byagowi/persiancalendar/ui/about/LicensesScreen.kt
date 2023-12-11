@@ -29,8 +29,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Motorcycle
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -168,7 +168,7 @@ private fun Licenses() {
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     LazyColumn {
         itemsIndexed(sections) { i, (title, license, text) ->
-            if (i > 0) Divider(
+            if (i > 0) HorizontalDivider(
                 modifier = Modifier.padding(start = 16.dp, end = 88.dp),
                 color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
             )

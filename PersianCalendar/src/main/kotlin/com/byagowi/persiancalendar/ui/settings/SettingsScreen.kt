@@ -40,6 +40,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -192,12 +193,12 @@ fun SettingsScreen(
         divider = {},
         indicator = @Composable { tabPositions ->
             if (selectedTabIndex < tabPositions.size) {
-                TabRowDefaults.Indicator(
+                SecondaryIndicator(
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha),
                     height = 2.dp,
+                    color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha)
                 )
             }
         },

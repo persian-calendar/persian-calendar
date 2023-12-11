@@ -46,6 +46,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
+import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -645,27 +646,26 @@ private fun CalendarScreen(
     addEvent: () -> Unit,
 ) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val currentTab by viewModel.selectedTabIndex.collectAsState()
+    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     Surface(
         shape = if (isLandscape) MaterialCornerExtraLargeNoBottomEnd() else MaterialCornerExtraLargeTop(),
         modifier = Modifier.fillMaxSize(),
     ) {
         @OptIn(ExperimentalFoundationApi::class) Column {
             val pagerState = rememberPagerState(
-                initialPage = currentTab.coerceAtMost(tabs.size - 1),
+                initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
                 pageCount = tabs::size,
             )
             val scope = rememberCoroutineScope()
             viewModel.changeSelectedTabIndex(pagerState.currentPage)
 
             TabRow(
-                selectedTabIndex = currentTab,
+                selectedTabIndex = selectedTabIndex,
                 divider = {},
                 indicator = @Composable { tabPositions ->
-                    if (currentTab < tabPositions.size) {
-                        TabRowDefaults.Indicator(
-                            Modifier
-                                .tabIndicatorOffset(tabPositions[currentTab])
+                    if (selectedTabIndex < tabPositions.size) {
+                        SecondaryIndicator(
+                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
                                 .padding(horizontal = ExtraLargeShapeCornerSize.dp),
                             height = 2.dp,
                         )
@@ -697,7 +697,7 @@ private fun CalendarScreen(
                     Modifier
                         .align(Alignment.BottomEnd)
                         .padding(24.dp),
-                    isVisible = currentTab == EVENTS_TAB,
+                    isVisible = selectedTabIndex == EVENTS_TAB,
                     action = addEvent,
                     icon = Icons.Default.Add,
                     title = stringResource(R.string.add_event),

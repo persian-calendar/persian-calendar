@@ -36,8 +36,8 @@ import androidx.compose.material.icons.filled.Print
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -193,9 +193,9 @@ fun DeviceInformationScreen(popNavigation: () -> Unit) {
                     item { Spacer(Modifier.height(16.dp)) }
                     item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
                     itemsIndexed(items) { i, item ->
-                        if (i > 0) Divider(
+                        if (i > 0) HorizontalDivider(
                             Modifier.padding(horizontal = 20.dp),
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
+                            color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
                         )
                         Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
                             Text(item.title, fontWeight = FontWeight.Bold)

@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.theme
 
 import android.content.SharedPreferences
 import android.os.Build
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -19,17 +18,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
-import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
-import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
-import com.byagowi.persiancalendar.PREF_ATHAN_NAME
-import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_THEME
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.calculationMethod
-import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -45,14 +35,15 @@ fun AppTheme(content: @Composable () -> Unit) {
         onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
 
-    val colorScheme = if (theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
-        val result =
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        if (theme == Theme.BLACK) result.copy(surface = Color.Black) else result
-    } else {
-        if (theme.isDark) DarkColorScheme else LightColorScheme
-    }
+    val colorScheme =
+        if (theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
+            val result =
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (theme == Theme.BLACK) result.copy(surface = Color.Black) else result
+        } else {
+            if (theme.isDark) DarkColorScheme else LightColorScheme
+        }
 
     MaterialTheme(colorScheme = colorScheme) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118

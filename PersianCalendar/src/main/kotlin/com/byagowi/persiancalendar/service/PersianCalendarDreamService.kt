@@ -16,8 +16,8 @@ import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.hypot

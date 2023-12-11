@@ -27,7 +27,7 @@ enum class Theme(
     LIGHT("LightTheme", R.string.theme_light, R.style.LightTheme),
     DARK("DarkTheme", R.string.theme_dark, R.style.DarkTheme, isDark = true),
     MODERN(
-        "ClassicTheme"/*legacy*/, R.string.theme_modern, R.style.ModernTheme,
+        "ClassicTheme",/*legacy*/ R.string.theme_modern, R.style.ModernTheme,
         hasDynamicColors = true,
     ),
     AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua, R.style.AquaTheme),

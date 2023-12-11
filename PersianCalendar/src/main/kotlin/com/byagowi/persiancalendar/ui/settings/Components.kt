@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -53,7 +53,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 }
 
 @Composable
-fun SettingsDivider() = Divider(Modifier.padding(horizontal = 8.dp))
+fun SettingsDivider() = HorizontalDivider(Modifier.padding(horizontal = 8.dp))
 
 @Composable
 fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit) {
