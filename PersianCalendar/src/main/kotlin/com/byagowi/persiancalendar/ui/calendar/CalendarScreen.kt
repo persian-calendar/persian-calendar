@@ -501,7 +501,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                                 fadeOut(animationSpec = tween(animationTime))
                             )
                         },
-                    ) { state -> Text(state, style = MaterialTheme.typography.titleMedium) }
+                    ) { state -> Text(state, style = MaterialTheme.typography.titleLarge) }
                     AnimatedContent(
                         subtitle,
                         label = "subtitle",
@@ -510,7 +510,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                                 fadeOut(animationSpec = tween(animationTime))
                             )
                         },
-                    ) { state -> Text(state, style = MaterialTheme.typography.titleSmall) }
+                    ) { state -> Text(state, style = MaterialTheme.typography.titleMedium) }
                 }
             },
             colors = TopAppBarDefaults.topAppBarColors(
