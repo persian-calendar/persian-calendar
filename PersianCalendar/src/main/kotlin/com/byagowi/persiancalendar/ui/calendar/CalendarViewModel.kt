@@ -35,6 +35,9 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
 
+    private val _isSearchOpenFlow = MutableStateFlow(false)
+    val isSearchOpen: StateFlow<Boolean> = _isSearchOpenFlow
+
     private val _eventsFlow = MutableSharedFlow<List<CalendarEvent<*>>>()
     val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
@@ -56,6 +59,14 @@ class CalendarViewModel @JvmOverloads constructor(
 
     fun changeSelectedTabIndex(index: Int) {
         _selectedTabIndex.value = index
+    }
+
+    fun openSearch() {
+        _isSearchOpenFlow.value = true
+    }
+
+    fun closeSearch() {
+        _isSearchOpenFlow.value = false
     }
 
     fun searchEvent(query: CharSequence) {

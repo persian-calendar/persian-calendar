@@ -83,7 +83,7 @@ import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-fun showMonthOverviewDialog(activity: ComponentActivity, date: AbstractDate) =
+fun showMonthOverview(activity: ComponentActivity, date: AbstractDate) =
     showComposeDialog(activity) { MonthOverview(activity, date, it) }
 
 @Composable

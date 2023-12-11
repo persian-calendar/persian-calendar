@@ -64,27 +64,27 @@ import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 
-fun showShiftWorkDialog(activity: ComponentActivity, selectedJdn: Jdn) {
-    val viewModel = ShiftWorkViewModel()
+@Composable
+fun ShiftWorkDialog(
+    selectedJdn: Jdn,
+    onDismissRequest: () -> Unit,
+    navigateToSelf: () -> Unit,
+) {
+    val viewModel = remember { ShiftWorkViewModel() }
     // from already initialized global variable till a better solution
     fillViewModelFromGlobalVariables(viewModel, selectedJdn)
-    showComposeDialog(activity) { onDismissRequest ->
-        Dialog(onDismissRequest = onDismissRequest) {
-            Surface(
-                shape = AlertDialogDefaults.shape,
-                color = AlertDialogDefaults.containerColor,
-                tonalElevation = AlertDialogDefaults.TonalElevation,
-            ) {
-                Column {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
-                    ) {
-                        ShiftWorkDialogContent(viewModel, selectedJdn, onDismissRequest) {
-                            activity.findNavController(R.id.navHostFragment)
-                                .navigateSafe(CalendarFragmentDirections.navigateToSelf())
-                        }
-                    }
+    Dialog(onDismissRequest = onDismissRequest) {
+        Surface(
+            shape = AlertDialogDefaults.shape,
+            color = AlertDialogDefaults.containerColor,
+            tonalElevation = AlertDialogDefaults.TonalElevation,
+        ) {
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                ) {
+                    ShiftWorkDialogContent(viewModel, selectedJdn, onDismissRequest, navigateToSelf)
                 }
             }
         }

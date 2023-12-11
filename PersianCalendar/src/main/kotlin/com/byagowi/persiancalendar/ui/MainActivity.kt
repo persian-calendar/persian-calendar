@@ -14,8 +14,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.widget.Toolbar
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -405,22 +403,6 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
     }
 
     private var clickedItem = 0
-
-    // TODO: Ugly, to get rid of after full Compose migration
-    fun setupToolbarWithDrawer(toolbar: Toolbar) {
-        val listener = ActionBarDrawerToggle(
-            this, binding.root, toolbar, R.string.open_drawer, R.string.close
-        ).also { it.syncState() }
-
-        binding.root.addDrawerListener(listener)
-        toolbar.setNavigationOnClickListener { binding.root.openDrawer(GravityCompat.START) }
-        toolbar.findViewTreeLifecycleOwner()?.lifecycle?.addObserver(LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_DESTROY) {
-                binding.root.removeDrawerListener(listener)
-                toolbar.setNavigationOnClickListener(null)
-            }
-        })
-    }
 
     // TODO: Ugly, to get rid of after full Compose migration
     fun openDrawer() = binding.root.openDrawer(GravityCompat.START)

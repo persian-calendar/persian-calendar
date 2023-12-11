@@ -12,8 +12,6 @@
         <attr name="colorCurrentDay" format="reference" />
         <attr name="colorSelectedDay" format="reference" />
         <attr name="colorEventIndicator" format="reference" />
-        <attr name="appToolbarTheme" format="reference" />
-        <attr name="appToolbarPopupTheme" format="reference" />
         <attr name="colorTextDaySelected" format="reference" />
         <attr name="dialogBackgroundColor" format="color" />
         <attr name="sunViewNightColor" format="reference" />

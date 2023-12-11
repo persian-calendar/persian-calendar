@@ -19,8 +19,6 @@
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.AppCompat">
-        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
-        <item name="appToolbarPopupTheme">@style/ThemeOverlay.AppCompat.Dark</item>
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
@@ -29,8 +27,6 @@
     </style>
 
     <style name="BaseLightTheme" parent="Theme.AppCompat.Light">
-        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Light</item>
-        <item name="appToolbarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
@@ -104,9 +100,6 @@
 
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
-
-        <!-- As has a relatively dark app toolbar color -->
-        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
     <style name="AquaTheme" parent="BaseLightTheme">
@@ -126,9 +119,6 @@
 
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
-
-        <!-- As has a relatively dark app toolbar color -->
-        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
     <style name="ModernTheme" parent="BaseLightTheme">

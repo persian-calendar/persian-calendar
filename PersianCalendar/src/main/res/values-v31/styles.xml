@@ -30,9 +30,6 @@
         <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
-
-        <!-- As has a relatively dark app toolbar color -->
-        <item name="appToolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
     </style>
 
     <style name="DynamicDarkTheme" parent="BaseDarkTheme">

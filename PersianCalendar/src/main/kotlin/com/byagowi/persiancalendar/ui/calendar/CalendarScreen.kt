@@ -8,19 +8,20 @@ import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.SearchView.SearchAutoComplete
-import androidx.appcompat.widget.Toolbar
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -39,40 +41,57 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
@@ -100,11 +119,10 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
-import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
-import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverview
+import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
@@ -117,12 +135,10 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
-import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -138,10 +154,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.titleStringId
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.html.body
@@ -164,17 +177,15 @@ import kotlinx.html.unsafe
 class CalendarFragment : Fragment(R.layout.calendar_screen) {
 
     private var mainBinding: CalendarScreenBinding? = null
-    private var searchView: SearchView? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
         mainBinding = null
-        searchView = null
     }
 
     private val onBackPressedCloseSearchCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
-            searchView?.takeIf { !it.isIconified }?.onActionViewCollapsed()
+            viewModel.closeSearch()
             isEnabled = false
         }
     }
@@ -248,12 +259,6 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
             it.onMonthSelected = { viewModel.changeSelectedMonth(it.selectedMonth) }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.selectedMonth.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
-            ).collectLatest { updateToolbar(binding, it) }
-        }
-
         val tabs = listOfNotNull<Pair<Int, @Composable () -> Unit>>(
             R.string.calendar to { CalendarsTab() },
             R.string.events to { EventsTab() },
@@ -272,7 +277,21 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
             binding.content.minimumHeight = (220 * resources.dp).toInt()
         }
 
-        setupMenu(binding.toolbar, binding.calendarPager)
+        binding.toolbar.setContent {
+            AppTheme {
+                val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
+                val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
+                AnimatedContent(
+                    searchBoxIsOpen,
+                    label = "toolbar",
+                    transitionSpec = {
+                        fadeIn(animationSpec = tween(animationTime)).togetherWith(
+                            fadeOut(animationSpec = tween(animationTime))
+                        )
+                    },
+                ) { if (it) Search() else Toolbar() }
+            }
+        }
 
         binding.root.post {
             binding.root.context.appPrefs.edit {
@@ -284,27 +303,6 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
             bringDate(viewModel.selectedDay.value, monthChange = false, smoothScroll = false)
         } else {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
-        }
-
-        // Ugly, to get rid of soon
-        (context?.getActivity() as? MainActivity)?.setupToolbarWithDrawer(binding.toolbar)
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
-            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            // tabs.forEach { (_, view) -> view.updatePadding(bottom = systemBarsInsets.bottom) }
-            binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = systemBarsInsets.top
-            }
-            // val allInsets =
-            //     insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
-            // binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            //     bottomMargin = allInsets.bottom + (20 * resources.dp).toInt()
-            // }
-            // Content root is only available in portrait mode
-            // binding.portraitContentRoot?.updatePadding(
-            //     bottom = (allInsets.bottom - systemBarsInsets.bottom).coerceAtLeast(0)
-            // )
-            WindowInsetsCompat.CONSUMED
         }
     }
 
@@ -347,18 +345,6 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                     view?.context ?: return, R.string.device_does_not_support, Toast.LENGTH_SHORT
                 ).show()
             }
-        }
-    }
-
-    private fun updateToolbar(binding: CalendarScreenBinding, date: AbstractDate) {
-        val toolbar = binding.toolbar
-        val secondaryCalendar = secondaryCalendar
-        if (secondaryCalendar == null) {
-            toolbar.title = date.monthName
-            toolbar.subtitle = formatNumber(date.year)
-        } else {
-            toolbar.title = language.my.format(date.monthName, formatNumber(date.year))
-            toolbar.subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
         }
     }
 
@@ -409,129 +395,275 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         ).show()
     }
 
-    private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
-        val toolbarContext = toolbar.context // context wrapped with toolbar related theme
-        val context = calendarPager.context // context usable for normal dialogs
-
-        val searchView = SearchView(toolbarContext).also { searchView = it }
-        searchView.setOnCloseListener {
-            onBackPressedCloseSearchCallback.isEnabled = false
-            false // don't prevent the event cascade
+    @Composable
+    @OptIn(ExperimentalMaterial3Api::class)
+    private fun Search() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // 2s timeout, give up if took too much time
+            withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
         }
-        searchView.setOnSearchClickListener {
-            onBackPressedCloseSearchCallback.isEnabled = true
-            viewLifecycleOwner.lifecycleScope.launch {
-                // 2s timeout, give up if took too much time
-                withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
-            }
-        }
-        // Remove search edit view below bar
-        searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull?.setBackgroundColor(
-            android.graphics.Color.TRANSPARENT
-        )
-        searchView.findViewById<SearchAutoComplete?>(
-            androidx.appcompat.R.id.search_src_text
-        ).debugAssertNotNull?.let {
-            it.setHint(R.string.search_in_events)
-            it.setOnItemClickListener { parent, _, position, _ ->
-                val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
-                val type = date.calendarType
-                val today = Jdn.today().toCalendar(type)
-                bringDate(
-                    Jdn(
-                        type,
-                        if (date.year == -1) (today.year + if (date.month < today.month) 1 else 0)
-                        else date.year,
-                        date.month,
-                        date.dayOfMonth
+        var query by remember { mutableStateOf("") }
+        viewModel.searchEvent(query)
+        val events by viewModel.eventsFlow.collectAsState(initial = emptyList())
+        val isActive by derivedStateOf { query.length >= 2 && events.isNotEmpty() }
+        val padding by animateDpAsState(if (isActive) 0.dp else 16.dp, label = "padding")
+        SearchBar(
+            query = query,
+            placeholder = { Text(stringResource(R.string.search_in_events)) },
+            onQueryChange = { query = it },
+            onSearch = {},
+            active = isActive,
+            onActiveChange = {},
+            trailingIcon = {
+                IconButton(onClick = { viewModel.closeSearch() }) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = stringResource(R.string.close)
                     )
-                )
-                searchView.onActionViewCollapsed()
-            }
-            val eventsAdapter =
-                SearchEventsAdapter(context, onQueryChanged = viewModel::searchEvent)
-            it.setAdapter(eventsAdapter)
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.eventsFlow.flowWithLifecycle(
-                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
-                ).collectLatest(eventsAdapter::setData)
-            }
-        }
-
-        toolbar.menu.add(R.string.return_to_today).also {
-            it.icon = toolbarContext.getCompatDrawable(R.drawable.ic_restore_modified)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.onClick { bringDate(Jdn.today(), highlight = false) }
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.todayButtonVisibilityEvent.flowWithLifecycle(
-                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
-                ).distinctUntilChanged().collectLatest(it::setVisible)
-            }
-        }
-        toolbar.menu.add(R.string.search_in_events).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.actionView = searchView
-        }
-        toolbar.menu.add(R.string.goto_date).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick {
-                val activity = activity ?: return@onClick
-                showDayPickerDialog(activity, viewModel.selectedDay.value, R.string.go, ::bringDate)
-            }
-        }
-        toolbar.menu.add(R.string.add_event).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { addEventOnCalendar(viewModel.selectedDay.value) }
-        }
-        toolbar.menu.add(R.string.shift_work_settings).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick {
-                showShiftWorkDialog(activity ?: return@onClick, viewModel.selectedDay.value)
-            }
-        }
-        toolbar.menu.add(R.string.month_overview).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick {
-                showMonthOverviewDialog(activity ?: return@onClick, viewModel.selectedMonth.value)
-            }
-        }
-        if (coordinates.value != null) {
-            toolbar.menu.add(R.string.month_pray_times).also {
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-                it.onClick {
-                    context.openHtmlInBrowser(createOwghatHtmlReport(viewModel.selectedMonth.value))
+                }
+            },
+            modifier = Modifier.padding(horizontal = padding),
+        ) {
+            if (padding.value != 0f) return@SearchBar
+            events.take(10).forEach { event ->
+                Box(
+                    Modifier
+                        .clickable {
+                            viewModel.closeSearch()
+                            bringEvent(event)
+                        }
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp, horizontal = 24.dp),
+                ) {
+                    Text(
+                        event.formattedTitle,
+                        modifier = Modifier.align(Alignment.CenterStart),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                 }
             }
+            if (events.size > 10)
+                Text("…", Modifier.padding(vertical = 12.dp, horizontal = 24.dp))
         }
-        // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
-        if (!isTalkBackEnabled) {
-            toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
-                val groupId = Menu.FIRST
-                val prefs = context.appPrefs
-                (listOf(null) + enabledCalendars.drop(1)).forEach {
-                    val item = menu.add(groupId, Menu.NONE, Menu.NONE, it?.title ?: R.string.none)
-                    item.isChecked = it == secondaryCalendar
-                    item.onClick {
-                        prefs.edit {
-                            if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
-                            else {
-                                putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
-                                putString(
-                                    PREF_OTHER_CALENDARS_KEY,
-                                    // Put the chosen calendars at the first of calendars priorities
-                                    (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
-                                )
-                            }
-                        }
-                        updateStoredPreference(context)
-                        findNavController().navigateSafe(
-                            CalendarFragmentDirections.navigateToSelf()
+    }
+
+    private fun bringEvent(event: CalendarEvent<*>) {
+        val date = event.date
+        val type = date.calendarType
+        val today = Jdn.today().toCalendar(type)
+        bringDate(
+            Jdn(
+                type,
+                if (date.year == -1) (today.year + if (date.month < today.month) 1 else 0)
+                else date.year,
+                date.month,
+                date.dayOfMonth
+            )
+        )
+    }
+
+    @Composable
+    private fun Toolbar() {
+        val context = LocalContext.current
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+        @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+            title = {
+                val date by viewModel.selectedMonth.collectAsState()
+                val secondaryCalendar = secondaryCalendar
+                val title: String
+                val subtitle: String
+                if (secondaryCalendar == null) {
+                    title = date.monthName
+                    subtitle = formatNumber(date.year)
+                } else {
+                    title = language.my.format(date.monthName, formatNumber(date.year))
+                    subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
+                }
+                val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
+                Column {
+                    AnimatedContent(
+                        title,
+                        label = "title",
+                        transitionSpec = {
+                            fadeIn(animationSpec = tween(animationTime)).togetherWith(
+                                fadeOut(animationSpec = tween(animationTime))
+                            )
+                        },
+                    ) { state -> Text(state, style = MaterialTheme.typography.titleMedium) }
+                    AnimatedContent(
+                        subtitle,
+                        label = "subtitle",
+                        transitionSpec = {
+                            fadeIn(animationSpec = tween(animationTime)).togetherWith(
+                                fadeOut(animationSpec = tween(animationTime))
+                            )
+                        },
+                    ) { state -> Text(state, style = MaterialTheme.typography.titleSmall) }
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(R.string.open_drawer)
+                    )
+                }
+            },
+            actions = {
+                val visibleTodayButton by viewModel.todayButtonVisibilityEvent.collectAsState(false)
+                AnimatedVisibility(visible = visibleTodayButton) {
+                    IconButton(onClick = { bringDate(Jdn.today(), highlight = false) }) {
+                        Icon(
+                            ImageVector.vectorResource(R.drawable.ic_restore_modified),
+                            contentDescription = stringResource(R.string.return_to_today),
                         )
                     }
                 }
-                menu.setGroupCheckable(groupId, true, true)
+
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip { Text(text = stringResource(R.string.search_in_events)) }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = {
+                        viewModel.openSearch()
+                        onBackPressedCloseSearchCallback.isEnabled = true
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = stringResource(R.string.search_in_events)
+                        )
+                    }
+                }
+
+                var showMenu by rememberSaveable { mutableStateOf(false) }
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = { showMenu = !showMenu }) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = stringResource(R.string.more_options),
+                        )
+                    }
+                }
+                Menu(showMenu) { showMenu = false }
+            },
+        )
+    }
+
+    @Composable
+    private fun Menu(showMenu: Boolean, closeMenu: () -> Unit) {
+        var showDayPickerDialog by remember { mutableStateOf(false) }
+        var showShiftWorkDialog by remember { mutableStateOf(false) }
+
+        DropdownMenu(expanded = showMenu, onDismissRequest = closeMenu) {
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.goto_date)) },
+                onClick = {
+                    closeMenu()
+                    showDayPickerDialog = true
+                },
+            )
+
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.add_event)) },
+                onClick = {
+                    closeMenu()
+                    addEventOnCalendar(viewModel.selectedDay.value)
+                          },
+            )
+
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.shift_work_settings)) },
+                onClick = {
+                    closeMenu()
+                    showShiftWorkDialog = true
+                },
+            )
+
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.month_overview)) },
+                onClick = {
+                    closeMenu()
+                    activity?.let { showMonthOverview(it, viewModel.selectedMonth.value) }
+                },
+            )
+
+            val coordinates by coordinates.collectAsState()
+            if (coordinates != null) DropdownMenuItem(
+                text = { Text(stringResource(R.string.month_pray_times)) },
+                onClick = {
+                    context?.openHtmlInBrowser(createOwghatHtmlReport(viewModel.selectedMonth.value))
+                },
+            )
+
+            // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
+            if (isTalkBackEnabled && enabledCalendars.size == 1) return@DropdownMenu
+
+            var showSecondaryCalendarSubMenu by remember { mutableStateOf(false) }
+            DropdownMenuItem(
+                text = { Text(stringResource(R.string.show_secondary_calendar)) },
+                onClick = { showSecondaryCalendarSubMenu = !showSecondaryCalendarSubMenu },
+            )
+
+            val context = LocalContext.current
+            if (showSecondaryCalendarSubMenu) (listOf(null) + enabledCalendars.drop(1)).forEach {
+                fun onClick() {
+                    context.appPrefs.edit {
+                        if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
+                        else {
+                            putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
+                            putString(
+                                PREF_OTHER_CALENDARS_KEY,
+                                // Put the chosen calendars at the first of calendars priorities
+                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(
+                                    ","
+                                )
+                            )
+                        }
+                    }
+                    updateStoredPreference(context)
+                    findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                }
+                DropdownMenuItem(
+                    text = {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                stringResource(it?.title ?: R.string.none),
+                                modifier = Modifier.weight(1f, fill = true),
+                            )
+                            RadioButton(selected = it == secondaryCalendar, onClick = ::onClick)
+                        }
+                    },
+                    onClick = ::onClick,
+                )
             }
         }
+
+        if (showDayPickerDialog) DayPickerDialog(
+            viewModel.selectedDay.value,
+            R.string.go,
+            { bringDate(it) }
+        ) { showDayPickerDialog = false }
+
+        if (showShiftWorkDialog) ShiftWorkDialog(
+            viewModel.selectedDay.value,
+            onDismissRequest = { showShiftWorkDialog = false },
+        ) { findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf()) }
     }
 
     private fun createOwghatHtmlReport(date: AbstractDate): String = createHTML().html {
@@ -592,7 +724,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
     }
 }
 
-const val CALENDARS_TAB = 0
+//const val CALENDARS_TAB = 0
 const val EVENTS_TAB = 1
 const val TIMES_TAB = 2
 
@@ -665,7 +797,8 @@ private fun CalendarScreen(
                 indicator = @Composable { tabPositions ->
                     if (selectedTabIndex < tabPositions.size) {
                         SecondaryIndicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
+                            Modifier
+                                .tabIndicatorOffset(tabPositions[selectedTabIndex])
                                 .padding(horizontal = ExtraLargeShapeCornerSize.dp),
                             height = 2.dp,
                         )
@@ -696,7 +829,8 @@ private fun CalendarScreen(
                 ShrinkingFloatingActionButton(
                     Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(24.dp),
+                        .padding(24.dp)
+                        .safeDrawingPadding(),
                     isVisible = selectedTabIndex == EVENTS_TAB,
                     action = addEvent,
                     icon = Icons.Default.Add,
