@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material.icons.filled.SocialDistance
+import androidx.compose.material.icons.filled._3dRotation
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -67,7 +68,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -161,10 +161,7 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val menu = listOf<Triple<ImageVector, @StringRes Int, () -> Unit>>(
-        Triple(
-            ImageVector.vectorResource(R.drawable.ic_3d_rotation),
-            R.string.show_globe_view_label,
-        ) onClick@{
+        Triple(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
             val textureSize = 2048
             val bitmap =
                 runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
