@@ -4,6 +4,11 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.ui.graphics.Color
 import androidx.core.view.doOnAttach
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -11,9 +16,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthPageBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
@@ -118,7 +123,15 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     it.contentDescription = it.context.getString(
                         R.string.previous_x, it.context.getString(R.string.month)
                     )
-                    it.rotateTo(ArrowView.Direction.START)
+                    it.setContent {
+                        // TODO: Ideally this should be onPrimary
+                        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+                        Icon(
+                            Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                            contentDescription = null,
+                            tint = colorOnAppBar,
+                        )
+                    }
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 1, true)
                     }
@@ -132,7 +145,15 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     it.contentDescription = it.context.getString(
                         R.string.next_x, it.context.getString(R.string.month)
                     )
-                    it.rotateTo(ArrowView.Direction.END)
+                    it.setContent {
+                        // TODO: Ideally this should be onPrimary
+                        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+                        Icon(
+                            Icons.AutoMirrored.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            tint = colorOnAppBar,
+                        )
+                    }
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
                     }
