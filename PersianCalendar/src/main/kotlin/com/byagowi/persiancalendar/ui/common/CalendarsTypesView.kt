@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
@@ -63,7 +62,8 @@ fun CalendarsTypes(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
             val selectedTabIndex = enabledCalendars.indexOf(current)
             if (selectedTabIndex < tabPositions.size) {
                 SecondaryIndicator(
-                    Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex])
+                    Modifier
+                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
                     height = 2.dp,
                 )

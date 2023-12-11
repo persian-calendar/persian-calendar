@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
@@ -300,7 +301,7 @@ fun CompassScreen(
                         }
                         IconButton(onClick = navigateToMap) {
                             Icon(
-                                ImageVector.vectorResource(R.drawable.ic_map),
+                                Icons.Default.Map,
                                 contentDescription = stringResource(R.string.map)
                             )
                         }

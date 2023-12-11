@@ -585,7 +585,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                 onClick = {
                     closeMenu()
                     addEventOnCalendar(viewModel.selectedDay.value)
-                          },
+                },
             )
 
             DropdownMenuItem(

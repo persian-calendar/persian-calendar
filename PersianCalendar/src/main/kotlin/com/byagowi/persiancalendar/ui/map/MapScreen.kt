@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -33,6 +33,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Grid3x3
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.NightlightRound
+import androidx.compose.material.icons.filled.SocialDistance
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -155,57 +160,56 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
     )
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val menu = remember {
-        listOf<Triple<@DrawableRes Int, @DrawableRes Int, () -> Unit>>(
-            Triple(R.drawable.ic_3d_rotation, R.string.show_globe_view_label) onClick@{
-                val textureSize = 2048
-                val bitmap =
-                    runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
-                        .getOrNull() ?: return@onClick
-                val matrix = Matrix()
-                matrix.setScale(
-                    textureSize.toFloat() / mapDraw.mapWidth,
-                    textureSize.toFloat() / mapDraw.mapHeight
-                )
-                mapDraw.draw(
-                    Canvas(bitmap),
-                    matrix,
-                    state.displayLocation,
-                    state.directPathDestination,
-                    state.displayGrid
-                )
-                showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
-                // DO NOT use bitmap after this
-            },
-            Triple(R.drawable.ic_distance_icon, R.string.show_direct_path_label) {
-                if (coordinates.value == null) showGpsDialog = true
-                else viewModel.toggleDirectPathMode()
-            },
-            Triple(R.drawable.ic_grid_3x3, R.string.show_grid_label) {
-                viewModel.toggleDisplayGrid()
-            },
-            Triple(R.drawable.ic_my_location, R.string.show_my_location_label) {
-                showGpsDialog = true
-            },
-            Triple(R.drawable.ic_location_on, R.string.show_location_label) {
-                if (coordinates.value == null) showGpsDialog = true
-                else viewModel.toggleDisplayLocation()
-            },
-            Triple(R.drawable.ic_nightlight, R.string.show_night_mask_label) onClick@{
-                if (viewModel.state.value.mapType == MapType.None) {
-                    val options = MapType.entries.drop(1) // Hide "None" option
-                        // Hide moon visibilities for now unless is a development build
-                        .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
-                    val titles = options.map { context.getString(it.title) }
-                    AlertDialog.Builder(context)
-                        .setItems(titles.toTypedArray()) { dialog, i ->
-                            viewModel.changeMapType(options[i])
-                            dialog.dismiss()
-                        }.show()
-                } else viewModel.changeMapType(MapType.None)
-            },
-        )
-    }
+    val menu = listOf<Triple<ImageVector, @StringRes Int, () -> Unit>>(
+        Triple(
+            ImageVector.vectorResource(R.drawable.ic_3d_rotation),
+            R.string.show_globe_view_label,
+        ) onClick@{
+            val textureSize = 2048
+            val bitmap =
+                runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
+                    .getOrNull() ?: return@onClick
+            val matrix = Matrix()
+            matrix.setScale(
+                textureSize.toFloat() / mapDraw.mapWidth,
+                textureSize.toFloat() / mapDraw.mapHeight
+            )
+            mapDraw.draw(
+                Canvas(bitmap),
+                matrix,
+                state.displayLocation,
+                state.directPathDestination,
+                state.displayGrid
+            )
+            showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
+            // DO NOT use bitmap after this
+        },
+        Triple(Icons.Default.SocialDistance, R.string.show_direct_path_label) {
+            if (coordinates.value == null) showGpsDialog = true
+            else viewModel.toggleDirectPathMode()
+        },
+        Triple(Icons.Default.Grid3x3, R.string.show_grid_label) {
+            viewModel.toggleDisplayGrid()
+        },
+        Triple(Icons.Default.MyLocation, R.string.show_my_location_label) { showGpsDialog = true },
+        Triple(Icons.Default.LocationOn, R.string.show_location_label) {
+            if (coordinates.value == null) showGpsDialog = true
+            else viewModel.toggleDisplayLocation()
+        },
+        Triple(Icons.Default.NightlightRound, R.string.show_night_mask_label) onClick@{
+            if (viewModel.state.value.mapType == MapType.None) {
+                val options = MapType.entries.drop(1) // Hide "None" option
+                    // Hide moon visibilities for now unless is a development build
+                    .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
+                val titles = options.map { context.getString(it.title) }
+                AlertDialog.Builder(context)
+                    .setItems(titles.toTypedArray()) { dialog, i ->
+                        viewModel.changeMapType(options[i])
+                        dialog.dismiss()
+                    }.show()
+            } else viewModel.changeMapType(MapType.None)
+        },
+    )
     val showKaaba = remember { context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true) }
     var formattedTime by remember { mutableStateOf("") }
     Box {
@@ -301,7 +305,7 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
                             state = rememberTooltipState()
                         ) {
                             Icon(
-                                ImageVector.vectorResource(icon),
+                                icon,
                                 contentDescription = stringResource(title),
                                 // We need more than Triple or defining a new class, oh well
                                 tint = if (when (title) {

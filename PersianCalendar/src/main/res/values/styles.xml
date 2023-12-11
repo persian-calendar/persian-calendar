@@ -22,7 +22,6 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-        <!--<item name="dialogBackgroundColor">#70606060</item>-->
         <item name="dialogBackgroundColor">#C0101010</item>
     </style>
 
@@ -30,7 +29,6 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-        <!--<item name="dialogBackgroundColor">#C0FFFFFF</item>-->
         <item name="dialogBackgroundColor">#D8FFFFFF</item>
     </style>
 
@@ -39,9 +37,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-<!--        <item name="alertDialogTheme">@style/AlertDialogTheme</item>-->
         <item name="android:typeface">sans</item>
-<!--        <item name="popupMenuBackground">@drawable/popup_background</item>-->
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 

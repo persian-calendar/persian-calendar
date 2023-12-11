@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
-import androidx.activity.ComponentActivity
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -49,7 +48,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
@@ -58,9 +56,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 
