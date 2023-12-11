@@ -73,11 +73,7 @@ fun DayPickerDialog(
             calendarType = it
         }
 
-        // Ugly code
-        var previousCalendarType by remember { mutableStateOf(calendarType) }
-        if (previousCalendarType != calendarType) ++changeToken
-        previousCalendarType = calendarType
-        DayPicker(calendarType, changeToken, jdn) { jdn = it }
+        DayPicker(calendarType, jdn) { jdn = it }
         val longAnimationTime = integerResource(android.R.integer.config_longAnimTime)
         AnimatedContent(
             targetState = if (jdn == today) " " else listOf(

@@ -42,7 +42,8 @@ fun AppTheme(content: @Composable () -> Unit) {
                 if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
             if (theme == Theme.BLACK) result.copy(surface = Color.Black) else result
         } else {
-            if (theme.isDark) DarkColorScheme else LightColorScheme
+            if (theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme()))
+                DarkColorScheme else LightColorScheme
         }
 
     MaterialTheme(colorScheme = colorScheme) {

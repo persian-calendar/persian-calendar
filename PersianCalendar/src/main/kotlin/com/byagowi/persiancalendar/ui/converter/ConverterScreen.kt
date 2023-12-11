@@ -195,34 +195,10 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
 
         binding.dayPickerView.setContent {
             AppTheme {
-                // Super ugly code
-                var calendar by remember { mutableStateOf(viewModel.calendar.value) }
-                var jdn by remember { mutableStateOf(viewModel.selectedDate.value) }
-                val scope = rememberCoroutineScope()
-                var changeToken by remember { mutableStateOf(0) }
-                remember {
-                    scope.launch {
-                        viewModel.calendar.collect {
-                            if (calendar != it) {
-                                calendar = it
-                                ++changeToken
-                            }
-                        }
-                    }
-                }
-                remember {
-                    scope.launch {
-                        viewModel.selectedDate.collect {
-                            if (jdn != it) {
-                                jdn = it
-                                ++changeToken
-                            }
-                        }
-                    }
-                }
+                val calendar by viewModel.calendar.collectAsState()
+                val jdn by viewModel.selectedDate.collectAsState()
                 DayPicker(
                     calendarType = calendar,
-                    changeToken = 0,
                     jdn = jdn,
                     setJdn = viewModel::changeSelectedDate
                 )
@@ -230,34 +206,10 @@ class ConverterFragment : Fragment(R.layout.converter_screen) {
         }
         binding.secondDayPickerView.setContent {
             AppTheme {
-                // Super ugly code
-                var calendar by remember { mutableStateOf(viewModel.calendar.value) }
-                var jdn by remember { mutableStateOf(viewModel.secondSelectedDate.value) }
-                val scope = rememberCoroutineScope()
-                var changeToken by remember { mutableStateOf(0) }
-                remember {
-                    scope.launch {
-                        viewModel.calendar.collect {
-                            if (calendar != it) {
-                                calendar = it
-                                ++changeToken
-                            }
-                        }
-                    }
-                }
-                remember {
-                    scope.launch {
-                        viewModel.secondSelectedDate.collect {
-                            if (jdn != it) {
-                                jdn = it
-                                ++changeToken
-                            }
-                        }
-                    }
-                }
+                val calendar by viewModel.calendar.collectAsState()
+                val jdn by viewModel.secondSelectedDate.collectAsState()
                 DayPicker(
                     calendarType = calendar,
-                    changeToken = 0,
                     jdn = jdn,
                     setJdn = viewModel::changeSecondSelectedDate
                 )
