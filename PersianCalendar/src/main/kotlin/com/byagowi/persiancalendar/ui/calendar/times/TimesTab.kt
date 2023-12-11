@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -132,6 +133,7 @@ private fun AstronomicalOverview(
 ) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     var animatedOnce by remember { mutableStateOf(false) }
+    DisposableEffect(null) { animatedOnce = false; onDispose { animatedOnce = false } }
     if (selectedTabIndex != TIMES_TAB) animatedOnce = false
     val jdn by viewModel.selectedDay.collectAsState(today)
 
