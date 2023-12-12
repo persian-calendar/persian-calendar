@@ -388,14 +388,17 @@ private fun QrCode(viewModel: ConverterViewModel, shareAction: (() -> Unit) -> U
             AndroidView(factory = ::QrView, update = { it.update(inputText.value) })
         }
 
-        var qrLongClickCount by remember { mutableStateOf(0) }
+        var qrLongClickCount by remember { mutableStateOf(1) }
         OutlinedButton(
             onClick = {
                 viewModel.changeQrCodeInput(
-                    when (qrLongClickCount++ % 3) {
+                    when (qrLongClickCount++ % 4) {
                         0 -> "https://example.com"
                         1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
-                        else -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
+                        2 -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
+                        else -> "BEGIN:VEVENT\nSUMMARY:Event title\nDTSTART:20201011T173000Z\n" +
+                                "DTEND:20201011T173000Z\nLOCATION:Location name\n" +
+                                "DESCRIPTION:Event description\nEND:VEVENT"
                     }
                 )
             },
