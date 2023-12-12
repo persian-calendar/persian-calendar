@@ -40,7 +40,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Scroller
 import android.widget.SeekBar
@@ -62,7 +61,6 @@ import androidx.core.os.postDelayed
 import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
-import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.customview.widget.ViewDragHelper
@@ -74,8 +72,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
@@ -87,8 +83,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.createStatusIcon
-import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -1461,111 +1455,6 @@ fun showInputDeviceTestDialog(activity: ComponentActivity) {
                     return super.onKeyUp(keyCode, event)
                 }
             })
-        .show()
-}
-
-// Debug only dialog to check validity of dynamic icons generation
-fun showIconsDemoDialog(activity: ComponentActivity) {
-    val recyclerViewAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-        override fun getItemCount() = 62
-        override fun getItemViewType(position: Int) = position
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            object : RecyclerView.ViewHolder(ImageView(activity).apply {
-                val day = viewType / 2 + 1
-                when (viewType % 2) {
-                    0 -> setImageResource(getDayIconResource(day))
-                    1 -> setImageBitmap(createStatusIcon(day))
-                }
-                val dp = resources.dp
-                layoutParams = ViewGroup.MarginLayoutParams((36 * dp).toInt(), (36 * dp).toInt())
-                    .apply { setMargins((4 * dp).toInt()) }
-                // shapeAppearanceModel = ShapeAppearanceModel.Builder()
-                //     .setAllCorners(CornerFamily.ROUNDED, 8 * dp)
-                //     .setAllEdges(TriangleEdgeTreatment(4 * dp, true))
-                //     .build()
-                setBackgroundColor(Color.DKGRAY)
-            }) {}
-    }
-    AlertDialog.Builder(activity)
-        .setView(RecyclerView(activity).also {
-            it.adapter = recyclerViewAdapter
-            it.layoutManager = GridLayoutManager(activity, 8)
-            it.setBackgroundColor(Color.WHITE)
-        })
-        .setNegativeButton(R.string.cancel, null)
-        .show()
-}
-
-@RequiresApi(Build.VERSION_CODES.S)
-fun showDynamicColorsDialog(activity: ComponentActivity) {
-    val dynamicColors = listOf(
-        android.R.color.system_accent1_0, android.R.color.system_accent1_10,
-        android.R.color.system_accent1_50, android.R.color.system_accent1_100,
-        android.R.color.system_accent1_200, android.R.color.system_accent1_300,
-        android.R.color.system_accent1_400, android.R.color.system_accent1_500,
-        android.R.color.system_accent1_600, android.R.color.system_accent1_700,
-        android.R.color.system_accent1_800, android.R.color.system_accent1_900,
-        android.R.color.system_accent1_1000,
-        android.R.color.system_accent2_0, android.R.color.system_accent2_10,
-        android.R.color.system_accent2_50, android.R.color.system_accent2_100,
-        android.R.color.system_accent2_200, android.R.color.system_accent2_300,
-        android.R.color.system_accent2_400, android.R.color.system_accent2_500,
-        android.R.color.system_accent2_600, android.R.color.system_accent2_700,
-        android.R.color.system_accent2_800, android.R.color.system_accent2_900,
-        android.R.color.system_accent2_1000,
-        android.R.color.system_accent3_0, android.R.color.system_accent3_10,
-        android.R.color.system_accent3_50, android.R.color.system_accent3_100,
-        android.R.color.system_accent3_200, android.R.color.system_accent3_300,
-        android.R.color.system_accent3_400, android.R.color.system_accent3_500,
-        android.R.color.system_accent3_600, android.R.color.system_accent3_700,
-        android.R.color.system_accent3_800, android.R.color.system_accent3_900,
-        android.R.color.system_accent3_1000,
-        android.R.color.system_neutral1_0, android.R.color.system_neutral1_10,
-        android.R.color.system_neutral1_50, android.R.color.system_neutral1_100,
-        android.R.color.system_neutral1_200, android.R.color.system_neutral1_300,
-        android.R.color.system_neutral1_400, android.R.color.system_neutral1_500,
-        android.R.color.system_neutral1_600, android.R.color.system_neutral1_700,
-        android.R.color.system_neutral1_800, android.R.color.system_neutral1_900,
-        android.R.color.system_neutral1_1000,
-        android.R.color.system_neutral2_0, android.R.color.system_neutral2_10,
-        android.R.color.system_neutral2_50, android.R.color.system_neutral2_100,
-        android.R.color.system_neutral2_200, android.R.color.system_neutral2_300,
-        android.R.color.system_neutral2_400, android.R.color.system_neutral2_500,
-        android.R.color.system_neutral2_600, android.R.color.system_neutral2_700,
-        android.R.color.system_neutral2_800, android.R.color.system_neutral2_900,
-        android.R.color.system_neutral2_1000,
-    )
-    val rows = listOf(
-        "", "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"
-    )
-    val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
-    val recyclerViewAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-        override fun getItemCount() = 84
-        override fun getItemViewType(position: Int) = position
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-            object : RecyclerView.ViewHolder(TextView(activity).apply {
-                textAlignment = View.TEXT_ALIGNMENT_CENTER
-                val dp = resources.dp
-                setAutoSizeTextTypeUniformWithConfiguration(8, 16, 1, dp.toInt())
-                layoutParams = ViewGroup.MarginLayoutParams((50 * dp).toInt(), (25 * dp).toInt())
-                    .apply { setMargins((4 * dp).toInt()) }
-                val col = viewType % 6
-                val row = viewType / 6
-                if (row == 0) text = cols[col]
-                else if (col == 0) text = rows[row]
-                else {
-                    val index = (col - 1) * 13 + row - 1
-                    setBackgroundColor(context.getColor(dynamicColors[index]))
-                }
-            }) {}
-    }
-    AlertDialog.Builder(activity)
-        .setView(RecyclerView(activity).also {
-            it.adapter = recyclerViewAdapter
-            it.layoutManager = GridLayoutManager(activity, 6)
-        })
         .show()
 }
 

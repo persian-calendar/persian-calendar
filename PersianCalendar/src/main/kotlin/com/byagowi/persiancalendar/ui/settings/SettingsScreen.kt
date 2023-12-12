@@ -79,10 +79,10 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
+import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
+import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
-import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
-import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
 import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
@@ -266,15 +266,21 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
     }
 
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
-    DropdownMenuItem(
-        text = { Text("Static vs generated icons") },
-        onClick = { showIconsDemoDialog(activity) },
-    )
+    run {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        DropdownMenuItem(
+            text = { Text("Static vs generated icons") },
+            onClick = { showDialog = true },
+        )
+        if (showDialog) IconsDemoDialog { showDialog = false }
+    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        var showDialog by rememberSaveable { mutableStateOf(false) }
         DropdownMenuItem(
             text = { Text("Dynamic Colors") },
-            onClick = { showDynamicColorsDialog(activity) },
+            onClick = { showDialog = true },
         )
+        if (showDialog) DynamicColorsDialog { showDialog = false }
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }

@@ -5,7 +5,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
@@ -20,7 +19,6 @@ class DialogsSmokeTest {
     @Test
     fun testDialog() {
         listOf<(MainActivity) -> Unit>(
-            { showIconsDemoDialog(it) },
             { showColorPickerDialog(it, true, "ABC") },
             { showColorPickerDialog(it, false, "ABC") },
             { showPrayerSelectDialog(it) },
