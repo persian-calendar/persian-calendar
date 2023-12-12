@@ -42,6 +42,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
@@ -118,16 +119,24 @@ fun WidgetConfiguration(activity: ComponentActivity) {
         )
     }
     AnimatedVisibility(!preferSystemColors) {
+        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
-            title = stringResource(R.string.widget_text_color),
-            summary = stringResource(R.string.select_widgets_text_color)
-        ) { showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR) }
+            stringResource(R.string.widget_text_color),
+            stringResource(R.string.select_widgets_text_color)
+        ) { showDialog = true }
+        if (showDialog) ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR) {
+            showDialog = false
+        }
     }
     AnimatedVisibility(!preferSystemColors) {
+        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
-            title = stringResource(R.string.widget_background_color),
-            summary = stringResource(R.string.select_widgets_background_color)
-        ) { showColorPickerDialog(activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR) }
+            stringResource(R.string.widget_background_color),
+            stringResource(R.string.select_widgets_background_color)
+        ) { showDialog = true }
+        if (showDialog) ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR) {
+            showDialog = false
+        }
     }
     SettingsSwitch(
         key = PREF_NUMERICAL_DATE_PREFERRED,

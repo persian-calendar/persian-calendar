@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
 import android.graphics.Color
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -23,20 +22,11 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.Locale
 
-fun showColorPickerDialog(activity: ComponentActivity, isBackgroundPick: Boolean, key: String) {
-    showComposeDialog(activity) { onDismissRequest ->
-        ColorPickerDialog(isBackgroundPick, key, onDismissRequest)
-    }
-}
-
 @Composable
-fun ColorPickerDialog(
-    isBackgroundPick: Boolean, key: String, onDismissRequest: () -> Unit
-) {
+fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val initialColor = remember {
         context.appPrefs.getString(key, null)?.let(Color::parseColor)

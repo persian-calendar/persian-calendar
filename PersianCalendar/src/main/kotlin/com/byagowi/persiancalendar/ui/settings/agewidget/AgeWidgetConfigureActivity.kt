@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
+import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -195,21 +195,25 @@ private fun AgeWidgetConfigureContent(
                             appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
                 }
                 if (showColorOptions) {
-                    SettingsClickable(
-                        stringResource(R.string.widget_text_color),
-                        stringResource(R.string.select_widgets_text_color)
-                    ) {
-                        showColorPickerDialog(
-                            activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
-                        )
+                    run {
+                        var showDialog by remember { mutableStateOf(false) }
+                        SettingsClickable(
+                            stringResource(R.string.widget_text_color),
+                            stringResource(R.string.select_widgets_text_color)
+                        ) { showDialog = true }
+                        if (showDialog) ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId) {
+                            showDialog = false
+                        }
                     }
-                    SettingsClickable(
-                        stringResource(R.string.widget_background_color),
-                        stringResource(R.string.select_widgets_background_color)
-                    ) {
-                        showColorPickerDialog(
-                            activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId
-                        )
+                    run {
+                        var showDialog by remember { mutableStateOf(false) }
+                        SettingsClickable(
+                            stringResource(R.string.widget_background_color),
+                            stringResource(R.string.select_widgets_background_color)
+                        ) { showDialog = true }
+                        if (showDialog) ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId) {
+                            showDialog = false
+                        }
                     }
                 }
             }
