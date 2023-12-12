@@ -140,11 +140,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
                     Text(stringResource(calendarType.title))
                     Spacer(Modifier.weight(1f))
-                    Icon(
-                        Icons.Rounded.DragHandle,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
+                    Icon(Icons.Rounded.DragHandle, contentDescription = null)
                 }
             }
         }
