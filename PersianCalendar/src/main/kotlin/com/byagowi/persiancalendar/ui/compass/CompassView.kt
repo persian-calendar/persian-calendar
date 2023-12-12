@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
@@ -85,7 +85,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.style = Paint.Style.FILL_AND_STROKE
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
-    private val kaaba = context.getCompatDrawable(R.drawable.kaaba)
+    private val kaaba = context.getSafeDrawable(R.drawable.kaaba)
         .toBitmap((32 * dp).toInt(), (32 * dp).toInt())
 
     private var cx = 0f

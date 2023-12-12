@@ -29,7 +29,7 @@ import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
@@ -96,12 +96,12 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     /**
      * Drawables
      */
-    private val level1D = context.getCompatDrawable(R.drawable.level_1d)
-    private val bubble1D = context.getCompatDrawable(R.drawable.bubble_1d)
-    private val marker1D = context.getCompatDrawable(R.drawable.marker_1d)
-    private val level2D = context.getCompatDrawable(R.drawable.level_2d)
-    private val bubble2D = context.getCompatDrawable(R.drawable.bubble_2d)
-    private val marker2D = context.getCompatDrawable(R.drawable.marker_2d)
+    private val level1D = context.getSafeDrawable(R.drawable.level_1d)
+    private val bubble1D = context.getSafeDrawable(R.drawable.bubble_1d)
+    private val marker1D = context.getSafeDrawable(R.drawable.marker_1d)
+    private val level2D = context.getSafeDrawable(R.drawable.level_2d)
+    private val bubble2D = context.getSafeDrawable(R.drawable.bubble_2d)
+    private val marker2D = context.getSafeDrawable(R.drawable.marker_2d)
 
     /**
      * Ajustement de la vitesse

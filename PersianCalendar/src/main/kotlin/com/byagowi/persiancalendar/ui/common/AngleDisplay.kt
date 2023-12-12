@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -38,7 +38,7 @@ class AngleDisplay(
     }
     private val lcdWidth = displayRect.width()
     val lcdHeight = displayRect.height()
-    private val displayDrawable = context.getCompatDrawable(R.drawable.display)
+    private val displayDrawable = context.getSafeDrawable(R.drawable.display)
     private val displayFormat = DecimalFormat(defaultFormat).also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }

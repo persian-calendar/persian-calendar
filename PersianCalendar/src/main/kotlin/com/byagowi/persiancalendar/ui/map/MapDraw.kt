@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import com.byagowi.persiancalendar.ui.utils.scaleBy
 import com.byagowi.persiancalendar.ui.utils.translateBy
 import com.byagowi.persiancalendar.utils.formatDate
@@ -62,7 +62,7 @@ import kotlin.math.sin
 
 class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundColor: Int? = null) {
     private val solarDraw = SolarDraw(context)
-    private val pinDrawable = context.getCompatDrawable(R.drawable.ic_pin)
+    private val pinDrawable = context.getSafeDrawable(R.drawable.ic_pin)
 
     val mapScaleFactor = 16 // As the path bounds is 360x180 *16
     val mapWidth = 360 * mapScaleFactor
@@ -107,7 +107,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     var drawKaaba: Boolean = false
 
     private val kaabaIcon by lazy(LazyThreadSafetyMode.NONE) {
-        context.getCompatDrawable(R.drawable.kaaba)
+        context.getSafeDrawable(R.drawable.kaaba)
     }
 
     var markersScale = 1f

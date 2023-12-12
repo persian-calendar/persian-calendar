@@ -9,7 +9,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import kotlin.math.abs
@@ -31,8 +31,8 @@ class SolarDraw(context: Context) {
         drawable.draw(canvas)
     }
 
-    private val sunDrawable = context.getCompatDrawable(R.drawable.ic_sun)
-    private val smallSunDrawable = context.getCompatDrawable(R.drawable.ic_sun_small)
+    private val sunDrawable = context.getSafeDrawable(R.drawable.ic_sun)
+    private val smallSunDrawable = context.getSafeDrawable(R.drawable.ic_sun_small)
 
     fun moon(
         canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
@@ -68,7 +68,7 @@ class SolarDraw(context: Context) {
         moonDrawable.draw(canvas)
     }
 
-    private val moonDrawable = context.getCompatDrawable(R.drawable.ic_moon)
+    private val moonDrawable = context.getSafeDrawable(R.drawable.ic_moon)
     private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
@@ -78,7 +78,7 @@ class SolarDraw(context: Context) {
         it.style = Paint.Style.FILL_AND_STROKE
     }
 
-    private val earthDrawable = context.getCompatDrawable(R.drawable.ic_earth)
+    private val earthDrawable = context.getSafeDrawable(R.drawable.ic_earth)
 
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)

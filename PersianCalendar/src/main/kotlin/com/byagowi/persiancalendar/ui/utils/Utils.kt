@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
-import android.animation.LayoutTransition
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -13,8 +11,8 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.util.Base64
@@ -25,7 +23,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
@@ -167,22 +164,13 @@ fun NavController.navigateSafe(directions: NavDirections) {
     runCatching { navigate(directions) }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
-@SuppressLint("UseCompatLoadingForDrawables") // for now
-fun Context?.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable {
-    return runCatching {
-        this?.getDrawable(drawableRes)
-    }.onFailure(logException).getOrNull().debugAssertNotNull ?: ShapeDrawable()
-}
+// Return an empty drawable instead of crash, to be removed someday hopefully
+fun Context.getSafeDrawable(@DrawableRes drawableRes: Int): Drawable =
+    runCatching { getDrawable(drawableRes) }.onFailure(logException).getOrNull().debugAssertNotNull
+        ?: ColorDrawable(Color.TRANSPARENT)
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) {
     this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }
-}
-
-fun ViewGroup.setupLayoutTransition() {
-    this.layoutTransition = LayoutTransition().also {
-        it.enableTransitionType(LayoutTransition.CHANGING)
-        it.setAnimateParentHierarchy(false) // this essentially was important to prevent rare crashes
-    }
 }
 
 fun ComponentActivity.askForCalendarPermission() {
