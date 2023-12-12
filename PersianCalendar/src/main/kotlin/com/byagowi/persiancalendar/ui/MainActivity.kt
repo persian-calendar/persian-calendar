@@ -321,6 +321,8 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
 
+            PREF_APP_LANGUAGE -> restartToSettings()
+
             PREF_THEME_GRADIENT -> setNavHostBackground()
 
             PREF_NOTIFY_DATE -> {
