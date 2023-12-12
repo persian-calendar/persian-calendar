@@ -59,14 +59,6 @@ enum class Theme(
                         }
                     )
                     // DynamicColors.applyToActivityIfAvailable(activity)
-                    activity.setTheme(
-                        when {
-                            theme == BLACK -> R.style.DynamicBlackSurfaceOverride
-                            theme == MODERN -> R.style.DynamicModernSurfaceOverride
-                            isNightModeEnabled -> R.style.DynamicDarkSurfaceOverride
-                            else -> R.style.DynamicLightSurfaceOverride
-                        }
-                    )
                 } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
             } else activity.setTheme(theme.styleRes)
 
