@@ -14,6 +14,7 @@ import android.os.Build
 import android.view.InputDevice
 import android.view.RoundedCorner
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -70,7 +71,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
@@ -245,7 +245,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                 onClick = {
                     selectedIndex = i
                     // TODO: Ugly cast
-                    clickHandler(context as? FragmentActivity)
+                    clickHandler(context as? ComponentActivity)
                 },
                 label = { Text(title) },
                 icon = {

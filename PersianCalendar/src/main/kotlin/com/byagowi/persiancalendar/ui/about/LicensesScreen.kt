@@ -58,7 +58,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
@@ -153,7 +152,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                 selected = selectedItem == i,
                 onClick = {
                     selectedItem = i
-                    clickHandler(context as? FragmentActivity) // TODO: Ugly cast
+                    clickHandler(context as? ComponentActivity) // TODO: Ugly cast
                 },
                 icon = icon,
                 label = { Text(title) },

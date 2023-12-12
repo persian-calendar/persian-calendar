@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.browser.customtabs.CustomTabsIntent
@@ -94,7 +95,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -289,7 +289,7 @@ fun AboutScreen(
                     .height(headerSize)
                     .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
                         logoAnimationAtEnd = !logoAnimationAtEnd
-                        clickHandlerDialog(context as? FragmentActivity) // TODO: Ugly cast
+                        clickHandlerDialog(context as? ComponentActivity) // TODO: Ugly cast
                         logoEffect = effectsGenerator
                             ?.invoke()
                             ?.asComposeRenderEffect()
@@ -311,7 +311,7 @@ private fun shareApplication(context: Context) {
 https://github.com/persian-calendar/persian-calendar"""
             putExtra(Intent.EXTRA_TEXT, textToShare)
         }, context.getString(R.string.share)))
-    }.onFailure(logException).onFailure { (context as? FragmentActivity)?.bringMarketPage() }
+    }.onFailure(logException).onFailure { (context as? ComponentActivity)?.bringMarketPage() }
 }
 
 @Composable
