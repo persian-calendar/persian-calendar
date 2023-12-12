@@ -53,20 +53,14 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
             val currentKey = context.appPrefs.getString(PREF_THEME, null)
             Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
         }.title)
-        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             title = stringResource(R.string.select_skin), summary = themeDisplayName
-        ) { showDialog = true }
-        if (showDialog) ThemeDialog { showDialog = false }
+        ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
     }
-    run {
-        var showDialog by rememberSaveable { mutableStateOf(destination == PREF_APP_LANGUAGE) }
-        SettingsClickable(
-            title = if (destination == PREF_APP_LANGUAGE) "Language" else stringResource(R.string.language),
-            summary = language.nativeName,
-        ) { showDialog = true }
-        if (showDialog) LanguageDialog { showDialog = false }
-    }
+    SettingsClickable(
+        title = if (destination == PREF_APP_LANGUAGE) "Language" else stringResource(R.string.language),
+        summary = language.nativeName,
+    ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
     if (language.isArabic) {
         SettingsSwitch(
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
@@ -96,10 +90,11 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
     SettingsDivider()
     SettingsSection(stringResource(R.string.calendar))
     run {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.events), stringResource(R.string.events_summary)
-        ) { showDialog = true }
+        ) { onDismissRequest -> HolidaysTypesDialog(onDismissRequest) }
+
+        var showDialog by rememberSaveable { mutableStateOf(false) }
         LaunchedEffect(null) { if (destination == PREF_HOLIDAY_TYPES) showDialog = true }
         if (showDialog) HolidaysTypesDialog { showDialog = false }
     }
@@ -118,14 +113,10 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
         },
         followChanges = true,
     )
-    run {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsClickable(
-            stringResource(R.string.calendars_priority),
-            stringResource(R.string.calendars_priority_summary)
-        ) { showDialog = true }
-        if (showDialog) CalendarPreferenceDialog { showDialog = false }
-    }
+    SettingsClickable(
+        stringResource(R.string.calendars_priority),
+        stringResource(R.string.calendars_priority_summary)
+    ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
     SettingsSwitch(
         PREF_ASTRONOMICAL_FEATURES,
         false,

@@ -23,7 +23,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -81,28 +80,19 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun LocationAthanSettings(activity: ComponentActivity) {
     SettingsSection(stringResource(R.string.location))
-    run {
-        var showDialog by remember { mutableStateOf(false) }
-        SettingsClickable(
-            title = stringResource(R.string.gps_location),
-            summary = stringResource(R.string.gps_location_help),
-        ) { showDialog = true }
-        if (showDialog) GPSLocationDialog { showDialog = false }
-    }
-    run {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsClickable(
-            title = stringResource(R.string.location),
-            summary = stringResource(R.string.location_help),
-        ) { showDialog = true }
-        if (showDialog) LocationDialog { showDialog = false }
-    }
-    run {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsClickable(stringResource(R.string.coordination)) { showDialog = true }
-        if (showDialog) CoordinatesDialog(
+    SettingsClickable(
+        title = stringResource(R.string.gps_location),
+        summary = stringResource(R.string.gps_location_help),
+    ) { onDismissRequest -> GPSLocationDialog(onDismissRequest) }
+    SettingsClickable(
+        title = stringResource(R.string.location),
+        summary = stringResource(R.string.location_help),
+    ) { onDismissRequest -> LocationDialog(onDismissRequest) }
+    SettingsClickable(stringResource(R.string.coordination)) { onDismissRequest ->
+        CoordinatesDialog(
             navigateToMap = { activity.findNavController(R.id.navHostFragment).navigate(R.id.map) },
-        ) { showDialog = false }
+            onDismissRequest = onDismissRequest
+        )
     }
 
     val isLocationSet by coordinates.map { it != null }.collectAsState(coordinates.value != null)
@@ -188,32 +178,27 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         )
     }
     AnimatedVisibility(isLocationSet) {
-        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.athan_gap),
             stringResource(R.string.athan_gap_summary),
-        ) { showDialog = true }
-        if (showDialog) AthanGapDialog { showDialog = false }
+        ) { onDismissRequest -> AthanGapDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),
-        ) { showDialog = true }
-        if (showDialog) PrayerSelectDialog { showDialog = false }
+        ) { onDismissRequest -> PrayerSelectDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsClickable(stringResource(R.string.custom_athan), athanSoundName) {
-            showDialog = true
+        SettingsClickable(
+            stringResource(R.string.custom_athan),
+            athanSoundName
+        ) { onDismissRequest -> AthanSelectDialog(onDismissRequest) }
+    }
+    AnimatedVisibility(isLocationSet) {
+        SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
+            PrayerSelectPreviewDialog(onDismissRequest)
         }
-        if (showDialog) AthanSelectDialog { showDialog = false }
-    }
-    AnimatedVisibility(isLocationSet) {
-        var showDialog by remember { mutableStateOf(false) }
-        SettingsClickable(stringResource(R.string.preview)) { showDialog = true }
-        if (showDialog) PrayerSelectPreviewDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
@@ -244,24 +229,20 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         )
     }
     AnimatedVisibility(isLocationSet && showAthanVolume) {
-        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary)
-        ) { showDialog = true }
-        if (showDialog) AthanVolumeDialog { showDialog = false }
+        ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
         var midnightSummary by remember {
             mutableStateOf(getMidnightMethodPreferenceSummary(context))
         }
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsClickable(stringResource(R.string.midnight), midnightSummary) { showDialog = true }
-        if (showDialog) {
+        SettingsClickable(stringResource(R.string.midnight), midnightSummary) { onDismissRequest ->
             AppDialog(
                 title = { Text(stringResource(R.string.midnight)) },
-                onDismissRequest = { showDialog = false },
+                onDismissRequest = onDismissRequest,
                 dismissButton = {
-                    TextButton(onClick = { showDialog = false }) {
+                    TextButton(onClick = onDismissRequest) {
                         Text(stringResource(R.string.cancel))
                     }
                 },
@@ -282,7 +263,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
                             .fillMaxWidth()
                             .height(SettingsItemHeight.dp)
                             .clickable {
-                                showDialog = false
+                                onDismissRequest()
                                 context.appPrefs.edit {
                                     if (key == "DEFAULT") remove(PREF_MIDNIGHT_METHOD)
                                     else putString(PREF_MIDNIGHT_METHOD, key)

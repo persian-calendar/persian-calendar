@@ -118,23 +118,19 @@ fun WidgetConfiguration(activity: ComponentActivity) {
         )
     }
     AnimatedVisibility(!preferSystemColors) {
-        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.widget_text_color),
             stringResource(R.string.select_widgets_text_color)
-        ) { showDialog = true }
-        if (showDialog) ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR) {
-            showDialog = false
+        ) { onDismissRequest ->
+            ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR, onDismissRequest)
         }
     }
     AnimatedVisibility(!preferSystemColors) {
-        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.widget_background_color),
             stringResource(R.string.select_widgets_background_color)
-        ) { showDialog = true }
-        if (showDialog) ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR) {
-            showDialog = false
+        ) { onDismissRequest ->
+            ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR, onDismissRequest)
         }
     }
     SettingsSwitch(

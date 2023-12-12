@@ -177,43 +177,40 @@ private fun AgeWidgetConfigureContent(
                     label = { Text(stringResource(R.string.age_widget_title)) },
                 )
 
-                run {
-                    var showDialog by rememberSaveable { mutableStateOf(false) }
-                    SettingsClickable(stringResource(R.string.select_date)) { showDialog = true }
-                    if (showDialog) {
-                        val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                        val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
-                        DayPickerDialog(
-                            initialJdn = jdn,
-                            positiveButtonTitle = R.string.accept,
-                            onSuccess = { appPrefs.edit { putJdn(key, it) } },
-                        ) { showDialog = false }
-                    }
+                SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
+                    val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
+                    val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
+                    DayPickerDialog(
+                        initialJdn = jdn,
+                        positiveButtonTitle = R.string.accept,
+                        onSuccess = { appPrefs.edit { putJdn(key, it) } },
+                        onDismissRequest = onDismissRequest,
+                    )
                 }
                 val showColorOptions = remember {
                     !(Theme.isDynamicColor(appPrefs) &&
                             appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
                 }
                 if (showColorOptions) {
-                    run {
-                        var showDialog by remember { mutableStateOf(false) }
-                        SettingsClickable(
-                            stringResource(R.string.widget_text_color),
-                            stringResource(R.string.select_widgets_text_color)
-                        ) { showDialog = true }
-                        if (showDialog) ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId) {
-                            showDialog = false
-                        }
+                    SettingsClickable(
+                        stringResource(R.string.widget_text_color),
+                        stringResource(R.string.select_widgets_text_color)
+                    ) { onDismissRequest ->
+                        ColorPickerDialog(
+                            false,
+                            PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
+                            onDismissRequest = onDismissRequest,
+                        )
                     }
-                    run {
-                        var showDialog by remember { mutableStateOf(false) }
-                        SettingsClickable(
-                            stringResource(R.string.widget_background_color),
-                            stringResource(R.string.select_widgets_background_color)
-                        ) { showDialog = true }
-                        if (showDialog) ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId) {
-                            showDialog = false
-                        }
+                    SettingsClickable(
+                        stringResource(R.string.widget_background_color),
+                        stringResource(R.string.select_widgets_background_color)
+                    ) { onDismissRequest ->
+                        ColorPickerDialog(
+                            true,
+                            PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
+                            onDismissRequest = onDismissRequest,
+                        )
                     }
                 }
             }

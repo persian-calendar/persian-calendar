@@ -69,11 +69,16 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 fun SettingsDivider() = HorizontalDivider(Modifier.padding(horizontal = 8.dp))
 
 @Composable
-fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit) {
+fun SettingsClickable(
+    title: String,
+    summary: String? = null,
+    dialog: @Composable (onDismissRequest: () -> Unit) -> Unit,
+) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
     Column(
         Modifier
             .fillMaxWidth()
-            .clickable { action() }
+            .clickable { showDialog = true }
             .padding(vertical = 16.dp, horizontal = 24.dp),
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
@@ -83,6 +88,7 @@ fun SettingsClickable(title: String, summary: String? = null, action: () -> Unit
             modifier = Modifier.alpha(AppBlendAlpha)
         )
     }
+    if (showDialog) dialog { showDialog = false }
 }
 
 @Composable
@@ -104,33 +110,34 @@ fun SettingsSingleSelect(
         )
     }
     var showDialog by rememberSaveable { mutableStateOf(false) }
-    SettingsClickable(title = title, summary = summary) { showDialog = true }
-    if (showDialog) AppDialog(
-        title = { Text(stringResource(dialogTitleResId)) },
-        dismissButton = {
-            TextButton(onClick = { showDialog = false }) { Text(stringResource(R.string.cancel)) }
-        },
-        onDismissRequest = { showDialog = false },
-    ) {
-        val currentValue = remember {
-            context.appPrefs.getString(key, null) ?: defaultValue
-        }
-        entries.zip(entryValues) { entry, entryValue ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(SettingsItemHeight.dp)
-                    .clickable {
-                        showDialog = false
-                        context.appPrefs.edit { putString(key, entryValue) }
-                        if (summaryResId == null) summary = entry
-                    }
-                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
-            ) {
-                RadioButton(selected = entryValue == currentValue, onClick = null)
-                Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
-                Text(entry)
+    SettingsClickable(title = title, summary = summary) { onDismissRequest ->
+        AppDialog(
+            title = { Text(stringResource(dialogTitleResId)) },
+            dismissButton = {
+                TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            },
+            onDismissRequest = onDismissRequest,
+        ) {
+            val currentValue = remember {
+                context.appPrefs.getString(key, null) ?: defaultValue
+            }
+            entries.zip(entryValues) { entry, entryValue ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(SettingsItemHeight.dp)
+                        .clickable {
+                            showDialog = false
+                            context.appPrefs.edit { putString(key, entryValue) }
+                            if (summaryResId == null) summary = entry
+                        }
+                        .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
+                ) {
+                    RadioButton(selected = entryValue == currentValue, onClick = null)
+                    Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                    Text(entry)
+                }
             }
         }
     }
@@ -147,9 +154,7 @@ fun SettingsMultiSelect(
     summary: String? = null,
 ) {
     val context = LocalContext.current
-    var showDialog by rememberSaveable { mutableStateOf(false) }
-    SettingsClickable(title = title, summary = summary) { showDialog = true }
-    if (showDialog) {
+    SettingsClickable(title = title, summary = summary) { onDismissRequest ->
         val result = rememberSaveable(
             saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
         ) {
@@ -158,15 +163,13 @@ fun SettingsMultiSelect(
         }
         AppDialog(
             title = { Text(stringResource(dialogTitleResId)) },
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = onDismissRequest,
             dismissButton = {
-                TextButton(onClick = {
-                    showDialog = false
-                }) { Text(stringResource(R.string.cancel)) }
+                TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
             },
             confirmButton = {
                 TextButton(onClick = {
-                    showDialog = false
+                    onDismissRequest()
                     context.appPrefs.edit { putStringSet(key, result.toSet()) }
                 }) { Text(stringResource(R.string.accept)) }
             },
