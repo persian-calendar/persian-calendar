@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -33,6 +32,10 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -177,16 +180,27 @@ fun ComponentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it
     // didn't go well in Android 6.0 so better not risk I guess
-    AlertDialog.Builder(this)
-        .setTitle(R.string.calendar_access)
-        .setMessage(R.string.phone_calendar_required)
-        .setPositiveButton(R.string.continue_button) { _, _ ->
-            requestPermissions(
-                arrayOf(Manifest.permission.READ_CALENDAR), CALENDAR_READ_PERMISSION_REQUEST_CODE
-            )
-        }
-        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-        .show()
+    showComposeDialog(this) { onDismissRequest ->
+        AlertDialog(
+            title = { Text(stringResource(R.string.calendar_access)) },
+            text = { Text(stringResource(R.string.phone_calendar_required)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDismissRequest()
+                    requestPermissions(
+                        arrayOf(Manifest.permission.READ_CALENDAR),
+                        CALENDAR_READ_PERMISSION_REQUEST_CODE
+                    )
+                }) { Text(stringResource(R.string.continue_button)) }
+            },
+            dismissButton = {
+                TextButton(onClick = onDismissRequest) {
+                    Text(stringResource(R.string.cancel))
+                }
+            },
+            onDismissRequest = onDismissRequest,
+        )
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
