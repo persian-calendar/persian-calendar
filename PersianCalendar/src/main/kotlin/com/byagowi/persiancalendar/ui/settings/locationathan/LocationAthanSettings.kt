@@ -48,8 +48,8 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanVolumeDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectPreviewDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
@@ -171,21 +171,21 @@ fun LocationAthanSettings(activity: ComponentActivity) {
             stringResource(R.string.asr_hanafi_juristic)
         )
     }
-    run {
+    AnimatedVisibility(isLocationSet) {
         var showDialog by remember { mutableStateOf(false) }
-        AnimatedVisibility(isLocationSet) {
-            SettingsClickable(
-                stringResource(R.string.athan_gap),
-                stringResource(R.string.athan_gap_summary),
-            ) { showDialog = true }
-        }
+        SettingsClickable(
+            stringResource(R.string.athan_gap),
+            stringResource(R.string.athan_gap_summary),
+        ) { showDialog = true }
         if (showDialog) AthanGapDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
+        var showDialog by remember { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),
-        ) { showPrayerSelectDialog(activity) }
+        ) { showDialog = true }
+        if (showDialog) PrayerSelectDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
         var showDialog by rememberSaveable { mutableStateOf(false) }
@@ -195,7 +195,9 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         if (showDialog) AthanSelectDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
-        SettingsClickable(stringResource(R.string.preview)) { showPrayerSelectPreviewDialog(activity) }
+        var showDialog by remember { mutableStateOf(false) }
+        SettingsClickable(stringResource(R.string.preview)) { showDialog = true }
+        if (showDialog) PrayerSelectPreviewDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
