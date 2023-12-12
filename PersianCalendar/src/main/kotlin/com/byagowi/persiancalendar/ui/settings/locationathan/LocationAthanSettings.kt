@@ -196,7 +196,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         if (showDialog) AthanGapDialog { showDialog = false }
     }
     AnimatedVisibility(isLocationSet) {
-        var showDialog by remember { mutableStateOf(false) }
+        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),

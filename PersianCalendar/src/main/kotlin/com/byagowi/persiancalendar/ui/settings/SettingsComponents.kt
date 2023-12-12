@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
-import android.app.AlertDialog
 import android.content.SharedPreferences
-import android.provider.MediaStore.Audio.Radio
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,20 +22,22 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role.Companion.RadioButton
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -103,7 +103,7 @@ fun SettingsSingleSelect(
             )] else context.getString(summaryResId)
         )
     }
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
     SettingsClickable(title = title, summary = summary) { showDialog = true }
     if (showDialog) AppDialog(
         title = { Text(stringResource(dialogTitleResId)) },
@@ -147,16 +147,47 @@ fun SettingsMultiSelect(
     summary: String? = null,
 ) {
     val context = LocalContext.current
-    SettingsClickable(title = title, summary = summary) {
-        val result = (context.appPrefs.getStringSet(key, null) ?: defaultValue).toMutableSet()
-        val checkedItems = entryValues.map { it in result }.toBooleanArray()
-        AlertDialog.Builder(context).setTitle(dialogTitleResId)
-            .setMultiChoiceItems(entries.toTypedArray(), checkedItems) { _, which, isChecked ->
-                if (isChecked) result.add(entryValues[which])
-                else result.remove(entryValues[which])
-            }.setNegativeButton(R.string.cancel, null).setPositiveButton(R.string.accept) { _, _ ->
-                context.appPrefs.edit { putStringSet(key, result) }
-            }.show()
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    SettingsClickable(title = title, summary = summary) { showDialog = true }
+    if (showDialog) {
+        val result = rememberSaveable(
+            saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
+        ) {
+            (context.appPrefs.getStringSet(key, null) ?: defaultValue).toList()
+                .toMutableStateList()
+        }
+        AppDialog(
+            title = { Text(stringResource(dialogTitleResId)) },
+            onDismissRequest = { showDialog = false },
+            dismissButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                }) { Text(stringResource(R.string.cancel)) }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    context.appPrefs.edit { putStringSet(key, result.toSet()) }
+                }) { Text(stringResource(R.string.accept)) }
+            },
+        ) {
+            entries.zip(entryValues) { entry, entryValue ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(SettingsItemHeight.dp)
+                        .clickable {
+                            if (entryValue in result) result.remove(entryValue)
+                            else result.add(entryValue)
+                        }
+                        .padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                ) {
+                    Text(entry, modifier = Modifier.weight(1f))
+                    Switch(checked = entryValue in result, onCheckedChange = null)
+                }
+            }
+        }
     }
 }
 
