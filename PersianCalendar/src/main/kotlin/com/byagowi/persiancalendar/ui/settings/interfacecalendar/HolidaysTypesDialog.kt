@@ -44,7 +44,6 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
-import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 
@@ -102,7 +101,10 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     EventsRepository.nepalOthersKey,
                 )
             }
-            Box(Modifier.height(SettingsItemHeight.dp), contentAlignment = Alignment.CenterStart) {
+            Box(
+                Modifier.height(HolidaysSettingsItemHeight.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
                 Text(
                     stringResource(R.string.other_holidays),
                     modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
@@ -149,7 +151,7 @@ fun CountryEvents(
                     if (nonHolidaysKey !in enabledTypes) enabledTypes.add(nonHolidaysKey)
                 }
             }
-            .height(SettingsItemHeight.dp),
+            .height(HolidaysSettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TriStateCheckbox(
@@ -198,7 +200,7 @@ private fun IndentedCheckBox(
             .clickable {
                 if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
             }
-            .height(SettingsItemHeight.dp)
+            .height(HolidaysSettingsItemHeight.dp)
             .padding(horizontal = 56.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -207,3 +209,5 @@ private fun IndentedCheckBox(
         Text(label)
     }
 }
+
+private const val HolidaysSettingsItemHeight = 40f
