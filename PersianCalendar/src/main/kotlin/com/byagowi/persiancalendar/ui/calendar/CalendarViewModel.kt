@@ -41,13 +41,6 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _eventsFlow = MutableSharedFlow<List<CalendarEvent<*>>>()
     val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
-    // Events
-    val todayButtonVisibilityEvent = _selectedDay.combine(_selectedMonth) { day, month ->
-        val todayJdn = Jdn.today()
-        val todayDate = todayJdn.toCalendar(mainCalendar)
-        month.year != todayDate.year || month.month != todayDate.month || day != todayJdn
-    }
-
     // Commands
     fun changeSelectedMonth(selectedMonth: AbstractDate) {
         _selectedMonth.value = selectedMonth

@@ -527,13 +527,21 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                 }
             },
             actions = {
-                val visibleTodayButton by viewModel.todayButtonVisibilityEvent.collectAsState(false)
-                AnimatedVisibility(visible = visibleTodayButton) {
-                    IconButton(onClick = { bringDate(Jdn.today(), highlight = false) }) {
-                        Icon(
-                            ImageVector.vectorResource(R.drawable.ic_restore_modified),
-                            contentDescription = stringResource(R.string.return_to_today),
-                        )
+                run {
+                    val selectedDay by viewModel.selectedDay.collectAsState()
+                    val selectedMonth by viewModel.selectedMonth.collectAsState()
+                    val todayJdn = Jdn.today()
+                    val todayDate = todayJdn.toCalendar(mainCalendar)
+                    AnimatedVisibility(
+                        selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month ||
+                                selectedDay != todayJdn
+                    ) {
+                        IconButton(onClick = { bringDate(Jdn.today(), highlight = false) }) {
+                            Icon(
+                                ImageVector.vectorResource(R.drawable.ic_restore_modified),
+                                contentDescription = stringResource(R.string.return_to_today),
+                            )
+                        }
                     }
                 }
 
