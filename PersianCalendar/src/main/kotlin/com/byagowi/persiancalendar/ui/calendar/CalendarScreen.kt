@@ -412,7 +412,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         viewModel.searchEvent(query)
         val events by viewModel.eventsFlow.collectAsState(initial = emptyList())
         val isActive by derivedStateOf { query.isNotEmpty() }
-        val padding by animateDpAsState(if (isActive) 0.dp else 16.dp, label = "padding")
+        val padding by animateDpAsState(if (isActive) 0.dp else 32.dp, label = "padding")
         val focusRequester = remember { FocusRequester() }
         LaunchedEffect(null) { focusRequester.requestFocus() }
         SearchBar(
