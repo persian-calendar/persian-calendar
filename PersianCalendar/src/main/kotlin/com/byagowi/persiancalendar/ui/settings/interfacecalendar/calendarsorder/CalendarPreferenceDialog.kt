@@ -18,6 +18,7 @@ import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -139,7 +140,11 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
                     Text(stringResource(calendarType.title))
                     Spacer(Modifier.weight(1f))
-                    Icon(Icons.Rounded.DragHandle, contentDescription = "Reorder")
+                    Icon(
+                        Icons.Rounded.DragHandle,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
                 }
             }
         }
