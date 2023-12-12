@@ -33,6 +33,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -525,23 +532,23 @@ fun AppDrawer(
 
         val selectedMenuItem by selectedMenuItemFlow.collectAsState()
         listOf(
-            Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
-            Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
-            Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
-            Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomy),
-            Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
-            Triple(R.id.about, R.drawable.ic_info, R.string.about),
-            Triple(R.id.exit, R.drawable.ic_cancel, R.string.exit),
+            Triple(R.id.calendar, Icons.Default.DateRange, R.string.calendar),
+            Triple(R.id.converter, Icons.Default.SwapVerticalCircle, R.string.date_converter),
+            Triple(R.id.compass, Icons.Default.Explore, R.string.compass),
+            Triple(
+                R.id.astronomy,
+                ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
+                R.string.astronomy
+            ),
+            Triple(R.id.settings, Icons.Default.Settings, R.string.settings),
+            Triple(R.id.about, Icons.Default.Info, R.string.about),
+            Triple(R.id.exit, Icons.Default.Cancel, R.string.exit),
         ).forEach { (id, icon, title) ->
             NavigationDrawerItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 label = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            ImageVector.vectorResource(icon),
-                            modifier = Modifier.size(24.dp),
-                            contentDescription = null
-                        )
+                        Icon(icon, modifier = Modifier.size(24.dp), contentDescription = null)
                         Spacer(Modifier.width(16.dp))
                         Text(stringResource(title))
                     }
