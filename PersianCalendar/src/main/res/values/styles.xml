@@ -7,7 +7,10 @@
     <!-- its v31 version is more interesting -->
     <color name="widget_background">@android:color/transparent</color>
 
-    <style name="SplashScreenTheme" parent="android:Theme.Material.Light.NoActionBar">
+    <!-- There is an override of this in values-night/styles.xml -->
+    <style name="BaseSplashScreenTheme" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="SplashScreenTheme" parent="BaseSplashScreenTheme">
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
