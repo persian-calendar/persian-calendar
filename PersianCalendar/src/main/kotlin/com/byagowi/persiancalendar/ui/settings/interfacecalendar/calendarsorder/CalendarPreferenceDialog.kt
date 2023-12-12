@@ -40,7 +40,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -62,7 +62,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         mutableStateOf(orderedCalendarTypes.map { it to (it in enabledCalendarTypes) })
     }
 
-    Dialog(
+    AppDialog(
         title = { Text(stringResource(R.string.calendars_priority)) },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }

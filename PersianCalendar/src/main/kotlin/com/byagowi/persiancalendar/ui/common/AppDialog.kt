@@ -23,7 +23,7 @@ import androidx.compose.ui.window.Dialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
 @Composable
-fun Dialog(
+fun AppDialog(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
     neutralButton: (@Composable () -> Unit)? = null,

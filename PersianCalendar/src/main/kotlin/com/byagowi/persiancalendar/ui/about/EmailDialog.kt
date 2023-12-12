@@ -18,13 +18,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
 fun EmailDialog(onDismissRequest: () -> Unit) {
     var message by rememberSaveable { mutableStateOf("") }
-    Dialog(
+    AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             val context = LocalContext.current

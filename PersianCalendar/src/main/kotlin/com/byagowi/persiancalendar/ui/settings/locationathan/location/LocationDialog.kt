@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -39,7 +38,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     var showProvincesDialog by rememberSaveable { mutableStateOf(false) }
     if (showProvincesDialog) return ProvincesDialog(onDismissRequest)
     val cities = remember { citiesStore.values.sortCityNames }
-    Dialog(
+    AppDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.location)) },
         confirmButton = if (language.isIranExclusive) {

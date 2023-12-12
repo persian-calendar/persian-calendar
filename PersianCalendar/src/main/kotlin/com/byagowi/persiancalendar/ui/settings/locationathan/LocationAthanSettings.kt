@@ -52,7 +52,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
@@ -257,7 +257,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(stringResource(R.string.midnight), midnightSummary) { showDialog = true }
         if (showDialog) {
-            Dialog(
+            AppDialog(
                 title = { Text(stringResource(R.string.midnight)) },
                 onDismissRequest = { showDialog = false },
                 dismissButton = {

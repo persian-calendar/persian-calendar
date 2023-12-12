@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +21,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.generated.districtsStore
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -33,7 +32,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 fun ProvincesDialog(onDismissRequest: () -> Unit) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
     if (province != null) return DistrictsDialog(province ?: "", onDismissRequest)
-    Dialog(
+    AppDialog(
         title = { Text("انتخاب استان برای مشاهدهٔ بخش‌ها") },
         onDismissRequest = onDismissRequest,
     ) {
@@ -58,7 +57,7 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
             countyDetails.drop(1).map { it.split(":") to countyDetails[0] }
         }.sortedBy { (district, _) -> language.prepareForSort(district[0/*district name*/]) }
     }
-    Dialog(
+    AppDialog(
         title = { Text(province) },
         onDismissRequest = onDismissRequest,
     ) {

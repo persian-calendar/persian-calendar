@@ -31,7 +31,7 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
@@ -61,7 +61,7 @@ fun CoordinatesDialog(
     // Whenever text field change this signals geocoder rerun
     // and no need to save as below remember also isn't saved
     var changeCounter by remember { mutableStateOf(0) }
-    Dialog(
+    AppDialog(
         title = { Text(stringResource(R.string.coordination)) },
         neutralButton = {
             navigateToMap?.also {

@@ -88,7 +88,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
@@ -164,7 +164,7 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
     )
 
     var showMapTypesDialog by remember { mutableStateOf(false) }
-    if (showMapTypesDialog) Dialog(onDismissRequest = { showMapTypesDialog = false }) {
+    if (showMapTypesDialog) AppDialog(onDismissRequest = { showMapTypesDialog = false }) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             MapType.entries.drop(1) // Hide "None" option
                 // Hide moon visibilities for now unless is a development build

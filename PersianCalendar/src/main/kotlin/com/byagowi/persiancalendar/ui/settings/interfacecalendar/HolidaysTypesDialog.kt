@@ -40,7 +40,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
@@ -54,7 +54,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
-    Dialog(
+    AppDialog(
         title = { Text(stringResource(R.string.events)) },
         dismissButton = {
             TextButton(onClick = onDismissRequest) {

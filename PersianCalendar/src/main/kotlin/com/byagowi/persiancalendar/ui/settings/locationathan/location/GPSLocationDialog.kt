@@ -38,7 +38,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -196,12 +196,12 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         }
     }
 
-    Dialog(onDismissRequest = onDismissRequest) {
+    AppDialog(onDismissRequest = onDismissRequest) {
         val textModifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()
         val coord =
-            coordinates ?: return@Dialog Text(message, textModifier, textAlign = TextAlign.Center)
+            coordinates ?: return@AppDialog Text(message, textModifier, textAlign = TextAlign.Center)
         val text = buildAnnotatedString {
             appendLine(formatCoordinate(context, coord, "\n"))
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))

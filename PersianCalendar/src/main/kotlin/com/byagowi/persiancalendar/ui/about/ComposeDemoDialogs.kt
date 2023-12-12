@@ -32,7 +32,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 
@@ -221,7 +221,7 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
     )
     val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
     val context = LocalContext.current
-    Dialog(onDismissRequest = onDismissRequest) {
+    AppDialog(onDismissRequest = onDismissRequest) {
         Column {
             Row {
                 cols.forEach {
@@ -248,7 +248,7 @@ fun DynamicColorsDialog(onDismissRequest: () -> Unit) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun IconsDemoDialog(onDismissRequest: () -> Unit) {
-    Dialog(onDismissRequest = onDismissRequest) {
+    AppDialog(onDismissRequest = onDismissRequest) {
         FlowRow {
             (0..61).forEach {
                 val day = it / 2 + 1

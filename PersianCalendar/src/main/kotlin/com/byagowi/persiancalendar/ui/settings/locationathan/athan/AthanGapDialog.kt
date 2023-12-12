@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
@@ -29,7 +29,7 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
     var minutes by remember {
         mutableStateOf(context.appPrefs.getString(PREF_ATHAN_GAP, null) ?: "0")
     }
-    Dialog(
+    AppDialog(
         title = { Text(stringResource(R.string.athan_gap_summary)) },
         onDismissRequest = onDismissRequest,
         confirmButton = {

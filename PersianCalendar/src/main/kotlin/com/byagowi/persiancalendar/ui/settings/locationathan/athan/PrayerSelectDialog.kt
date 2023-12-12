@@ -22,7 +22,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.ATHANS_LIST
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -39,7 +39,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
         (context.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
             .splitFilterNotEmpty(",").toMutableStateList()
     }
-    Dialog(
+    AppDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.athan_alarm)) },
         confirmButton = {
@@ -70,7 +70,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
 
 @Composable
 fun PrayerSelectPreviewDialog(onDismissRequest: () -> Unit) {
-    Dialog(
+    AppDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.preview)) },
         dismissButton = {

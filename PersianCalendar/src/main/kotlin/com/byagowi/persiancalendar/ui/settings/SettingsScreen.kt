@@ -83,7 +83,7 @@ import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
@@ -321,7 +321,7 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
         )
         if (showDialog) {
             var seconds by remember { mutableStateOf("5") }
-            Dialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
+            AppDialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
                 TextButton(onClick = onClick@{
                     closeMenu()
                     val value = seconds.toIntOrNull() ?: return@onClick

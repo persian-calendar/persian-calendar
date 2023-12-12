@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
@@ -40,7 +40,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
     val currentTheme = remember {
         context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
     }
-    Dialog(
+    AppDialog(
         title = { Text(stringResource(R.string.select_skin)) },
         onDismissRequest = onDismissRequest,
         dismissButton = {

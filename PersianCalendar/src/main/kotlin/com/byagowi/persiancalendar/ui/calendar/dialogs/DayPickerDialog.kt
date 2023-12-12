@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
-import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -51,7 +51,7 @@ fun DayPickerDialog(
     var jdn by remember { mutableStateOf(initialJdn) }
     val today = remember { Jdn.today() }
     var changeToken by remember { mutableIntStateOf(0) }
-    Dialog(
+    AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(onClick = {
