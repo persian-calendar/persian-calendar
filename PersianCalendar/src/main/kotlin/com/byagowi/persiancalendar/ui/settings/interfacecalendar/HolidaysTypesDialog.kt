@@ -43,7 +43,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 
@@ -164,7 +163,7 @@ fun CountryEvents(
                 else -> ToggleableState.Off
             },
             onClick = null,
-            modifier = Modifier.padding(start = SettingsHorizontalPaddingItemWithButton.dp),
+            modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
         )
         Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
         Text(calendarCenterName)

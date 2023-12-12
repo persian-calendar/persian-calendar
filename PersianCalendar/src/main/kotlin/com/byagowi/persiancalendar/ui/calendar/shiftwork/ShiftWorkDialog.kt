@@ -57,7 +57,7 @@ import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -111,7 +111,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         Modifier
             .fillMaxWidth()
             .clickable { viewModel.changeRecurs(!recurs) }
-            .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
+            .padding(horizontal = SettingsHorizontalPaddingItem.dp)
             .height(SettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

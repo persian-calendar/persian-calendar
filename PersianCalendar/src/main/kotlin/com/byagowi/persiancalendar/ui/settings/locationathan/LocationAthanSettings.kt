@@ -66,7 +66,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.Coordinate
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -270,7 +270,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
                                 }
                                 midnightSummary = title
                             }
-                            .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
+                            .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     ) {
                         RadioButton(selected = key == currentSelectionKey, onClick = null)
                         Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))

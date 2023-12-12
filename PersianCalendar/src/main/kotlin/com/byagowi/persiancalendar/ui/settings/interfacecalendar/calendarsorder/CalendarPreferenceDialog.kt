@@ -18,7 +18,6 @@ import androidx.compose.material.icons.rounded.DragHandle
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -43,7 +42,7 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -132,7 +131,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                             },
                         )
                         .height(SettingsItemHeight.dp)
-                        .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
+                        .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                         .fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

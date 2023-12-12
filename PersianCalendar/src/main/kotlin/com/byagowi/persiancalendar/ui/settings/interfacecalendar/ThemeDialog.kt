@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 
@@ -84,7 +84,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     .fillMaxWidth()
                     .height(SettingsItemHeight.dp)
                     .clickable(onClick = ::onClick)
-                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) {
                 RadioButton(selected = theme.key == currentTheme, onClick = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))

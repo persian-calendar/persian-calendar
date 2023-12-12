@@ -38,7 +38,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 
@@ -132,7 +132,7 @@ fun SettingsSingleSelect(
                             context.appPrefs.edit { putString(key, entryValue) }
                             if (summaryResId == null) summary = entry
                         }
-                        .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
+                        .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
                     RadioButton(selected = entryValue == currentValue, onClick = null)
                     Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
@@ -184,7 +184,7 @@ fun SettingsMultiSelect(
                             if (entryValue in result) result.remove(entryValue)
                             else result.add(entryValue)
                         }
-                        .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
+                        .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
                     Checkbox(checked = entryValue in result, onCheckedChange = null)
                     Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))

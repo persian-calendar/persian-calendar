@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLanguage
@@ -59,7 +59,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
                         if (item != currentLanguage) context.appPrefs.saveLanguage(item)
                         onDismissRequest()
                     }
-                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
             ) {
                 RadioButton(selected = item == currentLanguage, onClick = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
