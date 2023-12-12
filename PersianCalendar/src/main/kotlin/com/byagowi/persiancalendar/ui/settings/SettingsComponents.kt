@@ -2,31 +2,44 @@ package com.byagowi.persiancalendar.ui.settings
 
 import android.app.AlertDialog
 import android.content.SharedPreferences
+import android.provider.MediaStore.Audio.Radio
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role.Companion.RadioButton
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
@@ -90,17 +103,36 @@ fun SettingsSingleSelect(
             )] else context.getString(summaryResId)
         )
     }
-    SettingsClickable(title = title, summary = summary) {
-        val currentValue = entryValues.indexOf(
+    var showDialog by remember { mutableStateOf(false) }
+    SettingsClickable(title = title, summary = summary) { showDialog = true }
+    if (showDialog) AppDialog(
+        title = { Text(stringResource(dialogTitleResId)) },
+        dismissButton = {
+            TextButton(onClick = { showDialog = false }) { Text(stringResource(R.string.cancel)) }
+        },
+        onDismissRequest = { showDialog = false },
+    ) {
+        val currentValue = remember {
             context.appPrefs.getString(key, null) ?: defaultValue
-        )
-        AlertDialog.Builder(context).setTitle(dialogTitleResId)
-            .setNegativeButton(R.string.cancel, null)
-            .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
-                context.appPrefs.edit { putString(key, entryValues[which]) }
-                if (summaryResId == null) summary = entries[which]
-                dialog.dismiss()
-            }.show()
+        }
+        entries.zip(entryValues) { entry, entryValue ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(SettingsItemHeight.dp)
+                    .clickable {
+                        showDialog = false
+                        context.appPrefs.edit { putString(key, entryValue) }
+                        if (summaryResId == null) summary = entry
+                    }
+                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
+            ) {
+                RadioButton(selected = entryValue == currentValue, onClick = null)
+                Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                Text(entry)
+            }
+        }
     }
 }
 

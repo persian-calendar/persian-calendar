@@ -167,7 +167,6 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
         defaultValue = language.defaultWeekStart,
         dialogTitleResId = R.string.week_start_summary,
         title = stringResource(R.string.week_start),
-        summaryResId = R.string.week_start_summary,
     )
     SettingsMultiSelect(
         key = PREF_WEEK_ENDS,
