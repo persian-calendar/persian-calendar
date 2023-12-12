@@ -180,7 +180,7 @@ fun SettingsSwitch(
                 .align(alignment = Alignment.CenterEnd)
                 .padding(end = 16.dp),
             checked = currentValue,
-            onCheckedChange = { toggle() },
+            onCheckedChange = null,
         )
     }
 }

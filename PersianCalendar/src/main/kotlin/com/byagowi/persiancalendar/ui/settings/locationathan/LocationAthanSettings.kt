@@ -1,13 +1,22 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -16,8 +25,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.navigation.findNavController
@@ -40,6 +52,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
@@ -238,26 +251,49 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         var midnightSummary by remember {
             mutableStateOf(getMidnightMethodPreferenceSummary(context))
         }
-        SettingsClickable(stringResource(R.string.midnight), midnightSummary) {
-            val methodsToShow =
-                MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
-            val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
-            val entries = listOf(midnightDefaultTitle(context)) + methodsToShow.map {
-                midnightMethodToString(context, it)
-            }
-            AlertDialog.Builder(context).setTitle(R.string.midnight)
-                .setNegativeButton(R.string.cancel, null).setSingleChoiceItems(
-                    entries.toTypedArray(), entryValues.indexOf(
-                        context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
-                    )
-                ) { dialog, which ->
-                    context.appPrefs.edit {
-                        if (which == 0) remove(PREF_MIDNIGHT_METHOD)
-                        else putString(PREF_MIDNIGHT_METHOD, entryValues[which])
+        var showDialog by rememberSaveable { mutableStateOf(false) }
+        SettingsClickable(stringResource(R.string.midnight), midnightSummary) { showDialog = true }
+        if (showDialog) {
+            Dialog(
+                title = { Text(stringResource(R.string.midnight)) },
+                onDismissRequest = { showDialog = false },
+                dismissButton = {
+                    TextButton(onClick = { showDialog = false }) {
+                        Text(stringResource(R.string.cancel))
                     }
-                    midnightSummary = entries[which]
-                    dialog.dismiss()
-                }.show()
+                },
+            ) {
+                val currentSelectionKey =
+                    context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
+                (listOf(midnightDefaultTitle(context) to "DEFAULT") +
+                        MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
+                            .map {
+                                midnightMethodToString(
+                                    context,
+                                    it
+                                ) to it.name
+                            }).forEach { (title, key) ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .clickable {
+                                showDialog = false
+                                context.appPrefs.edit {
+                                    if (key == "DEFAULT") remove(PREF_MIDNIGHT_METHOD)
+                                    else putString(PREF_MIDNIGHT_METHOD, key)
+                                }
+                                midnightSummary = title
+                            }
+                            .padding(horizontal = 24.dp)
+                    ) {
+                        RadioButton(selected = key == currentSelectionKey, onClick = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(title)
+                    }
+                }
+            }
         }
     }
 }

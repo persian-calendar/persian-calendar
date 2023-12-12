@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -42,9 +43,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = {
                 onDismissRequest()
                 context.appPrefs.edit { putString(PREF_ATHAN_ALARM, alarms.joinToString(",")) }
-            }) {
-                Text(stringResource(R.string.accept))
-            }
+            }) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
@@ -55,13 +54,12 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
                 Modifier
                     .fillMaxWidth()
                     .clickable { if (key in alarms) alarms.remove(key) else alarms.add(key) }
+                    .height(56.dp)
                     .padding(vertical = 2.dp, horizontal = 26.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(stringResource(getPrayTimeName(key)), Modifier.weight(1f, fill = true))
-                Switch(checked = key in alarms, onCheckedChange = {
-                    if (key in alarms) alarms.remove(key) else alarms.add(key)
-                })
+                Switch(checked = key in alarms, onCheckedChange = null)
             }
         }
     }
