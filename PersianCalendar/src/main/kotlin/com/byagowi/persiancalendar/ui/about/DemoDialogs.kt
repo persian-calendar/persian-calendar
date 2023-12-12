@@ -70,7 +70,6 @@ import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
@@ -79,7 +78,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
@@ -120,9 +118,9 @@ import kotlin.random.Random
 // These are somehow a sandbox to test things not used in the app yet and can be removed anytime.
 //
 
-fun createEasterEggClickHandler(callback: (FragmentActivity) -> Unit): (FragmentActivity?) -> Unit {
+fun createEasterEggClickHandler(callback: (ComponentActivity) -> Unit): (ComponentActivity?) -> Unit {
     var clickCount = 0
-    return { activity: FragmentActivity? ->
+    return { activity: ComponentActivity? ->
         if (activity != null) runCatching {
             when (++clickCount % 10) {
                 0 -> callback(activity)
@@ -178,7 +176,7 @@ half4 main(float2 fragCoord) {
 }
 """
 
-fun showHiddenUiDialog(activity: FragmentActivity) {
+fun showHiddenUiDialog(activity: ComponentActivity) {
     if (BuildConfig.DEVELOPMENT) {
         Toast.makeText(activity, "Hi!", Toast.LENGTH_LONG).show()
     }
@@ -286,25 +284,38 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
 //    }
 //}
 
-fun showShaderSandboxDialog(activity: FragmentActivity) {
+fun showShaderSandboxDialog(activity: ComponentActivity) {
     val frame = object : FrameLayout(activity) {
         // Just to let AlertDialog know there is an editor here so it needs to show the soft keyboard
         override fun onCheckIsTextEditor() = true
     }
     frame.post {
-        val binding = ShaderSandboxBinding.inflate(activity.layoutInflater)
-        binding.glView.setEGLContextClientVersion(2)
+        val linear = LinearLayout(activity).also { it.orientation = LinearLayout.VERTICAL }
+        val inputText = EditText(activity).also {
+            it.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0
+            ).apply { weight = 1f }
+            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            linear.addView(it)
+        }
+        val glView = GLSurfaceView(activity).also {
+            it.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0
+            ).apply { weight = 1f }
+            linear.addView(it)
+        }
+        glView.setEGLContextClientVersion(2)
         val renderer = GLRenderer(onError = {
             activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
         })
-        binding.glView.setRenderer(renderer)
-        binding.glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
-        binding.inputText.doAfterTextChanged {
-            renderer.fragmentShader = binding.inputText.text?.toString() ?: ""
-            binding.glView.queueEvent { renderer.compileProgram(); binding.glView.requestRender() }
+        glView.setRenderer(renderer)
+        glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+        inputText.doAfterTextChanged {
+            renderer.fragmentShader = inputText.text?.toString() ?: ""
+            glView.queueEvent { renderer.compileProgram(); glView.requestRender() }
         }
-        binding.inputText.setText(sandboxFragmentShader)
-        frame.addView(binding.root)
+        inputText.setText(sandboxFragmentShader)
+        frame.addView(linear)
     }
     val dialog = AlertDialog.Builder(activity)
         .setView(frame)
@@ -315,7 +326,7 @@ fun showShaderSandboxDialog(activity: FragmentActivity) {
     })
 }
 
-fun showColorPickerDialog(activity: FragmentActivity) {
+fun showColorPickerDialog(activity: ComponentActivity) {
     val view = LinearLayout(activity).apply {
         orientation = LinearLayout.VERTICAL
         val layoutParams = ViewGroup.LayoutParams(
@@ -429,7 +440,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
     }
 }
 
-fun showFlingDemoDialog(activity: FragmentActivity) {
+fun showFlingDemoDialog(activity: ComponentActivity) {
     val x = FloatValueHolder()
     val horizontalFling = FlingAnimation(x)
     val y = FloatValueHolder()
@@ -605,7 +616,7 @@ float4 main(float2 fragCoord) {
 }
 """
 
-fun showPeriodicTableDialog(activity: FragmentActivity) {
+fun showPeriodicTableDialog(activity: ComponentActivity) {
     val zoomableView = ZoomableView(activity)
     val cellSize = 100
     zoomableView.contentWidth = 100f * 18
@@ -847,7 +858,7 @@ Ubc,Unbipentium,
 Ubh,Unbihexium,[Og] 5g2 6f3 8s2 8p1
 """.trim().split("\n")
 
-fun showRotationalSpringDemoDialog(activity: FragmentActivity) {
+fun showRotationalSpringDemoDialog(activity: ComponentActivity) {
     val radius = FloatValueHolder()
     val radiusSpring = SpringAnimation(radius)
     radiusSpring.spring = SpringForce(0f)
@@ -941,7 +952,7 @@ var SOLFEGE_NOTATION = listOf(
 fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
 fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
 
-fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecycle) {
+fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
     val currentSemitone = MutableStateFlow(MIDDLE_A_SEMITONE)
 
     val view = object : BaseSlider(activity) {
@@ -1032,7 +1043,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
     })
 }
 
-fun showSpringDemoDialog(activity: FragmentActivity) {
+fun showSpringDemoDialog(activity: ComponentActivity) {
     val x = FloatValueHolder()
     val horizontalSpring = SpringAnimation(x)
     horizontalSpring.spring = SpringForce(0f)
@@ -1138,7 +1149,7 @@ private fun getRandomTransparentColor(): Int {
     return Color.argb(0x10, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 }
 
-fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
+fun showViewDragHelperDemoDialog(activity: ComponentActivity) {
     // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
     val view = object : ViewGroup(activity) {
         private val bounds = List(9) { Rect() }
@@ -1305,7 +1316,7 @@ suspend fun playSoundTick(offset: Double) {
     }
 }
 
-fun showSensorTestDialog(activity: FragmentActivity) {
+fun showSensorTestDialog(activity: ComponentActivity) {
     val sensorManager = activity.getSystemService<SensorManager>() ?: return
     val root = LinearLayout(activity)
     val spinner = Spinner(activity)
@@ -1420,7 +1431,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
 }
 
 @SuppressLint("AppCompatCustomView")
-fun showInputDeviceTestDialog(activity: FragmentActivity) {
+fun showInputDeviceTestDialog(activity: ComponentActivity) {
     AlertDialog.Builder(activity)
         .setView(
             object : EditText(activity) {

@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -72,7 +71,6 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.TimeZoneClockPickerBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -84,8 +82,6 @@ import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -94,7 +90,6 @@ import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.StateFlow
-import java.util.GregorianCalendar
 import java.util.TimeZone
 
 class ConverterFragment : Fragment() {
@@ -503,35 +498,36 @@ private fun TimezoneClock(
     val commonClock = viewModel.clock.collectAsState()
     AndroidView(
         factory = {
-            val binding = TimeZoneClockPickerBinding.inflate(it.layoutInflater)
-            binding.timeZone.minValue = 0
-            binding.timeZone.maxValue = zones.size - 1
-            binding.timeZone.displayedValues = zoneNames
-            binding.timeZone.value = zones.indexOf(flow.value)
-            binding.timeZone.setOnValueChangedListener { picker, _, index ->
-                picker.performHapticFeedbackVirtualKey()
-                if (i == 0) viewModel.changeFirstTimeZone(zones[index])
-                else viewModel.changeSecondTimeZone(zones[index])
-            }
-            binding.clock.setOnTimeChangedListener { view, hourOfDay, minute ->
-                view.performHapticFeedbackVirtualKey()
-                viewModel.changeClock(hourOfDay, minute, flow.value)
-            }
-            binding.root
+//            val binding = TimeZoneClockPickerBinding.inflate(it.layoutInflater)
+//            binding.timeZone.minValue = 0
+//            binding.timeZone.maxValue = zones.size - 1
+//            binding.timeZone.displayedValues = zoneNames
+//            binding.timeZone.value = zones.indexOf(flow.value)
+//            binding.timeZone.setOnValueChangedListener { picker, _, index ->
+//                picker.performHapticFeedbackVirtualKey()
+//                if (i == 0) viewModel.changeFirstTimeZone(zones[index])
+//                else viewModel.changeSecondTimeZone(zones[index])
+//            }
+//            binding.clock.setOnTimeChangedListener { view, hourOfDay, minute ->
+//                view.performHapticFeedbackVirtualKey()
+//                viewModel.changeClock(hourOfDay, minute, flow.value)
+//            }
+//            binding.root
+            View(it)
         },
         update = {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@AndroidView
-            val binding = TimeZoneClockPickerBinding.bind(it)
-            val clock = GregorianCalendar(flow.value)
-            clock.timeInMillis = commonClock.value.timeInMillis
-            val hour = clock[GregorianCalendar.HOUR_OF_DAY]
-            val clockView = binding.clock
-            if (clockView.hour != hour) clockView.hour = hour
-            val minute = clock[GregorianCalendar.MINUTE]
-            if (clockView.minute != minute) clockView.minute = minute
-            val zoneView = binding.timeZone
-            val zoneIndex = zones.indexOf(flow.value)
-            if (zoneView.value != zoneIndex) zoneView.value = zoneIndex
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@AndroidView
+//            val binding = TimeZoneClockPickerBinding.bind(it)
+//            val clock = GregorianCalendar(flow.value)
+//            clock.timeInMillis = commonClock.value.timeInMillis
+//            val hour = clock[GregorianCalendar.HOUR_OF_DAY]
+//            val clockView = binding.clock
+//            if (clockView.hour != hour) clockView.hour = hour
+//            val minute = clock[GregorianCalendar.MINUTE]
+//            if (clockView.minute != minute) clockView.minute = minute
+//            val zoneView = binding.timeZone
+//            val zoneIndex = zones.indexOf(flow.value)
+//            if (zoneView.value != zoneIndex) zoneView.value = zoneIndex
         },
     )
 }

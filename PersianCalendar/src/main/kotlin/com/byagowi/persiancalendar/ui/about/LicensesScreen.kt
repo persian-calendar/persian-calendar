@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
@@ -124,7 +125,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
         windowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = Color.Transparent,
     ) {
-        listOf<Triple<String, @Composable () -> Unit, (FragmentActivity) -> Unit>>(
+        listOf<Triple<String, @Composable () -> Unit, (ComponentActivity) -> Unit>>(
             Triple(
                 "GPLv3",
                 { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
