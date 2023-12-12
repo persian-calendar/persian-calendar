@@ -104,22 +104,7 @@ class ConverterFragment : Fragment() {
         val viewModel by viewModels<ConverterViewModel>()
         val root = ComposeView(inflater.context)
         root.setContent {
-            AppTheme {
-                ConverterScreen(viewModel) {
-                    val jdn = viewModel.selectedDate.value
-                    activity?.shareText(
-                        when (viewModel.screenMode.value) {
-                            ConverterScreenMode.Converter -> listOf(
-                                dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                                getString(R.string.equivalent_to),
-                                dateStringOfOtherCalendars(jdn, spacedComma)
-                            ).joinToString(" ")
-
-                            else -> ""
-                        }
-                    )
-                }
-            }
+            AppTheme { ConverterScreen(viewModel) { activity?.shareText(it) } }
         }
         return root
     }
@@ -127,10 +112,10 @@ class ConverterFragment : Fragment() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConverterScreen(viewModel: ConverterViewModel, onShareText: (String) -> Unit) {
+fun ConverterScreen(viewModel: ConverterViewModel, shareText: (String) -> Unit) {
     val context = LocalContext.current
-    val shareActionMap = remember { mutableMapOf<ConverterScreenMode, () -> String?>() }
-    val screenMode = viewModel.screenMode.collectAsState()
+    var qrShareAction by remember { mutableStateOf({}) }
+    val screenMode by viewModel.screenMode.collectAsState()
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
     Column {
@@ -201,14 +186,57 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareText: (String) -> Unit
                         )
                     }
                 }
-                if ((false)) TooltipBox(
+                TooltipBox(
                     positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                     tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
                     state = rememberTooltipState()
                 ) {
                     IconButton(onClick = {
-                        val result = shareActionMap[screenMode.value]?.invoke()
-                        if (result != null) onShareText(result)
+                        when (screenMode) {
+                            ConverterScreenMode.Converter -> {
+                                val jdn = viewModel.selectedDate.value
+                                shareText(
+                                    listOf(
+                                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                                        context.getString(R.string.equivalent_to),
+                                        dateStringOfOtherCalendars(jdn, spacedComma)
+                                    ).joinToString(" ")
+                                )
+                            }
+
+                            ConverterScreenMode.Distance -> {
+                                val jdn = viewModel.selectedDate.value
+                                val secondJdn = viewModel.secondSelectedDate.value
+                                shareText(
+                                    calculateDaysDifference(
+                                        context.resources,
+                                        jdn,
+                                        secondJdn,
+                                        calendarType = viewModel.calendar.value
+                                    )
+                                )
+                            }
+
+                            ConverterScreenMode.Calculator -> {
+                                shareText(runCatching {
+                                    // running this inside a runCatching block is absolutely important
+                                    eval(viewModel.calculatorInputText.value)
+                                }.getOrElse { it.message } ?: "")
+                            }
+
+                            ConverterScreenMode.TimeZones -> {
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                                    shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
+//                                            Clock(
+//                                                pickerBinding.clock.hour,
+//                                                pickerBinding.clock.minute
+//                                            )
+//                                                .toBasicFormatString())
+//                                } else ""
+                            }
+
+                            ConverterScreenMode.QrCode -> qrShareAction()
+                        }
                     }) {
                         Icon(
                             imageVector = Icons.Default.Share,
@@ -230,17 +258,8 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareText: (String) -> Unit
                     LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
                 // Timezones
-                AnimatedVisibility(screenMode.value == ConverterScreenMode.TimeZones) {
-                    // TODO: Enable timezone and add this
-//                    shareActionMap[ConverterScreenMode.TimeZones] =
-//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                                    zoneNames[pickerBinding.timeZone.value] + ": " +
-//                                            Clock(
-//                                                pickerBinding.clock.hour,
-//                                                pickerBinding.clock.minute
-//                                            )
-//                                                .toBasicFormatString()
-//                                } else ""
+                AnimatedVisibility(screenMode == ConverterScreenMode.TimeZones) {
+                    // TODO: Enable timezone
                     val zones = remember {
                         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
                             .sortedBy { it.rawOffset }
@@ -268,23 +287,22 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareText: (String) -> Unit
                 }
 
                 AnimatedVisibility(
-                    screenMode.value == ConverterScreenMode.Converter ||
-                            screenMode.value == ConverterScreenMode.Distance
+                    screenMode == ConverterScreenMode.Converter || screenMode == ConverterScreenMode.Distance
                 ) {
                     Column(Modifier.padding(horizontal = 24.dp)) {
-                        ConverterAndDistance(viewModel, shareActionMap)
+                        ConverterAndDistance(viewModel)
                     }
                 }
 
-                AnimatedVisibility(screenMode.value == ConverterScreenMode.Calculator) {
+                AnimatedVisibility(screenMode == ConverterScreenMode.Calculator) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Calculator(viewModel, shareActionMap)
+                        Calculator(viewModel)
                     }
                 }
 
-                AnimatedVisibility(screenMode.value == ConverterScreenMode.QrCode) {
+                AnimatedVisibility(screenMode == ConverterScreenMode.QrCode) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        QrCode(viewModel, shareActionMap)
+                        QrCode(viewModel) { qrShareAction = it }
                     }
                 }
 
@@ -295,16 +313,12 @@ fun ConverterScreen(viewModel: ConverterViewModel, onShareText: (String) -> Unit
 }
 
 @Composable
-private fun Calculator(
-    viewModel: ConverterViewModel,
-    setShareAction: MutableMap<ConverterScreenMode, () -> String?>
-) {
+private fun Calculator(viewModel: ConverterViewModel) {
     val inputText = viewModel.calculatorInputText.collectAsState()
     val result = runCatching {
         // running this inside a runCatching block is absolutely important
         eval(inputText.value)
     }.getOrElse { it.message } ?: ""
-    setShareAction[ConverterScreenMode.Calculator] = { result }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         TextField(
@@ -347,10 +361,7 @@ private fun Calculator(
 }
 
 @Composable
-private fun QrCode(
-    viewModel: ConverterViewModel,
-    shareActionMap: MutableMap<ConverterScreenMode, () -> String?>
-) {
+private fun QrCode(viewModel: ConverterViewModel, shareAction: (() -> Unit) -> Unit) {
     val inputText = viewModel.qrCodeInputText.collectAsState()
     Column {
         val isLandscape =
@@ -365,10 +376,7 @@ private fun QrCode(
             AndroidView(
                 factory = {
                     val root = QrView(it)
-                    shareActionMap[ConverterScreenMode.QrCode] = {
-                        root.share()
-                        null
-                    }
+                    shareAction { root.share() }
                     root
                 },
                 update = { it.update(inputText.value) },
@@ -382,10 +390,7 @@ private fun QrCode(
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(24.dp))
-            AndroidView(
-                factory = ::QrView,
-                update = { it.update(inputText.value) }
-            )
+            AndroidView(factory = ::QrView, update = { it.update(inputText.value) })
         }
 
         var qrLongClickCount by remember { mutableStateOf(0) }
@@ -401,16 +406,13 @@ private fun QrCode(
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(top = 16.dp)
+                .padding(top = 16.dp),
         ) { Text("Sample inputs") }
     }
 }
 
 @Composable
-private fun ConverterAndDistance(
-    viewModel: ConverterViewModel,
-    shareActionMap: MutableMap<ConverterScreenMode, () -> String?>,
-) {
+private fun ConverterAndDistance(viewModel: ConverterViewModel) {
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendar by viewModel.calendar.collectAsState()
@@ -418,18 +420,6 @@ private fun ConverterAndDistance(
     val secondJdn by viewModel.secondSelectedDate.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     val context = LocalContext.current
-    shareActionMap[ConverterScreenMode.Converter] = {
-        listOf(
-            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-            context.getString(R.string.equivalent_to),
-            dateStringOfOtherCalendars(jdn, spacedComma)
-        ).joinToString(" ")
-    }
-    shareActionMap[ConverterScreenMode.Distance] = {
-        calculateDaysDifference(
-            context.resources, jdn, secondJdn, calendarType = viewModel.calendar.value
-        )
-    }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
