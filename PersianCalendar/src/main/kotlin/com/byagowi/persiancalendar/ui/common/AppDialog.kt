@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -19,9 +21,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDialog(
     title: (@Composable () -> Unit)? = null,
@@ -31,7 +33,7 @@ fun AppDialog(
     dismissButton: (@Composable () -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Dialog(onDismissRequest = onDismissRequest) {
+    BasicAlertDialog(onDismissRequest = onDismissRequest) {
         Surface(
             shape = AlertDialogDefaults.shape,
             color = AlertDialogDefaults.containerColor,
@@ -46,12 +48,12 @@ fun AppDialog(
                             Modifier.padding(
                                 top = SettingsHorizontalPaddingItem.dp,
                                 start = SettingsHorizontalPaddingItem.dp,
+                                bottom = 16.dp,
                                 end = SettingsHorizontalPaddingItem.dp,
                             )
                         ) { title() }
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
                 Column(
                     Modifier
                         .weight(weight = 1f, fill = false)
@@ -68,7 +70,7 @@ fun AppDialog(
                         neutralButton?.invoke()
                         Spacer(Modifier.weight(1f))
                         dismissButton?.invoke()
-                        Spacer(Modifier.width(8.dp))
+                        if (dismissButton != null) Spacer(Modifier.width(8.dp))
                         confirmButton?.invoke()
                     }
                 }
