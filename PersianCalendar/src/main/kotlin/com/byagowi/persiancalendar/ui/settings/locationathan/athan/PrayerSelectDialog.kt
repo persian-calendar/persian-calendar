@@ -3,10 +3,12 @@ package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Switch
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -23,7 +25,9 @@ import com.byagowi.persiancalendar.ATHANS_LIST
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getPrayTimeName
@@ -57,12 +61,13 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
                 Modifier
                     .fillMaxWidth()
                     .clickable { if (key in alarms) alarms.remove(key) else alarms.add(key) }
-                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
                     .height(SettingsItemHeight.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                Checkbox(checked = key in alarms, onCheckedChange = null)
+                Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
                 Text(stringResource(getPrayTimeName(key)), Modifier.weight(1f, fill = true))
-                Switch(checked = key in alarms, onCheckedChange = null)
             }
         }
     }

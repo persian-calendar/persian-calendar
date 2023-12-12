@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
@@ -37,7 +38,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -184,10 +184,11 @@ fun SettingsMultiSelect(
                             if (entryValue in result) result.remove(entryValue)
                             else result.add(entryValue)
                         }
-                        .padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                        .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
                 ) {
-                    Text(entry, modifier = Modifier.weight(1f))
-                    Switch(checked = entryValue in result, onCheckedChange = null)
+                    Checkbox(checked = entryValue in result, onCheckedChange = null)
+                    Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                    Text(entry)
                 }
             }
         }
