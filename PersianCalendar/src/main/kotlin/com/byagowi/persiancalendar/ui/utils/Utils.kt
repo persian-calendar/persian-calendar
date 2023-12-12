@@ -35,10 +35,12 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
@@ -46,9 +48,11 @@ import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
+import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
@@ -181,6 +185,7 @@ fun ComponentActivity.askForCalendarPermission() {
     // Maybe use ActivityCompat.shouldShowRequestPermissionRationale here? But in my testing it
     // didn't go well in Android 6.0 so better not risk I guess
     showComposeDialog(this) { onDismissRequest ->
+        val context = LocalContext.current
         AlertDialog(
             title = { Text(stringResource(R.string.calendar_access)) },
             text = { Text(stringResource(R.string.phone_calendar_required)) },
@@ -194,9 +199,10 @@ fun ComponentActivity.askForCalendarPermission() {
                 }) { Text(stringResource(R.string.continue_button)) }
             },
             dismissButton = {
-                TextButton(onClick = onDismissRequest) {
-                    Text(stringResource(R.string.cancel))
-                }
+                TextButton(onClick = {
+                    context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                    onDismissRequest()
+                }) { Text(stringResource(R.string.cancel)) }
             },
             onDismissRequest = onDismissRequest,
         )
