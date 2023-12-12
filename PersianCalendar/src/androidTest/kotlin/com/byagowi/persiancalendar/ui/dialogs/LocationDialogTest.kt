@@ -17,7 +17,7 @@ class LocationDialogTest {
         var locationString = ""
         composeTestRule.setContent {
             locationString = stringResource(R.string.location)
-            LocationDialog({}, {})
+            LocationDialog {}
         }
         composeTestRule.onNodeWithText(locationString)
     }
