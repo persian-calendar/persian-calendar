@@ -861,17 +861,8 @@ private fun DropdownMenuRadioItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End,
             ) {
-                Text(text)
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .width(16.dp),
-                )
-                RadioButton(
-                    modifier = Modifier.size(24.dp),
-                    selected = isSelected,
-                    onClick = { setSelected(!isSelected) },
-                )
+                Text(text, Modifier.weight(1f))
+                RadioButton(selected = isSelected, onClick = null)
             }
         },
         onClick = { setSelected(!isSelected) },

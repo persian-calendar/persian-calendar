@@ -10,13 +10,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -27,6 +30,8 @@ import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
@@ -73,14 +78,14 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                     .onFailure(logException).onFailure { onDismissRequest() }
             })
         }.forEach { (stringId, callback) ->
-            Text(
-                stringResource(stringId),
-                style = MaterialTheme.typography.bodyLarge,
+            Box(
+                contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
                     .clickable(onClick = callback)
-                    .padding(vertical = 12.dp, horizontal = 24.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                    .height(SettingsItemHeight.dp)
                     .fillMaxWidth(),
-            )
+            ) { Text(stringResource(stringId)) }
         }
     }
 }

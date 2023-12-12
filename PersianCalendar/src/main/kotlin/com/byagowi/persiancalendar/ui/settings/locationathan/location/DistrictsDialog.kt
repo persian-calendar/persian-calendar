@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.generated.districtsStore
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
@@ -33,13 +38,14 @@ fun ProvincesDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
     ) {
         districtsStore.forEach { (provinceName, _) ->
-            Text(
-                provinceName,
+            Box(
+                contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable { province = provinceName }
-                    .padding(vertical = 16.dp, horizontal = 24.dp)
-            )
+                    .height(SettingsItemHeight.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+            ) { Text(provinceName) }
         }
     }
 }
@@ -58,18 +64,8 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
     ) {
         val context = LocalContext.current
         districts.forEachIndexed { index, (district, county) ->
-            Text(
-                buildAnnotatedString {
-                    withStyle(MaterialTheme.typography.bodyLarge.toSpanStyle()) {
-                        append(district[0])
-                    }
-                    append(" ")
-                    withStyle(
-                        MaterialTheme.typography.bodyMedium.copy(
-                            color = LocalTextStyle.current.color.copy(.5f)
-                        ).toSpanStyle()
-                    ) { append(county) }
-                },
+            Box(
+                contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
@@ -81,8 +77,21 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
                         )
                         context.appPrefs.saveLocation(coordinates, districts[index].first[0])
                     }
-                    .padding(vertical = 16.dp, horizontal = 24.dp)
-            )
+                    .height(SettingsItemHeight.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+            ) {
+                Text(
+                    buildAnnotatedString {
+                        append(district[0])
+                        append(" ")
+                        withStyle(
+                            LocalTextStyle.current.toSpanStyle().copy(
+                                color = LocalTextStyle.current.color.copy(.5f)
+                            )
+                        ) { append(county) }
+                    }
+                )
+            }
         }
     }
 }

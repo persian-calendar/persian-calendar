@@ -66,6 +66,9 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectP
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -277,7 +280,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(48.dp)
+                            .height(SettingsItemHeight.dp)
                             .clickable {
                                 showDialog = false
                                 context.appPrefs.edit {
@@ -286,10 +289,10 @@ fun LocationAthanSettings(activity: ComponentActivity) {
                                 }
                                 midnightSummary = title
                             }
-                            .padding(horizontal = 24.dp)
+                            .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
                     ) {
                         RadioButton(selected = key == currentSelectionKey, onClick = null)
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
                         Text(title)
                     }
                 }

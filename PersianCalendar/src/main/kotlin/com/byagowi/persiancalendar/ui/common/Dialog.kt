@@ -20,6 +20,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
 @Composable
 fun Dialog(
@@ -40,7 +41,15 @@ fun Dialog(
                 title?.also { title ->
                     CompositionLocalProvider(
                         LocalTextStyle provides MaterialTheme.typography.headlineSmall
-                    ) { Box(Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp)) { title() } }
+                    ) {
+                        Box(
+                            Modifier.padding(
+                                top = SettingsHorizontalPaddingItem.dp,
+                                start = SettingsHorizontalPaddingItem.dp,
+                                end = SettingsHorizontalPaddingItem.dp,
+                            )
+                        ) { title() }
+                    }
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 Column(

@@ -29,6 +29,9 @@ import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.Dialog
 import com.byagowi.persiancalendar.ui.theme.Theme
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
@@ -50,8 +53,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 var isChecked by rememberSaveable {
                     mutableStateOf(
                         context.appPrefs.getBoolean(
-                            PREF_THEME_GRADIENT,
-                            DEFAULT_THEME_GRADIENT
+                            PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT
                         )
                     )
                 }
@@ -80,12 +82,12 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)
+                    .height(SettingsItemHeight.dp)
                     .clickable(onClick = ::onClick)
-                    .padding(horizontal = 10.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp),
             ) {
-                RadioButton(selected = theme.key == currentTheme, onClick = ::onClick)
-                Spacer(modifier = Modifier.width(8.dp))
+                RadioButton(selected = theme.key == currentTheme, onClick = null)
+                Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
                 Text(stringResource(theme.title))
             }
         }

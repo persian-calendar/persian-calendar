@@ -66,5 +66,17 @@ fun MaterialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 // When something needs to match with corner size
 const val ExtraLargeShapeCornerSize = 28f
 
+// Clickable items in settings should have this height
+const val SettingsItemHeight = 48f
+
+// Items in settings that have a radio button or checkbox should have this horizontal padding
+const val SettingsHorizontalPaddingItemWithButton = 22f
+
+// Radio button and checkbox should have this space with following text
+const val SettingsHorizontalButtonItemSpacer = 12f
+
+// Plain items in settings should have this horizontal padding
+const val SettingsHorizontalPaddingItem = 24f
+
 // Common alpha value to blend a component with it's background
 const val AppBlendAlpha = .75f

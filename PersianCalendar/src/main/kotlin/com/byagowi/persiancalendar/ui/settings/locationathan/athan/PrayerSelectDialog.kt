@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,6 +23,8 @@ import com.byagowi.persiancalendar.ATHANS_LIST
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
@@ -54,8 +57,8 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
                 Modifier
                     .fillMaxWidth()
                     .clickable { if (key in alarms) alarms.remove(key) else alarms.add(key) }
-                    .height(56.dp)
-                    .padding(vertical = 2.dp, horizontal = 26.dp),
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                    .height(SettingsItemHeight.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(stringResource(getPrayTimeName(key)), Modifier.weight(1f, fill = true))
@@ -76,16 +79,17 @@ fun PrayerSelectPreviewDialog(onDismissRequest: () -> Unit) {
     ) {
         val context = LocalContext.current
         ATHANS_LIST.forEach {
-            Text(
-                stringResource(getPrayTimeName(it)),
+            Box(
+                contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
                         onDismissRequest()
                         startAthan(context, it, null)
                     }
-                    .padding(vertical = 16.dp, horizontal = 24.dp)
-            )
+                    .height(SettingsItemHeight.dp)
+                    .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+            ) { Text(stringResource(getPrayTimeName(it))) }
         }
     }
 }

@@ -41,6 +41,9 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlin.random.Random
@@ -97,12 +100,6 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         ) { _, (calendarType, enabled), isDragging ->
             key(calendarType) {
                 val blur by animateDpAsState(if (dragStarted) 2.dp else 0.dp, label = "blur")
-                fun onClick() {
-                    list = list.map {
-                        it.first to (if (it.first == calendarType) !it.second else it.second)
-                    }
-                }
-
                 val interactionSource = remember(calendarType) { MutableInteractionSource() }
                 Row(
                     modifier = Modifier
@@ -110,7 +107,11 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                         .clickable(
                             interactionSource = interactionSource,
                             indication = rememberRipple(),
-                            onClick = ::onClick,
+                            onClick = {
+                                list = list.map {
+                                    it.first to (if (it.first == calendarType) !it.second else it.second)
+                                }
+                            },
                         )
                         .draggableHandle(
                             interactionSource = interactionSource,
@@ -129,16 +130,16 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                                 }
                             },
                         )
-                        .height(48.dp)
+                        .height(SettingsItemHeight.dp)
+                        .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
                         .fillMaxSize(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Spacer(Modifier.width(12.dp))
-                    Checkbox(checked = enabled, onCheckedChange = { onClick() })
-                    Text(stringResource(calendarType.title), Modifier.padding(horizontal = 8.dp))
+                    Checkbox(checked = enabled, onCheckedChange = null)
+                    Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                    Text(stringResource(calendarType.title))
                     Spacer(Modifier.weight(1f))
                     Icon(Icons.Rounded.DragHandle, contentDescription = "Reorder")
-                    Spacer(Modifier.width(20.dp))
                 }
             }
         }

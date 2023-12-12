@@ -56,6 +56,9 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 
@@ -107,11 +110,13 @@ fun ColumnScope.ShiftWorkDialogContent(
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .clickable { viewModel.changeRecurs(!recurs) },
+            .clickable { viewModel.changeRecurs(!recurs) }
+            .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
+            .height(SettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Checkbox(checked = recurs, onCheckedChange = { viewModel.changeRecurs(!recurs) })
+        Checkbox(checked = recurs, onCheckedChange = null)
+        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
         Text(stringResource(R.string.recurs))
     }
     TextButton(

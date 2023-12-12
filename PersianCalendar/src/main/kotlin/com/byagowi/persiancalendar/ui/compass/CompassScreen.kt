@@ -527,11 +527,7 @@ private fun DropdownMenuCheckableItem(
                         .weight(1f)
                         .width(16.dp),
                 )
-                Checkbox(
-                    modifier = Modifier.size(24.dp),
-                    checked = isChecked,
-                    onCheckedChange = { setChecked(!isChecked) },
-                )
+                Checkbox(checked = isChecked, onCheckedChange = null)
             }
         },
         onClick = { setChecked(!isChecked) },

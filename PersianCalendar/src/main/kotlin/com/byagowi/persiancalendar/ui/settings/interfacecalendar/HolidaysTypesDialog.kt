@@ -3,10 +3,13 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 import androidx.annotation.VisibleForTesting
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.LocalTextStyle
@@ -38,6 +41,10 @@ import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 
@@ -95,10 +102,12 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     EventsRepository.nepalOthersKey,
                 )
             }
-            Text(
-                stringResource(R.string.other_holidays),
-                modifier = Modifier.padding(horizontal = 32.dp, vertical = 4.dp),
-            )
+            Box(Modifier.height(SettingsItemHeight.dp), contentAlignment = Alignment.CenterStart) {
+                Text(
+                    stringResource(R.string.other_holidays),
+                    modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                )
+            }
             IndentedCheckBox(
                 stringResource(R.string.iran_ancient),
                 enabledTypes,
@@ -128,20 +137,19 @@ fun CountryEvents(
     holidaysKey: String,
     nonHolidaysKey: String,
 ) {
-    fun onParentClick() {
-        if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
-            enabledTypes.remove(holidaysKey)
-            enabledTypes.remove(nonHolidaysKey)
-        } else {
-            if (holidaysKey !in enabledTypes) enabledTypes.add(holidaysKey)
-            if (nonHolidaysKey !in enabledTypes) enabledTypes.add(nonHolidaysKey)
-        }
-    }
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable { onParentClick() }
-            .padding(vertical = 4.dp),
+            .clickable {
+                if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
+                    enabledTypes.remove(holidaysKey)
+                    enabledTypes.remove(nonHolidaysKey)
+                } else {
+                    if (holidaysKey !in enabledTypes) enabledTypes.add(holidaysKey)
+                    if (nonHolidaysKey !in enabledTypes) enabledTypes.add(nonHolidaysKey)
+                }
+            }
+            .height(SettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TriStateCheckbox(
@@ -153,11 +161,10 @@ fun CountryEvents(
 
                 else -> ToggleableState.Off
             },
-            onClick = { onParentClick() },
-            modifier = Modifier
-                .padding(start = 20.dp)
-                .size(32.dp),
+            onClick = null,
+            modifier = Modifier.padding(start = SettingsHorizontalPaddingItemWithButton.dp),
         )
+        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
         Text(calendarCenterName)
         val context = LocalContext.current
         if (sourceLink.isNotEmpty()) {
@@ -191,18 +198,12 @@ private fun IndentedCheckBox(
             .clickable {
                 if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
             }
-            .padding(vertical = 4.dp, horizontal = 32.dp),
+            .height(SettingsItemHeight.dp)
+            .padding(horizontal = 56.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Checkbox(
-            key in enabledTypes,
-            onCheckedChange = {
-                if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
-            },
-            modifier = Modifier
-                .padding(start = 20.dp)
-                .size(32.dp),
-        )
+        Checkbox(key in enabledTypes, onCheckedChange = null)
+        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
         Text(label)
     }
 }

@@ -23,6 +23,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.Dialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItemWithButton
+import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLanguage
 import java.util.TimeZone
@@ -46,21 +49,20 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
         }
 
         val context = LocalContext.current
-        fun onClick(item: Language) {
-            if (item != currentLanguage) context.appPrefs.saveLanguage(item)
-            onDismissRequest()
-        }
         languages.forEach { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(40.dp)
-                    .clickable { onClick(item) }
-                    .padding(horizontal = 10.dp)
+                    .height(SettingsItemHeight.dp)
+                    .clickable {
+                        if (item != currentLanguage) context.appPrefs.saveLanguage(item)
+                        onDismissRequest()
+                    }
+                    .padding(horizontal = SettingsHorizontalPaddingItemWithButton.dp)
             ) {
-                RadioButton(selected = item == currentLanguage, onClick = { onClick(item) })
-                Spacer(modifier = Modifier.width(8.dp))
+                RadioButton(selected = item == currentLanguage, onClick = null)
+                Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
                 Text(item.nativeName)
             }
         }
