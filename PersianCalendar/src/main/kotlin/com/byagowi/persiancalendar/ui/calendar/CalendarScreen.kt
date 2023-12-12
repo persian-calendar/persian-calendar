@@ -48,7 +48,6 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -412,7 +411,7 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         var query by remember { mutableStateOf("") }
         viewModel.searchEvent(query)
         val events by viewModel.eventsFlow.collectAsState(initial = emptyList())
-        val isActive by derivedStateOf { query.length >= 2 && events.isNotEmpty() }
+        val isActive by derivedStateOf { query.isNotEmpty() }
         val padding by animateDpAsState(if (isActive) 0.dp else 16.dp, label = "padding")
         val focusRequester = remember { FocusRequester() }
         LaunchedEffect(null) { focusRequester.requestFocus() }
