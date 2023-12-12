@@ -8,8 +8,6 @@ import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSelectPreviewDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showDistrictsDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -23,8 +21,6 @@ class DialogsSmokeTest {
             { showColorPickerDialog(it, false, "ABC") },
             { showPrayerSelectDialog(it) },
             { showPrayerSelectPreviewDialog(it) },
-            { showProvinceDialog(it) },
-            { showDistrictsDialog(it, listOf("a", "b", "c")) },
         ).forEach { launcher ->
             ActivityScenario.launch<MainActivity>(
                 Intent(

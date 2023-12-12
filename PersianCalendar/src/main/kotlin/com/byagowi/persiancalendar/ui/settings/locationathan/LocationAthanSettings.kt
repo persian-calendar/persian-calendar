@@ -53,7 +53,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.showPrayerSel
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
-import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -75,14 +74,12 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         if (showDialog) GPSLocationDialog { showDialog = false }
     }
     run {
-        var showDialog by remember { mutableStateOf(false) }
+        var showDialog by rememberSaveable { mutableStateOf(false) }
         SettingsClickable(
             title = stringResource(R.string.location),
             summary = stringResource(R.string.location_help),
         ) { showDialog = true }
-        if (showDialog) {
-            LocationDialog({ showProvinceDialog(activity) }) { showDialog = false }
-        }
+        if (showDialog) LocationDialog { showDialog = false }
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }

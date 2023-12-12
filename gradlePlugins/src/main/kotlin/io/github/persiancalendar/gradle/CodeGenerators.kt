@@ -285,9 +285,9 @@ abstract class CodeGenerators : DefaultTask() {
     private fun generateDistrictsCode(districtsJson: File, builder: FileSpec.Builder) {
         @OptIn(ExperimentalSerializationApi::class)
         builder.addProperty(
-            PropertySpec.builder("districtsStore", typeNameOf<List<Pair<String, List<String>>>>())
+            PropertySpec.builder("districtsStore", typeNameOf<Map<String, List<String>>>())
                 .initializer(buildCodeBlock {
-                    addStatement("listOf(")
+                    addStatement("mapOf(")
                     Json.decodeFromStream<Map<String, Map<String, Map<String, Coordinates>>>>(
                         districtsJson.inputStream()
                     ).forEach { province ->

@@ -14,7 +14,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,7 +37,9 @@ import com.byagowi.persiancalendar.utils.saveCity
 import com.byagowi.persiancalendar.utils.sortCityNames
 
 @Composable
-fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) {
+fun LocationDialog(onDismissRequest: () -> Unit) {
+    var showProvincesDialog by rememberSaveable { mutableStateOf(false) }
+    if (showProvincesDialog) return ProvincesDialog(onDismissRequest)
     val cities = remember { citiesStore.values.sortCityNames }
     Dialog(onDismissRequest = onDismissRequest) {
         Surface(
@@ -42,13 +48,11 @@ fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) 
             tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
             Column {
-                run {
-                    Text(
-                        stringResource(R.string.location),
-                        modifier = Modifier.padding(top = 24.dp, start = 24.dp),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                }
+                Text(
+                    stringResource(R.string.location),
+                    modifier = Modifier.padding(top = 24.dp, start = 24.dp),
+                    style = MaterialTheme.typography.headlineSmall,
+                )
                 Box(
                     Modifier
                         .weight(weight = 1f, fill = false)
@@ -84,10 +88,7 @@ fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) 
                     if (language.isIranExclusive) {
                         TextButton(
                             modifier = Modifier.fillMaxWidth(),
-                            onClick = {
-                                onDismissRequest()
-                                onMoreButtonClick()
-                            },
+                            onClick = { showProvincesDialog = true },
                         ) { Text(stringResource(R.string.more), Modifier.padding(8.dp)) }
                     }
                 }
@@ -98,4 +99,4 @@ fun LocationDialog(onMoreButtonClick: () -> Unit, onDismissRequest: () -> Unit) 
 
 @Preview
 @Composable
-private fun LocationPreferenceDialogPreview() = AppTheme { LocationDialog({}, {}) }
+private fun LocationPreferenceDialogPreview() = AppTheme { LocationDialog {} }
