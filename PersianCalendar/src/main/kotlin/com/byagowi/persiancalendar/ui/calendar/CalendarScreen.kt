@@ -277,8 +277,8 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
         }
 
         binding.content.post {
-            // Just to trick it for relayout, for now
-            binding.content.minimumHeight = (220 * resources.dp).toInt()
+            // Just set a nonsense value to trick it for relayout, for now
+            binding.content.minimumHeight = 200
         }
 
         binding.toolbar.setContent {
