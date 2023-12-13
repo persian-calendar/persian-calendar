@@ -33,7 +33,10 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
     override fun onDraw(canvas: Canvas) {
         val shared = sharedDayViewData ?: return
+        drawDay(canvas, shared)
+    }
 
+    fun drawDay(canvas: Canvas, shared: SharedDayViewData) {
         drawCircle(canvas, shared) // background circle, if is needed
         drawText(canvas, shared) // can be a day number, week day name abbr or week number of year
         drawIndicators(canvas, shared) // whether a day has event or appointment
@@ -97,8 +100,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun setAll(
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
-        jdn: Jdn? = null, dayOfMonth: Int? = null, header: String? = null,
-        isWeekNumber: Boolean = false
+        jdn: Jdn? = null, header: String? = null, isWeekNumber: Boolean = false
     ) {
         this.text = text
         this.today = isToday
@@ -130,7 +132,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     ) = setAll(
         text = formatNumber(dayOfMonth, mainCalendarDigits), isToday = isToday,
         isSelected = isSelected, hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
-        dayOfMonth = dayOfMonth, header = header, isHoliday = isHoliday || jdn.isWeekEnd()
+        header = header, isHoliday = isHoliday || jdn.isWeekEnd()
     )
 
     fun setInitialOfWeekDay(text: String) = setAll(text)

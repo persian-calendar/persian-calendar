@@ -83,7 +83,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
@@ -208,7 +208,7 @@ fun update(context: Context, updateDate: Boolean) {
             createSunViewRemoteViews(context, width, height, jdn, prayTimes)
         }
         updateFromRemoteViews<WidgetMonthView>(context) { width, height, _ ->
-            createMonthViewRemoteViews(context, width, height, date)
+            createMonthViewRemoteViews(context, width, height)
         }
         updateFromRemoteViews<WidgetMap>(context) { width, height, _ ->
             createMapRemoteViews(context, width, height, now)
@@ -367,20 +367,22 @@ private fun createSunViewRemoteViews(
 }
 
 private fun createMonthViewRemoteViews(
-    context: Context, width: Int, height: Int, date: AbstractDate
+    context: Context, width: Int, height: Int
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
+    remoteViews.setRoundBackground(R.id.image_background, width, height)
+
     val widgetTheme = Theme.getWidgetSuitableStyle(context, prefersWidgetsDynamicColors)
-    val monthView = MonthView(ContextThemeWrapper(context, widgetTheme))
     val color = when {
         prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
-    monthView.initializeForRendering(color, width, height, date)
-    remoteViews.setRoundBackground(R.id.image_background, width, height)
-    prepareViewForRendering(monthView, width, height)
-    remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
-    remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
+    val (bitmap, contentDescription) = renderMonthWidget(
+        ContextThemeWrapper(context, widgetTheme), color, width, height
+    )
+    remoteViews.setImageViewBitmap(R.id.image, bitmap)
+    remoteViews.setContentDescription(R.id.image, contentDescription)
+
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
     return remoteViews
 }

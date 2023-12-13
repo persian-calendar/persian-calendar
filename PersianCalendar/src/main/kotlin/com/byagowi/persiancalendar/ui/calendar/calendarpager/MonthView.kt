@@ -9,7 +9,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
-import androidx.annotation.ColorInt
 import androidx.core.animation.doOnEnd
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,7 +25,6 @@ import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
-import kotlin.math.min
 
 class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(context, attrs) {
 
@@ -44,21 +42,6 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         addCellSpacing((4 * resources.dp).toInt())
     }
 
-    fun initializeForRendering(
-        @ColorInt textColor: Int,
-        width: Int,
-        height: Int,
-        today: AbstractDate
-    ) {
-        val sharedData = SharedDayViewData(
-            context, height / 7f, min(width, height) / 7f, textColor
-        )
-        daysAdapter = DaysAdapter(context, sharedData, null)
-        adapter = daysAdapter
-        val jdn = Jdn(mainCalendar, today.year, today.month, 1)
-        bind(jdn, jdn.toCalendar(mainCalendar))
-    }
-
     private fun addCellSpacing(space: Int) {
         addItemDecoration(object : ItemDecoration() {
             override fun getItemOffsets(
@@ -73,24 +56,18 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         })
     }
 
-    private var monthName = ""
     private var selectionIndicator = SelectionIndicator(context) { invalidate() }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
         selectionIndicator.onDraw(canvas, this)
-
-        // Widget only drawing
-        val daysAdapter = daysAdapter.debugAssertNotNull ?: return
-        val widgetFooterTextPaint = daysAdapter.sharedDayViewData.widgetFooterTextPaint ?: return
-        canvas.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }
 
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {
         val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
-        monthName = language.my.format(monthStartDate.monthName, formatNumber(monthStartDate.year))
-        contentDescription = monthName
+        contentDescription =
+            language.my.format(monthStartDate.monthName, formatNumber(monthStartDate.year))
 
         daysAdapter?.let {
             val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
