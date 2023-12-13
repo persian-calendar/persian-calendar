@@ -80,7 +80,10 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
-                    .clickable(onClick = callback)
+                    .clickable(onClick = {
+                        onDismissRequest()
+                        callback()
+                    })
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     .height(SettingsItemHeight.dp)
                     .fillMaxWidth(),

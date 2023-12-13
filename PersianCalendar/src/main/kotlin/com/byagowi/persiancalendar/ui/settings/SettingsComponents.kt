@@ -108,7 +108,6 @@ fun SettingsSingleSelect(
             )] else context.getString(summaryResId)
         )
     }
-    var showDialog by rememberSaveable { mutableStateOf(false) }
     SettingsClickable(title = title, summary = summary) { onDismissRequest ->
         AppDialog(
             title = { Text(stringResource(dialogTitleResId)) },
@@ -127,7 +126,7 @@ fun SettingsSingleSelect(
                         .fillMaxWidth()
                         .height(SettingsItemHeight.dp)
                         .clickable {
-                            showDialog = false
+                            onDismissRequest()
                             context.appPrefs.edit { putString(key, entryValue) }
                             if (summaryResId == null) summary = entry
                         }
