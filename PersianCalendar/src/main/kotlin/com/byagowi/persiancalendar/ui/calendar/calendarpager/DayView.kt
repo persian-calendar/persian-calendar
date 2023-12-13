@@ -45,7 +45,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
     private fun drawCircle(canvas: Canvas, shared: SharedDayViewData) {
         if (today) canvas.drawCircle(
-            width / 2f, height / 2f, radius(this) - shared.circlesPadding,
+            width / 2f, height / 2f, radius(width, height) - shared.circlesPadding,
             shared.todayPaint
         )
     }
@@ -139,6 +139,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     fun setWeekNumber(text: String) = setAll(text, isWeekNumber = true)
 
     companion object {
-        fun radius(view: View): Float = min(view.width, view.height) / 2f
+        fun radius(width: Int, height: Int): Float = min(width, height) / 2f
     }
 }

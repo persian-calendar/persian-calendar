@@ -61,7 +61,9 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        selectedDayView?.also { selectionIndicator.onDraw(canvas, it) }
+        selectedDayView?.also {
+            selectionIndicator.onDraw(canvas, it.width, it.height, it.top, it.left)
+        }
     }
 
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {
@@ -88,7 +90,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     fun selectDay(dayOfMonth: Int?) {
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         val selectedDayPosition = daysAdapter.selectDayInternal(dayOfMonth)
-        selectionIndicator.selectDay(selectedDayPosition)
+        selectionIndicator.selectDay(selectedDayPosition != null)
         if (selectedDayPosition != null)
             selectedDayView = findViewHolderForAdapterPosition(selectedDayPosition)?.itemView
     }
@@ -100,9 +102,6 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
     private var isCurrentlySelected = false
     private var currentX = 0f
     private var currentY = 0f
-
-    // Last position, regardless of being selected right now or not
-    private var lastPosition: Int? = null
     private var lastX = 0f
     private var lastY = 0f
     private var lastRadius = 0f
@@ -124,8 +123,8 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
     private val transitionInterpolators = listOf(1f, 1.25f).map(::OvershootInterpolator)
     private val revealInterpolator = OvershootInterpolator(1.5f)
 
-    fun selectDay(selectedDayPosition: Int?) {
-        if (selectedDayPosition == null) {
+    fun selectDay(isSelection: Boolean) {
+        if (!isSelection) {
             if (isCurrentlySelected) {
                 isReveal = false
                 isCurrentlySelected = false
@@ -134,33 +133,32 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
         } else {
             isReveal = !isCurrentlySelected
             isCurrentlySelected = true
-            lastPosition = selectedDayPosition
             currentX = lastX
             currentY = lastY
             transitionAnimator.start()
         }
     }
 
-    fun onDraw(canvas: Canvas, dayView: View) {
+    fun onDraw(canvas: Canvas, width: Int, height: Int, top: Int, left: Int) {
         if (hideAnimator.isRunning) canvas.drawCircle(
-            dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
+            left + width / 2f, top + height / 2f,
             lastRadius * (1 - hideAnimator.animatedFraction), paint
         ) else if (isReveal) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = dayView.left.toFloat()
-            lastY = dayView.top.toFloat()
-            lastRadius = DayView.radius(dayView) * fraction
+            lastX = left.toFloat()
+            lastY = top.toFloat()
+            lastRadius = DayView.radius(width, height) * fraction
             canvas.drawCircle(
-                lastX + dayView.width / 2f, lastY + dayView.height / 2f,
-                DayView.radius(dayView) * fraction, paint
+                lastX + width / 2f, lastY + height / 2f,
+                DayView.radius(width, height) * fraction, paint
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = lerp(currentX, dayView.left.toFloat(), fraction)
-            lastY = lerp(currentY, dayView.top.toFloat(), fraction)
-            lastRadius = DayView.radius(dayView)
+            lastX = lerp(currentX, left.toFloat(), fraction)
+            lastY = lerp(currentY, top.toFloat(), fraction)
+            lastRadius = DayView.radius(width, height)
             canvas.drawCircle(
-                lastX + dayView.width / 2f, lastY + dayView.height / 2f, lastRadius, paint
+                lastX + width / 2f, lastY + height / 2f, lastRadius, paint
             )
         }
     }
