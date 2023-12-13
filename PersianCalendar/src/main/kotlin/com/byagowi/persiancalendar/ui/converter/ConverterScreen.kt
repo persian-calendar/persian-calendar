@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +25,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
@@ -62,6 +66,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -71,6 +76,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -415,9 +421,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendar by viewModel.calendar.collectAsState()
     val jdn by viewModel.selectedDate.collectAsState()
-    val secondJdn by viewModel.secondSelectedDate.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
-    val context = LocalContext.current
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
@@ -437,15 +441,8 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 shownCalendars = enabledCalendars - calendar,
                 isExpanded = isExpanded
             ) { isExpanded = !isExpanded } else Column {
-                Text(
-                    calculateDaysDifference(
-                        context.resources, jdn, secondJdn, calendarType = viewModel.calendar.value
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 12.dp),
-                )
+                val secondJdn by viewModel.secondSelectedDate.collectAsState()
+                DaysDistance(jdn, secondJdn, calendar)
                 DayPicker(
                     calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
                 )
@@ -473,19 +470,36 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         }
         AnimatedVisibility(screenMode == ConverterScreenMode.Distance) {
             Column {
-                Text(
-                    calculateDaysDifference(
-                        context.resources, jdn, secondJdn, calendarType = viewModel.calendar.value
-                    ),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
-                )
+                val secondJdn by viewModel.secondSelectedDate.collectAsState()
+                DaysDistance(jdn, secondJdn, calendar)
                 DayPicker(
                     calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: CalendarType) {
+    val context = LocalContext.current
+    val longAnimationTime = integerResource(android.R.integer.config_longAnimTime)
+    AnimatedContent(
+        calculateDaysDifference(context.resources, jdn, baseJdn, calendar),
+        modifier = Modifier.padding(vertical = 12.dp),
+        transitionSpec = {
+            slideIntoContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                animationSpec = tween(durationMillis = longAnimationTime)
+            ) togetherWith slideOutOfContainer(
+                towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                animationSpec = tween(durationMillis = longAnimationTime)
+            )
+        },
+        label = "day distance",
+    ) {
+        SelectionContainer {
+            Text(it, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
         }
     }
 }

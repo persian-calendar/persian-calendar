@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -31,15 +30,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-
-fun showDayPickerDialog(
-    activity: ComponentActivity,
-    jdn: Jdn,
-    @StringRes positiveButtonTitle: Int,
-    onSuccess: (jdn: Jdn) -> Unit
-) = showComposeDialog(activity) { DayPickerDialog(jdn, positiveButtonTitle, onSuccess, it) }
 
 @Composable
 fun DayPickerDialog(
@@ -94,7 +85,7 @@ fun DayPickerDialog(
                     animationSpec = tween(durationMillis = longAnimationTime)
                 )
             },
-            label = ""
+            label = "days distance"
         ) { state ->
             SelectionContainer {
                 Text(
