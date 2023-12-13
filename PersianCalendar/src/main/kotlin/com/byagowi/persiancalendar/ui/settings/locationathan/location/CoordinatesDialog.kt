@@ -108,7 +108,7 @@ fun CoordinatesDialog(
                 TextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(4.dp),
+                        .padding(vertical = 2.dp),
                     label = {
                         CompositionLocalProvider(LocalLayoutDirection provides uiDirection) {
                             Text(
@@ -131,7 +131,7 @@ fun CoordinatesDialog(
             style = MaterialTheme.typography.titleSmall,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .padding(horizontal = 16.dp),
         )
         if (!cityName.isNullOrBlank()) Text(
             cityName ?: "",
