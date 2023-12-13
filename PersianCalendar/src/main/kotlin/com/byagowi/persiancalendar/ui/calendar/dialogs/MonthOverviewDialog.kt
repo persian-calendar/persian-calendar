@@ -120,7 +120,7 @@ private fun MonthOverview(
                             .combinedClickable(
                                 onClick = { showPrintReport(isLongClick = false) },
                                 onClickLabel = "Print",
-                                onLongClick = { showPrintReport(isLongClick = false) },
+                                onLongClick = { showPrintReport(isLongClick = true) },
                                 onLongClickLabel = stringResource(R.string.year),
                             ),
                     ) {
