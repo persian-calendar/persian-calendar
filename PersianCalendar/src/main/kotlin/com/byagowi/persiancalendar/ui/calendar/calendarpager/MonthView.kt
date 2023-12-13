@@ -61,7 +61,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        selectionIndicator.onDraw(canvas, this)
+        selectedDayView?.also { selectionIndicator.onDraw(canvas, it) }
     }
 
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {
@@ -89,10 +89,14 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         val selectedDayPosition = daysAdapter.selectDayInternal(dayOfMonth)
         selectionIndicator.selectDay(selectedDayPosition)
+        if (selectedDayPosition != null)
+            selectedDayView = findViewHolderForAdapterPosition(selectedDayPosition)?.itemView
     }
+
+    private var selectedDayView: View? = null
 }
 
-private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator) -> Unit) {
+private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
     private var isCurrentlySelected = false
     private var currentX = 0f
     private var currentY = 0f
@@ -106,12 +110,12 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = LinearInterpolator()
-        it.addUpdateListener(invalidate)
+        it.addUpdateListener { invalidate() }
         it.doOnEnd { isReveal = false }
     }
     private val hideAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        it.addUpdateListener(invalidate)
+        it.addUpdateListener { invalidate() }
     }
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
@@ -137,10 +141,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         }
     }
 
-    fun onDraw(canvas: Canvas, recyclerView: RecyclerView) {
-        val lastPosition = lastPosition ?: return
-        val dayView = recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView
-            ?: return
+    fun onDraw(canvas: Canvas, dayView: View) {
         if (hideAnimator.isRunning) canvas.drawCircle(
             dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
             lastRadius * (1 - hideAnimator.animatedFraction), paint
