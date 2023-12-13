@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -14,12 +15,15 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
@@ -40,6 +44,8 @@ fun AppDialog(
             tonalElevation = AlertDialogDefaults.TonalElevation,
         ) {
             Column {
+                val scrollState = rememberScrollState()
+
                 title?.also { title ->
                     CompositionLocalProvider(
                         LocalTextStyle provides MaterialTheme.typography.headlineSmall
@@ -53,19 +59,33 @@ fun AppDialog(
                             )
                         ) { title() }
                     }
+
+                    val topAlpha by animateFloatAsState(
+                        if (scrollState.value == 0) 0f else 1f,
+                        label = "topAlpha",
+                    )
+                    HorizontalDivider(Modifier.alpha(topAlpha))
                 }
-                Column(
-                    Modifier
-                        .weight(weight = 1f, fill = false)
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
+
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
                 ) {
-                    CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                    Column(
+                        Modifier
+                            .weight(weight = 1f, fill = false)
+                            .fillMaxWidth()
+                            .verticalScroll(scrollState)
                     ) { content() }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
+
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
+                    val bottomAlpha by animateFloatAsState(
+                        if (scrollState.value == scrollState.maxValue) 0f else 1f,
+                        label = "topAlpha",
+                    )
+                    HorizontalDivider(Modifier.alpha(bottomAlpha))
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
                         neutralButton?.invoke()
                         Spacer(Modifier.weight(1f))
