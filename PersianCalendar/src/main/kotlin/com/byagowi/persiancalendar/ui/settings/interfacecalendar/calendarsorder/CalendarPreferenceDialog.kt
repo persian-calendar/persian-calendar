@@ -41,7 +41,6 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -136,7 +135,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(checked = enabled, onCheckedChange = null)
-                    Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                    Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                     Text(stringResource(calendarType.title))
                     Spacer(Modifier.weight(1f))
                     Icon(Icons.Rounded.DragHandle, contentDescription = null)

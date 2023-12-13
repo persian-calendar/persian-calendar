@@ -65,7 +65,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectP
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
@@ -273,7 +272,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
                             .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     ) {
                         RadioButton(selected = key == currentSelectionKey, onClick = null)
-                        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                         Text(title)
                     }
                 }

@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.ATHANS_LIST
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -65,7 +64,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Checkbox(checked = key in alarms, onCheckedChange = null)
-                Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+                Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(stringResource(getPrayTimeName(key)), Modifier.weight(1f, fill = true))
             }
         }

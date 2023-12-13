@@ -41,7 +41,6 @@ import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalButtonItemSpacer
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
@@ -165,7 +164,7 @@ fun CountryEvents(
             onClick = null,
             modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
         )
-        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
         Text(calendarCenterName)
         val context = LocalContext.current
         if (sourceLink.isNotEmpty()) {
@@ -200,11 +199,11 @@ private fun IndentedCheckBox(
                 if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
             }
             .height(HolidaysSettingsItemHeight.dp)
-            .padding(horizontal = 56.dp),
+            .padding(start = 72.dp, end = SettingsHorizontalPaddingItem.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(key in enabledTypes, onCheckedChange = null)
-        Spacer(modifier = Modifier.width(SettingsHorizontalButtonItemSpacer.dp))
+        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
         Text(label)
     }
 }
