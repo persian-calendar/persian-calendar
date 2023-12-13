@@ -562,22 +562,24 @@ class CalendarFragment : Fragment(R.layout.calendar_screen) {
                     }
                 }
 
-                var showMenu by rememberSaveable { mutableStateOf(false) }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { showMenu = !showMenu }) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more_options),
-                        )
+                Box {
+                    var showMenu by rememberSaveable { mutableStateOf(false) }
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = { showMenu = !showMenu }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = stringResource(R.string.more_options),
+                            )
+                        }
                     }
+                    Menu(showMenu) { showMenu = false }
                 }
-                Menu(showMenu) { showMenu = false }
             },
         )
     }
