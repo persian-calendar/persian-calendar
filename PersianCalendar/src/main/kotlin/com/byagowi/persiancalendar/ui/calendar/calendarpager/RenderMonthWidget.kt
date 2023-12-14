@@ -10,8 +10,10 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withTranslation
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -49,6 +51,10 @@ fun renderMonthWidget(
     dayView.sharedDayViewData = sharedData
     prepareViewForRendering(dayView, cellWidth.toInt(), cellHeight.toInt())
 
+    val monthDeviceEvents =
+        if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
+        else EventsStore.empty()
+
     val footer = language.my.format(baseDate.monthName, formatNumber(baseDate.year))
     val bitmap = createBitmap(width, height)
     val isRtl =
@@ -68,7 +74,6 @@ fun renderMonthWidget(
             }
         }
         val monthRange = 0..<monthLength
-        val monthDeviceEvents = context.readMonthDeviceEvents(monthStartJdn)
         (0..<rowsCount - 1).forEach { row ->
             (0..<7).forEach cell@{ column ->
                 val dayOffset = (column + row * 7) -
