@@ -1,12 +1,8 @@
 package com.byagowi.persiancalendar.ui.level
 
 import android.content.pm.ActivityInfo
-import android.os.Bundle
 import android.os.PowerManager
-import android.view.LayoutInflater
 import android.view.Surface
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -48,7 +44,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.integerResource
@@ -59,50 +54,21 @@ import androidx.core.content.getSystemService
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import java.util.UUID
 
-class LevelFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        val activity = activity ?: return root
-        root.setContent {
-            AppTheme {
-                LevelScreen(
-                    activity,
-                    popNavigation = { findNavController().navigateUp() },
-                    navigateToCompass = {
-                        // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                        val controller = findNavController()
-                        if (!controller.popBackStack(R.id.compass, false)) {
-                            controller.navigateSafe(LevelFragmentDirections.actionLevelToCompass())
-                        }
-                    },
-                )
-            }
-        }
-        return root
-    }
-}
-
 @Composable
 fun LevelScreen(
     activity: ComponentActivity,
-    popNavigation: () -> Unit,
+    navigateUp: () -> Unit,
     navigateToCompass: () -> Unit,
 ) {
     var isStopped by remember { mutableStateOf(false) }
@@ -165,7 +131,7 @@ fun LevelScreen(
                     titleContentColor = colorOnAppBar,
                 ),
                 navigationIcon = {
-                    IconButton(onClick = popNavigation) {
+                    IconButton(onClick = navigateUp) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Default.ArrowBack,
                             contentDescription = stringResource(R.string.navigate_up)

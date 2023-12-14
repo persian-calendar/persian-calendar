@@ -1,17 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.fragment.app.viewModels
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
-import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 

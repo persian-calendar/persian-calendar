@@ -3,10 +3,6 @@ package com.byagowi.persiancalendar.ui.map
 import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
@@ -63,7 +59,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -75,24 +70,16 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -103,42 +90,13 @@ import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.abs
 
-class MapFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-
-        // Just that our UI tests don't have access to the nav controllers, let's don't access nav there
-        val ifNavAvailable = runCatching { findNavController() }.getOrNull() != null
-        val viewModel =
-            if (ifNavAvailable) navGraphViewModels<MapViewModel>(R.id.map).value else MapViewModel()
-        // Set time from Astronomy screen state if we are brought from the screen to here directly
-        if (ifNavAvailable && findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
-            val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
-            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-            // Let's apply changes here to astronomy screen's view model also
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.state.flowWithLifecycle(
-                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
-                ).collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
-            }
-        }
-
-        root.setContent { AppTheme { MapScreen(viewModel) { findNavController().navigateUp() } } }
-        return root
-    }
-}
-
-private const val menuHeight = 56
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
+fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
     val state by viewModel.state.collectAsState()
     val coord by coordinates.collectAsState()
     val context = LocalContext.current
@@ -298,7 +256,7 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
             NavigationRailItem(
                 modifier = Modifier.weight(1f),
                 selected = false,
-                onClick = popNavigation,
+                onClick = navigateUp,
                 icon = {
                     Icon(
                         Icons.AutoMirrored.Default.ArrowBack,
@@ -416,3 +374,5 @@ fun MapScreen(viewModel: MapViewModel, popNavigation: () -> Unit) {
         }
     }
 }
+
+private const val menuHeight = 56

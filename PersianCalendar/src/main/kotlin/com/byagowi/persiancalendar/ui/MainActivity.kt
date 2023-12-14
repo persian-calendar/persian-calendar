@@ -1,19 +1,12 @@
 package com.byagowi.persiancalendar.ui
 
-import android.Manifest
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.RenderEffect
-import android.graphics.Shader
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.annotation.IdRes
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -40,13 +33,15 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,6 +49,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -61,33 +57,24 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.view.GravityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updateLayoutParams
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentContainerView
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.navOptions
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
-import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
-import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
@@ -96,10 +83,8 @@ import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
-import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
@@ -110,19 +95,28 @@ import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
+import com.byagowi.persiancalendar.ui.about.AboutScreen
+import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
+import com.byagowi.persiancalendar.ui.about.LicensesScreen
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
+import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
+import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.compass.CompassScreen
+import com.byagowi.persiancalendar.ui.converter.ConverterScreen
+import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
+import com.byagowi.persiancalendar.ui.level.LevelScreen
+import com.byagowi.persiancalendar.ui.map.MapScreen
+import com.byagowi.persiancalendar.ui.map.MapViewModel
+import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.isRtl
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -132,26 +126,13 @@ import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDa
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.util.Date
-import kotlin.math.roundToInt
 
-class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    NavController.OnDestinationChangedListener {
+class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var creationDateJdn = Jdn.today()
     private var settingHasChanged = false
-
-    private lateinit var drawer: DrawerLayout
-    private lateinit var navHostFragmentView: FragmentContainerView
-    private lateinit var navigation: ComposeView
-
-    private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = drawer.closeDrawer(GravityCompat.START)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
@@ -159,7 +140,6 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         super.onCreate(savedInstanceState)
         transparentSystemBars()
 
-        onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         initGlobal(this)
 
         startWorker(this)
@@ -167,50 +147,10 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        setContentView(R.layout.main_activity)
-        drawer = findViewById(R.id.root)
-        navHostFragmentView = findViewById(R.id.navHostFragment)
-        navigation = findViewById(R.id.navigation)
-        ensureDirectionality()
-        setNavHostBackground()
+        val intentStartDestination = intent?.action
+        intent?.action = ""
 
-        drawer.addDrawerListener(createDrawerListener())
-
-        navigation.setContent {
-            AppTheme {
-                AppDrawer(
-                    isDrawerOpen,
-                    selectedMenuItem,
-                ) { id ->
-                    when (id) {
-                        R.id.exit -> finish()
-                        else -> {
-                            drawer.closeDrawer(GravityCompat.START)
-                            if (navHostFragment?.navController?.currentDestination?.id != id) {
-                                clickedItem = id
-                            }
-                            selectedMenuItem.value = id
-                            applyAppLanguage(this)
-                        }
-                    }
-                }
-            }
-        }
-
-        navHostFragment?.navController?.addOnDestinationChangedListener(this)
-        when (intent?.action) {
-            "COMPASS" -> R.id.compass
-            "LEVEL" -> R.id.level
-            "MAP" -> R.id.map
-            "CONVERTER" -> R.id.converter
-            "ASTRONOMY" -> R.id.astronomy
-            "SETTINGS" -> R.id.settings
-            else -> null // unsupported action. ignore
-        }?.also {
-            navigateTo(it)
-            // So it won't happen again if the activity is restarted
-            intent?.action = ""
-        }
+        setContent { AppTheme { App(this, intentStartDestination) } }
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
@@ -223,75 +163,15 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         applyAppLanguage(this)
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
-
-        ViewCompat.setOnApplyWindowInsetsListener(drawer) { root, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                leftMargin = insets.left
-                rightMargin = insets.right
-            }
-            val transparencyState = SystemBarsTransparency(this@MainActivity)
-            navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = if (transparencyState.shouldStatusBarBeTransparent) 0 else insets.top
-                bottomMargin =
-                    if (transparencyState.shouldNavigationBarBeTransparent) 0 else insets.bottom
-            }
-            windowInsets
-        }
-    }
-
-    private val selectedMenuItem = MutableStateFlow(R.id.calendar)
-    private val isDrawerOpen = MutableStateFlow(false)
-    private var drawerOpenedOnce = false
-
-    private fun setNavHostBackground() {
-        if (!appPrefs.getBoolean(
-                PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT
-            )
-        ) navHostFragmentView.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
-        else navHostFragmentView.setBackgroundResource(R.drawable.gradient_background)
-    }
-
-    // This shouldn't be needed but as a the last resort
-    private fun ensureDirectionality() {
-        drawer.layoutDirection =
-            if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case resources isn't correct
-            else resources.configuration.layoutDirection
     }
 
     private var previousAppThemeValue: String? = null
 
-    private val navHostFragment by lazy {
-        (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment).debugAssertNotNull
-    }
-
-    override fun onDestinationChanged(
-        controller: NavController, destination: NavDestination, arguments: Bundle?
-    ) {
-        selectedMenuItem.value = when (destination.id) {
-            // We don't have a menu entry for compass, so
-            R.id.level -> R.id.compass
-            else -> destination.id
-        }
-
-        if (settingHasChanged) { // update when checked menu item is changed
-            applyAppLanguage(this)
-            update(applicationContext, true)
-            settingHasChanged = false // reset for the next time
-        }
-    }
-
-    private fun navigateTo(@IdRes id: Int) {
-        navHostFragment?.navController?.navigate(id, null, navOptions {
-            anim {
-                enter = R.anim.nav_enter_anim
-                exit = R.anim.nav_exit_anim
-                popEnter = R.anim.nav_enter_anim
-                popExit = R.anim.nav_exit_anim
-            }
-        })
-    }
-
+    //        if (settingHasChanged) { // update when checked menu item is changed
+//            applyAppLanguage(this)
+//            update(applicationContext, true)
+//            settingHasChanged = false // reset for the next time
+//        }
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
         settingHasChanged = true
 
@@ -314,8 +194,6 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
 
             PREF_APP_LANGUAGE -> restartToSettings()
 
-            PREF_THEME_GRADIENT -> setNavHostBackground()
-
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
                     stopService(Intent(this, ApplicationService::class.java))
@@ -335,36 +213,35 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-                val isGranted = ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-                appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
-                updateStoredPreference(this)
-                if (isGranted) update(this, updateDate = true)
-            }
-
-            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION -> {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-                val isGranted = ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-                appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
-                updateStoredPreference(this)
-            }
-        }
-    }
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int, permissions: Array<String>, grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        when (requestCode) {
+//            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION -> {
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+//                val isGranted = ActivityCompat.checkSelfPermission(
+//                    this, Manifest.permission.POST_NOTIFICATIONS
+//                ) == PackageManager.PERMISSION_GRANTED
+//                appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+//                updateStoredPreference(this)
+//                if (isGranted) update(this, updateDate = true)
+//            }
+//
+//            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION -> {
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+//                val isGranted = ActivityCompat.checkSelfPermission(
+//                    this, Manifest.permission.POST_NOTIFICATIONS
+//                ) == PackageManager.PERMISSION_GRANTED
+//                appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
+//                updateStoredPreference(this)
+//            }
+//        }
+//    }>
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         applyAppLanguage(this)
-        ensureDirectionality()
     }
 
     override fun onResume() {
@@ -374,10 +251,6 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         val today = Jdn.today()
         if (creationDateJdn != today) {
             creationDateJdn = today
-            val navController = navHostFragment?.navController
-            if (navController?.currentDestination?.id == R.id.calendar) {
-                navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
-            }
         }
     }
 
@@ -387,155 +260,274 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         finish()
         startActivity(intent)
     }
-
-    private var clickedItem = 0
-
-    // TODO: Ugly, to get rid of after full Compose migration
-    fun openDrawer() = drawer.openDrawer(GravityCompat.START)
-
-    private fun createDrawerListener() = object : DrawerLayout.SimpleDrawerListener() {
-        val slidingDirection = if (resources.isRtl) -1f else +1f
-
-        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            super.onDrawerSlide(drawerView, slideOffset)
-            slidingAnimation(drawerView, slideOffset)
-        }
-
-        private val blurs =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && windowManager.isCrossWindowBlurEnabled) (0..9).map {
-                if (it == 0) null
-                else RenderEffect.createBlurEffect(it * 2f, it * 2f, Shader.TileMode.CLAMP)
-            } else emptyList()
-
-        private fun slidingAnimation(drawerView: View, slideOffset: Float) {
-            navHostFragmentView.translationX =
-                slideOffset * drawerView.width.toFloat() * slidingDirection * .97f
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurs.isNotEmpty()) {
-                val blurIndex =
-                    if (slideOffset.isNaN()) 0 else ((blurs.size - 1) * slideOffset).roundToInt()
-                navHostFragmentView.setRenderEffect(blurs[blurIndex])
-                navigation.setRenderEffect(blurs[blurs.size - 1 - blurIndex])
-            }
-            drawer.bringChildToFront(drawerView)
-            drawer.requestLayout()
-        }
-
-        override fun onDrawerOpened(drawerView: View) {
-            super.onDrawerOpened(drawerView)
-            onBackPressedCloseDrawerCallback.isEnabled = true
-
-            isDrawerOpen.value = true
-
-            drawerOpenedOnce = true
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            super.onDrawerClosed(drawerView)
-            onBackPressedCloseDrawerCallback.isEnabled = false
-            if (clickedItem != 0) {
-                navigateTo(clickedItem)
-                clickedItem = 0
-            }
-
-            isDrawerOpen.value = false
-        }
-    }
 }
 
 @Composable
-fun AppDrawer(
-    isDrawerOpenFlow: StateFlow<Boolean>,
-    selectedMenuItemFlow: StateFlow<Int>,
-    onIdClicked: (Int) -> Unit
-) {
-    @OptIn(ExperimentalFoundationApi::class)
-    ModalDrawerSheet(
-        windowInsets = WindowInsets(0, 0, 0, 0),
-        modifier = Modifier.verticalScroll(rememberScrollState())
+fun App(activity: ComponentActivity, intentStartDestination: String?) {
+    val calendarRoute = "calendar"
+    val compassRoute = "compass"
+    val levelRoute = "level"
+    val mapRoute = "map"
+    val converterRoute = "converter"
+    val astronomyRoute = "astronomy"
+    val settingsRoute = "settings"
+    val aboutRoute = "about"
+    val licensesRoute = "license"
+    val deviceInformationRoute = "device"
+    val startDestination = when (intentStartDestination) {
+        "COMPASS" -> compassRoute
+        "LEVEL" -> levelRoute
+        "CONVERTER" -> converterRoute
+        "ASTRONOMY" -> astronomyRoute
+        "MAP" -> mapRoute
+        "SETTINGS" -> settingsRoute // has in app use
+        else -> calendarRoute
+    }
+    val navController = rememberNavController()
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            @OptIn(ExperimentalFoundationApi::class)
+            ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
+                val context = LocalContext.current
+                val needsVisibleStatusBarPlaceHolder = remember {
+                    SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
+                }
+                Box(
+                    if (needsVisibleStatusBarPlaceHolder) Modifier
+                        .fillMaxWidth()
+                        .background(
+                            Brush.verticalGradient(
+                                0f to Color(0x70000000), 1f to Color.Transparent
+                            )
+                        )
+                    else Modifier
+                ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
+
+                val actualSeason =
+                    remember { Season.fromDate(Date(), coordinates.value).ordinal }
+                val pageSize = 200
+                val seasonState = rememberPagerState(
+                    initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
+                    pageCount = { pageSize },
+                )
+                if (drawerState.isOpen) {
+                    scope.launch { seasonState.animateScrollToPage(100 + actualSeason) }
+                }
+                val imageFilter = remember(LocalConfiguration.current) {
+                    // Consider gray scale themes of Android 14
+                    // And apply a gray scale filter https://stackoverflow.com/a/75698731
+                    if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale)
+                        ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
+                    else null
+                }
+                HorizontalPager(
+                    state = seasonState,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
+                        .height(196.dp)
+                        .clip(MaterialTheme.shapes.extraLarge)
+                        .semantics {
+                            @OptIn(ExperimentalComposeUiApi::class)
+                            this.invisibleToUser()
+                        },
+                    pageSpacing = 8.dp,
+                ) {
+                    Image(
+                        ImageBitmap.imageResource(Season.entries[it % 4].imageId),
+                        contentScale = ContentScale.FillWidth,
+                        contentDescription = null,
+                        colorFilter = imageFilter,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clip(MaterialTheme.shapes.extraLarge),
+                    )
+                }
+
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                listOf(
+                    Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
+                    Triple(
+                        converterRoute,
+                        Icons.Default.SwapVerticalCircle,
+                        R.string.date_converter
+                    ),
+                    Triple(compassRoute, Icons.Default.Explore, R.string.compass),
+                    Triple(
+                        astronomyRoute,
+                        ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
+                        R.string.astronomy
+                    ),
+                    Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
+                    Triple(aboutRoute, Icons.Default.Info, R.string.about),
+                    Triple(null, Icons.Default.Cancel, R.string.exit),
+                ).forEach { (id, icon, title) ->
+                    NavigationDrawerItem(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        label = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Icon(
+                                    icon,
+                                    modifier = Modifier.size(24.dp),
+                                    contentDescription = null
+                                )
+                                Spacer(Modifier.width(16.dp))
+                                Text(stringResource(title))
+                            }
+                        },
+                        selected = id == navBackStackEntry?.destination?.route,
+                        onClick = {
+                            if (id == null) return@NavigationDrawerItem activity.finish()
+                            scope.launch {
+                                drawerState.close()
+                                navController.navigate(id)
+                            }
+                        },
+                    )
+                }
+            }
+        }
     ) {
         val context = LocalContext.current
-        val needsVisibleStatusBarPlaceHolder = remember {
-            SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
-        }
-        Box(
-            if (needsVisibleStatusBarPlaceHolder) Modifier
-                .fillMaxWidth()
-                .background(
-                    Brush.verticalGradient(
-                        0f to Color(0x70000000), 1f to Color.Transparent
-                    )
+        val isGradient = !context.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        NavHost(
+            navController = navController,
+            startDestination = startDestination,
+            modifier = if (isGradient)
+                Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
+            else Modifier.background(
+                Brush.linearGradient(
+                    0f to Color(context.resolveColor(R.attr.screenBackgroundGradientStart)),
+                    1f to Color(context.resolveColor(R.attr.screenBackgroundGradientEnd)),
+                    start =
+                    Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
+                    end =
+                    Offset(if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
                 )
-            else Modifier
-        ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
-        val isDrawerOpen by isDrawerOpenFlow.collectAsState()
-
-        val actualSeason = remember { Season.fromDate(Date(), coordinates.value).ordinal }
-        val pageSize = 200
-        val seasonState = rememberPagerState(
-            initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
-            pageCount = { pageSize },
-        )
-        val scope = rememberCoroutineScope()
-        if (isDrawerOpen) {
-            scope.launch { seasonState.animateScrollToPage(100 + actualSeason) }
-        }
-        val imageFilter = remember(LocalConfiguration.current) {
-            // Consider gray scale themes of Android 14
-            // And apply a gray scale filter https://stackoverflow.com/a/75698731
-            if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale)
-                ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
-            else null
-        }
-        HorizontalPager(
-            state = seasonState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
-                .height(196.dp)
-                .clip(MaterialTheme.shapes.extraLarge)
-                .semantics {
-                    @OptIn(ExperimentalComposeUiApi::class)
-                    this.invisibleToUser()
-                },
-            pageSpacing = 8.dp,
-        ) {
-            Image(
-                ImageBitmap.imageResource(Season.entries[it % 4].imageId),
-                contentScale = ContentScale.FillWidth,
-                contentDescription = null,
-                colorFilter = imageFilter,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clip(MaterialTheme.shapes.extraLarge),
-            )
-        }
-
-        val selectedMenuItem by selectedMenuItemFlow.collectAsState()
-        listOf(
-            Triple(R.id.calendar, Icons.Default.DateRange, R.string.calendar),
-            Triple(R.id.converter, Icons.Default.SwapVerticalCircle, R.string.date_converter),
-            Triple(R.id.compass, Icons.Default.Explore, R.string.compass),
-            Triple(
-                R.id.astronomy,
-                ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
-                R.string.astronomy
             ),
-            Triple(R.id.settings, Icons.Default.Settings, R.string.settings),
-            Triple(R.id.about, Icons.Default.Info, R.string.about),
-            Triple(R.id.exit, Icons.Default.Cancel, R.string.exit),
-        ).forEach { (id, icon, title) ->
-            NavigationDrawerItem(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                label = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(icon, modifier = Modifier.size(24.dp), contentDescription = null)
-                        Spacer(Modifier.width(16.dp))
-                        Text(stringResource(title))
-                    }
-                },
-                selected = id == selectedMenuItem,
-                onClick = { onIdClicked(id) },
-            )
+        ) {
+            composable(calendarRoute) {
+                CalendarScreen(
+                    openDrawer = { scope.launch { drawerState.open() } },
+                    navigateToHolidaysSettings = {
+                        navController.navigate(settingsRoute)
+                        // TODO
+//                                findNavController().navigateSafe(
+//                                    CalendarFragmentDirections.navigateToSettings(
+//                                        tab = INTERFACE_CALENDAR_TAB, preferenceKey = PREF_HOLIDAY_TYPES
+//                                    )
+//                                )
+                    },
+                    navigateToSettingsLocationTab = {
+                        // TODO
+                        navController.navigate(settingsRoute)
+                        // TODO
+//                                findNavController().navigateSafe(
+//                                    CalendarFragmentDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
+//                                )
+                    },
+                    navigateToAstronomy = { dayOffset ->
+                        navController.navigate(astronomyRoute)
+                        // TODO: pass day offset somehow
+//                                findNavController().navigateSafe(
+//                                    CalendarFragmentDirections.actionCalendarToAstronomy(dayOffset)
+//                                )
+                    },
+                    viewModel = remember { CalendarViewModel(activity.application) },
+                )
+            }
+
+            composable(converterRoute) {
+                ConverterScreen(
+                    openDrawer = { scope.launch { drawerState.open() } },
+                    viewModel = remember { ConverterViewModel() }
+                )
+            }
+
+            composable(compassRoute) {
+                CompassScreen(
+                    openDrawer = { scope.launch { drawerState.open() } },
+                    navigateToLevel = { navController.navigate(levelRoute) },
+                    navigateToMap = { navController.navigate(mapRoute) },
+                    activity,
+                )
+            }
+
+            composable(levelRoute) {
+                LevelScreen(
+                    activity,
+                    navigateUp = navController::navigateUp,
+                    navigateToCompass = {
+                        // If compass wasn't in backstack (level is brought from shortcut), navigate to it
+                        if (!navController.popBackStack(compassRoute, false))
+                            navController.navigate(levelRoute)
+                    },
+                )
+            }
+
+            composable(astronomyRoute) {
+                AstronomyScreen(
+                    openDrawer = { scope.launch { drawerState.open() } },
+                    navigateToMap = {
+                        // TODO: Pass time also somehow
+                        navController.navigate(mapRoute)
+                    },
+                    viewModel = remember { AstronomyViewModel() },
+                )
+            }
+
+            composable(mapRoute) {
+//                        // Just that our UI tests don't have access to the nav controllers, let's don't access nav there
+//                        val ifNavAvailable = runCatching { findNavController() }.getOrNull() != null
+//                        val viewModel =
+//                            if (ifNavAvailable) navGraphViewModels<MapViewModel>(R.id.map).value else MapViewModel()
+//                        // Set time from Astronomy screen state if we are brought from the screen to here directly
+//                        if (ifNavAvailable && findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
+//                            val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
+//                            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
+//                            // Let's apply changes here to astronomy screen's view model also
+//                            viewLifecycleOwner.lifecycleScope.launch {
+//                                viewModel.state.flowWithLifecycle(
+//                                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
+//                                ).collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
+//                            }
+//                        }
+                MapScreen(
+                    navigateUp = { navController.navigateUp() },
+                    viewModel = remember { MapViewModel() },
+                )
+            }
+
+            composable(settingsRoute) {
+                SettingsScreen(
+                    openDrawer = { scope.launch { drawerState.open() } },
+                    activity = activity,
+                    initialPage = 0,
+                    destination = ""
+                )//) args.tab, args.preferenceKey)
+                // TODO
+            }
+
+            composable(aboutRoute) {
+                AboutScreen(
+                    openDrawer = { scope.launch { drawerState.open() } },
+                    navigateToLicenses = { navController.navigate(licensesRoute) },
+                    navigateToDeviceInformation = {
+                        navController.navigate(deviceInformationRoute)
+                    },
+                )
+            }
+            composable(licensesRoute) {
+                LicensesScreen { navController.navigateUp() }
+            }
+            composable(deviceInformationRoute) {
+                DeviceInformationScreen { navController.popBackStack() }
+            }
         }
     }
 }

@@ -68,7 +68,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 private fun LicensesScreenPreview() = LicensesScreen {}
 
 @Composable
-fun LicensesScreen(popNavigation: () -> Unit) {
+fun LicensesScreen(navigateUp: () -> Unit) {
     Column {
         val context = LocalContext.current
         // TODO: Ideally this should be onPrimary
@@ -83,7 +83,7 @@ fun LicensesScreen(popNavigation: () -> Unit) {
                 titleContentColor = colorOnAppBar,
             ),
             navigationIcon = {
-                IconButton(onClick = popNavigation) {
+                IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = stringResource(R.string.navigate_up)

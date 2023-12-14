@@ -11,7 +11,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
-import com.byagowi.persiancalendar.ui.level.LevelScreen
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,7 +30,7 @@ class CompassScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            CompassScreen(LocalContext.current as ComponentActivity, {}, {})
+            CompassScreen({}, {}, {}, LocalContext.current as ComponentActivity)
         }
     }
 
@@ -42,9 +41,10 @@ class CompassScreenTest {
         composeTestRule.setContentWithTheme {
             levelString = stringResource(R.string.level)
             CompassScreen(
-                activity = LocalContext.current as ComponentActivity,
+                openDrawer = {},
                 navigateToLevel = { navigateToLevelIsCalled = true },
-                navigateToMap = { assert(false) }
+                navigateToMap = { assert(false) },
+                activity = LocalContext.current as ComponentActivity
             )
         }
         assert(!navigateToLevelIsCalled)
@@ -61,9 +61,10 @@ class CompassScreenTest {
         composeTestRule.setContentWithTheme {
             mapString = stringResource(R.string.map)
             CompassScreen(
-                activity = LocalContext.current as ComponentActivity,
+                openDrawer = {},
                 navigateToLevel = { assert(false) },
-                navigateToMap = { navigateToMapIsCalled = true }
+                navigateToMap = { navigateToMapIsCalled = true },
+                activity = LocalContext.current as ComponentActivity
             )
         }
         assert(!navigateToMapIsCalled)

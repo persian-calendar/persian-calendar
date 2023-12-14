@@ -89,7 +89,9 @@ fun LocationAthanSettings(activity: ComponentActivity) {
     ) { onDismissRequest -> LocationDialog(onDismissRequest) }
     SettingsClickable(stringResource(R.string.coordination)) { onDismissRequest ->
         CoordinatesDialog(
-            navigateToMap = { activity.findNavController(R.id.navHostFragment).navigate(R.id.map) },
+            navigateToMap = {
+//                activity.findNavController(R.id.navHostFragment).navigate(R.id.map)
+                            },
             onDismissRequest = onDismissRequest
         )
     }

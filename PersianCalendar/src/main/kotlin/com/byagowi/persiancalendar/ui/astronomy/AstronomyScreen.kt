@@ -1,10 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.os.Build
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -63,7 +59,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalView
@@ -76,21 +71,14 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.SolarDraw
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -106,36 +94,13 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
-class AstronomyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        // Just that our UI tests don't have access to the nav controllers, let's don't access nav there
-        val ifNavAvailable = runCatching { findNavController() }.getOrNull() != null
-        val viewModel =
-            if (ifNavAvailable) navGraphViewModels<AstronomyViewModel>(R.id.astronomy).value else AstronomyViewModel()
-        if (ifNavAvailable && viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME) {
-            viewModel.animateToAbsoluteDayOffset(navArgs<AstronomyFragmentArgs>().value.dayOffset)
-        }
-
-        val root = ComposeView(inflater.context)
-        root.setContent {
-            AppTheme {
-                AstronomyScreen(viewModel) {
-                    // Pass time also
-                    findNavController().navigateSafe(
-                        AstronomyFragmentDirections.actionAstronomyToMap()
-                    )
-                }
-            }
-        }
-        return root
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = Column {
+fun AstronomyScreen(
+    openDrawer: () -> Unit,
+    navigateToMap: () -> Unit,
+    viewModel: AstronomyViewModel,
+) = Column {
     val context = LocalContext.current
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
@@ -178,7 +143,7 @@ fun AstronomyScreen(viewModel: AstronomyViewModel, navigateToMap: () -> Unit) = 
             titleContentColor = colorOnAppBar,
         ),
         navigationIcon = {
-            IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+            IconButton(onClick = { openDrawer() }) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = stringResource(R.string.open_drawer)

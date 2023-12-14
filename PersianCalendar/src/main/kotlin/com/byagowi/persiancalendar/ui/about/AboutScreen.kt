@@ -3,13 +3,8 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
-import androidx.annotation.VisibleForTesting
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -84,7 +79,6 @@ import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -94,16 +88,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -112,46 +101,13 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 
-class AboutFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        root.setContent {
-            AppTheme {
-                val navController = rememberNavController()
-                val aboutRoute = "about"
-                val licensesRoute = "licenses"
-                val deviceInformationRoute = "deviceInformation"
-                NavHost(navController = navController, startDestination = aboutRoute) {
-                    composable(aboutRoute) {
-                        AboutScreen(
-                            navigateToLicenses = { navController.navigate(licensesRoute) },
-                            navigateToDeviceInformation = {
-                                navController.navigate(deviceInformationRoute)
-                            },
-                        )
-                    }
-                    composable(licensesRoute) {
-                        LicensesScreen { navController.popBackStack() }
-                    }
-                    composable(deviceInformationRoute) {
-                        DeviceInformationScreen { navController.popBackStack() }
-                    }
-                }
-            }
-        }
-        return root.rootView
-    }
-}
-
 @Preview
 @Composable
-private fun AboutScreenPreview() = AboutScreen({}, {})
+private fun AboutScreenPreview() = AboutScreen({}, {}, {})
 
 @Composable
-@VisibleForTesting
 fun AboutScreen(
+    openDrawer: () -> Unit,
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
 ) {
@@ -170,7 +126,7 @@ fun AboutScreen(
                 titleContentColor = colorOnAppBar,
             ),
             navigationIcon = {
-                IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                IconButton(onClick = { openDrawer() }) {
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = stringResource(R.string.open_drawer)

@@ -40,6 +40,7 @@ class AboutScreenTest {
         composeTestRule.setContentWithTheme {
             deviceInformationString = stringResource(R.string.device_information)
             AboutScreen(
+                openDrawer = {},
                 navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
                 navigateToLicenses = { assert(false) },
             )
@@ -57,6 +58,7 @@ class AboutScreenTest {
         composeTestRule.setContentWithTheme {
             licensesString = stringResource(R.string.about_license_title)
             AboutScreen(
+                openDrawer = {},
                 navigateToDeviceInformation = { assert(false) },
                 navigateToLicenses = { navigateToLicensesIsCalled = true },
             )

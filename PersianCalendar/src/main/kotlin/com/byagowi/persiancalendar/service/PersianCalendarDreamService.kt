@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.core.view.isVisible
-import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.theme.Theme
@@ -88,79 +87,79 @@ class PersianCalendarDreamService : DreamService() {
             }
         }
 
-        // Make the play/stop button movable using ViewDragHelper and ViewGroup
-        val screen = object : ViewGroup(this) {
-            init {
-                addView(backgroundView)
-                addView(button)
-            }
+//        // Make the play/stop button movable using ViewDragHelper and ViewGroup
+//        val screen = object : ViewGroup(this) {
+//            init {
+//                addView(backgroundView)
+//                addView(button)
+//            }
+//
+//            override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+//            override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//                super.onSizeChanged(w, h, oldw, oldh)
+//                backgroundView.layout(0, 0, w, h)
+//                button.layout(0, 0, min(w, h) / 5, min(w, h) / 5)
+//            }
+//
+//            private val centroids by lazy(LazyThreadSafetyMode.NONE) {
+//                listOf(0 to 0, 0 to height, width to 0, width to height, width / 2 to height / 2)
+//            }
+//
+//            // Make play button of the screen movable
+//            private val callback = object : ViewDragHelper.Callback() {
+//                override fun tryCaptureView(child: View, pointerId: Int) = child == button
+//                override fun onViewPositionChanged(
+//                    changedView: View, left: Int, top: Int, dx: Int, dy: Int
+//                ) = invalidate()
+//
+//                override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+//                    val centerX = releasedChild.left + releasedChild.width / 2.0
+//                    val centerY = releasedChild.top + releasedChild.height / 2.0
+//                    val (x, y) = centroids.minByOrNull { (centroidX, centroidY) ->
+//                        hypot(centroidX - centerX, centroidY - centerY)
+//                    } ?: return
+//                    dragHelper.settleCapturedViewAt(
+//                        (x - releasedChild.width / 2).coerceIn(0, width - releasedChild.width),
+//                        (y - releasedChild.height / 2).coerceIn(0, height - releasedChild.height)
+//                    )
+//                    invalidate()
+//                }
+//
+//                override fun getViewHorizontalDragRange(child: View): Int = width
+//                override fun getViewVerticalDragRange(child: View): Int = height
+//                override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
+//                    left.coerceIn(0, width - child.width)
+//
+//                override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
+//                    top.coerceIn(0, height - child.height)
+//
+//                override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
+//                    bringChildToFront(capturedChild)
+//            }
+//            private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
+//
+//
+//            override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+//                val action = event.action
+//                if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+//                    dragHelper.cancel()
+//                    return false
+//                }
+//                return dragHelper.shouldInterceptTouchEvent(event)
+//            }
+//
+//            @SuppressLint("ClickableViewAccessibility")
+//            override fun onTouchEvent(event: MotionEvent): Boolean {
+//                dragHelper.processTouchEvent(event)
+//                return true
+//            }
+//
+//            override fun computeScroll() {
+//                if (dragHelper.continueSettling(true)) invalidate()
+//            }
+//        }
 
-            override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
-            override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-                super.onSizeChanged(w, h, oldw, oldh)
-                backgroundView.layout(0, 0, w, h)
-                button.layout(0, 0, min(w, h) / 5, min(w, h) / 5)
-            }
-
-            private val centroids by lazy(LazyThreadSafetyMode.NONE) {
-                listOf(0 to 0, 0 to height, width to 0, width to height, width / 2 to height / 2)
-            }
-
-            // Make play button of the screen movable
-            private val callback = object : ViewDragHelper.Callback() {
-                override fun tryCaptureView(child: View, pointerId: Int) = child == button
-                override fun onViewPositionChanged(
-                    changedView: View, left: Int, top: Int, dx: Int, dy: Int
-                ) = invalidate()
-
-                override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-                    val centerX = releasedChild.left + releasedChild.width / 2.0
-                    val centerY = releasedChild.top + releasedChild.height / 2.0
-                    val (x, y) = centroids.minByOrNull { (centroidX, centroidY) ->
-                        hypot(centroidX - centerX, centroidY - centerY)
-                    } ?: return
-                    dragHelper.settleCapturedViewAt(
-                        (x - releasedChild.width / 2).coerceIn(0, width - releasedChild.width),
-                        (y - releasedChild.height / 2).coerceIn(0, height - releasedChild.height)
-                    )
-                    invalidate()
-                }
-
-                override fun getViewHorizontalDragRange(child: View): Int = width
-                override fun getViewVerticalDragRange(child: View): Int = height
-                override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
-                    left.coerceIn(0, width - child.width)
-
-                override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
-                    top.coerceIn(0, height - child.height)
-
-                override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
-                    bringChildToFront(capturedChild)
-            }
-            private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
-
-
-            override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-                val action = event.action
-                if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-                    dragHelper.cancel()
-                    return false
-                }
-                return dragHelper.shouldInterceptTouchEvent(event)
-            }
-
-            @SuppressLint("ClickableViewAccessibility")
-            override fun onTouchEvent(event: MotionEvent): Boolean {
-                dragHelper.processTouchEvent(event)
-                return true
-            }
-
-            override fun computeScroll() {
-                if (dragHelper.continueSettling(true)) invalidate()
-            }
-        }
-
-        setContentView(screen)
+        setContentView(backgroundView)
 
         listOf(valueAnimator::start, valueAnimator::reverse).random()()
     }

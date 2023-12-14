@@ -6,10 +6,6 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -60,7 +56,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -70,10 +65,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
@@ -82,10 +75,8 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.common.StopButton
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -99,36 +90,14 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-class CompassFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        val activity = activity ?: return root
-        root.setContent {
-            AppTheme {
-                CompassScreen(
-                    activity,
-                    navigateToLevel = {
-                        findNavController().navigateSafe(CompassFragmentDirections.actionCompassToLevel())
-                    },
-                    navigateToMap = {
-                        findNavController().navigateSafe(CompassFragmentDirections.actionCompassToMap())
-                    },
-                )
-            }
-        }
-        return root
-    }
-}
-
 // Lots of bad practices, should be rewritten sometime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompassScreen(
-    activity: ComponentActivity,
+    openDrawer: () -> Unit,
     navigateToLevel: () -> Unit,
     navigateToMap: () -> Unit,
+    activity: ComponentActivity,
 ) {
     val orientation = remember(LocalConfiguration.current) {
         when (activity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
@@ -197,7 +166,7 @@ fun CompassScreen(
                 titleContentColor = colorOnAppBar,
             ),
             navigationIcon = {
-                IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                IconButton(onClick = { openDrawer() }) {
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = stringResource(R.string.open_drawer)

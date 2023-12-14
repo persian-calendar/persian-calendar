@@ -63,7 +63,6 @@ import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
-import androidx.customview.widget.ViewDragHelper
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
@@ -1143,104 +1142,104 @@ private fun getRandomTransparentColor(): Int {
     return Color.argb(0x10, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
 }
 
-fun showViewDragHelperDemoDialog(activity: ComponentActivity) {
-    // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
-    val view = object : ViewGroup(activity) {
-        private val bounds = List(9) { Rect() }
-        override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            super.onSizeChanged(w, h, oldw, oldh)
-            val w3 = w / 3
-            val h3 = h / 3
-            bounds.forEachIndexed { i, r ->
-                r.set(0, 0, w3, h3)
-                r.offset(w3 * (i % 3), h3 * (i / 3))
-                getChildAt(i).layout(r.left, r.top, r.right, r.bottom)
-            }
-        }
-
-        private val callback = object : ViewDragHelper.Callback() {
-            override fun tryCaptureView(view: View, i: Int): Boolean = true
-            override fun onViewPositionChanged(
-                changedView: View, left: Int, top: Int, dx: Int, dy: Int
-            ) = invalidate()
-
-            override fun getViewHorizontalDragRange(child: View): Int = width
-            override fun getViewVerticalDragRange(child: View): Int = height
-            override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
-                bringChildToFront(capturedChild)
-
-            override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-                val (x, y) = computeFinalPosition(releasedChild, xvel, yvel)
-                dragHelper.settleCapturedViewAt(x, y)
-                invalidate()
-            }
-
-            private fun computeFinalPosition(child: View, xvel: Float, yvel: Float): Point {
-                val r = Rect()
-                child.getHitRect(r)
-                var cx = r.centerX()
-                var cy = r.centerY()
-                if (xvel != 0f || yvel != 0f) {
-                    val s =
-                        Scroller(context) // Creating a view just to use its computation doesn't look cool
-                    val w2: Int = r.width() / 2
-                    val h2: Int = r.height() / 2
-                    s.fling(cx, cy, xvel.toInt(), yvel.toInt(), w2, width - w2, h2, height - h2)
-                    cx = s.finalX
-                    cy = s.finalY
-                }
-                bounds.forEach { if (it.contains(cx, cy)) return Point(it.left, it.top) }
-                return Point()
-            }
-
-            override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
-                left.coerceIn(0, width - child.width)
-
-            override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
-                top.coerceIn(0, height - child.height)
-        }
-        private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
-
-        override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-            val action = event.action
-            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
-                dragHelper.cancel()
-                return false
-            }
-            return dragHelper.shouldInterceptTouchEvent(event)
-        }
-
-        @SuppressLint("ClickableViewAccessibility")
-        override fun onTouchEvent(event: MotionEvent): Boolean {
-            dragHelper.processTouchEvent(event)
-            return true
-        }
-
-        override fun computeScroll() {
-            if (dragHelper.continueSettling(true)) invalidate()
-        }
-
-        init {
-            (0..<360 step 40)
-                .map { Color.HSVToColor(floatArrayOf(it.toFloat(), 100f, 1f)) }
-                .shuffled()
-                .mapIndexed { i, color ->
-                    TextView(context).also {
-                        it.textSize = 32f
-                        it.textAlignment = View.TEXT_ALIGNMENT_CENTER
-                        it.setBackgroundColor(color)
-                        var clickedCount = i
-                        it.text = clickedCount.toString()
-                        it.setOnClickListener { _ -> it.text = (++clickedCount).toString() }
-                    }
-                }.forEach(::addView)
-        }
-    }
-    AlertDialog.Builder(activity)
-        .setView(view)
-        .show()
-}
+//fun showViewDragHelperDemoDialog(activity: ComponentActivity) {
+//    // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
+//    val view = object : ViewGroup(activity) {
+//        private val bounds = List(9) { Rect() }
+//        override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//            super.onSizeChanged(w, h, oldw, oldh)
+//            val w3 = w / 3
+//            val h3 = h / 3
+//            bounds.forEachIndexed { i, r ->
+//                r.set(0, 0, w3, h3)
+//                r.offset(w3 * (i % 3), h3 * (i / 3))
+//                getChildAt(i).layout(r.left, r.top, r.right, r.bottom)
+//            }
+//        }
+//
+//        private val callback = object : ViewDragHelper.Callback() {
+//            override fun tryCaptureView(view: View, i: Int): Boolean = true
+//            override fun onViewPositionChanged(
+//                changedView: View, left: Int, top: Int, dx: Int, dy: Int
+//            ) = invalidate()
+//
+//            override fun getViewHorizontalDragRange(child: View): Int = width
+//            override fun getViewVerticalDragRange(child: View): Int = height
+//            override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
+//                bringChildToFront(capturedChild)
+//
+//            override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+//                val (x, y) = computeFinalPosition(releasedChild, xvel, yvel)
+//                dragHelper.settleCapturedViewAt(x, y)
+//                invalidate()
+//            }
+//
+//            private fun computeFinalPosition(child: View, xvel: Float, yvel: Float): Point {
+//                val r = Rect()
+//                child.getHitRect(r)
+//                var cx = r.centerX()
+//                var cy = r.centerY()
+//                if (xvel != 0f || yvel != 0f) {
+//                    val s =
+//                        Scroller(context) // Creating a view just to use its computation doesn't look cool
+//                    val w2: Int = r.width() / 2
+//                    val h2: Int = r.height() / 2
+//                    s.fling(cx, cy, xvel.toInt(), yvel.toInt(), w2, width - w2, h2, height - h2)
+//                    cx = s.finalX
+//                    cy = s.finalY
+//                }
+//                bounds.forEach { if (it.contains(cx, cy)) return Point(it.left, it.top) }
+//                return Point()
+//            }
+//
+//            override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
+//                left.coerceIn(0, width - child.width)
+//
+//            override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
+//                top.coerceIn(0, height - child.height)
+//        }
+//        private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
+//
+//        override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+//            val action = event.action
+//            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+//                dragHelper.cancel()
+//                return false
+//            }
+//            return dragHelper.shouldInterceptTouchEvent(event)
+//        }
+//
+//        @SuppressLint("ClickableViewAccessibility")
+//        override fun onTouchEvent(event: MotionEvent): Boolean {
+//            dragHelper.processTouchEvent(event)
+//            return true
+//        }
+//
+//        override fun computeScroll() {
+//            if (dragHelper.continueSettling(true)) invalidate()
+//        }
+//
+//        init {
+//            (0..<360 step 40)
+//                .map { Color.HSVToColor(floatArrayOf(it.toFloat(), 100f, 1f)) }
+//                .shuffled()
+//                .mapIndexed { i, color ->
+//                    TextView(context).also {
+//                        it.textSize = 32f
+//                        it.textAlignment = View.TEXT_ALIGNMENT_CENTER
+//                        it.setBackgroundColor(color)
+//                        var clickedCount = i
+//                        it.text = clickedCount.toString()
+//                        it.setOnClickListener { _ -> it.text = (++clickedCount).toString() }
+//                    }
+//                }.forEach(::addView)
+//        }
+//    }
+//    AlertDialog.Builder(activity)
+//        .setView(view)
+//        .show()
+//}
 
 // Based on https://habr.com/ru/post/514844/ and https://timiskhakov.github.io/posts/programming-guitar-music
 private fun guitarString(

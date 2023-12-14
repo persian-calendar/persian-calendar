@@ -124,7 +124,7 @@ fun Context.openHtmlInBrowser(html: String) {
     }.onFailure(logException)
 }
 
-fun ComponentActivity.shareText(text: String) {
+fun Context.shareText(text: String) {
     runCatching {
         ShareCompat.IntentBuilder(this)
             .setType("text/plain")
@@ -174,10 +174,6 @@ fun Context.resolveResourceIdFromTheme(@AttrRes attributeId: Int): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attributeId, typedValue, true)
     return typedValue.resourceId
-}
-
-fun NavController.navigateSafe(directions: NavDirections) {
-    runCatching { navigate(directions) }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
 // Return an empty drawable instead of crash, to be removed someday hopefully

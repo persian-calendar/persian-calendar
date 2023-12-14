@@ -6,11 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
-import android.os.Bundle
 import android.provider.CalendarContract
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
@@ -89,7 +85,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.integerResource
@@ -100,14 +95,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
-import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
@@ -134,15 +124,11 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
-import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isRtl
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
@@ -180,29 +166,20 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-class CalendarFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        val viewModel by viewModels<CalendarViewModel>()
-        val navController = findNavController()
-        root.setContent { AppTheme { CalendarScreen(navController, viewModel) } }
-        root.post {
-            root.context.appPrefs.edit {
-                putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
-            }
-        }
-        return root
-    }
-}
-
 @Composable
-private fun CalendarScreen(navController: NavController, viewModel: CalendarViewModel) {
+fun CalendarScreen(
+    openDrawer: () -> Unit,
+    navigateToHolidaysSettings: () -> Unit,
+    navigateToSettingsLocationTab: () -> Unit,
+    navigateToAstronomy: (Int) -> Unit,
+    viewModel: CalendarViewModel,
+) {
+    val context = LocalContext.current
     // Refresh the calendar on resume
-    LaunchedEffect(null) { viewModel.refreshCalendar() }
+    LaunchedEffect(null) {
+        viewModel.refreshCalendar()
+        context.appPrefs.edit { putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE) }
+    }
 
     val isLandscape =
         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -217,14 +194,21 @@ private fun CalendarScreen(navController: NavController, viewModel: CalendarView
                     fadeOut(animationSpec = tween(animationTime))
                 )
             },
-        ) { if (it) Search(viewModel) else Toolbar(viewModel) }
+        ) { if (it) Search(viewModel) else Toolbar(openDrawer, viewModel) }
 
         val configuration = LocalConfiguration.current
         val screenWidth = configuration.screenWidthDp.dp
         val screenHeight = configuration.screenHeightDp.dp
         if (isLandscape) Row {
             CalendarPager(Modifier.width(screenWidth * 45 / 100), viewModel)
-            Details(Modifier.fillMaxSize(), viewModel, navController, scrollableTabs = true)
+            Details(
+                Modifier.fillMaxSize(),
+                viewModel,
+                navigateToHolidaysSettings,
+                navigateToSettingsLocationTab,
+                navigateToAstronomy,
+                scrollableTabs = true,
+            )
         } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             CalendarPager(Modifier.sizeIn(minHeight = 320.dp, maxHeight = 400.dp), viewModel)
             Details(
@@ -232,7 +216,9 @@ private fun CalendarScreen(navController: NavController, viewModel: CalendarView
                     .fillMaxWidth()
                     .defaultMinSize(minHeight = screenHeight - 400.dp - 64.dp),
                 viewModel,
-                navController,
+                navigateToHolidaysSettings,
+                navigateToSettingsLocationTab,
+                navigateToAstronomy,
             )
         }
     }
@@ -323,19 +309,22 @@ fun ButtonsBar(
 fun Details(
     modifier: Modifier,
     viewModel: CalendarViewModel,
-    navController: NavController,
+    navigateToHolidaysSettings: () -> Unit,
+    navigateToSettingsLocationTab: () -> Unit,
+    navigateToAstronomy: (Int) -> Unit,
     scrollableTabs: Boolean = false
 ) {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     val tabs = listOfNotNull<Pair<Int, @Composable () -> Unit>>(
         R.string.calendar to { CalendarsTab(viewModel) },
-        R.string.events to { EventsTab(viewModel, navController) },
+        R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
         if (enableTimesTab(context) && !removeThirdTab) R.string.owghat to {
             TimesTab(
+                navigateToSettingsLocationTab,
+                navigateToAstronomy,
                 viewModel,
-                navController
             )
         } else null,
     )
@@ -442,37 +431,6 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 }
 
 @Composable
-private fun EventsTab(viewModel: CalendarViewModel, navController: NavController) {
-    EventsTab(
-        navigateToHolidaysSettings = {
-            navController.navigateSafe(
-                CalendarFragmentDirections.navigateToSettings(
-                    tab = INTERFACE_CALENDAR_TAB, preferenceKey = PREF_HOLIDAY_TYPES
-                )
-            )
-        },
-        viewModel = viewModel,
-    )
-}
-
-@Composable
-private fun TimesTab(viewModel: CalendarViewModel, navController: NavController) {
-    TimesTab(
-        navigateToSettingsLocationTab = {
-            navController.navigateSafe(
-                CalendarFragmentDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
-            )
-        },
-        navigateToAstronomy = { dayOffset ->
-            navController.navigateSafe(
-                CalendarFragmentDirections.actionCalendarToAstronomy(dayOffset)
-            )
-        },
-        viewModel,
-    )
-}
-
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
     LaunchedEffect(null) {
@@ -549,7 +507,7 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
 }
 
 @Composable
-private fun Toolbar(viewModel: CalendarViewModel) {
+private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
@@ -612,7 +570,7 @@ private fun Toolbar(viewModel: CalendarViewModel) {
             titleContentColor = colorOnAppBar,
         ),
         navigationIcon = {
-            IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+            IconButton(onClick = { openDrawer() }) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = stringResource(R.string.open_drawer)
@@ -649,6 +607,8 @@ private fun Toolbar(viewModel: CalendarViewModel) {
                 }
             }
 
+            val addEvent = AddEvent(viewModel)
+
             Box {
                 var showMenu by rememberSaveable { mutableStateOf(false) }
                 TooltipBox(
@@ -665,14 +625,19 @@ private fun Toolbar(viewModel: CalendarViewModel) {
                         )
                     }
                 }
-                Menu(viewModel, showMenu) { showMenu = false }
+                Menu(viewModel, showMenu, addEvent) { showMenu = false }
             }
         },
     )
 }
 
 @Composable
-private fun Menu(viewModel: CalendarViewModel, showMenu: Boolean, closeMenu: () -> Unit) {
+private fun Menu(
+    viewModel: CalendarViewModel,
+    showMenu: Boolean,
+    addEvent: () -> Unit,
+    closeMenu: () -> Unit
+) {
     var showDayPickerDialog by remember { mutableStateOf(false) }
     var showShiftWorkDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -686,7 +651,6 @@ private fun Menu(viewModel: CalendarViewModel, showMenu: Boolean, closeMenu: () 
             },
         )
 
-        val addEvent = AddEvent(viewModel)
         DropdownMenuItem(
             text = { Text(stringResource(R.string.add_event)) },
             onClick = {

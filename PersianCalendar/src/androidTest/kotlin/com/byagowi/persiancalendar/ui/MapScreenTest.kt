@@ -33,7 +33,7 @@ class MapScreenTest {
         var navigateUpString = ""
         composeTestRule.setContentWithTheme {
             navigateUpString = stringResource(R.string.navigate_up)
-            MapScreen(MapViewModel()) { navigateUpIsCalled = true }
+            MapScreen({ navigateUpIsCalled = true }, MapViewModel())
         }
         composeTestRule.onNodeWithContentDescription(navigateUpString)
             .assertHasClickAction()

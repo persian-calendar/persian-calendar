@@ -42,7 +42,7 @@ class LevelScreenTest {
             navigateUpString = stringResource(R.string.navigate_up)
             LevelScreen(
                 activity = LocalContext.current as ComponentActivity,
-                popNavigation = { navigateUpIsCalled = true },
+                navigateUp = { navigateUpIsCalled = true },
                 navigateToCompass = { assert(false) }
             )
         }
@@ -61,7 +61,7 @@ class LevelScreenTest {
             compassString = stringResource(R.string.compass)
             LevelScreen(
                 activity = LocalContext.current as ComponentActivity,
-                popNavigation = { assert(false) },
+                navigateUp = { assert(false) },
                 navigateToCompass = { navigateToCompassIsCalled = true }
             )
         }

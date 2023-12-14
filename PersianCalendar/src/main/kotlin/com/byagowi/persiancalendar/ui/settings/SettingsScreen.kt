@@ -6,11 +6,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Icon
 import android.os.Build
-import android.os.Bundle
 import android.provider.Settings
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -60,15 +56,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -87,7 +80,6 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -98,27 +90,10 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
-class SettingsFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val root = ComposeView(inflater.context)
-        val activity = activity ?: return root
-        val args by navArgs<SettingsFragmentArgs>()
-        root.setContent {
-            AppTheme { SettingsScreen(activity, args.tab, args.preferenceKey) }
-        }
-        return root
-    }
-}
-
-const val INTERFACE_CALENDAR_TAB = 0
-const val WIDGET_NOTIFICATION_TAB = 1
-const val LOCATION_ATHAN_TAB = 2
-
 @Composable
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 fun SettingsScreen(
+    openDrawer: () -> Unit,
     activity: ComponentActivity,
     initialPage: Int,
     destination: String,
@@ -136,7 +111,7 @@ fun SettingsScreen(
             titleContentColor = colorOnAppBar,
         ),
         navigationIcon = {
-            IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+            IconButton(onClick = { openDrawer() }) {
                 Icon(
                     imageVector = Icons.Default.Menu,
                     contentDescription = stringResource(R.string.open_drawer)
@@ -226,6 +201,10 @@ fun SettingsScreen(
         }
     }
 }
+
+const val INTERFACE_CALENDAR_TAB = 0
+const val WIDGET_NOTIFICATION_TAB = 1
+const val LOCATION_ATHAN_TAB = 2
 
 @Composable
 private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {

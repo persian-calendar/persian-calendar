@@ -99,7 +99,7 @@ private fun DeviceInformationScreenPreview() = DeviceInformationScreen {}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DeviceInformationScreen(popNavigation: () -> Unit) {
+fun DeviceInformationScreen(navigateUp: () -> Unit) {
     val scrollBehavior = exitUntilCollapsedScrollBehavior()
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
@@ -119,7 +119,7 @@ fun DeviceInformationScreen(popNavigation: () -> Unit) {
                 titleContentColor = colorOnAppBar,
             ),
             navigationIcon = {
-                IconButton(onClick = popNavigation) {
+                IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Default.ArrowBack,
                         contentDescription = stringResource(R.string.navigate_up)

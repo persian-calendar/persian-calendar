@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.ui.converter
 
 import android.content.res.Configuration
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -62,7 +59,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -73,8 +69,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Clock
@@ -86,7 +80,6 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -98,22 +91,12 @@ import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.StateFlow
 import java.util.TimeZone
 
-class ConverterFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val viewModel by viewModels<ConverterViewModel>()
-        val root = ComposeView(inflater.context)
-        root.setContent {
-            AppTheme { ConverterScreen(viewModel) { activity?.shareText(it) } }
-        }
-        return root
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConverterScreen(viewModel: ConverterViewModel, shareText: (String) -> Unit) {
+fun ConverterScreen(
+    openDrawer: () -> Unit,
+    viewModel: ConverterViewModel
+) {
     val context = LocalContext.current
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
@@ -163,7 +146,7 @@ fun ConverterScreen(viewModel: ConverterViewModel, shareText: (String) -> Unit) 
                 titleContentColor = colorOnAppBar,
             ),
             navigationIcon = {
-                IconButton(onClick = { (context as? MainActivity)?.openDrawer() }) {
+                IconButton(onClick = { openDrawer() }) {
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = stringResource(R.string.open_drawer)
@@ -196,7 +179,7 @@ fun ConverterScreen(viewModel: ConverterViewModel, shareText: (String) -> Unit) 
                         when (screenMode) {
                             ConverterScreenMode.Converter -> {
                                 val jdn = viewModel.selectedDate.value
-                                shareText(
+                                context.shareText(
                                     listOf(
                                         dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                                         context.getString(R.string.equivalent_to),
@@ -208,7 +191,7 @@ fun ConverterScreen(viewModel: ConverterViewModel, shareText: (String) -> Unit) 
                             ConverterScreenMode.Distance -> {
                                 val jdn = viewModel.selectedDate.value
                                 val secondJdn = viewModel.secondSelectedDate.value
-                                shareText(
+                                context.shareText(
                                     calculateDaysDifference(
                                         context.resources,
                                         jdn,
@@ -219,7 +202,7 @@ fun ConverterScreen(viewModel: ConverterViewModel, shareText: (String) -> Unit) 
                             }
 
                             ConverterScreenMode.Calculator -> {
-                                shareText(runCatching {
+                                context.shareText(runCatching {
                                     // running this inside a runCatching block is absolutely important
                                     eval(viewModel.calculatorInputText.value)
                                 }.getOrElse { it.message } ?: "")

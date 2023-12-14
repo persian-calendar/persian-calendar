@@ -31,14 +31,14 @@ class SettingsScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            SettingsScreen(LocalContext.current as ComponentActivity, 0, "")
+            SettingsScreen({}, LocalContext.current as ComponentActivity, 0, "")
         }
     }
 
     @Test
     fun bringInterfaceCalendarTab() {
         composeTestRule.setContentWithTheme {
-            SettingsScreen(LocalContext.current as ComponentActivity, INTERFACE_CALENDAR_TAB, "")
+            SettingsScreen({}, LocalContext.current as ComponentActivity, INTERFACE_CALENDAR_TAB, "")
         }
     }
 
@@ -46,6 +46,7 @@ class SettingsScreenTest {
     fun bringWidgetNotificationTab() {
         composeTestRule.setContentWithTheme {
             SettingsScreen(
+                {},
                 LocalContext.current as ComponentActivity,
                 WIDGET_NOTIFICATION_TAB,
                 ""
@@ -56,7 +57,7 @@ class SettingsScreenTest {
     @Test
     fun bringLocationAthanTab() {
         composeTestRule.setContentWithTheme {
-            SettingsScreen(LocalContext.current as ComponentActivity, LOCATION_ATHAN_TAB, "")
+            SettingsScreen({}, LocalContext.current as ComponentActivity, LOCATION_ATHAN_TAB, "")
         }
     }
 }

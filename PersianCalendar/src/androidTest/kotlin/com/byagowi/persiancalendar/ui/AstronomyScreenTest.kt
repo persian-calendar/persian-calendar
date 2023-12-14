@@ -30,7 +30,7 @@ class AstronomyScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            AstronomyScreen(AstronomyViewModel()) {}
+            AstronomyScreen({}, {}, AstronomyViewModel())
         }
     }
 
@@ -40,7 +40,7 @@ class AstronomyScreenTest {
         var mapString = ""
         composeTestRule.setContentWithTheme {
             mapString = stringResource(R.string.map)
-            AstronomyScreen(AstronomyViewModel()) { navigateToMapIsCalled = true }
+            AstronomyScreen({}, { navigateToMapIsCalled = true }, AstronomyViewModel())
         }
         composeTestRule.onNodeWithContentDescription(mapString)
             .assertHasClickAction()
