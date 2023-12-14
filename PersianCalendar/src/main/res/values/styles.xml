@@ -37,8 +37,6 @@
 
     <!-- Applied to all themes -->
     <style name="SharedStyle">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:typeface">sans</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
@@ -121,8 +119,6 @@
     </style>
 
     <style name="ModernTheme" parent="BaseLightTheme">
-        <item name="android:windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="screenBackgroundGradientStart">@color/modern_gradient_start</item>
