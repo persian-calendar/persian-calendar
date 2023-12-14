@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -91,7 +90,7 @@ fun LocationAthanSettings(activity: ComponentActivity) {
         CoordinatesDialog(
             navigateToMap = {
 //                activity.findNavController(R.id.navHostFragment).navigate(R.id.map)
-                            },
+            },
             onDismissRequest = onDismissRequest
         )
     }

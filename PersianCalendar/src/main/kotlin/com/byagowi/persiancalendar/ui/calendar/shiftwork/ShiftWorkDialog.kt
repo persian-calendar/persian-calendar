@@ -84,7 +84,12 @@ fun ShiftWorkDialog(
                 CompositionLocalProvider(
                     LocalTextStyle provides MaterialTheme.typography.bodyMedium
                 ) {
-                    ShiftWorkDialogContent(viewModel, selectedJdn, onDismissRequest, refreshCalendar)
+                    ShiftWorkDialogContent(
+                        viewModel,
+                        selectedJdn,
+                        onDismissRequest,
+                        refreshCalendar
+                    )
                 }
             }
         }

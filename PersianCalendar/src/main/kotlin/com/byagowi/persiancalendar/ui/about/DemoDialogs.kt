@@ -9,10 +9,8 @@ import android.graphics.Color
 import android.graphics.ComposeShader
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.Point
 import android.graphics.PorterDuff
 import android.graphics.RadialGradient
-import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
@@ -41,7 +39,6 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.Scroller
 import android.widget.SeekBar
 import android.widget.Spinner
 import android.widget.TextView
@@ -51,8 +48,6 @@ import androidx.annotation.ColorInt
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.component1
-import androidx.core.graphics.component2
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.withMatrix

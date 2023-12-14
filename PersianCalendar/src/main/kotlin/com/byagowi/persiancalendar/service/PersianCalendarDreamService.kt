@@ -1,16 +1,13 @@
 package com.byagowi.persiancalendar.service
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
 import android.service.dreams.DreamService
 import android.view.ContextThemeWrapper
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.core.view.isVisible
@@ -19,8 +16,6 @@ import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.logException
-import kotlin.math.hypot
-import kotlin.math.min
 import kotlin.random.Random
 
 class PersianCalendarDreamService : DreamService() {

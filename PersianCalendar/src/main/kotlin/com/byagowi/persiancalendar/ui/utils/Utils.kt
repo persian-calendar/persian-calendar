@@ -54,8 +54,6 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
@@ -191,8 +189,9 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
 
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return setGranted(true)
     if (ActivityCompat.checkSelfPermission(
-        context, Manifest.permission.READ_CALENDAR
-    ) == PackageManager.PERMISSION_GRANTED) {
+            context, Manifest.permission.READ_CALENDAR
+        ) == PackageManager.PERMISSION_GRANTED
+    ) {
         context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) }
         return setGranted(true)
     }

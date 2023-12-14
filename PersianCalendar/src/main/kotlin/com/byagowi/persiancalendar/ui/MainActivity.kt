@@ -24,8 +24,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DateRange
@@ -522,9 +520,11 @@ fun App(activity: ComponentActivity, intentStartDestination: String?) {
                     },
                 )
             }
+
             composable(licensesRoute) {
                 LicensesScreen { navController.navigateUp() }
             }
+
             composable(deviceInformationRoute) {
                 DeviceInformationScreen { navController.popBackStack() }
             }

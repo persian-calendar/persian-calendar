@@ -116,7 +116,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
@@ -756,7 +755,7 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
         body {
             h1 {
                 +listOfNotNull(
-                    context?.appPrefs?.cityName,
+                    context.appPrefs?.cityName,
                     language.my.format(date.monthName, formatNumber(date.year))
                 ).joinToString(spacedComma)
             }
