@@ -7,11 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.utils.appPrefs
-import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -26,10 +24,11 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _selectedDay = MutableStateFlow(Jdn.today())
     val selectedDay: StateFlow<Jdn> get() = _selectedDay
 
-    private val _selectedMonth = MutableStateFlow(
-        mainCalendar.getMonthStartFromMonthsDistance(selectedDay.value, 0)
-    )
-    val selectedMonth: StateFlow<AbstractDate> get() = _selectedMonth
+    private val _selectedMonthOffset = MutableStateFlow(0)
+    val selectedMonthOffset: StateFlow<Int> get() = _selectedMonthOffset
+
+    private val _selectedMonthOffsetCommand = MutableStateFlow<Int?>(null)
+    val selectedMonthOffsetCommand: StateFlow<Int?> get() = _selectedMonthOffsetCommand
 
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
@@ -40,17 +39,43 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _eventsFlow = MutableSharedFlow<List<CalendarEvent<*>>>()
     val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
+    private val _refreshToken = MutableStateFlow(0)
+    val refreshToken: StateFlow<Int> = _refreshToken
+
+    private val _isHighlighted = MutableStateFlow(false)
+    val isHighlighted: StateFlow<Boolean> = _isHighlighted
+
+    private val _removedThirdTab = MutableStateFlow(false)
+    val removedThirdTab: StateFlow<Boolean> = _removedThirdTab
+
     // Commands
-    fun changeSelectedMonth(selectedMonth: AbstractDate) {
-        _selectedMonth.value = selectedMonth
+    fun changeSelectedMonthOffset(offset: Int) {
+        _selectedMonthOffset.value = offset
+    }
+
+    fun changeSelectedMonthOffsetCommand(offset: Int?) {
+        _selectedMonthOffsetCommand.value = offset
     }
 
     fun changeSelectedDay(jdn: Jdn) {
+        _isHighlighted.value = true
         _selectedDay.value = jdn
+    }
+
+    fun clearHighlightedDay() {
+        _isHighlighted.value = false
     }
 
     fun changeSelectedTabIndex(index: Int) {
         _selectedTabIndex.value = index
+    }
+
+    fun refreshCalendar() {
+        ++_refreshToken.value
+    }
+
+    fun removeThirdTab() {
+        _removedThirdTab.value = true
     }
 
     fun openSearch() {

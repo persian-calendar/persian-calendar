@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -39,7 +40,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
@@ -98,21 +99,25 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
         LaunchedEffect(null) { if (destination == PREF_HOLIDAY_TYPES) showDialog = true }
         if (showDialog) HolidaysTypesDialog { showDialog = false }
     }
-    SettingsSwitch(
-        PREF_SHOW_DEVICE_CALENDAR_EVENTS, false,
-        stringResource(R.string.show_device_calendar_events),
-        stringResource(R.string.show_device_calendar_events_summary),
-        onBeforeToggle = {
-            if (it && ActivityCompat.checkSelfPermission(
-                    activity, Manifest.permission.READ_CALENDAR
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                activity.askForCalendarPermission()
-                false
-            } else it
-        },
-        followChanges = true,
-    )
+    run {
+        var showDialog by remember { mutableStateOf(false) }
+        SettingsSwitch(
+            PREF_SHOW_DEVICE_CALENDAR_EVENTS, false,
+            stringResource(R.string.show_device_calendar_events),
+            stringResource(R.string.show_device_calendar_events_summary),
+            onBeforeToggle = {
+                if (it && ActivityCompat.checkSelfPermission(
+                        activity, Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    showDialog = true
+                    false
+                } else it
+            },
+            followChanges = true,
+        )
+        if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+    }
     SettingsClickable(
         stringResource(R.string.calendars_priority),
         stringResource(R.string.calendars_priority_summary)

@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="grid_calendar_height">320sp</dimen>
-    <dimen name="grid_calendar_height_max">400sp</dimen>
-    <dimen name="grid_calendar_land_width">340sp</dimen>
-    <dimen name="grid_calendar_land_width_max">460sp</dimen>
-    <dimen name="grid_calendar_padding_bottom">4sp</dimen>
-
     <!-- analogous to compat's listPreferredItemPaddingLeft/Right -->
     <dimen name="time_item_size">100dp</dimen>
     <dimen name="calendar_item_size">100dp</dimen>

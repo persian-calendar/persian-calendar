@@ -61,6 +61,7 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
@@ -77,11 +78,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
-import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
@@ -102,7 +103,6 @@ import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.MainActivityBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
@@ -120,7 +120,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
-import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -128,7 +127,6 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.enableDeviceCalendar
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
@@ -141,19 +139,18 @@ import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.roundToInt
 
-
-/**
- * Program activity for android
- */
 class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     NavController.OnDestinationChangedListener {
 
     private var creationDateJdn = Jdn.today()
     private var settingHasChanged = false
-    private lateinit var binding: MainActivityBinding
+
+    private lateinit var drawer: DrawerLayout
+    private lateinit var navHostFragmentView: FragmentContainerView
+    private lateinit var navigation: ComposeView
 
     private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = binding.root.closeDrawer(GravityCompat.START)
+        override fun handleOnBackPressed() = drawer.closeDrawer(GravityCompat.START)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -170,15 +167,16 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        binding = MainActivityBinding.inflate(layoutInflater).also {
-            setContentView(it.root)
-        }
+        setContentView(R.layout.main_activity)
+        drawer = findViewById(R.id.root)
+        navHostFragmentView = findViewById(R.id.navHostFragment)
+        navigation = findViewById(R.id.navigation)
         ensureDirectionality()
         setNavHostBackground()
 
-        binding.root.addDrawerListener(createDrawerListener())
+        drawer.addDrawerListener(createDrawerListener())
 
-        binding.navigation.setContent {
+        navigation.setContent {
             AppTheme {
                 AppDrawer(
                     isDrawerOpen,
@@ -187,7 +185,7 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
                     when (id) {
                         R.id.exit -> finish()
                         else -> {
-                            binding.root.closeDrawer(GravityCompat.START)
+                            drawer.closeDrawer(GravityCompat.START)
                             if (navHostFragment?.navController?.currentDestination?.id != id) {
                                 clickedItem = id
                             }
@@ -216,14 +214,9 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
-        if (isShowDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.READ_CALENDAR
-            ) != PackageManager.PERMISSION_GRANTED
-        ) askForCalendarPermission()
-
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar) {
             Toast.makeText(
-                binding.root.context, getString(R.string.outdated_app), Toast.LENGTH_LONG
+                this, getString(R.string.outdated_app), Toast.LENGTH_LONG
             ).show() // it.setAction(getString(R.string.update)) { bringMarketPage() }
         }
 
@@ -231,14 +224,14 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { root, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(drawer) { root, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 leftMargin = insets.left
                 rightMargin = insets.right
             }
             val transparencyState = SystemBarsTransparency(this@MainActivity)
-            binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = if (transparencyState.shouldStatusBarBeTransparent) 0 else insets.top
                 bottomMargin =
                     if (transparencyState.shouldNavigationBarBeTransparent) 0 else insets.bottom
@@ -255,13 +248,13 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
         if (!appPrefs.getBoolean(
                 PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT
             )
-        ) binding.navHostFragment.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
-        else binding.navHostFragment.setBackgroundResource(R.drawable.gradient_background)
+        ) navHostFragmentView.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
+        else navHostFragmentView.setBackgroundResource(R.drawable.gradient_background)
     }
 
     // This shouldn't be needed but as a the last resort
     private fun ensureDirectionality() {
-        binding.root.layoutDirection =
+        drawer.layoutDirection =
             if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case resources isn't correct
             else resources.configuration.layoutDirection
     }
@@ -312,15 +305,6 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET -> prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
 
-            PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
-                if (prefs.getBoolean(
-                        PREF_SHOW_DEVICE_CALENDAR_EVENTS, true
-                    ) && ActivityCompat.checkSelfPermission(
-                        this, Manifest.permission.READ_CALENDAR
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) askForCalendarPermission()
-            }
-
             PREF_THEME -> {
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going
@@ -356,10 +340,6 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            CALENDAR_READ_PERMISSION_REQUEST_CODE -> {
-                enableDeviceCalendar(this, navHostFragment?.navController)
-            }
-
             POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
                 val isGranted = ActivityCompat.checkSelfPermission(
@@ -411,7 +391,7 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
     private var clickedItem = 0
 
     // TODO: Ugly, to get rid of after full Compose migration
-    fun openDrawer() = binding.root.openDrawer(GravityCompat.START)
+    fun openDrawer() = drawer.openDrawer(GravityCompat.START)
 
     private fun createDrawerListener() = object : DrawerLayout.SimpleDrawerListener() {
         val slidingDirection = if (resources.isRtl) -1f else +1f
@@ -428,16 +408,16 @@ class MainActivity : FragmentActivity(), SharedPreferences.OnSharedPreferenceCha
             } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
-            binding.navHostFragment.translationX =
+            navHostFragmentView.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection * .97f
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurs.isNotEmpty()) {
                 val blurIndex =
                     if (slideOffset.isNaN()) 0 else ((blurs.size - 1) * slideOffset).roundToInt()
-                binding.navHostFragment.setRenderEffect(blurs[blurIndex])
-                binding.navigation.setRenderEffect(blurs[blurs.size - 1 - blurIndex])
+                navHostFragmentView.setRenderEffect(blurs[blurIndex])
+                navigation.setRenderEffect(blurs[blurs.size - 1 - blurIndex])
             }
-            binding.root.bringChildToFront(drawerView)
-            binding.root.requestLayout()
+            drawer.bringChildToFront(drawerView)
+            drawer.requestLayout()
         }
 
         override fun onDrawerOpened(drawerView: View) {

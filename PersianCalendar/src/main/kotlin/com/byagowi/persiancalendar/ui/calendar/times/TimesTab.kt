@@ -62,7 +62,6 @@ import java.util.GregorianCalendar
 
 @Composable
 fun TimesTab(
-    navigateToSelf: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel
@@ -74,7 +73,7 @@ fun TimesTab(
         header = R.string.ask_user_to_set_location,
         discardAction = {
             context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-            navigateToSelf()
+            viewModel.removeThirdTab()
         },
         acceptAction = navigateToSettingsLocationTab,
     )

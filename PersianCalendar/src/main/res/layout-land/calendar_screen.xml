@@ -14,10 +14,10 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
 
-        <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-            android:id="@+id/calendarPager"
-            android:layout_width="@dimen/grid_calendar_land_width"
-            android:layout_height="match_parent" />
+<!--        <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager-->
+<!--            android:id="@+id/calendarPager"-->
+<!--            android:layout_width="@dimen/grid_calendar_land_width"-->
+<!--            android:layout_height="match_parent" />-->
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/content"

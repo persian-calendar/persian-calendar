@@ -66,7 +66,6 @@ import java.util.UUID
 @Composable
 fun EventsTab(
     navigateToHolidaysSettings: () -> Unit,
-    refreshCalendarPagerForEvents: () -> Unit,
     viewModel: CalendarViewModel,
 ) = Column(Modifier.fillMaxWidth()) {
     Spacer(Modifier.height(8.dp))
@@ -132,7 +131,7 @@ fun EventsTab(
 
     val launcher = rememberLauncherForActivityResult(ViewEvent()) {
         refreshToken = UUID.randomUUID()
-        refreshCalendarPagerForEvents()
+        viewModel.refreshCalendar()
     }
 
     val animationTime = integerResource(android.R.integer.config_mediumAnimTime)

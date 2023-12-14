@@ -39,7 +39,7 @@ fun renderMonthWidget(
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val cellWidth = width.toFloat() / columnsCount
     val diameter = min(cellWidth, cellHeight)
-    val sharedData = SharedDayViewData(context, cellHeight, diameter, textColor)
+    val sharedData = SharedDayViewData(context, diameter, textColor)
     val todayJdn = Jdn.today()
     val today = todayJdn.toCalendar(mainCalendar)
     val baseDate = mainCalendar.createDate(today.year, today.month, 1)

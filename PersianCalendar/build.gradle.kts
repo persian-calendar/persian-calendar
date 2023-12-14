@@ -22,7 +22,6 @@ android {
     compileSdk = 34
 
     buildFeatures {
-        viewBinding = true
         buildConfig = true
         compose = true
     }
@@ -133,8 +132,6 @@ dependencies {
 
     // Google/JetBrains owned libraries (roughly platform libraries)
     implementation(libs.drawerlayout)
-    implementation(libs.recyclerview)
-    implementation(libs.viewpager2)
     implementation(libs.dynamicanimation)
 
     implementation(libs.navigation.fragment.ktx)

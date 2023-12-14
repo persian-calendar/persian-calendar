@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 
 class SharedDayViewData(
-    context: Context, height: Float, diameter: Float = height,
+    context: Context, diameter: Float,
     @ColorInt private val widgetTextColor: Int? = null
 ) {
     private val dp = context.resources.dp
@@ -29,8 +29,6 @@ class SharedDayViewData(
     private val eventIndicatorsGap = diameter * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
     val scorpioSign = context.getString(R.string.scorpio).first() + if (isArabicScript) ZWJ else ""
-
-    val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (widgetTextColor == null || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) return

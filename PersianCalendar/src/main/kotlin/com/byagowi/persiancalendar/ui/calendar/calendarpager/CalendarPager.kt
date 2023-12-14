@@ -1,206 +1,126 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import android.content.Context
-import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.core.view.doOnAttach
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
+import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.MonthPageBinding
-import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.utils.isLandscape
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.sp
-import io.github.persiancalendar.calendar.AbstractDate
-import java.lang.ref.WeakReference
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
-class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
+    val context = LocalContext.current
+    val pagerState = rememberPagerState(
+        initialPage = applyOffset(0),
+        pageCount = ::monthsLimit,
+    )
 
-    // Public API
-    var onDayClicked = fun(_: Jdn) {}
-    var onDayLongClicked = fun(_: Jdn) {}
+    val scope = rememberCoroutineScope()
 
-    // Selected month is visible current month of the pager, maybe a day is not selected on it yet
-    var onMonthSelected = fun() {}
-    private val baseJdn = Jdn.today()
-    val selectedMonth: AbstractDate
-        get() = mainCalendar.getMonthStartFromMonthsDistance(
-            baseJdn, -applyOffset(viewPager.currentItem)
-        )
-
-    fun setSelectedDay(
-        jdn: Jdn,
-        highlight: Boolean = true,
-        monthChange: Boolean = true,
-        smoothScroll: Boolean = true
-    ) {
-        selectedJdn = if (highlight) jdn else null
-
-        if (monthChange) {
-            viewPager.setCurrentItem(
-                applyOffset(position = -mainCalendar.getMonthsDistance(baseJdn, jdn)), smoothScroll
-            )
-        }
-
-        refresh()
+    val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
+    selectedMonthOffsetCommand?.let {
+        viewModel.changeSelectedMonthOffsetCommand(null)
+        scope.launch { pagerState.animateScrollToPage(applyOffset(-it)) }
     }
 
-    // Public API, to be reviewed
-    fun refresh(isEventsModified: Boolean = false) = pagesViewHolders.mapNotNull { it.get() }
-        .forEach { it.pageRefresh(isEventsModified, selectedJdn) }
-
-    private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
-
-    // Package API, to be rewritten with viewPager.adapter.notifyItemChanged()
-    private fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
-
-    private val monthsLimit = 5000 // this should be an even number
-
-    private fun applyOffset(position: Int) = monthsLimit / 2 - position
-
-    private val viewPager = ViewPager2(context)
-    private var selectedJdn: Jdn? = null
-
-    init {
-        viewPager.adapter = PagerAdapter()
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) = refresh()
-        })
-        addView(viewPager)
-        viewPager.setCurrentItem(applyOffset(0), false)
-    }
-
-    inner class PagerAdapter : RecyclerView.Adapter<PagerAdapter.ViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            MonthPageBinding.inflate(parent.context.layoutInflater, parent, false)
-        )
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
-
-        override fun getItemCount() = monthsLimit
-
-        private val monthViewInitializer by lazy(LazyThreadSafetyMode.NONE) {
-            val suitableHeight = (resources.displayMetrics.heightPixels / 2.2f).coerceIn(
-                resources.getDimension(R.dimen.grid_calendar_height),
-                resources.getDimension(R.dimen.grid_calendar_height_max)
+    HorizontalPager(state = pagerState, modifier = modifier) { index ->
+        Row(
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier.fillMaxHeight(),
+        ) {
+            // TODO: Ideally this should be onPrimary
+            var height by remember { mutableStateOf(100) }
+            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+            Icon(
+                Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                contentDescription = null,
+                tint = colorOnAppBar,
+                modifier = Modifier
+                    .padding(start = 10.dp)
+                    .height(with(LocalDensity.current) { height.toDp() } / 7)
+                    .combinedClickable(
+                        onClick = {
+                            scope.launch { pagerState.animateScrollToPage(index - 1) }
+                        },
+                        onClickLabel = stringResource(
+                            R.string.previous_x, stringResource(R.string.month)
+                        ),
+                        onLongClick = {
+                            scope.launch { pagerState.animateScrollToPage(index - 12) }
+                        },
+                        onLongClickLabel = stringResource(
+                            R.string.previous_x, stringResource(R.string.year)
+                        ),
+                    )
+                    .alpha(.9f),
             )
+            val isCurrentSelection = pagerState.currentPage == index
+            if (pagerState.currentPage == index)
+                viewModel.changeSelectedMonthOffset(-applyOffset(index))
 
-            if (resources.isLandscape) layoutParams.width =
-                (resources.displayMetrics.widthPixels / 2.05f)
-                    .coerceAtMost(resources.getDimension(R.dimen.grid_calendar_land_width_max))
-                    .toInt()
-            else layoutParams.height = suitableHeight.toInt()
-
-            val cellHeight = suitableHeight / 7 - resources.sp(4.5f)
-            val sharedDayViewData = SharedDayViewData(context, cellHeight)
-            fun(binding: MonthPageBinding) {
-                binding.monthView.initialize(sharedDayViewData, this@CalendarPager)
-
-                binding.previous.layoutParams.height = (cellHeight / 1.4).toInt()
-                binding.next.layoutParams.height = (cellHeight / 1.4).toInt()
-            }
-        }
-
-        @OptIn(ExperimentalFoundationApi::class)
-        inner class ViewHolder(val binding: MonthPageBinding) :
-            RecyclerView.ViewHolder(binding.root) {
-
-            var pageRefresh = fun(_: Boolean, _: Jdn?) {}
-
-            init {
-                doOnAttach { monthViewInitializer(binding) }
-
-                binding.previous.setContent {
-                    // TODO: Ideally this should be onPrimary
-                    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-                    Icon(
-                        Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                        contentDescription = null,
-                        tint = colorOnAppBar,
-                        modifier = Modifier.combinedClickable(
-                            onClick = {
-                                viewPager.setCurrentItem(viewPager.currentItem - 1, true)
-                            },
-                            onClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.month)
-                            ),
-                            onLongClick = {
-                                viewPager.setCurrentItem(viewPager.currentItem - 12, false)
-                            },
-                            onLongClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.year)
-                            ),
+            val currentMonthOffset = -applyOffset(index)
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(bottom = 4.dp)
+                    .onSizeChanged { height = (it.height * 1.08).roundToInt() },
+            ) { Month(viewModel, currentMonthOffset, isCurrentSelection) }
+            Icon(
+                Icons.AutoMirrored.Default.KeyboardArrowRight,
+                contentDescription = null,
+                tint = colorOnAppBar,
+                modifier = Modifier
+                    .padding(end = 10.dp)
+                    .height(with(LocalDensity.current) { height.toDp() } / 7)
+                    .combinedClickable(
+                        onClick = {
+                            scope.launch { pagerState.animateScrollToPage(index + 1) }
+                        },
+                        onClickLabel = stringResource(
+                            R.string.next_x, stringResource(R.string.month)
+                        ),
+                        onLongClick = {
+                            scope.launch { pagerState.animateScrollToPage(index + 12) }
+                        },
+                        onLongClickLabel = stringResource(
+                            R.string.next_x, stringResource(R.string.year)
                         ),
                     )
-                }
-
-                binding.next.setContent {
-                    // TODO: Ideally this should be onPrimary
-                    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-                    Icon(
-                        Icons.AutoMirrored.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                        tint = colorOnAppBar,
-                        modifier = Modifier.combinedClickable(
-                            onClick = {
-                                viewPager.setCurrentItem(viewPager.currentItem + 1, true)
-                            },
-                            onClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.month)
-                            ),
-                            onLongClick = {
-                                viewPager.setCurrentItem(viewPager.currentItem + 12, false)
-                            },
-                            onLongClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.year)
-                            ),
-                        ),
-                    )
-                }
-
-                addViewHolder(this)
-            }
-
-            fun bind(position: Int) {
-                val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(
-                    baseJdn, -applyOffset(position)
-                )
-                val monthStartJdn = Jdn(monthStartDate)
-                val monthLength =
-                    mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
-                binding.monthView.bind(monthStartJdn, monthStartDate)
-
-                pageRefresh = { isEventsModification: Boolean, jdn: Jdn? ->
-                    if (viewPager.currentItem == position) {
-                        if (isEventsModification && jdn != null) {
-                            binding.monthView.initializeMonthEvents()
-                            onDayClicked(jdn)
-                        } else {
-                            onMonthSelected()
-                        }
-                    }
-                    binding.monthView.selectDay(
-                        if (jdn != null && jdn >= monthStartJdn && jdn - monthStartJdn + 1 <= monthLength) jdn - monthStartJdn + 1
-                        else null
-                    )
-                }
-
-                pageRefresh(false, selectedJdn)
-            }
+                    .alpha(.9f),
+            )
         }
     }
 }
+
+private val monthsLimit = 5000 // this should be an even number
+
+private fun applyOffset(position: Int) = monthsLimit / 2 - position

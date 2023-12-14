@@ -15,14 +15,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -40,14 +41,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
@@ -61,16 +63,17 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShiftWorkDialog(
     selectedJdn: Jdn,
     onDismissRequest: () -> Unit,
-    navigateToSelf: () -> Unit,
+    refreshCalendar: () -> Unit,
 ) {
     val viewModel = remember { ShiftWorkViewModel() }
     // from already initialized global variable till a better solution
     fillViewModelFromGlobalVariables(viewModel, selectedJdn)
-    Dialog(onDismissRequest = onDismissRequest) {
+    BasicAlertDialog(onDismissRequest = onDismissRequest) {
         Surface(
             shape = AlertDialogDefaults.shape,
             color = AlertDialogDefaults.containerColor,
@@ -81,7 +84,7 @@ fun ShiftWorkDialog(
                 CompositionLocalProvider(
                     LocalTextStyle provides MaterialTheme.typography.bodyMedium
                 ) {
-                    ShiftWorkDialogContent(viewModel, selectedJdn, onDismissRequest, navigateToSelf)
+                    ShiftWorkDialogContent(viewModel, selectedJdn, onDismissRequest, refreshCalendar)
                 }
             }
         }
@@ -133,6 +136,8 @@ fun ColumnScope.ShiftWorkDialogContent(
     val lazyListState = rememberLazyListState()
     var selectedTypeDropdownIndex by remember { mutableStateOf(-1) }
     var selectedLengthDropdownIndex by remember { mutableStateOf(-1) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     LazyColumn(
         Modifier
             .weight(weight = 1f, fill = false)
@@ -199,8 +204,8 @@ fun ColumnScope.ShiftWorkDialogContent(
                 Spacer(Modifier.width(4.dp))
                 Box(Modifier.weight(30f)) {
                     TextField(
-                        value = length.toString(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        value = formatNumber(length),
+                        readOnly = true,
                         onValueChange = {
                             selectedTypeDropdownIndex = -1
                             viewModel.changeShiftWorkLengthOfPosition(
@@ -208,19 +213,25 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 it.toIntOrNull() ?: 0
                             )
                         },
-                        modifier = Modifier.onFocusChanged {
-                            if (it.hasFocus) selectedLengthDropdownIndex = position
-                            else if (selectedLengthDropdownIndex == position)
-                                selectedLengthDropdownIndex = -1
-                        },
+                        modifier = Modifier
+                            .onFocusChanged {
+                                if (it.hasFocus) selectedLengthDropdownIndex = position
+                                else if (selectedLengthDropdownIndex == position)
+                                    selectedLengthDropdownIndex = -1
+                            }
+                            .focusRequester(focusRequester),
                     )
                     DropdownMenu(
                         expanded = selectedLengthDropdownIndex == position,
-                        onDismissRequest = { selectedLengthDropdownIndex = -1 },
+                        onDismissRequest = {
+                            focusManager.clearFocus()
+                            selectedLengthDropdownIndex = -1
+                        },
                     ) {
                         (0..14).map { length ->
                             DropdownMenuItem(
                                 onClick = {
+                                    focusManager.clearFocus()
                                     selectedLengthDropdownIndex = -1
                                     viewModel.changeShiftWorkLengthOfPosition(position, length)
                                 },

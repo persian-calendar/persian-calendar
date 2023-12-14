@@ -351,13 +351,3 @@ private fun getCalendarNameAbbr(date: AbstractDate) =
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.toCalendar(it)) }
 
-fun enableDeviceCalendar(context: Context, navController: NavController?) {
-    val isGranted = ActivityCompat.checkSelfPermission(
-        context, Manifest.permission.READ_CALENDAR
-    ) == PackageManager.PERMISSION_GRANTED
-    context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
-    if (isGranted && navController != null && navController.currentDestination?.id == R.id.calendar) {
-        updateStoredPreference(context)
-        navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
-    }
-}

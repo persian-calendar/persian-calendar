@@ -7,7 +7,7 @@ androidx-core = "1.12.0"
 androidx-fragment = "1.6.2"
 androidx-navigation = "2.7.5"
 androidx-test-ext-junit = "1.1.5"
-astronomy = "bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f" # is equal to v2.1.17
+astronomy = "21330a781a29c6f612efe36298156e473d0a4d3a" # is equal to v2.1.18
 browser = "1.7.0"
 compose = "1.6.0-beta02"
 compose-accompanist = "0.32.0"
@@ -30,7 +30,6 @@ kotlinx-serialization-json = "1.6.0"
 ksp = "1.9.21-1.0.15"
 leakcanary = "2.12"
 lifecycle-runtime = "2.6.2"
-material = "1.10.0"
 mockito-core = "5.8.0"
 mockito-kotlin = "5.2.1"
 openlocationcode = "1.0.4"
@@ -38,11 +37,9 @@ persiancalendar-calculator = "371a91149d1fea9c318ef0def94ca0f93a1be0c2"
 persiancalendar-calendar = "a029c1f7fdf7204b8315847b89612eb15a5d519e"
 persiancalendar-praytimes = "36eab5bf0b6f5057357d6fbf0007bea3fab73895"
 persiancalendar-qr = "60ad1863978b35205549eae6af177c45a1e67307"
-recyclerview = "1.3.2"
 room = "2.6.1"
 sqlite = "2.4.0"
 truth = "1.1.5"
-viewpager2 = "1.0.0"
 work-manager = "2.9.0"
 
 [libraries]
@@ -85,7 +82,6 @@ kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm",
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization-json" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
@@ -95,7 +91,6 @@ persiancalendar-calculator = { group = "com.github.persian-calendar", name = "ca
 persiancalendar-calendar = { group = "com.github.persian-calendar", name = "calendar", version.ref = "persiancalendar-calendar" }
 persiancalendar-praytimes = { group = "com.github.persian-calendar", name = "praytimes", version.ref = "persiancalendar-praytimes" }
 persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", version.ref = "persiancalendar-qr" }
-recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
@@ -107,7 +102,6 @@ test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "and
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
-viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
 
 [plugins]

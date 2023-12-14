@@ -1326,7 +1326,6 @@ fun showSensorTestDialog(activity: ComponentActivity) {
         log.addAll(List(width) { emptyFloat })
     }
 
-    @SuppressLint("AppCompatCustomView")
     val textView = object : TextView(activity) {
         override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
             super.onSizeChanged(w, h, oldw, oldh)
@@ -1424,7 +1423,6 @@ fun showSensorTestDialog(activity: ComponentActivity) {
         .show()
 }
 
-@SuppressLint("AppCompatCustomView")
 fun showInputDeviceTestDialog(activity: ComponentActivity) {
     AlertDialog.Builder(activity)
         .setView(
