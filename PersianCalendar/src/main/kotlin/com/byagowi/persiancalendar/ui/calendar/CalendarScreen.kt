@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.os.Build
 import android.provider.CalendarContract
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -184,6 +185,10 @@ fun CalendarScreen(
         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     Column {
         val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
+
+        val scope = rememberCoroutineScope()
+        BackHandler(enabled = searchBoxIsOpen) { scope.launch { viewModel.closeSearch() } }
+
         val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         AnimatedContent(
             searchBoxIsOpen,

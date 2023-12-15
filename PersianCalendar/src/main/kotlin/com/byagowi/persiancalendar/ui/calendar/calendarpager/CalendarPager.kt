@@ -59,7 +59,6 @@ fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
     HorizontalPager(state = pagerState, modifier = modifier) { index ->
         Box(modifier = Modifier.fillMaxHeight()) {
             var size by remember { mutableStateOf(IntSize.Zero) }
-            debugLog("$size")
             // TODO: Ideally this should be onPrimary
             val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
             Icon(
