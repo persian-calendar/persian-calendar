@@ -29,14 +29,14 @@ jobs:
           ./gradlew assembleDebug lintDebug testDebugUnitTest --stacktrace
 
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: PersianCalendar
           path: PersianCalendar/build/outputs/apk/**/*.apk
 
       - name: Archive reports for failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: reports
           path: "*/build/reports"
@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: instrumentation-test-results ${{ matrix.api-level }}
           path: ./**/build/reports/androidTests/connected/**
