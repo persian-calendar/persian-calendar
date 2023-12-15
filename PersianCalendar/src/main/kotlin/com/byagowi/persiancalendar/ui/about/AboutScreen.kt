@@ -39,8 +39,8 @@ import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PermDeviceInformation
@@ -369,7 +369,7 @@ private fun HelpItems() {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Spacer(modifier = Modifier.width(16.dp))
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown,
+                        imageVector = Icons.Default.ExpandMore,
                         contentDescription = stringResource(R.string.more),
                         modifier = Modifier
                             .rotate(angle)

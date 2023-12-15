@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -111,7 +111,7 @@ fun TimesTab(
             if (cityName != null) Text(cityName, style = MaterialTheme.typography.bodyLarge)
             val angle by animateFloatAsState(if (isExpanded) 180f else 0f, label = "angle")
             Icon(
-                imageVector = Icons.Default.KeyboardArrowDown,
+                imageVector = Icons.Default.ExpandMore,
                 contentDescription = null,
                 modifier = Modifier
                     .rotate(angle)
