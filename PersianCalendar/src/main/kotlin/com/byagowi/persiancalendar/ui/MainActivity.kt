@@ -360,7 +360,12 @@ fun App(intentStartDestination: String?, application: Application, finish: () ->
                                     Text(stringResource(title))
                                 }
                             },
-                            selected = id == navBackStackEntry?.destination?.route,
+                            selected = when (val route = navBackStackEntry?.destination?.route) {
+                                levelRoute -> compassRoute
+                                mapRoute -> astronomyRoute
+                                deviceInformationRoute, licensesRoute -> aboutRoute
+                                else -> route ?: calendarRoute
+                            } == id,
                             onClick = {
                                 if (id == null) return@NavigationDrawerItem finish()
                                 scope.launch {
