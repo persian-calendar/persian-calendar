@@ -23,6 +23,8 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,6 +56,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
@@ -84,6 +87,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -111,61 +115,71 @@ fun AboutScreen(
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
 ) {
-    Column {
-        val context = LocalContext.current
-        // TODO: Ideally this should be onPrimary
-        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-
-        @OptIn(ExperimentalMaterial3Api::class)
-        TopAppBar(
-            title = { Text(stringResource(R.string.about)) },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                navigationIconContentColor = colorOnAppBar,
-                actionIconContentColor = colorOnAppBar,
-                titleContentColor = colorOnAppBar,
-            ),
-            navigationIcon = {
-                IconButton(onClick = { openDrawer() }) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(R.string.open_drawer)
-                    )
-                }
-            },
-            actions = {
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.share)) }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { shareApplication(context) }) {
+    val context = LocalContext.current
+    // TODO: Ideally this should be onPrimary
+    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            @OptIn(ExperimentalMaterial3Api::class)
+            TopAppBar(
+                title = { Text(stringResource(R.string.about)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = colorOnAppBar,
+                    actionIconContentColor = colorOnAppBar,
+                    titleContentColor = colorOnAppBar,
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { openDrawer() }) {
                         Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = stringResource(R.string.share)
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = stringResource(R.string.open_drawer)
                         )
                     }
-                }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.device_information)) }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = navigateToDeviceInformation) {
-                        Icon(
-                            imageVector = Icons.Default.PermDeviceInformation,
-                            contentDescription = stringResource(R.string.device_information)
-                        )
+                },
+                actions = {
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip { Text(text = stringResource(R.string.share)) }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = { shareApplication(context) }) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = stringResource(R.string.share)
+                            )
+                        }
                     }
-                }
-            },
-        )
-
-        Box(modifier = Modifier.clip(MaterialCornerExtraLargeTop())) {
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip { Text(text = stringResource(R.string.device_information)) }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = navigateToDeviceInformation) {
+                            Icon(
+                                imageVector = Icons.Default.PermDeviceInformation,
+                                contentDescription = stringResource(R.string.device_information)
+                            )
+                        }
+                    }
+                },
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                )
+                .clip(MaterialCornerExtraLargeTop())
+        ) {
             var logoAnimationAtEnd by remember { mutableStateOf(false) }
             var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
             LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
@@ -254,7 +268,7 @@ fun AboutScreen(
                             ?.asComposeRenderEffect()
                     })
                 Surface(shape = MaterialCornerExtraLargeTop()) {
-                    AboutScreenContent(navigateToLicenses)
+                    AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
             }
         }
@@ -274,7 +288,7 @@ https://github.com/persian-calendar/persian-calendar"""
 }
 
 @Composable
-private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
+private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
     Column {
         // Licenses
         Text(
@@ -338,7 +352,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
         )
         DevelopersChips()
 
-        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+        Spacer(Modifier.height(bottomPadding))
     }
 }
 

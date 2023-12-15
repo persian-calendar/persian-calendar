@@ -16,7 +16,10 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -37,6 +40,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -56,6 +60,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
@@ -70,31 +75,42 @@ private fun LicensesScreenPreview() = LicensesScreen {}
 
 @Composable
 fun LicensesScreen(navigateUp: () -> Unit) {
-    Column {
-        val context = LocalContext.current
-        // TODO: Ideally this should be onPrimary
-        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-        @OptIn(ExperimentalMaterial3Api::class)
-        TopAppBar(
-            title = { Text(stringResource(R.string.licenses)) },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                navigationIconContentColor = colorOnAppBar,
-                actionIconContentColor = colorOnAppBar,
-                titleContentColor = colorOnAppBar,
-            ),
-            navigationIcon = {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.navigate_up)
-                    )
-                }
-            },
-        )
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            val context = LocalContext.current
+            // TODO: Ideally this should be onPrimary
+            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+            @OptIn(ExperimentalMaterial3Api::class)
+            TopAppBar(
+                title = { Text(stringResource(R.string.licenses)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = colorOnAppBar,
+                    actionIconContentColor = colorOnAppBar,
+                    titleContentColor = colorOnAppBar,
+                ),
+                navigationIcon = {
+                    IconButton(onClick = navigateUp) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.navigate_up)
+                        )
+                    }
+                },
+            )
+        }
+    ) { paddingValues ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Surface(shape = MaterialCornerExtraLargeTop()) {
-                Licenses()
+            Surface(
+                shape = MaterialCornerExtraLargeTop(),
+                modifier = Modifier.padding(
+                    top = paddingValues.calculateTopPadding(),
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                ),
+            ) {
+                Licenses(paddingValues.calculateBottomPadding())
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
@@ -164,7 +180,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Licenses() {
+private fun Licenses(bottomPadding: Dp) {
     val sections = remember { getCreditsSections() }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     LazyColumn {
@@ -219,6 +235,6 @@ private fun Licenses() {
                 }
             }
         }
-        item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
+        item { Spacer(Modifier.height(bottomPadding)) }
     }
 }
