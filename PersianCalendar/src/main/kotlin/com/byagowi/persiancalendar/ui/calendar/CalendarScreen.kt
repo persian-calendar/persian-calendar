@@ -327,11 +327,7 @@ fun Details(
         R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
         if (enableTimesTab(context) && !removeThirdTab) R.string.owghat to {
-            TimesTab(
-                navigateToSettingsLocationTab,
-                navigateToAstronomy,
-                viewModel,
-            )
+            TimesTab(navigateToSettingsLocationTab, navigateToAstronomy, viewModel)
         } else null,
     )
 
@@ -762,7 +758,7 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
         body {
             h1 {
                 +listOfNotNull(
-                    context.appPrefs?.cityName,
+                    context.appPrefs.cityName,
                     language.my.format(date.monthName, formatNumber(date.year))
                 ).joinToString(spacedComma)
             }

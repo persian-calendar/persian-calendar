@@ -14,7 +14,6 @@ import android.os.Build
 import android.view.InputDevice
 import android.view.RoundedCorner
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

@@ -171,7 +171,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var previousAppThemeValue: String? = null
 
-//        if (settingHasChanged) { // update when checked menu item is changed
+    //        if (settingHasChanged) { // update when checked menu item is changed
 //            applyAppLanguage(this)
 //            update(applicationContext, true)
 //            settingHasChanged = false // reset for the next time

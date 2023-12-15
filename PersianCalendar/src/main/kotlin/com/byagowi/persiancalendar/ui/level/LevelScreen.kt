@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.level
 import android.content.pm.ActivityInfo
 import android.os.PowerManager
 import android.view.Surface
-import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing

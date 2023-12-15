@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
 import android.content.pm.PackageManager
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
