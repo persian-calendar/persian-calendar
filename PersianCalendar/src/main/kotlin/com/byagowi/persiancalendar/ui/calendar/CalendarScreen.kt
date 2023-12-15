@@ -523,6 +523,10 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
+            val refreshToken by viewModel.refreshToken.collectAsState()
+            // just a noop to update title and subtitle when secondary calendar is toggled
+            refreshToken.run {}
+
             val secondaryCalendar = secondaryCalendar
             val title: String
             val subtitle: String
