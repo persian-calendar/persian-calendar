@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -305,12 +307,19 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
         }) { showDayPickerDialog = false }
     }
 
-    AnimatedVisibility(visible = formattedTime.isNotEmpty()) {
-        Box {
+    Box(Modifier.fillMaxSize()) {
+        AnimatedVisibility(
+            visible = formattedTime.isNotEmpty(),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .safeDrawingPadding()
+                .padding(bottom = 16.dp),
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
             @OptIn(ExperimentalFoundationApi::class) Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .safeDrawingPadding()
                     .height(46.dp)
                     .padding(bottom = 16.dp)
