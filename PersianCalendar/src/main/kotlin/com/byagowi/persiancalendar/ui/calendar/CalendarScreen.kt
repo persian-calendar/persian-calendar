@@ -28,6 +28,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,6 +60,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -88,11 +91,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -176,56 +181,79 @@ fun CalendarScreen(
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel,
 ) {
-    val context = LocalContext.current
-    // Refresh the calendar on resume
-    LaunchedEffect(null) {
-        viewModel.refreshCalendar()
-        context.appPrefs.edit { putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE) }
-    }
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
 
-    val isLandscape =
-        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    Column {
-        val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
+            val scope = rememberCoroutineScope()
+            BackHandler(enabled = searchBoxIsOpen) { scope.launch { viewModel.closeSearch() } }
 
-        val scope = rememberCoroutineScope()
-        BackHandler(enabled = searchBoxIsOpen) { scope.launch { viewModel.closeSearch() } }
-
-        val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
-        AnimatedContent(
-            searchBoxIsOpen,
-            label = "toolbar",
-            transitionSpec = {
-                fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                    fadeOut(animationSpec = tween(animationTime))
+            val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
+            AnimatedContent(
+                searchBoxIsOpen,
+                label = "toolbar",
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(animationTime)).togetherWith(
+                        fadeOut(animationSpec = tween(animationTime))
+                    )
+                },
+            ) { if (it) Search(viewModel) else Toolbar(openDrawer, viewModel) }
+        },
+        floatingActionButton = {
+            val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+            val addEvent = AddEvent(viewModel)
+            ShrinkingFloatingActionButton(
+                modifier = Modifier,
+                isVisible = selectedTabIndex == EVENTS_TAB,
+                action = addEvent,
+                icon = Icons.Default.Add,
+                title = stringResource(R.string.add_event),
+            )
+        }
+    ) { paddingValues ->
+        val context = LocalContext.current
+        // Refresh the calendar on resume
+        LaunchedEffect(null) {
+            viewModel.refreshCalendar()
+            context.appPrefs.edit { putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE) }
+        }
+        val isLandscape =
+            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+        Column(
+            Modifier.padding(
+                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+            )
+        ) {
+            Spacer(Modifier.height(paddingValues.calculateTopPadding()))
+            val configuration = LocalConfiguration.current
+            val screenWidth = configuration.screenWidthDp.dp
+            val screenHeight = configuration.screenHeightDp.dp
+            if (isLandscape) Row {
+                CalendarPager(Modifier.width(screenWidth * 45 / 100), viewModel)
+                Details(
+                    Modifier.fillMaxSize(),
+                    viewModel,
+                    navigateToHolidaysSettings,
+                    navigateToSettingsLocationTab,
+                    navigateToAstronomy,
+                    paddingValues.calculateBottomPadding(),
+                    scrollableTabs = true,
                 )
-            },
-        ) { if (it) Search(viewModel) else Toolbar(openDrawer, viewModel) }
-
-        val configuration = LocalConfiguration.current
-        val screenWidth = configuration.screenWidthDp.dp
-        val screenHeight = configuration.screenHeightDp.dp
-        if (isLandscape) Row {
-            CalendarPager(Modifier.width(screenWidth * 45 / 100), viewModel)
-            Details(
-                Modifier.fillMaxSize(),
-                viewModel,
-                navigateToHolidaysSettings,
-                navigateToSettingsLocationTab,
-                navigateToAstronomy,
-                scrollableTabs = true,
-            )
-        } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-            CalendarPager(Modifier.sizeIn(minHeight = 320.dp, maxHeight = 400.dp), viewModel)
-            Details(
-                Modifier
-                    .fillMaxWidth()
-                    .defaultMinSize(minHeight = screenHeight - 400.dp - 64.dp),
-                viewModel,
-                navigateToHolidaysSettings,
-                navigateToSettingsLocationTab,
-                navigateToAstronomy,
-            )
+            } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                CalendarPager(Modifier.sizeIn(minHeight = 320.dp, maxHeight = 400.dp), viewModel)
+                Details(
+                    Modifier
+                        .fillMaxWidth()
+                        .defaultMinSize(minHeight = screenHeight - 400.dp - 64.dp),
+                    viewModel,
+                    navigateToHolidaysSettings,
+                    navigateToSettingsLocationTab,
+                    navigateToAstronomy,
+                    paddingValues.calculateBottomPadding(),
+                )
+            }
         }
     }
 }
@@ -318,6 +346,7 @@ fun Details(
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
+    bottomPadding: Dp,
     scrollableTabs: Boolean = false
 ) {
     val context = LocalContext.current
@@ -368,33 +397,20 @@ fun Details(
                 }
             }
 
-            Box {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = modifier,
-                    verticalAlignment = Alignment.Top,
-                ) { index ->
-                    Surface(modifier = Modifier.fillMaxSize()) {
-                        Column(
-                            if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
-                            else Modifier
-                        ) {
-                            tabs[index].second()
-                            Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-                        }
+            HorizontalPager(
+                state = pagerState,
+                modifier = modifier,
+                verticalAlignment = Alignment.Top,
+            ) { index ->
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Column(
+                        if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
+                        else Modifier
+                    ) {
+                        tabs[index].second()
+                        Spacer(Modifier.height(bottomPadding))
                     }
                 }
-                val addEvent = AddEvent(viewModel)
-                ShrinkingFloatingActionButton(
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(24.dp)
-                        .safeDrawingPadding(),
-                    isVisible = selectedTabIndex == EVENTS_TAB,
-                    action = addEvent,
-                    icon = Icons.Default.Add,
-                    title = stringResource(R.string.add_event),
-                )
             }
         }
     }
