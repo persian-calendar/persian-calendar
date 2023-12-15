@@ -14,7 +14,7 @@
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.9.10 (*)
 +--- com.github.persian-calendar:qr:60ad1863978b35205549eae6af177c45a1e67307
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0 -> 1.9.10 (*)
-+--- com.github.cosinekitty:astronomy:21330a781a29c6f612efe36298156e473d0a4d3a
++--- com.github.cosinekitty:astronomy:61dc07020aaa6885d2c7f688a4d82beaf6edb9ef
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.9.10 (*)
 +--- androidx.dynamicanimation:dynamicanimation:1.0.0
 |    +--- androidx.core:core:1.0.0 -> 1.12.0
