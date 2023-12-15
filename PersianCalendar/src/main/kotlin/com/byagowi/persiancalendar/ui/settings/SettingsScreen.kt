@@ -8,7 +8,6 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -96,106 +95,108 @@ fun SettingsScreen(
     openDrawer: () -> Unit,
     initialPage: Int,
     destination: String,
-) = Column {
-    val context = LocalContext.current
-    LaunchedEffect(null) { context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
-    // TODO: Ideally this should be onPrimary
-    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-    TopAppBar(
-        title = { Text(stringResource(R.string.settings)) },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            navigationIconContentColor = colorOnAppBar,
-            actionIconContentColor = colorOnAppBar,
-            titleContentColor = colorOnAppBar,
-        ),
-        navigationIcon = {
-            IconButton(onClick = { openDrawer() }) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(R.string.open_drawer)
-                )
-            }
-        },
-        actions = {
-            var showMenu by rememberSaveable { mutableStateOf(false) }
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                tooltip = {
-                    PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                },
-                state = rememberTooltipState()
-            ) {
-                IconButton(onClick = { showMenu = !showMenu }) {
+) {
+    Column {
+        val context = LocalContext.current
+        LaunchedEffect(null) { context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+        TopAppBar(
+            title = { Text(stringResource(R.string.settings)) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = { openDrawer() }) {
                     Icon(
-                        imageVector = Icons.Default.MoreVert,
-                        contentDescription = stringResource(R.string.more_options),
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(R.string.open_drawer)
                     )
                 }
-            }
-            DropdownMenu(
-                expanded = showMenu, onDismissRequest = { showMenu = false },
-            ) { MenuItems { showMenu = false } }
-        },
-    )
-
-    val tabs = remember {
-        listOf(
-            @Composable {
-                InterfaceCalendarSettings(destination)
-            } to listOf(R.string.pref_interface, R.string.calendar),
-
-            @Composable {
-                WidgetNotificationSettings()
-            } to listOf(R.string.pref_notification, R.string.pref_widget),
-
-            @Composable {
-                LocationAthanSettings()
-            } to listOf(R.string.location, R.string.athan),
+            },
+            actions = {
+                var showMenu by rememberSaveable { mutableStateOf(false) }
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = { showMenu = !showMenu }) {
+                        Icon(
+                            imageVector = Icons.Default.MoreVert,
+                            contentDescription = stringResource(R.string.more_options),
+                        )
+                    }
+                }
+                DropdownMenu(
+                    expanded = showMenu, onDismissRequest = { showMenu = false },
+                ) { MenuItems { showMenu = false } }
+            },
         )
-    }
 
-    val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
-    val scope = rememberCoroutineScope()
+        val tabs = remember {
+            listOf(
+                @Composable {
+                    InterfaceCalendarSettings(destination)
+                } to listOf(R.string.pref_interface, R.string.calendar),
 
-    val selectedTabIndex = pagerState.currentPage
-    TabRow(
-        selectedTabIndex = selectedTabIndex,
-        contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
-        containerColor = Color.Transparent,
-        divider = {},
-        indicator = @Composable { tabPositions ->
-            if (selectedTabIndex < tabPositions.size) {
-                SecondaryIndicator(
-                    Modifier
-                        .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                        .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    height = 2.dp,
-                    color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha)
-                )
-            }
-        },
-    ) {
-        tabs.forEachIndexed { index, (_, titlesResId) ->
-            val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
-                context.getString(it)
-            }
-            Tab(
-                text = { Text(title) },
-                selected = pagerState.currentPage == index,
-                onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                @Composable {
+                    WidgetNotificationSettings()
+                } to listOf(R.string.pref_notification, R.string.pref_widget),
+
+                @Composable {
+                    LocationAthanSettings()
+                } to listOf(R.string.location, R.string.athan),
             )
         }
-    }
 
-    HorizontalPager(
-        state = pagerState,
-        modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
-    ) { index ->
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                tabs[index].first()
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+        val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
+        val scope = rememberCoroutineScope()
+
+        val selectedTabIndex = pagerState.currentPage
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
+            containerColor = Color.Transparent,
+            divider = {},
+            indicator = @Composable { tabPositions ->
+                if (selectedTabIndex < tabPositions.size) {
+                    SecondaryIndicator(
+                        Modifier
+                            .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                            .padding(horizontal = ExtraLargeShapeCornerSize.dp),
+                        height = 2.dp,
+                        color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha)
+                    )
+                }
+            },
+        ) {
+            tabs.forEachIndexed { index, (_, titlesResId) ->
+                val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
+                    context.getString(it)
+                }
+                Tab(
+                    text = { Text(title) },
+                    selected = pagerState.currentPage == index,
+                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                )
+            }
+        }
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
+        ) { index ->
+            Surface(modifier = Modifier.fillMaxSize()) {
+                Column(Modifier.verticalScroll(rememberScrollState())) {
+                    tabs[index].first()
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+                }
             }
         }
     }

@@ -100,317 +100,319 @@ fun AstronomyScreen(
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
-) = Column {
-    val context = LocalContext.current
-    // TODO: Ideally this should be onPrimary
-    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+) {
+    Column {
+        val context = LocalContext.current
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
 
-    val state by viewModel.astronomyState.collectAsState()
+        val state by viewModel.astronomyState.collectAsState()
 
-    var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDayPickerDialog) DayPickerDialog(initialJdn = Jdn(state.date.toCivilDate()),
-        positiveButtonTitle = R.string.accept,
-        onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }) {
-        showDayPickerDialog = false
-    }
-
-    LaunchedEffect(null) {
-        while (true) {
-            delay(TEN_SECONDS_IN_MILLIS)
-            // Ugly, just to make the offset
-            viewModel.addMinutesOffset(1)
-            viewModel.addMinutesOffset(-1)
+        var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
+        if (showDayPickerDialog) DayPickerDialog(initialJdn = Jdn(state.date.toCivilDate()),
+            positiveButtonTitle = R.string.accept,
+            onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }) {
+            showDayPickerDialog = false
         }
-    }
 
-    // Bad practice, for now
-    var slider by remember { mutableStateOf<SliderView?>(null) }
-
-    var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
-        showHoroscopeDialog = false
-    }
-
-    var isTropical by rememberSaveable { mutableStateOf(false) }
-    var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
-
-    TopAppBar(
-        title = { Text(stringResource(R.string.astronomy)) },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-            navigationIconContentColor = colorOnAppBar,
-            actionIconContentColor = colorOnAppBar,
-            titleContentColor = colorOnAppBar,
-        ),
-        navigationIcon = {
-            IconButton(onClick = { openDrawer() }) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(R.string.open_drawer)
-                )
+        LaunchedEffect(null) {
+            while (true) {
+                delay(TEN_SECONDS_IN_MILLIS)
+                // Ugly, just to make the offset
+                viewModel.addMinutesOffset(1)
+                viewModel.addMinutesOffset(-1)
             }
-        },
-        actions = {
-            val minutesOffset by viewModel.minutesOffset.collectAsState()
-            AnimatedVisibility(visible = minutesOffset != 0) {
-                IconButton(onClick = { viewModel.animateToAbsoluteMinutesOffset(0) }) {
+        }
+
+        // Bad practice, for now
+        var slider by remember { mutableStateOf<SliderView?>(null) }
+
+        var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
+        if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
+            showHoroscopeDialog = false
+        }
+
+        var isTropical by rememberSaveable { mutableStateOf(false) }
+        var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
+
+        TopAppBar(
+            title = { Text(stringResource(R.string.astronomy)) },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = colorOnAppBar,
+                actionIconContentColor = colorOnAppBar,
+                titleContentColor = colorOnAppBar,
+            ),
+            navigationIcon = {
+                IconButton(onClick = { openDrawer() }) {
                     Icon(
-                        ImageVector.vectorResource(R.drawable.ic_restore_modified),
-                        contentDescription = stringResource(R.string.return_to_today),
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = stringResource(R.string.open_drawer)
                     )
                 }
-            }
-            AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
-                Row(
-                    Modifier.clickable { isTropical = !isTropical },
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(stringResource(R.string.tropical))
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Switch(isTropical, onCheckedChange = { isTropical = !isTropical })
-                }
-            }
-            Box {
-                var showMenu by rememberSaveable { mutableStateOf(false) }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { showMenu = !showMenu }) {
+            },
+            actions = {
+                val minutesOffset by viewModel.minutesOffset.collectAsState()
+                AnimatedVisibility(visible = minutesOffset != 0) {
+                    IconButton(onClick = { viewModel.animateToAbsoluteMinutesOffset(0) }) {
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more_options),
+                            ImageVector.vectorResource(R.drawable.ic_restore_modified),
+                            contentDescription = stringResource(R.string.return_to_today),
                         )
                     }
                 }
-                DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.goto_date)) },
-                        onClick = {
-                            showMenu = false
-                            showDayPickerDialog = true
-                        },
-                    )
-                    DropdownMenuItem(
-                        text = { Text(stringResource(R.string.map)) },
-                        onClick = {
-                            showMenu = false
-                            navigateToMap()
-                        },
-                    )
-                }
-            }
-        },
-    )
-
-    val sunZodiac = if (isTropical) Zodiac.fromTropical(state.sun.elon)
-    else Zodiac.fromIau(state.sun.elon)
-    val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
-    else Zodiac.fromIau(state.moon.lon)
-
-    val jdn by derivedStateOf { Jdn(state.date.toCivilDate()) }
-
-    val headerCache = remember {
-        lruCache(1024, create = { jdn: Jdn ->
-            state.generateHeader(context, jdn).joinToString("\n")
-        })
-    }
-
-    var lastButtonClickTimestamp by remember { mutableStateOf(System.currentTimeMillis()) }
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    fun buttonScrollSlider(days: Int): Boolean {
-        lastButtonClickTimestamp = System.currentTimeMillis()
-        slider?.smoothScrollBy(250f * days * if (isRtl) 1 else -1, 0f)
-        viewModel.animateToRelativeDayOffset(days)
-        return true
-    }
-
-    Surface(shape = MaterialCornerExtraLargeTop()) {
-        Box {
-            Column(
-                Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                Spacer(Modifier.height(24.dp))
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    SelectionContainer {
-                        Text(
-                            headerCache[jdn],
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 3
-                        )
-                    }
-                    Seasons(jdn)
-                    AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
-                        Row(Modifier.padding(top = 8.dp)) {
-                            Box(Modifier.weight(1f)) {
-                                Cell(
-                                    Modifier.align(Alignment.Center),
-                                    0xcceaaa00.toInt(),
-                                    stringResource(R.string.sun),
-                                    sunZodiac.format(context, true) // ☉☀️
-                                )
-                            }
-                            Box(Modifier.weight(1f)) {
-                                Cell(
-                                    Modifier.align(Alignment.Center),
-                                    0xcc606060.toInt(),
-                                    stringResource(R.string.moon),
-                                    moonZodiac.format(context, true) // ☽it.moonPhaseEmoji
-                                )
-                            }
-                        }
+                AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
+                    Row(
+                        Modifier.clickable { isTropical = !isTropical },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(stringResource(R.string.tropical))
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Switch(isTropical, onCheckedChange = { isTropical = !isTropical })
                     }
                 }
-                Spacer(Modifier.height(16.dp))
-                Box(Modifier.fillMaxWidth()) {
-                    Column(Modifier.align(Alignment.CenterStart)) {
-                        AstronomyMode.entries.forEach {
-                            NavigationRailItem(
-                                modifier = Modifier.size(56.dp),
-                                selected = mode == it,
-                                onClick = { mode = it },
-                                icon = {
-                                    if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
-                                        ImageVector.vectorResource(it.icon),
-                                        modifier = Modifier.size(24.dp),
-                                        contentDescription = null,
-                                        tint = Color.Unspecified,
-                                    )
-                                },
+                Box {
+                    var showMenu by rememberSaveable { mutableStateOf(false) }
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = { showMenu = !showMenu }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = stringResource(R.string.more_options),
                             )
                         }
                     }
-                    AndroidView(
-                        factory = {
-                            val solarView = SolarView(it)
-                            var clickCount = 0
-                            solarView.setOnClickListener {
-                                if (++clickCount % 2 == 0) showHoroscopeDialog = true
-                            }
-                            solarView.rotationalMinutesChange = { offset ->
-                                viewModel.addMinutesOffset(offset)
-                                slider?.manualScrollBy(offset / 200f, 0f)
-                            }
-                            solarView
-                        },
-                        modifier = Modifier
-                            .size(290.dp)
-                            .align(Alignment.Center),
-                        update = {
-                            it.isTropicalDegree = isTropical
-                            it.setTime(state)
-                            it.mode = mode
-                        },
-                    )
-                    val map = stringResource(R.string.map)
-                    NavigationRailItem(
-                        modifier = Modifier
-                            .size(56.dp)
-                            .align(Alignment.CenterEnd),
-                        selected = false,
-                        onClick = navigateToMap,
-                        icon = {
-                            Text(
-                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
-                                modifier = Modifier.semantics { this.contentDescription = map }
-                            )
-                        },
-                    )
-                }
-            }
-            @OptIn(ExperimentalFoundationApi::class) Column(
-                Modifier
-                    .align(Alignment.BottomCenter)
-                    .safeDrawingPadding()
-                    .fillMaxWidth()
-            ) {
-                Text(
-                    state.date.formatDateAndTime(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .combinedClickable(
-                            onClick = { showDayPickerDialog = true },
-                            onClickLabel = stringResource(R.string.goto_date),
-                            onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
-                            onLongClickLabel = stringResource(R.string.today),
-                        )
-                )
-                Spacer(Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    val view = LocalView.current
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Icon(
-                        Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                        contentDescription = null,
-                        Modifier.combinedClickable(
+                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.goto_date)) },
                             onClick = {
-                                view.performHapticFeedbackLongPress()
-                                buttonScrollSlider(-1)
+                                showMenu = false
+                                showDayPickerDialog = true
                             },
-                            onClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.day)
-                            ),
-                            onLongClick = { buttonScrollSlider(-365) },
-                            onLongClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.year)
-                            ),
-                        ),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    AndroidView(
-                        factory = { context ->
-                            val root = SliderView(context)
-                            slider = root
-                            var latestVibration = 0L
-                            root.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
-                            root.onScrollListener = { dx, _ ->
-                                if (dx != 0f) {
-                                    val current = System.currentTimeMillis()
-                                    if (current - lastButtonClickTimestamp > 2000) {
-                                        if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                                            root.performHapticFeedbackVirtualKey()
-                                            latestVibration = current
-                                        }
-                                        viewModel.addMinutesOffset(
-                                            (dx * if (isRtl) 1 else -1).toInt()
-                                        )
-                                    }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.map)) },
+                            onClick = {
+                                showMenu = false
+                                navigateToMap()
+                            },
+                        )
+                    }
+                }
+            },
+        )
+
+        val sunZodiac = if (isTropical) Zodiac.fromTropical(state.sun.elon)
+        else Zodiac.fromIau(state.sun.elon)
+        val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
+        else Zodiac.fromIau(state.moon.lon)
+
+        val jdn by derivedStateOf { Jdn(state.date.toCivilDate()) }
+
+        val headerCache = remember {
+            lruCache(1024, create = { jdn: Jdn ->
+                state.generateHeader(context, jdn).joinToString("\n")
+            })
+        }
+
+        var lastButtonClickTimestamp by remember { mutableStateOf(System.currentTimeMillis()) }
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+        fun buttonScrollSlider(days: Int): Boolean {
+            lastButtonClickTimestamp = System.currentTimeMillis()
+            slider?.smoothScrollBy(250f * days * if (isRtl) 1 else -1, 0f)
+            viewModel.animateToRelativeDayOffset(days)
+            return true
+        }
+
+        Surface(shape = MaterialCornerExtraLargeTop()) {
+            Box {
+                Column(
+                    Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    Spacer(Modifier.height(24.dp))
+                    Column(Modifier.padding(horizontal = 24.dp)) {
+                        SelectionContainer {
+                            Text(
+                                headerCache[jdn],
+                                style = MaterialTheme.typography.bodyMedium,
+                                maxLines = 3
+                            )
+                        }
+                        Seasons(jdn)
+                        AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
+                            Row(Modifier.padding(top = 8.dp)) {
+                                Box(Modifier.weight(1f)) {
+                                    Cell(
+                                        Modifier.align(Alignment.Center),
+                                        0xcceaaa00.toInt(),
+                                        stringResource(R.string.sun),
+                                        sunZodiac.format(context, true) // ☉☀️
+                                    )
+                                }
+                                Box(Modifier.weight(1f)) {
+                                    Cell(
+                                        Modifier.align(Alignment.Center),
+                                        0xcc606060.toInt(),
+                                        stringResource(R.string.moon),
+                                        moonZodiac.format(context, true) // ☽it.moonPhaseEmoji
+                                    )
                                 }
                             }
-                            root
-                        },
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .height(46.dp)
-                            .weight(1f, fill = false),
-                    )
-                    Icon(
-                        Icons.AutoMirrored.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                        Modifier.combinedClickable(
-                            onClick = {
-                                view.performHapticFeedbackLongPress()
-                                buttonScrollSlider(+1)
+                        }
+                    }
+                    Spacer(Modifier.height(16.dp))
+                    Box(Modifier.fillMaxWidth()) {
+                        Column(Modifier.align(Alignment.CenterStart)) {
+                            AstronomyMode.entries.forEach {
+                                NavigationRailItem(
+                                    modifier = Modifier.size(56.dp),
+                                    selected = mode == it,
+                                    onClick = { mode = it },
+                                    icon = {
+                                        if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
+                                            ImageVector.vectorResource(it.icon),
+                                            modifier = Modifier.size(24.dp),
+                                            contentDescription = null,
+                                            tint = Color.Unspecified,
+                                        )
+                                    },
+                                )
+                            }
+                        }
+                        AndroidView(
+                            factory = {
+                                val solarView = SolarView(it)
+                                var clickCount = 0
+                                solarView.setOnClickListener {
+                                    if (++clickCount % 2 == 0) showHoroscopeDialog = true
+                                }
+                                solarView.rotationalMinutesChange = { offset ->
+                                    viewModel.addMinutesOffset(offset)
+                                    slider?.manualScrollBy(offset / 200f, 0f)
+                                }
+                                solarView
                             },
-                            onClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.day)
-                            ),
-                            onLongClick = { buttonScrollSlider(+365) },
-                            onLongClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.year)
-                            ),
-                        ),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
+                            modifier = Modifier
+                                .size(290.dp)
+                                .align(Alignment.Center),
+                            update = {
+                                it.isTropicalDegree = isTropical
+                                it.setTime(state)
+                                it.mode = mode
+                            },
+                        )
+                        val map = stringResource(R.string.map)
+                        NavigationRailItem(
+                            modifier = Modifier
+                                .size(56.dp)
+                                .align(Alignment.CenterEnd),
+                            selected = false,
+                            onClick = navigateToMap,
+                            icon = {
+                                Text(
+                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
+                                    modifier = Modifier.semantics { this.contentDescription = map }
+                                )
+                            },
+                        )
+                    }
                 }
-                Spacer(Modifier.height(8.dp))
+                @OptIn(ExperimentalFoundationApi::class) Column(
+                    Modifier
+                        .align(Alignment.BottomCenter)
+                        .safeDrawingPadding()
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        state.date.formatDateAndTime(),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
+                                onClick = { showDayPickerDialog = true },
+                                onClickLabel = stringResource(R.string.goto_date),
+                                onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
+                                onLongClickLabel = stringResource(R.string.today),
+                            )
+                    )
+                    Spacer(Modifier.height(8.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        val view = LocalView.current
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Icon(
+                            Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                            contentDescription = null,
+                            Modifier.combinedClickable(
+                                onClick = {
+                                    view.performHapticFeedbackLongPress()
+                                    buttonScrollSlider(-1)
+                                },
+                                onClickLabel = stringResource(
+                                    R.string.previous_x, stringResource(R.string.day)
+                                ),
+                                onLongClick = { buttonScrollSlider(-365) },
+                                onLongClickLabel = stringResource(
+                                    R.string.previous_x, stringResource(R.string.year)
+                                ),
+                            ),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                        AndroidView(
+                            factory = { context ->
+                                val root = SliderView(context)
+                                slider = root
+                                var latestVibration = 0L
+                                root.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
+                                root.onScrollListener = { dx, _ ->
+                                    if (dx != 0f) {
+                                        val current = System.currentTimeMillis()
+                                        if (current - lastButtonClickTimestamp > 2000) {
+                                            if (current >= latestVibration + 25_000_000 / abs(dx)) {
+                                                root.performHapticFeedbackVirtualKey()
+                                                latestVibration = current
+                                            }
+                                            viewModel.addMinutesOffset(
+                                                (dx * if (isRtl) 1 else -1).toInt()
+                                            )
+                                        }
+                                    }
+                                }
+                                root
+                            },
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp)
+                                .height(46.dp)
+                                .weight(1f, fill = false),
+                        )
+                        Icon(
+                            Icons.AutoMirrored.Default.KeyboardArrowRight,
+                            contentDescription = null,
+                            Modifier.combinedClickable(
+                                onClick = {
+                                    view.performHapticFeedbackLongPress()
+                                    buttonScrollSlider(+1)
+                                },
+                                onClickLabel = stringResource(
+                                    R.string.next_x, stringResource(R.string.day)
+                                ),
+                                onLongClick = { buttonScrollSlider(+365) },
+                                onLongClickLabel = stringResource(
+                                    R.string.next_x, stringResource(R.string.year)
+                                ),
+                            ),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                    }
+                    Spacer(Modifier.height(8.dp))
+                }
             }
         }
     }

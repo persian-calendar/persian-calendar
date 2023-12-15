@@ -271,70 +271,72 @@ https://github.com/persian-calendar/persian-calendar"""
 }
 
 @Composable
-private fun AboutScreenContent(navigateToLicenses: () -> Unit) = Column {
-    // Licenses
-    Text(
-        stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
-        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
-    )
-    AboutScreenButton(
-        icon = Icons.Default.Folder,
-        action = { navigateToLicenses() },
-        title = R.string.about_license_title,
-        summary = R.string.about_license_sum
-    )
+private fun AboutScreenContent(navigateToLicenses: () -> Unit) {
+    Column {
+        // Licenses
+        Text(
+            stringResource(R.string.licenses, MaterialTheme.typography.bodyLarge),
+            modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
+        )
+        AboutScreenButton(
+            icon = Icons.Default.Folder,
+            action = { navigateToLicenses() },
+            title = R.string.about_license_title,
+            summary = R.string.about_license_sum
+        )
 
-    // Help
-    if (language.isUserAbleToReadPersian) {
-        Row(modifier = Modifier.padding(top = 16.dp, start = 12.dp)) {
-            Icon(
-                modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                imageVector = Icons.AutoMirrored.Default.Help,
-                contentDescription = stringResource(R.string.help)
-            )
-            Column {
-                Text(
-                    stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge
+        // Help
+        if (language.isUserAbleToReadPersian) {
+            Row(modifier = Modifier.padding(top = 16.dp, start = 12.dp)) {
+                Icon(
+                    modifier = Modifier.padding(start = 8.dp, end = 4.dp),
+                    imageVector = Icons.AutoMirrored.Default.Help,
+                    contentDescription = stringResource(R.string.help)
                 )
+                Column {
+                    Text(
+                        stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge
+                    )
+                }
+            }
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                HelpItems()
             }
         }
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-            HelpItems()
-        }
-    }
 
-    // Bug report
-    Text(
-        stringResource(R.string.about_support_developers),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
-    )
-    AboutScreenButton(
-        icon = Icons.Default.BugReport,
-        action = ::launchReportIntent,
-        title = R.string.about_report_bug,
-        summary = R.string.about_report_bug_sum
-    )
-    run {
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        AboutScreenButton(
-            icon = Icons.Default.Email,
-            action = { showDialog = true },
-            title = R.string.about_sendMail,
-            summary = R.string.about_email_sum
+        // Bug report
+        Text(
+            stringResource(R.string.about_support_developers),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
         )
-        if (showDialog) EmailDialog { showDialog = false }
+        AboutScreenButton(
+            icon = Icons.Default.BugReport,
+            action = ::launchReportIntent,
+            title = R.string.about_report_bug,
+            summary = R.string.about_report_bug_sum
+        )
+        run {
+            var showDialog by rememberSaveable { mutableStateOf(false) }
+            AboutScreenButton(
+                icon = Icons.Default.Email,
+                action = { showDialog = true },
+                title = R.string.about_sendMail,
+                summary = R.string.about_email_sum
+            )
+            if (showDialog) EmailDialog { showDialog = false }
+        }
+
+        // Developers
+        Text(
+            stringResource(R.string.about_developers),
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
+        )
+        DevelopersChips()
+
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
-
-    // Developers
-    Text(
-        stringResource(R.string.about_developers),
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
-    )
-    DevelopersChips()
-
-    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
 }
 
 @OptIn(ExperimentalLayoutApi::class)
