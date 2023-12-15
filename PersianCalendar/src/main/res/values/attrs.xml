@@ -7,7 +7,6 @@
         <!-- TODO This should be merged with Material's owned colorOnPrimary someday -->
         <attr name="colorOnAppBar" format="reference" />
         <attr name="colorAppointment" format="reference" />
-        <attr name="colorTextHoliday" format="reference" />
         <attr name="colorHoliday" format="reference" />
         <attr name="colorCurrentDay" format="reference" />
         <attr name="colorSelectedDay" format="reference" />

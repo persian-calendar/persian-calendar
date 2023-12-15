@@ -50,7 +50,6 @@
         <item name="screenBackgroundColor">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
-        <item name="colorTextHoliday">@color/dark_text_holiday</item>
         <item name="colorHoliday">@color/dark_holiday</item>
         <item name="colorOnAppBar">@color/dark_text_day</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
@@ -69,7 +68,6 @@
         <item name="screenBackgroundColor">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
-        <item name="colorTextHoliday">@color/black_text_holiday</item>
         <item name="colorHoliday">@color/black_holiday</item>
         <item name="colorOnAppBar">@color/black_text_day</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
@@ -88,7 +86,6 @@
         <item name="screenBackgroundColor">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
-        <item name="colorTextHoliday">@color/light_text_holiday</item>
         <item name="colorHoliday">@color/light_holiday</item>
         <item name="colorOnAppBar">@color/light_text_day</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
@@ -107,7 +104,6 @@
         <item name="screenBackgroundColor">@color/aqua_accent</item>
 
         <item name="colorSurface">@color/aqua_surface_background</item>
-        <item name="colorTextHoliday">@color/aqua_text_holiday</item>
         <item name="colorHoliday">@color/aqua_holiday</item>
         <item name="colorOnAppBar">@color/aqua_text_day</item>
         <item name="colorCurrentDay">@color/aqua_current_day</item>
@@ -126,7 +122,6 @@
         <item name="screenBackgroundColor">@color/modern_primary</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
-        <item name="colorTextHoliday">@color/modern_text_holiday</item>
         <item name="colorHoliday">@color/modern_holiday</item>
         <item name="colorOnAppBar">@color/modern_text_day</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>
