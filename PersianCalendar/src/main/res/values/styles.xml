@@ -25,14 +25,12 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-        <item name="dialogBackgroundColor">#C0101010</item>
     </style>
 
     <style name="BaseLightTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-        <item name="dialogBackgroundColor">#D8FFFFFF</item>
     </style>
 
     <!-- Applied to all themes -->

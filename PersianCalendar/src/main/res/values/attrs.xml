@@ -12,7 +12,6 @@
         <attr name="colorSelectedDay" format="reference" />
         <attr name="colorEventIndicator" format="reference" />
         <attr name="colorTextDaySelected" format="reference" />
-        <attr name="dialogBackgroundColor" format="color" />
         <attr name="sunViewNightColor" format="reference" />
         <attr name="sunViewDayColor" format="reference" />
         <attr name="sunViewMidDayColor" format="reference" />
