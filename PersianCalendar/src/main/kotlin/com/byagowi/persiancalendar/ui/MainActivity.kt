@@ -72,6 +72,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -84,6 +85,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
@@ -117,6 +119,8 @@ import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
 import com.byagowi.persiancalendar.ui.map.MapViewModel
+import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.theme.Theme
@@ -131,7 +135,6 @@ import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDa
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -402,32 +405,38 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 )
             ),
         ) {
+            val tabKey = "TAB"
+            val settingsKey = "SETTINGS"
+            val daysOffsetKey = "DAYS_OFFSET"
             composable(calendarRoute) {
                 CalendarScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
                     navigateToHolidaysSettings = {
-                        navController.navigate(settingsRoute)
-                        // TODO
-//                                findNavController().navigateSafe(
-//                                    CalendarFragmentDirections.navigateToSettings(
-//                                        tab = INTERFACE_CALENDAR_TAB, preferenceKey = PREF_HOLIDAY_TYPES
-//                                    )
-//                                )
+                        navController.graph.findNode(settingsRoute)?.let { destination ->
+                            navController.navigate(
+                                destination.id,
+                                bundleOf(
+                                    tabKey to INTERFACE_CALENDAR_TAB,
+                                    settingsKey to PREF_HOLIDAY_TYPES
+                                )
+                            )
+                        }
                     },
                     navigateToSettingsLocationTab = {
-                        // TODO
-                        navController.navigate(settingsRoute)
-                        // TODO
-//                                findNavController().navigateSafe(
-//                                    CalendarFragmentDirections.navigateToSettings(tab = LOCATION_ATHAN_TAB)
-//                                )
+                        navController.graph.findNode(settingsRoute)?.let { destination ->
+                            navController.navigate(
+                                destination.id,
+                                bundleOf(tabKey to LOCATION_ATHAN_TAB)
+                            )
+                        }
                     },
-                    navigateToAstronomy = { dayOffset ->
-                        navController.navigate(astronomyRoute)
-                        // TODO: pass day offset somehow
-//                                findNavController().navigateSafe(
-//                                    CalendarFragmentDirections.actionCalendarToAstronomy(dayOffset)
-//                                )
+                    navigateToAstronomy = { daysOffset ->
+                        navController.graph.findNode(astronomyRoute)?.let { destination ->
+                            navController.navigate(
+                                destination.id,
+                                bundleOf(daysOffsetKey to daysOffset)
+                            )
+                        }
                     },
                     viewModel = viewModel<CalendarViewModel>(),
                 )
@@ -460,10 +469,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             }
 
             composable(astronomyRoute) {
+                val viewModel = viewModel<AstronomyViewModel>()
+                it.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
+                    viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
+                }
                 AstronomyScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
                     navigateToMap = { navController.navigate(mapRoute) },
-                    viewModel = viewModel<AstronomyViewModel>(),
+                    viewModel = viewModel,
                 )
             }
 
@@ -486,10 +499,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             composable(settingsRoute) {
                 SettingsScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
-                    initialPage = 0,
-                    destination = ""
-                )//) args.tab, args.preferenceKey)
-                // TODO
+                    initialPage = it.arguments?.getInt(tabKey, 0) ?: 0,
+                    destination = it.arguments?.getString(settingsKey) ?: ""
+                )
             }
 
             composable(aboutRoute) {
