@@ -193,9 +193,12 @@ fun AboutScreen(
                 }
             }
 
+            val scrollState = rememberScrollState()
+
             @OptIn(ExperimentalAnimationGraphicsApi::class) Row(
                 Modifier
                     .height(headerSize)
+                    .graphicsLayer { translationY = scrollState.value / -4f }
                     .fillMaxWidth(),
             ) {
                 Box(
@@ -237,7 +240,7 @@ fun AboutScreen(
                 else null
             }
 
-            Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            Column(modifier = Modifier.verticalScroll(scrollState)) {
                 val clickHandlerDialog =
                     remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
                 Box(modifier = Modifier
