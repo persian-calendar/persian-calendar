@@ -30,7 +30,7 @@ class LevelScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            LevelScreen(LocalContext.current as ComponentActivity, {}, {})
+            LevelScreen({}, {})
         }
     }
 
@@ -41,7 +41,6 @@ class LevelScreenTest {
         composeTestRule.setContentWithTheme {
             navigateUpString = stringResource(R.string.navigate_up)
             LevelScreen(
-                activity = LocalContext.current as ComponentActivity,
                 navigateUp = { navigateUpIsCalled = true },
                 navigateToCompass = { assert(false) }
             )
@@ -60,7 +59,6 @@ class LevelScreenTest {
         composeTestRule.setContentWithTheme {
             compassString = stringResource(R.string.compass)
             LevelScreen(
-                activity = LocalContext.current as ComponentActivity,
                 navigateUp = { assert(false) },
                 navigateToCompass = { navigateToCompassIsCalled = true }
             )

@@ -30,7 +30,7 @@ class CompassScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            CompassScreen({}, {}, {}, LocalContext.current as ComponentActivity)
+            CompassScreen({}, {}, {})
         }
     }
 
@@ -44,7 +44,6 @@ class CompassScreenTest {
                 openDrawer = {},
                 navigateToLevel = { navigateToLevelIsCalled = true },
                 navigateToMap = { assert(false) },
-                activity = LocalContext.current as ComponentActivity
             )
         }
         assert(!navigateToLevelIsCalled)
@@ -64,7 +63,6 @@ class CompassScreenTest {
                 openDrawer = {},
                 navigateToLevel = { assert(false) },
                 navigateToMap = { navigateToMapIsCalled = true },
-                activity = LocalContext.current as ComponentActivity
             )
         }
         assert(!navigateToMapIsCalled)
