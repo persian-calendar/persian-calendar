@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -72,6 +71,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -154,7 +154,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         val intentStartDestination = intent?.action
         intent?.action = ""
 
-        setContent { AppTheme { App(intentStartDestination, application, ::finish) } }
+        setContent { AppTheme { App(intentStartDestination, ::finish) } }
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
@@ -241,7 +241,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 }
 
 @Composable
-fun App(intentStartDestination: String?, application: Application, finish: () -> Unit) {
+fun App(intentStartDestination: String?, finish: () -> Unit) {
     val calendarRoute = "calendar"
     val compassRoute = "compass"
     val levelRoute = "level"
@@ -426,14 +426,14 @@ fun App(intentStartDestination: String?, application: Application, finish: () ->
 //                                    CalendarFragmentDirections.actionCalendarToAstronomy(dayOffset)
 //                                )
                     },
-                    viewModel = remember { CalendarViewModel(application) },
+                    viewModel = viewModel<CalendarViewModel>(),
                 )
             }
 
             composable(converterRoute) {
                 ConverterScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
-                    viewModel = remember { ConverterViewModel() }
+                    viewModel = viewModel<ConverterViewModel>()
                 )
             }
 
@@ -463,7 +463,7 @@ fun App(intentStartDestination: String?, application: Application, finish: () ->
                         // TODO: Pass time also somehow
                         navController.navigate(mapRoute)
                     },
-                    viewModel = remember { AstronomyViewModel() },
+                    viewModel = viewModel<AstronomyViewModel>(),
                 )
             }
 
@@ -485,7 +485,7 @@ fun App(intentStartDestination: String?, application: Application, finish: () ->
 //                        }
                 MapScreen(
                     navigateUp = { navController.navigateUp() },
-                    viewModel = remember { MapViewModel() },
+                    viewModel = viewModel<MapViewModel>(),
                 )
             }
 
