@@ -8,7 +8,6 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
@@ -191,58 +190,63 @@ fun CompassScreen(
                         )
                     }
                 }
-                var showMenu by rememberSaveable { mutableStateOf(false) }
-                if (cityName != null || BuildConfig.DEVELOPMENT) IconButton(
-                    onClick = { showMenu = !showMenu },
-                ) {
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                        },
-                        state = rememberTooltipState()
+                Box {
+                    var showMenu by rememberSaveable { mutableStateOf(false) }
+                    if (cityName != null || BuildConfig.DEVELOPMENT) IconButton(
+                        onClick = { showMenu = !showMenu },
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more_options),
-                        )
-                    }
-                }
-                var showTrueNorth by rememberSaveable {
-                    mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
-                }
-                var showQibla by rememberSaveable {
-                    mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
-                }
-                DropdownMenu(
-                    expanded = showMenu,
-                    onDismissRequest = { showMenu = false },
-                ) {
-                    DropdownMenuCheckableItem(stringResource(R.string.true_north), showTrueNorth) {
-                        showTrueNorth = it
-                        showMenu = false
-                        compassView?.isTrueNorth = it
-                    }
-                    DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
-                        showQibla = it
-                        showMenu = false
-                        compassView?.isShowQibla = it
-                        prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
-                    }
-                    if (BuildConfig.DEVELOPMENT) {
-                        DropdownMenuItem(
-                            text = { Text("Do a rotation") },
-                            onClick = {
-                                // Ugly, but is test only
-                                val animator = ValueAnimator.ofFloat(0f, 1f)
-                                animator.duration = TEN_SECONDS_IN_MILLIS
-                                animator.addUpdateListener {
-                                    compassView?.angle = it.animatedFraction * 360
-                                }
-                                if (Random.nextBoolean()) animator.start() else animator.reverse()
-                                showMenu = false
+                        TooltipBox(
+                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                            tooltip = {
+                                PlainTooltip { Text(text = stringResource(R.string.more_options)) }
                             },
-                        )
+                            state = rememberTooltipState()
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = stringResource(R.string.more_options),
+                            )
+                        }
+                    }
+                    var showTrueNorth by rememberSaveable {
+                        mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
+                    }
+                    var showQibla by rememberSaveable {
+                        mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
+                    }
+                    DropdownMenu(
+                        expanded = showMenu,
+                        onDismissRequest = { showMenu = false },
+                    ) {
+                        DropdownMenuCheckableItem(
+                            stringResource(R.string.true_north),
+                            showTrueNorth
+                        ) {
+                            showTrueNorth = it
+                            showMenu = false
+                            compassView?.isTrueNorth = it
+                        }
+                        DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
+                            showQibla = it
+                            showMenu = false
+                            compassView?.isShowQibla = it
+                            prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
+                        }
+                        if (BuildConfig.DEVELOPMENT) {
+                            DropdownMenuItem(
+                                text = { Text("Do a rotation") },
+                                onClick = {
+                                    // Ugly, but is test only
+                                    val animator = ValueAnimator.ofFloat(0f, 1f)
+                                    animator.duration = TEN_SECONDS_IN_MILLIS
+                                    animator.addUpdateListener {
+                                        compassView?.angle = it.animatedFraction * 360
+                                    }
+                                    if (Random.nextBoolean()) animator.start() else animator.reverse()
+                                    showMenu = false
+                                },
+                            )
+                        }
                     }
                 }
             },
