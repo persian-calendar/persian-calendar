@@ -45,6 +45,7 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -130,6 +131,8 @@ import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDa
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.variants.debugLog
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -459,33 +462,24 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             composable(astronomyRoute) {
                 AstronomyScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
-                    navigateToMap = {
-                        // TODO: Pass time also somehow
-                        navController.navigate(mapRoute)
-                    },
+                    navigateToMap = { navController.navigate(mapRoute) },
                     viewModel = viewModel<AstronomyViewModel>(),
                 )
             }
 
             composable(mapRoute) {
-//                        // Just that our UI tests don't have access to the nav controllers, let's don't access nav there
-//                        val ifNavAvailable = runCatching { findNavController() }.getOrNull() != null
-//                        val viewModel =
-//                            if (ifNavAvailable) navGraphViewModels<MapViewModel>(R.id.map).value else MapViewModel()
-//                        // Set time from Astronomy screen state if we are brought from the screen to here directly
-//                        if (ifNavAvailable && findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
-//                            val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
-//                            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-//                            // Let's apply changes here to astronomy screen's view model also
-//                            viewLifecycleOwner.lifecycleScope.launch {
-//                                viewModel.state.flowWithLifecycle(
-//                                    viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED
-//                                ).collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
-//                            }
-//                        }
+                val viewModel = viewModel<MapViewModel>()
+                val previousEntry = navController.previousBackStackEntry
+                if (previousEntry?.destination?.route == astronomyRoute) {
+                    val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
+                    viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
+                    LaunchedEffect(null) {
+                        viewModel.state.collectLatest { astronomyViewModel.changeToTime(it.time) }
+                    }
+                }
                 MapScreen(
                     navigateUp = { navController.navigateUp() },
-                    viewModel = viewModel<MapViewModel>(),
+                    viewModel = viewModel,
                 )
             }
 
