@@ -45,10 +45,13 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -387,12 +390,27 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         }
     ) {
         val context = LocalContext.current
-        val isGradient = !context.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+
+        var isGradient by remember {
+            mutableStateOf(
+                context.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+            )
+        }
+        DisposableEffect(null) {
+            val appPrefs = context.appPrefs
+            val listener = { _: SharedPreferences, key: String? ->
+                if (key == PREF_THEME_GRADIENT)
+                    isGradient = appPrefs.getBoolean(key, DEFAULT_THEME_GRADIENT)
+            }
+            appPrefs.registerOnSharedPreferenceChangeListener(listener)
+            onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
+        }
+
         val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = if (isGradient)
+            modifier = if (!isGradient)
                 Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
             else Modifier.background(
                 Brush.linearGradient(
