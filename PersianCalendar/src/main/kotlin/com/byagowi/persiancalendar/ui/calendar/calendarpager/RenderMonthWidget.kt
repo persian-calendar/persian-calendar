@@ -17,7 +17,6 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
@@ -39,7 +38,6 @@ fun renderMonthWidget(
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val cellWidth = width.toFloat() / columnsCount
     val diameter = min(cellWidth, cellHeight)
-    val sharedData = SharedDayViewData(context, diameter, textColor)
     val todayJdn = Jdn.today()
     val today = todayJdn.toCalendar(mainCalendar)
     val baseDate = mainCalendar.createDate(today.year, today.month, 1)
@@ -47,9 +45,9 @@ fun renderMonthWidget(
     val startingDayOfWeek = monthStartJdn.dayOfWeek
     val monthLength = mainCalendar.getMonthLength(today.year, today.month)
 
-    val dayView = DayView(context)
-    dayView.sharedDayViewData = sharedData
-    prepareViewForRendering(dayView, cellWidth.toInt(), cellHeight.toInt())
+    val isRtl =
+        language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+    val dayPainter = DayPainter(context, cellWidth.toInt(), cellHeight.toInt(), isRtl, textColor)
 
     val monthDeviceEvents =
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
@@ -57,8 +55,6 @@ fun renderMonthWidget(
 
     val footer = language.my.format(baseDate.monthName, formatNumber(baseDate.year))
     val bitmap = createBitmap(width, height)
-    val isRtl =
-        language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     Canvas(bitmap).also {
         (0..<7).forEach { column ->
             val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
@@ -67,10 +63,10 @@ fun renderMonthWidget(
                 else cellWidth * column + xStart,
                 0f
             ) {
-                dayView.setInitialOfWeekDay(
+                dayPainter.setInitialOfWeekDay(
                     getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(column))
                 )
-                dayView.drawDay(this, sharedData)
+                dayPainter.drawDay(this)
             }
         }
         val monthRange = 0..<monthLength
@@ -83,7 +79,7 @@ fun renderMonthWidget(
                 val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                 val isToday = day == todayJdn
 
-                dayView.setDayOfMonthItem(
+                dayPainter.setDayOfMonthItem(
                     isToday, false,
                     events.any { it !is CalendarEvent.DeviceCalendarEvent },
                     events.any { it is CalendarEvent.DeviceCalendarEvent },
@@ -96,7 +92,7 @@ fun renderMonthWidget(
                     if (isRtl) width - cellWidth * (column + 1) - xStart
                     else cellWidth * column + xStart,
                     cellHeight * (row + 1),
-                ) { dayView.drawDay(this, sharedData) }
+                ) { dayPainter.drawDay(this) }
             }
         }
         if (isShowWeekOfYearEnabled) {
@@ -106,14 +102,20 @@ fun renderMonthWidget(
                     weekOfYearStart + 1
             (1..weeksCount).forEach { week ->
                 val weekNumber = formatNumber(weekOfYearStart + week - 1)
-                dayView.setWeekNumber(weekNumber)
+                dayPainter.setWeekNumber(weekNumber)
 
                 it.withTranslation(
                     if (isRtl) width - cellWidth else 0f, cellHeight * week,
-                ) { dayView.draw(this) }
+                ) { dayPainter.drawDay(this) }
             }
         }
-        it.drawText(footer, width / 2f, height * .95f, sharedData.widgetFooterTextPaint ?: Paint())
+        val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.textAlign = Paint.Align.CENTER
+            it.textSize = diameter * 20 / 40
+            it.color = textColor
+            it.alpha = 90
+        }
+        it.drawText(footer, width / 2f, height * .95f, footerPaint)
     }
     return bitmap to footer
 }

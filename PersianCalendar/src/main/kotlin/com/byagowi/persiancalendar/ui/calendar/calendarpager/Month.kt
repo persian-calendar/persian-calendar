@@ -10,8 +10,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Canvas
@@ -27,15 +30,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -59,11 +63,10 @@ import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.math.min
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean) {
+fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean, size: IntSize) {
     val todayJdn = remember { Jdn.today() }
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(todayJdn, offset)
     val monthStartJdn = Jdn(monthStartDate)
@@ -103,22 +106,23 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
 
     val addEvent = AddEvent(viewModel)
 
-    var size by remember { mutableStateOf(IntSize.Zero) }
-    val sharedDayViewData = remember(size.height, refreshToken) {
-        SharedDayViewData(context, min(size.height / 7f, size.width / columnsCount.toFloat()))
-    }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val dayPainter = remember(size.height, size.width, refreshToken) {
+        DayPainter(context, size.width / columnsCount, size.height / rowsCount, isRtl)
+    }
+
+    val cellSize = with(LocalDensity.current) {
+        DpSize(size.width.toDp() / columnsCount, size.height.toDp() / rowsCount)
+    }
     Column(
         Modifier
-            .onSizeChanged { size = it }
-            .fillMaxWidth()
             .drawWithCache {
                 onDrawBehind {
                     drawIntoCanvas {
                         invalidationToken.run {}
                         val index = lastSelectedDay - monthStartJdn
                         if (index !in monthRange) return@drawIntoCanvas
-                        val (column, row) = dayPositions[index] ?: (0 to 0)
+                        val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
                         val l = column * size.width / columnsCount
                         val t = row * size.height / rowsCount
                         val w = size.width / columnsCount
@@ -130,28 +134,32 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                 }
             }
     ) {
-        Row(Modifier.weight(1f, fill = false)) {
-            if (isShowWeekOfYearEnabled) Box(Modifier.weight(1f))
+        Row(Modifier.height(cellSize.height)) {
+            if (isShowWeekOfYearEnabled) Spacer(Modifier.width(cellSize.width))
             (0..<7).forEach { column ->
                 val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
                 val description = stringResource(
                     R.string.week_days_name_column, getWeekDayName(weekDayPosition)
                 )
                 Cell(
-                    Modifier.semantics { this.contentDescription = description },
-                    sharedDayViewData
+                    Modifier
+                        .semantics { this.contentDescription = description }
+                        .size(cellSize),
+                    dayPainter
                 ) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
             }
         }
         (0..<6).forEach { row ->
-            Row(Modifier.weight(1f, fill = false)) {
+            Row(Modifier.height(cellSize.height)) {
                 if (isShowWeekOfYearEnabled && row < weeksCount) {
                     val weekNumber = formatNumber(weekOfYearStart + row - 1)
                     val description =
                         stringResource(R.string.nth_week_of_year, weekNumber)
                     Cell(
-                        Modifier.semantics { this.contentDescription = description },
-                        sharedDayViewData
+                        Modifier
+                            .semantics { this.contentDescription = description }
+                            .size(cellSize),
+                        dayPainter
                     ) { it.setWeekNumber(weekNumber) }
                 }
                 (0..<7).forEach RowForEach@{ column ->
@@ -159,17 +167,19 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                             applyWeekStartOffsetToWeekDay(startingDayOfWeek)
                     val day = monthStartJdn + dayOffset
                     if (dayOffset !in monthRange)
-                        return@RowForEach Cell(Modifier, sharedDayViewData) {}
+                        return@RowForEach Spacer(Modifier.width(cellSize.width))
                     val isToday = day == todayJdn
-
                     Cell(
                         Modifier
+                            .size(cellSize)
                             .combinedClickable(
                                 indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = {
-                                    viewModel.changeSelectedDay(day)
-                                    selectionIndicator.startSelection()
+                                    if (isCurrentSelection) {
+                                        viewModel.changeSelectedDay(day)
+                                        selectionIndicator.startSelection()
+                                    }
                                 },
                                 onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
                                     context,
@@ -186,7 +196,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                                     addEvent()
                                 }
                             ),
-                        sharedDayViewData
+                        dayPainter,
                     ) {
                         dayPositions[dayOffset] =
                             (column + if (isShowWeekOfYearEnabled) 1 else 0) to row + 1
@@ -194,7 +204,6 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                         it.setDayOfMonthItem(
                             isToday, isHighlighted && selectedDay == day,
-                            //isSelected == true && dayOffset == lastSelectedDay - 1,
                             events.any { it !is CalendarEvent.DeviceCalendarEvent },
                             events.any { it is CalendarEvent.DeviceCalendarEvent },
                             events.any { it.isHoliday }, day, dayOffset + 1,
@@ -208,18 +217,22 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
 }
 
 @Composable
-private fun RowScope.Cell(
+private fun Cell(
     modifier: Modifier = Modifier,
-    sharedDayViewData: SharedDayViewData,
-    update: (DayView) -> Unit,
+    dayPainter: DayPainter,
+    update: (DayPainter) -> Unit,
 ) {
-    AndroidView(
-        factory = ::DayView,
-        update = {
-            it.sharedDayViewData = sharedDayViewData
-            update(it)
-        },
-        modifier = modifier.then(Modifier.weight(1f)),
+    Box(
+        Modifier
+            .drawWithCache {
+                onDrawWithContent {
+                    drawIntoCanvas {
+                        update(dayPainter)
+                        dayPainter.drawDay(it.nativeCanvas)
+                    }
+                }
+            }
+            .then(modifier),
     )
 }
 
@@ -272,16 +285,16 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = left.toFloat()
             lastY = top.toFloat()
-            lastRadius = DayView.radius(width, height) * fraction
+            lastRadius = DayPainter.radius(width, height) * fraction
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f),
-                DayView.radius(width, height) * fraction, paint
+                DayPainter.radius(width, height) * fraction, paint
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = lerp(currentX, left.toFloat(), fraction)
             lastY = lerp(currentY, top.toFloat(), fraction)
-            lastRadius = DayView.radius(width, height)
+            lastRadius = DayPainter.radius(width, height)
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f), lastRadius, paint
             )

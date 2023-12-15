@@ -2,9 +2,11 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -12,6 +14,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,12 +31,13 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -53,21 +57,20 @@ fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
     }
 
     HorizontalPager(state = pagerState, modifier = modifier) { index ->
-        Row(
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier.fillMaxHeight(),
-        ) {
+        Box(modifier = Modifier.fillMaxHeight()) {
+            var size by remember { mutableStateOf(IntSize.Zero) }
+            debugLog("$size")
             // TODO: Ideally this should be onPrimary
-            var height by remember { mutableStateOf(100) }
             val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
             Icon(
                 Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = null,
                 tint = colorOnAppBar,
                 modifier = Modifier
-                    .padding(start = 10.dp)
-                    .height(with(LocalDensity.current) { height.toDp() } / 7)
+                    .height(with(LocalDensity.current) { size.height.toDp() } / 7 + 4.dp)
                     .combinedClickable(
+                        indication = rememberRipple(bounded = false),
+                        interactionSource = remember { MutableInteractionSource() },
                         onClick = {
                             scope.launch { pagerState.animateScrollToPage(index - 1) }
                         },
@@ -75,33 +78,35 @@ fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
                             R.string.previous_x, stringResource(R.string.month)
                         ),
                         onLongClick = {
-                            scope.launch { pagerState.animateScrollToPage(index - 12) }
+                            scope.launch { pagerState.scrollToPage(index - 12) }
                         },
                         onLongClickLabel = stringResource(
                             R.string.previous_x, stringResource(R.string.year)
                         ),
                     )
-                    .alpha(.9f),
+                    .padding(start = 10.dp)
+                    .alpha(.9f)
+                    .align(Alignment.TopStart),
             )
             val isCurrentSelection = pagerState.currentPage == index
             if (pagerState.currentPage == index)
                 viewModel.changeSelectedMonthOffset(-applyOffset(index))
-
             val currentMonthOffset = -applyOffset(index)
             Box(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = 4.dp)
-                    .onSizeChanged { height = (it.height * 1.08).roundToInt() },
-            ) { Month(viewModel, currentMonthOffset, isCurrentSelection) }
+                    .padding(bottom = 4.dp, start = 36.dp, end = 36.dp)
+                    .fillMaxSize()
+                    .onSizeChanged { size = it },
+            ) { Month(viewModel, currentMonthOffset, isCurrentSelection, size) }
             Icon(
                 Icons.AutoMirrored.Default.KeyboardArrowRight,
                 contentDescription = null,
                 tint = colorOnAppBar,
                 modifier = Modifier
-                    .padding(end = 10.dp)
-                    .height(with(LocalDensity.current) { height.toDp() } / 7)
+                    .height(with(LocalDensity.current) { size.height.toDp() } / 7 + 4.dp)
                     .combinedClickable(
+                        indication = rememberRipple(bounded = false),
+                        interactionSource = remember { MutableInteractionSource() },
                         onClick = {
                             scope.launch { pagerState.animateScrollToPage(index + 1) }
                         },
@@ -109,13 +114,15 @@ fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
                             R.string.next_x, stringResource(R.string.month)
                         ),
                         onLongClick = {
-                            scope.launch { pagerState.animateScrollToPage(index + 12) }
+                            scope.launch { pagerState.scrollToPage(index + 12) }
                         },
                         onLongClickLabel = stringResource(
                             R.string.next_x, stringResource(R.string.year)
                         ),
                     )
-                    .alpha(.9f),
+                    .padding(end = 10.dp)
+                    .alpha(.9f)
+                    .align(Alignment.TopEnd),
             )
         }
     }
