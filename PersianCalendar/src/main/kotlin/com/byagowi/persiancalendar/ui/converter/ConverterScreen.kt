@@ -13,14 +13,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -38,6 +37,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -101,113 +101,115 @@ fun ConverterScreen(
     val screenMode by viewModel.screenMode.collectAsState()
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-    Column {
-        TopAppBar(
-            title = {
-                var showMenu by remember { mutableStateOf(false) }
-                Box(
-                    Modifier
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .background(Color.Gray.copy(alpha = .5f))
-                        .clickable { showMenu = !showMenu },
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(vertical = 4.dp)
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            TopAppBar(
+                title = {
+                    var showMenu by remember { mutableStateOf(false) }
+                    Box(
+                        Modifier
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .background(Color.Gray.copy(alpha = .5f))
+                            .clickable { showMenu = !showMenu },
                     ) {
-                        Spacer(Modifier.width(16.dp))
-                        Text(stringResource(viewModel.screenMode.value.title))
-                        Icon(Icons.Default.ExpandMore, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(vertical = 4.dp)
+                        ) {
+                            Spacer(Modifier.width(16.dp))
+                            Text(stringResource(viewModel.screenMode.value.title))
+                            Icon(Icons.Default.ExpandMore, contentDescription = null)
+                            Spacer(Modifier.width(8.dp))
+                        }
+                        DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                            ConverterScreenMode.entries.filter {
+                                // Converter doesn't work in Android 5, let's hide it there
+                                it != ConverterScreenMode.TimeZones
+                                // Disable timezone for now
+                                // || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                            }.forEach {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(it.title)) },
+                                    onClick = {
+                                        showMenu = false
+                                        viewModel.changeScreenMode(it)
+                                    },
+                                )
+                            }
+                        }
                     }
-                    DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                        ConverterScreenMode.entries.filter {
-                            // Converter doesn't work in Android 5, let's hide it there
-                            it != ConverterScreenMode.TimeZones
-                            // Disable timezone for now
-                            // || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                        }.forEach {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(it.title)) },
-                                onClick = {
-                                    showMenu = false
-                                    viewModel.changeScreenMode(it)
-                                },
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = colorOnAppBar,
+                    actionIconContentColor = colorOnAppBar,
+                    titleContentColor = colorOnAppBar,
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { openDrawer() }) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = stringResource(R.string.open_drawer)
+                        )
+                    }
+                },
+                actions = {
+                    val todayButtonVisibility by viewModel.todayButtonVisibilityEvent.collectAsState(
+                        initial = false
+                    )
+                    AnimatedVisibility(todayButtonVisibility) {
+                        IconButton(onClick = {
+                            val todayJdn = Jdn.today()
+                            viewModel.changeSelectedDate(todayJdn)
+                            viewModel.changeSecondSelectedDate(todayJdn)
+                            viewModel.resetTimeZoneClock()
+                        }) {
+                            Icon(
+                                ImageVector.vectorResource(R.drawable.ic_restore_modified),
+                                contentDescription = stringResource(R.string.return_to_today),
                             )
                         }
                     }
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                navigationIconContentColor = colorOnAppBar,
-                actionIconContentColor = colorOnAppBar,
-                titleContentColor = colorOnAppBar,
-            ),
-            navigationIcon = {
-                IconButton(onClick = { openDrawer() }) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(R.string.open_drawer)
-                    )
-                }
-            },
-            actions = {
-                val todayButtonVisibility by viewModel.todayButtonVisibilityEvent.collectAsState(
-                    initial = false
-                )
-                AnimatedVisibility(todayButtonVisibility) {
-                    IconButton(onClick = {
-                        val todayJdn = Jdn.today()
-                        viewModel.changeSelectedDate(todayJdn)
-                        viewModel.changeSecondSelectedDate(todayJdn)
-                        viewModel.resetTimeZoneClock()
-                    }) {
-                        Icon(
-                            ImageVector.vectorResource(R.drawable.ic_restore_modified),
-                            contentDescription = stringResource(R.string.return_to_today),
-                        )
-                    }
-                }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = {
-                        when (screenMode) {
-                            ConverterScreenMode.Converter -> {
-                                val jdn = viewModel.selectedDate.value
-                                context.shareText(
-                                    listOf(
-                                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                                        context.getString(R.string.equivalent_to),
-                                        dateStringOfOtherCalendars(jdn, spacedComma)
-                                    ).joinToString(" ")
-                                )
-                            }
-
-                            ConverterScreenMode.Distance -> {
-                                val jdn = viewModel.selectedDate.value
-                                val secondJdn = viewModel.secondSelectedDate.value
-                                context.shareText(
-                                    calculateDaysDifference(
-                                        context.resources,
-                                        jdn,
-                                        secondJdn,
-                                        calendarType = viewModel.calendar.value
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = {
+                            when (screenMode) {
+                                ConverterScreenMode.Converter -> {
+                                    val jdn = viewModel.selectedDate.value
+                                    context.shareText(
+                                        listOf(
+                                            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                                            context.getString(R.string.equivalent_to),
+                                            dateStringOfOtherCalendars(jdn, spacedComma)
+                                        ).joinToString(" ")
                                     )
-                                )
-                            }
+                                }
 
-                            ConverterScreenMode.Calculator -> {
-                                context.shareText(runCatching {
-                                    // running this inside a runCatching block is absolutely important
-                                    eval(viewModel.calculatorInputText.value)
-                                }.getOrElse { it.message } ?: "")
-                            }
+                                ConverterScreenMode.Distance -> {
+                                    val jdn = viewModel.selectedDate.value
+                                    val secondJdn = viewModel.secondSelectedDate.value
+                                    context.shareText(
+                                        calculateDaysDifference(
+                                            context.resources,
+                                            jdn,
+                                            secondJdn,
+                                            calendarType = viewModel.calendar.value
+                                        )
+                                    )
+                                }
 
-                            ConverterScreenMode.TimeZones -> {
+                                ConverterScreenMode.Calculator -> {
+                                    context.shareText(runCatching {
+                                        // running this inside a runCatching block is absolutely important
+                                        eval(viewModel.calculatorInputText.value)
+                                    }.getOrElse { it.message } ?: "")
+                                }
+
+                                ConverterScreenMode.TimeZones -> {
 //                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                                    shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
 //                                            Clock(
@@ -216,23 +218,30 @@ fun ConverterScreen(
 //                                            )
 //                                                .toBasicFormatString())
 //                                } else ""
+                                }
+
+                                ConverterScreenMode.QrCode -> qrShareAction()
                             }
-
-                            ConverterScreenMode.QrCode -> qrShareAction()
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Share,
+                                contentDescription = stringResource(R.string.share),
+                            )
                         }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = stringResource(R.string.share),
-                        )
                     }
-                }
-            },
-        )
-
+                },
+            )
+        }
+    ) { paddingValues ->
         Surface(
             shape = MaterialCornerExtraLargeTop(),
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    top = paddingValues.calculateTopPadding(),
+                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+                ),
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(24.dp))
@@ -258,10 +267,22 @@ fun ConverterScreen(
                     }
                     if (isLandscape) Row {
                         Box(Modifier.weight(1f)) {
-                            TimezoneClock(viewModel, zones, zoneNames, viewModel.firstTimeZone, 0)
+                            TimezoneClock(
+                                viewModel,
+                                zones,
+                                zoneNames,
+                                viewModel.firstTimeZone,
+                                0
+                            )
                         }
                         Box(Modifier.weight(1f)) {
-                            TimezoneClock(viewModel, zones, zoneNames, viewModel.secondTimeZone, 1)
+                            TimezoneClock(
+                                viewModel,
+                                zones,
+                                zoneNames,
+                                viewModel.secondTimeZone,
+                                1
+                            )
                         }
                     } else Column {
                         TimezoneClock(viewModel, zones, zoneNames, viewModel.firstTimeZone, 0)
@@ -289,7 +310,7 @@ fun ConverterScreen(
                     }
                 }
 
-                Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+                Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
             }
         }
     }
