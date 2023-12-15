@@ -12,6 +12,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,9 +23,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DateRange
@@ -306,87 +310,90 @@ fun App(intentStartDestination: String?, application: Application, finish: () ->
                     else Modifier
                 ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
 
-                val actualSeason =
-                    remember { Season.fromDate(Date(), coordinates.value).ordinal }
-                val pageSize = 200
-                val seasonState = rememberPagerState(
-                    initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
-                    pageCount = { pageSize },
-                )
-                if (drawerState.isOpen) {
-                    scope.launch { seasonState.animateScrollToPage(100 + actualSeason) }
-                }
-                val imageFilter = remember(LocalConfiguration.current) {
-                    // Consider gray scale themes of Android 14
-                    // And apply a gray scale filter https://stackoverflow.com/a/75698731
-                    if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale)
-                        ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
-                    else null
-                }
-                HorizontalPager(
-                    state = seasonState,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
-                        .height(196.dp)
-                        .clip(MaterialTheme.shapes.extraLarge)
-                        .semantics {
-                            @OptIn(ExperimentalComposeUiApi::class)
-                            this.invisibleToUser()
-                        },
-                    pageSpacing = 8.dp,
-                ) {
-                    Image(
-                        ImageBitmap.imageResource(Season.entries[it % 4].imageId),
-                        contentScale = ContentScale.FillWidth,
-                        contentDescription = null,
-                        colorFilter = imageFilter,
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    val actualSeason =
+                        remember { Season.fromDate(Date(), coordinates.value).ordinal }
+                    val pageSize = 200
+                    val seasonState = rememberPagerState(
+                        initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
+                        pageCount = { pageSize },
+                    )
+                    if (drawerState.isOpen) {
+                        scope.launch { seasonState.animateScrollToPage(100 + actualSeason) }
+                    }
+                    val imageFilter = remember(LocalConfiguration.current) {
+                        // Consider gray scale themes of Android 14
+                        // And apply a gray scale filter https://stackoverflow.com/a/75698731
+                        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale)
+                            ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
+                        else null
+                    }
+                    HorizontalPager(
+                        state = seasonState,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .clip(MaterialTheme.shapes.extraLarge),
-                    )
-                }
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
+                            .height(196.dp)
+                            .clip(MaterialTheme.shapes.extraLarge)
+                            .semantics {
+                                @OptIn(ExperimentalComposeUiApi::class)
+                                this.invisibleToUser()
+                            },
+                        pageSpacing = 8.dp,
+                    ) {
+                        Image(
+                            ImageBitmap.imageResource(Season.entries[it % 4].imageId),
+                            contentScale = ContentScale.FillWidth,
+                            contentDescription = null,
+                            colorFilter = imageFilter,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(MaterialTheme.shapes.extraLarge),
+                        )
+                    }
 
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                listOf(
-                    Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
-                    Triple(
-                        converterRoute,
-                        Icons.Default.SwapVerticalCircle,
-                        R.string.date_converter
-                    ),
-                    Triple(compassRoute, Icons.Default.Explore, R.string.compass),
-                    Triple(
-                        astronomyRoute,
-                        ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
-                        R.string.astronomy
-                    ),
-                    Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
-                    Triple(aboutRoute, Icons.Default.Info, R.string.about),
-                    Triple(null, Icons.Default.Cancel, R.string.exit),
-                ).forEach { (id, icon, title) ->
-                    NavigationDrawerItem(
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                        label = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(
-                                    icon,
-                                    modifier = Modifier.size(24.dp),
-                                    contentDescription = null
-                                )
-                                Spacer(Modifier.width(16.dp))
-                                Text(stringResource(title))
-                            }
-                        },
-                        selected = id == navBackStackEntry?.destination?.route,
-                        onClick = {
-                            if (id == null) return@NavigationDrawerItem finish()
-                            scope.launch {
-                                drawerState.close()
-                                navController.navigate(id)
-                            }
-                        },
-                    )
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    listOf(
+                        Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
+                        Triple(
+                            converterRoute,
+                            Icons.Default.SwapVerticalCircle,
+                            R.string.date_converter
+                        ),
+                        Triple(compassRoute, Icons.Default.Explore, R.string.compass),
+                        Triple(
+                            astronomyRoute,
+                            ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
+                            R.string.astronomy
+                        ),
+                        Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
+                        Triple(aboutRoute, Icons.Default.Info, R.string.about),
+                        Triple(null, Icons.Default.Cancel, R.string.exit),
+                    ).forEach { (id, icon, title) ->
+                        NavigationDrawerItem(
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                            label = {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        icon,
+                                        modifier = Modifier.size(24.dp),
+                                        contentDescription = null
+                                    )
+                                    Spacer(Modifier.width(16.dp))
+                                    Text(stringResource(title))
+                                }
+                            },
+                            selected = id == navBackStackEntry?.destination?.route,
+                            onClick = {
+                                if (id == null) return@NavigationDrawerItem finish()
+                                scope.launch {
+                                    drawerState.close()
+                                    navController.navigate(id)
+                                }
+                            },
+                        )
+                    }
+                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                 }
             }
         }
