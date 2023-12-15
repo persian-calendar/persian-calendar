@@ -46,7 +46,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 
 @Composable
-fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? = null) {
+fun InterfaceCalendarSettings(destination: String? = null) {
     SettingsSection(stringResource(R.string.pref_interface))
     val context = LocalContext.current
     run {
@@ -107,7 +107,7 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
             stringResource(R.string.show_device_calendar_events_summary),
             onBeforeToggle = {
                 if (it && ActivityCompat.checkSelfPermission(
-                        activity, Manifest.permission.READ_CALENDAR
+                        context, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     showDialog = true
@@ -136,7 +136,7 @@ fun InterfaceCalendarSettings(activity: ComponentActivity, destination: String? 
     )
     run {
         LaunchedEffect(null) {
-            val appPrefs = activity.appPrefs
+            val appPrefs = context.appPrefs
             if (PREF_ISLAMIC_OFFSET in appPrefs && appPrefs.isIslamicOffsetExpired) appPrefs.edit {
                 putString(
                     PREF_ISLAMIC_OFFSET,

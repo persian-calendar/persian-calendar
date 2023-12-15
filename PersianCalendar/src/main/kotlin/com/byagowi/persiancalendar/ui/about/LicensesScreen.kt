@@ -61,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Preview
@@ -152,7 +153,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                 selected = selectedItem == i,
                 onClick = {
                     selectedItem = i
-                    clickHandler(context as? ComponentActivity) // TODO: Ugly cast
+                    clickHandler(context.getActivity())
                 },
                 icon = icon,
                 label = { Text(title) },

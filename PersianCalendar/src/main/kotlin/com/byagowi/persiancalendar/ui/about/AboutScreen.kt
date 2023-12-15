@@ -95,6 +95,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
@@ -244,7 +245,7 @@ fun AboutScreen(
                     .height(headerSize)
                     .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
                         logoAnimationAtEnd = !logoAnimationAtEnd
-                        clickHandlerDialog(context as? ComponentActivity) // TODO: Ugly cast
+                        clickHandlerDialog(context.getActivity())
                         logoEffect = effectsGenerator
                             ?.invoke()
                             ?.asComposeRenderEffect()

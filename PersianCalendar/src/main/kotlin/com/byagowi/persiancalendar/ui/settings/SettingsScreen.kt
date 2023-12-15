@@ -82,6 +82,7 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotifica
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
@@ -93,7 +94,6 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 fun SettingsScreen(
     openDrawer: () -> Unit,
-    activity: ComponentActivity,
     initialPage: Int,
     destination: String,
 ) = Column {
@@ -135,22 +135,22 @@ fun SettingsScreen(
             }
             DropdownMenu(
                 expanded = showMenu, onDismissRequest = { showMenu = false },
-            ) { MenuItems(activity) { showMenu = false } }
+            ) { MenuItems { showMenu = false } }
         },
     )
 
     val tabs = remember {
         listOf(
             @Composable {
-                InterfaceCalendarSettings(activity, destination)
+                InterfaceCalendarSettings(destination)
             } to listOf(R.string.pref_interface, R.string.calendar),
 
             @Composable {
-                WidgetNotificationSettings(activity)
+                WidgetNotificationSettings()
             } to listOf(R.string.pref_notification, R.string.pref_widget),
 
             @Composable {
-                LocationAthanSettings(activity)
+                LocationAthanSettings()
             } to listOf(R.string.location, R.string.athan),
         )
     }
@@ -206,13 +206,14 @@ const val WIDGET_NOTIFICATION_TAB = 1
 const val LOCATION_ATHAN_TAB = 2
 
 @Composable
-private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
+private fun MenuItems(closeMenu: () -> Unit) {
+    val context = LocalContext.current
     DropdownMenuItem(
         text = { Text(stringResource(R.string.live_wallpaper_settings)) },
         onClick = {
             closeMenu()
             runCatching {
-                activity.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
+                context.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
             }.onFailure(logException).getOrNull().debugAssertNotNull
         },
     )
@@ -220,7 +221,7 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
         text = { Text(stringResource(R.string.screensaver_settings)) },
         onClick = {
             closeMenu()
-            runCatching { activity.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }.onFailure(
+            runCatching { context.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }.onFailure(
                 logException
             ).getOrNull().debugAssertNotNull
         },
@@ -230,12 +231,12 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
             text = { Text(stringResource(R.string.add_quick_settings_tile)) },
             onClick = {
                 closeMenu()
-                activity.getSystemService<StatusBarManager>()?.requestAddTileService(
+                context.getSystemService<StatusBarManager>()?.requestAddTileService(
                     ComponentName(
-                        activity.packageName, PersianCalendarTileService::class.qualifiedName ?: "",
+                        context.packageName, PersianCalendarTileService::class.qualifiedName ?: "",
                     ),
-                    activity.getString(R.string.app_name),
-                    Icon.createWithResource(activity, R.drawable.day19),
+                    context.getString(R.string.app_name),
+                    Icon.createWithResource(context, R.drawable.day19),
                     {},
                     {},
                 )
@@ -287,8 +288,8 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
     DropdownMenuItem(
         text = { Text("Clear preferences store and exit") },
         onClick = {
-            activity.appPrefs.edit { clear() }
-            activity.finish()
+            context.appPrefs.edit { clear() }
+            context.getActivity()?.finish()
         },
     )
     run {
@@ -307,10 +308,10 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
                         OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
                             TimeUnit.SECONDS.toMillis(value.toLong()), TimeUnit.MILLISECONDS
                         ).build()
-                    WorkManager.getInstance(activity).beginUniqueWork(
+                    WorkManager.getInstance(context).beginUniqueWork(
                         "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
                     ).enqueue()
-                    Toast.makeText(activity, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
                 }) { Text(stringResource(R.string.accept)) }
             }, onDismissRequest = { closeMenu() }) {
                 TextField(
@@ -361,7 +362,7 @@ private fun MenuItems(activity: ComponentActivity, closeMenu: () -> Unit) {
         onClick = {
             // https://stackoverflow.com/a/23112947
             runCatching {
-                activity.startActivity(
+                context.startActivity(
                     Intent(Intent.ACTION_MAIN).setClassName(
                         "com.android.systemui", "com.android.systemui.Somnambulator"
                     )

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
@@ -148,7 +149,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         val intentStartDestination = intent?.action
         intent?.action = ""
 
-        setContent { AppTheme { App(this, intentStartDestination) } }
+        setContent { AppTheme { App(intentStartDestination, application, ::finish) } }
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
@@ -261,7 +262,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 }
 
 @Composable
-fun App(activity: ComponentActivity, intentStartDestination: String?) {
+fun App(intentStartDestination: String?, application: Application, finish: () -> Unit) {
     val calendarRoute = "calendar"
     val compassRoute = "compass"
     val levelRoute = "level"
@@ -379,7 +380,7 @@ fun App(activity: ComponentActivity, intentStartDestination: String?) {
                         },
                         selected = id == navBackStackEntry?.destination?.route,
                         onClick = {
-                            if (id == null) return@NavigationDrawerItem activity.finish()
+                            if (id == null) return@NavigationDrawerItem finish()
                             scope.launch {
                                 drawerState.close()
                                 navController.navigate(id)
@@ -436,7 +437,7 @@ fun App(activity: ComponentActivity, intentStartDestination: String?) {
 //                                    CalendarFragmentDirections.actionCalendarToAstronomy(dayOffset)
 //                                )
                     },
-                    viewModel = remember { CalendarViewModel(activity.application) },
+                    viewModel = remember { CalendarViewModel(application) },
                 )
             }
 
@@ -452,13 +453,11 @@ fun App(activity: ComponentActivity, intentStartDestination: String?) {
                     openDrawer = { scope.launch { drawerState.open() } },
                     navigateToLevel = { navController.navigate(levelRoute) },
                     navigateToMap = { navController.navigate(mapRoute) },
-                    activity,
                 )
             }
 
             composable(levelRoute) {
                 LevelScreen(
-                    activity,
                     navigateUp = navController::navigateUp,
                     navigateToCompass = {
                         // If compass wasn't in backstack (level is brought from shortcut), navigate to it
@@ -504,7 +503,6 @@ fun App(activity: ComponentActivity, intentStartDestination: String?) {
             composable(settingsRoute) {
                 SettingsScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
-                    activity = activity,
                     initialPage = 0,
                     destination = ""
                 )//) args.tab, args.preferenceKey)

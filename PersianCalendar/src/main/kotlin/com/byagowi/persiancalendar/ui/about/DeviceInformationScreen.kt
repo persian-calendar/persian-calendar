@@ -73,6 +73,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
@@ -104,8 +105,7 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
         val items = remember {
-            // TODO: Ugly cast
-            createItemsList(context as? Activity ?: return@remember emptyList())
+            createItemsList(context.getActivity() ?: return@remember emptyList())
         }
         // TODO: Ideally this should be onPrimary
         val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
@@ -244,8 +244,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                 selected = i == selectedIndex,
                 onClick = {
                     selectedIndex = i
-                    // TODO: Ugly cast
-                    clickHandler(context as? ComponentActivity)
+                    clickHandler(context.getActivity())
                 },
                 label = { Text(title) },
                 icon = {

@@ -61,13 +61,13 @@ import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import java.util.UUID
 
 @Composable
 fun LevelScreen(
-    activity: ComponentActivity,
     navigateUp: () -> Unit,
     navigateToCompass: () -> Unit,
 ) {
@@ -82,6 +82,7 @@ fun LevelScreen(
     LocalLifecycleOwner.current.lifecycle.addObserver(LifecycleEventObserver { _, event ->
         if (event != Lifecycle.Event.ON_PAUSE && event != Lifecycle.Event.ON_RESUME) return@LifecycleEventObserver
 
+        val activity = context.getActivity() ?: return@LifecycleEventObserver
         // Rotation lock, https://stackoverflow.com/a/75984863
         val destination = if (event == Lifecycle.Event.ON_PAUSE) null else {
             @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
@@ -106,6 +107,7 @@ fun LevelScreen(
             ?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "persiancalendar:level")
         lock?.acquire(FIFTEEN_MINUTES_IN_MILLIS)
 
+        val activity = context.getActivity() ?: return@DisposableEffect onDispose {}
         val windowInsetsController =
             WindowCompat.getInsetsController(activity.window, activity.window.decorView)
         windowInsetsController.systemBarsBehavior =
@@ -191,7 +193,9 @@ fun LevelScreen(
                             .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
                         factory = {
                             val levelView = LevelView(it)
-                            orientationProvider = OrientationProvider(activity, levelView)
+                            context.getActivity()?.let { activity ->
+                                orientationProvider = OrientationProvider(activity, levelView)
+                            }
                             levelView
                         },
                         update = update@{ levelView ->

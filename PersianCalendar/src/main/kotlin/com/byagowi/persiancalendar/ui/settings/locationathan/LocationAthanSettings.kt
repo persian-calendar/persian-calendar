@@ -67,6 +67,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDi
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.titleStringId
@@ -76,7 +77,7 @@ import io.github.persiancalendar.praytimes.MidnightMethod
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun LocationAthanSettings(activity: ComponentActivity) {
+fun LocationAthanSettings() {
     SettingsSection(stringResource(R.string.location))
     SettingsClickable(
         title = stringResource(R.string.gps_location),
@@ -208,10 +209,10 @@ fun LocationAthanSettings(activity: ComponentActivity) {
             stringResource(R.string.enable_notification_athan),
             onBeforeToggle = { value ->
                 if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                        activity, Manifest.permission.POST_NOTIFICATIONS
+                        context, Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    activity.askForPostNotificationPermission(
+                    context.getActivity()?.askForPostNotificationPermission(
                         POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
                     )
                     false

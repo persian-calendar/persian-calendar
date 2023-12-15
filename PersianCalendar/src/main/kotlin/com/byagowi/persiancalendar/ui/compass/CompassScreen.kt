@@ -96,10 +96,10 @@ fun CompassScreen(
     openDrawer: () -> Unit,
     navigateToLevel: () -> Unit,
     navigateToMap: () -> Unit,
-    activity: ComponentActivity,
 ) {
+    val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
-        when (activity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
+        when (context.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
             android.view.Surface.ROTATION_0 -> 0f
             android.view.Surface.ROTATION_90 -> 90f
             android.view.Surface.ROTATION_180 -> 180f
@@ -120,7 +120,6 @@ fun CompassScreen(
             isTimeShiftAnimate = false
         }
     }
-    val context = LocalContext.current
     val prefs = remember { context.appPrefs }
     val cityName = remember {
         prefs.cityName ?: coordinates.value?.run {
@@ -349,7 +348,7 @@ fun CompassScreen(
 
     LocalLifecycleOwner.current.lifecycle.addObserver(LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_RESUME) {
-            sensorManager = activity.getSystemService<SensorManager>()
+            sensorManager = context.getSystemService<SensorManager>()
             accelerometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             magnetometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
             orientationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)

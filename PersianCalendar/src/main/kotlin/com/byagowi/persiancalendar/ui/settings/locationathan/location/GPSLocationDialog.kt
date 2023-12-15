@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -123,8 +122,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                     TextButton(onClick = {
                         onDismissRequest()
                         runCatching {
-                            // TODO: Ugly cast
-                            (context as Activity?)?.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                            context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                         }.onFailure(logException)
                     }) { Text(stringResource(R.string.accept)) }
                 }

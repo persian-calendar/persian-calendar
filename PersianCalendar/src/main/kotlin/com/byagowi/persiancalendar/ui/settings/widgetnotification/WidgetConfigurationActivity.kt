@@ -134,7 +134,7 @@ private fun WidgetConfigurationContent(
                         )
                     }
 
-                    WidgetConfiguration(activity)
+                    WidgetConfiguration()
                 }
             }
         }

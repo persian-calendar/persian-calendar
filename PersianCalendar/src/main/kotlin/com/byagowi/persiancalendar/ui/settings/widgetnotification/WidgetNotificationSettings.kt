@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
@@ -45,21 +46,23 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.TimeZone
 
 @Composable
-fun WidgetNotificationSettings(activity: ComponentActivity) {
+fun WidgetNotificationSettings() {
     SettingsSection(stringResource(R.string.pref_notification))
-    NotificationSettings(activity)
+    NotificationSettings()
     SettingsDivider()
     SettingsSection(stringResource(R.string.pref_widget))
-    WidgetConfiguration(activity)
+    WidgetConfiguration()
 }
 
 @Composable
-fun NotificationSettings(activity: ComponentActivity) {
-    val appPrefs = remember { activity.appPrefs }
+fun NotificationSettings() {
+    val context = LocalContext.current
+    val appPrefs = remember { context.appPrefs }
     var showDateLockScreen by remember {
         mutableStateOf(appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
     }
@@ -78,10 +81,10 @@ fun NotificationSettings(activity: ComponentActivity) {
         summary = stringResource(R.string.enable_notify),
         onBeforeToggle = { value: Boolean ->
             if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                    activity, Manifest.permission.POST_NOTIFICATIONS
+                    context, Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                activity.askForPostNotificationPermission(
+                context.getActivity()?.askForPostNotificationPermission(
                     POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
                 )
                 false
@@ -104,8 +107,9 @@ fun NotificationSettings(activity: ComponentActivity) {
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
-fun WidgetConfiguration(activity: ComponentActivity) {
-    val appPrefs = remember { activity.appPrefs }
+fun WidgetConfiguration() {
+    val context = LocalContext.current
+    val appPrefs = remember { context.appPrefs }
     val isDynamicTheme = remember { Theme.isDynamicColor(appPrefs) }
     var preferSystemColors by remember {
         mutableStateOf(appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, isDynamicTheme))
