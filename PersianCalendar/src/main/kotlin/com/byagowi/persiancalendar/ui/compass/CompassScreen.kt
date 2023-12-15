@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -143,157 +144,166 @@ fun CompassScreen(
     var isStopped by remember { mutableStateOf(false) }
     // Ugly, for now
     var compassView by remember { mutableStateOf<CompassView?>(null) }
-    Column {
-        // TODO: Ideally this should be onPrimary
-        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-        TopAppBar(
-            title = {
-                Column {
-                    Text(if (isSliderShown) Clock(time).toBasicFormatString() else stringResource(R.string.compass))
-                    if (cityName != null) Text(
-                        cityName,
-                        style = MaterialTheme.typography.titleSmall,
-                    )
-                }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                navigationIconContentColor = colorOnAppBar,
-                actionIconContentColor = colorOnAppBar,
-                titleContentColor = colorOnAppBar,
-            ),
-            navigationIcon = {
-                IconButton(onClick = { openDrawer() }) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(R.string.open_drawer)
-                    )
-                }
-            },
-            actions = {
-                val coordinates by coordinates.collectAsState()
-                if (coordinates != null) TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip {
-                            Text(stringResource(R.string.show_sun_and_moon_path_in_24_hours))
-                        }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { isTimeShiftAnimate = true }) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
-                            contentDescription = stringResource(
-                                R.string.show_sun_and_moon_path_in_24_hours
-                            ),
+
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            // TODO: Ideally this should be onPrimary
+            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+            TopAppBar(
+                title = {
+                    Column {
+                        Text(
+                            if (isSliderShown) Clock(time).toBasicFormatString() else stringResource(
+                                R.string.compass
+                            )
+                        )
+                        if (cityName != null) Text(
+                            cityName,
+                            style = MaterialTheme.typography.titleSmall,
                         )
                     }
-                }
-                Box {
-                    var showMenu by rememberSaveable { mutableStateOf(false) }
-                    if (cityName != null || BuildConfig.DEVELOPMENT) IconButton(
-                        onClick = { showMenu = !showMenu },
-                    ) {
-                        TooltipBox(
-                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                            tooltip = {
-                                PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                            },
-                            state = rememberTooltipState()
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.MoreVert,
-                                contentDescription = stringResource(R.string.more_options),
-                            )
-                        }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = colorOnAppBar,
+                    actionIconContentColor = colorOnAppBar,
+                    titleContentColor = colorOnAppBar,
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { openDrawer() }) {
+                        Icon(
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = stringResource(R.string.open_drawer)
+                        )
                     }
-                    var showTrueNorth by rememberSaveable {
-                        mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
-                    }
-                    var showQibla by rememberSaveable {
-                        mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
-                    }
-                    DropdownMenu(
-                        expanded = showMenu,
-                        onDismissRequest = { showMenu = false },
-                    ) {
-                        DropdownMenuCheckableItem(
-                            stringResource(R.string.true_north),
-                            showTrueNorth
-                        ) {
-                            showTrueNorth = it
-                            showMenu = false
-                            compassView?.isTrueNorth = it
-                        }
-                        DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
-                            showQibla = it
-                            showMenu = false
-                            compassView?.isShowQibla = it
-                            prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
-                        }
-                        if (BuildConfig.DEVELOPMENT) {
-                            DropdownMenuItem(
-                                text = { Text("Do a rotation") },
-                                onClick = {
-                                    // Ugly, but is test only
-                                    val animator = ValueAnimator.ofFloat(0f, 1f)
-                                    animator.duration = TEN_SECONDS_IN_MILLIS
-                                    animator.addUpdateListener {
-                                        compassView?.angle = it.animatedFraction * 360
-                                    }
-                                    if (Random.nextBoolean()) animator.start() else animator.reverse()
-                                    showMenu = false
-                                },
-                            )
-                        }
-                    }
-                }
-            },
-        )
-        Surface(shape = MaterialCornerExtraLargeTop()) {
-            Box {
-                Column {
-                    AndroidView(
-                        modifier = Modifier.weight(1f),
-                        factory = {
-                            val root = CompassView(it)
-                            compassView = root
-                            root
+                },
+                actions = {
+                    val coordinates by coordinates.collectAsState()
+                    if (coordinates != null) TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip {
+                                Text(stringResource(R.string.show_sun_and_moon_path_in_24_hours))
+                            }
                         },
-                        update = { it.setTime(time) },
-                    )
-                    BottomAppBar {
-                        Spacer(Modifier.width(8.dp))
-                        IconButton(onClick = navigateToLevel) {
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = { isTimeShiftAnimate = true }) {
                             Icon(
-                                ImageVector.vectorResource(R.drawable.ic_level),
-                                contentDescription = stringResource(R.string.level)
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
+                                contentDescription = stringResource(
+                                    R.string.show_sun_and_moon_path_in_24_hours
+                                ),
                             )
                         }
-                        IconButton(onClick = navigateToMap) {
-                            Icon(
-                                Icons.Default.Map,
-                                contentDescription = stringResource(R.string.map)
-                            )
-                        }
-                        IconButton(onClick = {
-                            showLongToast(
-                                context, if (sensorNotFound) R.string.compass_not_found
-                                else R.string.calibrate_compass_summary, 5000
-                            )
-                        }) {
-                            Icon(
-                                Icons.Default.Info,
-                                contentDescription = stringResource(R.string.help)
-                            )
-                        }
-                        Spacer(Modifier.weight(1f, fill = true))
-                        StopButton(isStopped) { isStopped = it }
-                        Spacer(Modifier.width(16.dp))
                     }
+                    Box {
+                        var showMenu by rememberSaveable { mutableStateOf(false) }
+                        if (cityName != null || BuildConfig.DEVELOPMENT) IconButton(
+                            onClick = { showMenu = !showMenu },
+                        ) {
+                            TooltipBox(
+                                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                                tooltip = {
+                                    PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                                },
+                                state = rememberTooltipState()
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.MoreVert,
+                                    contentDescription = stringResource(R.string.more_options),
+                                )
+                            }
+                        }
+                        var showTrueNorth by rememberSaveable {
+                            mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
+                        }
+                        var showQibla by rememberSaveable {
+                            mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
+                        }
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false },
+                        ) {
+                            DropdownMenuCheckableItem(
+                                stringResource(R.string.true_north),
+                                showTrueNorth
+                            ) {
+                                showTrueNorth = it
+                                showMenu = false
+                                compassView?.isTrueNorth = it
+                            }
+                            DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
+                                showQibla = it
+                                showMenu = false
+                                compassView?.isShowQibla = it
+                                prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
+                            }
+                            if (BuildConfig.DEVELOPMENT) {
+                                DropdownMenuItem(
+                                    text = { Text("Do a rotation") },
+                                    onClick = {
+                                        // Ugly, but is test only
+                                        val animator = ValueAnimator.ofFloat(0f, 1f)
+                                        animator.duration = TEN_SECONDS_IN_MILLIS
+                                        animator.addUpdateListener {
+                                            compassView?.angle = it.animatedFraction * 360
+                                        }
+                                        if (Random.nextBoolean()) animator.start() else animator.reverse()
+                                        showMenu = false
+                                    },
+                                )
+                            }
+                        }
+                    }
+                },
+            )
+        },
+        bottomBar = {
+            BottomAppBar {
+                Spacer(Modifier.width(8.dp))
+                IconButton(onClick = navigateToLevel) {
+                    Icon(
+                        ImageVector.vectorResource(R.drawable.ic_level),
+                        contentDescription = stringResource(R.string.level)
+                    )
                 }
+                IconButton(onClick = navigateToMap) {
+                    Icon(
+                        Icons.Default.Map,
+                        contentDescription = stringResource(R.string.map)
+                    )
+                }
+                IconButton(onClick = {
+                    showLongToast(
+                        context, if (sensorNotFound) R.string.compass_not_found
+                        else R.string.calibrate_compass_summary, 5000
+                    )
+                }) {
+                    Icon(
+                        Icons.Default.Info,
+                        contentDescription = stringResource(R.string.help)
+                    )
+                }
+                Spacer(Modifier.weight(1f, fill = true))
+                StopButton(isStopped) { isStopped = it }
+                Spacer(Modifier.width(16.dp))
             }
+        }
+    ) { paddingValues ->
+        Surface(
+            shape = MaterialCornerExtraLargeTop(),
+            modifier = Modifier.padding(paddingValues)
+        ) {
+            AndroidView(
+                factory = {
+                    val root = CompassView(it)
+                    compassView = root
+                    root
+                },
+                update = { it.setTime(time) },
+            )
             AnimatedVisibility(visible = isSliderShown) {
                 Slider(
                     valueRange = 0f..24f,
