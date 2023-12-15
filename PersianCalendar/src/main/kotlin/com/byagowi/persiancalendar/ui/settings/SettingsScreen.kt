@@ -23,8 +23,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Palette
+import androidx.compose.material.icons.filled.Widgets
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +58,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -139,21 +143,17 @@ fun SettingsScreen(
             },
         )
 
-        val tabs = remember {
-            listOf(
-                @Composable {
-                    InterfaceCalendarSettings(destination)
-                } to listOf(R.string.pref_interface, R.string.calendar),
-
-                @Composable {
-                    WidgetNotificationSettings()
-                } to listOf(R.string.pref_notification, R.string.pref_widget),
-
-                @Composable {
-                    LocationAthanSettings()
-                } to listOf(R.string.location, R.string.athan),
-            )
-        }
+        val tabs = listOf<Triple<ImageVector, List<Int>, @Composable () -> Unit>>(
+            Triple(Icons.Default.Palette, listOf(R.string.pref_interface, R.string.calendar)) {
+                InterfaceCalendarSettings(destination)
+            },
+            Triple(
+                Icons.Default.Widgets, listOf(R.string.pref_notification, R.string.pref_widget)
+            ) { WidgetNotificationSettings() },
+            Triple(Icons.Default.LocationOn, listOf(R.string.location, R.string.athan)) {
+                LocationAthanSettings()
+            },
+        )
 
         val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
         val scope = rememberCoroutineScope()
@@ -176,11 +176,12 @@ fun SettingsScreen(
                 }
             },
         ) {
-            tabs.forEachIndexed { index, (_, titlesResId) ->
+            tabs.forEachIndexed { index, (icon, titlesResId) ->
                 val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
                     context.getString(it)
                 }
                 Tab(
+                    icon = { Icon(icon, contentDescription = null) },
                     text = { Text(title) },
                     selected = pagerState.currentPage == index,
                     onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
@@ -194,7 +195,7 @@ fun SettingsScreen(
         ) { index ->
             Surface(modifier = Modifier.fillMaxSize()) {
                 Column(Modifier.verticalScroll(rememberScrollState())) {
-                    tabs[index].first()
+                    tabs[index].third()
                     Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                 }
             }
