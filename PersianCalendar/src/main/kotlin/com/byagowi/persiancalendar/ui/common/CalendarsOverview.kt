@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -349,7 +350,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                             modifier = Modifier
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
-                                    indication = null
+                                    indication = rememberRipple(bounded = false),
                                 ) { context.copyToClipboard(formatDate(date)) }
                                 .semantics {
                                     this.contentDescription = formatDate(date)
@@ -366,7 +367,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                             linear,
                             modifier = Modifier.clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = null
+                                indication = rememberRipple(bounded = false),
                             ) { context.copyToClipboard(linear) },
                         )
                     }
