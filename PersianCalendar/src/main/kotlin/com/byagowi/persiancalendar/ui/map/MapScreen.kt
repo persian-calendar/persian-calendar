@@ -13,6 +13,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material.icons.filled.SocialDistance
 import androidx.compose.material.icons.filled._3dRotation
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -331,6 +333,8 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
                     contentDescription = null,
                     Modifier.combinedClickable(
+                        indication = rememberRipple(bounded = false),
+                        interactionSource = remember { MutableInteractionSource() },
                         onClick = {
                             view.performHapticFeedbackLongPress()
                             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
@@ -365,6 +369,8 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     Icons.AutoMirrored.Default.KeyboardArrowRight,
                     contentDescription = null,
                     Modifier.combinedClickable(
+                        indication = rememberRipple(bounded = false),
+                        interactionSource = remember { MutableInteractionSource() },
                         onClick = {
                             view.performHapticFeedbackLongPress()
                             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
