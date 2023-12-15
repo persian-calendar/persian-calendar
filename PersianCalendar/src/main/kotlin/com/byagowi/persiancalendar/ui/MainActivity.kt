@@ -171,7 +171,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var previousAppThemeValue: String? = null
 
-    //        if (settingHasChanged) { // update when checked menu item is changed
+//        if (settingHasChanged) { // update when checked menu item is changed
 //            applyAppLanguage(this)
 //            update(applicationContext, true)
 //            settingHasChanged = false // reset for the next time
@@ -216,32 +216,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             loadLanguageResources(this)
         }
     }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int, permissions: Array<String>, grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//        when (requestCode) {
-//            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION -> {
-//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-//                val isGranted = ActivityCompat.checkSelfPermission(
-//                    this, Manifest.permission.POST_NOTIFICATIONS
-//                ) == PackageManager.PERMISSION_GRANTED
-//                appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
-//                updateStoredPreference(this)
-//                if (isGranted) update(this, updateDate = true)
-//            }
-//
-//            POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION -> {
-//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-//                val isGranted = ActivityCompat.checkSelfPermission(
-//                    this, Manifest.permission.POST_NOTIFICATIONS
-//                ) == PackageManager.PERMISSION_GRANTED
-//                appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
-//                updateStoredPreference(this)
-//            }
-//        }
-//    }>
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)

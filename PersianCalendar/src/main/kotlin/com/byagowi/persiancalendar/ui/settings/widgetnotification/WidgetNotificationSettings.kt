@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -15,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -22,7 +25,6 @@ import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
 import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
-import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -38,6 +40,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
@@ -45,9 +48,8 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.update
 import java.util.TimeZone
 
 @Composable
@@ -74,27 +76,34 @@ fun NotificationSettings() {
         appPrefs.registerOnSharedPreferenceChangeListener(listener)
         onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
-    SettingsSwitch(
-        key = PREF_NOTIFY_DATE,
-        defaultValue = DEFAULT_NOTIFY_DATE,
-        title = stringResource(R.string.notify_date),
-        summary = stringResource(R.string.enable_notify),
-        onBeforeToggle = { value: Boolean ->
-            if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
-                    context, Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                context.getActivity()?.askForPostNotificationPermission(
-                    POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
-                )
-                false
-            } else {
-                showDateLockScreen = value
-                value
-            }
-        },
-        followChanges = true,
-    )
+    run {
+        val launcher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+            updateStoredPreference(context)
+            if (isGranted) update(context, updateDate = true)
+        }
+        SettingsSwitch(
+            key = PREF_NOTIFY_DATE,
+            defaultValue = DEFAULT_NOTIFY_DATE,
+            title = stringResource(R.string.notify_date),
+            summary = stringResource(R.string.enable_notify),
+            onBeforeToggle = { value: Boolean ->
+                if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
+                        context, Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    false
+                } else {
+                    showDateLockScreen = value
+                    value
+                }
+            },
+            followChanges = true,
+        )
+    }
     AnimatedVisibility(showDateLockScreen) {
         SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,

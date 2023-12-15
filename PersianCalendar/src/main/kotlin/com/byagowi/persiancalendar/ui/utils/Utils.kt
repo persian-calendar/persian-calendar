@@ -227,11 +227,6 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun ComponentActivity.askForPostNotificationPermission(requestCode: Int) {
-    requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), requestCode)
-}
-
 fun Window.makeWallpaperTransparency() {
     this.navigationBarColor = Color.TRANSPARENT
     this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
