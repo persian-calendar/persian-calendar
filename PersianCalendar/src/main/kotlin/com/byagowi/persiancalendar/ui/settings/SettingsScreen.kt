@@ -11,12 +11,12 @@ import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -34,6 +34,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -60,6 +61,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -100,103 +102,122 @@ fun SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
-    Column {
-        val context = LocalContext.current
-        LaunchedEffect(null) { context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
-        // TODO: Ideally this should be onPrimary
-        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-        TopAppBar(
-            title = { Text(stringResource(R.string.settings)) },
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                navigationIconContentColor = colorOnAppBar,
-                actionIconContentColor = colorOnAppBar,
-                titleContentColor = colorOnAppBar,
-            ),
-            navigationIcon = {
-                IconButton(onClick = { openDrawer() }) {
-                    Icon(
-                        imageVector = Icons.Default.Menu,
-                        contentDescription = stringResource(R.string.open_drawer)
-                    )
-                }
-            },
-            actions = {
-                var showMenu by rememberSaveable { mutableStateOf(false) }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { showMenu = !showMenu }) {
+    val context = LocalContext.current
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            // TODO: Ideally this should be onPrimary
+            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+            TopAppBar(
+                title = { Text(stringResource(R.string.settings)) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    navigationIconContentColor = colorOnAppBar,
+                    actionIconContentColor = colorOnAppBar,
+                    titleContentColor = colorOnAppBar,
+                ),
+                navigationIcon = {
+                    IconButton(onClick = { openDrawer() }) {
                         Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more_options),
+                            imageVector = Icons.Default.Menu,
+                            contentDescription = stringResource(R.string.open_drawer)
                         )
                     }
-                }
-                DropdownMenu(
-                    expanded = showMenu, onDismissRequest = { showMenu = false },
-                ) { MenuItems { showMenu = false } }
-            },
-        )
-
-        val tabs = listOf<Triple<ImageVector, List<Int>, @Composable () -> Unit>>(
-            Triple(Icons.Default.Palette, listOf(R.string.pref_interface, R.string.calendar)) {
-                InterfaceCalendarSettings(destination)
-            },
-            Triple(
-                Icons.Default.Widgets, listOf(R.string.pref_notification, R.string.pref_widget)
-            ) { WidgetNotificationSettings() },
-            Triple(Icons.Default.LocationOn, listOf(R.string.location, R.string.athan)) {
-                LocationAthanSettings()
-            },
-        )
-
-        val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
-        val scope = rememberCoroutineScope()
-
-        val selectedTabIndex = pagerState.currentPage
-        TabRow(
-            selectedTabIndex = selectedTabIndex,
-            contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
-            containerColor = Color.Transparent,
-            divider = {},
-            indicator = @Composable { tabPositions ->
-                if (selectedTabIndex < tabPositions.size) {
-                    SecondaryIndicator(
-                        Modifier
-                            .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                            .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                        height = 2.dp,
-                        color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha)
+                },
+                actions = {
+                    var showMenu by rememberSaveable { mutableStateOf(false) }
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = {
+                            PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                        },
+                        state = rememberTooltipState()
+                    ) {
+                        IconButton(onClick = { showMenu = !showMenu }) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                contentDescription = stringResource(R.string.more_options),
+                            )
+                        }
+                    }
+                    DropdownMenu(
+                        expanded = showMenu, onDismissRequest = { showMenu = false },
+                    ) { MenuItems { showMenu = false } }
+                },
+            )
+        }
+    ) { paddingValues ->
+        Column(
+            Modifier.padding(
+                top = paddingValues.calculateTopPadding(),
+                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current)
+            )
+        ) {
+            LaunchedEffect(null) {
+                context.appPrefs.edit {
+                    putBoolean(
+                        PREF_HAS_EVER_VISITED,
+                        true
                     )
                 }
-            },
-        ) {
-            tabs.forEachIndexed { index, (icon, titlesResId) ->
-                val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
-                    context.getString(it)
-                }
-                Tab(
-                    icon = { Icon(icon, contentDescription = null) },
-                    text = { Text(title) },
-                    selected = pagerState.currentPage == index,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
-                )
             }
-        }
 
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
-        ) { index ->
-            Surface(modifier = Modifier.fillMaxSize()) {
-                Column(Modifier.verticalScroll(rememberScrollState())) {
-                    tabs[index].third()
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+            val tabs = listOf<Triple<ImageVector, List<Int>, @Composable () -> Unit>>(
+                Triple(Icons.Default.Palette, listOf(R.string.pref_interface, R.string.calendar)) {
+                    InterfaceCalendarSettings(destination)
+                },
+                Triple(
+                    Icons.Default.Widgets, listOf(R.string.pref_notification, R.string.pref_widget)
+                ) { WidgetNotificationSettings() },
+                Triple(Icons.Default.LocationOn, listOf(R.string.location, R.string.athan)) {
+                    LocationAthanSettings()
+                },
+            )
+
+            val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
+            val scope = rememberCoroutineScope()
+
+            val selectedTabIndex = pagerState.currentPage
+            TabRow(
+                selectedTabIndex = selectedTabIndex,
+                contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
+                containerColor = Color.Transparent,
+                divider = {},
+                indicator = @Composable { tabPositions ->
+                    if (selectedTabIndex < tabPositions.size) {
+                        SecondaryIndicator(
+                            Modifier
+                                .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                                .padding(horizontal = ExtraLargeShapeCornerSize.dp),
+                            height = 2.dp,
+                            color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha)
+                        )
+                    }
+                },
+            ) {
+                tabs.forEachIndexed { index, (icon, titlesResId) ->
+                    val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
+                        context.getString(it)
+                    }
+                    Tab(
+                        icon = { Icon(icon, contentDescription = null) },
+                        text = { Text(title) },
+                        selected = pagerState.currentPage == index,
+                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                    )
+                }
+            }
+
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
+            ) { index ->
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    Column(Modifier.verticalScroll(rememberScrollState())) {
+                        tabs[index].third()
+                        Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
+                    }
                 }
             }
         }

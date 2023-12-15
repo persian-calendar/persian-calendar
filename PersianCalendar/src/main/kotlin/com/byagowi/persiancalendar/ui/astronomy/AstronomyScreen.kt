@@ -215,7 +215,6 @@ fun AstronomyScreen(
             )
         },
         bottomBar = {
-
             var lastButtonClickTimestamp by remember { mutableStateOf(System.currentTimeMillis()) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             fun buttonScrollSlider(days: Int): Boolean {
