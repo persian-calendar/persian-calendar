@@ -119,6 +119,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverview
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
@@ -128,6 +129,7 @@ import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -675,10 +677,10 @@ private fun Menu(
             text = { Text(stringResource(R.string.month_overview)) },
             onClick = {
                 closeMenu()
-//                val selectedMonthOffset = viewModel.selectedMonthOffset.value
-//                val selectedMonth =
-//                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-//                activity?.let { showMonthOverview(it, viewModel.selectedMonth.value) }
+                val selectedMonthOffset = viewModel.selectedMonthOffset.value
+                val selectedMonth =
+                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
+                context.getActivity()?.let { showMonthOverview(it, selectedMonth) }
             },
         )
 
