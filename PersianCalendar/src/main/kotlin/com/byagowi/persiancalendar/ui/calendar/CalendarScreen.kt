@@ -58,6 +58,10 @@ import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -107,11 +111,13 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -131,6 +137,7 @@ import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -147,6 +154,7 @@ import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.update
 import io.github.persiancalendar.calendar.AbstractDate
@@ -177,8 +185,11 @@ fun CalendarScreen(
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel,
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         containerColor = Color.Transparent,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
 
@@ -206,7 +217,7 @@ fun CalendarScreen(
                 icon = Icons.Default.Add,
                 title = stringResource(R.string.add_event),
             )
-        }
+        },
     ) { paddingValues ->
         val context = LocalContext.current
         // Refresh the calendar on resume
@@ -250,6 +261,22 @@ fun CalendarScreen(
                     paddingValues.calculateBottomPadding(),
                 )
             }
+        }
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(null) {
+        if (mainCalendar == CalendarType.SHAMSI &&
+            isIranHolidaysEnabled &&
+            Jdn.today().toPersianDate().year > supportedYearOfIranCalendar
+        ) {
+            if (snackbarHostState.showSnackbar(
+                    context.getString(R.string.outdated_app),
+                    duration = SnackbarDuration.Long,
+                    actionLabel = context.getString(R.string.update),
+                    withDismissAction = true,
+                ) == SnackbarResult.ActionPerformed
+            ) context.bringMarketPage()
         }
     }
 }

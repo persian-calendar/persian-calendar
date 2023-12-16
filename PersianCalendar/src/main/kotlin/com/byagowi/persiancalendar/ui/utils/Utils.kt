@@ -86,7 +86,7 @@ fun Context?.copyToClipboard(text: CharSequence?) {
     }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
-fun ComponentActivity.bringMarketPage() {
+fun Context.bringMarketPage() {
     runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
     }.onFailure(logException).onFailure {

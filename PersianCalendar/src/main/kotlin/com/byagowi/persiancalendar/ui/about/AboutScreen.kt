@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedVisibility
@@ -22,7 +21,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,9 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -284,7 +280,7 @@ private fun shareApplication(context: Context) {
 https://github.com/persian-calendar/persian-calendar"""
             putExtra(Intent.EXTRA_TEXT, textToShare)
         }, context.getString(R.string.share)))
-    }.onFailure(logException).onFailure { (context as? ComponentActivity)?.bringMarketPage() }
+    }.onFailure(logException).onFailure { context.bringMarketPage() }
 }
 
 @Composable
