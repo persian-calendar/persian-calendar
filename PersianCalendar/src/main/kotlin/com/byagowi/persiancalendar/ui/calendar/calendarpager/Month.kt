@@ -101,7 +101,9 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
     var lastSelectedDay by remember { mutableStateOf(selectedDay) }
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     if (isHighlighted) lastSelectedDay = selectedDay else selectionIndicator.clearSelection()
-    LaunchedEffect(null) { if (isHighlighted) selectionIndicator.startSelection() }
+    LaunchedEffect(null) {
+        if (isHighlighted && selectedDay - monthStartJdn in monthRange) selectionIndicator.startSelection()
+    }
 
     val addEvent = AddEvent(viewModel)
 
