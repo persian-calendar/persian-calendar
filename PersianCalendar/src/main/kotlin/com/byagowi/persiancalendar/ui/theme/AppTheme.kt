@@ -56,7 +56,7 @@ fun AppTheme(content: @Composable () -> Unit) {
                 context.appPrefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
             )
         }
-        shapes = Shapes(
+        if (isCutCorner) shapes = Shapes(
             extraSmall = CutCornerShape(4.dp),
             small = CutCornerShape(8.dp),
             medium = CutCornerShape(12.dp),
