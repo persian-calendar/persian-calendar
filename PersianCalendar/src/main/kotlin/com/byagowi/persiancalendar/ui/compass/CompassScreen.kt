@@ -42,6 +42,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -352,58 +353,66 @@ fun CompassScreen(
     var magnetometerSensor by remember { mutableStateOf<Sensor?>(null) }
     var orientationSensor by remember { mutableStateOf<Sensor?>(null) }
 
-    LocalLifecycleOwner.current.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_RESUME) {
-            sensorManager = context.getSystemService<SensorManager>()
-            accelerometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-            magnetometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-            orientationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
 
-            if (orientationSensor != null) {
-                sensorManager?.registerListener(
-                    orientationSensorListener, orientationSensor, SensorManager.SENSOR_DELAY_FASTEST
+    val localLifecycle = LocalLifecycleOwner.current
+    DisposableEffect(null) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                sensorManager = context.getSystemService<SensorManager>()
+                accelerometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+                magnetometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+                orientationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+
+                if (orientationSensor != null) {
+                    sensorManager?.registerListener(
+                        orientationSensorListener,
+                        orientationSensor,
+                        SensorManager.SENSOR_DELAY_FASTEST
+                    )
+                    if (BuildConfig.DEVELOPMENT) Toast.makeText(
+                        context, "dev: orientation", Toast.LENGTH_SHORT
+                    ).show()
+                    if (coordinates.value == null) showSnackbarMessage(
+                        context.getString(R.string.set_location),
+                        SnackbarDuration.Long,
+                    )
+                } else if (accelerometerSensor != null && magnetometerSensor != null) {
+                    sensorManager?.registerListener(
+                        accelerometerMagneticSensorListener,
+                        accelerometerSensor,
+                        SensorManager.SENSOR_DELAY_GAME
+                    )
+                    sensorManager?.registerListener(
+                        accelerometerMagneticSensorListener,
+                        magnetometerSensor,
+                        SensorManager.SENSOR_DELAY_GAME
+                    )
+                    if (BuildConfig.DEVELOPMENT) Toast.makeText(
+                        context, "dev: acc+magnet", Toast.LENGTH_SHORT
+                    ).show()
+                    if (coordinates.value == null) showSnackbarMessage(
+                        context.getString(R.string.set_location),
+                        SnackbarDuration.Short,
+                    )
+                } else {
+                    showSnackbarMessage(
+                        context.getString(R.string.compass_not_found),
+                        SnackbarDuration.Short,
+                    )
+                    sensorNotFound = true
+                }
+            } else if (event == Lifecycle.Event.ON_PAUSE) {
+                if (orientationSensor != null) sensorManager?.unregisterListener(
+                    orientationSensorListener
                 )
-                if (BuildConfig.DEVELOPMENT) Toast.makeText(
-                    context, "dev: orientation", Toast.LENGTH_SHORT
-                ).show()
-                if (coordinates.value == null) showSnackbarMessage(
-                    context.getString(R.string.set_location),
-                    SnackbarDuration.Long,
+                else if (accelerometerSensor != null && magnetometerSensor != null) sensorManager?.unregisterListener(
+                    accelerometerMagneticSensorListener
                 )
-            } else if (accelerometerSensor != null && magnetometerSensor != null) {
-                sensorManager?.registerListener(
-                    accelerometerMagneticSensorListener,
-                    accelerometerSensor,
-                    SensorManager.SENSOR_DELAY_GAME
-                )
-                sensorManager?.registerListener(
-                    accelerometerMagneticSensorListener,
-                    magnetometerSensor,
-                    SensorManager.SENSOR_DELAY_GAME
-                )
-                if (BuildConfig.DEVELOPMENT) Toast.makeText(
-                    context, "dev: acc+magnet", Toast.LENGTH_SHORT
-                ).show()
-                if (coordinates.value == null) showSnackbarMessage(
-                    context.getString(R.string.set_location),
-                    SnackbarDuration.Short,
-                )
-            } else {
-                showSnackbarMessage(
-                    context.getString(R.string.compass_not_found),
-                    SnackbarDuration.Short,
-                )
-                sensorNotFound = true
             }
-        } else if (event == Lifecycle.Event.ON_PAUSE) {
-            if (orientationSensor != null) sensorManager?.unregisterListener(
-                orientationSensorListener
-            )
-            else if (accelerometerSensor != null && magnetometerSensor != null) sensorManager?.unregisterListener(
-                accelerometerMagneticSensorListener
-            )
         }
-    })
+        localLifecycle.lifecycle.addObserver(observer)
+        onDispose { localLifecycle.lifecycle.removeObserver(observer) }
+    }
 }
 
 private abstract class BaseSensorListener : SensorEventListener {
