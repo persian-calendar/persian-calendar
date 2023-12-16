@@ -131,7 +131,6 @@ import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -669,7 +668,7 @@ private fun Menu(viewModel: CalendarViewModel) {
                 val selectedMonthOffset = viewModel.selectedMonthOffset.value
                 val selectedMonth =
                     mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-                context.getActivity()?.let { showMonthOverview(it, selectedMonth) }
+                showMonthOverview(context, selectedMonth)
             },
         )
 

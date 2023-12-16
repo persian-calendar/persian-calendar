@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.agewidget
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
@@ -30,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -90,7 +90,7 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
             appPrefs.edit { putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today()) }
 
         setContent {
-            SystemTheme { AgeWidgetConfigureContent(this, appWidgetId, appPrefs, ::confirm) }
+            SystemTheme { AgeWidgetConfigureContent(appWidgetId, ::confirm) }
         }
     }
 
@@ -101,12 +101,7 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
 }
 
 @Composable
-private fun AgeWidgetConfigureContent(
-    activity: ComponentActivity,
-    appWidgetId: Int,
-    appPrefs: SharedPreferences,
-    confirm: () -> Unit,
-) {
+private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
     Column(modifier = Modifier.safeDrawingPadding()) {
         AndroidView(
             factory = { context ->
@@ -122,7 +117,7 @@ private fun AgeWidgetConfigureContent(
                 }
                 updateWidget()
 
-                appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
+                context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
                     // TODO: Investigate why sometimes gets out of sync
                     preview.post {
                         preview.removeAllViews()
@@ -156,8 +151,9 @@ private fun AgeWidgetConfigureContent(
                     )
                 }
 
+                val context = LocalContext.current
                 val initialTitle = remember {
-                    appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
+                    context.appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
                 }
                 var text by rememberSaveable { mutableStateOf(initialTitle) }
                 OutlinedTextField(
@@ -167,7 +163,7 @@ private fun AgeWidgetConfigureContent(
                     value = text,
                     onValueChange = {
                         text = it
-                        appPrefs.edit {
+                        context.appPrefs.edit {
                             putString(
                                 PREF_TITLE_AGE_WIDGET + appWidgetId,
                                 text
@@ -179,17 +175,17 @@ private fun AgeWidgetConfigureContent(
 
                 SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    val jdn = appPrefs.getJdnOrNull(key) ?: Jdn.today()
+                    val jdn = context.appPrefs.getJdnOrNull(key) ?: Jdn.today()
                     DayPickerDialog(
                         initialJdn = jdn,
                         positiveButtonTitle = R.string.accept,
-                        onSuccess = { appPrefs.edit { putJdn(key, it) } },
+                        onSuccess = { context.appPrefs.edit { putJdn(key, it) } },
                         onDismissRequest = onDismissRequest,
                     )
                 }
                 val showColorOptions = remember {
-                    !(Theme.isDynamicColor(appPrefs) &&
-                            appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
+                    !(Theme.isDynamicColor(context.appPrefs) &&
+                            context.appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
                 }
                 if (showColorOptions) {
                     SettingsClickable(

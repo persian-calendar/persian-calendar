@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.content.Context
-import androidx.activity.ComponentActivity
+import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -25,9 +26,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -36,6 +43,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.core.view.minusAssign
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -47,9 +55,10 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.theme.AppTheme
+import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -62,6 +71,7 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.html.DIV
 import kotlinx.html.body
@@ -83,26 +93,44 @@ import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-fun showMonthOverview(activity: ComponentActivity, date: AbstractDate) =
-    showComposeDialog(activity) { MonthOverview(activity, date, it) }
+fun showMonthOverview(context: Context, date: AbstractDate) =
+    showComposeDialog(context) { MonthOverview(date, it) }
+
+private fun showComposeDialog(
+    context: Context, dialog: @Composable ((onDismissRequest: () -> Unit) -> Unit)
+) {
+    val decorView =
+        (context.getActivity()?.window?.decorView as? ViewGroup).debugAssertNotNull ?: return
+    decorView.addView(ComposeView(context).also { composeView ->
+        composeView.setContent {
+            var showDialog by remember { mutableStateOf(true) }
+            if (showDialog) AppTheme {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeDrawingPadding()
+                ) { dialog { showDialog = false } }
+            } else decorView.post { decorView -= composeView }
+        }
+    })
+}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-private fun MonthOverview(
-    activity: ComponentActivity, date: AbstractDate, onDismissRequest: () -> Unit
-) {
+private fun MonthOverview(date: AbstractDate, onDismissRequest: () -> Unit) {
+    val context = LocalContext.current
     val events = formatComposeEventsList(
-        createEventsList(activity, date), MaterialTheme.colorScheme.primary
+        createEventsList(context, date), MaterialTheme.colorScheme.primary
     )
 
     fun showPrintReport(isLongClick: Boolean) {
         runCatching {
-            activity.openHtmlInBrowser(
-                createEventsReport(activity, date, wholeYear = isLongClick)
+            context.openHtmlInBrowser(
+                createEventsReport(context, date, wholeYear = isLongClick)
             )
         }.onFailure(logException)
         onDismissRequest()
-        createEventsReport(activity, date, wholeYear = isLongClick)
+        createEventsReport(context, date, wholeYear = isLongClick)
     }
 
     BottomSheetScaffold(

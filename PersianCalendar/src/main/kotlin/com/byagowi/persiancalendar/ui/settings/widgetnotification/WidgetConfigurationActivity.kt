@@ -63,7 +63,7 @@ class WidgetConfigurationActivity : ComponentActivity() {
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
-        setContent { SystemTheme { WidgetConfigurationContent(this, ::finishAndSuccess) } }
+        setContent { SystemTheme { WidgetConfigurationContent(::finishAndSuccess) } }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -73,27 +73,24 @@ class WidgetConfigurationActivity : ComponentActivity() {
 }
 
 @Composable
-private fun WidgetConfigurationContent(
-    activity: ComponentActivity,
-    finishAndSuccess: () -> Unit,
-) {
+private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
     Column(Modifier.safeDrawingPadding()) {
         AndroidView(
             factory = { context ->
                 val preview = FrameLayout(context)
 
-                val width = (200 * activity.resources.dp).toInt()
-                val height = (60 * activity.resources.dp).toInt()
+                val width = (200 * context.resources.dp).toInt()
+                val height = (60 * context.resources.dp).toInt()
                 fun updateWidget() {
                     preview.addView(
                         createSampleRemoteViews(
-                            activity, width, height
-                        ).apply(activity.applicationContext, preview)
+                            context, width, height
+                        ).apply(context.applicationContext, preview)
                     )
                 }
                 updateWidget()
 
-                activity.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
+                context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
                     // TODO: Investigate why sometimes gets out of sync
                     preview.post {
                         preview.removeAllViews()
