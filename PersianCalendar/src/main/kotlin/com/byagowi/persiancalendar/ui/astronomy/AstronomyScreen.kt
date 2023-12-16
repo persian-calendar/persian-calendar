@@ -58,9 +58,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
@@ -79,7 +80,6 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
@@ -221,7 +221,7 @@ fun AstronomyScreen(
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    val view = LocalView.current
+                    val hapticFeedback = LocalHapticFeedback.current
                     Spacer(modifier = Modifier.width(16.dp))
                     Icon(
                         Icons.AutoMirrored.Default.KeyboardArrowLeft,
@@ -230,7 +230,7 @@ fun AstronomyScreen(
                             indication = rememberRipple(bounded = false),
                             interactionSource = remember { MutableInteractionSource() },
                             onClick = {
-                                view.performHapticFeedbackLongPress()
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                 buttonScrollSlider(-1)
                             },
                             onClickLabel = stringResource(
@@ -277,7 +277,7 @@ fun AstronomyScreen(
                             indication = rememberRipple(bounded = false),
                             interactionSource = remember { MutableInteractionSource() },
                             onClick = {
-                                view.performHapticFeedbackLongPress()
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                 buttonScrollSlider(+1)
                             },
                             onClickLabel = stringResource(

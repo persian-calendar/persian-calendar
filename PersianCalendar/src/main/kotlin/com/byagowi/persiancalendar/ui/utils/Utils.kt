@@ -274,11 +274,6 @@ fun View.performHapticFeedbackVirtualKey() {
     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 }
 
-fun View.performHapticFeedbackLongPress() {
-    debugLog("Preformed a haptic feedback long press")
-    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-}
-
 /**
  * Determines if a color should be considered light or dark.
  *

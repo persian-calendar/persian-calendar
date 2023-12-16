@@ -63,11 +63,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -85,7 +86,6 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
@@ -327,7 +327,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     .padding(bottom = 16.dp)
                     .fillMaxWidth(),
             ) {
-                val view = LocalView.current
+                val hapticFeedback = LocalHapticFeedback.current
                 Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
@@ -336,7 +336,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                         indication = rememberRipple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },
                         onClick = {
-                            view.performHapticFeedbackLongPress()
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
                             else viewModel.subtractOneHour()
                         },
@@ -372,7 +372,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                         indication = rememberRipple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },
                         onClick = {
-                            view.performHapticFeedbackLongPress()
+                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
                             else viewModel.addOneHour()
                         },
