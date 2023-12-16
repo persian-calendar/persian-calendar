@@ -28,25 +28,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -82,6 +76,7 @@ import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
@@ -178,38 +173,21 @@ fun AstronomyScreen(
                             Switch(isTropical, onCheckedChange = { isTropical = !isTropical })
                         }
                     }
-                    Box {
-                        var showMenu by rememberSaveable { mutableStateOf(false) }
-                        TooltipBox(
-                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                            tooltip = {
-                                PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                    ThreeDotsDropdownMenu { closeMenu ->
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.goto_date)) },
+                            onClick = {
+                                closeMenu()
+                                showDayPickerDialog = true
                             },
-                            state = rememberTooltipState()
-                        ) {
-                            IconButton(onClick = { showMenu = !showMenu }) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = stringResource(R.string.more_options),
-                                )
-                            }
-                        }
-                        DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.goto_date)) },
-                                onClick = {
-                                    showMenu = false
-                                    showDayPickerDialog = true
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.map)) },
-                                onClick = {
-                                    showMenu = false
-                                    navigateToMap()
-                                },
-                            )
-                        }
+                        )
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.map)) },
+                            onClick = {
+                                closeMenu()
+                                navigateToMap()
+                            },
+                        )
                     }
                 },
             )

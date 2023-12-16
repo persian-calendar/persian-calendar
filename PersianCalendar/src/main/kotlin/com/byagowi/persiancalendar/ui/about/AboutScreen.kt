@@ -458,7 +458,7 @@ private fun DevelopersChips() {
         }.shuffled()
     }
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)
+        @OptIn(ExperimentalLayoutApi::class)
         FlowRow(
             Modifier
                 .fillMaxWidth()

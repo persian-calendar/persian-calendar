@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.defaultMinSize
@@ -35,11 +34,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -48,10 +44,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -81,7 +75,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -130,6 +123,7 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
+import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
@@ -629,42 +623,18 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 }
             }
 
-            val addEvent = AddEvent(viewModel)
-
-            Box {
-                var showMenu by rememberSaveable { mutableStateOf(false) }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.more_options)) }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { showMenu = !showMenu }) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = stringResource(R.string.more_options),
-                        )
-                    }
-                }
-                Menu(viewModel, showMenu, addEvent) { showMenu = false }
-            }
+            Menu(viewModel)
         },
     )
 }
 
 @Composable
-private fun Menu(
-    viewModel: CalendarViewModel,
-    showMenu: Boolean,
-    addEvent: () -> Unit,
-    closeMenu: () -> Unit
-) {
+private fun Menu(viewModel: CalendarViewModel) {
+    val addEvent = AddEvent(viewModel)
     var showDayPickerDialog by remember { mutableStateOf(false) }
     var showShiftWorkDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
-
-    DropdownMenu(expanded = showMenu, onDismissRequest = closeMenu) {
+    ThreeDotsDropdownMenu { closeMenu ->
         DropdownMenuItem(
             text = { Text(stringResource(R.string.goto_date)) },
             onClick = {
@@ -713,7 +683,7 @@ private fun Menu(
         )
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
-        if (isTalkBackEnabled && enabledCalendars.size == 1) return@DropdownMenu
+        if (isTalkBackEnabled && enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
 
         var showSecondaryCalendarSubMenu by remember { mutableStateOf(false) }
         DropdownMenuItem(

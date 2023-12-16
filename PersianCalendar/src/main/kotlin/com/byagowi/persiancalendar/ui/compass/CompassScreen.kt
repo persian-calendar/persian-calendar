@@ -14,7 +14,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -24,10 +23,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -74,6 +71,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.StopButton
+import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -198,63 +196,41 @@ fun CompassScreen(
                             )
                         }
                     }
-                    Box {
-                        var showMenu by rememberSaveable { mutableStateOf(false) }
-                        if (cityName != null || BuildConfig.DEVELOPMENT) IconButton(
-                            onClick = { showMenu = !showMenu },
+                    var showTrueNorth by rememberSaveable {
+                        mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
+                    }
+                    var showQibla by rememberSaveable {
+                        mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
+                    }
+                    if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
+                        DropdownMenuCheckableItem(
+                            stringResource(R.string.true_north),
+                            showTrueNorth
                         ) {
-                            TooltipBox(
-                                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                                tooltip = {
-                                    PlainTooltip { Text(text = stringResource(R.string.more_options)) }
+                            showTrueNorth = it
+                            closeMenu()
+                            compassView?.isTrueNorth = it
+                        }
+                        DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
+                            showQibla = it
+                            closeMenu()
+                            compassView?.isShowQibla = it
+                            prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
+                        }
+                        if (BuildConfig.DEVELOPMENT) {
+                            DropdownMenuItem(
+                                text = { Text("Do a rotation") },
+                                onClick = {
+                                    closeMenu()
+                                    // Ugly, but is test only
+                                    val animator = ValueAnimator.ofFloat(0f, 1f)
+                                    animator.duration = TEN_SECONDS_IN_MILLIS
+                                    animator.addUpdateListener {
+                                        compassView?.angle = it.animatedFraction * 360
+                                    }
+                                    if (Random.nextBoolean()) animator.start() else animator.reverse()
                                 },
-                                state = rememberTooltipState()
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.MoreVert,
-                                    contentDescription = stringResource(R.string.more_options),
-                                )
-                            }
-                        }
-                        var showTrueNorth by rememberSaveable {
-                            mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
-                        }
-                        var showQibla by rememberSaveable {
-                            mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false },
-                        ) {
-                            DropdownMenuCheckableItem(
-                                stringResource(R.string.true_north),
-                                showTrueNorth
-                            ) {
-                                showTrueNorth = it
-                                showMenu = false
-                                compassView?.isTrueNorth = it
-                            }
-                            DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
-                                showQibla = it
-                                showMenu = false
-                                compassView?.isShowQibla = it
-                                prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
-                            }
-                            if (BuildConfig.DEVELOPMENT) {
-                                DropdownMenuItem(
-                                    text = { Text("Do a rotation") },
-                                    onClick = {
-                                        // Ugly, but is test only
-                                        val animator = ValueAnimator.ofFloat(0f, 1f)
-                                        animator.duration = TEN_SECONDS_IN_MILLIS
-                                        animator.addUpdateListener {
-                                            compassView?.angle = it.animatedFraction * 360
-                                        }
-                                        if (Random.nextBoolean()) animator.start() else animator.reverse()
-                                        showMenu = false
-                                    },
-                                )
-                            }
+                            )
                         }
                     }
                 },
