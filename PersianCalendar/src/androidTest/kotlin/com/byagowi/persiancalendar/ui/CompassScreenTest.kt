@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource

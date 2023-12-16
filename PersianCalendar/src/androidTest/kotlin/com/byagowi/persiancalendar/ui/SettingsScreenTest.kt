@@ -1,12 +1,9 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
@@ -31,7 +28,7 @@ class SettingsScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContentWithTheme {
-            SettingsScreen({},0, "")
+            SettingsScreen({}, 0, "")
         }
     }
 
