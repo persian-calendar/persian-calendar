@@ -198,7 +198,7 @@ fun CalendarScreen(
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
             val addEvent = AddEvent(viewModel)
             ShrinkingFloatingActionButton(
-                modifier = Modifier,
+                modifier = Modifier.padding(end = 8.dp),
                 isVisible = selectedTabIndex == EVENTS_TAB,
                 action = addEvent,
                 icon = Icons.Default.Add,
