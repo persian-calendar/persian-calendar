@@ -365,9 +365,21 @@ private fun Calculator(viewModel: ConverterViewModel) {
 }
 
 @Composable
-private fun QrCode(viewModel: ConverterViewModel, shareAction: (() -> Unit) -> Unit) {
+private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -> Unit) {
     val inputText = viewModel.qrCodeInputText.collectAsState()
     Column {
+        @Composable
+        fun Qr() {
+            AndroidView(
+                factory = {
+                    val root = QrView(it)
+                    setShareAction { root.share() }
+                    root
+                },
+                update = { it.update(inputText.value) },
+            )
+        }
+
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
@@ -377,15 +389,7 @@ private fun QrCode(viewModel: ConverterViewModel, shareAction: (() -> Unit) -> U
                 minLines = 6,
                 modifier = Modifier.weight(1f),
             )
-            AndroidView(
-                factory = {
-                    val root = QrView(it)
-                    shareAction { root.share() }
-                    root
-                },
-                update = { it.update(inputText.value) },
-                modifier = Modifier.weight(1f),
-            )
+            Qr()
         } else Column(Modifier.padding(horizontal = 24.dp)) {
             TextField(
                 value = inputText.value,
@@ -394,7 +398,7 @@ private fun QrCode(viewModel: ConverterViewModel, shareAction: (() -> Unit) -> U
                 modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.height(24.dp))
-            AndroidView(factory = ::QrView, update = { it.update(inputText.value) })
+            Qr()
         }
 
         var qrLongClickCount by remember { mutableStateOf(1) }
