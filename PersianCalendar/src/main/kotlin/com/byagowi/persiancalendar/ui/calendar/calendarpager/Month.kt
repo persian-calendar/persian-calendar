@@ -87,8 +87,8 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
     val monthRange = 0..<monthLength
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
-    val weeksCount = (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
-            weekOfYearStart + 1
+    val weeksCount =
+        (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) - weekOfYearStart + 1
 
     val refreshToken by viewModel.refreshToken.collectAsState()
     val monthDeviceEvents = remember(refreshToken) {
@@ -116,24 +116,23 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
         DpSize(size.width.toDp() / columnsCount, size.height.toDp() / rowsCount)
     }
     Column(
-        Modifier
-            .drawWithCache {
-                onDrawBehind {
-                    drawIntoCanvas {
-                        invalidationToken.run {}
-                        val index = lastSelectedDay - monthStartJdn
-                        if (index !in monthRange) return@drawIntoCanvas
-                        val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
-                        val l = column * size.width / columnsCount
-                        val t = row * size.height / rowsCount
-                        val w = size.width / columnsCount
-                        val h = size.height / rowsCount
-                        selectionIndicator.onDraw(
-                            it, if (isRtl) size.width - l - w else l, t, w, h
-                        )
-                    }
+        Modifier.drawWithCache {
+            onDrawBehind {
+                drawIntoCanvas {
+                    invalidationToken.run {}
+                    val index = lastSelectedDay - monthStartJdn
+                    if (index !in monthRange) return@drawIntoCanvas
+                    val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
+                    val l = column * size.width / columnsCount
+                    val t = row * size.height / rowsCount
+                    val w = size.width / columnsCount
+                    val h = size.height / rowsCount
+                    selectionIndicator.onDraw(
+                        it, if (isRtl) size.width - l - w else l, t, w, h
+                    )
                 }
             }
+        },
     ) {
         Row(Modifier.height(cellSize.height)) {
             if (isShowWeekOfYearEnabled) Spacer(Modifier.width(cellSize.width))
@@ -146,35 +145,31 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                     Modifier
                         .semantics { this.contentDescription = description }
                         .size(cellSize),
-                    dayPainter
-                ) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
+                    dayPainter) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
             }
         }
         (0..<6).forEach { row ->
             Row(Modifier.height(cellSize.height)) {
                 if (isShowWeekOfYearEnabled && row < weeksCount) {
                     val weekNumber = formatNumber(weekOfYearStart + row - 1)
-                    val description =
-                        stringResource(R.string.nth_week_of_year, weekNumber)
+                    val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Cell(
                         Modifier
                             .semantics { this.contentDescription = description }
                             .size(cellSize),
-                        dayPainter
+                        dayPainter,
                     ) { it.setWeekNumber(weekNumber) }
                 }
                 (0..<7).forEach RowForEach@{ column ->
-                    val dayOffset = (column + row * 7) -
-                            applyWeekStartOffsetToWeekDay(startingDayOfWeek)
+                    val dayOffset =
+                        (column + row * 7) - applyWeekStartOffsetToWeekDay(startingDayOfWeek)
                     val day = monthStartJdn + dayOffset
-                    if (dayOffset !in monthRange)
-                        return@RowForEach Spacer(Modifier.width(cellSize.width))
+                    if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier.width(cellSize.width))
                     val isToday = day == todayJdn
                     Cell(
                         Modifier
                             .size(cellSize)
-                            .combinedClickable(
-                                indication = null,
+                            .combinedClickable(indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = {
                                     if (isCurrentSelection) {
@@ -195,8 +190,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                                 onLongClick = {
                                     viewModel.changeSelectedDay(day)
                                     addEvent()
-                                }
-                            ),
+                                }),
                         dayPainter,
                     ) {
                         dayPositions[dayOffset] =
@@ -204,10 +198,13 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                         val events =
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                         it.setDayOfMonthItem(
-                            isToday, isHighlighted && selectedDay == day,
+                            isToday,
+                            isHighlighted && selectedDay == day,
                             events.any { it !is CalendarEvent.DeviceCalendarEvent },
                             events.any { it is CalendarEvent.DeviceCalendarEvent },
-                            events.any { it.isHoliday }, day, dayOffset + 1,
+                            events.any { it.isHoliday },
+                            day,
+                            dayOffset + 1,
                             getShiftWorkTitle(day, true)
                         )
                     }
@@ -281,7 +278,8 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
     fun onDraw(canvas: Canvas, left: Int, top: Int, width: Int, height: Int) {
         if (hideAnimator.isRunning) canvas.drawCircle(
             Offset(left + width / 2f, top + height / 2f),
-            lastRadius * (1 - hideAnimator.animatedFraction), paint
+            lastRadius * (1 - hideAnimator.animatedFraction),
+            paint
         ) else if (isReveal) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = left.toFloat()
@@ -289,7 +287,8 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
             lastRadius = DayPainter.radius(width, height) * fraction
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f),
-                DayPainter.radius(width, height) * fraction, paint
+                DayPainter.radius(width, height) * fraction,
+                paint
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
