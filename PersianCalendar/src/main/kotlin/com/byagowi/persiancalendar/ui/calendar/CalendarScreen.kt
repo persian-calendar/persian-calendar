@@ -433,7 +433,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
             }
             ButtonsBar(
                 header = R.string.enable_notification,
-                acceptButton = R.string.notify_date,
+                acceptButton = R.string.yes,
                 discardAction = {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },

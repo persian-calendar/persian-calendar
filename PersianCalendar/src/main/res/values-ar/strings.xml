@@ -458,4 +458,5 @@
     </plurals>
     <string name="open_drawer">فتح درج التنقل</string>
     <string name="more_options">المزيد من الخيارات</string>
+    <string name="yes">نعم</string>
 </resources>
