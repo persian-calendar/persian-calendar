@@ -46,12 +46,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -64,7 +66,6 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -324,8 +325,8 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        val context = LocalContext.current
         val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
+        val clipboardManager = LocalClipboardManager.current
         enabledCalendars.forEach { calendarType ->
             AnimatedVisibility(
                 visible = calendarType in calendarsToShow,
@@ -353,10 +354,8 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                                 .clickable(
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberRipple(bounded = false),
-                                ) { context.copyToClipboard(formatDate(date)) }
-                                .semantics {
-                                    this.contentDescription = formatDate(date)
-                                },
+                                ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
+                                .semantics { this.contentDescription = formatDate(date) },
                         ) {
                             Text(
                                 formatNumber(date.dayOfMonth),
@@ -370,7 +369,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                             modifier = Modifier.clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberRipple(bounded = false),
-                            ) { context.copyToClipboard(linear) },
+                            ) { clipboardManager.setText(AnnotatedString(linear)) },
                         )
                     }
                 }

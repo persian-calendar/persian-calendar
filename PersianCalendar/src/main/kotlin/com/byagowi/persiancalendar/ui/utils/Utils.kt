@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -15,17 +13,14 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
-import android.util.Base64
 import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -49,13 +44,11 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
-import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -67,24 +60,9 @@ import java.io.File
 
 inline val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
 inline val Resources.isPortrait get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-inline val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 inline val Resources.dp: Float get() = displayMetrics.density
 fun Resources.sp(value: Float): Float =
     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, displayMetrics)
-
-val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
-
-fun Context?.copyToClipboard(text: CharSequence?) {
-    runCatching {
-        this?.getSystemService<ClipboardManager>()
-            ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
-        if (Build.VERSION.SDK_INT < 32) {
-            val message = (if (resources.isRtl) RLM else "") +
-                    getString(R.string.date_copied_clipboard, text)
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-        } else Unit
-    }.onFailure(logException).getOrNull().debugAssertNotNull
-}
 
 fun Context.bringMarketPage() {
     runCatching {
@@ -103,8 +81,8 @@ fun Bitmap.toByteArray(): ByteArray {
     return buffer.toByteArray()
 }
 
-fun Bitmap.toPngBase64(): String =
-    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
+//fun Bitmap.toPngBase64(): String =
+//    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
 
 private inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
