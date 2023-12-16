@@ -5,6 +5,7 @@ import android.view.View
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,6 +59,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
@@ -119,10 +122,22 @@ fun ConverterScreen(
                         ) {
                             Spacer(Modifier.width(16.dp))
                             Text(stringResource(viewModel.screenMode.value.title))
-                            Icon(Icons.Default.ExpandMore, contentDescription = null)
+                            val angle by animateFloatAsState(
+                                if (showMenu) 180f else 0f,
+                                label = "angle",
+                            )
+                            Icon(
+                                imageVector = Icons.Default.ExpandMore,
+                                contentDescription = null,
+                                modifier = Modifier.rotate(angle),
+                            )
                             Spacer(Modifier.width(8.dp))
                         }
-                        DropdownMenu(expanded = showMenu, onDismissRequest = { showMenu = false }) {
+                        DropdownMenu(
+                            expanded = showMenu,
+                            onDismissRequest = { showMenu = false },
+                            Modifier.defaultMinSize(minWidth = 140.dp),
+                        ) {
                             ConverterScreenMode.entries.filter {
                                 // Converter doesn't work in Android 5, let's hide it there
                                 it != ConverterScreenMode.TimeZones
