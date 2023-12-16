@@ -11,10 +11,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.SaverScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,9 +40,11 @@ fun DayPickerDialog(
     onSuccess: (jdn: Jdn) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var jdn by remember { mutableStateOf(initialJdn) }
+    var jdn by rememberSaveable(saver = object : Saver<MutableState<Jdn>, Long> {
+        override fun restore(value: Long) = mutableStateOf(Jdn(value))
+        override fun SaverScope.save(value: MutableState<Jdn>) = value.value.value
+    }) { mutableStateOf(initialJdn) }
     val today = remember { Jdn.today() }
-    var changeToken by remember { mutableIntStateOf(0) }
     AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
@@ -49,10 +54,9 @@ fun DayPickerDialog(
             }) { Text(stringResource(positiveButtonTitle)) }
         },
         neutralButton = {
-            if (jdn != today) TextButton(onClick = {
-                jdn = today
-                ++changeToken
-            }) { Text(stringResource(R.string.today)) }
+            if (jdn != today) TextButton(onClick = { jdn = today }) {
+                Text(stringResource(R.string.today))
+            }
         }
     ) {
         var calendarType by remember { mutableStateOf(mainCalendar) }

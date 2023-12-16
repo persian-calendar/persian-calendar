@@ -81,6 +81,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -659,10 +660,22 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
 
 @Composable
 private fun Menu(viewModel: CalendarViewModel) {
-    val addEvent = AddEvent(viewModel)
-    var showDayPickerDialog by remember { mutableStateOf(false) }
-    var showShiftWorkDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val addEvent = AddEvent(viewModel)
+
+    var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDayPickerDialog) DayPickerDialog(
+        viewModel.selectedDay.value,
+        R.string.go,
+        { bringDate(viewModel, it, context) }
+    ) { showDayPickerDialog = false }
+
+    var showShiftWorkDialog by rememberSaveable { mutableStateOf(false) }
+    if (showShiftWorkDialog) ShiftWorkDialog(
+        viewModel.selectedDay.value,
+        onDismissRequest = { showShiftWorkDialog = false },
+    ) { viewModel.refreshCalendar() }
+
     ThreeDotsDropdownMenu { closeMenu ->
         DropdownMenuItem(
             text = { Text(stringResource(R.string.goto_date)) },
@@ -757,17 +770,6 @@ private fun Menu(viewModel: CalendarViewModel) {
             }
         }
     }
-
-    if (showDayPickerDialog) DayPickerDialog(
-        viewModel.selectedDay.value,
-        R.string.go,
-        { bringDate(viewModel, it, context) }
-    ) { showDayPickerDialog = false }
-
-    if (showShiftWorkDialog) ShiftWorkDialog(
-        viewModel.selectedDay.value,
-        onDismissRequest = { showShiftWorkDialog = false },
-    ) { viewModel.refreshCalendar() }
 }
 
 private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String {
