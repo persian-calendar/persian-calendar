@@ -1,14 +1,12 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
@@ -33,6 +31,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
@@ -47,6 +48,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -81,6 +83,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.abs
@@ -143,8 +146,17 @@ fun CompassScreen(
     // Ugly, for now
     var compassView by remember { mutableStateOf<CompassView?>(null) }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    fun showSnackbarMessage(message: String, duration: SnackbarDuration) {
+        scope.launch {
+            snackbarHostState.showSnackbar(message, duration = duration)
+        }
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             // TODO: Ideally this should be onPrimary
             val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
@@ -252,9 +264,13 @@ fun CompassScreen(
                     )
                 }
                 IconButton(onClick = {
-                    showLongToast(
-                        context, if (sensorNotFound) R.string.compass_not_found
-                        else R.string.calibrate_compass_summary, 5000
+                    // show snackbar as a suspend function
+                    showSnackbarMessage(
+                        context.getString(
+                            if (sensorNotFound) R.string.compass_not_found
+                            else R.string.calibrate_compass_summary
+                        ),
+                        SnackbarDuration.Long,
                     )
                 }) {
                     Icon(
@@ -348,10 +364,11 @@ fun CompassScreen(
                     orientationSensorListener, orientationSensor, SensorManager.SENSOR_DELAY_FASTEST
                 )
                 if (BuildConfig.DEVELOPMENT) Toast.makeText(
-                    context, "dev: orientation", Toast.LENGTH_LONG
+                    context, "dev: orientation", Toast.LENGTH_SHORT
                 ).show()
-                if (coordinates.value == null) showLongToast(
-                    context, R.string.set_location, Toast.LENGTH_SHORT
+                if (coordinates.value == null) showSnackbarMessage(
+                    context.getString(R.string.set_location),
+                    SnackbarDuration.Long,
                 )
             } else if (accelerometerSensor != null && magnetometerSensor != null) {
                 sensorManager?.registerListener(
@@ -365,13 +382,17 @@ fun CompassScreen(
                     SensorManager.SENSOR_DELAY_GAME
                 )
                 if (BuildConfig.DEVELOPMENT) Toast.makeText(
-                    context, "dev: acc+magnet", Toast.LENGTH_LONG
+                    context, "dev: acc+magnet", Toast.LENGTH_SHORT
                 ).show()
-                if (coordinates.value == null) showLongToast(
-                    context, R.string.set_location, Toast.LENGTH_SHORT
+                if (coordinates.value == null) showSnackbarMessage(
+                    context.getString(R.string.set_location),
+                    SnackbarDuration.Short,
                 )
             } else {
-                showLongToast(context, R.string.compass_not_found, Toast.LENGTH_SHORT)
+                showSnackbarMessage(
+                    context.getString(R.string.compass_not_found),
+                    SnackbarDuration.Short,
+                )
                 sensorNotFound = true
             }
         } else if (event == Lifecycle.Event.ON_PAUSE) {
@@ -460,11 +481,6 @@ private abstract class AccelerometerMagneticSensorListener : BaseSensorListener(
             isMagneticFieldAvailable = false
         }
     }
-}
-
-// TODO: Snackbar should be better here, just make sure it will support long messages
-private fun showLongToast(context: Context, @StringRes messageId: Int, duration: Int) {
-    Toast.makeText(context, messageId, duration).show()
 }
 
 @Composable
