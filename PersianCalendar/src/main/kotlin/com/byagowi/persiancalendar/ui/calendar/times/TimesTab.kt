@@ -96,6 +96,8 @@ fun TimesTab(
 
     Column(
         Modifier.clickable(
+            indication = rememberRipple(bounded = false),
+            interactionSource = remember { MutableInteractionSource() },
             onClickLabel = stringResource(R.string.more),
             onClick = { isExpanded = !isExpanded },
         ),
