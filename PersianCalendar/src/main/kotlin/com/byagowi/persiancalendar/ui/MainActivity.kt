@@ -276,7 +276,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
     BackHandler(enabled = drawerState.isOpen) { scope.launch { drawerState.close() } }
 
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
     ModalNavigationDrawer(
+        gesturesEnabled = when (navBackStackEntry?.destination?.route) {
+            // As these screens slider drags and interactions collide with drawer, till a better solution
+            astronomyRoute, mapRoute -> false
+            else -> true
+        },
         drawerState = drawerState,
         drawerContent = {
             @OptIn(ExperimentalFoundationApi::class)
@@ -338,7 +345,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         )
                     }
 
-                    val navBackStackEntry by navController.currentBackStackEntryAsState()
                     listOf(
                         Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
                         Triple(
