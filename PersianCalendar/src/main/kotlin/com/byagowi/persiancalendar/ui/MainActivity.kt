@@ -379,7 +379,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 if (id == null) return@NavigationDrawerItem finish()
                                 scope.launch {
                                     drawerState.close()
-                                    navController.navigate(id)
+                                    if (navBackStackEntry?.destination?.route != id) {
+                                        navController.navigate(id)
+                                    }
                                 }
                             },
                         )
