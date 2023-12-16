@@ -44,7 +44,7 @@ fun ThreeDotsDropdownMenu(content: @Composable ColumnScope.(closeMenu: () -> Uni
         DropdownMenu(
             expanded = showMenu,
             onDismissRequest = { showMenu = false },
-            modifier = Modifier.defaultMinSize(minWidth = 160.dp),
+            modifier = Modifier.defaultMinSize(minWidth = 200.dp),
             content = { content { showMenu = false } },
         )
     }
