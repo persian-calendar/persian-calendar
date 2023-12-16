@@ -485,7 +485,10 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(levelRoute) {
                 LevelScreen(
-                    navigateUp = navController::navigateUp,
+                    navigateUp = {
+                        if (navController.currentDestination?.route == levelRoute)
+                            navController.navigateUp()
+                    },
                     navigateToCompass = {
                         // If compass wasn't in backstack (level is brought from shortcut), navigate to it
                         if (!navController.popBackStack(compassRoute, false))
@@ -517,7 +520,10 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     }
                 }
                 MapScreen(
-                    navigateUp = { navController.navigateUp() },
+                    navigateUp = {
+                        if (navController.currentDestination?.route == mapRoute)
+                            navController.navigateUp()
+                    },
                     viewModel = viewModel,
                 )
             }
@@ -541,11 +547,17 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             }
 
             composable(licensesRoute) {
-                LicensesScreen { navController.navigateUp() }
+                LicensesScreen {
+                    if (navController.currentDestination?.route == licensesRoute)
+                        navController.navigateUp()
+                }
             }
 
             composable(deviceInformationRoute) {
-                DeviceInformationScreen { navController.popBackStack() }
+                DeviceInformationScreen {
+                    if (navController.currentDestination?.route == deviceInformationRoute)
+                        navController.navigateUp()
+                }
             }
         }
     }
