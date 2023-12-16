@@ -16,6 +16,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -43,6 +44,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
@@ -78,6 +80,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -687,29 +690,44 @@ private fun Menu(viewModel: CalendarViewModel) {
 
         var showSecondaryCalendarSubMenu by remember { mutableStateOf(false) }
         DropdownMenuItem(
-            text = { Text(stringResource(R.string.show_secondary_calendar)) },
+            text = {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.show_secondary_calendar), Modifier.weight(1f))
+                    val angle by animateFloatAsState(
+                        if (showSecondaryCalendarSubMenu) 180f else 0f,
+                        label = "angle",
+                    )
+                    Icon(
+                        imageVector = Icons.Default.ExpandMore,
+                        contentDescription = null,
+                        modifier = Modifier.rotate(angle),
+                    )
+                }
+            },
             onClick = { showSecondaryCalendarSubMenu = !showSecondaryCalendarSubMenu },
         )
 
-        if (showSecondaryCalendarSubMenu) (listOf(null) + enabledCalendars.drop(1)).forEach {
-            DropdownMenuRadioItem(
-                stringResource(it?.title ?: R.string.none),
-                it == secondaryCalendar
-            ) { _ ->
-                context.appPrefs.edit {
-                    if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
-                    else {
-                        putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
-                        putString(
-                            PREF_OTHER_CALENDARS_KEY,
-                            // Put the chosen calendars at the first of calendars priorities
-                            (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
-                        )
+        (listOf(null) + enabledCalendars.drop(1)).forEach {
+            AnimatedVisibility(showSecondaryCalendarSubMenu) {
+                DropdownMenuRadioItem(
+                    stringResource(it?.title ?: R.string.none),
+                    it == secondaryCalendar
+                ) { _ ->
+                    context.appPrefs.edit {
+                        if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
+                        else {
+                            putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
+                            putString(
+                                PREF_OTHER_CALENDARS_KEY,
+                                // Put the chosen calendars at the first of calendars priorities
+                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
+                            )
+                        }
                     }
+                    updateStoredPreference(context)
+                    viewModel.refreshCalendar()
+                    closeMenu()
                 }
-                updateStoredPreference(context)
-                viewModel.refreshCalendar()
-                closeMenu()
             }
         }
     }
