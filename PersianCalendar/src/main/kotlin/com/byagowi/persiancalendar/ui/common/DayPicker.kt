@@ -39,12 +39,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlinx.coroutines.launch
@@ -89,13 +91,17 @@ fun DayPicker(
         if (previousMonth != date.month) ++monthChangeToken
         previousMonth = date.month
         Row(modifier = Modifier.fillMaxWidth()) {
+            val view = LocalView.current
             ListItemPicker(
                 modifier = Modifier.weight(1f),
                 label = daysFormat,
                 list = remember(monthsLength) { (1..monthsLength).toList() },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.dayOfMonth,
-            ) { setJdn(Jdn(calendarType, date.year, date.month, it)) }
+            ) {
+                setJdn(Jdn(calendarType, date.year, date.month, it))
+                view.performHapticFeedbackVirtualKey()
+            }
             Spacer(modifier = Modifier.width(8.dp))
             ListItemPicker(
                 modifier = Modifier.weight(1f),
@@ -103,7 +109,10 @@ fun DayPicker(
                 list = remember(yearMonth) { (1..yearMonth).toList() },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.month,
-            ) { setJdn(Jdn(calendarType, date.year, it, date.dayOfMonth)) }
+            ) {
+                setJdn(Jdn(calendarType, date.year, it, date.dayOfMonth))
+                view.performHapticFeedbackVirtualKey()
+            }
             Spacer(modifier = Modifier.width(8.dp))
             ListItemPicker(
                 modifier = Modifier.weight(1f),
@@ -111,7 +120,10 @@ fun DayPicker(
                 list = remember(startYear) { (startYear..startYear + 400).toList() },
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.year,
-            ) { setJdn(Jdn(calendarType, it, date.month, date.dayOfMonth)) }
+            ) {
+                setJdn(Jdn(calendarType, it, date.month, date.dayOfMonth))
+                view.performHapticFeedbackVirtualKey()
+            }
         }
     }
 }
