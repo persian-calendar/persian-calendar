@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,8 +100,8 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
     var lastSelectedDay by remember { mutableStateOf(selectedDay) }
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     if (isHighlighted) lastSelectedDay = selectedDay else selectionIndicator.clearSelection()
-    LaunchedEffect(null) {
-        if (isHighlighted && selectedDay - monthStartJdn in monthRange) selectionIndicator.startSelection()
+    if (isHighlighted && selectedDay - monthStartJdn in monthRange && isCurrentSelection) {
+        selectionIndicator.startSelection()
     }
 
     val addEvent = AddEvent(viewModel)
@@ -171,12 +170,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                             .size(cellSize)
                             .combinedClickable(indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
-                                onClick = {
-                                    if (isCurrentSelection) {
-                                        viewModel.changeSelectedDay(day)
-                                        selectionIndicator.startSelection()
-                                    }
-                                },
+                                onClick = { viewModel.changeSelectedDay(day) },
                                 onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
                                     context,
                                     day,
