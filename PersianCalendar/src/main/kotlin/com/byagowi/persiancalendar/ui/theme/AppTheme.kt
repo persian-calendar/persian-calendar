@@ -3,8 +3,10 @@ package com.byagowi.persiancalendar.ui.theme
 import android.content.SharedPreferences
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -18,7 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
@@ -43,7 +49,32 @@ fun AppTheme(content: @Composable () -> Unit) {
             if (theme == Theme.BLACK) result.copy(surface = Color.Black) else result
         } else if (darkTheme) DarkColorScheme else LightColorScheme
 
-    MaterialTheme(colorScheme = colorScheme) {
+    var shapes = MaterialTheme.shapes
+    if (BuildConfig.DEVELOPMENT) {
+        var isCutCorner by remember {
+            mutableStateOf(
+                context.appPrefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
+            )
+        }
+        shapes = Shapes(
+            extraSmall = CutCornerShape(4.dp),
+            small = CutCornerShape(8.dp),
+            medium = CutCornerShape(12.dp),
+            large = CutCornerShape(16.dp),
+            extraLarge = CutCornerShape(28.dp),
+        )
+        DisposableEffect(null) {
+            val appPrefs = context.appPrefs
+            val listener = { _: SharedPreferences, key: String? ->
+                if (key == PREF_THEME_CYBERPUNK)
+                    isCutCorner = appPrefs.getBoolean(key, DEFAULT_THEME_CYBERPUNK)
+            }
+            appPrefs.registerOnSharedPreferenceChangeListener(listener)
+            onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
+        }
+    }
+
+    MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
         //  We update the LocalContentColor to match our onBackground. This allows the default
         //  content color to be more appropriate to the theme background

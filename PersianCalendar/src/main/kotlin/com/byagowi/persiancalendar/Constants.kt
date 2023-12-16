@@ -51,6 +51,7 @@ const val PREF_ATHAN_ALARM = "AthanAlarm"
 const val PREF_ATHAN_GAP = "AthanGap"
 const val PREF_THEME = "Theme"
 const val PREF_THEME_GRADIENT = "ThemeGradient"
+const val PREF_THEME_CYBERPUNK = "ThemeCyberpunk"
 const val PREF_HOLIDAY_TYPES = "holiday_types"
 const val PREF_WEEK_START = "WeekStart"
 const val PREF_WEEK_ENDS = "WeekEnds"
@@ -63,8 +64,6 @@ const val PREF_LAST_APP_VISIT_VERSION = "LastAppVisitVersion"
 const val PREF_SHOW_QIBLA_IN_COMPASS = "showQibla"
 const val PREF_TRUE_NORTH_IN_COMPASS = "trueNorth"
 const val PREF_WALLPAPER_DARK = "WallpaperDark"
-
-const val CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
@@ -83,6 +82,7 @@ const val DEFAULT_ATHAN_VOLUME = 3
 const val DEFAULT_ISLAMIC_OFFSET = "0"
 const val DEFAULT_SECONDARY_CALENDAR_IN_TABLE = false
 const val DEFAULT_THEME_GRADIENT = true
+const val DEFAULT_THEME_CYBERPUNK = false
 const val DEFAULT_WALLPAPER_DARK = true
 const val DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS = false
 const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
