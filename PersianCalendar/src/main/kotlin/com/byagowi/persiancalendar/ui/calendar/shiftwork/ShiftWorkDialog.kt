@@ -66,13 +66,11 @@ import com.byagowi.persiancalendar.utils.formatNumber
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShiftWorkDialog(
+    viewModel: ShiftWorkViewModel,
     selectedJdn: Jdn,
     onDismissRequest: () -> Unit,
     refreshCalendar: () -> Unit,
 ) {
-    val viewModel = remember { ShiftWorkViewModel() }
-    // from already initialized global variable till a better solution
-    fillViewModelFromGlobalVariables(viewModel, selectedJdn)
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         Surface(
             shape = AlertDialogDefaults.shape,

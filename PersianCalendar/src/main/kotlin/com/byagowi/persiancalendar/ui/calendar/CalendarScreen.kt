@@ -130,6 +130,8 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverview
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
@@ -265,9 +267,8 @@ fun CalendarScreen(
 
     val context = LocalContext.current
     LaunchedEffect(null) {
-        if (mainCalendar == CalendarType.SHAMSI &&
-            isIranHolidaysEnabled &&
-            Jdn.today().toPersianDate().year > supportedYearOfIranCalendar
+        if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && Jdn.today()
+                .toPersianDate().year > supportedYearOfIranCalendar
         ) {
             if (snackbarHostState.showSnackbar(
                     context.getString(R.string.outdated_app),
@@ -382,8 +383,7 @@ fun Details(
         } else null,
     )
 
-    val isLandscape =
-        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     Surface(
         shape = if (isLandscape) MaterialCornerExtraLargeNoBottomEnd() else MaterialCornerExtraLargeTop(),
@@ -496,8 +496,7 @@ private fun Search(viewModel: CalendarViewModel) {
         trailingIcon = {
             IconButton(onClick = { viewModel.closeSearch() }) {
                 Icon(
-                    Icons.Default.Close,
-                    contentDescription = stringResource(R.string.close)
+                    Icons.Default.Close, contentDescription = stringResource(R.string.close)
                 )
             }
         },
@@ -524,8 +523,7 @@ private fun Search(viewModel: CalendarViewModel) {
                 )
             }
         }
-        if (events.size > 10)
-            Text("…", Modifier.padding(vertical = 12.dp, horizontal = 24.dp))
+        if (events.size > 10) Text("…", Modifier.padding(vertical = 12.dp, horizontal = 24.dp))
     }
 }
 
@@ -536,11 +534,8 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
     bringDate(
         viewModel,
         Jdn(
-            type,
-            if (date.year == -1) (today.year + if (date.month < today.month) 1 else 0)
-            else date.year,
-            date.month,
-            date.dayOfMonth
+            type, if (date.year == -1) (today.year + if (date.month < today.month) 1 else 0)
+            else date.year, date.month, date.dayOfMonth
         ),
         context,
     )
@@ -555,8 +550,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val todayJdn = Jdn.today()
     val todayDate = todayJdn.toCalendar(mainCalendar)
-    val selectedMonth =
-        mainCalendar.getMonthStartFromMonthsDistance(todayJdn, selectedMonthOffset)
+    val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(todayJdn, selectedMonthOffset)
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
@@ -572,8 +566,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 subtitle = formatNumber(selectedMonth.year)
             } else {
                 title = language.my.format(
-                    selectedMonth.monthName,
-                    formatNumber(selectedMonth.year)
+                    selectedMonth.monthName, formatNumber(selectedMonth.year)
                 )
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
             }
@@ -619,8 +612,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
         actions = {
             val isHighlighted by viewModel.isHighlighted.collectAsState()
             AnimatedVisibility(
-                selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month ||
-                        isHighlighted
+                selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month || isHighlighted
             ) {
                 IconButton(onClick = {
                     bringDate(viewModel, Jdn.today(), context, highlight = false)
@@ -661,14 +653,16 @@ private fun Menu(viewModel: CalendarViewModel) {
     if (showDayPickerDialog) DayPickerDialog(
         viewModel.selectedDay.value,
         R.string.go,
-        { bringDate(viewModel, it, context) }
-    ) { showDayPickerDialog = false }
+        { bringDate(viewModel, it, context) }) { showDayPickerDialog = false }
 
-    var showShiftWorkDialog by rememberSaveable { mutableStateOf(false) }
-    if (showShiftWorkDialog) ShiftWorkDialog(
-        viewModel.selectedDay.value,
-        onDismissRequest = { showShiftWorkDialog = false },
-    ) { viewModel.refreshCalendar() }
+    val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
+    shiftWorkViewModel?.let { it ->
+        ShiftWorkDialog(
+            it,
+            viewModel.selectedDay.value,
+            onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
+        ) { viewModel.refreshCalendar() }
+    }
 
     ThreeDotsDropdownMenu { closeMenu ->
         DropdownMenuItem(
@@ -691,7 +685,10 @@ private fun Menu(viewModel: CalendarViewModel) {
             text = { Text(stringResource(R.string.shift_work_settings)) },
             onClick = {
                 closeMenu()
-                showShiftWorkDialog = true
+                val dialogViewModel = ShiftWorkViewModel()
+                // from already initialized global variable till a better solution
+                fillViewModelFromGlobalVariables(dialogViewModel, viewModel.selectedDay.value)
+                viewModel.setShiftWorkViewModel(dialogViewModel)
             },
         )
 
@@ -743,8 +740,7 @@ private fun Menu(viewModel: CalendarViewModel) {
         (listOf(null) + enabledCalendars.drop(1)).forEach {
             AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 DropdownMenuRadioItem(
-                    stringResource(it?.title ?: R.string.none),
-                    it == secondaryCalendar
+                    stringResource(it?.title ?: R.string.none), it == secondaryCalendar
                 ) { _ ->
                     context.appPrefs.edit {
                         if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
@@ -853,12 +849,11 @@ class AddEventContract : ActivityResultContract<Jdn, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
     override fun createIntent(context: Context, input: Jdn): Intent {
         val time = input.toGregorianCalendar().timeInMillis
-        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
-            .putExtra(
-                CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                    input, input.toCalendar(mainCalendar)
-                )
-            ).putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
+        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).putExtra(
+            CalendarContract.Events.DESCRIPTION, dayTitleSummary(
+                input, input.toCalendar(mainCalendar)
+            )
+        ).putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
             .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
     }

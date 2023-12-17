@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +48,9 @@ class CalendarViewModel @JvmOverloads constructor(
 
     private val _removedThirdTab = MutableStateFlow(false)
     val removedThirdTab: StateFlow<Boolean> = _removedThirdTab
+
+    private val _shiftWorkViewModel = MutableStateFlow<ShiftWorkViewModel?>(null)
+    val shiftWorkViewModel: StateFlow<ShiftWorkViewModel?> = _shiftWorkViewModel
 
     // Commands
     fun changeSelectedMonthOffset(offset: Int) {
@@ -88,6 +92,10 @@ class CalendarViewModel @JvmOverloads constructor(
 
     fun searchEvent(query: CharSequence) {
         viewModelScope.launch { _eventsFlow.emit(repository.findEvent(query)) }
+    }
+
+    fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
+        _shiftWorkViewModel.value = shiftWorkViewModel
     }
 
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
