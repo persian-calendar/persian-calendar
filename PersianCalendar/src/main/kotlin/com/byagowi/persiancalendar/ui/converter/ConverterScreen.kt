@@ -412,6 +412,7 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
                 minLines = 6,
                 modifier = Modifier.weight(1f),
             )
+            Spacer(Modifier.width(24.dp))
             Qr()
         } else Column(Modifier.padding(horizontal = 24.dp)) {
             TextField(
