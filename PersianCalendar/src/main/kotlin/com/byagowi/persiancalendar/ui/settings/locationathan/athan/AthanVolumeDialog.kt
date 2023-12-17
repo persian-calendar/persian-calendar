@@ -7,9 +7,11 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -24,7 +26,7 @@ import com.byagowi.persiancalendar.utils.getAthanUri
 @Composable
 fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    var volume by remember { mutableStateOf(context.athanVolume) }
+    var volume by rememberSaveable { mutableStateOf(context.athanVolume) }
 
     val audioManager =
         remember { context.getSystemService<AudioManager>() } ?: return onDismissRequest()
@@ -38,22 +40,21 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
         ringtone?.play()
     }
 
-    val onDialogClose = remember {
-        {
+    DisposableEffect(null) {
+        onDispose {
             ringtone?.stop()
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalAlarmVolume, 0)
-            onDismissRequest()
         }
     }
 
     AlertDialog(
         title = { Text(stringResource(R.string.athan_volume)) },
         dismissButton = {
-            TextButton(onClick = onDialogClose) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         confirmButton = {
             TextButton(onClick = {
-                onDialogClose()
+                onDismissRequest()
                 context.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
             }) { Text(stringResource(R.string.accept)) }
         },
@@ -69,6 +70,6 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
                 },
             )
         },
-        onDismissRequest = onDialogClose,
+        onDismissRequest = onDismissRequest,
     )
 }
