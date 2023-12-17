@@ -62,8 +62,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
@@ -116,9 +118,12 @@ fun ConverterScreen(
                             .background(Color.Gray.copy(alpha = .5f))
                             .clickable { showMenu = !showMenu },
                     ) {
+                        var spinnerWidth by remember { mutableStateOf(0) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(vertical = 4.dp)
+                            modifier = Modifier
+                                .padding(vertical = 4.dp)
+                                .onSizeChanged { spinnerWidth = it.width },
                         ) {
                             Spacer(Modifier.width(16.dp))
                             Text(stringResource(viewModel.screenMode.value.title))
@@ -136,7 +141,7 @@ fun ConverterScreen(
                         DropdownMenu(
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false },
-                            Modifier.defaultMinSize(minWidth = 140.dp),
+                            Modifier.defaultMinSize(minWidth = with(LocalDensity.current) { spinnerWidth.toDp() }),
                         ) {
                             ConverterScreenMode.entries.filter {
                                 // Converter doesn't work in Android 5, let's hide it there
