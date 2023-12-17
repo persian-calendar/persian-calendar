@@ -552,7 +552,6 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
 
-    val selectedDay by viewModel.selectedDay.collectAsState()
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val todayJdn = Jdn.today()
     val todayDate = todayJdn.toCalendar(mainCalendar)
@@ -618,9 +617,10 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             }
         },
         actions = {
+            val isHighlighted by viewModel.isHighlighted.collectAsState()
             AnimatedVisibility(
                 selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month ||
-                        selectedDay != todayJdn
+                        isHighlighted
             ) {
                 IconButton(onClick = {
                     bringDate(viewModel, Jdn.today(), context, highlight = false)
