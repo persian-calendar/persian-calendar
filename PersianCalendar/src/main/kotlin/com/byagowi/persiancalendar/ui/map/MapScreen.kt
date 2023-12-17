@@ -26,7 +26,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -314,21 +313,18 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
             visible = formattedTime.isNotEmpty(),
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .safeDrawingPadding()
-                .padding(bottom = 16.dp),
+                .safeDrawingPadding(),
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
             @OptIn(ExperimentalFoundationApi::class) Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .safeDrawingPadding()
+                    .padding(all = 16.dp)
                     .height(46.dp)
-                    .padding(bottom = 16.dp)
                     .fillMaxWidth(),
             ) {
                 val hapticFeedback = LocalHapticFeedback.current
-                Spacer(modifier = Modifier.width(16.dp))
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
                     contentDescription = null,
@@ -383,9 +379,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     ),
                     tint = MaterialTheme.colorScheme.primary,
                 )
-                Spacer(modifier = Modifier.width(16.dp))
             }
-            Spacer(Modifier.height(8.dp))
         }
     }
 }

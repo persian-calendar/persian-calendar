@@ -211,6 +211,7 @@ fun AstronomyScreen(
                 Modifier
                     .safeDrawingPadding()
                     .fillMaxWidth()
+                    .padding(bottom = 16.dp),
             ) {
                 Text(
                     state.date.formatDateAndTime(),
@@ -225,9 +226,11 @@ fun AstronomyScreen(
                         )
                 )
                 Spacer(Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
                     val hapticFeedback = LocalHapticFeedback.current
-                    Spacer(modifier = Modifier.width(16.dp))
                     Icon(
                         Icons.AutoMirrored.Default.KeyboardArrowLeft,
                         contentDescription = null,
@@ -295,9 +298,7 @@ fun AstronomyScreen(
                         ),
                         tint = MaterialTheme.colorScheme.primary,
                     )
-                    Spacer(modifier = Modifier.width(16.dp))
                 }
-                Spacer(Modifier.height(8.dp))
             }
         }
     ) { paddingValues ->
