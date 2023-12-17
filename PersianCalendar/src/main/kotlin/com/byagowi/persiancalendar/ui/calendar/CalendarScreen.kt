@@ -479,7 +479,7 @@ private fun Search(viewModel: CalendarViewModel) {
             withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
         }
     }
-    var query by remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
     viewModel.searchEvent(query)
     val events by viewModel.eventsFlow.collectAsState(initial = emptyList())
     val isActive by derivedStateOf { query.isNotEmpty() }
@@ -495,9 +495,7 @@ private fun Search(viewModel: CalendarViewModel) {
         onActiveChange = {},
         trailingIcon = {
             IconButton(onClick = { viewModel.closeSearch() }) {
-                Icon(
-                    Icons.Default.Close, contentDescription = stringResource(R.string.close)
-                )
+                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
             }
         },
         modifier = Modifier
