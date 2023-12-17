@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -390,41 +391,21 @@ private fun Calculator(viewModel: ConverterViewModel) {
 @Composable
 private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -> Unit) {
     val inputText = viewModel.qrCodeInputText.collectAsState()
-    Column {
-        @Composable
-        fun Qr() {
-            AndroidView(
-                factory = {
-                    val root = QrView(it)
-                    setShareAction { root.share() }
-                    root
-                },
-                update = { it.update(inputText.value) },
-            )
-        }
 
-        val isLandscape =
-            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-        if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
-            TextField(
-                value = inputText.value,
-                onValueChange = viewModel::changeQrCodeInput,
-                minLines = 6,
-                modifier = Modifier.weight(1f),
-            )
-            Spacer(Modifier.width(24.dp))
-            Qr()
-        } else Column(Modifier.padding(horizontal = 24.dp)) {
-            TextField(
-                value = inputText.value,
-                onValueChange = viewModel::changeQrCodeInput,
-                minLines = 10,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(Modifier.height(24.dp))
-            Qr()
-        }
+    @Composable
+    fun Qr() {
+        AndroidView(
+            factory = {
+                val root = QrView(it)
+                setShareAction { root.share() }
+                root
+            },
+            update = { it.update(inputText.value) },
+        )
+    }
 
+    @Composable
+    fun ColumnScope.SampleInputButton() {
         var qrLongClickCount by remember { mutableIntStateOf(1) }
         OutlinedButton(
             onClick = {
@@ -443,6 +424,34 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 16.dp),
         ) { Text("Sample inputs") }
+    }
+
+    val isLandscape =
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
+        Column(modifier = Modifier.weight(1f)) {
+            TextField(
+                value = inputText.value,
+                onValueChange = viewModel::changeQrCodeInput,
+                minLines = 6,
+                modifier = Modifier.fillMaxWidth(),
+            )
+            Spacer(Modifier.height(8.dp))
+            SampleInputButton()
+        }
+        Spacer(Modifier.width(24.dp))
+        Qr()
+    } else Column(Modifier.padding(horizontal = 24.dp)) {
+        TextField(
+            value = inputText.value,
+            onValueChange = viewModel::changeQrCodeInput,
+            minLines = 10,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(Modifier.height(24.dp))
+        Qr()
+        Spacer(Modifier.height(8.dp))
+        SampleInputButton()
     }
 }
 
