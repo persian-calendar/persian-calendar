@@ -17,7 +17,7 @@ along with this program.  If not, see http://www.gnu.org/licenses/.
 
 ----
 Assets
-* {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
+* {spring,summer,fall,winter}.webp by Lotta Nieminen (CC BY NC 4.0)
   https://www.behance.net/gallery/21015893/Google-Calendar
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
 * kaaba.xml from Emoji One project, v2, 1f54b.svg, http://emojione.com (CC BY 4.0)
