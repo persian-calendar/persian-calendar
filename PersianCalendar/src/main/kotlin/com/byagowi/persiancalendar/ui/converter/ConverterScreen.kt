@@ -112,7 +112,7 @@ fun ConverterScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    var showMenu by remember { mutableStateOf(false) }
+                    var showMenu by rememberSaveable { mutableStateOf(false) }
                     Box(
                         Modifier
                             .clip(MaterialTheme.shapes.extraLarge)
