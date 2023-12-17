@@ -28,6 +28,7 @@ import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -86,8 +87,8 @@ fun DayPicker(
         val yearsFormat = remember(calendarType) {
             { item: Int -> formatNumber(item) }
         }
-        var monthChangeToken by remember { mutableStateOf(0) }
-        var previousMonth by remember { mutableStateOf(0) }
+        var monthChangeToken by remember { mutableIntStateOf(0) }
+        var previousMonth by remember { mutableIntStateOf(0) }
         if (previousMonth != date.month) ++monthChangeToken
         previousMonth = date.month
         Row(modifier = Modifier.fillMaxWidth()) {

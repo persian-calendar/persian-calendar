@@ -52,6 +52,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -118,7 +119,7 @@ fun ConverterScreen(
                             .background(Color.Gray.copy(alpha = .5f))
                             .clickable { showMenu = !showMenu },
                     ) {
-                        var spinnerWidth by remember { mutableStateOf(0) }
+                        var spinnerWidth by remember { mutableIntStateOf(0) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
@@ -141,7 +142,9 @@ fun ConverterScreen(
                         DropdownMenu(
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false },
-                            Modifier.defaultMinSize(minWidth = with(LocalDensity.current) { spinnerWidth.toDp() }),
+                            Modifier.defaultMinSize(
+                                minWidth = with(LocalDensity.current) { spinnerWidth.toDp() }
+                            ),
                         ) {
                             ConverterScreenMode.entries.filter {
                                 // Converter doesn't work in Android 5, let's hide it there
@@ -421,7 +424,7 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
             Qr()
         }
 
-        var qrLongClickCount by remember { mutableStateOf(1) }
+        var qrLongClickCount by remember { mutableIntStateOf(1) }
         OutlinedButton(
             onClick = {
                 viewModel.changeQrCodeInput(

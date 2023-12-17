@@ -47,6 +47,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -197,7 +198,7 @@ fun AstronomyScreen(
             )
         },
         bottomBar = {
-            var lastButtonClickTimestamp by remember { mutableStateOf(System.currentTimeMillis()) }
+            var lastButtonClickTimestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             fun buttonScrollSlider(days: Int): Boolean {
                 lastButtonClickTimestamp = System.currentTimeMillis()

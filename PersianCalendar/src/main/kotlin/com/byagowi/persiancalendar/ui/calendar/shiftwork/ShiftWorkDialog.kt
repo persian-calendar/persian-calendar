@@ -36,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -137,8 +138,8 @@ fun ColumnScope.ShiftWorkDialogContent(
 
     val shiftWorkRows by viewModel.shiftWorks.collectAsState()
     val lazyListState = rememberLazyListState()
-    var selectedTypeDropdownIndex by remember { mutableStateOf(-1) }
-    var selectedLengthDropdownIndex by remember { mutableStateOf(-1) }
+    var selectedTypeDropdownIndex by remember { mutableIntStateOf(-1) }
+    var selectedLengthDropdownIndex by remember { mutableIntStateOf(-1) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
     LazyColumn(
