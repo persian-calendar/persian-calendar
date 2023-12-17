@@ -239,7 +239,12 @@ fun CalendarScreen(
             val screenWidth = configuration.screenWidthDp.dp
             val screenHeight = configuration.screenHeightDp.dp
             if (isLandscape) Row {
-                CalendarPager(Modifier.width(screenWidth * 45 / 100), viewModel)
+                CalendarPager(
+                    Modifier
+                        .width(screenWidth * 45 / 100)
+                        .padding(bottom = paddingValues.calculateBottomPadding()),
+                    viewModel,
+                )
                 Details(
                     Modifier.fillMaxSize(),
                     viewModel,
