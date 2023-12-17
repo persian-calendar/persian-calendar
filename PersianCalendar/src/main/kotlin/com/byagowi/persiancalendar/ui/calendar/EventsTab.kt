@@ -153,9 +153,7 @@ fun EventsTab(
                 event.title,
                 label = "event title",
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                        fadeOut(animationSpec = tween(animationTime))
-                    )
+                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                 },
             ) { title ->
                 Row(

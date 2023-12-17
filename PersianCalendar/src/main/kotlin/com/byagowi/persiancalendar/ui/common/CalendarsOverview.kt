@@ -129,9 +129,7 @@ fun CalendarsOverview(
                     jdn.dayOfWeekName, stringResource(R.string.iran_time)
                 ) else jdn.dayOfWeekName,
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                        fadeOut(animationSpec = tween(animationTime))
-                    )
+                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                 },
                 label = "weekday name",
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
@@ -174,9 +172,7 @@ fun CalendarsOverview(
                     calculateDaysDifference(context.resources, jdn)
                 ).joinToString(""),
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                        fadeOut(animationSpec = tween(animationTime))
-                    )
+                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                 },
                 label = "diff days",
             ) { state ->
@@ -337,9 +333,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                     targetState = jdn,
                     label = "jdn",
                     transitionSpec = {
-                        fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                            fadeOut(animationSpec = tween(animationTime))
-                        )
+                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                     },
                 ) { state ->
                     val date = state.toCalendar(calendarType)

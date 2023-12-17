@@ -149,9 +149,7 @@ private fun AstronomicalOverview(
             .height(100.dp)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
         transitionSpec = {
-            fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                fadeOut(animationSpec = tween(animationTime))
-            )
+            fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
         },
     ) { state ->
         if (state) AndroidView(

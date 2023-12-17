@@ -202,9 +202,7 @@ fun CalendarScreen(
                 searchBoxIsOpen,
                 label = "toolbar",
                 transitionSpec = {
-                    fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                        fadeOut(animationSpec = tween(animationTime))
-                    )
+                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                 },
             ) { if (it) Search(viewModel) else Toolbar(openDrawer, viewModel) }
         },
@@ -586,18 +584,14 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                     title,
                     label = "title",
                     transitionSpec = {
-                        fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                            fadeOut(animationSpec = tween(animationTime))
-                        )
+                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                     },
                 ) { state -> Text(state, style = MaterialTheme.typography.titleLarge) }
                 AnimatedContent(
                     subtitle,
                     label = "subtitle",
                     transitionSpec = {
-                        fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                            fadeOut(animationSpec = tween(animationTime))
-                        )
+                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                     },
                 ) { state ->
                     Text(
