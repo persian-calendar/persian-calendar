@@ -11,12 +11,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -40,10 +38,9 @@ fun DayPickerDialog(
     onSuccess: (jdn: Jdn) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var jdn by rememberSaveable(saver = object : Saver<MutableState<Jdn>, Long> {
-        override fun restore(value: Long) = mutableStateOf(Jdn(value))
-        override fun SaverScope.save(value: MutableState<Jdn>) = value.value.value
-    }) { mutableStateOf(initialJdn) }
+    var jdn by rememberSaveable(
+        saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
+    ) { mutableStateOf(initialJdn) }
     val today = remember { Jdn.today() }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -57,7 +54,7 @@ fun DayPickerDialog(
             if (jdn != today) TextButton(onClick = { jdn = today }) {
                 Text(stringResource(R.string.today))
             }
-        }
+        },
     ) {
         var calendarType by remember { mutableStateOf(mainCalendar) }
         CalendarsTypesPicker(current = calendarType) { calendarType = it }
@@ -66,13 +63,12 @@ fun DayPickerDialog(
         val longAnimationTime = integerResource(android.R.integer.config_longAnimTime)
         AnimatedContent(
             targetState = if (jdn == today) " " else listOf(
-                stringResource(R.string.days_distance),
-                spacedColon,
+                stringResource(R.string.days_distance), spacedColon,
                 calculateDaysDifference(
                     LocalContext.current.resources,
                     jdn,
                     calendarType = calendarType,
-                )
+                ),
             ).joinToString(""),
             transitionSpec = {
                 slideIntoContainer(
@@ -83,7 +79,7 @@ fun DayPickerDialog(
                     animationSpec = tween(durationMillis = longAnimationTime)
                 )
             },
-            label = "days distance"
+            label = "days distance",
         ) { state ->
             SelectionContainer {
                 Text(
