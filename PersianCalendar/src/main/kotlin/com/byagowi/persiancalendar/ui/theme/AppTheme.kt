@@ -42,12 +42,11 @@ fun AppTheme(content: @Composable () -> Unit) {
     }
 
     val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
-    val colorScheme =
+    var colorScheme =
         if (theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val result =
-                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            if (theme == Theme.BLACK) result.copy(surface = Color.Black) else result
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         } else if (darkTheme) DarkColorScheme else LightColorScheme
+    if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
 
     var shapes = MaterialTheme.shapes
     if (BuildConfig.DEVELOPMENT) {
