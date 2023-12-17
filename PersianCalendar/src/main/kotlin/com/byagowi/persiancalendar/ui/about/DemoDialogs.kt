@@ -28,7 +28,9 @@ import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.text.Html
 import android.text.Spanned
+import android.text.SpannedString
 import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -53,8 +55,6 @@ import androidx.core.graphics.get
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.os.postDelayed
-import androidx.core.text.HtmlCompat
-import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
@@ -644,9 +644,12 @@ fun showPeriodicTableDialog(activity: ComponentActivity) {
     }
 
     fun formatTitle(input: String): Spanned {
-        return "<small><small>$input</small></small>"
-            .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>")
-            .parseAsHtml(HtmlCompat.FROM_HTML_MODE_LEGACY)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return SpannedString(input)
+        return Html.fromHtml(
+            "<small><small>$input</small></small>"
+                .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>"),
+            Html.FROM_HTML_MODE_LEGACY
+        )
     }
 
     val dialog = AlertDialog.Builder(activity)
