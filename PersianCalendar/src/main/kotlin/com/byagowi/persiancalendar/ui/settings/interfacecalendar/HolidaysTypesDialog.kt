@@ -51,20 +51,16 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
-    AppDialog(
-        title = { Text(stringResource(R.string.events)) },
-        dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.cancel))
-            }
-        },
-        confirmButton = {
-            TextButton(onClick = {
-                onDismissRequest()
-                context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
-            }) { Text(stringResource(R.string.accept)) }
-        },
-        onDismissRequest = onDismissRequest
+    AppDialog(title = { Text(stringResource(R.string.events)) }, dismissButton = {
+        TextButton(onClick = onDismissRequest) {
+            Text(stringResource(R.string.cancel))
+        }
+    }, confirmButton = {
+        TextButton(onClick = {
+            onDismissRequest()
+            context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
+        }) { Text(stringResource(R.string.accept)) }
+    }, onDismissRequest = onDismissRequest
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.bodyMedium
@@ -154,8 +150,7 @@ fun CountryEvents(
     ) {
         TriStateCheckbox(
             state = when {
-                holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes ->
-                    ToggleableState.On
+                holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes -> ToggleableState.On
 
                 holidaysKey in enabledTypes || nonHolidaysKey in enabledTypes -> ToggleableState.Indeterminate
 
@@ -164,7 +159,7 @@ fun CountryEvents(
             onClick = null,
             modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
         )
-        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+        Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
         Text(calendarCenterName)
         val context = LocalContext.current
         if (sourceLink.isNotEmpty()) {
@@ -199,13 +194,17 @@ private fun IndentedCheckBox(
                 if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
             }
             .height(HolidaysSettingsItemHeight.dp)
-            .padding(start = 72.dp, end = SettingsHorizontalPaddingItem.dp),
+            .padding(
+                start = (24/*checkbox size*/ + HolidaysHorizontalPaddingItem + SettingsHorizontalPaddingItem).dp,
+                end = HolidaysHorizontalPaddingItem.dp,
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(key in enabledTypes, onCheckedChange = null)
-        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+        Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
         Text(label)
     }
 }
 
-private const val HolidaysSettingsItemHeight = 40f
+private const val HolidaysSettingsItemHeight = 40
+private const val HolidaysHorizontalPaddingItem = 16
