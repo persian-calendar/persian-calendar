@@ -10,20 +10,21 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -35,7 +36,6 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
-import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -252,18 +252,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         },
         drawerState = drawerState,
         drawerContent = {
-            val isLandscape =
-                LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
             @OptIn(ExperimentalFoundationApi::class) ModalDrawerSheet(
-                windowInsets = if (isLandscape) DrawerDefaults.windowInsets
-                else WindowInsets(0, 0, 0, 0),
+                windowInsets = WindowInsets(0, 0, 0, 0)
             ) {
                 val context = LocalContext.current
                 val needsVisibleStatusBarPlaceHolder = remember {
                     SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
                 }
-                Box(
+                Spacer(
                     if (needsVisibleStatusBarPlaceHolder) Modifier
                         .fillMaxWidth()
                         .background(
@@ -271,8 +267,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 0f to Color(0x70000000), 1f to Color.Transparent
                             )
                         )
+                        .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top))
                     else Modifier
-                ) { Box(Modifier.windowInsetsTopHeight(WindowInsets.systemBars)) }
+                )
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     val actualSeason =

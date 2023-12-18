@@ -5,6 +5,11 @@ import android.view.View
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +23,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -72,17 +78,25 @@ fun AppTheme(content: @Composable () -> Unit) {
         ) {
             val isGradient by isGradient.collectAsState()
             Box(
-                if (!isGradient) Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
-                else Modifier.background(
-                    Brush.linearGradient(
-                        0f to Color(context.resolveColor(R.attr.screenBackgroundGradientStart)),
-                        1f to Color(context.resolveColor(R.attr.screenBackgroundGradientEnd)),
-                        start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
-                        end = Offset(
-                            if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY
-                        ),
+                Modifier
+                    .windowInsetsPadding(
+                        WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
                     )
-                ),
+                    .then(
+                        if (!isGradient) Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
+                        else Modifier.background(
+                            Brush.linearGradient(
+                                0f to Color(context.resolveColor(R.attr.screenBackgroundGradientStart)),
+                                1f to Color(context.resolveColor(R.attr.screenBackgroundGradientEnd)),
+                                start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
+                                end = Offset(
+                                    if (isRtl) 0f else Float.POSITIVE_INFINITY,
+                                    Float.POSITIVE_INFINITY
+                                ),
+                            )
+                        )
+                    )
+                    .clipToBounds(),
             ) { content() }
         }
     }
