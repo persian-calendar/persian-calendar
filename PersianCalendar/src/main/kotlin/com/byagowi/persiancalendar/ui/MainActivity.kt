@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
+import androidx.compose.material3.DrawerDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -275,8 +276,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         },
         drawerState = drawerState,
         drawerContent = {
+            val isLandscape =
+                LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
             @OptIn(ExperimentalFoundationApi::class)
-            ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
+            ModalDrawerSheet(
+                windowInsets =
+                if (isLandscape) DrawerDefaults.windowInsets else WindowInsets(0, 0, 0, 0),
+            ) {
                 val context = LocalContext.current
                 val needsVisibleStatusBarPlaceHolder = remember {
                     SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
