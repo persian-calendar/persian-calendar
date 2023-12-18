@@ -25,17 +25,14 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -93,13 +90,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtLeast
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -228,44 +226,56 @@ fun CalendarScreen(
         }
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-        Column(
-            Modifier.padding(
-                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-            )
-        ) {
-            Spacer(Modifier.height(paddingValues.calculateTopPadding()))
+        val topPadding = paddingValues.calculateTopPadding()
+        val bottomPadding = paddingValues.calculateBottomPadding()
+        Column(Modifier.padding(top = topPadding)) {
             val configuration = LocalConfiguration.current
             val screenWidth = configuration.screenWidthDp.dp
             val screenHeight = configuration.screenHeightDp.dp
             if (isLandscape) Row {
-                CalendarPager(
-                    Modifier
-                        .width(screenWidth * 45 / 100)
-                        .padding(bottom = paddingValues.calculateBottomPadding()),
-                    viewModel,
-                )
-                Details(
-                    Modifier.fillMaxSize(),
-                    viewModel,
-                    navigateToHolidaysSettings,
-                    navigateToSettingsLocationTab,
-                    navigateToAstronomy,
-                    paddingValues.calculateBottomPadding(),
-                    scrollableTabs = true,
-                )
-            } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                CalendarPager(Modifier.sizeIn(minHeight = 320.dp, maxHeight = 400.dp), viewModel)
-                Details(
-                    Modifier
-                        .fillMaxWidth()
-                        .defaultMinSize(minHeight = screenHeight - 400.dp - 64.dp),
-                    viewModel,
-                    navigateToHolidaysSettings,
-                    navigateToSettingsLocationTab,
-                    navigateToAstronomy,
-                    paddingValues.calculateBottomPadding(),
-                )
+                val width = screenWidth * 45 / 100
+                BoxWithConstraints(Modifier.width(width)) {
+                    val height = 400.dp.coerceAtMost(this.maxHeight)
+                    CalendarPager(viewModel, screenWidth * 45 / 100, height)
+                }
+                Surface(
+                    shape = MaterialCornerExtraLargeNoBottomEnd(),
+                    modifier = Modifier.fillMaxHeight(),
+                ) {
+                    Details(
+                        viewModel,
+                        navigateToHolidaysSettings,
+                        navigateToSettingsLocationTab,
+                        navigateToAstronomy,
+                        bottomPadding,
+                        scrollableTabs = true,
+                    )
+                }
+            } else {
+                val scrollState = rememberScrollState()
+                scrollState.viewportSize
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .verticalScroll(scrollState),
+                ) {
+                    val calendarHeight = 380.dp.coerceAtLeast(screenHeight / 2.2f)
+                    CalendarPager(viewModel, screenWidth, calendarHeight)
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .weight(1f),
+                        shape = MaterialCornerExtraLargeTop(),
+                    ) {
+                        Details(
+                            viewModel,
+                            navigateToHolidaysSettings,
+                            navigateToSettingsLocationTab,
+                            navigateToAstronomy,
+                            bottomPadding,
+                        )
+                    }
+                }
             }
         }
     }
@@ -369,7 +379,6 @@ fun ButtonsBar(
 
 @Composable
 fun Details(
-    modifier: Modifier,
     viewModel: CalendarViewModel,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
@@ -388,56 +397,48 @@ fun Details(
         } else null,
     )
 
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-    Surface(
-        shape = if (isLandscape) MaterialCornerExtraLargeNoBottomEnd() else MaterialCornerExtraLargeTop(),
-    ) {
-        @OptIn(ExperimentalFoundationApi::class) Column {
-            val pagerState = rememberPagerState(
-                initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
-                pageCount = tabs::size,
-            )
-            val scope = rememberCoroutineScope()
-            viewModel.changeSelectedTabIndex(pagerState.currentPage)
+    @OptIn(ExperimentalFoundationApi::class) Column {
+        val pagerState = rememberPagerState(
+            initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
+            pageCount = tabs::size,
+        )
+        val scope = rememberCoroutineScope()
+        viewModel.changeSelectedTabIndex(pagerState.currentPage)
 
-            TabRow(
-                selectedTabIndex = selectedTabIndex,
-                divider = {},
-                indicator = @Composable { tabPositions ->
-                    if (selectedTabIndex < tabPositions.size) {
-                        SecondaryIndicator(
-                            Modifier
-                                .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                                .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                            height = 2.dp,
-                        )
-                    }
-                },
-            ) {
-                tabs.forEachIndexed { index, (titlesResId, _) ->
-                    Tab(
-                        text = { Text(stringResource(titlesResId)) },
-                        selected = pagerState.currentPage == index,
-                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            divider = {},
+            indicator = @Composable { tabPositions ->
+                if (selectedTabIndex < tabPositions.size) {
+                    SecondaryIndicator(
+                        Modifier
+                            .tabIndicatorOffset(tabPositions[selectedTabIndex])
+                            .padding(horizontal = ExtraLargeShapeCornerSize.dp),
+                        height = 2.dp,
                     )
                 }
+            },
+        ) {
+            tabs.forEachIndexed { index, (titlesResId, _) ->
+                Tab(
+                    text = { Text(stringResource(titlesResId)) },
+                    selected = pagerState.currentPage == index,
+                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                )
             }
+        }
 
-            HorizontalPager(
-                state = pagerState,
-                modifier = modifier,
-                verticalAlignment = Alignment.Top,
-            ) { index ->
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    Column(
-                        if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
-                        else Modifier
-                    ) {
-                        tabs[index].second()
-                        Spacer(Modifier.height(bottomPadding))
-                    }
-                }
+        HorizontalPager(
+            state = pagerState,
+            verticalAlignment = Alignment.Top,
+        ) { index ->
+            Column(
+                if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
+                else Modifier
+            ) {
+                tabs[index].second()
+                Spacer(Modifier.height(bottomPadding))
             }
         }
     }

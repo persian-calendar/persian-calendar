@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -64,7 +65,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean, size: IntSize) {
+fun Month(
+    viewModel: CalendarViewModel,
+    offset: Int,
+    isCurrentSelection: Boolean,
+    width: Dp,
+    height: Dp,
+) {
     val todayJdn = remember { Jdn.today() }
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(todayJdn, offset)
     val monthStartJdn = Jdn(monthStartDate)
@@ -107,13 +114,16 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
     val addEvent = AddEvent(viewModel)
 
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val dayPainter = remember(size.height, size.width, refreshToken) {
-        DayPainter(context, size.width / columnsCount, size.height / rowsCount, isRtl)
-    }
 
-    val cellSize = with(LocalDensity.current) {
-        DpSize(size.width.toDp() / columnsCount, size.height.toDp() / rowsCount)
+    val cellSize = DpSize(width / columnsCount, height / rowsCount)
+    val cellPixelSize = with(LocalDensity.current) {
+        IntSize(cellSize.width.roundToPx(), cellSize.height.roundToPx())
     }
+    val dayPainter = remember(height, width, refreshToken) {
+        DayPainter(context, cellPixelSize.width, cellPixelSize.height, isRtl)
+    }
+    val widthPixel = with(LocalDensity.current) { width.roundToPx() }
+
     Column(
         Modifier.drawWithCache {
             onDrawBehind {
@@ -122,12 +132,12 @@ fun Month(viewModel: CalendarViewModel, offset: Int, isCurrentSelection: Boolean
                     val index = lastSelectedDay - monthStartJdn
                     if (index !in monthRange) return@drawIntoCanvas
                     val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
-                    val l = column * size.width / columnsCount
-                    val t = row * size.height / rowsCount
-                    val w = size.width / columnsCount
-                    val h = size.height / rowsCount
+                    val l = column * cellPixelSize.width
+                    val t = row * cellPixelSize.height
+                    val w = cellPixelSize.width
+                    val h = cellPixelSize.height
                     selectionIndicator.onDraw(
-                        it, if (isRtl) size.width - l - w else l, t, w, h
+                        it, if (isRtl) widthPixel - l - w else l, t, w, h
                     )
                 }
             }
