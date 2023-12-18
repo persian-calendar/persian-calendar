@@ -17,14 +17,13 @@ datastore = "1.0.0"
 dynamicanimation = "1.0.0"
 espresso = "3.5.1"
 glance = "1.0.0"
-jetbrains-kotlinx-serialization-json = "1.6.2"
 junit = "4.13.2"
 junit-runner = "1.10.1"
 junit5 = "5.10.1"
 kotlin = "1.9.21"
 kotlinpoet = "1.15.3"
 kotlinx-html-jvm = "0.10.1"
-kotlinx-serialization-json = "1.6.0"
+kotlinx-serialization-json = "1.6.2"
 ksp = "1.9.21-1.0.16"
 leakcanary = "2.12"
 lifecycle-runtime = "2.6.2"
@@ -74,7 +73,7 @@ kotlinpoet = { group = "com.squareup", name = "kotlinpoet", version.ref = "kotli
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm", version.ref = "kotlinx-html-jvm" }
-kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization-json" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
