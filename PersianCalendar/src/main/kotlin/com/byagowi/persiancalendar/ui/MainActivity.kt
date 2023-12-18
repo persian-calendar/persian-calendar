@@ -45,18 +45,14 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -66,13 +62,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -82,7 +76,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
-import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -96,7 +89,6 @@ import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.PREF_THEME
-import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
@@ -126,7 +118,6 @@ import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -264,10 +255,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             val isLandscape =
                 LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-            @OptIn(ExperimentalFoundationApi::class)
-            ModalDrawerSheet(
-                windowInsets =
-                if (isLandscape) DrawerDefaults.windowInsets else WindowInsets(0, 0, 0, 0),
+            @OptIn(ExperimentalFoundationApi::class) ModalDrawerSheet(
+                windowInsets = if (isLandscape) DrawerDefaults.windowInsets
+                else WindowInsets(0, 0, 0, 0),
             ) {
                 val context = LocalContext.current
                 val needsVisibleStatusBarPlaceHolder = remember {
@@ -298,8 +288,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     val imageFilter = remember(LocalConfiguration.current) {
                         // Consider gray scale themes of Android 14
                         // And apply a gray scale filter https://stackoverflow.com/a/75698731
-                        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale)
-                            ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
+                        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale) ColorFilter.colorMatrix(
+                            ColorMatrix().also { it.setToSaturation(0f) })
                         else null
                     }
                     HorizontalPager(
@@ -310,8 +300,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             .height(196.dp)
                             .clip(MaterialTheme.shapes.extraLarge)
                             .semantics {
-                                @OptIn(ExperimentalComposeUiApi::class)
-                                this.invisibleToUser()
+                                @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
                             },
                         pageSpacing = 8.dp,
                     ) {
@@ -376,41 +365,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                 }
             }
-        }
+        },
     ) {
-        val context = LocalContext.current
-
-        var isGradient by remember {
-            mutableStateOf(
-                context.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
-            )
-        }
-        DisposableEffect(null) {
-            val appPrefs = context.appPrefs
-            val listener = { _: SharedPreferences, key: String? ->
-                if (key == PREF_THEME_GRADIENT)
-                    isGradient = appPrefs.getBoolean(key, DEFAULT_THEME_GRADIENT)
-            }
-            appPrefs.registerOnSharedPreferenceChangeListener(listener)
-            onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-        }
-
-        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
         NavHost(
             navController = navController,
             startDestination = startDestination,
-            modifier = if (!isGradient)
-                Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
-            else Modifier.background(
-                Brush.linearGradient(
-                    0f to Color(context.resolveColor(R.attr.screenBackgroundGradientStart)),
-                    1f to Color(context.resolveColor(R.attr.screenBackgroundGradientEnd)),
-                    start =
-                    Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
-                    end =
-                    Offset(if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
-                )
-            ),
         ) {
             val tabKey = "TAB"
             val settingsKey = "SETTINGS"
@@ -421,8 +380,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     navigateToHolidaysSettings = {
                         navController.graph.findNode(settingsRoute)?.let { destination ->
                             navController.navigate(
-                                destination.id,
-                                bundleOf(
+                                destination.id, bundleOf(
                                     tabKey to INTERFACE_CALENDAR_TAB,
                                     settingsKey to PREF_HOLIDAY_TYPES
                                 )
@@ -432,16 +390,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     navigateToSettingsLocationTab = {
                         navController.graph.findNode(settingsRoute)?.let { destination ->
                             navController.navigate(
-                                destination.id,
-                                bundleOf(tabKey to LOCATION_ATHAN_TAB)
+                                destination.id, bundleOf(tabKey to LOCATION_ATHAN_TAB)
                             )
                         }
                     },
                     navigateToAstronomy = { daysOffset ->
                         navController.graph.findNode(astronomyRoute)?.let { destination ->
                             navController.navigate(
-                                destination.id,
-                                bundleOf(daysOffsetKey to daysOffset)
+                                destination.id, bundleOf(daysOffsetKey to daysOffset)
                             )
                         }
                     },
@@ -467,13 +423,15 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             composable(levelRoute) {
                 LevelScreen(
                     navigateUp = {
-                        if (navController.currentDestination?.route == levelRoute)
+                        if (navController.currentDestination?.route == levelRoute) {
                             navController.navigateUp()
+                        }
                     },
                     navigateToCompass = {
                         // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                        if (!navController.popBackStack(compassRoute, false))
+                        if (!navController.popBackStack(compassRoute, false)) {
                             navController.navigate(levelRoute)
+                        }
                     },
                 )
             }
@@ -502,8 +460,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
                 MapScreen(
                     navigateUp = {
-                        if (navController.currentDestination?.route == mapRoute)
+                        if (navController.currentDestination?.route == mapRoute) {
                             navController.navigateUp()
+                        }
                     },
                     viewModel = viewModel,
                 )
@@ -529,15 +488,17 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(licensesRoute) {
                 LicensesScreen {
-                    if (navController.currentDestination?.route == licensesRoute)
+                    if (navController.currentDestination?.route == licensesRoute) {
                         navController.navigateUp()
+                    }
                 }
             }
 
             composable(deviceInformationRoute) {
                 DeviceInformationScreen {
-                    if (navController.currentDestination?.route == deviceInformationRoute)
+                    if (navController.currentDestination?.route == deviceInformationRoute) {
                         navController.navigateUp()
+                    }
                 }
             }
         }

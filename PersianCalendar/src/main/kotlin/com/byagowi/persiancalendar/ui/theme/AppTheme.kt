@@ -2,7 +2,9 @@ package com.byagowi.persiancalendar.ui.theme
 
 import android.os.Build
 import android.view.View
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -15,6 +17,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -24,6 +29,7 @@ import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isCyberpunk
+import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -58,11 +64,27 @@ fun AppTheme(content: @Composable () -> Unit) {
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
 
     MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
+        val isRtl =
+            language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
         CompositionLocalProvider(
             LocalContentColor provides colorOnAppBar,
-            LocalLayoutDirection provides if (language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr,
-            content = content,
-        )
+            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
+        ) {
+            val isGradient by isGradient.collectAsState()
+            Box(
+                if (!isGradient) Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
+                else Modifier.background(
+                    Brush.linearGradient(
+                        0f to Color(context.resolveColor(R.attr.screenBackgroundGradientStart)),
+                        1f to Color(context.resolveColor(R.attr.screenBackgroundGradientEnd)),
+                        start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
+                        end = Offset(
+                            if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY
+                        ),
+                    )
+                ),
+            ) { content() }
+        }
     }
 }
 
