@@ -34,6 +34,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -90,7 +91,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -108,15 +108,13 @@ fun SettingsScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            // TODO: Ideally this should be onPrimary
-            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
             TopAppBar(
                 title = { Text(stringResource(R.string.settings)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    navigationIconContentColor = colorOnAppBar,
-                    actionIconContentColor = colorOnAppBar,
-                    titleContentColor = colorOnAppBar,
+                    navigationIconContentColor = LocalContentColor.current,
+                    actionIconContentColor = LocalContentColor.current,
+                    titleContentColor = LocalContentColor.current,
                 ),
                 navigationIcon = {
                     IconButton(onClick = { openDrawer() }) {
@@ -164,7 +162,7 @@ fun SettingsScreen(
             val selectedTabIndex = pagerState.currentPage
             TabRow(
                 selectedTabIndex = selectedTabIndex,
-                contentColor = Color(context.resolveColor(R.attr.colorOnAppBar)),
+                contentColor = LocalContentColor.current,
                 containerColor = Color.Transparent,
                 divider = {},
                 indicator = @Composable { tabPositions ->
@@ -174,7 +172,7 @@ fun SettingsScreen(
                                 .tabIndicatorOffset(tabPositions[selectedTabIndex])
                                 .padding(horizontal = ExtraLargeShapeCornerSize.dp),
                             height = 2.dp,
-                            color = Color(context.resolveColor(R.attr.colorOnAppBar)).copy(alpha = AppBlendAlpha)
+                            color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
                         )
                     }
                 },

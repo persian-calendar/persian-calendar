@@ -35,6 +35,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -65,7 +66,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Preview
 @Composable
@@ -77,16 +77,14 @@ fun LicensesScreen(navigateUp: () -> Unit) {
         containerColor = Color.Transparent,
         topBar = {
             val context = LocalContext.current
-            // TODO: Ideally this should be onPrimary
-            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
                 title = { Text(stringResource(R.string.licenses)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    navigationIconContentColor = colorOnAppBar,
-                    actionIconContentColor = colorOnAppBar,
-                    titleContentColor = colorOnAppBar,
+                    navigationIconContentColor = LocalContentColor.current,
+                    actionIconContentColor = LocalContentColor.current,
+                    titleContentColor = LocalContentColor.current,
                 ),
                 navigationIcon = {
                     IconButton(onClick = navigateUp) {

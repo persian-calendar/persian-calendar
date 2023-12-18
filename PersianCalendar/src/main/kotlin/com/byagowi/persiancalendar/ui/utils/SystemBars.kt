@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Build
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import com.byagowi.persiancalendar.R
 
 class SystemBarsTransparency(context: Context) {

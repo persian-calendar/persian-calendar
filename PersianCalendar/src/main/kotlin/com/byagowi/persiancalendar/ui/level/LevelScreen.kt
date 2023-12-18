@@ -28,6 +28,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -61,7 +62,6 @@ import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import java.util.UUID
 
@@ -121,15 +121,13 @@ fun LevelScreen(
 
     Column {
         AnimatedVisibility(visible = !isFullscreen) {
-            // TODO: Ideally this should be onPrimary
-            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.level)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    navigationIconContentColor = colorOnAppBar,
-                    actionIconContentColor = colorOnAppBar,
-                    titleContentColor = colorOnAppBar,
+                    navigationIconContentColor = LocalContentColor.current,
+                    actionIconContentColor = LocalContentColor.current,
+                    titleContentColor = LocalContentColor.current,
                 ),
                 navigationIcon = {
                     IconButton(onClick = navigateUp) {

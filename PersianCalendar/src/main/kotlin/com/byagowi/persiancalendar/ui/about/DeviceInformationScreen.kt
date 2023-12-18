@@ -41,6 +41,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.PlainTooltip
@@ -74,7 +75,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.html.body
@@ -106,16 +106,14 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
         val items = remember {
             createItemsList(context.getActivity() ?: return@remember emptyList())
         }
-        // TODO: Ideally this should be onPrimary
-        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
             title = { Text(stringResource(R.string.device_information)) },
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,
-                navigationIconContentColor = colorOnAppBar,
-                actionIconContentColor = colorOnAppBar,
-                titleContentColor = colorOnAppBar,
+                navigationIconContentColor = LocalContentColor.current,
+                actionIconContentColor = LocalContentColor.current,
+                titleContentColor = LocalContentColor.current,
             ),
             navigationIcon = {
                 IconButton(onClick = navigateUp) {

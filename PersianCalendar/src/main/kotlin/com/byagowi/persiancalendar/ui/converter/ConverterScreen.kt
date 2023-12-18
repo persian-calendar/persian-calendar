@@ -37,6 +37,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
@@ -87,7 +88,6 @@ import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -106,8 +106,6 @@ fun ConverterScreen(
     val context = LocalContext.current
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
-    // TODO: Ideally this should be onPrimary
-    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -166,9 +164,9 @@ fun ConverterScreen(
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    navigationIconContentColor = colorOnAppBar,
-                    actionIconContentColor = colorOnAppBar,
-                    titleContentColor = colorOnAppBar,
+                    navigationIconContentColor = LocalContentColor.current,
+                    actionIconContentColor = LocalContentColor.current,
+                    titleContentColor = LocalContentColor.current,
                 ),
                 navigationIcon = {
                     IconButton(onClick = { openDrawer() }) {

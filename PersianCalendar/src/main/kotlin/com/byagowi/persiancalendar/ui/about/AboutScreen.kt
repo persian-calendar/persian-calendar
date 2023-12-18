@@ -50,6 +50,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
@@ -96,7 +97,6 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -112,8 +112,6 @@ fun AboutScreen(
     navigateToLicenses: () -> Unit,
 ) {
     val context = LocalContext.current
-    // TODO: Ideally this should be onPrimary
-    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -122,9 +120,9 @@ fun AboutScreen(
                 title = { Text(stringResource(R.string.about)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
-                    navigationIconContentColor = colorOnAppBar,
-                    actionIconContentColor = colorOnAppBar,
-                    titleContentColor = colorOnAppBar,
+                    navigationIconContentColor = LocalContentColor.current,
+                    actionIconContentColor = LocalContentColor.current,
+                    titleContentColor = LocalContentColor.current,
                 ),
                 navigationIcon = {
                     IconButton(onClick = { openDrawer() }) {
@@ -222,12 +220,12 @@ fun AboutScreen(
                         Text(
                             aboutTitle,
                             style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                            color = colorOnAppBar,
+                            color = LocalContentColor.current,
                         )
                         Text(
                             aboutSubtitle,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = colorOnAppBar,
+                            color = LocalContentColor.current,
                         )
                     }
                 }

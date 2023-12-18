@@ -15,6 +15,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -25,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -57,12 +56,9 @@ fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
     HorizontalPager(state = pagerState, modifier = modifier) { index ->
         Box(modifier = Modifier.fillMaxHeight()) {
             var size by remember { mutableStateOf(IntSize.Zero) }
-            // TODO: Ideally this should be onPrimary
-            val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
             Icon(
                 Icons.AutoMirrored.Default.KeyboardArrowLeft,
                 contentDescription = null,
-                tint = colorOnAppBar,
                 modifier = Modifier
                     .height(with(LocalDensity.current) { size.height.toDp() } / 7 + 4.dp)
                     .combinedClickable(
@@ -98,7 +94,6 @@ fun CalendarPager(modifier: Modifier = Modifier, viewModel: CalendarViewModel) {
             Icon(
                 Icons.AutoMirrored.Default.KeyboardArrowRight,
                 contentDescription = null,
-                tint = colorOnAppBar,
                 modifier = Modifier
                     .height(with(LocalDensity.current) { size.height.toDp() } / 7 + 4.dp)
                     .combinedClickable(

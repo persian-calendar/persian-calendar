@@ -22,9 +22,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -52,12 +54,12 @@ fun AppTheme(content: @Composable () -> Unit) {
     }
     val language by language.collectAsState()
 
+    // TODO: Ideally this should be onPrimary
+    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+
     MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
-        // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
-        //  We update the LocalContentColor to match our onBackground. This allows the default
-        //  content color to be more appropriate to the theme background
         CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+            LocalContentColor provides colorOnAppBar,
             LocalLayoutDirection provides if (language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr,
             content = content,
         )

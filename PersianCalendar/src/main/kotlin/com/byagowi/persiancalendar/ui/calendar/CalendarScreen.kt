@@ -52,6 +52,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PlainTooltip
@@ -143,7 +144,6 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -547,8 +547,6 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
 @Composable
 private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
-    // TODO: Ideally this should be onPrimary
-    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val todayJdn = Jdn.today()
@@ -600,9 +598,9 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
-            navigationIconContentColor = colorOnAppBar,
-            actionIconContentColor = colorOnAppBar,
-            titleContentColor = colorOnAppBar,
+            navigationIconContentColor = LocalContentColor.current,
+            actionIconContentColor = LocalContentColor.current,
+            titleContentColor = LocalContentColor.current,
         ),
         navigationIcon = {
             IconButton(onClick = { openDrawer() }) {
