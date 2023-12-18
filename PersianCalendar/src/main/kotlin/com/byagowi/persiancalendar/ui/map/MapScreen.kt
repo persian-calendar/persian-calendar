@@ -358,7 +358,8 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                                 onClickLabel = stringResource(R.string.goto_date),
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),
-                            )
+                            ),
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 Icon(

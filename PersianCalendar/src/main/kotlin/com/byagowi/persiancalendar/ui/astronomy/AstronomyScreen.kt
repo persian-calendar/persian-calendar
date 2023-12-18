@@ -221,7 +221,8 @@ fun AstronomyScreen(
                             onClickLabel = stringResource(R.string.goto_date),
                             onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                             onLongClickLabel = stringResource(R.string.today),
-                        )
+                        ),
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(Modifier.height(8.dp))
                 Row(
