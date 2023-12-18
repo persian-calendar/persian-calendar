@@ -20,11 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
@@ -78,9 +81,14 @@ fun AppTheme(content: @Composable () -> Unit) {
         //  We update the LocalContentColor to match our onBackground. This allows the default
         //  content color to be more appropriate to the theme background
         CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-            content = content
-        )
+            LocalContentColor provides MaterialTheme.colorScheme.onBackground
+        ) {
+            if (language.isLessKnownRtl) {
+                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+                    content()
+                }
+            } else content()
+        }
     }
 }
 
