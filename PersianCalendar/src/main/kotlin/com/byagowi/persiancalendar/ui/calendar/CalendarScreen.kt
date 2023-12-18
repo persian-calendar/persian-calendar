@@ -257,7 +257,7 @@ fun CalendarScreen(
             } else BoxWithConstraints(Modifier.fillMaxSize()) {
                 val maxHeight = maxHeight
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    val calendarHeight = 340.dp.coerceAtLeast(maxHeight / 2f)
+                    val calendarHeight = 280.dp.coerceAtLeast(maxHeight / 2f)
                     CalendarPager(viewModel, screenWidth, calendarHeight)
                     val detailsMinHeight = maxHeight - calendarHeight - 2.dp
                     Surface(
