@@ -29,7 +29,9 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -248,23 +250,18 @@ fun CalendarScreen(
                         navigateToSettingsLocationTab,
                         navigateToAstronomy,
                         bottomPadding,
+                        screenHeight,
                         scrollableTabs = true,
                     )
                 }
-            } else {
-                val scrollState = rememberScrollState()
-                scrollState.viewportSize
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .verticalScroll(scrollState),
-                ) {
-                    val calendarHeight = 380.dp.coerceAtLeast(screenHeight / 2.2f)
+            } else BoxWithConstraints(Modifier.fillMaxSize()) {
+                val maxHeight = maxHeight
+                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                    val calendarHeight = 340.dp.coerceAtLeast(maxHeight / 2f)
                     CalendarPager(viewModel, screenWidth, calendarHeight)
+                    val detailsMinHeight = maxHeight - calendarHeight - 2.dp
                     Surface(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f),
+                        modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
                         shape = MaterialCornerExtraLargeTop(),
                     ) {
                         Details(
@@ -273,6 +270,7 @@ fun CalendarScreen(
                             navigateToSettingsLocationTab,
                             navigateToAstronomy,
                             bottomPadding,
+                            detailsMinHeight,
                         )
                     }
                 }
@@ -384,6 +382,7 @@ fun Details(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     bottomPadding: Dp,
+    contentMinHeight: Dp,
     scrollableTabs: Boolean = false
 ) {
     val context = LocalContext.current
@@ -398,7 +397,7 @@ fun Details(
     )
 
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-    @OptIn(ExperimentalFoundationApi::class) Column {
+    @OptIn(ExperimentalFoundationApi::class) Column(Modifier.fillMaxHeight()) {
         val pagerState = rememberPagerState(
             initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
             pageCount = tabs::size,
@@ -434,8 +433,12 @@ fun Details(
             verticalAlignment = Alignment.Top,
         ) { index ->
             Column(
-                if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
-                else Modifier
+                Modifier
+                    .defaultMinSize(minHeight = contentMinHeight * 3 / 4)
+                    .then(
+                        if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
+                        else Modifier
+                    )
             ) {
                 tabs[index].second()
                 Spacer(Modifier.height(bottomPadding))
