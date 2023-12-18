@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.utils
 
 import android.app.LocaleManager
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
 import androidx.core.content.getSystemService
@@ -18,11 +19,19 @@ fun applyAppLanguage(context: Context) {
     } else {
         Locale.setDefault(locale)
         val resources = context.resources
-        val config = resources.configuration
-        config.setLocale(locale)
-        config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
+        val config = applyLanguageToConfiguration(resources.configuration)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
+}
+
+fun applyLanguageToConfiguration(
+    config: Configuration,
+    locale: Locale = language.asSystemLocale()
+): Configuration {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return config
+    config.setLocale(locale)
+    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
+    return config
 }
 
 fun formatNumber(number: Double): String {

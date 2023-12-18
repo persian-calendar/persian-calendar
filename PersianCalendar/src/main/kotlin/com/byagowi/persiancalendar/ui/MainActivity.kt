@@ -130,6 +130,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
@@ -217,7 +218,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
+        super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
         applyAppLanguage(this)
     }
 
