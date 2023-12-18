@@ -31,21 +31,14 @@ import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     val context = LocalContext.current
 
-    var theme by remember { mutableStateOf(Theme.getCurrent(context)) }
-    DisposableEffect(null) {
-        val appPrefs = context.appPrefs
-        val listener = { prefs: SharedPreferences, key: String? ->
-            if (key == PREF_THEME) theme = Theme.getCurrent(prefs)
-        }
-        appPrefs.registerOnSharedPreferenceChangeListener(listener)
-        onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-    }
+    val theme by theme.collectAsState()
 
     val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
     var colorScheme =

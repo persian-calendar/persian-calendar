@@ -41,14 +41,9 @@ fun Activity.transparentSystemBars() {
 
     val transparencyState = SystemBarsTransparency(this)
 
-    if (transparencyState.isPrimaryColorLight || transparencyState.isSurfaceColorLight) {
-        val insetsController: WindowInsetsControllerCompat =
-            WindowCompat.getInsetsController(window, window.decorView)
-        if (transparencyState.isPrimaryColorLight)
-            insetsController.isAppearanceLightStatusBars = true
-        if (transparencyState.isSurfaceColorLight)
-            insetsController.isAppearanceLightNavigationBars = true
-    }
+    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    insetsController.isAppearanceLightStatusBars = transparencyState.isPrimaryColorLight
+    insetsController.isAppearanceLightNavigationBars = transparencyState.isSurfaceColorLight
 
     val systemUiScrim = ColorUtils.setAlphaComponent(Color.BLACK, 0x40) // 25% black
     window.statusBarColor =
@@ -61,5 +56,4 @@ fun Activity.transparentSystemBars() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         window.isNavigationBarContrastEnforced = false
     }
-
 }

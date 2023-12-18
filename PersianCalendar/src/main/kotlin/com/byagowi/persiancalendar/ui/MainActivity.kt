@@ -165,11 +165,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
         applyAppLanguage(this)
-
-        previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
     }
-
-    private var previousAppThemeValue: String? = null
 
     //        if (settingHasChanged) { // update when checked menu item is changed
 //            applyAppLanguage(this)
@@ -190,10 +186,8 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             PREF_ISLAMIC_OFFSET -> prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
 
             PREF_THEME -> {
-                // Restart activity if theme is changed and don't if app theme
-                // has just got a default value by preferences as going
-                // from null => SystemDefault which makes no difference
-                if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
+                Theme.apply(this)
+                transparentSystemBars()
             }
 
             PREF_NOTIFY_DATE -> {
@@ -229,13 +223,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             creationDateJdn = today
         }
     }
-
-    private fun restartToSettings() {
-        val intent = intent
-        intent?.action = "SETTINGS"
-        finish()
-        startActivity(intent)
-    }
 }
 
 @Composable
@@ -256,7 +243,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         "CONVERTER" -> converterRoute
         "ASTRONOMY" -> astronomyRoute
         "MAP" -> mapRoute
-        "SETTINGS" -> settingsRoute // has in app use
         else -> calendarRoute
     }
     val navController = rememberNavController()

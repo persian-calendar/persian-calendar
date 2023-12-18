@@ -59,6 +59,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -124,6 +125,9 @@ var highLatitudesMethod = HighLatitudesMethod.NightMiddle
 
 private val language_ = MutableStateFlow(Language.FA)
 val language: StateFlow<Language> = language_
+
+private val theme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
+val theme: StateFlow<Theme> = theme_
 
 private var alternativeGregorianMonths = false
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
@@ -240,6 +244,7 @@ fun updateStoredPreference(context: Context) {
 
     language_.value = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.getPreferredDefaultLanguage(context)
+    theme_.value = Theme.getCurrent(prefs)
     alternativeGregorianMonths = when {
         language.isPersian -> prefs.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
