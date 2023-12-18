@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.theme
 
 import android.content.SharedPreferences
 import android.os.Build
+import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.LocalContentColor
@@ -14,6 +15,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME
@@ -75,20 +78,16 @@ fun AppTheme(content: @Composable () -> Unit) {
             onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
         }
     }
+    val language by language.collectAsState()
 
     MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
         //  We update the LocalContentColor to match our onBackground. This allows the default
         //  content color to be more appropriate to the theme background
         CompositionLocalProvider(
-            LocalContentColor provides MaterialTheme.colorScheme.onBackground
-        ) {
-            if (language.isLessKnownRtl) {
-                CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-                    content()
-                }
-            } else content()
-        }
+            LocalContentColor provides MaterialTheme.colorScheme.onBackground,
+            LocalLayoutDirection provides if (language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr
+        ) { content() }
     }
 }
 

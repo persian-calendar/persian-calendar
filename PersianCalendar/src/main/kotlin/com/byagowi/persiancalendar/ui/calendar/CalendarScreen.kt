@@ -293,7 +293,7 @@ const val TIMES_TAB = 2
 private fun enableTimesTab(context: Context): Boolean {
     val appPrefs = context.appPrefs
     return coordinates.value != null || // if coordinates is set, should be shown
-            (language.isPersian && // The placeholder isn't translated to other languages
+            (language.value.isPersian && // The placeholder isn't translated to other languages
                     // The user is already dismissed the third tab
                     !appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) &&
                     // Try to not show the placeholder to established users
@@ -568,7 +568,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
             } else {
-                title = language.my.format(
+                title = language.value.my.format(
                     selectedMonth.monthName, formatNumber(selectedMonth.year)
                 )
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
@@ -768,7 +768,7 @@ private fun Menu(viewModel: CalendarViewModel) {
 private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String {
     return createHTML().html {
         val coordinates = coordinates.value ?: return@html
-        attributes["lang"] = language.language
+        attributes["lang"] = language.value.language
         attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"
         head {
             meta(charset = "utf8")
@@ -788,7 +788,7 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
             h1 {
                 +listOfNotNull(
                     context.appPrefs.cityName,
-                    language.my.format(date.monthName, formatNumber(date.year))
+                    language.value.my.format(date.monthName, formatNumber(date.year))
                 ).joinToString(spacedComma)
             }
             table {
@@ -813,7 +813,7 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
                         }
                     }
                 }
-                if (calculationMethod != language.preferredCalculationMethod) {
+                if (calculationMethod != language.value.preferredCalculationMethod) {
                     tfoot {
                         tr {
                             td {

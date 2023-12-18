@@ -193,7 +193,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                         expanded = selectedTypeDropdownIndex == position,
                         onDismissRequest = { selectedTypeDropdownIndex = -1 },
                     ) {
-                        (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
+                        (shiftWorkTitles.values + language.value.additionalShiftWorkTitles).forEach {
                             DropdownMenuItem(
                                 onClick = {
                                     selectedTypeDropdownIndex = -1

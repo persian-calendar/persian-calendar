@@ -179,7 +179,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         LaunchedEffect(coord.latitude, coord.longitude) {
             launch(Dispatchers.IO) {
                 runCatching {
-                    val result = Geocoder(context, language.asSystemLocale())
+                    val result = Geocoder(context, language.value.asSystemLocale())
                         .getFromLocation(coord.latitude, coord.longitude, 1)
                         ?.firstOrNull()
                     countryCode = result?.countryCode

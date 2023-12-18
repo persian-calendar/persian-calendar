@@ -54,7 +54,7 @@ val SharedPreferences.storedCity: CityItem?
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
 
 val SharedPreferences.cityName: String?
-    get() = this.storedCity?.let(language::getCityName)
+    get() = this.storedCity?.let(language.value::getCityName)
         ?: this.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
 
 // Ignore offset if it isn't set in less than month ago

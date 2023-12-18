@@ -40,7 +40,7 @@ fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Un
     ) {
         enabledCalendars.forEach { calendarType ->
             val title = stringResource(
-                if (language.betterToUseShortCalendarName) calendarType.shortTitle
+                if (language.value.betterToUseShortCalendarName) calendarType.shortTitle
                 else calendarType.title
             )
             val view = LocalView.current

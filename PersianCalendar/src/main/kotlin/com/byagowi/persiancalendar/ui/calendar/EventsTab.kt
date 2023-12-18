@@ -215,7 +215,7 @@ fun EventsTab(
         }
 
         val isHolidaysAlreadySet = remember { PREF_HOLIDAY_TYPES !in context.appPrefs }
-        if (isHolidaysAlreadySet && language.isIranExclusive) {
+        if (isHolidaysAlreadySet && language.value.isIranExclusive) {
             Spacer(modifier = Modifier.height(16.dp))
             ButtonsBar(
                 header = R.string.warn_if_events_not_set,

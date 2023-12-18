@@ -50,7 +50,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
-    ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
+    ) { EventsRepository.getEnabledTypes(context.appPrefs, language.value).toMutableStateList() }
     AppDialog(title = { Text(stringResource(R.string.events)) }, dismissButton = {
         TextButton(onClick = onDismissRequest) {
             Text(stringResource(R.string.cancel))
@@ -65,7 +65,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
         CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.bodyMedium
         ) {
-            if (!language.showNepaliCalendar) {
+            if (!language.value.showNepaliCalendar) {
                 CountryEvents(
                     stringResource(R.string.iran_official_events),
                     EventType.Iran.source,

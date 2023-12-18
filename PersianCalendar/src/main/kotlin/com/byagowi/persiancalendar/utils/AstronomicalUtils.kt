@@ -56,19 +56,19 @@ fun generateYearName(
     time: GregorianCalendar? = null
 ): String {
     val yearNames = listOfNotNull(
-        language.inParentheses.format(
+        language.value.inParentheses.format(
             ChineseZodiac.fromPersianCalendar(persianDate).format(context, withEmoji),
             context.getString(R.string.shamsi_calendar_short)
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val date = ChineseCalendar((time ?: Jdn(persianDate).toGregorianCalendar()).time)
             val year = date[ChineseCalendar.YEAR]
-            language.inParentheses.format(
+            language.value.inParentheses.format(
                 ChineseZodiac.fromChineseCalendar(date).format(context, withEmoji),
                 context.getString(R.string.chinese) + spacedComma + formatNumber(year)
             )
         } else null
-    ).let { if (language.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
+    ).let { if (language.value.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
     return "%s$spacedColon%s".format(context.getString(R.string.year_name), yearNames)
 }
 

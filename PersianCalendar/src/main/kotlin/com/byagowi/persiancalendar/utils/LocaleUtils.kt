@@ -13,24 +13,24 @@ import com.byagowi.persiancalendar.global.preferredDigits
 import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
-    val locale = language.asSystemLocale()
+    val locale = language.value.asSystemLocale()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         context.getSystemService<LocaleManager>()?.applicationLocales = LocaleList(locale)
     } else {
         Locale.setDefault(locale)
         val resources = context.resources
-        val config = applyLanguageToConfiguration(resources.configuration)
+        val config = applyLanguageToConfiguration(resources.configuration, locale)
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 }
 
 fun applyLanguageToConfiguration(
     config: Configuration,
-    locale: Locale = language.asSystemLocale()
+    locale: Locale = language.value.asSystemLocale()
 ): Configuration {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) return config
     config.setLocale(locale)
-    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
+    config.setLayoutDirection(if (language.value.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
     return config
 }
 
@@ -52,10 +52,10 @@ val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_D
 
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->
-        city to language.getCityName(city).let { language.prepareForSort(it) }
+        city to language.value.getCityName(city).let { language.value.prepareForSort(it) }
     }.sortedWith { (leftCity, leftSortName), (rightCity, rightSortName) ->
-        language.countriesOrder.indexOf(leftCity.countryCode).compareTo(
-            language.countriesOrder.indexOf(rightCity.countryCode)
+        language.value.countriesOrder.indexOf(leftCity.countryCode).compareTo(
+            language.value.countriesOrder.indexOf(rightCity.countryCode)
         ).takeIf { it != 0 } ?: leftSortName.compareTo(rightSortName)
     }.map { (city, _) -> city }
 

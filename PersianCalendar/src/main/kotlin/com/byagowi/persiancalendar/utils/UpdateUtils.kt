@@ -708,7 +708,7 @@ private fun updateNotification(
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
         whatToShowOnWidgets = whatToShowOnWidgets,
         spacedComma = spacedComma,
-        language = language,
+        language = language.value,
         notificationId =
         if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
     )
@@ -869,7 +869,7 @@ private fun RemoteViews.setRoundBackground(
 fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
     val direction = when {
         // Apply RTL for Arabic script locales anyway just in case something went wrong
-        language.isArabicScript -> View.LAYOUT_DIRECTION_RTL
+        language.value.isArabicScript -> View.LAYOUT_DIRECTION_RTL
         else -> context.resources.configuration.layoutDirection
     }
     setInt(viewId, "setLayoutDirection", direction)

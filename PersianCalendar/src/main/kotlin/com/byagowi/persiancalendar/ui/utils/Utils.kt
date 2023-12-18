@@ -58,7 +58,7 @@ import com.byagowi.persiancalendar.variants.debugLog
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-inline val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
+inline val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.value.isLessKnownRtl
 inline val Resources.isPortrait get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 inline val Resources.dp: Float get() = displayMetrics.density
 fun Resources.sp(value: Float): Float =

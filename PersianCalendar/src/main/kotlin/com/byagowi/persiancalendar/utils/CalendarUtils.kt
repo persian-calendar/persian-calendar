@@ -141,7 +141,7 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
 }
 
 fun GregorianCalendar.formatDateAndTime(): String {
-    return language.timeAndDateFormat.format(
+    return language.value.timeAndDateFormat.format(
         Clock(this).toFormattedString(forcedIn12 = true),
         formatDate(Jdn(this.toCivilDate()).toCalendar(mainCalendar), forceNonNumerical = true)
     )
@@ -295,14 +295,18 @@ fun calculateDaysDifference(
         }
     )
     if (result.isEmpty()) return daysString
-    return language.inParentheses.format(daysString, result.joinToString(spacedOr))
+    return language.value.inParentheses.format(daysString, result.joinToString(spacedOr))
 }
 
 fun formatDate(
     date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
 ): String = if (numericalDatePreferred && !forceNonNumerical)
     (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
-else language.dmy.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
+else language.value.dmy.format(
+    formatNumber(date.dayOfMonth),
+    date.monthName,
+    formatNumber(date.year)
+)
 
 fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) = "%s/%s/%s".format(
     formatNumber(year, digits), formatNumber(month, digits), formatNumber(dayOfMonth, digits)
@@ -320,17 +324,17 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
         )
     ).toCalendar(secondaryCalendar)
     return when {
-        from.month == to.month -> language.my.format(from.monthName, formatNumber(from.year))
+        from.month == to.month -> language.value.my.format(from.monthName, formatNumber(from.year))
         from.year != to.year -> listOf(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
             to.year to 1..to.month
         ).joinToString(EN_DASH) { (year, months) ->
-            language.my.format(months.joinToString(EN_DASH) {
+            language.value.my.format(months.joinToString(EN_DASH) {
                 from.calendarType.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
             }, formatNumber(year))
         }
 
-        else -> language.my.format(
+        else -> language.value.my.format(
             (from.month..to.month).joinToString(EN_DASH) {
                 from.calendarType.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
             },

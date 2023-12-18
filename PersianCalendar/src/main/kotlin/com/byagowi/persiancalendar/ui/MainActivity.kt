@@ -196,8 +196,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
 
-            PREF_APP_LANGUAGE -> restartToSettings()
-
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
                     stopService(Intent(this, ApplicationService::class.java))

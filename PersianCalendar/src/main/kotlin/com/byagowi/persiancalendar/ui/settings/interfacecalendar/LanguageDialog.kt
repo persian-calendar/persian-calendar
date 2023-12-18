@@ -38,7 +38,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         }
     ) {
-        val currentLanguage = language
+        val currentLanguage = language.value
         val languages = Language.entries.let { languages ->
             if (TimeZone.getDefault().id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID))
                 languages else languages.sortedBy { it.code }

@@ -125,7 +125,7 @@ fun CalendarsOverview(
                 )
             }
             AnimatedContent(
-                if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
+                if (isToday && isForcedIranTimeEnabled) language.value.inParentheses.format(
                     jdn.dayOfWeekName, stringResource(R.string.iran_time)
                 ) else jdn.dayOfWeekName,
                 transitionSpec = {

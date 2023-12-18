@@ -190,7 +190,7 @@ fun AboutScreen(
                         if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
                         else formatNumber(BuildConfig.VERSION_NAME)
                     append(context.getString(R.string.version, version))
-                    if (language.isUserAbleToReadPersian) {
+                    if (language.value.isUserAbleToReadPersian) {
                         appendLine()
                         append(
                             context.getString(
@@ -299,7 +299,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         )
 
         // Help
-        if (language.isUserAbleToReadPersian) {
+        if (language.value.isUserAbleToReadPersian) {
             Row(modifier = Modifier.padding(top = 16.dp, start = 12.dp)) {
                 Icon(
                     modifier = Modifier.padding(start = 8.dp, end = 4.dp),

@@ -121,8 +121,10 @@ var asrMethod = AsrMethod.Standard
     private set
 var highLatitudesMethod = HighLatitudesMethod.NightMiddle
     private set
-var language = Language.FA
-    private set
+
+private val language_ = MutableStateFlow(Language.FA)
+val language: StateFlow<Language> = language_
+
 private var alternativeGregorianMonths = false
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
 val coordinates: StateFlow<Coordinates?> = coordinates_
@@ -133,14 +135,14 @@ val mainCalendarDigits
     get() = when {
         secondaryCalendar == null -> preferredDigits
         preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
-        !language.canHaveLocalDigits -> Language.ARABIC_DIGITS
+        !language.value.canHaveLocalDigits -> Language.ARABIC_DIGITS
         else -> mainCalendar.preferredDigits
     }
 val secondaryCalendar
     get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
 val secondaryCalendarDigits
     get() = when {
-        !language.canHaveLocalDigits -> Language.ARABIC_DIGITS
+        !language.value.canHaveLocalDigits -> Language.ARABIC_DIGITS
         preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
         else -> secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS
     }
@@ -216,12 +218,13 @@ fun configureCalendarsAndLoadEvents(context: Context) {
         DEFAULT_ISLAMIC_OFFSET
     )?.toIntOrNull() ?: 0
 
-    eventsRepository = EventsRepository(appPrefs, language)
+    eventsRepository = EventsRepository(appPrefs, language.value)
     isIranHolidaysEnabled = eventsRepository?.iranHolidays ?: false
 }
 
 fun loadLanguageResources(context: Context) {
     debugLog("Utils: loadLanguageResources is called")
+    val language = language.value
     persianMonths = language.getPersianMonths(context)
     islamicMonths = language.getIslamicMonths(context)
     gregorianMonths = language.getGregorianMonths(context, alternativeGregorianMonths)
@@ -233,8 +236,9 @@ fun loadLanguageResources(context: Context) {
 fun updateStoredPreference(context: Context) {
     debugLog("Utils: updateStoredPreference is called")
     val prefs = context.appPrefs
+    val language = language.value
 
-    language = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
+    language_.value = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.getPreferredDefaultLanguage(context)
     alternativeGregorianMonths = when {
         language.isPersian -> prefs.getBoolean(

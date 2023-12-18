@@ -152,7 +152,7 @@ private class Paints(
     @ColorInt private val widgetTextColor: Int? = null
 ) {
     private val dp = context.resources.dp
-    val isArabicScript = language.isArabicScript
+    val isArabicScript = language.value.isArabicScript
     val circlesPadding = 1 * dp
     val eventYOffset = diameter * 12 / 40
     val eventIndicatorRadius = diameter * 2 / 40

@@ -46,14 +46,14 @@ fun renderMonthWidget(
     val monthLength = mainCalendar.getMonthLength(today.year, today.month)
 
     val isRtl =
-        language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+        language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     val dayPainter = DayPainter(context, cellWidth.toInt(), cellHeight.toInt(), isRtl, textColor)
 
     val monthDeviceEvents =
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
         else EventsStore.empty()
 
-    val footer = language.my.format(baseDate.monthName, formatNumber(baseDate.year))
+    val footer = language.value.my.format(baseDate.monthName, formatNumber(baseDate.year))
     val bitmap = createBitmap(width, height)
     Canvas(bitmap).also {
         (0..<7).forEach { column ->

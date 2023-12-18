@@ -172,7 +172,7 @@ fun LocationAthanSettings() {
     AnimatedVisibility(isLocationSet && showAsrCalculationMethod) {
         SettingsSwitch(
             PREF_ASR_HANAFI_JURISTIC,
-            language.isHanafiMajority,
+            language.value.isHanafiMajority,
             stringResource(R.string.asr_hanafi_juristic)
         )
     }

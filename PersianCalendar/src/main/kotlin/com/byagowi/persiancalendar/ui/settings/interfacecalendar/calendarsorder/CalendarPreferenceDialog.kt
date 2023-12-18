@@ -57,7 +57,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         val orderedCalendarTypes =
             enabledCalendars + (CalendarType.entries - enabledCalendars.toSet()) -
                     // Don't show Nepali on default locales, at least for now.
-                    if (language.showNepaliCalendar) emptySet() else setOf(CalendarType.NEPALI)
+                    if (language.value.showNepaliCalendar) emptySet() else setOf(CalendarType.NEPALI)
         mutableStateOf(orderedCalendarTypes.map { it to (it in enabledCalendarTypes) })
     }
 

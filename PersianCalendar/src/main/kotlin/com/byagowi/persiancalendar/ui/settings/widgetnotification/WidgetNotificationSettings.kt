@@ -170,7 +170,7 @@ fun WidgetConfiguration() {
         summary = stringResource(R.string.center_align_widgets_summary)
     )
     val isInIranTimeVisible = remember {
-        (language.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+        (language.value.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
     if (isInIranTimeVisible) {
         SettingsSwitch(

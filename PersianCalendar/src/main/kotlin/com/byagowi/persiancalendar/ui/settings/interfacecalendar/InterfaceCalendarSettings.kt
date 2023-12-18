@@ -2,8 +2,10 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
 import android.content.pm.PackageManager
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,11 +59,12 @@ fun InterfaceCalendarSettings(destination: String? = null) {
             title = stringResource(R.string.select_skin), summary = themeDisplayName
         ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
     }
+    val language by language.collectAsState()
     SettingsClickable(
-        title = if (destination == PREF_APP_LANGUAGE) "Language" else stringResource(R.string.language),
+        title = stringResource(R.string.language),
         summary = language.nativeName,
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
-    if (language.isArabic) {
+    AnimatedVisibility(language.isArabic) {
         SettingsSwitch(
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
             DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
@@ -69,7 +72,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
             "كانون الثاني، شباط، آذار، …"
         )
     }
-    if (language.isPersian) {
+    AnimatedVisibility(language.isPersian) {
         SettingsSwitch(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
@@ -78,7 +81,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
         )
     }
     // TODO: To be integrated into the language selection dialog one day
-    if (language.canHaveLocalDigits) {
+    AnimatedVisibility(language.canHaveLocalDigits) {
         SettingsSwitch(
             PREF_LOCAL_DIGITS,
             true,

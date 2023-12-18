@@ -65,7 +65,7 @@ class AstronomyState(val date: GregorianCalendar) {
                 .formatDateAndTime()
             val isSolar = i == 0
             val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
-            (language.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
+            (language.value.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
                     spacedColon + formattedDate
         } + generateYearName(context, jdn.toPersianDate(), true, date)
     }

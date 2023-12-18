@@ -147,7 +147,7 @@ fun CoordinatesDialog(
                 runCatching {
                     val latitude = state[0].value.toDoubleOrNull() ?: 0.0
                     val longitude = state[1].value.toDoubleOrNull() ?: 0.0
-                    val geocoder = Geocoder(context, language.asSystemLocale())
+                    val geocoder = Geocoder(context, language.value.asSystemLocale())
                         .getFromLocation(latitude, longitude, 20)
                     // TODO: Is it needed to change the state in the main thread in Compose?
                     withContext(Dispatchers.Main.immediate) {

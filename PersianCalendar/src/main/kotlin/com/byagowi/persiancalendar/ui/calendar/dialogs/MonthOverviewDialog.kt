@@ -280,7 +280,7 @@ private fun formatPrintEventsList(events: Map<Jdn, List<CalendarEvent<*>>>): Lis
 private fun createEventsReport(
     context: Context, date: AbstractDate, wholeYear: Boolean
 ) = createHTML().html {
-    attributes["lang"] = language.language
+    attributes["lang"] = language.value.language
     attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"
     head {
         meta(charset = "utf8")
@@ -326,7 +326,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         ).filter { it.second }.joinToString(" ") { it.first }
     }
     h1 {
-        +language.my.format(date.monthName, formatNumber(date.year))
+        +language.value.my.format(date.monthName, formatNumber(date.year))
         val title = monthFormatForSecondaryCalendar(date, secondaryCalendar ?: return@h1)
         small { +" ($title)" }
     }

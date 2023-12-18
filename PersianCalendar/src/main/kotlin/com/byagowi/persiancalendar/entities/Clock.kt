@@ -31,7 +31,10 @@ data class Clock(val hours: Int, val minutes: Int) {
         if (clockIn24 && !forcedIn12) return toBasicFormatString()
         val clockString = toBasicFormatString((hours % 12).takeIf { it != 0 } ?: 12)
         if (!printAmPm) return clockString
-        return language.clockAmPmOrder.format(clockString, if (hours >= 12) pmString else amString)
+        return language.value.clockAmPmOrder.format(
+            clockString,
+            if (hours >= 12) pmString else amString
+        )
     }
 
     fun asRemainingTime(resources: Resources, short: Boolean = false): String {

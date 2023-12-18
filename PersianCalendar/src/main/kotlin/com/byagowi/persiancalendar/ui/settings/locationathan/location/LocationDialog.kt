@@ -41,7 +41,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.location)) },
-        confirmButton = if (language.isIranExclusive) {
+        confirmButton = if (language.value.isIranExclusive) {
             {
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -65,13 +65,13 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
             ) {
                 Text(
                     buildAnnotatedString {
-                        append(language.getCityName(city))
+                        append(language.value.getCityName(city))
                         append(" ")
                         withStyle(
                             LocalTextStyle.current.toSpanStyle().copy(
                                 color = LocalTextStyle.current.color.copy(.5f)
                             )
-                        ) { append(language.getCountryName(city)) }
+                        ) { append(language.value.getCountryName(city)) }
                     }
                 )
             }

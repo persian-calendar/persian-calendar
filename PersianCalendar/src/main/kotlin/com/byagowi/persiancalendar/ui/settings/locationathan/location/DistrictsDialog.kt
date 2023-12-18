@@ -55,7 +55,7 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
         (districtsStore[province] ?: emptyList()).flatMap { county ->
             val countyDetails = county.split(";")
             countyDetails.drop(1).map { it.split(":") to countyDetails[0] }
-        }.sortedBy { (district, _) -> language.prepareForSort(district[0/*district name*/]) }
+        }.sortedBy { (district, _) -> language.value.prepareForSort(district[0/*district name*/]) }
     }
     AppDialog(
         title = { Text(province) },
