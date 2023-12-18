@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.theme
 
-import android.content.SharedPreferences
 import android.os.Build
 import android.view.View
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -14,12 +13,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -27,12 +22,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
-import com.byagowi.persiancalendar.PREF_THEME
-import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
+import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
-import com.byagowi.persiancalendar.utils.appPrefs
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -48,28 +40,15 @@ fun AppTheme(content: @Composable () -> Unit) {
     if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
 
     var shapes = MaterialTheme.shapes
+    val isCyberpunk by isCyberpunk.collectAsState()
     if (BuildConfig.DEVELOPMENT) {
-        var isCutCorner by remember {
-            mutableStateOf(
-                context.appPrefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
-            )
-        }
-        if (isCutCorner) shapes = Shapes(
+        shapes = if (isCyberpunk) Shapes(
             extraSmall = CutCornerShape(4.dp),
             small = CutCornerShape(8.dp),
             medium = CutCornerShape(12.dp),
             large = CutCornerShape(16.dp),
             extraLarge = CutCornerShape(28.dp),
-        )
-        DisposableEffect(null) {
-            val appPrefs = context.appPrefs
-            val listener = { _: SharedPreferences, key: String? ->
-                if (key == PREF_THEME_CYBERPUNK)
-                    isCutCorner = appPrefs.getBoolean(key, DEFAULT_THEME_CYBERPUNK)
-            }
-            appPrefs.registerOnSharedPreferenceChangeListener(listener)
-            onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-        }
+        ) else MaterialTheme.shapes
     }
     val language by language.collectAsState()
 
@@ -79,8 +58,9 @@ fun AppTheme(content: @Composable () -> Unit) {
         //  content color to be more appropriate to the theme background
         CompositionLocalProvider(
             LocalContentColor provides MaterialTheme.colorScheme.onBackground,
-            LocalLayoutDirection provides if (language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr
-        ) { content() }
+            LocalLayoutDirection provides if (language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL) LayoutDirection.Rtl else LayoutDirection.Ltr,
+            content = content,
+        )
     }
 }
 

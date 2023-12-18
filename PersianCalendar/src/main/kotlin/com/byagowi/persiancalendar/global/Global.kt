@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
@@ -48,6 +49,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
+import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
@@ -128,6 +130,9 @@ val language: StateFlow<Language> = language_
 
 private val theme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
 val theme: StateFlow<Theme> = theme_
+
+private val isCyberpunk_ = MutableStateFlow(false)
+val isCyberpunk: StateFlow<Boolean> = isCyberpunk_
 
 private var alternativeGregorianMonths = false
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
@@ -245,6 +250,7 @@ fun updateStoredPreference(context: Context) {
     language_.value = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.getPreferredDefaultLanguage(context)
     theme_.value = Theme.getCurrent(prefs)
+    isCyberpunk_.value = prefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     alternativeGregorianMonths = when {
         language.isPersian -> prefs.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
