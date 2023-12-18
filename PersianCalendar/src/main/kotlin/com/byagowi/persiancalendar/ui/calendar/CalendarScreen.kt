@@ -31,7 +31,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -98,7 +97,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -230,16 +228,13 @@ fun CalendarScreen(
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         val topPadding = paddingValues.calculateTopPadding()
         val bottomPadding = paddingValues.calculateBottomPadding()
-        Column(Modifier.padding(top = topPadding)) {
-            val configuration = LocalConfiguration.current
-            val screenWidth = configuration.screenWidthDp.dp
-            val screenHeight = configuration.screenHeightDp.dp
+        BoxWithConstraints(Modifier.padding(top = topPadding)) {
+            val maxHeight = maxHeight
+            val maxWidth = maxWidth
             if (isLandscape) Row {
-                val width = screenWidth * 45 / 100
-                BoxWithConstraints(Modifier.width(width)) {
-                    val height = 400.dp.coerceAtMost(this.maxHeight)
-                    CalendarPager(viewModel, screenWidth * 45 / 100, height)
-                }
+                val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
+                val height = 400.dp.coerceAtMost(maxHeight)
+                Box(Modifier.width(width)) { CalendarPager(viewModel, width, height) }
                 Surface(
                     shape = MaterialCornerExtraLargeNoBottomEnd(),
                     modifier = Modifier.fillMaxHeight(),
@@ -250,29 +245,26 @@ fun CalendarScreen(
                         navigateToSettingsLocationTab,
                         navigateToAstronomy,
                         bottomPadding,
-                        screenHeight,
+                        maxHeight,
                         scrollableTabs = true,
                     )
                 }
-            } else BoxWithConstraints(Modifier.fillMaxSize()) {
-                val maxHeight = maxHeight
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    val calendarHeight = 280.dp.coerceAtLeast(maxHeight / 2f)
-                    CalendarPager(viewModel, screenWidth, calendarHeight)
-                    val detailsMinHeight = maxHeight - calendarHeight - 2.dp
-                    Surface(
-                        modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                        shape = MaterialCornerExtraLargeTop(),
-                    ) {
-                        Details(
-                            viewModel,
-                            navigateToHolidaysSettings,
-                            navigateToSettingsLocationTab,
-                            navigateToAstronomy,
-                            bottomPadding,
-                            detailsMinHeight,
-                        )
-                    }
+            } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 480.dp)
+                CalendarPager(viewModel, maxWidth, calendarHeight)
+                val detailsMinHeight = maxHeight - calendarHeight - 2.dp
+                Surface(
+                    modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                    shape = MaterialCornerExtraLargeTop(),
+                ) {
+                    Details(
+                        viewModel,
+                        navigateToHolidaysSettings,
+                        navigateToSettingsLocationTab,
+                        navigateToAstronomy,
+                        bottomPadding,
+                        detailsMinHeight,
+                    )
                 }
             }
         }
