@@ -22,8 +22,8 @@ class SearchEventsStore(val events: List<CalendarEvent<*>>) {
                 is CalendarEvent.PersianCalendarEvent,
                 is CalendarEvent.NepaliCalendarEvent -> title
 
-                is CalendarEvent.DeviceCalendarEvent ->
-                    if (description.isBlank()) title else "$title ($description)"
+                is CalendarEvent.DeviceCalendarEvent -> oneLinerTitleWithTime +
+                        if (description.isNotBlank()) "$title ($description)" else ""
             }
     }
 }

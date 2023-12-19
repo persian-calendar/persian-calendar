@@ -183,13 +183,12 @@ private fun readDeviceEvents(
             fun GregorianCalendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getLong(0),
-                title =
-                if (it.getString(6) == "1") it.getString(1) ?: ""
-                else "${it.getString(1) ?: ""} (${startCalendar.clock()}${
-                    (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                        "-${endCalendar.clock()}"
-                    else "")
-                })",
+                title = it.getString(1),
+                time = if (it.getString(6/*ALL_DAY*/) == "1") null else
+                    startCalendar.clock() +
+                        (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
+                            " $EN_DASH ${endCalendar.clock()}"
+                        else ""),
                 description = it.getString(2)?.replace(descriptionCleaningPattern, "") ?: "",
                 start = startDate,
                 end = endDate,
@@ -225,7 +224,7 @@ fun getEventsTitle(
     .filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
         val title = when {
-            it is CalendarEvent.DeviceCalendarEvent -> it.title
+            it is CalendarEvent.DeviceCalendarEvent -> it.oneLinerTitleWithTime
             compact -> it.title.replace(Regex(" \\([^)]+\\)$"), "")
             else -> it.title
         }

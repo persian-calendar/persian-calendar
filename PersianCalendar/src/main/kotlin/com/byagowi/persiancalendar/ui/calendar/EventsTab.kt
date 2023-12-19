@@ -183,26 +183,33 @@ fun EventsTab(
                         )
                         .padding(8.dp)
                         .semantics {
-                            val text = when {
-                                event.isHoliday -> "${event.title} ($holidayString)"
-                                else -> event.title
-                            }
                             this.contentDescription = if (event.isHoliday) context.getString(
-                                R.string.holiday_reason, event.title
-                            ) else text
+                                R.string.holiday_reason, event.oneLinerTitleWithTime
+                            ) else event.oneLinerTitleWithTime
                         },
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     val contentColor =
                         if (isColorLight(backgroundColor.toArgb())) Color.Black else Color.White
-                    SelectionContainer {
-                        Text(
-                            title,
-                            color = contentColor,
-                            style = MaterialTheme.typography.bodyMedium,
-                            modifier = Modifier.weight(1f, fill = false)
-                        )
+                    Column(modifier = Modifier.weight(1f, fill = false)) {
+                        SelectionContainer {
+                            Text(
+                                title,
+                                color = contentColor,
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
+                        val eventItem = (event as? CalendarEvent.DeviceCalendarEvent)
+                        AnimatedVisibility(!eventItem?.time.isNullOrEmpty()) {
+                            SelectionContainer {
+                                Text(
+                                    eventItem?.time ?: "",
+                                    color = contentColor,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
+                        }
                     }
                     if (event is CalendarEvent.DeviceCalendarEvent) Icon(
                         Icons.AutoMirrored.Default.OpenInNew,
