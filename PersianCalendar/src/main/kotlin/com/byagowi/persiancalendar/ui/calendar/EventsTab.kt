@@ -149,8 +149,10 @@ fun EventsTab(
                 else -> MaterialTheme.colorScheme.surfaceVariant
             }
 
+            val eventTime =
+                (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
             AnimatedContent(
-                event.title + if (event.isHoliday) " ($holidayString)" else "",
+                (event.title + if (event.isHoliday) " ($holidayString)" else "") + eventTime,
                 label = "event title",
                 transitionSpec = {
                     fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
@@ -192,31 +194,21 @@ fun EventsTab(
                 ) {
                     val contentColor =
                         if (isColorLight(backgroundColor.toArgb())) Color.Black else Color.White
-                    Column(modifier = Modifier.weight(1f, fill = false)) {
-                        SelectionContainer {
-                            Text(
-                                title,
-                                color = contentColor,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                        val eventItem = (event as? CalendarEvent.DeviceCalendarEvent)
-                        AnimatedVisibility(!eventItem?.time.isNullOrEmpty()) {
-                            SelectionContainer {
-                                Text(
-                                    eventItem?.time ?: "",
-                                    color = contentColor,
-                                    style = MaterialTheme.typography.bodyMedium,
-                                )
-                            }
-                        }
+                    SelectionContainer {
+                        Text(
+                            title,
+                            color = contentColor,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
                     }
-                    if (event is CalendarEvent.DeviceCalendarEvent) Icon(
-                        Icons.AutoMirrored.Default.OpenInNew,
-                        contentDescription = null,
-                        tint = contentColor,
-                        modifier = Modifier.padding(start = 8.dp),
-                    )
+                    AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent) {
+                        Icon(
+                            Icons.AutoMirrored.Default.OpenInNew,
+                            contentDescription = null,
+                            tint = contentColor,
+                            modifier = Modifier.padding(start = 8.dp),
+                        )
+                    }
                 }
             }
         }
