@@ -46,6 +46,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -96,6 +97,7 @@ import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.loadLanguageResources
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.about.AboutScreen
@@ -256,20 +258,24 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 windowInsets = WindowInsets(0, 0, 0, 0)
             ) {
                 val context = LocalContext.current
-                val needsVisibleStatusBarPlaceHolder = remember {
-                    SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
-                }
-                Spacer(
-                    if (needsVisibleStatusBarPlaceHolder) Modifier
-                        .fillMaxWidth()
-                        .background(
-                            Brush.verticalGradient(
-                                0f to Color(0x70000000), 1f to Color.Transparent
+                run {
+                    val theme by theme.collectAsState()
+                    val needsVisibleStatusBarPlaceHolder = remember(theme) {
+                        SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
+                    }
+                    Spacer(
+                        Modifier
+                            .fillMaxWidth()
+                            .then(
+                                if (needsVisibleStatusBarPlaceHolder) Modifier.background(
+                                    Brush.verticalGradient(
+                                        0f to Color(0x70000000), 1f to Color.Transparent
+                                    )
+                                ) else Modifier
                             )
-                        )
-                        .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top))
-                    else Modifier
-                )
+                            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
+                    )
+                }
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     val actualSeason =
