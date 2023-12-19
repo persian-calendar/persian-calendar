@@ -150,7 +150,7 @@ fun EventsTab(
             }
 
             AnimatedContent(
-                event.title,
+                event.title + if (event.isHoliday) " ($holidayString)" else "",
                 label = "event title",
                 transitionSpec = {
                     fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
