@@ -221,6 +221,9 @@ fun EventsTab(
                 acceptAction = navigateToHolidaysSettings,
             )
         }
+
+        // Events addition fab placeholder, so events can be scrolled after it
+        Spacer(modifier = Modifier.height(76.dp))
     }
 }
 
