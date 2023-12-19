@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
@@ -37,7 +38,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.R
@@ -62,6 +62,7 @@ import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -116,13 +117,12 @@ fun Month(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val cellSize = DpSize(width / columnsCount, height / rowsCount)
-    val cellPixelSize = with(LocalDensity.current) {
-        IntSize(cellSize.width.roundToPx(), cellSize.height.roundToPx())
-    }
+    val widthPixels = with(LocalDensity.current) { width.toPx() }
+    val heightPixels = with(LocalDensity.current) { height.toPx() }
+    val cellPixelsSize = Size(widthPixels / columnsCount, heightPixels / rowsCount)
     val dayPainter = remember(height, width, refreshToken) {
-        DayPainter(context, cellPixelSize.width, cellPixelSize.height, isRtl)
+        DayPainter(context, cellPixelsSize.width, cellPixelsSize.height, isRtl)
     }
-    val widthPixel = with(LocalDensity.current) { width.roundToPx() }
 
     Column(
         Modifier.drawWithCache {
@@ -132,12 +132,13 @@ fun Month(
                     val index = lastSelectedDay - monthStartJdn
                     if (index !in monthRange) return@drawIntoCanvas
                     val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
-                    val l = column * cellPixelSize.width
-                    val t = row * cellPixelSize.height
-                    val w = cellPixelSize.width
-                    val h = cellPixelSize.height
                     selectionIndicator.onDraw(
-                        it, if (isRtl) widthPixel - l - w else l, t, w, h
+                        canvas = it,
+                        left = if (isRtl) widthPixels - column * cellPixelsSize.width - cellPixelsSize.width
+                        else column * cellPixelsSize.width,
+                        top = row * cellPixelsSize.height,
+                        width = cellPixelsSize.width,
+                        height = cellPixelsSize.height,
                     )
                 }
             }
@@ -150,10 +151,9 @@ fun Month(
                 val description = stringResource(
                     R.string.week_days_name_column, getWeekDayName(weekDayPosition)
                 )
-                Cell(
-                    Modifier
-                        .semantics { this.contentDescription = description }
-                        .size(cellSize),
+                Cell(Modifier
+                    .semantics { this.contentDescription = description }
+                    .size(cellSize),
                     dayPainter) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
             }
         }
@@ -279,15 +279,15 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
         transitionAnimator.start()
     }
 
-    fun onDraw(canvas: Canvas, left: Int, top: Int, width: Int, height: Int) {
+    fun onDraw(canvas: Canvas, left: Float, top: Float, width: Float, height: Float) {
         if (hideAnimator.isRunning) canvas.drawCircle(
             Offset(left + width / 2f, top + height / 2f),
             lastRadius * (1 - hideAnimator.animatedFraction),
             paint
         ) else if (isReveal) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = left.toFloat()
-            lastY = top.toFloat()
+            lastX = left
+            lastY = top
             lastRadius = DayPainter.radius(width, height) * fraction
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f),
@@ -296,8 +296,8 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = lerp(currentX, left.toFloat(), fraction)
-            lastY = lerp(currentY, top.toFloat(), fraction)
+            lastX = lerp(currentX, left, fraction)
+            lastY = lerp(currentY, top, fraction)
             lastRadius = DayPainter.radius(width, height)
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f), lastRadius, paint

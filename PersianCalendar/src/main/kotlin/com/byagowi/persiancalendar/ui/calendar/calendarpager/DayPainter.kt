@@ -27,12 +27,12 @@ import kotlin.math.min
 
 class DayPainter(
     context: Context,
-    private val width: Int,
-    private val height: Int,
+    private val width: Float,
+    private val height: Float,
     private val isRtl: Boolean,
     @ColorInt widgetTextColor: Int? = null
 ) {
-    private val paints = Paints(context, min(width, height).toFloat(), widgetTextColor)
+    private val paints = Paints(context, min(width, height), widgetTextColor)
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -52,7 +52,9 @@ class DayPainter(
 
     private fun drawCircle(canvas: Canvas) {
         if (today) canvas.drawCircle(
-            width / 2f, height / 2f, radius(width, height) - paints.circlesPadding,
+            width / 2f,
+            height / 2f,
+            radius(width, height) - paints.circlesPadding,
             paints.todayPaint
         )
     }
@@ -143,7 +145,7 @@ class DayPainter(
     fun setWeekNumber(text: String) = setAll(text, isWeekNumber = true)
 
     companion object {
-        fun radius(width: Int, height: Int): Float = min(width, height) / 2f
+        fun radius(width: Float, height: Float): Float = min(width, height) / 2f
     }
 }
 
