@@ -286,7 +286,7 @@ fun CalendarScreen(
     }
 }
 
-//const val CALENDARS_TAB = 0
+const val CALENDARS_TAB = 0
 const val EVENTS_TAB = 1
 const val TIMES_TAB = 2
 

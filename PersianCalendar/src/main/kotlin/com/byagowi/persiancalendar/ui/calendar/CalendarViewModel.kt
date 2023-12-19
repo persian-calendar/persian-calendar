@@ -10,13 +10,17 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import java.util.GregorianCalendar
 
 class CalendarViewModel @JvmOverloads constructor(
     application: Application,
@@ -31,7 +35,7 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _selectedMonthOffsetCommand = MutableStateFlow<Int?>(null)
     val selectedMonthOffsetCommand: StateFlow<Int?> get() = _selectedMonthOffsetCommand
 
-    private val _selectedTabIndex = MutableStateFlow(0)
+    private val _selectedTabIndex = MutableStateFlow(CALENDARS_TAB)
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
 
     private val _isSearchOpenFlow = MutableStateFlow(false)
@@ -51,6 +55,15 @@ class CalendarViewModel @JvmOverloads constructor(
 
     private val _shiftWorkViewModel = MutableStateFlow<ShiftWorkViewModel?>(null)
     val shiftWorkViewModel: StateFlow<ShiftWorkViewModel?> = _shiftWorkViewModel
+
+    private val _sunViewNeedAnimation = MutableStateFlow(false)
+    val sunViewNeedsAnimation: StateFlow<Boolean> = _sunViewNeedAnimation
+
+    private val _now = MutableStateFlow(GregorianCalendar())
+    val now: StateFlow<GregorianCalendar> = _now
+
+    private val _today = MutableStateFlow(Jdn.today())
+    val today: StateFlow<Jdn> = _today
 
     // Commands
     fun changeSelectedMonthOffset(offset: Int) {
@@ -98,17 +111,38 @@ class CalendarViewModel @JvmOverloads constructor(
         _shiftWorkViewModel.value = shiftWorkViewModel
     }
 
+    fun clearNeedsAnimation() {
+        _sunViewNeedAnimation.value = false
+    }
+
+    fun astronomicalOverviewLaunched() {
+        _sunViewNeedAnimation.value = true
+    }
+
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
     // or user has added an appointment on their calendar outside the app.
     fun initializeEventsRepository() {
         repository = SearchEventsRepository(getApplication())
     }
 
+
     init {
         viewModelScope.launch {
             val prefs = application.appPrefs
             changeSelectedTabIndex(prefs.getInt(LAST_CHOSEN_TAB_KEY, 0))
             selectedTabIndex.collectLatest { prefs.edit { putInt(LAST_CHOSEN_TAB_KEY, it) } }
+        }
+        viewModelScope.launch {
+            selectedTabIndex.combine(selectedDay) { tabIndex, day ->
+                tabIndex == TIMES_TAB && day == today.value
+            }.collect { if (it) _sunViewNeedAnimation.value = true }
+        }
+        viewModelScope.launch {
+            while (true) {
+                delay(THIRTY_SECONDS_IN_MILLIS)
+                _now.value = GregorianCalendar()
+                _today.value = Jdn.today()
+            }
         }
     }
 }

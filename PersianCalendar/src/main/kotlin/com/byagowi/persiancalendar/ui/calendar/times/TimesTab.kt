@@ -81,17 +81,7 @@ fun TimesTab(
     )
     var isExpanded by remember { mutableStateOf(false) }
 
-    var today by remember { mutableStateOf(Jdn.today()) }
-    // TODO: Maybe move this logic to view model and listen to it from there
-    var now by remember { mutableStateOf(GregorianCalendar()) }
-    LaunchedEffect(null) {
-        while (true) {
-            delay(THIRTY_SECONDS_IN_MILLIS)
-            today = Jdn.today()
-            now = GregorianCalendar()
-        }
-    }
-    val jdn by viewModel.selectedDay.collectAsState(today)
+    val jdn by viewModel.selectedDay.collectAsState()
     val prayTimes by derivedStateOf { coordinates.calculatePrayTimes(jdn.toGregorianCalendar()) }
 
     Column(
@@ -103,7 +93,7 @@ fun TimesTab(
         ),
     ) {
         Spacer(Modifier.height(16.dp))
-        AstronomicalOverview(viewModel, today, prayTimes, now, navigateToAstronomy)
+        AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy)
         Spacer(Modifier.height(16.dp))
         Times(isExpanded, prayTimes)
         Spacer(Modifier.height(8.dp))
@@ -129,16 +119,14 @@ fun TimesTab(
 @Composable
 private fun AstronomicalOverview(
     viewModel: CalendarViewModel,
-    today: Jdn,
     prayTimes: PrayTimes,
-    now: GregorianCalendar,
     navigateToAstronomy: (Int) -> Unit,
 ) {
-    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-    var animatedOnce by remember { mutableStateOf(false) }
-    DisposableEffect(null) { animatedOnce = false; onDispose { animatedOnce = false } }
-    if (selectedTabIndex != TIMES_TAB) animatedOnce = false
-    val jdn by viewModel.selectedDay.collectAsState(today)
+    val today by viewModel.today.collectAsState()
+    val jdn by viewModel.selectedDay.collectAsState()
+    val sunViewNeedsAnimation by viewModel.sunViewNeedsAnimation.collectAsState()
+    val now by viewModel.now.collectAsState()
+    LaunchedEffect(null) { viewModel.astronomicalOverviewLaunched() }
 
     val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
     AnimatedContent(
@@ -157,12 +145,13 @@ private fun AstronomicalOverview(
             update = {
                 it.prayTimes = prayTimes
                 it.setTime(now)
-                if (jdn == today && selectedTabIndex == TIMES_TAB && !animatedOnce) it.startAnimate()
-                animatedOnce = true
+                if (sunViewNeedsAnimation) {
+                    it.startAnimate()
+                    viewModel.clearNeedsAnimation()
+                } else it.initiate()
             },
             modifier = Modifier.fillMaxHeight(),
         ) else Box {
-            animatedOnce = false // If moon view is shown, animated the sun view the next time
             AndroidView(
                 factory = ::MoonView,
                 update = { if (jdn != today) it.jdn = jdn.value.toFloat() },

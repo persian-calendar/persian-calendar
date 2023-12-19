@@ -249,6 +249,8 @@ class SunView @JvmOverloads constructor(
                 dayLength.asRemainingTime(resources) + if (remaining.toMinutes() == 0) "" else
             ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(resources))
+
+        invalidate()
     }
 
     private val animator = ValueAnimator.ofFloat(0f, 1f).also {
