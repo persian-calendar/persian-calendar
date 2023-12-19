@@ -63,13 +63,11 @@ import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
+import com.byagowi.persiancalendar.variants.debugLog
 import java.util.UUID
 
 @Composable
-fun LevelScreen(
-    navigateUp: () -> Unit,
-    navigateToCompass: () -> Unit,
-) {
+fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
     var isStopped by remember { mutableStateOf(false) }
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
@@ -78,28 +76,34 @@ fun LevelScreen(
     val isFullscreen by derivedStateOf { fullscreenToken != null }
     val context = LocalContext.current
 
-    LocalLifecycleOwner.current.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event != Lifecycle.Event.ON_PAUSE && event != Lifecycle.Event.ON_RESUME) return@LifecycleEventObserver
-
-        val activity = context.getActivity() ?: return@LifecycleEventObserver
-        // Rotation lock, https://stackoverflow.com/a/75984863
-        val destination = if (event == Lifecycle.Event.ON_PAUSE) null else {
-            @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(null) {
+        val activity = context.getActivity() ?: return@DisposableEffect onDispose {}
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                debugLog("level: ON_RESUME")
+                // Rotation lock, https://stackoverflow.com/a/75984863
+                val destination =
+                    @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
+                activity.requestedOrientation = when (destination) {
+                    Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+                    Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                    Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                    Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                }
+                if (orientationProvider?.isListening == false && !isStopped) {
+                    orientationProvider?.startListening()
+                }
+            } else if (event == Lifecycle.Event.ON_PAUSE) {
+                debugLog("level: ON_PAUSE")
+                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
+            }
         }
-        activity.requestedOrientation = when (destination) {
-            Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-            Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-            Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        }
-
-        if (event == Lifecycle.Event.ON_PAUSE) {
-            if (orientationProvider?.isListening == true) orientationProvider?.stopListening()
-        } else {
-            if (orientationProvider?.isListening == false && !isStopped) orientationProvider?.startListening()
-        }
-    })
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     if (fullscreenToken != null) DisposableEffect(fullscreenToken) {
         val lock = context.getSystemService<PowerManager>()

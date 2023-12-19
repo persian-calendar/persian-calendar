@@ -84,6 +84,7 @@ import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -92,14 +93,10 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-// Lots of bad practices, should be rewritten sometime
+// Lots of bad practices unfortunately
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompassScreen(
-    openDrawer: () -> Unit,
-    navigateToLevel: () -> Unit,
-    navigateToMap: () -> Unit,
-) {
+fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateToMap: () -> Unit) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
         when (context.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
@@ -347,23 +344,20 @@ fun CompassScreen(
                 checkIfA11yAnnounceIsNeeded(angle)
         }
     }
-    var sensorManager by remember { mutableStateOf<SensorManager?>(null) }
-    var accelerometerSensor by remember { mutableStateOf<Sensor?>(null) }
-    var magnetometerSensor by remember { mutableStateOf<Sensor?>(null) }
-    var orientationSensor by remember { mutableStateOf<Sensor?>(null) }
 
-
-    val localLifecycle = LocalLifecycleOwner.current
+    val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(null) {
+        val sensorManager =
+            context.getSystemService<SensorManager>() ?: return@DisposableEffect onDispose {}
+        val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        val orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
-                sensorManager = context.getSystemService<SensorManager>()
-                accelerometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-                magnetometerSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
-                orientationSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-
+                debugLog("compass: ON_RESUME")
                 if (orientationSensor != null) {
-                    sensorManager?.registerListener(
+                    sensorManager.registerListener(
                         orientationSensorListener,
                         orientationSensor,
                         SensorManager.SENSOR_DELAY_FASTEST
@@ -376,12 +370,12 @@ fun CompassScreen(
                         SnackbarDuration.Long,
                     )
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
-                    sensorManager?.registerListener(
+                    sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
                         accelerometerSensor,
                         SensorManager.SENSOR_DELAY_GAME
                     )
-                    sensorManager?.registerListener(
+                    sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
                         magnetometerSensor,
                         SensorManager.SENSOR_DELAY_GAME
@@ -401,16 +395,16 @@ fun CompassScreen(
                     sensorNotFound = true
                 }
             } else if (event == Lifecycle.Event.ON_PAUSE) {
-                if (orientationSensor != null) sensorManager?.unregisterListener(
-                    orientationSensorListener
-                )
-                else if (accelerometerSensor != null && magnetometerSensor != null) sensorManager?.unregisterListener(
-                    accelerometerMagneticSensorListener
-                )
+                debugLog("compass: ON_PAUSE")
+                if (orientationSensor != null) {
+                    sensorManager.unregisterListener(orientationSensorListener)
+                } else if (accelerometerSensor != null && magnetometerSensor != null) {
+                    sensorManager.unregisterListener(accelerometerMagneticSensorListener)
+                }
             }
         }
-        localLifecycle.lifecycle.addObserver(observer)
-        onDispose { localLifecycle.lifecycle.removeObserver(observer) }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 }
 
