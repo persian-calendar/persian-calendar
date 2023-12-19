@@ -193,9 +193,7 @@ fun CalendarScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
-
-            val scope = rememberCoroutineScope()
-            BackHandler(enabled = searchBoxIsOpen) { scope.launch { viewModel.closeSearch() } }
+            BackHandler(enabled = searchBoxIsOpen) { viewModel.closeSearch() }
 
             val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
             AnimatedContent(
