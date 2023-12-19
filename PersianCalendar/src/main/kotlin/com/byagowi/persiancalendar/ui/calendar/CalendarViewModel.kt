@@ -10,6 +10,8 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
+import com.byagowi.persiancalendar.ui.resumeToken
+import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.delay
@@ -20,7 +22,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import java.util.GregorianCalendar
 
 class CalendarViewModel @JvmOverloads constructor(
     application: Application,
@@ -147,6 +148,12 @@ class CalendarViewModel @JvmOverloads constructor(
                     _today.value = today
                     if (!isHighlighted.value) _selectedDay.value = today
                 }
+            }
+        }
+        viewModelScope.launch {
+            resumeToken.collect {
+                delay(HALF_SECOND_IN_MILLIS)
+                refreshCalendar()
             }
         }
     }

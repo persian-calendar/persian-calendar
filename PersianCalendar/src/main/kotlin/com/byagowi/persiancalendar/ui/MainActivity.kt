@@ -128,15 +128,13 @@ import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private var creationDateJdn = Jdn.today()
-    private var settingHasChanged = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
         applyAppLanguage(this)
@@ -166,8 +164,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 //            settingHasChanged = false // reset for the next time
 //        }
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
-        settingHasChanged = true
-
         prefs ?: return
 
         // If it is the first initiation of preference, don't call the rest multiple times
@@ -211,12 +207,12 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        val today = Jdn.today()
-        if (creationDateJdn != today) {
-            creationDateJdn = today
-        }
+        ++resumeToken_.value
     }
 }
+
+private val resumeToken_ = MutableStateFlow(0)
+val resumeToken: StateFlow<Int> = resumeToken_
 
 @Composable
 fun App(intentStartDestination: String?, finish: () -> Unit) {

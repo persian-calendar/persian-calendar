@@ -32,9 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,7 +59,6 @@ import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
-import java.util.UUID
 
 @Composable
 fun EventsTab(
@@ -107,8 +104,8 @@ fun EventsTab(
                 }
             }
         }
-        // TODO: Refresh also on event addition
-        var refreshToken by remember { mutableStateOf(UUID.randomUUID()) }
+
+        val refreshToken by viewModel.refreshToken.collectAsState()
         val events = remember(jdn, refreshToken) {
             (eventsRepository?.getEvents(jdn, context.readDayDeviceEvents(jdn))
                 ?: emptyList()).sortedBy {
@@ -130,10 +127,8 @@ fun EventsTab(
             )
         }
 
-        val launcher = rememberLauncherForActivityResult(ViewEvent()) {
-            refreshToken = UUID.randomUUID()
-            viewModel.refreshCalendar()
-        }
+        val launcher =
+            rememberLauncherForActivityResult(ViewEvent()) { viewModel.refreshCalendar() }
 
         val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         events.forEach { event ->
