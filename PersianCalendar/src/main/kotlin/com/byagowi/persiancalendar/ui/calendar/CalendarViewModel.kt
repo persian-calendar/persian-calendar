@@ -141,7 +141,12 @@ class CalendarViewModel @JvmOverloads constructor(
             while (true) {
                 delay(THIRTY_SECONDS_IN_MILLIS)
                 _now.value = GregorianCalendar()
-                _today.value = Jdn.today()
+                val today = Jdn.today()
+                if (_today.value != today) {
+                    refreshCalendar()
+                    _today.value = today
+                    if (!isHighlighted.value) _selectedDay.value = today
+                }
             }
         }
     }

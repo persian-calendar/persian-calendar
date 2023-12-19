@@ -72,8 +72,8 @@ fun Month(
     width: Dp,
     height: Dp,
 ) {
-    val todayJdn = remember { Jdn.today() }
-    val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(todayJdn, offset)
+    val today by viewModel.today.collectAsState()
+    val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
 
     // Why the moving circle feels faster this way
@@ -176,7 +176,7 @@ fun Month(
                         (column + row * 7) - applyWeekStartOffsetToWeekDay(startingDayOfWeek)
                     val day = monthStartJdn + dayOffset
                     if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier.width(cellSize.width))
-                    val isToday = day == todayJdn
+                    val isToday = day == today
                     Cell(
                         Modifier
                             .size(cellSize)

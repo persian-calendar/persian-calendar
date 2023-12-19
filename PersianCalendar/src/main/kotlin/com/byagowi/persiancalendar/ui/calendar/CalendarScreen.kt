@@ -545,9 +545,9 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
-    val todayJdn = Jdn.today()
-    val todayDate = todayJdn.toCalendar(mainCalendar)
-    val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(todayJdn, selectedMonthOffset)
+    val today by viewModel.today.collectAsState()
+    val todayDate = today.toCalendar(mainCalendar)
+    val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
