@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
@@ -62,7 +61,6 @@ import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -119,9 +117,10 @@ fun Month(
     val cellSize = DpSize(width / columnsCount, height / rowsCount)
     val widthPixels = with(LocalDensity.current) { width.toPx() }
     val heightPixels = with(LocalDensity.current) { height.toPx() }
-    val cellPixelsSize = Size(widthPixels / columnsCount, heightPixels / rowsCount)
+    val cellPixelsWidth = widthPixels / columnsCount
+    val cellPixelsHeight = heightPixels / rowsCount
     val dayPainter = remember(height, width, refreshToken) {
-        DayPainter(context, cellPixelsSize.width, cellPixelsSize.height, isRtl)
+        DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl)
     }
 
     Column(
@@ -134,11 +133,11 @@ fun Month(
                     val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
                     selectionIndicator.onDraw(
                         canvas = it,
-                        left = if (isRtl) widthPixels - column * cellPixelsSize.width - cellPixelsSize.width
-                        else column * cellPixelsSize.width,
-                        top = row * cellPixelsSize.height,
-                        width = cellPixelsSize.width,
-                        height = cellPixelsSize.height,
+                        left = if (isRtl) widthPixels - (column + 1) * cellPixelsWidth
+                        else column * cellPixelsWidth,
+                        top = row * cellPixelsHeight,
+                        width = cellPixelsWidth,
+                        height = cellPixelsHeight,
                     )
                 }
             }
