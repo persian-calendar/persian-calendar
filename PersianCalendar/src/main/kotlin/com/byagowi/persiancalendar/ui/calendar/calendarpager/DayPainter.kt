@@ -52,10 +52,7 @@ class DayPainter(
 
     private fun drawCircle(canvas: Canvas) {
         if (today) canvas.drawCircle(
-            width / 2f,
-            height / 2f,
-            radius(width, height) - paints.circlesPadding,
-            paints.todayPaint
+            width / 2, height / 2, radius(width, height), paints.todayPaint
         )
     }
 
@@ -155,7 +152,6 @@ private class Paints(
 ) {
     private val dp = context.resources.dp
     val isArabicScript = language.value.isArabicScript
-    val circlesPadding = 1 * dp
     val eventYOffset = diameter * 12 / 40
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40
