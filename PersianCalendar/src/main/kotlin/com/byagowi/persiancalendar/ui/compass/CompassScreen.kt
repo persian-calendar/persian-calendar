@@ -307,44 +307,6 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
         }
     }
 
-    // Accessibility announcing helpers on when the phone is headed on a specific direction
-    val checkIfA11yAnnounceIsNeeded = remember {
-        val northAnnouncer = SensorEventAnnouncer(R.string.north)
-        val eastAnnouncer = SensorEventAnnouncer(R.string.east, false)
-        val westAnnouncer = SensorEventAnnouncer(R.string.west, false)
-        val southAnnouncer = SensorEventAnnouncer(R.string.south, false)
-        val qiblaAnnouncer = SensorEventAnnouncer(R.string.qibla, false);
-        { angle: Float ->
-            northAnnouncer.check(context, isNearToDegree(0f, angle))
-            eastAnnouncer.check(context, isNearToDegree(90f, angle))
-            southAnnouncer.check(context, isNearToDegree(180f, angle))
-            westAnnouncer.check(context, isNearToDegree(270f, angle))
-            compassView?.qiblaHeading?.heading?.also {
-                qiblaAnnouncer.check(context, isNearToDegree(it, angle))
-            }
-            Unit
-        }
-    }
-
-    val orientationSensorListener = remember {
-        object : OrientationSensorListener() {
-            override val compassView: CompassView? get() = compassView
-            override val isStopped: Boolean get() = isStopped
-            override val orientation: Float get() = orientation
-            override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
-                checkIfA11yAnnounceIsNeeded(angle)
-        }
-    }
-    val accelerometerMagneticSensorListener = remember {
-        object : AccelerometerMagneticSensorListener() {
-            override val compassView: CompassView? get() = compassView
-            override val isStopped: Boolean get() = isStopped
-            override val orientation: Float get() = orientation
-            override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
-                checkIfA11yAnnounceIsNeeded(angle)
-        }
-    }
-
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(null) {
         val sensorManager =
@@ -352,6 +314,39 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
         val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
         val orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+
+        // Accessibility announcing helpers on when the phone is headed on a specific direction
+        val checkIfA11yAnnounceIsNeeded = run {
+            val northAnnouncer = SensorEventAnnouncer(R.string.north)
+            val eastAnnouncer = SensorEventAnnouncer(R.string.east, false)
+            val westAnnouncer = SensorEventAnnouncer(R.string.west, false)
+            val southAnnouncer = SensorEventAnnouncer(R.string.south, false)
+            val qiblaAnnouncer = SensorEventAnnouncer(R.string.qibla, false);
+            { angle: Float ->
+                northAnnouncer.check(context, isNearToDegree(0f, angle))
+                eastAnnouncer.check(context, isNearToDegree(90f, angle))
+                southAnnouncer.check(context, isNearToDegree(180f, angle))
+                westAnnouncer.check(context, isNearToDegree(270f, angle))
+                compassView?.qiblaHeading?.heading?.also {
+                    qiblaAnnouncer.check(context, isNearToDegree(it, angle))
+                }
+                Unit
+            }
+        }
+        val orientationSensorListener = object : OrientationSensorListener() {
+            override val compassView: CompassView? get() = compassView
+            override val isStopped: Boolean get() = isStopped
+            override val orientation: Float get() = orientation
+            override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
+                checkIfA11yAnnounceIsNeeded(angle)
+        }
+        val accelerometerMagneticSensorListener = object : AccelerometerMagneticSensorListener() {
+            override val compassView: CompassView? get() = compassView
+            override val isStopped: Boolean get() = isStopped
+            override val orientation: Float get() = orientation
+            override fun checkIfA11yAnnounceIsNeeded(angle: Float) =
+                checkIfA11yAnnounceIsNeeded(angle)
+        }
 
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
