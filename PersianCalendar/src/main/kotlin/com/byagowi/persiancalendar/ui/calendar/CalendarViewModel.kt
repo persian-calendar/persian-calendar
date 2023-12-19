@@ -59,8 +59,8 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _sunViewNeedAnimation = MutableStateFlow(false)
     val sunViewNeedsAnimation: StateFlow<Boolean> = _sunViewNeedAnimation
 
-    private val _now = MutableStateFlow(GregorianCalendar())
-    val now: StateFlow<GregorianCalendar> = _now
+    private val _now = MutableStateFlow(System.currentTimeMillis())
+    val now: StateFlow<Long> = _now
 
     private val _today = MutableStateFlow(Jdn.today())
     val today: StateFlow<Jdn> = _today
@@ -140,7 +140,7 @@ class CalendarViewModel @JvmOverloads constructor(
         viewModelScope.launch {
             while (true) {
                 delay(THIRTY_SECONDS_IN_MILLIS)
-                _now.value = GregorianCalendar()
+                _now.value = System.currentTimeMillis()
                 val today = Jdn.today()
                 if (_today.value != today) {
                     refreshCalendar()

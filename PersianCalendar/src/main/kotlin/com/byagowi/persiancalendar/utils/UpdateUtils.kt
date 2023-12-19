@@ -205,7 +205,7 @@ fun update(context: Context, updateDate: Boolean) {
             create4x2RemoteViews(context, width, height, jdn, date, nowClock, prayTimes)
         }
         updateFromRemoteViews<WidgetSunView>(context) { width, height, _ ->
-            createSunViewRemoteViews(context, width, height, jdn, prayTimes)
+            createSunViewRemoteViews(context, width, height, prayTimes)
         }
         updateFromRemoteViews<WidgetMonthView>(context) { width, height, _ ->
             createMonthViewRemoteViews(context, width, height)
@@ -328,7 +328,7 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
 }
 
 private fun createSunViewRemoteViews(
-    context: Context, width: Int, height: Int, jdn: Jdn, prayTimes: PrayTimes?
+    context: Context, width: Int, height: Int, prayTimes: PrayTimes?
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = when {
@@ -339,7 +339,7 @@ private fun createSunViewRemoteViews(
     remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForRendering(sunView, width, height)
     sunView.prayTimes = prayTimes
-    sunView.setTime(jdn.toGregorianCalendar())
+    sunView.setTime(System.currentTimeMillis())
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
