@@ -38,6 +38,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -122,6 +123,7 @@ fun Month(
     val dayPainter = remember(height, width, refreshToken) {
         DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl)
     }
+    val oneDp = with(LocalDensity.current) { 1.dp.toPx() }
 
     Column(
         Modifier.drawWithCache {
@@ -131,13 +133,14 @@ fun Month(
                     val index = lastSelectedDay - monthStartJdn
                     if (index !in monthRange) return@drawIntoCanvas
                     val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
-                    selectionIndicator.onDraw(
+                    selectionIndicator.draw(
                         canvas = it,
                         left = if (isRtl) widthPixels - (column + 1) * cellPixelsWidth
                         else column * cellPixelsWidth,
                         top = row * cellPixelsHeight,
                         width = cellPixelsWidth,
                         height = cellPixelsHeight,
+                        oneDp = oneDp,
                     )
                 }
             }
@@ -278,7 +281,7 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
         transitionAnimator.start()
     }
 
-    fun onDraw(canvas: Canvas, left: Float, top: Float, width: Float, height: Float) {
+    fun draw(canvas: Canvas, left: Float, top: Float, width: Float, height: Float, oneDp: Float) {
         if (hideAnimator.isRunning) canvas.drawCircle(
             Offset(left + width / 2f, top + height / 2f),
             lastRadius * (1 - hideAnimator.animatedFraction),
@@ -287,17 +290,17 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = left
             lastY = top
-            lastRadius = DayPainter.radius(width, height) * fraction
+            lastRadius = (DayPainter.radius(width, height) - oneDp) * fraction
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f),
-                DayPainter.radius(width, height) * fraction,
+                (DayPainter.radius(width, height) -oneDp) * fraction,
                 paint
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = lerp(currentX, left, fraction)
             lastY = lerp(currentY, top, fraction)
-            lastRadius = DayPainter.radius(width, height)
+            lastRadius = (DayPainter.radius(width, height) - oneDp)
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f), lastRadius, paint
             )

@@ -145,7 +145,6 @@ private fun <T> getItemIndexForOffset(
 fun <T> ListItemPicker(
     modifier: Modifier = Modifier,
     label: (T) -> String = { it.toString() },
-    dividersColor: Color = MaterialTheme.colorScheme.primary,
     list: List<T>,
     textStyle: TextStyle = LocalTextStyle.current,
     value: T,
