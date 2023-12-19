@@ -147,7 +147,9 @@ fun EventsTab(
             val eventTime =
                 (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
             AnimatedContent(
-                (event.title + if (event.isHoliday) " ($holidayString)" else "") + eventTime,
+                (if (event.isHoliday) language.value.inParentheses.format(
+                    event.title, holidayString
+                ) else event.title) + eventTime,
                 label = "event title",
                 transitionSpec = {
                     fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
