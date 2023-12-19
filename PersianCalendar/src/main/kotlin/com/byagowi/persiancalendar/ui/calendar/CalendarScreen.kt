@@ -864,6 +864,7 @@ fun AddEvent(viewModel: CalendarViewModel): () -> Unit {
 
     var showDialog by remember { mutableStateOf(false) }
     if (showDialog) AskForCalendarPermissionDialog { isGranted ->
+        viewModel.refreshCalendar()
         showDialog = false
         if (isGranted) runCatching {
             addEvent.launch(viewModel.selectedDay.value)
