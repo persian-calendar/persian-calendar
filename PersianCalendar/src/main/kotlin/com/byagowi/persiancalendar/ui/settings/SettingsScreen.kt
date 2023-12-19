@@ -80,6 +80,7 @@ import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
+import com.byagowi.persiancalendar.ui.about.ScheduleAlarm
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -314,30 +315,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
             text = { Text("Schedule an alarm") },
             onClick = { showDialog = true },
         )
-        if (showDialog) {
-            var seconds by remember { mutableStateOf("5") }
-            AppDialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
-                TextButton(onClick = onClick@{
-                    closeMenu()
-                    val value = seconds.toIntOrNull() ?: return@onClick
-                    val alarmWorker =
-                        OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
-                            TimeUnit.SECONDS.toMillis(value.toLong()), TimeUnit.MILLISECONDS
-                        ).build()
-                    WorkManager.getInstance(context).beginUniqueWork(
-                        "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
-                    ).enqueue()
-                    Toast.makeText(context, "Alarm in ${value}s", Toast.LENGTH_SHORT).show()
-                }) { Text(stringResource(R.string.accept)) }
-            }, onDismissRequest = { closeMenu() }) {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = seconds,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    onValueChange = { seconds = it },
-                )
-            }
-        }
+        if (showDialog) ScheduleAlarm { showDialog = false }
     }
 //    fun viewCommandResult(command: String) {
 //        val dialogBuilder = AlertDialog.Builder(activity)

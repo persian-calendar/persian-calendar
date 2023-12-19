@@ -59,6 +59,7 @@ import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -95,25 +96,6 @@ import kotlinx.html.unsafe
 
 fun showMonthOverview(context: Context, date: AbstractDate) =
     showComposeDialog(context) { MonthOverview(date, it) }
-
-private fun showComposeDialog(
-    context: Context, dialog: @Composable ((onDismissRequest: () -> Unit) -> Unit)
-) {
-    val decorView =
-        (context.getActivity()?.window?.decorView as? ViewGroup).debugAssertNotNull ?: return
-    decorView.addView(ComposeView(context).also { composeView ->
-        composeView.setContent {
-            var showDialog by remember { mutableStateOf(true) }
-            if (showDialog) AppTheme {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .safeDrawingPadding()
-                ) { dialog { showDialog = false } }
-            } else decorView.post { decorView -= composeView }
-        }
-    })
-}
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)

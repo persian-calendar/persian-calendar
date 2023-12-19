@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
+import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.html.body
 import kotlinx.html.h1
@@ -219,9 +220,9 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
             listOf(
-                Triple(
-                    Icons.Default.Android, Build.VERSION.RELEASE, ::showHiddenUiDialog
-                ),
+                Triple(Icons.Default.Android, Build.VERSION.RELEASE) { activity ->
+                    showComposeDialog(activity) { onDismissRequest -> ScheduleAlarm(onDismissRequest) }
+                },
                 Triple(
                     Icons.Default.Settings, "API " + Build.VERSION.SDK_INT, ::showSensorTestDialog
                 ),
