@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -132,17 +133,20 @@ fun EventsTab(
 
         val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         events.forEach { event ->
-            val backgroundColor = when {
-                event is CalendarEvent.DeviceCalendarEvent -> {
-                    runCatching {
-                        // should be turned to long then int otherwise gets stupid alpha
-                        if (event.color.isEmpty()) null else Color(event.color.toLong().toInt())
-                    }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
-                }
+            val backgroundColor by animateColorAsState(
+                when {
+                    event is CalendarEvent.DeviceCalendarEvent -> {
+                        runCatching {
+                            // should be turned to long then int otherwise gets stupid alpha
+                            if (event.color.isEmpty()) null else Color(event.color.toLong().toInt())
+                        }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
+                    }
 
-                event.isHoliday -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            }
+                    event.isHoliday -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.surfaceVariant
+                },
+                label = "backgroundColor",
+            )
 
             val eventTime =
                 (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
@@ -189,8 +193,11 @@ fun EventsTab(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    val contentColor =
-                        if (isColorLight(backgroundColor.toArgb())) Color.Black else Color.White
+                    val contentColor by animateColorAsState(
+                        if (isColorLight(backgroundColor.toArgb())) Color.Black else Color.White,
+                        label = "contentColor"
+                    )
+
                     SelectionContainer {
                         Text(
                             title,
