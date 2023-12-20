@@ -105,9 +105,9 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
     val context = LocalContext.current
     val mapDraw = remember { MapDraw(context) }
 
-    LaunchedEffect(null) { coordinates.collectLatest { viewModel.turnOnDisplayLocation() } }
+    LaunchedEffect(Unit) { coordinates.collectLatest { viewModel.turnOnDisplayLocation() } }
 
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         while (true) {
             delay(ONE_MINUTE_IN_MILLIS)
             viewModel.addOneMinute()

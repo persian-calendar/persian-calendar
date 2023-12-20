@@ -136,7 +136,7 @@ fun SettingsScreen(
                 end = paddingValues.calculateEndPadding(LocalLayoutDirection.current)
             )
         ) {
-            LaunchedEffect(null) {
+            LaunchedEffect(Unit) {
                 context.appPrefs.edit {
                     putBoolean(
                         PREF_HAS_EVER_VISITED,

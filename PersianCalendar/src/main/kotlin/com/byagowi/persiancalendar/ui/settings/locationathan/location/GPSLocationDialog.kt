@@ -105,7 +105,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
 
     run {
         var showPhoneSettingsDialog by remember { mutableStateOf(false) }
-        LaunchedEffect(null) {
+        LaunchedEffect(Unit) {
             delay(TWO_SECONDS_IN_MILLIS)
             if (isOneProviderEnabled) delay(TEN_SECONDS_IN_MILLIS)
             runCatching {
@@ -130,7 +130,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         }
     }
 
-    DisposableEffect(null) {
+    DisposableEffect(Unit) {
         val locationListener = object : LocationListener {
             @Deprecated("")
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {

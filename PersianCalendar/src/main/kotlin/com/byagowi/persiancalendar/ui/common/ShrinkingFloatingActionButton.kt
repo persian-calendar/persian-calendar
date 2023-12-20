@@ -42,7 +42,7 @@ fun ShrinkingFloatingActionButton(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Icon(icon, contentDescription = title)
-                LaunchedEffect(null) {
+                LaunchedEffect(Unit) {
                     delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
                     showLabel = false
                 }

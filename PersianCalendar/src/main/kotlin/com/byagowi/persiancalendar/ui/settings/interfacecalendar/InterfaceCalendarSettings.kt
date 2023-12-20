@@ -97,7 +97,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
         ) { onDismissRequest -> HolidaysTypesDialog(onDismissRequest) }
 
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        LaunchedEffect(null) { if (destination == PREF_HOLIDAY_TYPES) showDialog = true }
+        LaunchedEffect(Unit) { if (destination == PREF_HOLIDAY_TYPES) showDialog = true }
         if (showDialog) HolidaysTypesDialog { showDialog = false }
     }
     run {
@@ -136,7 +136,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
         stringResource(R.string.week_number_summary)
     )
     run {
-        LaunchedEffect(null) {
+        LaunchedEffect(Unit) {
             val appPrefs = context.appPrefs
             if (PREF_ISLAMIC_OFFSET in appPrefs && appPrefs.isIslamicOffsetExpired) appPrefs.edit {
                 putString(

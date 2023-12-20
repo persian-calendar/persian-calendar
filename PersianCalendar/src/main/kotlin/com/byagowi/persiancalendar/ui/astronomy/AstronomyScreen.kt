@@ -113,7 +113,7 @@ fun AstronomyScreen(
         showDayPickerDialog = false
     }
 
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
         if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
             viewModel.animateToAbsoluteMinutesOffset(0)

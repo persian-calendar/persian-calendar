@@ -126,7 +126,7 @@ private fun AstronomicalOverview(
     val jdn by viewModel.selectedDay.collectAsState()
     val sunViewNeedsAnimation by viewModel.sunViewNeedsAnimation.collectAsState()
     val now by viewModel.now.collectAsState()
-    LaunchedEffect(null) { viewModel.astronomicalOverviewLaunched() }
+    LaunchedEffect(Unit) { viewModel.astronomicalOverviewLaunched() }
 
     val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
     AnimatedContent(

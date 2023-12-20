@@ -218,7 +218,7 @@ fun CalendarScreen(
     ) { paddingValues ->
         val context = LocalContext.current
         // Refresh the calendar on resume
-        LaunchedEffect(null) {
+        LaunchedEffect(Unit) {
             viewModel.refreshCalendar()
             context.appPrefs.edit { putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE) }
         }
@@ -269,7 +269,7 @@ fun CalendarScreen(
     }
 
     val context = LocalContext.current
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && Jdn.today()
                 .toPersianDate().year > supportedYearOfIranCalendar
         ) {
@@ -472,7 +472,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         launch {
             // 2s timeout, give up if took too much time
             withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
@@ -484,7 +484,7 @@ private fun Search(viewModel: CalendarViewModel) {
     val isActive by derivedStateOf { query.isNotEmpty() }
     val padding by animateDpAsState(if (isActive) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(null) { focusRequester.requestFocus() }
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
     SearchBar(
         query = query,
         placeholder = { Text(stringResource(R.string.search_in_events)) },

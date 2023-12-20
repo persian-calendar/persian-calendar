@@ -233,7 +233,7 @@ fun CalendarsOverview(
         }
 
         var firstShow by remember { mutableStateOf(true) }
-        LaunchedEffect(null) { firstShow = false }
+        LaunchedEffect(Unit) { firstShow = false }
         val indicatorStrokeWidth by animateDpAsState(
             if (isExpanded && !firstShow) ProgressIndicatorDefaults.CircularStrokeWidth else 0.dp,
             animationSpec = tween(animationTime * 2),

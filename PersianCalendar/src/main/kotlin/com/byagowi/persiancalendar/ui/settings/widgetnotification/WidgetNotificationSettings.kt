@@ -67,7 +67,7 @@ fun NotificationSettings() {
     var showDateLockScreen by remember {
         mutableStateOf(appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
     }
-    DisposableEffect(null) {
+    DisposableEffect(Unit) {
         val listener = { prefs: SharedPreferences, changeKey: String? ->
             if (changeKey == PREF_NOTIFY_DATE)
                 showDateLockScreen = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)

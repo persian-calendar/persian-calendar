@@ -418,7 +418,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 if (previousEntry?.destination?.route == astronomyRoute) {
                     val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
                     viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-                    LaunchedEffect(null) {
+                    LaunchedEffect(Unit) {
                         viewModel.state.collectLatest { astronomyViewModel.changeToTime(it.time) }
                     }
                 }

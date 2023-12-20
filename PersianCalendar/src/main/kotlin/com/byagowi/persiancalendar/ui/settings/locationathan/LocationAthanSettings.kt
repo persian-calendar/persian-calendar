@@ -124,7 +124,7 @@ fun LocationAthanSettings() {
             )
         )
     }
-    DisposableEffect(null) {
+    DisposableEffect(Unit) {
         val listener = { _: SharedPreferences, _: String? ->
             updateStoredPreference(context)
             showHighLatitudesMethod = enableHighLatitudesConfiguration

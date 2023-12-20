@@ -40,7 +40,7 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
         ringtone?.play()
     }
 
-    DisposableEffect(null) {
+    DisposableEffect(Unit) {
         onDispose {
             ringtone?.stop()
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalAlarmVolume, 0)

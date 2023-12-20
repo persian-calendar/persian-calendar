@@ -268,7 +268,7 @@ fun NumberPicker(
                                 )
                             )
                         }
-                        LaunchedEffect(null) { focusRequester.requestFocus() }
+                        LaunchedEffect(Unit) { focusRequester.requestFocus() }
                         var isCapturedOnce by remember { mutableStateOf(false) }
 
                         val interactionSource = remember { MutableInteractionSource() }

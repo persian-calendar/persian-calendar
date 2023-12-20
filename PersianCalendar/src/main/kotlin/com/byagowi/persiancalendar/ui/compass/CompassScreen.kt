@@ -129,7 +129,7 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
     val sliderValue by derivedStateOf { if (isTimeShiftAnimate) timeShiftAnimate else timeShift }
     val isSliderShown by derivedStateOf { sliderValue != 0f }
     var baseTime by remember { mutableStateOf(Date()) }
-    LaunchedEffect(null) {
+    LaunchedEffect(Unit) {
         while (true) {
             delay(THIRTY_SECONDS_IN_MILLIS)
             baseTime = Date()
@@ -308,7 +308,7 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(null) {
+    DisposableEffect(Unit) {
         val sensorManager =
             context.getSystemService<SensorManager>() ?: return@DisposableEffect onDispose {}
         val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
