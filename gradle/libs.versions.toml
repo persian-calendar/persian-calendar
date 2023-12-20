@@ -36,7 +36,7 @@ persiancalendar-praytimes = "36eab5bf0b6f5057357d6fbf0007bea3fab73895"
 persiancalendar-qr = "60ad1863978b35205549eae6af177c45a1e67307"
 room = "2.6.1"
 sqlite = "2.4.0"
-truth = "1.1.5"
+truth = "1.2.0"
 work-manager = "2.9.0"
 
 [libraries]
