@@ -36,6 +36,7 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -254,9 +255,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         },
         drawerState = drawerState,
         drawerContent = {
-            @OptIn(ExperimentalFoundationApi::class) ModalDrawerSheet(
-                windowInsets = WindowInsets(0, 0, 0, 0)
-            ) {
+            ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
                 val context = LocalContext.current
                 run {
                     val theme by theme.collectAsState()
@@ -278,56 +277,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    var actualSeason by remember {
-                        mutableStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
-                    }
-                    val pageSize = 200
-                    val seasonState = rememberPagerState(
-                        initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
-                        pageCount = { pageSize },
-                    )
-                    if (drawerState.isOpen) {
-                        LaunchedEffect(Unit) {
-                            seasonState.animateScrollToPage(100 + actualSeason)
-                            while (true) {
-                                delay(TEN_SECONDS_IN_MILLIS)
-                                val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
-                                if (seasonIndex != actualSeason) {
-                                    actualSeason = seasonIndex
-                                    seasonState.animateScrollToPage(100 + actualSeason)
-                                }
-                            }
-                        }
-                    }
-                    val imageFilter = remember(LocalConfiguration.current) {
-                        // Consider gray scale themes of Android 14
-                        // And apply a gray scale filter https://stackoverflow.com/a/75698731
-                        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale) ColorFilter.colorMatrix(
-                            ColorMatrix().also { it.setToSaturation(0f) })
-                        else null
-                    }
-                    HorizontalPager(
-                        state = seasonState,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
-                            .height(196.dp)
-                            .clip(MaterialTheme.shapes.extraLarge)
-                            .semantics {
-                                @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                            },
-                        pageSpacing = 8.dp,
-                    ) {
-                        Image(
-                            ImageBitmap.imageResource(Season.entries[it % 4].imageId),
-                            contentScale = ContentScale.FillWidth,
-                            contentDescription = null,
-                            colorFilter = imageFilter,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(MaterialTheme.shapes.extraLarge),
-                        )
-                    }
+                    DrawerSeasonsPager(drawerState)
 
                     listOf(
                         Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
@@ -516,5 +466,63 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun DrawerSeasonsPager(drawerState: DrawerState) {
+    var actualSeason by remember {
+        mutableStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
+    }
+    val pageSize = 200
+    val seasonState = rememberPagerState(
+        initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
+        pageCount = { pageSize },
+    )
+    if (drawerState.isOpen) {
+        LaunchedEffect(Unit) {
+            seasonState.animateScrollToPage(pageSize / 2 + actualSeason)
+            while (true) {
+                delay(TEN_SECONDS_IN_MILLIS)
+                val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
+                if (seasonIndex != actualSeason) {
+                    actualSeason = seasonIndex
+                    seasonState.animateScrollToPage(pageSize / 2 + actualSeason)
+                }
+            }
+        }
+    }
+
+    val context = LocalContext.current
+    val imageFilter = remember(LocalConfiguration.current) {
+        // Consider gray scale themes of Android 14
+        // And apply a gray scale filter https://stackoverflow.com/a/75698731
+        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale) ColorFilter.colorMatrix(
+            ColorMatrix().also { it.setToSaturation(0f) })
+        else null
+    }
+
+    HorizontalPager(
+        state = seasonState,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
+            .height(196.dp)
+            .clip(MaterialTheme.shapes.extraLarge)
+            .semantics {
+                @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+            },
+        pageSpacing = 8.dp,
+    ) {
+        Image(
+            ImageBitmap.imageResource(Season.entries[it % 4].imageId),
+            contentScale = ContentScale.FillWidth,
+            contentDescription = null,
+            colorFilter = imageFilter,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(MaterialTheme.shapes.extraLarge),
+        )
     }
 }
