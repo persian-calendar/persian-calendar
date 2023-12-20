@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -184,11 +186,22 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 value.replace(Regex("[=,]"), "")
                             )
                         },
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { selectedTypeDropdownIndex = position },
+                            ) {
+                                val angle by animateFloatAsState(
+                                    if (selectedTypeDropdownIndex == position) 180f else 0f,
+                                    label = "angle",
+                                )
+                                Icon(
+                                    Icons.Default.ExpandMore,
+                                    contentDescription = stringResource(R.string.more_options),
+                                    modifier = Modifier.rotate(angle),
+                                )
+                            }
+                        }
                     )
-                    IconButton(
-                        onClick = { selectedTypeDropdownIndex = position },
-                        modifier = Modifier.align(Alignment.CenterEnd),
-                    ) { Icon(Icons.Default.ExpandMore, contentDescription = null) }
                     DropdownMenu(
                         expanded = selectedTypeDropdownIndex == position,
                         onDismissRequest = { selectedTypeDropdownIndex = -1 },
