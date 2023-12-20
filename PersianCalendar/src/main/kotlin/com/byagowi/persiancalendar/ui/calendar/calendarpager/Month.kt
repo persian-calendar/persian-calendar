@@ -123,7 +123,7 @@ fun Month(
     val dayPainter = remember(height, width, refreshToken) {
         DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl)
     }
-    val oneDp = with(LocalDensity.current) { 1.dp.toPx() }
+    val halfDp = with(LocalDensity.current) { .5f.dp.toPx() }
 
     Column(
         Modifier.drawWithCache {
@@ -140,7 +140,7 @@ fun Month(
                         top = row * cellPixelsHeight,
                         width = cellPixelsWidth,
                         height = cellPixelsHeight,
-                        oneDp = oneDp,
+                        halfDp = halfDp,
                     )
                 }
             }
@@ -281,7 +281,7 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
         transitionAnimator.start()
     }
 
-    fun draw(canvas: Canvas, left: Float, top: Float, width: Float, height: Float, oneDp: Float) {
+    fun draw(canvas: Canvas, left: Float, top: Float, width: Float, height: Float, halfDp: Float) {
         if (hideAnimator.isRunning) canvas.drawCircle(
             Offset(left + width / 2f, top + height / 2f),
             lastRadius * (1 - hideAnimator.animatedFraction),
@@ -290,17 +290,17 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
             val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = left
             lastY = top
-            lastRadius = (DayPainter.radius(width, height) - oneDp) * fraction
+            lastRadius = (DayPainter.radius(width, height) - halfDp) * fraction
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f),
-                (DayPainter.radius(width, height) -oneDp) * fraction,
+                (DayPainter.radius(width, height) -halfDp) * fraction,
                 paint
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
             val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
             lastX = lerp(currentX, left, fraction)
             lastY = lerp(currentY, top, fraction)
-            lastRadius = (DayPainter.radius(width, height) - oneDp)
+            lastRadius = (DayPainter.radius(width, height) - halfDp)
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f), lastRadius, paint
             )
