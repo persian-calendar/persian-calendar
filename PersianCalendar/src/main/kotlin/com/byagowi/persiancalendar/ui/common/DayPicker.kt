@@ -68,8 +68,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-// TODO: Make it editable on click
-// TODO: Make it's a11y work
 @Composable
 fun DayPicker(
     calendarType: CalendarType,
