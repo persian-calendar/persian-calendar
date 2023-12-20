@@ -394,6 +394,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="open_drawer">Open navigation drawer</string>
     <string name="more_options">More options</string>
     <string name="yes">Yes</string>
+    <string name="sample_inputs">Sample inputs</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

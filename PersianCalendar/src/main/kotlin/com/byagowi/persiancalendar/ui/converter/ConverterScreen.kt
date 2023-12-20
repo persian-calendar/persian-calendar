@@ -421,7 +421,7 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 16.dp),
-        ) { Text("Sample inputs") }
+        ) { Text(stringResource(R.string.sample_inputs)) }
     }
 
     val isLandscape =
