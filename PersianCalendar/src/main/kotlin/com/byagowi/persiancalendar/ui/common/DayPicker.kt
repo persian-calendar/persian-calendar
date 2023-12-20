@@ -21,12 +21,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,14 +38,23 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -50,6 +63,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -142,13 +156,13 @@ private fun <T> getItemIndexForOffset(
 }
 
 @Composable
-fun <T> ListItemPicker(
+fun ListItemPicker(
     modifier: Modifier = Modifier,
-    label: (T) -> String = { it.toString() },
-    list: List<T>,
+    label: (Int) -> String = { it.toString() },
+    list: List<Int>,
     textStyle: TextStyle = LocalTextStyle.current,
-    value: T,
-    onValueChange: (T) -> Unit,
+    value: Int,
+    onValueChange: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
     val verticalMargin = 8.dp
@@ -221,12 +235,17 @@ fun <T> ListItemPicker(
                     .padding(vertical = verticalMargin)
                     .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) }
             ) {
-                val baseLabelModifier = Modifier.align(Alignment.Center)
+                val baseLabelModifier = Modifier
+                    .align(Alignment.Center)
+                    .height(20.dp)
                 ProvideTextStyle(textStyle) {
                     if (indexOfElement > 0)
                         Label(
                             text = label(list.elementAt(indexOfElement - 1)),
                             modifier = baseLabelModifier
+                                .semantics {
+                                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                                }
                                 .offset(y = -halfNumbersColumnHeight)
                                 .alpha(
                                     maxOf(
@@ -235,9 +254,54 @@ fun <T> ListItemPicker(
                                     )
                                 )
                         )
-                    Label(
+                    var showTextEdit by remember { mutableStateOf(false) }
+                    if (showTextEdit) {
+                        val focusRequester = remember { FocusRequester() }
+                        val focusManager = LocalFocusManager.current
+                        var inputValue by remember {
+                            val valueText = formatNumber(value)
+                            mutableStateOf(
+                                TextFieldValue(
+                                    valueText,
+                                    selection = TextRange(0, valueText.length)
+                                )
+                            )
+                        }
+                        LaunchedEffect(null) { focusRequester.requestFocus() }
+                        BasicTextField(
+                            value = inputValue,
+                            maxLines = 1,
+                            onValueChange = { inputValue = it },
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    focusManager.clearFocus()
+                                    showTextEdit = false
+                                    inputValue.text.toIntOrNull()?.let {
+                                        if (it in list) onValueChange(it)
+                                    }
+                                }
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done,
+                            ),
+                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .focusRequester(focusRequester),
+                        )
+                    } else Label(
                         text = label(list.elementAt(indexOfElement)),
                         modifier = baseLabelModifier
+                            .pointerInput(Unit) {
+                                detectTapGestures(
+                                    onTap = { showTextEdit = true },
+                                    onLongPress = {
+                                        // FIXME: Empty to disable text selection
+                                        debugLog("onLongPress")
+                                    },
+                                )
+                            }
                             .alpha(
                                 (maxOf(
                                     minimumAlpha,
@@ -249,6 +313,9 @@ fun <T> ListItemPicker(
                         Label(
                             text = label(list.elementAt(indexOfElement + 1)),
                             modifier = baseLabelModifier
+                                .semantics {
+                                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                                }
                                 .offset(y = halfNumbersColumnHeight)
                                 .alpha(
                                     maxOf(
@@ -295,18 +362,7 @@ fun <T> ListItemPicker(
 
 @Composable
 private fun Label(text: String, modifier: Modifier) {
-    Text(
-        modifier = modifier
-            .pointerInput(Unit) {
-                detectTapGestures(onLongPress = {
-                    // FIXME: Empty to disable text selection
-                })
-            }
-            .height(20.dp),
-        maxLines = 1,
-        text = text,
-        textAlign = TextAlign.Center,
-    )
+    Text(modifier = modifier, maxLines = 1, text = text, textAlign = TextAlign.Center)
 }
 
 private suspend fun Animatable<Float, AnimationVector1D>.fling(
