@@ -6,10 +6,12 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +45,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -63,7 +64,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -107,10 +107,10 @@ fun DayPicker(
         previousMonth = date.month
         Row(modifier = Modifier.fillMaxWidth()) {
             val view = LocalView.current
-            ListItemPicker(
+            NumberPicker(
                 modifier = Modifier.weight(1f),
                 label = daysFormat,
-                list = remember(monthsLength) { (1..monthsLength).toList() },
+                range = 1..monthsLength,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.dayOfMonth,
             ) {
@@ -118,10 +118,10 @@ fun DayPicker(
                 view.performHapticFeedbackVirtualKey()
             }
             Spacer(modifier = Modifier.width(8.dp))
-            ListItemPicker(
+            NumberPicker(
                 modifier = Modifier.weight(1f),
                 label = monthsFormat,
-                list = remember(yearMonth) { (1..yearMonth).toList() },
+                range = 1..yearMonth,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.month,
             ) {
@@ -129,10 +129,10 @@ fun DayPicker(
                 view.performHapticFeedbackVirtualKey()
             }
             Spacer(modifier = Modifier.width(8.dp))
-            ListItemPicker(
+            NumberPicker(
                 modifier = Modifier.weight(1f),
                 label = yearsFormat,
-                list = remember(startYear) { (startYear..startYear + 400).toList() },
+                range = startYear..startYear + 400,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.year,
             ) {
@@ -145,9 +145,9 @@ fun DayPicker(
 
 // The following is brought from https://github.com/ChargeMap/Compose-NumberPicker and customized
 // MIT licensed
-private fun <T> getItemIndexForOffset(
-    range: List<T>,
-    value: T,
+private fun getItemIndexForOffset(
+    range: IntRange,
+    value: Int,
     offset: Float,
     halfNumbersColumnHeightPx: Float
 ): Int {
@@ -156,10 +156,10 @@ private fun <T> getItemIndexForOffset(
 }
 
 @Composable
-fun ListItemPicker(
+fun NumberPicker(
     modifier: Modifier = Modifier,
     label: (Int) -> String = { it.toString() },
-    list: List<Int>,
+    range: IntRange,
     textStyle: TextStyle = LocalTextStyle.current,
     value: Int,
     onValueChange: (Int) -> Unit,
@@ -174,9 +174,9 @@ fun ListItemPicker(
 
     val animatedOffset = remember { Animatable(0f) }
         .apply {
-            val index = list.indexOf(value)
-            val offsetRange = remember(value, list) {
-                -((list.count() - 1) - index) * halfNumbersColumnHeightPx to
+            val index = range.indexOf(value)
+            val offsetRange = remember(value, range) {
+                -((range.count() - 1) - index) * halfNumbersColumnHeightPx to
                         index * halfNumbersColumnHeightPx
             }
             updateBounds(offsetRange.first, offsetRange.second)
@@ -185,10 +185,11 @@ fun ListItemPicker(
     val coercedAnimatedOffset = animatedOffset.value % halfNumbersColumnHeightPx
 
     val indexOfElement =
-        getItemIndexForOffset(list, value, animatedOffset.value, halfNumbersColumnHeightPx)
+        getItemIndexForOffset(range, value, animatedOffset.value, halfNumbersColumnHeightPx)
 
     var dividersWidth by remember { mutableStateOf(0.dp) }
 
+    val focusManager = LocalFocusManager.current
     Layout(
         modifier = modifier
             .draggable(
@@ -198,6 +199,7 @@ fun ListItemPicker(
                         animatedOffset.snapTo(animatedOffset.value + deltaY)
                     }
                 },
+                onDragStarted = { focusManager.clearFocus() },
                 onDragStopped = { velocity ->
                     coroutineScope.launch {
                         val endValue = animatedOffset.fling(
@@ -219,8 +221,8 @@ fun ListItemPicker(
                             }
                         ).endState.value
 
-                        val result = list.elementAt(
-                            getItemIndexForOffset(list, value, endValue, halfNumbersColumnHeightPx)
+                        val result = range.elementAt(
+                            getItemIndexForOffset(range, value, endValue, halfNumbersColumnHeightPx)
                         )
                         onValueChange(result)
                         animatedOffset.snapTo(0f)
@@ -241,7 +243,7 @@ fun ListItemPicker(
                 ProvideTextStyle(textStyle) {
                     if (indexOfElement > 0)
                         Label(
-                            text = label(list.elementAt(indexOfElement - 1)),
+                            text = label(range.elementAt(indexOfElement - 1)),
                             modifier = baseLabelModifier
                                 .semantics {
                                     @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
@@ -257,7 +259,6 @@ fun ListItemPicker(
                     var showTextEdit by remember { mutableStateOf(false) }
                     if (showTextEdit) {
                         val focusRequester = remember { FocusRequester() }
-                        val focusManager = LocalFocusManager.current
                         var inputValue by remember {
                             val valueText = formatNumber(value)
                             mutableStateOf(
@@ -268,8 +269,15 @@ fun ListItemPicker(
                             )
                         }
                         LaunchedEffect(null) { focusRequester.requestFocus() }
+                        var isCapturedOnce by remember { mutableStateOf(false) }
+
+                        val interactionSource = remember { MutableInteractionSource() }
+                        val isFocused by interactionSource.collectIsFocusedAsState()
+                        if (isFocused && !isCapturedOnce) isCapturedOnce = true
+                        if (!isFocused && isCapturedOnce) showTextEdit = false
                         BasicTextField(
                             value = inputValue,
+                            interactionSource = interactionSource,
                             maxLines = 1,
                             onValueChange = { inputValue = it },
                             keyboardActions = KeyboardActions(
@@ -277,7 +285,7 @@ fun ListItemPicker(
                                     focusManager.clearFocus()
                                     showTextEdit = false
                                     inputValue.text.toIntOrNull()?.let {
-                                        if (it in list) onValueChange(it)
+                                        if (it in range) onValueChange(it)
                                     }
                                 }
                             ),
@@ -291,17 +299,12 @@ fun ListItemPicker(
                                 .focusRequester(focusRequester),
                         )
                     } else Label(
-                        text = label(list.elementAt(indexOfElement)),
+                        text = label(range.elementAt(indexOfElement)),
                         modifier = baseLabelModifier
-                            .pointerInput(Unit) {
-                                detectTapGestures(
-                                    onTap = { showTextEdit = true },
-                                    onLongPress = {
-                                        // FIXME: Empty to disable text selection
-                                        debugLog("onLongPress")
-                                    },
-                                )
-                            }
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                            ) { showTextEdit = true }
                             .alpha(
                                 (maxOf(
                                     minimumAlpha,
@@ -309,9 +312,9 @@ fun ListItemPicker(
                                 ))
                             )
                     )
-                    if (indexOfElement < list.count() - 1)
+                    if (indexOfElement < range.count() - 1)
                         Label(
-                            text = label(list.elementAt(indexOfElement + 1)),
+                            text = label(range.elementAt(indexOfElement + 1)),
                             modifier = baseLabelModifier
                                 .semantics {
                                     @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
