@@ -124,7 +124,7 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
-import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
@@ -484,7 +484,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
         LaunchedEffect(Unit) {
             seasonState.animateScrollToPage(pageSize / 2 + actualSeason)
             while (true) {
-                delay(TEN_SECONDS_IN_MILLIS)
+                delay(THIRTY_SECONDS_IN_MILLIS)
                 val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
                 if (seasonIndex != actualSeason) {
                     actualSeason = seasonIndex
