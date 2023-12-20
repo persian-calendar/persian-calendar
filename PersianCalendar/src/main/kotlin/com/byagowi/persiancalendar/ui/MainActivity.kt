@@ -498,9 +498,9 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
     val imageFilter = remember(LocalConfiguration.current) {
         // Consider gray scale themes of Android 14
         // And apply a gray scale filter https://stackoverflow.com/a/75698731
-        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale) ColorFilter.colorMatrix(
-            ColorMatrix().also { it.setToSaturation(0f) })
-        else null
+        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale) {
+            ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
+        } else null
     }
 
     HorizontalPager(
