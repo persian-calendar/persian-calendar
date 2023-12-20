@@ -48,8 +48,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -121,6 +123,7 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
+import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
@@ -128,6 +131,7 @@ import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -274,15 +278,26 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    val actualSeason =
-                        remember { Season.fromDate(Date(), coordinates.value).ordinal }
+                    var actualSeason by remember {
+                        mutableStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
+                    }
                     val pageSize = 200
                     val seasonState = rememberPagerState(
                         initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
                         pageCount = { pageSize },
                     )
                     if (drawerState.isOpen) {
-                        scope.launch { seasonState.animateScrollToPage(100 + actualSeason) }
+                        LaunchedEffect(Unit) {
+                            seasonState.animateScrollToPage(100 + actualSeason)
+                            while (true) {
+                                delay(TEN_SECONDS_IN_MILLIS)
+                                val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
+                                if (seasonIndex != actualSeason) {
+                                    actualSeason = seasonIndex
+                                    seasonState.animateScrollToPage(100 + actualSeason)
+                                }
+                            }
+                        }
                     }
                     val imageFilter = remember(LocalConfiguration.current) {
                         // Consider gray scale themes of Android 14
