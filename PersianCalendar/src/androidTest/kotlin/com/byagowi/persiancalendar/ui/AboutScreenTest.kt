@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
@@ -24,20 +21,11 @@ class AboutScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // TODO: To get rid of when all the theme system is moved to compose
-    private fun ComposeContentTestRule.setContentWithTheme(body: @Composable () -> Unit) {
-        setContent {
-            val context = LocalContext.current
-            context.setTheme(R.style.LightTheme); context.setTheme(R.style.SharedStyle)
-            body()
-        }
-    }
-
     @Test
     fun aboutScreenNavigateToDeviceInformation() {
         var navigateToDeviceInformationIsCalled = false
         var deviceInformationString = ""
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             deviceInformationString = stringResource(R.string.device_information)
             AboutScreen(
                 openDrawer = {},
@@ -55,7 +43,7 @@ class AboutScreenTest {
     fun aboutScreenNavigateToLicenses() {
         var navigateToLicensesIsCalled = false
         var licensesString = ""
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             licensesString = stringResource(R.string.about_license_title)
             AboutScreen(
                 openDrawer = {},
@@ -71,11 +59,11 @@ class AboutScreenTest {
 
     @Test
     fun deviceInformationSmokeTest() {
-        composeTestRule.setContentWithTheme { DeviceInformationScreen {} }
+        composeTestRule.setContent { DeviceInformationScreen {} }
     }
 
     @Test
     fun licensesSmokeTest() {
-        composeTestRule.setContentWithTheme { LicensesScreen {} }
+        composeTestRule.setContent { LicensesScreen {} }
     }
 }

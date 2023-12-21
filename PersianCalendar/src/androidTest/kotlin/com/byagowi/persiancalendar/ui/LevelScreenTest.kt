@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
@@ -17,18 +14,9 @@ class LevelScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // TODO: To get rid of when all the theme system is moved to compose
-    private fun ComposeContentTestRule.setContentWithTheme(body: @Composable () -> Unit) {
-        setContent {
-            val context = LocalContext.current
-            context.setTheme(R.style.LightTheme); context.setTheme(R.style.SharedStyle)
-            body()
-        }
-    }
-
     @Test
     fun basicSmokeTest() {
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             LevelScreen({}, {})
         }
     }
@@ -37,7 +25,7 @@ class LevelScreenTest {
     fun navigateUpIsCalled() {
         var navigateUpString = ""
         var navigateUpIsCalled = false
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             navigateUpString = stringResource(R.string.navigate_up)
             LevelScreen(
                 navigateUp = { navigateUpIsCalled = true },
@@ -55,7 +43,7 @@ class LevelScreenTest {
     fun navigateToCompassIsCalled() {
         var compassString = ""
         var navigateToCompassIsCalled = false
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             compassString = stringResource(R.string.compass)
             LevelScreen(
                 navigateUp = { assert(false) },
