@@ -64,7 +64,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -72,7 +71,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -87,6 +85,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -180,18 +179,11 @@ fun ConverterScreen(
                     val todayButtonVisibility by viewModel.todayButtonVisibilityEvent.collectAsState(
                         initial = false
                     )
-                    AnimatedVisibility(todayButtonVisibility) {
-                        IconButton(onClick = {
-                            val todayJdn = Jdn.today()
-                            viewModel.changeSelectedDate(todayJdn)
-                            viewModel.changeSecondSelectedDate(todayJdn)
-                            viewModel.resetTimeZoneClock()
-                        }) {
-                            Icon(
-                                ImageVector.vectorResource(R.drawable.ic_restore_modified),
-                                contentDescription = stringResource(R.string.return_to_today),
-                            )
-                        }
+                    TodayActionButton(visible = todayButtonVisibility) {
+                        val todayJdn = Jdn.today()
+                        viewModel.changeSelectedDate(todayJdn)
+                        viewModel.changeSecondSelectedDate(todayJdn)
+                        viewModel.resetTimeZoneClock()
                     }
                     TooltipBox(
                         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),

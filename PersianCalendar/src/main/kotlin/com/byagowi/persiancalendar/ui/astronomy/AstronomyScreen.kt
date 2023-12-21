@@ -80,6 +80,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -158,13 +159,8 @@ fun AstronomyScreen(
                 },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()
-                    AnimatedVisibility(visible = minutesOffset != 0) {
-                        IconButton(onClick = { viewModel.animateToAbsoluteMinutesOffset(0) }) {
-                            Icon(
-                                ImageVector.vectorResource(R.drawable.ic_restore_modified),
-                                contentDescription = stringResource(R.string.return_to_today),
-                            )
-                        }
+                    TodayActionButton(visible = minutesOffset != 0) {
+                        viewModel.animateToAbsoluteMinutesOffset(0)
                     }
                     AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
                         Row(

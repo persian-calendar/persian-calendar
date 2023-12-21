@@ -88,12 +88,10 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -135,6 +133,7 @@ import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
@@ -606,18 +605,9 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
         },
         actions = {
             val isHighlighted by viewModel.isHighlighted.collectAsState()
-            AnimatedVisibility(
-                selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month || isHighlighted
-            ) {
-                IconButton(onClick = {
-                    bringDate(viewModel, Jdn.today(), context, highlight = false)
-                }) {
-                    Icon(
-                        ImageVector.vectorResource(R.drawable.ic_restore_modified),
-                        contentDescription = stringResource(R.string.return_to_today),
-                    )
-                }
-            }
+            TodayActionButton(
+                visible = selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month || isHighlighted
+            ) { bringDate(viewModel, Jdn.today(), context, highlight = false) }
 
             TooltipBox(
                 positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
