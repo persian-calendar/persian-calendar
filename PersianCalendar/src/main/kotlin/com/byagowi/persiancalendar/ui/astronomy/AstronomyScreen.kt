@@ -164,7 +164,10 @@ fun AstronomyScreen(
                     }
                     AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
                         Row(
-                            Modifier.clickable { isTropical = !isTropical },
+                            Modifier.clickable(
+                                indication = rememberRipple(bounded = false),
+                                interactionSource = remember { MutableInteractionSource() },
+                            ) { isTropical = !isTropical },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(stringResource(R.string.tropical))
