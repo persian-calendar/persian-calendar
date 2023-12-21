@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
 import android.content.SharedPreferences
-import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
@@ -22,6 +21,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
+import org.jetbrains.annotations.VisibleForTesting
 
 class EventsRepository(
     private val enabledTypes: Set<String> = emptySet(),

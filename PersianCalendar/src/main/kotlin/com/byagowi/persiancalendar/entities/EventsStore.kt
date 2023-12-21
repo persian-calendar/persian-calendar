@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.entities
 
-import androidx.annotation.VisibleForTesting
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
+import org.jetbrains.annotations.VisibleForTesting
 
 @JvmInline
 value class EventsStore<T : CalendarEvent<out AbstractDate>>

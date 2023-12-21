@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.VisibleForTesting
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -17,6 +16,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.persiancalendar.praytimes.CalculationMethod
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.Locale
 import java.util.TimeZone
 
