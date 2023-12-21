@@ -10,6 +10,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
@@ -283,9 +284,12 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     }
     private val circlesPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val zodiacSeparatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resolveColor(R.attr.colorSurface)
         it.strokeWidth = .5f * dp
         it.style = Paint.Style.STROKE
+    }
+
+    fun setSurfaceColor(@ColorInt color: Int) {
+        zodiacSeparatorPaint.color = color
     }
 
     private val zodiacPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

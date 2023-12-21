@@ -64,6 +64,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -394,10 +395,13 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
 
     @Composable
     fun Qr() {
+        val surfaceColor = MaterialTheme.colorScheme.surface
+        val contentColor = LocalContentColor.current
         AndroidView(
             factory = {
                 val root = QrView(it)
-                setShareAction { root.share() }
+                root.setContentColor(contentColor.toArgb())
+                setShareAction { root.share(backgroundColor = surfaceColor.toArgb()) }
                 root
             },
             update = { it.update(inputText.value) },

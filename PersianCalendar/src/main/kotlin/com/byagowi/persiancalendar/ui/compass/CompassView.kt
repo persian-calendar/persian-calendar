@@ -11,6 +11,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
+import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
@@ -25,7 +26,6 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
@@ -130,10 +130,13 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.textAlign = Paint.Align.CENTER
     }
     private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.color = context.resolveColor(R.attr.colorSurface)
         it.strokeWidth = 5 * dp
         it.style = Paint.Style.STROKE
         it.textAlign = Paint.Align.CENTER
+    }
+
+    fun setSurfaceColor(@ColorInt color: Int) {
+        textStrokePaint.color = color
     }
 
     private val angleDisplay = AngleDisplay(context, "0", "888")

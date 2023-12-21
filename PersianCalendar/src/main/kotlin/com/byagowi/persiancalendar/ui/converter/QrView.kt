@@ -12,13 +12,12 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.OvershootInterpolator
+import androidx.annotation.ColorInt
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import androidx.core.view.isVisible
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareBinaryFile
 import com.byagowi.persiancalendar.ui.utils.toByteArray
 import com.byagowi.persiancalendar.utils.logException
@@ -30,8 +29,10 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     private var previousQr: List<List<Boolean>> = emptyList()
     private var roundness = 1f
     private var viewSize = 0
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resolveColor(android.R.attr.textColorPrimary)
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    fun setContentColor(@ColorInt color: Int) {
+        paint.color = color
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -103,10 +104,10 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         canvas.drawRoundRect(rect, r, r, paint)
     }
 
-    fun share() {
+    fun share(@ColorInt backgroundColor: Int) {
         val size = 1280f
         val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
-            drawColor(context.resolveColor(R.attr.colorSurface))
+            drawColor(backgroundColor)
             withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
                 drawQr(this, size.toInt(), 1f, qr, qr)
             }

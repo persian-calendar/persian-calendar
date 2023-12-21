@@ -13,7 +13,6 @@
         <item name="colorPrimary">@android:color/system_accent3_800</item>
         <item name="colorAccent">@android:color/system_accent1_800</item>
 
-        <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorCurrentDay">@android:color/system_accent1_400</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_0</item>
@@ -30,7 +29,6 @@
         <item name="colorPrimary">@android:color/system_accent3_200</item>
         <item name="colorAccent">@android:color/system_accent1_100</item>
 
-        <item name="colorSurface">@android:color/system_neutral1_900</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_100</item>
@@ -53,7 +51,6 @@
         <item name="colorPrimary">@android:color/system_accent3_800</item>
         <item name="colorAccent">@android:color/system_accent1_800</item>
 
-        <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="colorHoliday">@android:color/system_accent1_400</item>
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_1000</item>

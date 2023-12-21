@@ -56,6 +56,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -285,9 +286,11 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
             shape = MaterialCornerExtraLargeTop(),
             modifier = Modifier.padding(paddingValues)
         ) {
+            val surfaceColor = MaterialTheme.colorScheme.surface
             AndroidView(
                 factory = {
                     val root = CompassView(it)
+                    root.setSurfaceColor(surfaceColor.toArgb())
                     compassView = root
                     root
                 },
@@ -313,6 +316,8 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
             context.getSystemService<SensorManager>() ?: return@DisposableEffect onDispose {}
         val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+
+        @Suppress("DEPRECATION")
         val orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
 
         // Accessibility announcing helpers on when the phone is headed on a specific direction

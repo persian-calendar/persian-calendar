@@ -59,6 +59,7 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
@@ -376,9 +377,11 @@ fun AstronomyScreen(
                             )
                         }
                     }
+                    val surfaceColor = MaterialTheme.colorScheme.surface
                     AndroidView(
                         factory = {
                             val solarView = SolarView(it)
+                            solarView.setSurfaceColor(surfaceColor.toArgb())
                             var clickCount = 0
                             solarView.setOnClickListener {
                                 if (++clickCount % 2 == 0) showHoroscopeDialog = true
