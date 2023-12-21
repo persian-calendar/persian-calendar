@@ -4,7 +4,6 @@
         <attr name="colorAppointment" format="reference" />
         <attr name="colorHoliday" format="reference" />
         <attr name="colorCurrentDay" format="reference" />
-        <attr name="colorSelectedDay" format="reference" />
         <attr name="colorEventIndicator" format="reference" />
         <attr name="colorTextDaySelected" format="reference" />
         <attr name="sunViewNightColor" format="reference" />

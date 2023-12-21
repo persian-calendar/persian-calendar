@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -34,6 +33,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -53,7 +53,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.theme.DaySelectionColor
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -82,9 +82,13 @@ fun Month(
     val invalidationFlow = remember { MutableStateFlow(0) }
     if (isCurrentSelection) ++invalidationFlow.value
     val invalidationToken by invalidationFlow.collectAsState()
-    val context = LocalContext.current
-    val selectionIndicator = remember {
-        SelectionIndicator(context) { ++invalidationFlow.value }
+    val indicatorColor = DaySelectionColor()
+    val mediumAnimTime = integerResource(android.R.integer.config_mediumAnimTime)
+    val shortAnimTime = integerResource(android.R.integer.config_shortAnimTime)
+    val selectionIndicator = remember(indicatorColor) {
+        SelectionIndicator(mediumAnimTime, shortAnimTime, indicatorColor) {
+            ++invalidationFlow.value
+        }
     }
 
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
@@ -99,6 +103,7 @@ fun Month(
         (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) - weekOfYearStart + 1
 
     val refreshToken by viewModel.refreshToken.collectAsState()
+    val context = LocalContext.current
     val monthDeviceEvents = remember(refreshToken) {
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
         else EventsStore.empty()
@@ -243,7 +248,12 @@ private fun Cell(
     )
 }
 
-private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
+private class SelectionIndicator(
+    transitionAnimTime: Int,
+    hideAnimTime: Int,
+    color: Color,
+    invalidate: () -> Unit,
+) {
     private var isCurrentlySelected = false
     private var currentX = 0f
     private var currentY = 0f
@@ -252,18 +262,18 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
     private var lastRadius = 0f
     private var isReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        it.duration = transitionAnimTime.toLong()
         it.interpolator = LinearInterpolator()
         it.addUpdateListener { invalidate() }
         it.doOnEnd { isReveal = false }
     }
     private val hideAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        it.duration = hideAnimTime.toLong()
         it.addUpdateListener { invalidate() }
     }
     private val paint = Paint().also {
         it.style = PaintingStyle.Fill
-        it.color = Color(context.resolveColor(R.attr.colorSelectedDay))
+        it.color = color
     }
     private val transitionInterpolators = listOf(1f, 1.25f).map(::OvershootInterpolator)
     private val revealInterpolator = OvershootInterpolator(1.5f)

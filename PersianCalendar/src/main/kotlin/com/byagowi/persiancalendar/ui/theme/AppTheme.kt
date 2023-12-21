@@ -193,6 +193,27 @@ private fun AppBackground(): Brush {
     )
 }
 
+@Composable
+fun DaySelectionColor(): Color {
+    val theme by theme.collectAsState()
+    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val resolvedTheme =
+        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
+    val context = LocalContext.current
+    return if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_800))
+        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_600))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_100))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFFEFF2F1)
+        Theme.DARK, Theme.BLACK -> Color(0xFFE0E0E0)
+        Theme.AQUA -> Color(0xFFF5F5F5)
+        Theme.MODERN -> Color(0xFFDDDEE2)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+}
+
 // Best effort theme matching system, used for widget and wallpaper configuration screen meant to
 // not affected by app's internals
 @Composable

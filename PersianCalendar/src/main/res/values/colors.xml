@@ -19,7 +19,6 @@
     <color name="dark_holiday">#e65100</color>
     <color name="dark_surface_background">#191c1e</color>
     <color name="dark_current_day">#82B1FF</color>
-    <color name="dark_selected_day">#e0e0e0</color>
     <color name="dark_event_indicator">#e0e0e0</color>
 
     <color name="black_primary">#000000</color>
@@ -27,7 +26,6 @@
     <color name="black_holiday">#e65100</color>
     <color name="black_surface_background">#000000</color>
     <color name="black_current_day">#82B1FF</color>
-    <color name="black_selected_day">#e0e0e0</color>
     <color name="black_event_indicator">#e0e0e0</color>
 
     <color name="light_primary">#00695c</color>
@@ -35,7 +33,6 @@
     <color name="light_holiday">#ff8a65</color>
     <color name="light_surface_background">#fafafa</color>
     <color name="light_current_day">#ff7043</color>
-    <color name="light_selected_day">#eff2f1</color>
     <color name="light_event_indicator">#eff2f1</color>
 
     <color name="aqua_primary">#00838f</color>
@@ -43,7 +40,6 @@
     <color name="aqua_holiday">#ff8a65</color>
     <color name="aqua_surface_background">#fafafa</color>
     <color name="aqua_current_day">#ff7043</color>
-    <color name="aqua_selected_day">#F5F5F5</color>
     <color name="aqua_event_indicator">#eff2f1</color>
 
     <color name="modern_primary">#fafafa</color>
@@ -51,7 +47,6 @@
     <color name="modern_holiday">#E51C23</color>
     <color name="modern_surface_background">#fafafa</color>
     <color name="modern_current_day">#42AFBF</color>
-    <color name="modern_selected_day">#DDDEE2</color>
     <color name="modern_event_indicator">#000000</color>
 
     <!-- override of these exist in values-v31/colors.xml -->
