@@ -186,9 +186,9 @@ private fun readDeviceEvents(
                 title = it.getString(1),
                 time = if (it.getString(6/*ALL_DAY*/) == "1") null else
                     startCalendar.clock() +
-                        (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                            " $EN_DASH ${endCalendar.clock()}"
-                        else ""),
+                            (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
+                                " $EN_DASH ${endCalendar.clock()}"
+                            else ""),
                 description = it.getString(2)?.replace(descriptionCleaningPattern, "") ?: "",
                 start = startDate,
                 end = endDate,

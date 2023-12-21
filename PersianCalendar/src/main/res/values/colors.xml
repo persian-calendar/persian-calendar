@@ -16,8 +16,6 @@
 
     <color name="dark_primary">#2F3133</color>
     <color name="dark_accent">#74BBEF</color>
-    <color name="dark_gradient_start">#3E4042</color>
-    <color name="dark_gradient_end">#191C1E</color>
     <color name="dark_holiday">#e65100</color>
     <color name="dark_text_day">#ffffff</color>
     <color name="dark_surface_background">#191c1e</color>
@@ -27,8 +25,6 @@
 
     <color name="black_primary">#000000</color>
     <color name="black_accent">#74BBEF</color>
-    <color name="black_gradient_start">#000000</color>
-    <color name="black_gradient_end">#000000</color>
     <color name="black_holiday">#e65100</color>
     <color name="black_text_day">#ffffff</color>
     <color name="black_surface_background">#000000</color>
@@ -38,8 +34,6 @@
 
     <color name="light_primary">#00695c</color>
     <color name="light_accent">#00796b</color>
-    <color name="light_gradient_start">#00796B</color>
-    <color name="light_gradient_end">#004D40</color>
     <color name="light_holiday">#ff8a65</color>
     <color name="light_text_day">#ffffff</color>
     <color name="light_surface_background">#fafafa</color>
@@ -49,8 +43,6 @@
 
     <color name="aqua_primary">#00838f</color>
     <color name="aqua_accent">#1a237e</color>
-    <color name="aqua_gradient_start">#00838F</color>
-    <color name="aqua_gradient_end">#1a237e</color>
     <color name="aqua_holiday">#ff8a65</color>
     <color name="aqua_text_day">#ffffff</color>
     <color name="aqua_surface_background">#fafafa</color>
@@ -60,8 +52,6 @@
 
     <color name="modern_primary">#fafafa</color>
     <color name="modern_accent">#376E9F</color>
-    <color name="modern_gradient_start">#FFFFFF</color>
-    <color name="modern_gradient_end">#E1E3E5</color>
     <color name="modern_holiday">#E51C23</color>
     <color name="modern_text_day">#000000</color>
     <color name="modern_surface_background">#fafafa</color>

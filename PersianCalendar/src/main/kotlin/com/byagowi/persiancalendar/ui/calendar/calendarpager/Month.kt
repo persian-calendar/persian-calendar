@@ -293,7 +293,7 @@ private class SelectionIndicator(context: Context, invalidate: () -> Unit) {
             lastRadius = (DayPainter.radius(width, height) - halfDp) * fraction
             canvas.drawCircle(
                 Offset(lastX + width / 2f, lastY + height / 2f),
-                (DayPainter.radius(width, height) -halfDp) * fraction,
+                (DayPainter.radius(width, height) - halfDp) * fraction,
                 paint
             )
         } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->

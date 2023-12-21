@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="appTheme">
-        <attr name="screenBackgroundColor" format="reference" />
-        <attr name="screenBackgroundGradientStart" format="reference" />
-        <attr name="screenBackgroundGradientEnd" format="reference" />
         <!-- TODO This should be merged with Material's owned colorOnPrimary someday -->
         <attr name="colorOnAppBar" format="reference" />
         <attr name="colorAppointment" format="reference" />

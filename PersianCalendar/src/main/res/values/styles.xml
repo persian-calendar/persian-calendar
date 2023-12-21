@@ -43,9 +43,6 @@
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
-        <item name="screenBackgroundGradientStart">@color/dark_gradient_start</item>
-        <item name="screenBackgroundGradientEnd">@color/dark_gradient_end</item>
-        <item name="screenBackgroundColor">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
         <item name="colorHoliday">@color/dark_holiday</item>
@@ -61,9 +58,6 @@
     <style name="BlackTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/black_accent</item>
         <item name="colorAccent">@color/black_accent</item>
-        <item name="screenBackgroundGradientStart">@color/black_gradient_start</item>
-        <item name="screenBackgroundGradientEnd">@color/black_gradient_end</item>
-        <item name="screenBackgroundColor">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
         <item name="colorHoliday">@color/black_holiday</item>
@@ -79,9 +73,6 @@
     <style name="LightTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="screenBackgroundGradientStart">@color/light_gradient_start</item>
-        <item name="screenBackgroundGradientEnd">@color/light_gradient_end</item>
-        <item name="screenBackgroundColor">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
         <item name="colorHoliday">@color/light_holiday</item>
@@ -97,9 +88,6 @@
     <style name="AquaTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/aqua_primary</item>
         <item name="colorAccent">@color/aqua_accent</item>
-        <item name="screenBackgroundGradientStart">@color/aqua_gradient_start</item>
-        <item name="screenBackgroundGradientEnd">@color/aqua_gradient_end</item>
-        <item name="screenBackgroundColor">@color/aqua_accent</item>
 
         <item name="colorSurface">@color/aqua_surface_background</item>
         <item name="colorHoliday">@color/aqua_holiday</item>
@@ -115,9 +103,6 @@
     <style name="ModernTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorAccent">@color/modern_accent</item>
-        <item name="screenBackgroundGradientStart">@color/modern_gradient_start</item>
-        <item name="screenBackgroundGradientEnd">@color/modern_gradient_end</item>
-        <item name="screenBackgroundColor">@color/modern_primary</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
         <item name="colorHoliday">@color/modern_holiday</item>

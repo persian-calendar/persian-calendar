@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -46,11 +47,12 @@ fun AppTheme(content: @Composable () -> Unit) {
 
     val theme by theme.collectAsState()
 
-    val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && isSystemInDarkTheme())
-    var colorScheme =
-        if (theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        } else if (darkTheme) DarkColorScheme else LightColorScheme
+    val systemInDarkTheme = isSystemInDarkTheme()
+    val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
+    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    var colorScheme = if (hasDynamicColors) {
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else if (darkTheme) DarkColorScheme else LightColorScheme
     if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
 
     var shapes = MaterialTheme.shapes
@@ -69,6 +71,51 @@ fun AppTheme(content: @Composable () -> Unit) {
     // TODO: Ideally this should be onPrimary
     val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
 
+    val resolvedTheme = if (theme != Theme.SYSTEM_DEFAULT) theme else
+        if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
+    val backgroundGradientStart = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_500))
+        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_700))
+        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_0))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFF00796B)
+        Theme.DARK -> Color(0xFF3E4042)
+        Theme.BLACK -> Color.Black
+        Theme.AQUA -> Color(0xFF00838F)
+        Theme.MODERN -> Color.White
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    val backgroundGradientEnd = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_900))
+        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_900))
+        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_100))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFF004D40)
+        Theme.DARK -> Color(0xFF191C1E)
+        Theme.BLACK -> Color.Black
+        Theme.AQUA -> Color(0xFF1A237E)
+        Theme.MODERN -> Color(0xFFE1E3E5)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    val backgroundColor = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
+        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_800))
+        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_10))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFF00695c)
+        Theme.DARK -> Color(0xFF2F3133)
+        Theme.BLACK -> Color.Black
+        Theme.AQUA -> Color(0xFF1A237E)
+        Theme.MODERN -> Color(0xFFFAFAFA)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+
     MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -83,11 +130,11 @@ fun AppTheme(content: @Composable () -> Unit) {
                         WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
                     )
                     .then(
-                        if (!isGradient) Modifier.background(color = Color(context.resolveColor(R.attr.screenBackgroundColor)))
+                        if (!isGradient) Modifier.background(backgroundColor)
                         else Modifier.background(
                             Brush.linearGradient(
-                                0f to Color(context.resolveColor(R.attr.screenBackgroundGradientStart)),
-                                1f to Color(context.resolveColor(R.attr.screenBackgroundGradientEnd)),
+                                0f to backgroundGradientStart,
+                                1f to backgroundGradientEnd,
                                 start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
                                 end = Offset(
                                     if (isRtl) 0f else Float.POSITIVE_INFINITY,
