@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -46,35 +47,13 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    val context = LocalContext.current
-
-    val theme by theme.collectAsState()
-
-    val systemInDarkTheme = isSystemInDarkTheme()
-    val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
-    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    var colorScheme = if (hasDynamicColors) {
-        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else if (darkTheme) DarkColorScheme else LightColorScheme
-    if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
-
-    val isCyberpunk by isCyberpunk.collectAsState()
-    val shapes = if (BuildConfig.DEVELOPMENT && isCyberpunk) Shapes(
-        extraSmall = CutCornerShape(4.dp),
-        small = CutCornerShape(8.dp),
-        medium = CutCornerShape(12.dp),
-        large = CutCornerShape(16.dp),
-        extraLarge = CutCornerShape(28.dp),
-    ) else MaterialTheme.shapes
-
-    MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
-        // TODO: Ideally this should be onPrimary
-        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+    MaterialTheme(colorScheme = AppColorScheme(), shapes = AppShapes()) {
+        // TODO: Ideally this should be onPrimary or onBackground
+        val colorOnAppBar = Color(LocalContext.current.resolveColor(R.attr.colorOnAppBar))
 
         val language by language.collectAsState()
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
-
         CompositionLocalProvider(
             LocalContentColor provides colorOnAppBar,
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
@@ -84,7 +63,7 @@ fun AppTheme(content: @Composable () -> Unit) {
                 WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
             Box(
                 Modifier
-                    .background(BackgroundBrush(theme, isRtl))
+                    .background(AppBackground())
                     .windowInsetsPadding(sidesInsets)
                     .clipToBounds(),
             ) { content() }
@@ -93,7 +72,36 @@ fun AppTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun BackgroundBrush(theme: Theme, isRtl: Boolean): Brush {
+private fun AppColorScheme(): ColorScheme {
+    val theme by theme.collectAsState()
+    val systemInDarkTheme = isSystemInDarkTheme()
+    val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
+    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val context = LocalContext.current
+    var colorScheme = if (hasDynamicColors) {
+        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else if (darkTheme) DarkColorScheme else LightColorScheme
+    // Handle black theme which is useful for OLED screens
+    if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
+    return colorScheme
+}
+
+@Composable
+private fun AppShapes(): Shapes {
+    if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
+    val isCyberpunk by isCyberpunk.collectAsState()
+    return if (isCyberpunk) Shapes(
+        extraSmall = CutCornerShape(4.dp),
+        small = CutCornerShape(8.dp),
+        medium = CutCornerShape(12.dp),
+        large = CutCornerShape(16.dp),
+        extraLarge = CutCornerShape(28.dp),
+    ) else MaterialTheme.shapes
+}
+
+@Composable
+private fun AppBackground(): Brush {
+    val theme by theme.collectAsState()
     val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val context = LocalContext.current
     val resolvedTheme =
@@ -152,13 +160,12 @@ private fun BackgroundBrush(theme: Theme, isRtl: Boolean): Brush {
         label = "gradient end color",
         animationSpec = colorAnimationSpec,
     )
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     return Brush.linearGradient(
         0f to backgroundGradientStart,
         1f to backgroundGradientEnd,
         start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
-        end = Offset(
-            if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY
-        ),
+        end = Offset(if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY),
     )
 }
 
