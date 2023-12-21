@@ -113,48 +113,48 @@ private fun BackgroundBrush(theme: Theme, isRtl: Boolean): Brush {
         Theme.MODERN -> Color(0xFFFAFAFA)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val backgroundGradientStart = if (!isGradient) backgroundColor
-    else if (hasDynamicColors) when (resolvedTheme) {
-        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_500))
-        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_700))
-        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
-        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_0))
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
-        Theme.LIGHT -> Color(0xFF00796B)
-        Theme.DARK -> Color(0xFF3E4042)
-        Theme.BLACK -> Color.Black
-        Theme.AQUA -> Color(0xFF00838F)
-        Theme.MODERN -> Color.White
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    }
-    val backgroundGradientEnd = if (!isGradient) backgroundColor
-    else if (hasDynamicColors) when (resolvedTheme) {
-        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_900))
-        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_900))
-        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
-        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_100))
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
-        Theme.LIGHT -> Color(0xFF004D40)
-        Theme.DARK -> Color(0xFF191C1E)
-        Theme.BLACK -> Color.Black
-        Theme.AQUA -> Color(0xFF1A237E)
-        Theme.MODERN -> Color(0xFFE1E3E5)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    }
     val colorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessLow)
+    val backgroundGradientStart by animateColorAsState(
+        if (!isGradient) backgroundColor
+        else if (hasDynamicColors) when (resolvedTheme) {
+            Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_500))
+            Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_700))
+            Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
+            Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_0))
+            else -> null.debugAssertNotNull ?: Color.Transparent
+        } else when (resolvedTheme) {
+            Theme.LIGHT -> Color(0xFF00796B)
+            Theme.DARK -> Color(0xFF3E4042)
+            Theme.BLACK -> Color.Black
+            Theme.AQUA -> Color(0xFF00838F)
+            Theme.MODERN -> Color.White
+            else -> null.debugAssertNotNull ?: Color.Transparent
+        },
+        label = "gradient start color",
+        animationSpec = colorAnimationSpec,
+    )
+    val backgroundGradientEnd by animateColorAsState(
+        if (!isGradient) backgroundColor
+        else if (hasDynamicColors) when (resolvedTheme) {
+            Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_900))
+            Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_900))
+            Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
+            Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_100))
+            else -> null.debugAssertNotNull ?: Color.Transparent
+        } else when (resolvedTheme) {
+            Theme.LIGHT -> Color(0xFF004D40)
+            Theme.DARK -> Color(0xFF191C1E)
+            Theme.BLACK -> Color.Black
+            Theme.AQUA -> Color(0xFF1A237E)
+            Theme.MODERN -> Color(0xFFE1E3E5)
+            else -> null.debugAssertNotNull ?: Color.Transparent
+        },
+        label = "gradient end color",
+        animationSpec = colorAnimationSpec,
+    )
     return Brush.linearGradient(
-        0f to animateColorAsState(
-            backgroundGradientStart,
-            label = "gradient start color",
-            animationSpec = colorAnimationSpec,
-        ).value,
-        1f to animateColorAsState(
-            backgroundGradientEnd,
-            label = "gradient end color",
-            animationSpec = colorAnimationSpec,
-        ).value,
+        0f to backgroundGradientStart,
+        1f to backgroundGradientEnd,
         start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
         end = Offset(
             if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY
