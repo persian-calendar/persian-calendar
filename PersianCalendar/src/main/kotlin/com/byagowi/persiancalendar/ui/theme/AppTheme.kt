@@ -63,9 +63,10 @@ fun AppTheme(content: @Composable () -> Unit) {
                 WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
             Box(
                 Modifier
-                    .background(AppBackground())
                     .windowInsetsPadding(sidesInsets)
-                    .clipToBounds(),
+                    .clipToBounds()
+                    // Don't move this upper to top of the chain so clip to bound can be applied to it
+                    .background(AppBackground()),
             ) { content() }
         }
     }
