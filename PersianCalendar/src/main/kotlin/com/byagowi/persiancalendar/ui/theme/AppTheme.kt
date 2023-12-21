@@ -2,6 +2,9 @@ package com.byagowi.persiancalendar.ui.theme
 
 import android.os.Build
 import android.view.View
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -116,6 +119,8 @@ fun AppTheme(content: @Composable () -> Unit) {
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
 
+    val colorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessLow)
+
     MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -130,11 +135,25 @@ fun AppTheme(content: @Composable () -> Unit) {
                         WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
                     )
                     .then(
-                        if (!isGradient) Modifier.background(backgroundColor)
+                        if (!isGradient) Modifier.background(
+                            animateColorAsState(
+                                backgroundColor,
+                                label = "background color",
+                                animationSpec = colorAnimationSpec,
+                            ).value
+                        )
                         else Modifier.background(
                             Brush.linearGradient(
-                                0f to backgroundGradientStart,
-                                1f to backgroundGradientEnd,
+                                0f to animateColorAsState(
+                                    backgroundGradientStart,
+                                    label = "gradient start color",
+                                    animationSpec = colorAnimationSpec,
+                                ).value,
+                                1f to animateColorAsState(
+                                    backgroundGradientEnd,
+                                    label = "gradient end color",
+                                    animationSpec = colorAnimationSpec,
+                                ).value,
                                 start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
                                 end = Offset(
                                     if (isRtl) 0f else Float.POSITIVE_INFINITY,
