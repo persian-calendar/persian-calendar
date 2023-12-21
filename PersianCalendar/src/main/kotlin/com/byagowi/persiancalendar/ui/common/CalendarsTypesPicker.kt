@@ -33,7 +33,6 @@ fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Un
                     Modifier
                         .tabIndicatorOffset(tabPositions[selectedTabIndex])
                         .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                    height = 2.dp,
                 )
             }
         },

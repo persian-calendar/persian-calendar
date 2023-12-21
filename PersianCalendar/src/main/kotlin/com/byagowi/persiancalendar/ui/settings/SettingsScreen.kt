@@ -160,7 +160,6 @@ fun SettingsScreen(
                             Modifier
                                 .tabIndicatorOffset(tabPositions[selectedTabIndex])
                                 .padding(horizontal = ExtraLargeShapeCornerSize.dp),
-                            height = 2.dp,
                             color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
                         )
                     }
