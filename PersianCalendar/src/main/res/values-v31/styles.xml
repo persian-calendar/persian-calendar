@@ -10,8 +10,6 @@
     <style name="WidgetTextStyle" />
 
     <style name="DynamicLightTheme" parent="BaseLightTheme">
-        <item name="colorAccent">@android:color/system_accent1_800</item>
-
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorCurrentDay">@android:color/system_accent1_400</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_0</item>
@@ -25,8 +23,6 @@
     </style>
 
     <style name="DynamicDarkTheme" parent="BaseDarkTheme">
-        <item name="colorAccent">@android:color/system_accent1_100</item>
-
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_100</item>
@@ -46,8 +42,6 @@
     </style>
 
     <style name="DynamicModernTheme" parent="BaseLightTheme">
-        <item name="colorAccent">@android:color/system_accent1_800</item>
-
         <item name="colorHoliday">@android:color/system_accent1_400</item>
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_1000</item>

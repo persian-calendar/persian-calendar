@@ -39,8 +39,6 @@
     </style>
 
     <style name="DarkTheme" parent="BaseDarkTheme">
-        <item name="colorAccent">@color/dark_accent</item>
-
         <item name="colorHoliday">@color/dark_holiday</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
@@ -50,8 +48,6 @@
     </style>
 
     <style name="BlackTheme" parent="BaseDarkTheme">
-        <item name="colorAccent">@color/black_accent</item>
-
         <item name="colorHoliday">@color/black_holiday</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
@@ -61,8 +57,6 @@
     </style>
 
     <style name="LightTheme" parent="BaseLightTheme">
-        <item name="colorAccent">@color/light_accent</item>
-
         <item name="colorHoliday">@color/light_holiday</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
@@ -72,8 +66,6 @@
     </style>
 
     <style name="AquaTheme" parent="BaseLightTheme">
-        <item name="colorAccent">@color/aqua_accent</item>
-
         <item name="colorHoliday">@color/aqua_holiday</item>
         <item name="colorCurrentDay">@color/aqua_current_day</item>
         <item name="colorEventIndicator">@color/aqua_event_indicator</item>
@@ -83,8 +75,6 @@
     </style>
 
     <style name="ModernTheme" parent="BaseLightTheme">
-        <item name="colorAccent">@color/modern_accent</item>
-
         <item name="colorHoliday">@color/modern_holiday</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>

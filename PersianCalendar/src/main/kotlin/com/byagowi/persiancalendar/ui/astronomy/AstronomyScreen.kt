@@ -250,9 +250,11 @@ fun AstronomyScreen(
                         ),
                         tint = MaterialTheme.colorScheme.primary,
                     )
+                    val primary = MaterialTheme.colorScheme.primary
                     AndroidView(
                         factory = { context ->
                             val root = SliderView(context)
+                            root.setBarsColor(primary.toArgb())
                             slider = root
                             var latestVibration = 0L
                             root.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
