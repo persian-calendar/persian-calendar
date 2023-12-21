@@ -102,7 +102,6 @@ fun ConverterScreen(
     openDrawer: () -> Unit,
     viewModel: ConverterViewModel
 ) {
-    val context = LocalContext.current
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
     Scaffold(
@@ -185,64 +184,7 @@ fun ConverterScreen(
                         viewModel.changeSecondSelectedDate(todayJdn)
                         viewModel.resetTimeZoneClock()
                     }
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = {
-                            when (screenMode) {
-                                ConverterScreenMode.Converter -> {
-                                    val jdn = viewModel.selectedDate.value
-                                    context.shareText(
-                                        listOf(
-                                            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                                            context.getString(R.string.equivalent_to),
-                                            dateStringOfOtherCalendars(jdn, spacedComma)
-                                        ).joinToString(" ")
-                                    )
-                                }
-
-                                ConverterScreenMode.Distance -> {
-                                    val jdn = viewModel.selectedDate.value
-                                    val secondJdn = viewModel.secondSelectedDate.value
-                                    context.shareText(
-                                        calculateDaysDifference(
-                                            context.resources,
-                                            jdn,
-                                            secondJdn,
-                                            calendarType = viewModel.calendar.value
-                                        )
-                                    )
-                                }
-
-                                ConverterScreenMode.Calculator -> {
-                                    context.shareText(runCatching {
-                                        // running this inside a runCatching block is absolutely important
-                                        eval(viewModel.calculatorInputText.value)
-                                    }.getOrElse { it.message } ?: "")
-                                }
-
-                                ConverterScreenMode.TimeZones -> {
-//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                                    shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
-//                                            Clock(
-//                                                pickerBinding.clock.hour,
-//                                                pickerBinding.clock.minute
-//                                            )
-//                                                .toBasicFormatString())
-//                                } else ""
-                                }
-
-                                ConverterScreenMode.QrCode -> qrShareAction()
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Share,
-                                contentDescription = stringResource(R.string.share),
-                            )
-                        }
-                    }
+                    ShareActionButton(viewModel, qrShareAction)
                 },
             )
         }
@@ -326,6 +268,74 @@ fun ConverterScreen(
 
                 Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
             }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun ShareActionButton(
+    viewModel: ConverterViewModel,
+    qrShareAction: () -> Unit
+) {
+    val screenMode by viewModel.screenMode.collectAsState()
+    val context = LocalContext.current
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
+        state = rememberTooltipState()
+    ) {
+        IconButton(onClick = {
+            when (screenMode) {
+                ConverterScreenMode.Converter -> {
+                    val jdn = viewModel.selectedDate.value
+                    context.shareText(
+                        listOf(
+                            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                            context.getString(R.string.equivalent_to),
+                            dateStringOfOtherCalendars(jdn, spacedComma)
+                        ).joinToString(" ")
+                    )
+                }
+
+                ConverterScreenMode.Distance -> {
+                    val jdn = viewModel.selectedDate.value
+                    val secondJdn = viewModel.secondSelectedDate.value
+                    context.shareText(
+                        calculateDaysDifference(
+                            context.resources,
+                            jdn,
+                            secondJdn,
+                            calendarType = viewModel.calendar.value
+                        )
+                    )
+                }
+
+                ConverterScreenMode.Calculator -> {
+                    context.shareText(runCatching {
+                        // running this inside a runCatching block is absolutely important
+                        eval(viewModel.calculatorInputText.value)
+                    }.getOrElse { it.message } ?: "")
+                }
+
+                ConverterScreenMode.TimeZones -> {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                        shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
+//                                Clock(
+//                                    pickerBinding.clock.hour,
+//                                    pickerBinding.clock.minute
+//                                )
+//                                    .toBasicFormatString())
+//                    } else ""
+                }
+
+                ConverterScreenMode.QrCode -> qrShareAction()
+            }
+        }) {
+            Icon(
+                imageVector = Icons.Default.Share,
+                contentDescription = stringResource(R.string.share),
+            )
         }
     }
 }
