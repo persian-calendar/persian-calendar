@@ -137,6 +137,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.jetbrains.annotations.VisibleForTesting
 import java.util.Date
 
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -219,6 +220,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 private val resumeToken_ = MutableStateFlow(0)
 val resumeToken: StateFlow<Int> = resumeToken_
 
+@VisibleForTesting
 @Composable
 fun App(intentStartDestination: String?, finish: () -> Unit) {
     val calendarRoute = "calendar"
