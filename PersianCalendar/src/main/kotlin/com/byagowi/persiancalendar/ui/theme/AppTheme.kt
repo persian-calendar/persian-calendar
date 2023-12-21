@@ -117,8 +117,8 @@ private fun AppColorScheme(): ColorScheme {
     }
     return colorScheme.copy(
         background = backgroundColor,
-        onBackground = if (backgroundColor.isLight) Color.Black
-        else if (darkTheme) DarkColorScheme.onBackground else Color.White,
+        onBackground = if (backgroundColor.isLight) LightColorScheme.onBackground
+        else DarkColorScheme.onBackground,
     )
 }
 
