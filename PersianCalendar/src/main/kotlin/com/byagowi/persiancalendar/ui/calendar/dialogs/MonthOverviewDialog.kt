@@ -1,39 +1,27 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.content.Context
-import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Print
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -41,9 +29,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import androidx.core.view.minusAssign
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -55,11 +43,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.theme.AppTheme
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -72,7 +57,6 @@ import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.html.DIV
 import kotlinx.html.body
@@ -94,12 +78,9 @@ import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-fun showMonthOverview(context: Context, date: AbstractDate) =
-    showComposeDialog(context) { MonthOverview(date, it) }
-
 @Composable
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
-private fun MonthOverview(date: AbstractDate, onDismissRequest: () -> Unit) {
+@OptIn(ExperimentalFoundationApi::class)
+fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val events = formatComposeEventsList(
         createEventsList(context, date), MaterialTheme.colorScheme.primary
@@ -115,74 +96,61 @@ private fun MonthOverview(date: AbstractDate, onDismissRequest: () -> Unit) {
         createEventsReport(context, date, wholeYear = isLongClick)
     }
 
-    BottomSheetScaffold(
-        containerColor = Color.Transparent,
-        contentColor = Color.Transparent,
-        sheetPeekHeight = 200.dp,
-        sheetContent = {
-            LazyColumn {
-                stickyHeader {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp)
-                            // TODO: Apply long click on the button itself
-                            .combinedClickable(
-                                onClick = { showPrintReport(isLongClick = false) },
-                                onClickLabel = "Print",
-                                onLongClick = { showPrintReport(isLongClick = true) },
-                                onLongClickLabel = stringResource(R.string.year),
-                            ),
-                    ) {
-                        FloatingActionButton(
+    Dialog(onDismissRequest = onDismissRequest) {
+        LazyColumn {
+            stickyHeader {
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 8.dp)
+                        // TODO: Apply long click on the button itself
+                        .combinedClickable(
                             onClick = { showPrintReport(isLongClick = false) },
-                            modifier = Modifier.align(Alignment.Center)
-                        ) { Icon(Icons.Default.Print, contentDescription = "Print") }
-                    }
+                            onClickLabel = "Print",
+                            onLongClick = { showPrintReport(isLongClick = true) },
+                            onLongClickLabel = stringResource(R.string.year),
+                        ),
+                ) {
+                    FloatingActionButton(
+                        onClick = { showPrintReport(isLongClick = false) },
+                        modifier = Modifier.align(Alignment.Center)
+                    ) { Icon(Icons.Default.Print, contentDescription = "Print") }
                 }
-                if (events.isEmpty()) item {
-                    Card(
-                        shape = MaterialTheme.shapes.large,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(all = 16.dp),
-                    ) {
-                        Text(
-                            stringResource(R.string.warn_if_events_not_set),
-                            style = MaterialTheme.typography.titleLarge,
-                            modifier = Modifier.padding(all = 16.dp)
-                        )
-                    }
-                }
-                items(events) { (jdn, text) ->
-                    Card(
-                        shape = MaterialTheme.shapes.large,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-                    ) {
-                        Text(
-                            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                            style = MaterialTheme.typography.headlineSmall,
-                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-                        )
-                        SelectionContainer(
-                            Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                        ) { Text(text) }
-                    }
-                }
-                item { Spacer(Modifier.height(8.dp)) }
             }
-        },
-        content = {
-            Box(
-                Modifier
-                    .background(Color.Transparent)
-                    .fillMaxSize()
-                    .clickable { onDismissRequest() },
-            )
-        },
-    )
+            if (events.isEmpty()) item {
+                Card(
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                ) {
+                    Text(
+                        stringResource(R.string.warn_if_events_not_set),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.padding(all = 16.dp)
+                    )
+                }
+            }
+            items(events) { (jdn, text) ->
+                Card(
+                    shape = MaterialTheme.shapes.large,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                ) {
+                    Text(
+                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                    )
+                    SelectionContainer(
+                        Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    ) { Text(text) }
+                }
+            }
+            item { Spacer(Modifier.height(8.dp)) }
+        }
+    }
 }
 
 private fun createEventsList(
