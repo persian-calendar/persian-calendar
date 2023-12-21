@@ -58,22 +58,44 @@ fun AppTheme(content: @Composable () -> Unit) {
     } else if (darkTheme) DarkColorScheme else LightColorScheme
     if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
 
-    var shapes = MaterialTheme.shapes
     val isCyberpunk by isCyberpunk.collectAsState()
-    if (BuildConfig.DEVELOPMENT) {
-        shapes = if (isCyberpunk) Shapes(
-            extraSmall = CutCornerShape(4.dp),
-            small = CutCornerShape(8.dp),
-            medium = CutCornerShape(12.dp),
-            large = CutCornerShape(16.dp),
-            extraLarge = CutCornerShape(28.dp),
-        ) else MaterialTheme.shapes
+    val shapes = if (BuildConfig.DEVELOPMENT && isCyberpunk) Shapes(
+        extraSmall = CutCornerShape(4.dp),
+        small = CutCornerShape(8.dp),
+        medium = CutCornerShape(12.dp),
+        large = CutCornerShape(16.dp),
+        extraLarge = CutCornerShape(28.dp),
+    ) else MaterialTheme.shapes
+
+    MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
+        // TODO: Ideally this should be onPrimary
+        val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
+
+        val language by language.collectAsState()
+        val isRtl =
+            language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+
+        CompositionLocalProvider(
+            LocalContentColor provides colorOnAppBar,
+            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
+        ) {
+            // Don't draw behind sides insets in landscape, we don't have any plan for using that space
+            val sidesInsets =
+                WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
+            Box(
+                Modifier
+                    .background(BackgroundBrush(theme, isRtl))
+                    .windowInsetsPadding(sidesInsets)
+                    .clipToBounds(),
+            ) { content() }
+        }
     }
-    val language by language.collectAsState()
+}
 
-    // TODO: Ideally this should be onPrimary
-    val colorOnAppBar = Color(context.resolveColor(R.attr.colorOnAppBar))
-
+@Composable
+private fun BackgroundBrush(theme: Theme, isRtl: Boolean): Brush {
+    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val context = LocalContext.current
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val isGradient by isGradient.collectAsState()
@@ -121,43 +143,23 @@ fun AppTheme(content: @Composable () -> Unit) {
         Theme.MODERN -> Color(0xFFE1E3E5)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-
     val colorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessLow)
-
-    MaterialTheme(colorScheme = colorScheme, shapes = shapes) {
-        val isRtl =
-            language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
-        CompositionLocalProvider(
-            LocalContentColor provides colorOnAppBar,
-            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
-        ) {
-            Box(
-                Modifier
-                    .windowInsetsPadding(
-                        WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
-                    )
-                    .background(
-                        Brush.linearGradient(
-                            0f to animateColorAsState(
-                                backgroundGradientStart,
-                                label = "gradient start color",
-                                animationSpec = colorAnimationSpec,
-                            ).value,
-                            1f to animateColorAsState(
-                                backgroundGradientEnd,
-                                label = "gradient end color",
-                                animationSpec = colorAnimationSpec,
-                            ).value,
-                            start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
-                            end = Offset(
-                                if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY
-                            ),
-                        )
-                    )
-                    .clipToBounds(),
-            ) { content() }
-        }
-    }
+    return Brush.linearGradient(
+        0f to animateColorAsState(
+            backgroundGradientStart,
+            label = "gradient start color",
+            animationSpec = colorAnimationSpec,
+        ).value,
+        1f to animateColorAsState(
+            backgroundGradientEnd,
+            label = "gradient end color",
+            animationSpec = colorAnimationSpec,
+        ).value,
+        start = Offset(if (isRtl) Float.POSITIVE_INFINITY else 0f, 0f),
+        end = Offset(
+            if (isRtl) 0f else Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY
+        ),
+    )
 }
 
 // Best effort theme matching system, used for widget and wallpaper configuration screen meant to
