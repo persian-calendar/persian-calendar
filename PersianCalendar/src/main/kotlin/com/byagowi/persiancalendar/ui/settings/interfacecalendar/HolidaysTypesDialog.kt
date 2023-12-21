@@ -66,24 +66,39 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
             LocalTextStyle provides MaterialTheme.typography.bodyMedium
         ) {
             if (!language.value.showNepaliCalendar) {
-                CountryEvents(
-                    stringResource(R.string.iran_official_events),
-                    EventType.Iran.source,
-                    stringResource(R.string.iran_holidays),
-                    stringResource(R.string.iran_others),
-                    enabledTypes,
-                    EventsRepository.iranHolidaysKey,
-                    EventsRepository.iranOthersKey,
-                )
-                CountryEvents(
-                    stringResource(R.string.afghanistan_events),
-                    EventType.Afghanistan.source,
-                    stringResource(R.string.afghanistan_holidays),
-                    stringResource(R.string.afghanistan_others),
-                    enabledTypes,
-                    EventsRepository.afghanistanHolidaysKey,
-                    EventsRepository.afghanistanOthersKey,
-                )
+                @Composable
+                fun Iran() {
+                    CountryEvents(
+                        stringResource(R.string.iran_official_events),
+                        EventType.Iran.source,
+                        stringResource(R.string.iran_holidays),
+                        stringResource(R.string.iran_others),
+                        enabledTypes,
+                        EventsRepository.iranHolidaysKey,
+                        EventsRepository.iranOthersKey,
+                    )
+                }
+
+                @Composable
+                fun Afghanistan() {
+                    CountryEvents(
+                        stringResource(R.string.afghanistan_events),
+                        EventType.Afghanistan.source,
+                        stringResource(R.string.afghanistan_holidays),
+                        stringResource(R.string.afghanistan_others),
+                        enabledTypes,
+                        EventsRepository.afghanistanHolidaysKey,
+                        EventsRepository.afghanistanOthersKey,
+                    )
+                }
+
+                if (language.value.isAfghanistanExclusive) {
+                    Afghanistan()
+                    Iran()
+                } else {
+                    Iran()
+                    Afghanistan()
+                }
             } else {
                 CountryEvents(
                     stringResource(R.string.nepal),
@@ -104,7 +119,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 )
             }
-            IndentedCheckBox(
+            if (!language.value.isAfghanistanExclusive) IndentedCheckBox(
                 stringResource(R.string.iran_ancient),
                 enabledTypes,
                 EventsRepository.iranAncientKey,
