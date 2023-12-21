@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -120,8 +122,9 @@ fun Month(
     val heightPixels = with(LocalDensity.current) { height.toPx() }
     val cellPixelsWidth = widthPixels / columnsCount
     val cellPixelsHeight = heightPixels / rowsCount
-    val dayPainter = remember(height, width, refreshToken) {
-        DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl)
+    val contentColor = LocalContentColor.current
+    val dayPainter = remember(height, width, refreshToken, contentColor) {
+        DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl, contentColor.toArgb())
     }
     val halfDp = with(LocalDensity.current) { .5f.dp.toPx() }
 

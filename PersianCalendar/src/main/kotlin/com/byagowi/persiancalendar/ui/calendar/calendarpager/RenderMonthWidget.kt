@@ -47,7 +47,7 @@ fun renderMonthWidget(
 
     val isRtl =
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
-    val dayPainter = DayPainter(context, cellWidth, cellHeight, isRtl, textColor)
+    val dayPainter = DayPainter(context, cellWidth, cellHeight, isRtl, textColor, textColor)
 
     val monthDeviceEvents =
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)

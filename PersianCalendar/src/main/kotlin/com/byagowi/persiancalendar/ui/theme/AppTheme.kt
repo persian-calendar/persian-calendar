@@ -24,6 +24,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -37,25 +38,38 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
-import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.getActivity
+import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = AppColorScheme(), shapes = AppShapes()) {
-        // TODO: Ideally this should be onPrimary or onBackground
-        val colorOnAppBar = Color(LocalContext.current.resolveColor(R.attr.colorOnAppBar))
+        val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+        val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+        val context = LocalContext.current
+        LaunchedEffect(isBackgroundColorLight, isSurfaceColorLight) {
+            context.getActivity()?.window?.let {
+                transparentSystemBars(it, isBackgroundColorLight, isSurfaceColorLight)
+            }
+        }
+
+        val contentColor by animateColorAsState(
+            MaterialTheme.colorScheme.onBackground,
+            animationSpec = colorAnimationSpec,
+            label = "content color"
+        )
 
         val language by language.collectAsState()
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
         CompositionLocalProvider(
-            LocalContentColor provides colorOnAppBar,
+            LocalContentColor provides contentColor,
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
         ) {
             // Don't draw behind sides insets in landscape, we don't have any plan for using that space
@@ -75,16 +89,36 @@ fun AppTheme(content: @Composable () -> Unit) {
 @Composable
 private fun AppColorScheme(): ColorScheme {
     val theme by theme.collectAsState()
+    val context = LocalContext.current
     val systemInDarkTheme = isSystemInDarkTheme()
     val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
     val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    val context = LocalContext.current
     var colorScheme = if (hasDynamicColors) {
         if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (darkTheme) DarkColorScheme else LightColorScheme
     // Handle black theme which is useful for OLED screens
     if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
-    return colorScheme
+
+    val resolvedTheme =
+        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
+    val backgroundColor = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
+        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_800))
+        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_10))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFF00695c)
+        Theme.DARK -> Color(0xFF2F3133)
+        Theme.BLACK -> Color.Black
+        Theme.AQUA -> Color(0xFF1A237E)
+        Theme.MODERN -> Color(0xFFFAFAFA)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    return colorScheme.copy(
+        background = backgroundColor,
+        onBackground = if (backgroundColor.isLight) Color.Black else Color.White,
+    )
 }
 
 @Composable
@@ -100,29 +134,17 @@ private fun AppShapes(): Shapes {
     ) else MaterialTheme.shapes
 }
 
+private val colorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessLow)
+
 @Composable
 private fun AppBackground(): Brush {
+    val backgroundColor = MaterialTheme.colorScheme.background
     val theme by theme.collectAsState()
     val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val context = LocalContext.current
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val isGradient by isGradient.collectAsState()
-    val backgroundColor = if (hasDynamicColors) when (resolvedTheme) {
-        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
-        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_800))
-        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
-        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_10))
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
-        Theme.LIGHT -> Color(0xFF00695c)
-        Theme.DARK -> Color(0xFF2F3133)
-        Theme.BLACK -> Color.Black
-        Theme.AQUA -> Color(0xFF1A237E)
-        Theme.MODERN -> Color(0xFFFAFAFA)
-        else -> null.debugAssertNotNull ?: Color.Transparent
-    }
-    val colorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessLow)
     val backgroundGradientStart by animateColorAsState(
         if (!isGradient) backgroundColor
         else if (hasDynamicColors) when (resolvedTheme) {

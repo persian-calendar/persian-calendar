@@ -5,6 +5,20 @@ import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.colorspace.ColorSpaces
+import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
+
+/**
+ * Determines if a color should be considered light or dark.
+ *
+ * See: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
+ *
+ * Per [androidx.core.graphics.ColorUtils.calculateLuminance], second component of xyz is luminance
+ */
+@Stable
+val Color.isLight: Boolean get() = this.convert(ColorSpaces.CieXyz).component2() > .5
 
 /**
  * As [androidx.compose.material.icons.MaterialIconDimension] isn't accessible despite saying otherwise

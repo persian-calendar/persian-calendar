@@ -38,7 +38,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
@@ -54,7 +53,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.utils.isColorLight
+import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
@@ -194,7 +193,7 @@ fun EventsTab(
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     val contentColor by animateColorAsState(
-                        if (isColorLight(backgroundColor.toArgb())) Color.Black else Color.White,
+                        if (backgroundColor.isLight) Color.Black else Color.White,
                         label = "contentColor"
                     )
 

@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
@@ -251,11 +252,3 @@ fun View.performHapticFeedbackVirtualKey() {
     debugLog("Preformed a haptic feedback virtual key")
     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
 }
-
-/**
- * Determines if a color should be considered light or dark.
- *
- * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
- */
-fun isColorLight(@ColorInt color: Int): Boolean =
-    color != Color.TRANSPARENT && ColorUtils.calculateLuminance(color) > 0.5

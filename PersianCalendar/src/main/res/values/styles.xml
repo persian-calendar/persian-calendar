@@ -46,7 +46,6 @@
 
         <item name="colorSurface">@color/dark_surface_background</item>
         <item name="colorHoliday">@color/dark_holiday</item>
-        <item name="colorOnAppBar">@color/dark_text_day</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
         <item name="colorSelectedDay">@color/dark_selected_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
@@ -61,7 +60,6 @@
 
         <item name="colorSurface">@color/black_surface_background</item>
         <item name="colorHoliday">@color/black_holiday</item>
-        <item name="colorOnAppBar">@color/black_text_day</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
         <item name="colorSelectedDay">@color/black_selected_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
@@ -76,7 +74,6 @@
 
         <item name="colorSurface">@color/light_surface_background</item>
         <item name="colorHoliday">@color/light_holiday</item>
-        <item name="colorOnAppBar">@color/light_text_day</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
         <item name="colorSelectedDay">@color/light_selected_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
@@ -91,7 +88,6 @@
 
         <item name="colorSurface">@color/aqua_surface_background</item>
         <item name="colorHoliday">@color/aqua_holiday</item>
-        <item name="colorOnAppBar">@color/aqua_text_day</item>
         <item name="colorCurrentDay">@color/aqua_current_day</item>
         <item name="colorSelectedDay">@color/aqua_selected_day</item>
         <item name="colorEventIndicator">@color/aqua_event_indicator</item>
@@ -106,12 +102,11 @@
 
         <item name="colorSurface">@color/modern_surface_background</item>
         <item name="colorHoliday">@color/modern_holiday</item>
-        <item name="colorOnAppBar">@color/modern_text_day</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>
         <item name="colorSelectedDay">@color/modern_selected_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
 
-        <item name="colorTextDaySelected">@color/modern_text_day</item>
+        <item name="colorTextDaySelected">@android:color/black</item>
         <item name="colorAppointment">@color/modern_accent</item>
     </style>
 

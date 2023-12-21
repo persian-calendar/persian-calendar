@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -47,7 +48,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -74,6 +74,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -100,7 +101,6 @@ import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.loadLanguageResources
-import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.about.AboutScreen
@@ -121,9 +121,8 @@ import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
+import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -142,10 +141,11 @@ import java.util.Date
 
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
-        transparentSystemBars()
 
         initGlobal(this)
 
@@ -162,6 +162,12 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
         applyAppLanguage(this)
+
+        // There is a window:enforceNavigationBarContrast set to false in styles.xml as the following
+        // isn't as effective in dark themes.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.isNavigationBarContrastEnforced = false
+        }
     }
 
     //        if (settingHasChanged) { // update when checked menu item is changed
@@ -179,20 +185,14 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET -> prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
-
-            PREF_THEME -> {
-                Theme.apply(this)
-                transparentSystemBars()
-            }
-
+            PREF_THEME -> Theme.apply(this)
+            PREF_PRAY_TIME_METHOD -> prefs.edit { remove(PREF_MIDNIGHT_METHOD) }
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
                     stopService(Intent(this, ApplicationService::class.java))
                     startWorker(applicationContext)
                 }
             }
-
-            PREF_PRAY_TIME_METHOD -> prefs.edit { remove(PREF_MIDNIGHT_METHOD) }
         }
 
         configureCalendarsAndLoadEvents(this)
@@ -258,12 +258,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
-                val context = LocalContext.current
                 run {
-                    val theme by theme.collectAsState()
-                    val needsVisibleStatusBarPlaceHolder = remember(theme) {
-                        SystemBarsTransparency(context).needsVisibleStatusBarPlaceHolder
-                    }
+                    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+                    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+                    val needsVisibleStatusBarPlaceHolder =
+                        !isBackgroundColorLight && isSurfaceColorLight
                     Spacer(
                         Modifier
                             .fillMaxWidth()

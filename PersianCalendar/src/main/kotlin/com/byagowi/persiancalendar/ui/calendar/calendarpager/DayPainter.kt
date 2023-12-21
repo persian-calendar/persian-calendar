@@ -30,9 +30,10 @@ class DayPainter(
     private val width: Float,
     private val height: Float,
     private val isRtl: Boolean,
+    @ColorInt currentColor: Int,
     @ColorInt widgetTextColor: Int? = null
 ) {
-    private val paints = Paints(context, min(width, height), widgetTextColor)
+    private val paints = Paints(context, min(width, height), currentColor, widgetTextColor)
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -151,6 +152,7 @@ class DayPainter(
 
 private class Paints(
     context: Context, diameter: Float,
+    @ColorInt private val currentColor: Int,
     @ColorInt private val widgetTextColor: Int? = null
 ) {
     private val dp = context.resources.dp
@@ -195,7 +197,7 @@ private class Paints(
         addShadowIfNeeded(it)
     }
 
-    private val colorTextDay = widgetTextColor ?: context.resolveColor(R.attr.colorOnAppBar)
+    private val colorTextDay = widgetTextColor ?: currentColor
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
@@ -219,7 +221,7 @@ private class Paints(
     }
 
     private val colorTextDayName = ColorUtils.setAlphaComponent(
-        widgetTextColor ?: context.resolveColor(R.attr.colorOnAppBar),
+        widgetTextColor ?: currentColor,
         0xCC
     )
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
