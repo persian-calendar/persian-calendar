@@ -120,7 +120,7 @@ private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
                         .padding(vertical = 16.dp)
                 ) {
                     Button(
-                        onClick = { finishAndSuccess() },
+                        onClick = finishAndSuccess,
                         modifier = Modifier
                             .align(alignment = Alignment.CenterHorizontally)
                             .padding(bottom = 8.dp)

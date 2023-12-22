@@ -278,7 +278,7 @@ fun ColumnScope.ShiftWorkDialogContent(
             // }
         }) { Text(stringResource(R.string.add)) }
         Spacer(Modifier.weight(1f))
-        TextButton(onClick = { onDismissRequest() }) {
+        TextButton(onClick = onDismissRequest) {
             Text(stringResource(R.string.cancel))
         }
         Spacer(Modifier.width(8.dp))

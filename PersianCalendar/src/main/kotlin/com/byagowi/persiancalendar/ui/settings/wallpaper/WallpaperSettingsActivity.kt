@@ -58,7 +58,7 @@ class WallpaperSettingsActivity : ComponentActivity() {
                             .padding(vertical = 16.dp),
                     ) {
                         Button(
-                            onClick = { finish() },
+                            onClick = ::finish,
                             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                         ) {
                             Text(

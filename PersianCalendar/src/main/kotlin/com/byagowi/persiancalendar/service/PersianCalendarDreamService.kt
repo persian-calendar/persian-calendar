@@ -6,16 +6,11 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
 import android.service.dreams.DreamService
-import android.view.ContextThemeWrapper
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.ImageView
-import androidx.core.view.isVisible
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random
 
 class PersianCalendarDreamService : DreamService() {

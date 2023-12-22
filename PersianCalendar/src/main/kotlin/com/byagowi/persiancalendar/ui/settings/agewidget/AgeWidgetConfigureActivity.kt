@@ -142,7 +142,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                     .padding(vertical = 16.dp),
             ) {
                 Button(
-                    onClick = { confirm() },
+                    onClick = confirm,
                     modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
                 ) {
                     Text(
