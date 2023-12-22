@@ -28,7 +28,6 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -36,20 +35,15 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -83,9 +77,11 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
+import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -167,14 +163,7 @@ fun ConverterScreen(
                     actionIconContentColor = LocalContentColor.current,
                     titleContentColor = LocalContentColor.current,
                 ),
-                navigationIcon = {
-                    IconButton(onClick = { openDrawer() }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = stringResource(R.string.open_drawer)
-                        )
-                    }
-                },
+                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     val todayButtonVisibility by viewModel.todayButtonVisibilityEvent.collectAsState(
                         initial = false
@@ -274,69 +263,60 @@ fun ConverterScreen(
 }
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
 private fun ShareActionButton(
     viewModel: ConverterViewModel,
     qrShareAction: () -> Unit
 ) {
     val screenMode by viewModel.screenMode.collectAsState()
     val context = LocalContext.current
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = { PlainTooltip { Text(text = stringResource(R.string.share)) } },
-        state = rememberTooltipState()
+    AppIconButton(
+        icon = Icons.Default.Share,
+        title = stringResource(R.string.share)
     ) {
-        IconButton(onClick = {
-            when (screenMode) {
-                ConverterScreenMode.Converter -> {
-                    val jdn = viewModel.selectedDate.value
-                    context.shareText(
-                        listOf(
-                            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                            context.getString(R.string.equivalent_to),
-                            dateStringOfOtherCalendars(jdn, spacedComma)
-                        ).joinToString(" ")
-                    )
-                }
-
-                ConverterScreenMode.Distance -> {
-                    val jdn = viewModel.selectedDate.value
-                    val secondJdn = viewModel.secondSelectedDate.value
-                    context.shareText(
-                        calculateDaysDifference(
-                            context.resources,
-                            jdn,
-                            secondJdn,
-                            calendarType = viewModel.calendar.value
-                        )
-                    )
-                }
-
-                ConverterScreenMode.Calculator -> {
-                    context.shareText(runCatching {
-                        // running this inside a runCatching block is absolutely important
-                        eval(viewModel.calculatorInputText.value)
-                    }.getOrElse { it.message } ?: "")
-                }
-
-                ConverterScreenMode.TimeZones -> {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                        shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
-//                                Clock(
-//                                    pickerBinding.clock.hour,
-//                                    pickerBinding.clock.minute
-//                                )
-//                                    .toBasicFormatString())
-//                    } else ""
-                }
-
-                ConverterScreenMode.QrCode -> qrShareAction()
+        when (screenMode) {
+            ConverterScreenMode.Converter -> {
+                val jdn = viewModel.selectedDate.value
+                context.shareText(
+                    listOf(
+                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                        context.getString(R.string.equivalent_to),
+                        dateStringOfOtherCalendars(jdn, spacedComma)
+                    ).joinToString(" ")
+                )
             }
-        }) {
-            Icon(
-                imageVector = Icons.Default.Share,
-                contentDescription = stringResource(R.string.share),
-            )
+
+            ConverterScreenMode.Distance -> {
+                val jdn = viewModel.selectedDate.value
+                val secondJdn = viewModel.secondSelectedDate.value
+                context.shareText(
+                    calculateDaysDifference(
+                        context.resources,
+                        jdn,
+                        secondJdn,
+                        calendarType = viewModel.calendar.value
+                    )
+                )
+            }
+
+            ConverterScreenMode.Calculator -> {
+                context.shareText(runCatching {
+                    // running this inside a runCatching block is absolutely important
+                    eval(viewModel.calculatorInputText.value)
+                }.getOrElse { it.message } ?: "")
+            }
+
+            ConverterScreenMode.TimeZones -> {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
+//                            Clock(
+//                                pickerBinding.clock.hour,
+//                                pickerBinding.clock.minute
+//                            )
+//                                .toBasicFormatString())
+//                } else ""
+            }
+
+            ConverterScreenMode.QrCode -> qrShareAction()
         }
     }
 }

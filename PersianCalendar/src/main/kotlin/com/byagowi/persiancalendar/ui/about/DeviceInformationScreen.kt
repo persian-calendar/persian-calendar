@@ -29,7 +29,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.Motorcycle
 import androidx.compose.material.icons.filled.PermDeviceInformation
@@ -40,19 +39,14 @@ import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarDefaults.exitUntilCollapsedScrollBehavior
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -75,6 +69,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
@@ -118,71 +114,31 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
                 actionIconContentColor = LocalContentColor.current,
                 titleContentColor = LocalContentColor.current,
             ),
-            navigationIcon = {
-                IconButton(onClick = navigateUp) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                        contentDescription = stringResource(R.string.navigate_up)
-                    )
-                }
-            },
+            navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             actions = {
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = stringResource(R.string.share)) }
-                    },
-                    state = rememberTooltipState()
+                AppIconButton(
+                    icon = Icons.Default.Share,
+                    title = stringResource(R.string.share),
+                ) { context.shareTextFile(generateHtmlReport(items), "device.html", "text/html") }
+                AppIconButton(
+                    icon = Icons.Default.Print,
+                    title = "Print",
+                ) { context.openHtmlInBrowser(generateHtmlReport(items)) }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) AppIconButton(
+                    icon = Icons.Default.SportsEsports,
+                    title = "Game",
                 ) {
-                    IconButton(onClick = {
-                        context.shareTextFile(generateHtmlReport(items), "device.html", "text/html")
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = stringResource(R.string.share)
+                    runCatching {
+                        context.startActivity(
+                            Intent(Intent.ACTION_MAIN).setClassName(
+                                "com.android.systemui",
+                                "com.android.systemui.egg.MLandActivity"
+                            ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
-                    }
-                }
-                TooltipBox(
-                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                    tooltip = {
-                        PlainTooltip { Text(text = "Print") }
-                    },
-                    state = rememberTooltipState()
-                ) {
-                    IconButton(onClick = { context.openHtmlInBrowser(generateHtmlReport(items)) }) {
-                        Icon(
-                            imageVector = Icons.Default.Print, contentDescription = "Print"
-                        )
-                    }
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip { Text(text = "Game") }
-                        },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = {
-                            runCatching {
-                                context.startActivity(
-                                    Intent(Intent.ACTION_MAIN).setClassName(
-                                        "com.android.systemui",
-                                        "com.android.systemui.egg.MLandActivity"
-                                    ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                )
-                            }.onFailure(logException).onFailure {
-                                Toast.makeText(
-                                    context, R.string.device_does_not_support, Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.SportsEsports,
-                                contentDescription = "Game"
-                            )
-                        }
+                    }.onFailure(logException).onFailure {
+                        Toast.makeText(
+                            context, R.string.device_does_not_support, Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             },

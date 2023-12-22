@@ -19,16 +19,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarDuration
@@ -36,11 +32,8 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -75,6 +68,8 @@ import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -178,34 +173,13 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                     actionIconContentColor = LocalContentColor.current,
                     titleContentColor = LocalContentColor.current,
                 ),
-                navigationIcon = {
-                    IconButton(onClick = { openDrawer() }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = stringResource(R.string.open_drawer)
-                        )
-                    }
-                },
+                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     val coordinates by coordinates.collectAsState()
-                    if (coordinates != null) TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip {
-                                Text(stringResource(R.string.show_sun_and_moon_path_in_24_hours))
-                            }
-                        },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = { isTimeShiftAnimate = true }) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
-                                contentDescription = stringResource(
-                                    R.string.show_sun_and_moon_path_in_24_hours
-                                ),
-                            )
-                        }
-                    }
+                    if (coordinates != null) AppIconButton(
+                        icon = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
+                        title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
+                    ) { isTimeShiftAnimate = true }
                     var showTrueNorth by rememberSaveable {
                         mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
                     }
@@ -249,19 +223,20 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
         bottomBar = {
             BottomAppBar {
                 Spacer(Modifier.width(8.dp))
-                IconButton(onClick = navigateToLevel) {
-                    Icon(
-                        ImageVector.vectorResource(R.drawable.ic_level),
-                        contentDescription = stringResource(R.string.level)
-                    )
-                }
-                IconButton(onClick = navigateToMap) {
-                    Icon(
-                        Icons.Default.Map,
-                        contentDescription = stringResource(R.string.map)
-                    )
-                }
-                IconButton(onClick = {
+                AppIconButton(
+                    icon = ImageVector.vectorResource(R.drawable.ic_level),
+                    title = stringResource(R.string.level),
+                    onClick = navigateToLevel,
+                )
+                AppIconButton(
+                    icon = Icons.Default.Map,
+                    title = stringResource(R.string.map),
+                    onClick = navigateToMap,
+                )
+                AppIconButton(
+                    icon = Icons.Default.Info,
+                    title = stringResource(R.string.help),
+                ) {
                     // show snackbar as a suspend function
                     showSnackbarMessage(
                         context.getString(
@@ -269,11 +244,6 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                             else R.string.calibrate_compass_summary
                         ),
                         SnackbarDuration.Long,
-                    )
-                }) {
-                    Icon(
-                        Icons.Default.Info,
-                        contentDescription = stringResource(R.string.help)
                     )
                 }
                 Spacer(Modifier.weight(1f, fill = true))

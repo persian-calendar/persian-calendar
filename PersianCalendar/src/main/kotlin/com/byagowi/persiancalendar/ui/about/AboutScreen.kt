@@ -39,7 +39,6 @@ import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Folder
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PermDeviceInformation
 import androidx.compose.material.icons.filled.Share
@@ -49,18 +48,13 @@ import androidx.compose.material3.ElevatedFilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -93,6 +87,8 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -124,43 +120,17 @@ fun AboutScreen(
                     actionIconContentColor = LocalContentColor.current,
                     titleContentColor = LocalContentColor.current,
                 ),
-                navigationIcon = {
-                    IconButton(onClick = { openDrawer() }) {
-                        Icon(
-                            imageVector = Icons.Default.Menu,
-                            contentDescription = stringResource(R.string.open_drawer)
-                        )
-                    }
-                },
+                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip { Text(text = stringResource(R.string.share)) }
-                        },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = { shareApplication(context) }) {
-                            Icon(
-                                imageVector = Icons.Default.Share,
-                                contentDescription = stringResource(R.string.share)
-                            )
-                        }
-                    }
-                    TooltipBox(
-                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                        tooltip = {
-                            PlainTooltip { Text(text = stringResource(R.string.device_information)) }
-                        },
-                        state = rememberTooltipState()
-                    ) {
-                        IconButton(onClick = navigateToDeviceInformation) {
-                            Icon(
-                                imageVector = Icons.Default.PermDeviceInformation,
-                                contentDescription = stringResource(R.string.device_information)
-                            )
-                        }
-                    }
+                    AppIconButton(
+                        icon = Icons.Default.Share,
+                        title = stringResource(R.string.share),
+                    ) { shareApplication(context) }
+                    AppIconButton(
+                        icon = Icons.Default.PermDeviceInformation,
+                        title = stringResource(R.string.device_information),
+                        onClick = navigateToDeviceInformation,
+                    )
                 },
             )
         }

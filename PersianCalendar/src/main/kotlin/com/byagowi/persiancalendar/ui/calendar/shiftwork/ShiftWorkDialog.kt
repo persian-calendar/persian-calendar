@@ -187,9 +187,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                             )
                         },
                         trailingIcon = {
-                            IconButton(
-                                onClick = { selectedTypeDropdownIndex = position },
-                            ) {
+                            IconButton(onClick = { selectedTypeDropdownIndex = position }) {
                                 val angle by animateFloatAsState(
                                     if (selectedTypeDropdownIndex == position) 180f else 0f,
                                     label = "angle",

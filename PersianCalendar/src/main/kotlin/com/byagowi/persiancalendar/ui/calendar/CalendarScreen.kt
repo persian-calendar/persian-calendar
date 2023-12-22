@@ -43,17 +43,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ExpandMore
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
@@ -67,11 +64,8 @@ import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.PrimaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -130,7 +124,9 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
+import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
+import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
@@ -486,9 +482,10 @@ private fun Search(viewModel: CalendarViewModel) {
         active = isActive,
         onActiveChange = {},
         trailingIcon = {
-            IconButton(onClick = { viewModel.closeSearch() }) {
-                Icon(Icons.Default.Close, contentDescription = stringResource(R.string.close))
-            }
+            AppIconButton(
+                icon = Icons.Default.Close,
+                title = stringResource(R.string.close),
+            ) { viewModel.closeSearch() }
         },
         modifier = Modifier
             .padding(horizontal = padding)
@@ -589,34 +586,17 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             actionIconContentColor = LocalContentColor.current,
             titleContentColor = LocalContentColor.current,
         ),
-        navigationIcon = {
-            IconButton(onClick = { openDrawer() }) {
-                Icon(
-                    imageVector = Icons.Default.Menu,
-                    contentDescription = stringResource(R.string.open_drawer)
-                )
-            }
-        },
+        navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
         actions = {
             val isHighlighted by viewModel.isHighlighted.collectAsState()
             TodayActionButton(
                 visible = selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month || isHighlighted
             ) { bringDate(viewModel, Jdn.today(), context, highlight = false) }
 
-            TooltipBox(
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                tooltip = {
-                    PlainTooltip { Text(text = stringResource(R.string.search_in_events)) }
-                },
-                state = rememberTooltipState()
-            ) {
-                IconButton(onClick = { viewModel.openSearch() }) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = stringResource(R.string.search_in_events)
-                    )
-                }
-            }
+            AppIconButton(
+                icon = Icons.Default.Search,
+                title = stringResource(R.string.search_in_events),
+            ) { viewModel.openSearch() }
 
             Menu(viewModel)
         },

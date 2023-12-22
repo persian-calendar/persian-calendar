@@ -19,15 +19,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.SyncAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -57,6 +54,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
@@ -133,27 +132,16 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                     actionIconContentColor = LocalContentColor.current,
                     titleContentColor = LocalContentColor.current,
                 ),
-                navigationIcon = {
-                    IconButton(onClick = navigateUp) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Default.ArrowBack,
-                            contentDescription = stringResource(R.string.navigate_up)
-                        )
-                    }
-                },
+                navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
-                    IconButton(onClick = { cmInchFlip = !cmInchFlip }) {
-                        Icon(
-                            imageVector = Icons.Default.SyncAlt,
-                            contentDescription = "cm / in",
-                        )
-                    }
-                    IconButton(onClick = { fullscreenToken = UUID.randomUUID() }) {
-                        Icon(
-                            imageVector = Icons.Default.Fullscreen,
-                            contentDescription = stringResource(R.string.full_screen),
-                        )
-                    }
+                    AppIconButton(
+                        icon = Icons.Default.SyncAlt,
+                        title = "cm / in",
+                    ) { cmInchFlip = !cmInchFlip }
+                    AppIconButton(
+                        icon = Icons.Default.Fullscreen,
+                        title = stringResource(R.string.full_screen),
+                    ) { fullscreenToken = UUID.randomUUID() }
                 },
             )
         }
@@ -215,12 +203,11 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                         BottomAppBar {
                             Spacer(Modifier.width(8.dp))
                             AnimatedVisibility(visible = !isFullscreen) {
-                                IconButton(onClick = navigateToCompass) {
-                                    Icon(
-                                        Icons.Default.Explore,
-                                        contentDescription = stringResource(R.string.compass)
-                                    )
-                                }
+                                AppIconButton(
+                                    icon = Icons.Default.Explore,
+                                    title = stringResource(R.string.compass),
+                                    onClick = navigateToCompass,
+                                )
                             }
                             Spacer(Modifier.weight(1f, fill = true))
                             StopButton(isStopped) { isStopped = it }
