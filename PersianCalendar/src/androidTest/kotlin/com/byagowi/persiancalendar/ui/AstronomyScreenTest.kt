@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.performClick
@@ -18,18 +15,9 @@ class AstronomyScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // TODO: To get rid of when all the theme system is moved to compose
-    private fun ComposeContentTestRule.setContentWithTheme(body: @Composable () -> Unit) {
-        setContent {
-            val context = LocalContext.current
-            context.setTheme(R.style.LightTheme); context.setTheme(R.style.BaseTheme)
-            body()
-        }
-    }
-
     @Test
     fun basicSmokeTest() {
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             AstronomyScreen({}, {}, AstronomyViewModel())
         }
     }
@@ -38,7 +26,7 @@ class AstronomyScreenTest {
     fun astronomyScreenNavigateToMap() {
         var navigateToMapIsCalled = false
         var mapString = ""
-        composeTestRule.setContentWithTheme {
+        composeTestRule.setContent {
             mapString = stringResource(R.string.map)
             AstronomyScreen({}, { navigateToMapIsCalled = true }, AstronomyViewModel())
         }

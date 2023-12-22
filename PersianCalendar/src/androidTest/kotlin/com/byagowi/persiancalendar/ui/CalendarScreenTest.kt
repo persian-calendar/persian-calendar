@@ -1,12 +1,8 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import org.junit.Rule
 import org.junit.Test
@@ -17,18 +13,9 @@ class CalendarScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    // TODO: To get rid of when all the theme system is moved to compose
-    private fun ComposeContentTestRule.setContentWithTheme(body: @Composable () -> Unit) {
-        setContent {
-            val context = LocalContext.current
-            context.setTheme(R.style.LightTheme); context.setTheme(R.style.BaseTheme)
-            body()
-        }
-    }
-
     @Test
     fun calendarScreenSmokeTest() {
-        composeTestRule.setContentWithTheme { CalendarScreen({}, {}, {}, {}, viewModel()) }
+        composeTestRule.setContent { CalendarScreen({}, {}, {}, {}, viewModel()) }
     }
 
 //    @Test
