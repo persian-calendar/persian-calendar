@@ -8,9 +8,9 @@
     <color name="widget_background">@android:color/transparent</color>
 
     <!-- There is an override of this in values-night/styles.xml -->
-    <style name="BaseSplashScreenTheme" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="BaseDayNightTheme" parent="android:Theme.Material.Light.NoActionBar" />
 
-    <style name="SplashScreenTheme" parent="BaseSplashScreenTheme">
+    <style name="SplashScreenTheme" parent="BaseDayNightTheme">
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
@@ -19,7 +19,7 @@
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
     </style>
 
-    <style name="BaseTheme" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="BaseTheme" parent="BaseDayNightTheme">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:typeface">sans</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>

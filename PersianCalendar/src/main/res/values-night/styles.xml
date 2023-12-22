@@ -2,6 +2,6 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- There is an override of this in values-night-v31/styles.xml, keep that synced -->
-    <style name="BaseSplashScreenTheme" parent="android:Theme.Material.NoActionBar" />
+    <style name="BaseDayNightTheme" parent="android:Theme.Material.NoActionBar" />
 
 </resources>
