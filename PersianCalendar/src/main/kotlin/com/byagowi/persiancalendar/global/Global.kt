@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
+import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
@@ -228,8 +229,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     val appPrefs = context.appPrefs
 
     IslamicDate.islamicOffset = if (appPrefs.isIslamicOffsetExpired) 0 else appPrefs.getString(
-        PREF_ISLAMIC_OFFSET,
-        DEFAULT_ISLAMIC_OFFSET
+        PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET
     )?.toIntOrNull() ?: 0
 
     eventsRepository = EventsRepository(appPrefs, language.value)
@@ -254,7 +254,10 @@ fun updateStoredPreference(context: Context) {
 
     language_.value = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.getPreferredDefaultLanguage(context)
-    theme_.value = Theme.getCurrent(prefs)
+    theme_.value = run {
+        val key = prefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
+        Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
+    }
     isCyberpunk_.value = prefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     isGradient_.value = prefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     alternativeGregorianMonths = when {
@@ -263,24 +266,21 @@ fun updateStoredPreference(context: Context) {
         )
 
         language.isArabic -> prefs.getBoolean(
-            PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
-            DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
+            PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
         )
 
         else -> false
     }
 
     preferredDigits = if (!prefs.getBoolean(
-            PREF_LOCAL_DIGITS,
-            DEFAULT_LOCAL_DIGITS
+            PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS
         ) || !language.canHaveLocalDigits
     ) Language.ARABIC_DIGITS
     else language.preferredDigits
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled = language.showIranTimeOption && prefs.getBoolean(
-        PREF_IRAN_TIME,
-        DEFAULT_IRAN_TIME
+        PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     isNotifyDateOnLockScreen = prefs.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
@@ -296,14 +296,13 @@ fun updateStoredPreference(context: Context) {
         prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
     )
     asrMethod = if (calculationMethod.isJafari || !prefs.getBoolean(
-            PREF_ASR_HANAFI_JURISTIC,
-            language.isHanafiMajority
+            PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
-    midnightMethod = context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
-        ?.let(MidnightMethod::valueOf)
-        ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }
-        ?: calculationMethod.defaultMidnight
+    midnightMethod =
+        context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
+            ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }
+            ?: calculationMethod.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
         if (!enableHighLatitudesConfiguration) DEFAULT_HIGH_LATITUDES_METHOD
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
@@ -312,8 +311,7 @@ fun updateStoredPreference(context: Context) {
     coordinates_.value = prefs.storedCity?.coordinates ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).map {
             prefs.getString(it, null)?.toDoubleOrNull() ?: .0
-        }
-            .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
+        }.takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
             ?.let { (lat, lng, alt) -> Coordinates(lat, lng, alt) }
     }
     runCatching {

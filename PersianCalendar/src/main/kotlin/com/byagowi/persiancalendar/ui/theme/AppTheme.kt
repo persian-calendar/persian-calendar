@@ -98,8 +98,7 @@ private fun AppColorScheme(): ColorScheme {
     val context = LocalContext.current
     val systemInDarkTheme = isSystemInDarkTheme()
     val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
-    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-    var colorScheme = if (hasDynamicColors) {
+    var colorScheme = if (theme.isDynamicColors()) {
         if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (darkTheme) DarkColorScheme else LightColorScheme
     // Handle black theme which is useful for OLED screens
@@ -107,7 +106,7 @@ private fun AppColorScheme(): ColorScheme {
 
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
-    val backgroundColor = if (hasDynamicColors) when (resolvedTheme) {
+    val backgroundColor = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
         Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_800))
         Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
@@ -147,14 +146,13 @@ val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
 private fun AppBackground(): Brush {
     val backgroundColor = MaterialTheme.colorScheme.background
     val theme by theme.collectAsState()
-    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val context = LocalContext.current
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val isGradient by isGradient.collectAsState()
     val backgroundGradientStart by animateColorAsState(
         if (!isGradient) backgroundColor
-        else if (hasDynamicColors) when (resolvedTheme) {
+        else if (theme.isDynamicColors()) when (resolvedTheme) {
             Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_500))
             Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_700))
             Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
@@ -173,7 +171,7 @@ private fun AppBackground(): Brush {
     )
     val backgroundGradientEnd by animateColorAsState(
         if (!isGradient) backgroundColor
-        else if (hasDynamicColors) when (resolvedTheme) {
+        else if (theme.isDynamicColors()) when (resolvedTheme) {
             Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_900))
             Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_900))
             Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
@@ -205,9 +203,8 @@ fun AppDayPainterColors(): DayPainterColors {
     val theme by theme.collectAsState()
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
-    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val context = LocalContext.current
-    val colorAppointments = if (hasDynamicColors) when (resolvedTheme) {
+    val colorAppointments = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
@@ -219,7 +216,7 @@ fun AppDayPainterColors(): DayPainterColors {
         Theme.MODERN -> Color(0xFF376E9F)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorHolidays = if (hasDynamicColors) when (resolvedTheme) {
+    val colorHolidays = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
@@ -231,7 +228,7 @@ fun AppDayPainterColors(): DayPainterColors {
         Theme.MODERN -> Color(0xFFE51C23)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorCurrentDay = if (hasDynamicColors) when (resolvedTheme) {
+    val colorCurrentDay = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_400))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_600))
@@ -243,7 +240,7 @@ fun AppDayPainterColors(): DayPainterColors {
         Theme.MODERN -> Color(0xFF42AFBF)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorEventIndicator = if (hasDynamicColors) when (resolvedTheme) {
+    val colorEventIndicator = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_0))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_100))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_neutral1_1000))
@@ -255,7 +252,7 @@ fun AppDayPainterColors(): DayPainterColors {
         Theme.MODERN -> Color(0xFF000000)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorTextDaySelected = if (hasDynamicColors) when (resolvedTheme) {
+    val colorTextDaySelected = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent2_0))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent2_0))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_900))
@@ -281,11 +278,10 @@ fun AppDayPainterColors(): DayPainterColors {
 @Composable
 fun AppDaySelectionColor(): Color {
     val theme by theme.collectAsState()
-    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val context = LocalContext.current
-    return if (hasDynamicColors) when (resolvedTheme) {
+    return if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_800))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_600))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_100))
@@ -302,21 +298,20 @@ fun AppDaySelectionColor(): Color {
 @Composable
 fun AppSunViewColors(): SunViewColors {
     val theme by theme.collectAsState()
-    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val context = LocalContext.current
     var nightColor = ContextCompat.getColor(
         context,
-        if (hasDynamicColors) R.color.sun_view_dynamic_night_color else R.color.sun_view_night_color
+        if (theme.isDynamicColors()) R.color.sun_view_dynamic_night_color else R.color.sun_view_night_color
     )
     var dayColor = ContextCompat.getColor(
         context,
-        if (hasDynamicColors) R.color.sun_view_dynamic_day_color else R.color.sun_view_day_color
+        if (theme.isDynamicColors()) R.color.sun_view_dynamic_day_color else R.color.sun_view_day_color
     )
     var midDayColor = ContextCompat.getColor(
         context,
-        if (hasDynamicColors) R.color.sun_view_dynamic_midday_color else R.color.sun_view_midday_color
+        if (theme.isDynamicColors()) R.color.sun_view_dynamic_midday_color else R.color.sun_view_midday_color
     )
-    if (theme == Theme.BLACK && hasDynamicColors) {
+    if (theme == Theme.BLACK && theme.isDynamicColors()) {
         nightColor = ContextCompat.getColor(context, android.R.color.system_accent1_900)
         dayColor = ContextCompat.getColor(context, android.R.color.system_accent1_800)
         midDayColor = ContextCompat.getColor(context, android.R.color.system_accent1_600)

@@ -79,6 +79,7 @@ import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
@@ -179,7 +180,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     selectedWidgetTextColor = getWidgetTextColor(prefs)
     selectedWidgetBackgroundColor = getWidgetBackgroundColor(prefs)
-    prefersWidgetsDynamicColors = Theme.isDynamicColor(prefs) &&
+    prefersWidgetsDynamicColors = theme.value.isDynamicColors() &&
             prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
 
     roundPixelSize =

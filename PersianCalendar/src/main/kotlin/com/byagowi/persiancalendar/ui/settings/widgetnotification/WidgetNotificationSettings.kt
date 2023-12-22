@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +40,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsDivider
@@ -46,7 +48,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
-import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.update
 import java.util.TimeZone
@@ -118,11 +119,13 @@ fun NotificationSettings() {
 fun WidgetConfiguration() {
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
-    val isDynamicTheme = remember { Theme.isDynamicColor(appPrefs) }
-    var preferSystemColors by remember {
-        mutableStateOf(appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, isDynamicTheme))
+    val theme by theme.collectAsState()
+    var preferSystemColors by remember(theme) {
+        mutableStateOf(
+            appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, theme.isDynamicColors())
+        )
     }
-    if (isDynamicTheme) {
+    if (theme.isDynamicColors()) {
         SettingsSwitch(
             PREF_WIDGETS_PREFER_SYSTEM_COLORS, true,
             stringResource(R.string.widget_prefer_device_colors),

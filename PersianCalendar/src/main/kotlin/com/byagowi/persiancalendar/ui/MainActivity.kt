@@ -48,6 +48,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -100,6 +101,7 @@ import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.loadLanguageResources
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.about.AboutScreen
@@ -119,7 +121,6 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.AppTheme
-import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -493,10 +494,11 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
     }
 
     val context = LocalContext.current
-    val imageFilter = remember(LocalConfiguration.current) {
+    val theme by theme.collectAsState()
+    val imageFilter = remember(LocalConfiguration.current, theme) {
         // Consider gray scale themes of Android 14
         // And apply a gray scale filter https://stackoverflow.com/a/75698731
-        if (Theme.isDynamicColor(context.appPrefs) && context.isDynamicGrayscale) {
+        if (theme.isDynamicColors() && context.isDynamicGrayscale) {
             ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
         } else null
     }
