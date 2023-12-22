@@ -134,6 +134,12 @@
             android:exported="true"
             android:launchMode="singleTop" />
 
+        <activity
+            android:name=".ui.settings.wallpaper.DreamSettingsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:launchMode="singleTop" />
+
         <receiver
             android:name=".Widget1x1"
             android:exported="false"

@@ -64,6 +64,7 @@ const val PREF_LAST_APP_VISIT_VERSION = "LastAppVisitVersion"
 const val PREF_SHOW_QIBLA_IN_COMPASS = "showQibla"
 const val PREF_TRUE_NORTH_IN_COMPASS = "trueNorth"
 const val PREF_WALLPAPER_DARK = "WallpaperDark"
+const val PREF_DREAM_NOISE = "DreamNoise"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
@@ -84,11 +85,10 @@ const val DEFAULT_SECONDARY_CALENDAR_IN_TABLE = false
 const val DEFAULT_THEME_GRADIENT = true
 const val DEFAULT_THEME_CYBERPUNK = false
 const val DEFAULT_WALLPAPER_DARK = true
+const val DEFAULT_DREAM_NOISE = false
 const val DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS = false
 const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
 
-const val LOAD_APP_ID = 1000
-const val THREE_HOURS_APP_ID = 1010
 const val ALARMS_BASE_ID = 2000
 
 const val BROADCAST_ALARM = "BROADCAST_ALARM"
