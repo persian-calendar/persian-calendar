@@ -923,99 +923,12 @@ private class Cam16
     /** b* coordinate in CAM16-UCS  */
     private val bstar: Double
 ) {
-    // Avoid allocations during conversion by pre-allocating an array.
-    private val tempArray = doubleArrayOf(0.0, 0.0, 0.0)
-
-    /**
-     * CAM16 instances also have coordinates in the CAM16-UCS space, called J*, a*, b*, or jstar,
-     * astar, bstar in code. CAM16-UCS is included in the CAM16 specification, and is used to measure
-     * distances between colors.
-     */
-    fun distance(other: Cam16): Double {
-        val dJ = jstar - other.jstar
-        val dA = astar - other.astar
-        val dB = bstar - other.bstar
-        val dEPrime = sqrt(dJ * dJ + dA * dA + dB * dB)
-        return 1.41 * dEPrime.pow(0.63)
-    }
-
-    /**
-     * ARGB representation of the color. Assumes the color was viewed in default viewing conditions,
-     * which are near-identical to the default viewing conditions for sRGB.
-     */
-    fun toInt(): Int {
-        return viewed(ViewingConditions.DEFAULT)
-    }
-
-    /**
-     * ARGB representation of the color, in defined viewing conditions.
-     *
-     * @param viewingConditions Information about the environment where the color will be viewed.
-     * @return ARGB representation of color
-     */
-    private fun viewed(viewingConditions: ViewingConditions): Int {
-        val xyz = xyzInViewingConditions(viewingConditions, tempArray)
-        return ColorUtils.argbFromXyz(xyz[0], xyz[1], xyz[2])
-    }
-
-    private fun xyzInViewingConditions(
-        viewingConditions: ViewingConditions,
-        returnArray: DoubleArray?
-    ): DoubleArray {
-        val alpha = if (chroma == 0.0 || j == 0.0) 0.0 else chroma / sqrt(
-            j / 100.0
-        )
-        val t = (alpha / (1.64 - 0.29.pow(viewingConditions.n)).pow(0.73)).pow(1.0 / 0.9)
-        val hRad = Math.toRadians(hue)
-        val eHue = 0.25 * (cos(hRad + 2.0) + 3.8)
-        val ac = (viewingConditions.aw
-                * (j / 100.0).pow(1.0 / viewingConditions.c / viewingConditions.z))
-        val p1 = eHue * (50000.0 / 13.0) * viewingConditions.nc * viewingConditions.ncb
-        val p2 = ac / viewingConditions.nbb
-        val hSin = sin(hRad)
-        val hCos = cos(hRad)
-        val gamma = 23.0 * (p2 + 0.305) * t / (23.0 * p1 + 11.0 * t * hCos + 108.0 * t * hSin)
-        val a = gamma * hCos
-        val b = gamma * hSin
-        val rA = (460.0 * p2 + 451.0 * a + 288.0 * b) / 1403.0
-        val gA = (460.0 * p2 - 891.0 * a - 261.0 * b) / 1403.0
-        val bA = (460.0 * p2 - 220.0 * a - 6300.0 * b) / 1403.0
-        val rCBase = max(0.0, 27.13 * abs(rA) / (400.0 - abs(rA)))
-        val rC = sign(rA) * (100.0 / viewingConditions.fl) * rCBase.pow(1.0 / 0.42)
-        val gCBase = max(0.0, 27.13 * abs(gA) / (400.0 - abs(gA)))
-        val gC = sign(gA) * (100.0 / viewingConditions.fl) * gCBase.pow(1.0 / 0.42)
-        val bCBase = max(0.0, 27.13 * abs(bA) / (400.0 - abs(bA)))
-        val bC = sign(bA) * (100.0 / viewingConditions.fl) * bCBase.pow(1.0 / 0.42)
-        val rF = rC / viewingConditions.rgbD[0]
-        val gF = gC / viewingConditions.rgbD[1]
-        val bF = bC / viewingConditions.rgbD[2]
-        val matrix = CAM16RGB_TO_XYZ
-        val x = rF * matrix[0][0] + gF * matrix[0][1] + bF * matrix[0][2]
-        val y = rF * matrix[1][0] + gF * matrix[1][1] + bF * matrix[1][2]
-        val z = rF * matrix[2][0] + gF * matrix[2][1] + bF * matrix[2][2]
-        return if (returnArray != null) {
-            returnArray[0] = x
-            returnArray[1] = y
-            returnArray[2] = z
-            returnArray
-        } else {
-            doubleArrayOf(x, y, z)
-        }
-    }
-
     companion object {
         // Transforms XYZ color space coordinates to 'cone'/'RGB' responses in CAM16.
         val XYZ_TO_CAM16RGB = arrayOf(
             doubleArrayOf(0.401288, 0.650173, -0.051461),
             doubleArrayOf(-0.250268, 1.204414, 0.045854),
             doubleArrayOf(-0.002079, 0.048952, 0.953127)
-        )
-
-        // Transforms 'cone'/'RGB' responses in CAM16 to XYZ color space coordinates.
-        val CAM16RGB_TO_XYZ = arrayOf(
-            doubleArrayOf(1.8620678, -1.0112547, 0.14918678),
-            doubleArrayOf(0.38752654, 0.62144744, -0.00897398),
-            doubleArrayOf(-0.01584150, -0.03412294, 1.0499644)
         )
 
         /**
@@ -1252,15 +1165,6 @@ private object ColorUtils {
         doubleArrayOf(0.2126, 0.7152, 0.0722),
         doubleArrayOf(0.01932141, 0.11916382, 0.95034478)
     )
-    private val XYZ_TO_SRGB = arrayOf(
-        doubleArrayOf(
-            3.2413774792388685, -1.5376652402851851, -0.49885366846268053
-        ), doubleArrayOf(
-            -0.9691452513005321, 1.8758853451067872, 0.04156585616912061
-        ), doubleArrayOf(
-            0.05562093689691305, -0.20395524564742123, 1.0571799111220335
-        )
-    )
     private val WHITE_POINT_D65 = doubleArrayOf(95.047, 100.0, 108.883)
 
     /** Converts a color from RGB components to ARGB format.  */
@@ -1289,18 +1193,6 @@ private object ColorUtils {
     /** Returns the blue component of a color in ARGB format.  */
     private fun blueFromArgb(argb: Int): Int {
         return argb and 255
-    }
-
-    /** Converts a color from ARGB to XYZ.  */
-    fun argbFromXyz(x: Double, y: Double, z: Double): Int {
-        val matrix = XYZ_TO_SRGB
-        val linearR = matrix[0][0] * x + matrix[0][1] * y + matrix[0][2] * z
-        val linearG = matrix[1][0] * x + matrix[1][1] * y + matrix[1][2] * z
-        val linearB = matrix[2][0] * x + matrix[2][1] * y + matrix[2][2] * z
-        val r = delinearized(linearR)
-        val g = delinearized(linearG)
-        val b = delinearized(linearB)
-        return argbFromRgb(r, g, b)
     }
 
     /** Converts a color from XYZ to ARGB.  */
