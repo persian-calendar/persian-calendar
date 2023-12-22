@@ -93,7 +93,6 @@ import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
@@ -142,8 +141,7 @@ import java.util.Date
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        Theme.apply(this)
+        setTheme(R.style.BaseTheme)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
 
@@ -185,7 +183,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET -> prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
-            PREF_THEME -> Theme.apply(this)
             PREF_PRAY_TIME_METHOD -> prefs.edit { remove(PREF_MIDNIGHT_METHOD) }
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {

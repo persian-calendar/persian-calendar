@@ -69,18 +69,18 @@ class PersianCalendarDreamService : DreamService() {
             it.setOnClickListener { wakeUp() }
         }
 
-        val button = ImageView(ContextThemeWrapper(this, R.style.LightTheme))
-        run {
-            button.setImageResource(R.drawable.ic_play)
-            var play = false
-            button.setOnClickListener { _ ->
-                runCatching {
-                    play = !play
-                    if (play) audioTrack.play() else audioTrack.pause()
-                    button.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
-                }.onFailure(logException).onFailure { button.isVisible = false }
-            }
-        }
+//        val button = ImageView(ContextThemeWrapper(this, R.style.LightTheme))
+//        run {
+//            button.setImageResource(R.drawable.ic_play)
+//            var play = false
+//            button.setOnClickListener { _ ->
+//                runCatching {
+//                    play = !play
+//                    if (play) audioTrack.play() else audioTrack.pause()
+//                    button.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
+//                }.onFailure(logException).onFailure { button.isVisible = false }
+//            }
+//        }
 
 //        // Make the play/stop button movable using ViewDragHelper and ViewGroup
 //        val screen = object : ViewGroup(this) {

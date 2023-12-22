@@ -19,26 +19,11 @@
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
     </style>
 
-    <style name="BaseDarkTheme" parent="android:Theme.Material.NoActionBar" />
-
-    <style name="BaseLightTheme" parent="android:Theme.Material.Light.NoActionBar" />
-
-    <!-- Applied to all themes -->
-    <style name="SharedStyle">
+    <style name="BaseTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="android:typeface">sans</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
-
-    <style name="DarkTheme" parent="BaseDarkTheme" />
-
-    <style name="BlackTheme" parent="BaseDarkTheme" />
-
-    <style name="LightTheme" parent="BaseLightTheme" />
-
-    <style name="AquaTheme" parent="BaseLightTheme" />
-
-    <style name="ModernTheme" parent="BaseLightTheme" />
 
     <!-- But in v31/styles.xml it is overridden to not have shadow -->
     <style name="WidgetTextStyle">

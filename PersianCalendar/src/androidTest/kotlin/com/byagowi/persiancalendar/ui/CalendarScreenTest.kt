@@ -21,7 +21,7 @@ class CalendarScreenTest {
     private fun ComposeContentTestRule.setContentWithTheme(body: @Composable () -> Unit) {
         setContent {
             val context = LocalContext.current
-            context.setTheme(R.style.LightTheme); context.setTheme(R.style.SharedStyle)
+            context.setTheme(R.style.LightTheme); context.setTheme(R.style.BaseTheme)
             body()
         }
     }
