@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="appTheme">
-        <attr name="sunViewNightColor" format="reference" />
-        <attr name="sunViewDayColor" format="reference" />
-        <attr name="sunViewMidDayColor" format="reference" />
-    </declare-styleable>
-</resources>

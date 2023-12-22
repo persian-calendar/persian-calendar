@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="sun_view_widget_day_color">@android:color/system_accent1_600</color>
-    <color name="sun_view_widget_midday_color">@android:color/system_accent1_400</color>
-    <color name="sun_view_widget_night_color">@android:color/system_accent1_800</color>
+    <color name="sun_view_dynamic_day_color">@android:color/system_accent1_600</color>
+    <color name="sun_view_dynamic_midday_color">@android:color/system_accent1_400</color>
+    <color name="sun_view_dynamic_night_color">@android:color/system_accent1_800</color>
     <color name="remote_view_holiday_color">@android:color/system_accent1_300</color>
 </resources>

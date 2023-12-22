@@ -18,16 +18,13 @@
     <color name="remote_view_holiday_color">#ff8a65</color>
 
     <!-- == SunView == -->
-    <color name="sun_view_sunrise_text_color">#FF9800</color>
-    <color name="sun_view_midday_text_color">#FFC107</color>
-    <color name="sun_view_sunset_text_color">#F22424</color>
     <color name="sun_view_night_color">#383C7C</color>
     <color name="sun_view_day_color">#74BBEF</color>
     <color name="sun_view_midday_color">#B2D5F1</color>
     <!-- override of these exist in values-v31/colors.xml -->
-    <color name="sun_view_widget_night_color">@color/sun_view_night_color</color>
-    <color name="sun_view_widget_day_color">@color/sun_view_day_color</color>
-    <color name="sun_view_widget_midday_color">@color/sun_view_midday_color</color>
+    <color name="sun_view_dynamic_night_color">@color/sun_view_night_color</color>
+    <color name="sun_view_dynamic_day_color">@color/sun_view_day_color</color>
+    <color name="sun_view_dynamic_midday_color">@color/sun_view_midday_color</color>
 
     <!-- == Level == -->
     <color name="black_reflect">#FF666666</color>

@@ -27,6 +27,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.applyCanvas
@@ -84,6 +85,7 @@ import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
@@ -334,7 +336,29 @@ private fun createSunViewRemoteViews(
         prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
-    val sunView = SunView(context, textColor = color)
+    val sunView = SunView(context)
+    sunView.colors = SunViewColors(
+        nightColor = ContextCompat.getColor(
+            context,
+            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_night_color
+            else R.color.sun_view_night_color
+        ),
+        dayColor = ContextCompat.getColor(
+            context,
+            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_day_color
+            else R.color.sun_view_day_color
+        ),
+        middayColor = ContextCompat.getColor(
+            context,
+            if (prefersWidgetsDynamicColors) R.color.sun_view_dynamic_midday_color
+            else R.color.sun_view_midday_color
+        ),
+        sunriseTextColor = color,
+        middayTextColor = color,
+        sunsetTextColor = color,
+        textColorSecondary = color,
+        linesColor = ColorUtils.setAlphaComponent(color, 0x60)
+    )
     remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForRendering(sunView, width, height)
     sunView.prayTimes = prayTimes

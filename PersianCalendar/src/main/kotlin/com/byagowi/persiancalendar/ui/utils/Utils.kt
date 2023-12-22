@@ -26,7 +26,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.material3.AlertDialog
@@ -41,7 +40,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ShareCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.graphics.drawable.toDrawable
@@ -127,16 +125,6 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 // Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
 tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
-
-/**
- * Returns the color int for the provided theme color attribute
- *
- * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L92
- */
-@ColorInt
-fun Context.resolveColor(@AttrRes attributeResId: Int): Int {
-    return ContextCompat.getColor(this, resolveResourceIdFromTheme(attributeResId))
-}
 
 /**
  * Turns an attribute to a resource id from the theme

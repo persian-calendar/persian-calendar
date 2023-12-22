@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.ButtonsBar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.common.MoonView
+import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
 import com.byagowi.persiancalendar.ui.utils.MaterialIconDimension
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -135,9 +136,11 @@ private fun AstronomicalOverview(
             fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
         },
     ) { state ->
+        val sunViewColors = AppSunViewColors()
         if (state) AndroidView(
             factory = ::SunView,
             update = {
+                it.colors = sunViewColors
                 it.prayTimes = prayTimes
                 it.setTime(now)
                 if (sunViewNeedsAnimation) {

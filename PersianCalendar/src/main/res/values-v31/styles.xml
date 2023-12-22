@@ -9,28 +9,12 @@
 
     <style name="WidgetTextStyle" />
 
-    <style name="DynamicLightTheme" parent="BaseLightTheme">
-        <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
-    </style>
+    <style name="DynamicLightTheme" parent="BaseLightTheme" />
 
-    <style name="DynamicDarkTheme" parent="BaseDarkTheme">
-        <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
-    </style>
+    <style name="DynamicDarkTheme" parent="BaseDarkTheme" />
 
-    <style name="DynamicBlackTheme" parent="DynamicDarkTheme">
-        <item name="sunViewNightColor">@android:color/system_accent1_900</item>
-        <item name="sunViewDayColor">@android:color/system_accent1_800</item>
-        <item name="sunViewMidDayColor">@android:color/system_accent1_600</item>
-    </style>
+    <style name="DynamicBlackTheme" parent="DynamicDarkTheme" />
 
-    <style name="DynamicModernTheme" parent="BaseLightTheme">
-        <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
-    </style>
+    <style name="DynamicModernTheme" parent="BaseLightTheme" />
 
 </resources>

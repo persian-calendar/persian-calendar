@@ -3,17 +3,13 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
-import android.util.AttributeSet
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
@@ -23,7 +19,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
@@ -35,36 +30,25 @@ import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt
 
+data class SunViewColors(
+    @ColorInt val nightColor: Int,
+    @ColorInt val dayColor: Int,
+    @ColorInt val middayColor: Int,
+    @ColorInt val sunriseTextColor: Int,
+    @ColorInt val middayTextColor: Int,
+    @ColorInt val sunsetTextColor: Int,
+    @ColorInt val textColorSecondary: Int,
+    @ColorInt val linesColor: Int,
+)
+
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class SunView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, @ColorInt textColor: Int? = null
-) : View(context, attrs) {
-
+class SunView(context: Context) : View(context) {
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
-    private val linesColor = ColorUtils.setAlphaComponent(textColor ?: Color.GRAY, 0x60)
-    private val isInWidgetRender = textColor != null
-    private val nightColor =
-        if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_night_color)
-        else context.resolveColor(R.attr.sunViewNightColor)
-    private val dayColor =
-        if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_day_color)
-        else context.resolveColor(R.attr.sunViewDayColor)
-    private val midDayColor =
-        if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_midday_color)
-        else context.resolveColor(R.attr.sunViewMidDayColor)
-    private val sunriseTextColor =
-        textColor ?: ContextCompat.getColor(context, R.color.sun_view_sunrise_text_color)
-    private val middayTextColor =
-        textColor ?: ContextCompat.getColor(context, R.color.sun_view_midday_text_color)
-    private val sunsetTextColor =
-        textColor ?: ContextCompat.getColor(context, R.color.sun_view_sunset_text_color)
-    private val textColorSecondary =
-        textColor ?: context.resolveColor(android.R.attr.textColorSecondary)
 
     internal var width: Int = 0
     internal var height: Int = 0
@@ -93,14 +77,17 @@ class SunView @JvmOverloads constructor(
         invalidate()
     }
 
+    var colors: SunViewColors? = null
+
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
+        val colors = colors ?: return
 
         width = w
         height = h - 18
 
         dayPaint.shader = LinearGradient(
-            width * .17f, 0f, width / 2f, 0f, dayColor, midDayColor,
+            width * .17f, 0f, width / 2f, 0f, colors.dayColor, colors.middayColor,
             Shader.TileMode.MIRROR
         )
 
@@ -133,6 +120,7 @@ class SunView @JvmOverloads constructor(
     var clippingPath = Path()
 
     private fun mainDraw(canvas: Canvas) {
+        val colors = colors ?: return
         val animatedFraction = if (animator.isRunning) animator.animatedFraction else 1f
         val value = animatedFraction * current
         val width = width
@@ -143,7 +131,7 @@ class SunView @JvmOverloads constructor(
             withClip(0f, height * .75f, width * value, height.toFloat()) {
                 paint.also {
                     it.style = Paint.Style.FILL
-                    it.color = nightColor
+                    it.color = colors.nightColor
                 }
                 drawPath(nightPath, paint)
             }
@@ -157,7 +145,7 @@ class SunView @JvmOverloads constructor(
             paint.also {
                 it.strokeWidth = 3f
                 it.style = Paint.Style.STROKE
-                it.color = linesColor
+                it.color = colors.linesColor
             }
             drawPath(curvePath, paint)
             // draw horizon line
@@ -189,14 +177,14 @@ class SunView @JvmOverloads constructor(
             it.textSize = fontSize
             it.strokeWidth = 0f
             it.style = Paint.Style.FILL
-            it.color = sunriseTextColor
+            it.color = colors.sunriseTextColor
         }
         canvas.drawText(
             sunriseString, width * if (isRtl) .83f else .17f, height * .2f, paint
         )
-        paint.color = middayTextColor
+        paint.color = colors.middayTextColor
         canvas.drawText(middayString, width / 2f, height * .94f, paint)
-        paint.color = sunsetTextColor
+        paint.color = colors.sunsetTextColor
         canvas.drawText(
             sunsetString, width * if (isRtl) .17f else .83f, height * .2f, paint
         )
@@ -206,7 +194,7 @@ class SunView @JvmOverloads constructor(
             it.textAlign = Paint.Align.CENTER
             it.strokeWidth = 0f
             it.style = Paint.Style.FILL
-            it.color = textColorSecondary
+            it.color = colors.textColorSecondary
         }
         canvas.drawText(
             dayLengthString, width * if (isRtl) .70f else .30f, height * .94f, paint
@@ -262,11 +250,6 @@ class SunView @JvmOverloads constructor(
     fun startAnimate() {
         initiate()
         animator.start()
-    }
-
-    fun clear() {
-        current = 0f
-        invalidate()
     }
 
     companion object {

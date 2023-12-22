@@ -19,17 +19,9 @@
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
     </style>
 
-    <style name="BaseDarkTheme" parent="android:Theme.Material.NoActionBar">
-        <item name="sunViewNightColor">@color/sun_view_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-    </style>
+    <style name="BaseDarkTheme" parent="android:Theme.Material.NoActionBar" />
 
-    <style name="BaseLightTheme" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="sunViewNightColor">@color/sun_view_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-    </style>
+    <style name="BaseLightTheme" parent="android:Theme.Material.Light.NoActionBar" />
 
     <!-- Applied to all themes -->
     <style name="SharedStyle">

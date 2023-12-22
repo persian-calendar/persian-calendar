@@ -37,13 +37,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
+import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
@@ -293,6 +297,40 @@ fun AppDaySelectionColor(): Color {
         Theme.MODERN -> Color(0xFFDDDEE2)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
+}
+
+@Composable
+fun AppSunViewColors(): SunViewColors {
+    val theme by theme.collectAsState()
+    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val context = LocalContext.current
+    var nightColor = ContextCompat.getColor(
+        context,
+        if (hasDynamicColors) R.color.sun_view_dynamic_night_color else R.color.sun_view_night_color
+    )
+    var dayColor = ContextCompat.getColor(
+        context,
+        if (hasDynamicColors) R.color.sun_view_dynamic_day_color else R.color.sun_view_day_color
+    )
+    var midDayColor = ContextCompat.getColor(
+        context,
+        if (hasDynamicColors) R.color.sun_view_dynamic_midday_color else R.color.sun_view_midday_color
+    )
+    if (theme == Theme.BLACK && hasDynamicColors) {
+        nightColor = ContextCompat.getColor(context, android.R.color.system_accent1_900)
+        dayColor = ContextCompat.getColor(context, android.R.color.system_accent1_800)
+        midDayColor = ContextCompat.getColor(context, android.R.color.system_accent1_600)
+    }
+    return SunViewColors(
+        nightColor = nightColor,
+        dayColor = dayColor,
+        middayColor = midDayColor,
+        sunriseTextColor = 0xFFFF9800.toInt(),
+        middayTextColor = 0xFFFFC107.toInt(),
+        sunsetTextColor = 0xFFF22424.toInt(),
+        textColorSecondary = LocalContentColor.current.copy(alpha = AppBlendAlpha).toArgb(),
+        linesColor = 0x60888888,
+    )
 }
 
 // Best effort theme matching system, used for widget and wallpaper configuration screen meant to
