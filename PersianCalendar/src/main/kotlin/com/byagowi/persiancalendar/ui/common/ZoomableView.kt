@@ -165,6 +165,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        parent?.requestDisallowInterceptTouchEvent(true)
         scaleDetector.onTouchEvent(event)
         flingDetector.onTouchEvent(event)
         when (event.action) {

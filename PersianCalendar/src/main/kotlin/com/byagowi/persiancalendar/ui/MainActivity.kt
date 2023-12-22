@@ -248,11 +248,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     ModalNavigationDrawer(
-        gesturesEnabled = when (navBackStackEntry?.destination?.route) {
-            // As these screens slider drags and interactions collide with drawer, till a better solution
-            astronomyRoute, mapRoute -> false
-            else -> true
-        },
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {

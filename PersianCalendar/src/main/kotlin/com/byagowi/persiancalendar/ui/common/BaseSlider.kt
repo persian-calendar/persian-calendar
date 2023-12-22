@@ -35,6 +35,7 @@ open class BaseSlider(context: Context, attrs: AttributeSet? = null) : View(cont
     }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        parent?.requestDisallowInterceptTouchEvent(true)
         flingDetector.onTouchEvent(event)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
