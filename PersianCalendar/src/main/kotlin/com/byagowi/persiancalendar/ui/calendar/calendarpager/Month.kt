@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -53,7 +52,8 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.theme.DaySelectionColor
+import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
+import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -82,10 +82,14 @@ fun Month(
     val invalidationFlow = remember { MutableStateFlow(0) }
     if (isCurrentSelection) ++invalidationFlow.value
     val invalidationToken by invalidationFlow.collectAsState()
-    val indicatorColor = DaySelectionColor()
+    val indicatorColor = AppDaySelectionColor()
     val mediumAnimTime = integerResource(android.R.integer.config_mediumAnimTime)
     val shortAnimTime = integerResource(android.R.integer.config_shortAnimTime)
-    val selectionIndicator = remember(indicatorColor) {
+    // New indicator for every launch, needed when a day is selected and we are
+    // coming back from other screens
+    var launchId by remember { mutableStateOf(0) }
+    LaunchedEffect(Unit) { ++launchId }
+    val selectionIndicator = remember(indicatorColor, launchId) {
         SelectionIndicator(mediumAnimTime, shortAnimTime, indicatorColor) {
             ++invalidationFlow.value
         }
@@ -127,9 +131,9 @@ fun Month(
     val heightPixels = with(LocalDensity.current) { height.toPx() }
     val cellPixelsWidth = widthPixels / columnsCount
     val cellPixelsHeight = heightPixels / rowsCount
-    val contentColor = LocalContentColor.current
-    val dayPainter = remember(height, width, refreshToken, contentColor) {
-        DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl, contentColor.toArgb())
+    val dayPainterColors = AppDayPainterColors()
+    val dayPainter = remember(height, width, refreshToken, dayPainterColors) {
+        DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl, dayPainterColors)
     }
     val halfDp = with(LocalDensity.current) { .5f.dp.toPx() }
 

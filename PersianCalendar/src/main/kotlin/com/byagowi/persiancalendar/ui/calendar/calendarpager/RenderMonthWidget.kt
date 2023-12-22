@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.View
-import androidx.annotation.ColorInt
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withTranslation
 import androidx.core.text.layoutDirection
@@ -28,7 +27,7 @@ import kotlin.math.min
 
 fun renderMonthWidget(
     context: Context,
-    @ColorInt textColor: Int,
+    colors: DayPainterColors,
     width: Int,
     height: Int
 ): Pair<Bitmap, String> {
@@ -47,7 +46,7 @@ fun renderMonthWidget(
 
     val isRtl =
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
-    val dayPainter = DayPainter(context, cellWidth, cellHeight, isRtl, textColor, textColor)
+    val dayPainter = DayPainter(context, cellWidth, cellHeight, isRtl, colors, true)
 
     val monthDeviceEvents =
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
@@ -112,7 +111,7 @@ fun renderMonthWidget(
         val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.textAlign = Paint.Align.CENTER
             it.textSize = diameter * 20 / 40
-            it.color = textColor
+            it.color = colors.contentColor
             it.alpha = 90
         }
         it.drawText(footer, width / 2f, height * .95f, footerPaint)

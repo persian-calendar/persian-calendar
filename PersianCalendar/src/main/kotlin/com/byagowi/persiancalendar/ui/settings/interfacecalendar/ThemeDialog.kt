@@ -12,6 +12,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -27,6 +28,7 @@ import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -48,7 +50,8 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             }
         },
         neutralButton = {
-            if (Theme.supportsGradient(context)) {
+            val theme by theme.collectAsState()
+            if (theme.hasGradient) {
                 var isChecked by rememberSaveable {
                     mutableStateOf(
                         context.appPrefs.getBoolean(

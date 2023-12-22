@@ -14,32 +14,6 @@
     <color name="widget_divider">#46ffffff</color>
     <color name="widget_refresh_icon_color">#ddd</color>
 
-    <color name="dark_primary">#2F3133</color>
-    <color name="dark_accent">#74BBEF</color>
-    <color name="dark_holiday">#e65100</color>
-    <color name="dark_current_day">#82B1FF</color>
-    <color name="dark_event_indicator">#e0e0e0</color>
-
-    <color name="black_primary">#000000</color>
-    <color name="black_holiday">#e65100</color>
-    <color name="black_current_day">#82B1FF</color>
-    <color name="black_event_indicator">#e0e0e0</color>
-
-    <color name="light_holiday">#ff8a65</color>
-    <color name="light_current_day">#ff7043</color>
-    <color name="light_event_indicator">#eff2f1</color>
-
-    <color name="aqua_holiday">#ff8a65</color>
-    <color name="aqua_current_day">#ff7043</color>
-    <color name="aqua_event_indicator">#eff2f1</color>
-
-    <color name="modern_primary">#fafafa</color>
-    <color name="modern_accent">#376E9F</color>
-    <color name="modern_holiday">#E51C23</color>
-    <color name="modern_surface_background">#fafafa</color>
-    <color name="modern_current_day">#42AFBF</color>
-    <color name="modern_event_indicator">#000000</color>
-
     <!-- override of these exist in values-v31/colors.xml -->
     <color name="remote_view_holiday_color">#ff8a65</color>
 

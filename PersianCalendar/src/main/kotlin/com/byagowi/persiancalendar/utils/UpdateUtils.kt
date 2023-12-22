@@ -16,7 +16,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
-import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
@@ -28,7 +27,6 @@ import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.applyCanvas
@@ -83,6 +81,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -366,20 +365,27 @@ private fun createSunViewRemoteViews(
     return remoteViews
 }
 
-private fun createMonthViewRemoteViews(
-    context: Context, width: Int, height: Int
-): RemoteViews {
+private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
 
-    val widgetTheme = Theme.getWidgetSuitableStyle(context, prefersWidgetsDynamicColors)
-    val color = when {
+    val contentColor = when {
         prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
-    val (bitmap, contentDescription) = renderMonthWidget(
-        ContextThemeWrapper(context, widgetTheme), color, width, height
+    val colors = DayPainterColors(
+        contentColor = contentColor,
+        colorAppointments =
+        if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
+        else 0xFF376E9F.toInt(),
+        colorHolidays =
+        if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
+        else 0xFFE51C23.toInt(),
+        colorEventIndicator = contentColor,
+        colorCurrentDay = contentColor,
+        colorTextDaySelected = contentColor,
     )
+    val (bitmap, contentDescription) = renderMonthWidget(context, colors, width, height)
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)
 
@@ -680,10 +686,8 @@ private fun setEventsInWidget(
     ) else ""
     remoteViews.setTextViewTextOrHideIfEmpty(eventsId, nonHolidays)
 
-    if (!prefersWidgetsDynamicColors) remoteViews.setInt(
-        holidaysId, "setTextColor",
-        ContextCompat.getColor(context, R.color.light_holiday)
-    )
+    if (!prefersWidgetsDynamicColors)
+        remoteViews.setInt(holidaysId, "setTextColor", 0xFFFF8A65.toInt())
 }
 
 private var latestPostedNotification: NotificationData? = null

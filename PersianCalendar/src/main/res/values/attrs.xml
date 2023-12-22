@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="appTheme">
-        <attr name="colorAppointment" format="reference" />
-        <attr name="colorHoliday" format="reference" />
-        <attr name="colorCurrentDay" format="reference" />
-        <attr name="colorEventIndicator" format="reference" />
-        <attr name="colorTextDaySelected" format="reference" />
         <attr name="sunViewNightColor" format="reference" />
         <attr name="sunViewDayColor" format="reference" />
         <attr name="sunViewMidDayColor" format="reference" />

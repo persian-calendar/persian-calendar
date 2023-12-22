@@ -19,21 +19,32 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import kotlin.math.min
+
+data class DayPainterColors(
+    @ColorInt val contentColor: Int,
+    @ColorInt val colorAppointments: Int,
+    @ColorInt val colorHolidays: Int,
+    @ColorInt val colorEventIndicator: Int,
+    @ColorInt val colorCurrentDay: Int,
+    @ColorInt val colorTextDaySelected: Int,
+) {
+    @ColorInt
+    val colorTextDayName = ColorUtils.setAlphaComponent(contentColor, 0xCC)
+}
 
 class DayPainter(
     context: Context,
     private val width: Float,
     private val height: Float,
     private val isRtl: Boolean,
-    @ColorInt currentColor: Int,
-    @ColorInt widgetTextColor: Int? = null
+    colors: DayPainterColors,
+    isWidget: Boolean = false,
 ) {
-    private val paints = Paints(context, min(width, height), currentColor, widgetTextColor)
+    private val paints = Paints(context, min(width, height), colors, isWidget)
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -151,9 +162,7 @@ class DayPainter(
 }
 
 private class Paints(
-    context: Context, diameter: Float,
-    @ColorInt private val currentColor: Int,
-    @ColorInt private val widgetTextColor: Int? = null
+    context: Context, diameter: Float, colors: DayPainterColors, isWidget: Boolean
 ) {
     private val dp = context.resources.dp
     val todayCirclePadding = .5f * dp
@@ -165,21 +174,21 @@ private class Paints(
     val scorpioSign = context.getString(R.string.scorpio).first() + if (isArabicScript) ZWJ else ""
 
     private fun addShadowIfNeeded(paint: Paint) {
-        if (widgetTextColor == null || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) return
-        paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+            paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resolveColor(R.attr.colorAppointment)
+        it.color = colors.colorAppointments
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = widgetTextColor ?: context.resolveColor(R.attr.colorEventIndicator)
+        it.color = colors.colorEventIndicator
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1 * dp
-        it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
+        it.color = colors.colorCurrentDay
     }
 
     private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
@@ -193,53 +202,46 @@ private class Paints(
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = context.resolveColor(R.attr.colorHoliday)
-        addShadowIfNeeded(it)
+        it.color = colors.colorHolidays
+        if (isWidget) addShadowIfNeeded(it)
     }
 
-    private val colorTextDay = widgetTextColor ?: currentColor
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colorTextDay
-        addShadowIfNeeded(it)
+        it.color = colors.contentColor
+        if (isWidget) addShadowIfNeeded(it)
     }
 
-    private val colorTextDaySelected =
-        widgetTextColor ?: context.resolveColor(R.attr.colorTextDaySelected)
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colorTextDaySelected
-        addShadowIfNeeded(it)
+        it.color = colors.colorTextDaySelected
+        if (isWidget) addShadowIfNeeded(it)
     }
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colorTextDaySelected
-        addShadowIfNeeded(it)
+        it.color = colors.colorTextDaySelected
+        if (isWidget) addShadowIfNeeded(it)
     }
 
-    private val colorTextDayName = ColorUtils.setAlphaComponent(
-        widgetTextColor ?: currentColor,
-        0xCC
-    )
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colorTextDayName
-        addShadowIfNeeded(it)
+        it.color = colors.colorTextDayName
+        if (isWidget) addShadowIfNeeded(it)
     }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colorTextDayName
-        addShadowIfNeeded(it)
+        it.color = colors.colorTextDayName
+        if (isWidget) addShadowIfNeeded(it)
     }
     val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = diameter * 20 / 40
-        it.color = colorTextDayName
-        addShadowIfNeeded(it)
+        it.color = colors.colorTextDayName
+        if (isWidget) addShadowIfNeeded(it)
     }
 }

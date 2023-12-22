@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
@@ -42,6 +43,7 @@ import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
@@ -194,7 +196,86 @@ private fun AppBackground(): Brush {
 }
 
 @Composable
-fun DaySelectionColor(): Color {
+fun AppDayPainterColors(): DayPainterColors {
+    val contentColor = LocalContentColor.current
+    val theme by theme.collectAsState()
+    val resolvedTheme =
+        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
+    val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+    val context = LocalContext.current
+    val colorAppointments = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
+        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFF74BBEF)
+        Theme.DARK, Theme.BLACK -> Color(0xFF74BBEF)
+        Theme.AQUA -> Color(0xFF74BBEF)
+        Theme.MODERN -> Color(0xFF376E9F)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    val colorHolidays = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
+        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFFFF8A65)
+        Theme.DARK, Theme.BLACK -> Color(0xFFE65100)
+        Theme.AQUA -> Color(0xFFFF8A65)
+        Theme.MODERN -> Color(0xFFE51C23)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    val colorCurrentDay = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_400))
+        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_600))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFFFF7043)
+        Theme.DARK, Theme.BLACK -> Color(0xFF82B1FF)
+        Theme.AQUA -> Color(0xFFFF7043)
+        Theme.MODERN -> Color(0xFF42AFBF)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    val colorEventIndicator = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_0))
+        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_100))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_neutral1_1000))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFFEFF2F1)
+        Theme.DARK, Theme.BLACK -> Color(0xFFE0E0E0)
+        Theme.AQUA -> Color(0xFFEFF2F1)
+        Theme.MODERN -> Color(0xFF000000)
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    val colorTextDaySelected = if (hasDynamicColors) when (resolvedTheme) {
+        Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent2_0))
+        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent2_0))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_900))
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    } else when (resolvedTheme) {
+        Theme.LIGHT -> Color(0xFF2F3133)
+        Theme.DARK -> Color(0xFF2F3133)
+        Theme.BLACK -> Color.Black
+        Theme.AQUA -> Color(0xFF2F3133)
+        Theme.MODERN -> Color.Black
+        else -> null.debugAssertNotNull ?: Color.Transparent
+    }
+    return DayPainterColors(
+        contentColor = contentColor.toArgb(),
+        colorAppointments = colorAppointments.toArgb(),
+        colorHolidays = colorHolidays.toArgb(),
+        colorCurrentDay = colorCurrentDay.toArgb(),
+        colorEventIndicator = colorEventIndicator.toArgb(),
+        colorTextDaySelected = colorTextDaySelected.toArgb(),
+    )
+}
+
+@Composable
+fun AppDaySelectionColor(): Color {
     val theme by theme.collectAsState()
     val hasDynamicColors = theme.hasDynamicColors && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
     val resolvedTheme =

@@ -38,50 +38,15 @@
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
-    <style name="DarkTheme" parent="BaseDarkTheme">
-        <item name="colorHoliday">@color/dark_holiday</item>
-        <item name="colorCurrentDay">@color/dark_current_day</item>
-        <item name="colorEventIndicator">@color/dark_event_indicator</item>
+    <style name="DarkTheme" parent="BaseDarkTheme" />
 
-        <item name="colorTextDaySelected">@color/dark_primary</item>
-        <item name="colorAppointment">@color/dark_accent</item>
-    </style>
+    <style name="BlackTheme" parent="BaseDarkTheme" />
 
-    <style name="BlackTheme" parent="BaseDarkTheme">
-        <item name="colorHoliday">@color/black_holiday</item>
-        <item name="colorCurrentDay">@color/black_current_day</item>
-        <item name="colorEventIndicator">@color/black_event_indicator</item>
+    <style name="LightTheme" parent="BaseLightTheme" />
 
-        <item name="colorTextDaySelected">@color/black_primary</item>
-        <item name="colorAppointment">@color/dark_accent</item>
-    </style>
+    <style name="AquaTheme" parent="BaseLightTheme" />
 
-    <style name="LightTheme" parent="BaseLightTheme">
-        <item name="colorHoliday">@color/light_holiday</item>
-        <item name="colorCurrentDay">@color/light_current_day</item>
-        <item name="colorEventIndicator">@color/light_event_indicator</item>
-
-        <item name="colorTextDaySelected">@color/dark_primary</item>
-        <item name="colorAppointment">@color/dark_accent</item>
-    </style>
-
-    <style name="AquaTheme" parent="BaseLightTheme">
-        <item name="colorHoliday">@color/aqua_holiday</item>
-        <item name="colorCurrentDay">@color/aqua_current_day</item>
-        <item name="colorEventIndicator">@color/aqua_event_indicator</item>
-
-        <item name="colorTextDaySelected">@color/dark_primary</item>
-        <item name="colorAppointment">@color/dark_accent</item>
-    </style>
-
-    <style name="ModernTheme" parent="BaseLightTheme">
-        <item name="colorHoliday">@color/modern_holiday</item>
-        <item name="colorCurrentDay">@color/modern_current_day</item>
-        <item name="colorEventIndicator">@color/modern_event_indicator</item>
-
-        <item name="colorTextDaySelected">@android:color/black</item>
-        <item name="colorAppointment">@color/modern_accent</item>
-    </style>
+    <style name="ModernTheme" parent="BaseLightTheme" />
 
     <!-- But in v31/styles.xml it is overridden to not have shadow -->
     <style name="WidgetTextStyle">
