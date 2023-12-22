@@ -67,7 +67,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 
         val contentColor by animateColorAsState(
             MaterialTheme.colorScheme.onBackground,
-            animationSpec = colorAnimationSpec,
+            animationSpec = appColorAnimationSpec,
             label = "content color"
         )
 
@@ -141,7 +141,7 @@ private fun AppShapes(): Shapes {
     ) else MaterialTheme.shapes
 }
 
-private val colorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessLow)
+val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
 
 @Composable
 private fun AppBackground(): Brush {
@@ -169,7 +169,7 @@ private fun AppBackground(): Brush {
             else -> null.debugAssertNotNull ?: Color.Transparent
         },
         label = "gradient start color",
-        animationSpec = colorAnimationSpec,
+        animationSpec = appColorAnimationSpec,
     )
     val backgroundGradientEnd by animateColorAsState(
         if (!isGradient) backgroundColor
@@ -188,7 +188,7 @@ private fun AppBackground(): Brush {
             else -> null.debugAssertNotNull ?: Color.Transparent
         },
         label = "gradient end color",
-        animationSpec = colorAnimationSpec,
+        animationSpec = appColorAnimationSpec,
     )
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     return Brush.linearGradient(

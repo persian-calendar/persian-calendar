@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -77,6 +79,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -194,7 +197,21 @@ fun SettingsScreen(
                 state = pagerState,
                 modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
             ) { index ->
-                Surface(modifier = Modifier.fillMaxSize()) {
+                val surfaceColor by animateColorAsState(
+                    MaterialTheme.colorScheme.surface,
+                    animationSpec = appColorAnimationSpec,
+                    label = "surface color"
+                )
+                val onSurfaceColor by animateColorAsState(
+                    MaterialTheme.colorScheme.onSurface,
+                    animationSpec = appColorAnimationSpec,
+                    label = "onSurface color"
+                )
+                Surface(
+                    color = surfaceColor,
+                    contentColor = onSurfaceColor,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
                         tabs[index].third()
                         Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
