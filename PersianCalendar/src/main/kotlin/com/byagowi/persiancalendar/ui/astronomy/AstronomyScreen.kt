@@ -380,10 +380,10 @@ fun AstronomyScreen(
                         }
                     }
                     val surfaceColor = MaterialTheme.colorScheme.surface
+                    val contentColor = LocalContentColor.current
                     AndroidView(
                         factory = {
                             val solarView = SolarView(it)
-                            solarView.setSurfaceColor(surfaceColor.toArgb())
                             var clickCount = 0
                             solarView.setOnClickListener {
                                 if (++clickCount % 2 == 0) showHoroscopeDialog = true
@@ -398,6 +398,8 @@ fun AstronomyScreen(
                             .size(290.dp)
                             .align(Alignment.Center),
                         update = {
+                            it.setSurfaceColor(surfaceColor.toArgb())
+                            it.setContentColor(contentColor.toArgb())
                             it.isTropicalDegree = isTropical
                             it.setTime(state)
                             it.mode = mode

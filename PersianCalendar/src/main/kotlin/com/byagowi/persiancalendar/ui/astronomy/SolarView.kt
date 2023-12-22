@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.variants.debugLog
 import java.util.GregorianCalendar
@@ -149,11 +148,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             }
         }
         return true
-    }
-
-    private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
-        it.color = context.resolveColor(android.R.attr.textColorPrimary)
     }
 
     private val textPath = Path()
@@ -290,6 +284,14 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     fun setSurfaceColor(@ColorInt color: Int) {
         zodiacSeparatorPaint.color = color
+    }
+
+    private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+    }
+
+    fun setContentColor(@ColorInt color: Int) {
+        colorTextPaint.color = color
     }
 
     private val zodiacPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
