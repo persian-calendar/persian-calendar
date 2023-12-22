@@ -1,12 +1,14 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -65,7 +67,10 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     context.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, isChecked) }
                 }
                 Row(
-                    Modifier.clickable { onClick() },
+                    Modifier.clickable(
+                        indication = rememberRipple(bounded = false),
+                        interactionSource = remember { MutableInteractionSource() },
+                    ) { onClick() },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Switch(checked = isChecked, onCheckedChange = { onClick() })
