@@ -21,7 +21,6 @@
 
     <style name="BaseTheme" parent="BaseDayNightTheme">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:typeface">sans</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
