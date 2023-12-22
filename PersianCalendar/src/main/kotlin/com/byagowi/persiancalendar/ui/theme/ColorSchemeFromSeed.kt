@@ -118,7 +118,7 @@ private fun darkFromCorePalette(core: CorePalette): ColorScheme {
     )
 }
 
-class CorePalette private constructor(argb: Int, isContent: Boolean) {
+private class CorePalette private constructor(argb: Int, isContent: Boolean) {
     val a1: TonalPalette
     val a2: TonalPalette
     val a3: TonalPalette
@@ -167,7 +167,7 @@ class CorePalette private constructor(argb: Int, isContent: Boolean) {
     }
 }
 
-class TonalPalette private constructor(
+private class TonalPalette private constructor(
     /** The hue of the Tonal Palette, in HCT. Ranges from 0 to 360.  */
     private var hue: Double,
     /** The chroma of the Tonal Palette, in HCT. Ranges from 0 to ~130 (for sRGB gamut).  */
@@ -204,7 +204,7 @@ class TonalPalette private constructor(
     }
 }
 
-class Hct private constructor(argb: Int) {
+private class Hct private constructor(argb: Int) {
     var hue = 0.0
     var chroma = 0.0
     var tone = 0.0
@@ -865,7 +865,7 @@ object HctSolver {
     }
 }
 
-class Cam16
+private class Cam16
 /**
  * All of the CAM16 dimensions can be calculated from 3 of the dimensions, in the following
  * combinations: - {j or q} and {c, m, or s} and hue - jstar, astar, bstar Prefer using a static
@@ -1124,7 +1124,7 @@ class Cam16
     }
 }
 
-class ViewingConditions
+private class ViewingConditions
 /**
  * Parameters are intermediate values of the CAM16 conversion process. Their names are shorthand
  * for technical color science terminology, this class would not benefit from documenting them
@@ -1246,7 +1246,7 @@ class ViewingConditions
     }
 }
 
-object ColorUtils {
+private object ColorUtils {
     private val SRGB_TO_XYZ = arrayOf(
         doubleArrayOf(0.41233895, 0.35762064, 0.18051042),
         doubleArrayOf(0.2126, 0.7152, 0.0722),
@@ -1411,7 +1411,7 @@ object ColorUtils {
     }
 }
 
-object MathUtils {
+private object MathUtils {
     /**
      * The linear interpolation function.
      *
