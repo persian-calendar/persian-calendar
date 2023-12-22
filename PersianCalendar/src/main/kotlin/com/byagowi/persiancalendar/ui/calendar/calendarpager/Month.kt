@@ -161,10 +161,12 @@ fun Month(
                 val description = stringResource(
                     R.string.week_days_name_column, getWeekDayName(weekDayPosition)
                 )
-                Cell(Modifier
-                    .semantics { this.contentDescription = description }
-                    .size(cellSize),
-                    dayPainter) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
+                Cell(
+                    Modifier
+                        .semantics { this.contentDescription = description }
+                        .size(cellSize),
+                    dayPainter,
+                ) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
             }
         }
         (0..<6).forEach { row ->
@@ -188,7 +190,8 @@ fun Month(
                     Cell(
                         Modifier
                             .size(cellSize)
-                            .combinedClickable(indication = null,
+                            .combinedClickable(
+                                indication = null,
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = { viewModel.changeSelectedDay(day) },
                                 onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
@@ -204,7 +207,8 @@ fun Month(
                                 onLongClick = {
                                     viewModel.changeSelectedDay(day)
                                     addEvent()
-                                }),
+                                },
+                            ),
                         dayPainter,
                     ) {
                         dayPositions[dayOffset] =
