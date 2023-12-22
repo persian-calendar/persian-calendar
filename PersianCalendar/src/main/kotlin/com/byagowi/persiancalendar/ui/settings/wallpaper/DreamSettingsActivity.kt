@@ -28,9 +28,9 @@ import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 
 class DreamSettingsActivity : ComponentActivity() {
-
     private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = finish()
     }
@@ -78,7 +78,7 @@ class DreamSettingsActivity : ComponentActivity() {
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
+        super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
         applyAppLanguage(this)
     }
 }

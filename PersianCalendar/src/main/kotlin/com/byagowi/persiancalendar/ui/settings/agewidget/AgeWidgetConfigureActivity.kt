@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getWidgetSize
@@ -95,7 +96,7 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
+        super.onConfigurationChanged(applyLanguageToConfiguration(newConfig))
         applyAppLanguage(this)
     }
 }
