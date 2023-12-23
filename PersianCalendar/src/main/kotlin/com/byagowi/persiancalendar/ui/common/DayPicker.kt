@@ -150,7 +150,7 @@ private fun getItemIndexForOffset(
     halfNumbersColumnHeightPx: Float
 ): Int {
     val indexOf = range.indexOf(value) - (offset / halfNumbersColumnHeightPx).toInt()
-    return maxOf(0, minOf(indexOf, range.count() - 1))
+    return indexOf.coerceIn(0, range.last - range.first)
 }
 
 @Composable
