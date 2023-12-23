@@ -24,7 +24,6 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -48,23 +47,12 @@ import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = AppColorScheme(), shapes = AppShapes()) {
-        val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-        val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-        val context = LocalContext.current
-        LaunchedEffect(isBackgroundColorLight, isSurfaceColorLight) {
-            context.getActivity()?.window?.let {
-                transparentSystemBars(it, isBackgroundColorLight, isSurfaceColorLight)
-            }
-        }
-
         val contentColor by animateColorAsState(
             MaterialTheme.colorScheme.onBackground,
             animationSpec = appColorAnimationSpec,

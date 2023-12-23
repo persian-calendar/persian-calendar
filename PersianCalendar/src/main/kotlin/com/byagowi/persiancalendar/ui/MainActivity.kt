@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -75,7 +76,9 @@ import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.core.graphics.ColorUtils
 import androidx.core.os.bundleOf
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -141,8 +144,8 @@ import java.util.Date
 
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Just to make sure we have an initial transparent system bars, it will be applied
-        // with correct values later also
+        // Just to make sure we have an initial transparent system bars
+        // System bars are tweaked later with project's own transparentSystemBars also
         enableEdgeToEdge()
         setTheme(R.style.BaseTheme)
         applyAppLanguage(this)
@@ -158,7 +161,17 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         val intentStartDestination = intent?.action
         intent?.action = ""
 
-        setContent { AppTheme { App(intentStartDestination, ::finish) } }
+        setContent {
+            AppTheme {
+                val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+                val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+                LaunchedEffect(isBackgroundColorLight, isSurfaceColorLight) {
+                    transparentSystemBars(window, isBackgroundColorLight, isSurfaceColorLight)
+                }
+
+                App(intentStartDestination, ::finish)
+            }
+        }
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
@@ -522,4 +535,42 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
                 .clip(MaterialTheme.shapes.extraLarge),
         )
     }
+}
+
+/**
+ * Make system bars (status and navigation bars) transparent as far as possible, also disables
+ * decor view insets so we should consider the insets ourselves.
+ *
+ * From https://stackoverflow.com/a/76018821 with some modifications
+ * Also have a look at [androidx.activity.enableEdgeToEdge] which provides the same functionality
+ * but in non-gesture navigation is less immersive.
+ */
+private fun transparentSystemBars(
+    window: Window,
+    isBackgroundColorLight: Boolean,
+    isSurfaceColorLight: Boolean,
+) {
+    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    insetsController.isAppearanceLightStatusBars = isBackgroundColorLight
+    insetsController.isAppearanceLightNavigationBars = isSurfaceColorLight
+
+    val isLightStatusBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    val isLightNavigationBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+    // Either primary color, what we use behind above status icons, isn't light so we don't need to worry
+    // about not being able to set isAppearanceLightStatusBars or let's check the sdk version so
+    // we at least use isAppearanceLightStatusBars.
+    val shouldStatusBarBeTransparent = !isBackgroundColorLight || isLightStatusBarAvailable
+
+    // Either surface color, what we use behind below navigation icons, isn't light so we don't need to worry
+    // about not being able to set isAppearanceLightNavigationBars or let's check the sdk version so
+    // we at least use isAppearanceLightStatusBars.
+    val shouldNavigationBarBeTransparent = !isSurfaceColorLight || isLightNavigationBarAvailable
+
+    val systemUiScrim =
+        ColorUtils.setAlphaComponent(android.graphics.Color.BLACK, 0x40) // 25% black
+    window.statusBarColor =
+        if (shouldStatusBarBeTransparent) android.graphics.Color.TRANSPARENT else systemUiScrim
+    window.navigationBarColor =
+        if (shouldNavigationBarBeTransparent) android.graphics.Color.TRANSPARENT else systemUiScrim
 }
