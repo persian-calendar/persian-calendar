@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.animation.AnimatedVisibility
@@ -61,6 +62,7 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -70,6 +72,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -106,10 +109,7 @@ fun AstronomyScreen(
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
 ) {
-    val context = LocalContext.current
-
     val state by viewModel.astronomyState.collectAsState()
-
     var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDayPickerDialog) DayPickerDialog(initialJdn = Jdn(state.date.toCivilDate()),
         positiveButtonTitle = R.string.accept,
@@ -132,11 +132,6 @@ fun AstronomyScreen(
 
     // Bad practice, for now
     var slider by remember { mutableStateOf<SliderView?>(null) }
-
-    var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
-        showHoroscopeDialog = false
-    }
 
     var isTropical by rememberSaveable { mutableStateOf(false) }
     var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
@@ -304,19 +299,6 @@ fun AstronomyScreen(
             }
         }
     ) { paddingValues ->
-        val sunZodiac = if (isTropical) Zodiac.fromTropical(state.sun.elon)
-        else Zodiac.fromIau(state.sun.elon)
-        val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
-        else Zodiac.fromIau(state.moon.lon)
-
-        val jdn by derivedStateOf { Jdn(state.date.toCivilDate()) }
-
-        val headerCache = remember {
-            lruCache(1024, create = { jdn: Jdn ->
-                state.generateHeader(context, jdn).joinToString("\n")
-            })
-        }
-
         Surface(
             shape = MaterialCornerExtraLargeTop(),
             modifier = Modifier.padding(
@@ -326,7 +308,7 @@ fun AstronomyScreen(
             )
         ) {
             BoxWithConstraints {
-                val maxHeight = maxHeight
+                val maxHeight = maxHeight - paddingValues.calculateBottomPadding()
                 val maxWidth = maxWidth
                 Column(
                     Modifier
@@ -334,108 +316,181 @@ fun AstronomyScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(Modifier.height(24.dp))
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        SelectionContainer {
-                            Text(
-                                headerCache[jdn],
-                                style = MaterialTheme.typography.bodyMedium,
-                                maxLines = 3
-                            )
-                        }
-                        Seasons(jdn)
-                        AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
-                            Row(Modifier.padding(top = 8.dp)) {
-                                Box(Modifier.weight(1f)) {
-                                    Cell(
-                                        Modifier.align(Alignment.Center),
-                                        0xcceaaa00.toInt(),
-                                        stringResource(R.string.sun),
-                                        sunZodiac.format(context, true) // ☉☀️
-                                    )
-                                }
-                                Box(Modifier.weight(1f)) {
-                                    Cell(
-                                        Modifier.align(Alignment.Center),
-                                        0xcc606060.toInt(),
-                                        stringResource(R.string.moon),
-                                        moonZodiac.format(context, true) // ☽it.moonPhaseEmoji
-                                    )
-                                }
-                            }
-                        }
-                    }
-                    Spacer(Modifier.height(16.dp))
-                    val minSize = 290.dp
-                    val headerSize = 380.dp
-                    Box(
-                        Modifier
-                            .height((maxHeight - headerSize).coerceAtLeast(minSize))
-                            .fillMaxWidth(),
-                    ) {
-                        Column(Modifier.align(Alignment.CenterStart)) {
-                            AstronomyMode.entries.forEach {
-                                NavigationRailItem(
-                                    modifier = Modifier.size(56.dp),
-                                    selected = mode == it,
-                                    onClick = { mode = it },
-                                    icon = {
-                                        if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
-                                            ImageVector.vectorResource(it.icon),
-                                            modifier = Modifier.size(24.dp),
-                                            contentDescription = null,
-                                            tint = Color.Unspecified,
-                                        )
-                                    },
-                                )
-                            }
-                        }
-                        val surfaceColor = MaterialTheme.colorScheme.surface
-                        val contentColor = LocalContentColor.current
-                        AndroidView(
-                            factory = {
-                                val solarView = SolarView(it)
-                                var clickCount = 0
-                                solarView.setOnClickListener {
-                                    if (++clickCount % 2 == 0) showHoroscopeDialog = true
-                                }
-                                solarView.rotationalMinutesChange = { offset ->
-                                    viewModel.addMinutesOffset(offset)
-                                    slider?.manualScrollBy(offset / 200f, 0f)
-                                }
-                                solarView
-                            },
-                            modifier = Modifier
-                                .size(
-                                    min(
-                                        maxWidth * 7 / 10,
-                                        maxHeight - headerSize
-                                    ).coerceAtLeast(minSize)
-                                )
-                                .align(Alignment.Center),
-                            update = {
-                                it.setSurfaceColor(surfaceColor.toArgb())
-                                it.setContentColor(contentColor.toArgb())
-                                it.isTropicalDegree = isTropical
-                                it.setTime(state)
-                                it.mode = mode
-                            },
+                    val isLandscape =
+                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    if (isLandscape) Row(Modifier.fillMaxWidth()) {
+                        Header(
+                            Modifier
+                                .weight(1f)
+                                .padding(start = 24.dp),
+                            isTropical,
+                            mode,
+                            state
                         )
-                        val map = stringResource(R.string.map)
-                        NavigationRailItem(
-                            modifier = Modifier
-                                .size(56.dp)
-                                .align(Alignment.CenterEnd),
-                            selected = false,
-                            onClick = navigateToMap,
-                            icon = {
-                                Text(
-                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
-                                    modifier = Modifier.semantics { this.contentDescription = map }
-                                )
-                            },
+                        val circleSize = min(maxWidth, maxHeight)
+                        SolarDisplay(
+                            Modifier
+                                .weight(1f)
+                                .height(maxHeight),
+                            viewModel,
+                            mode,
+                            isTropical,
+                            slider,
+                            circleSize,
+                            navigateToMap
+                        ) { mode = it }
+                    } else Column {
+                        val minSize = 290.dp
+                        val headerSize = 240.dp // Just hypothetically
+                        Header(
+                            Modifier.padding(horizontal = 24.dp),
+                            isTropical,
+                            mode,
+                            state
                         )
+                        Spacer(Modifier.height(16.dp))
+                        SolarDisplay(
+                            Modifier
+                                .fillMaxWidth()
+                                .height((maxHeight - headerSize).coerceAtLeast(minSize)),
+                            viewModel,
+                            mode,
+                            isTropical,
+                            slider,
+                            min(maxWidth * 7 / 10, maxHeight - headerSize).coerceAtLeast(minSize),
+                            navigateToMap
+                        ) { mode = it }
                     }
                     Spacer(modifier = Modifier.height(paddingValues.calculateBottomPadding()))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun SolarDisplay(
+    modifier: Modifier,
+    viewModel: AstronomyViewModel,
+    mode: AstronomyMode,
+    isTropical: Boolean,
+    slider: SliderView?,
+    circleSize: Dp,
+    navigateToMap: () -> Unit,
+    setMode: (AstronomyMode) -> Unit,
+) {
+    val state by viewModel.astronomyState.collectAsState()
+    var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
+    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
+        showHoroscopeDialog = false
+    }
+    Box(modifier) {
+        Column(Modifier.align(Alignment.CenterStart)) {
+            AstronomyMode.entries.forEach {
+                NavigationRailItem(
+                    modifier = Modifier.size(56.dp),
+                    selected = mode == it,
+                    onClick = { setMode(it) },
+                    icon = {
+                        if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
+                            ImageVector.vectorResource(it.icon),
+                            modifier = Modifier.size(24.dp),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                        )
+                    },
+                )
+            }
+        }
+        val surfaceColor = MaterialTheme.colorScheme.surface
+        val contentColor = LocalContentColor.current
+        AndroidView(
+            factory = {
+                val solarView = SolarView(it)
+                var clickCount = 0
+                solarView.setOnClickListener {
+                    if (++clickCount % 2 == 0) showHoroscopeDialog = true
+                }
+                solarView.rotationalMinutesChange = { offset ->
+                    viewModel.addMinutesOffset(offset)
+                    slider?.manualScrollBy(offset / 200f, 0f)
+                }
+                solarView
+            },
+            modifier = Modifier
+                .size(circleSize)
+                .align(Alignment.Center),
+            update = {
+                it.setSurfaceColor(surfaceColor.toArgb())
+                it.setContentColor(contentColor.toArgb())
+                it.isTropicalDegree = isTropical
+                it.setTime(state)
+                it.mode = mode
+            },
+        )
+        val map = stringResource(R.string.map)
+        NavigationRailItem(
+            modifier = Modifier
+                .size(56.dp)
+                .align(Alignment.CenterEnd),
+            selected = false,
+            onClick = navigateToMap,
+            icon = {
+                Text(
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
+                    modifier = Modifier.semantics { this.contentDescription = map }
+                )
+            },
+        )
+    }
+}
+
+@Composable
+private fun Header(
+    modifier: Modifier,
+    isTropical: Boolean,
+    mode: AstronomyMode,
+    state: AstronomyState,
+) {
+    val sunZodiac = if (isTropical) Zodiac.fromTropical(state.sun.elon)
+    else Zodiac.fromIau(state.sun.elon)
+    val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
+    else Zodiac.fromIau(state.moon.lon)
+
+    val context = LocalContext.current
+    val headerCache = remember {
+        lruCache(1024, create = { jdn: Jdn ->
+            state.generateHeader(context, jdn).joinToString("\n")
+        })
+    }
+
+    Column(modifier) {
+        val jdn by derivedStateOf { Jdn(state.date.toCivilDate()) }
+        SelectionContainer {
+            Text(
+                headerCache[jdn],
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 3
+            )
+        }
+        Seasons(jdn)
+        AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
+            Row(Modifier.padding(top = 8.dp)) {
+                Box(Modifier.weight(1f)) {
+                    Cell(
+                        Modifier.align(Alignment.Center),
+                        0xcceaaa00.toInt(),
+                        stringResource(R.string.sun),
+                        sunZodiac.format(context, true) // ☉☀️
+                    )
+                }
+                Box(Modifier.weight(1f)) {
+                    Cell(
+                        Modifier.align(Alignment.Center),
+                        0xcc606060.toInt(),
+                        stringResource(R.string.moon),
+                        moonZodiac.format(context, true) // ☽it.moonPhaseEmoji
+                    )
                 }
             }
         }
