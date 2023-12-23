@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -196,111 +197,15 @@ fun AstronomyScreen(
             )
         },
         bottomBar = {
-            var lastButtonClickTimestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
-            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-            fun buttonScrollSlider(days: Int): Boolean {
-                lastButtonClickTimestamp = System.currentTimeMillis()
-                slider?.smoothScrollBy(250f * days * if (isRtl) 1 else -1, 0f)
-                viewModel.animateToRelativeDayOffset(days)
-                return true
-            }
-
-            @OptIn(ExperimentalFoundationApi::class) Column(
+            if (!isLandscape) SliderBar(
                 Modifier
-                    .safeDrawingPadding()
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-            ) {
-                Text(
-                    state.date.formatDateAndTime(),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .combinedClickable(
-                            onClick = { showDayPickerDialog = true },
-                            onClickLabel = stringResource(R.string.goto_date),
-                            onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
-                            onLongClickLabel = stringResource(R.string.today),
-                        ),
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(Modifier.height(8.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                ) {
-                    val hapticFeedback = LocalHapticFeedback.current
-                    Icon(
-                        Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                        contentDescription = null,
-                        Modifier.combinedClickable(
-                            indication = rememberRipple(bounded = false),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                buttonScrollSlider(-1)
-                            },
-                            onClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.day)
-                            ),
-                            onLongClick = { buttonScrollSlider(-365) },
-                            onLongClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.year)
-                            ),
-                        ),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    val primary = MaterialTheme.colorScheme.primary
-                    AndroidView(
-                        factory = { context ->
-                            val root = SliderView(context)
-                            root.setBarsColor(primary.toArgb())
-                            slider = root
-                            var latestVibration = 0L
-                            root.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
-                            root.onScrollListener = { dx, _ ->
-                                if (dx != 0f) {
-                                    val current = System.currentTimeMillis()
-                                    if (current - lastButtonClickTimestamp > 2000) {
-                                        if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                                            root.performHapticFeedbackVirtualKey()
-                                            latestVibration = current
-                                        }
-                                        viewModel.addMinutesOffset(
-                                            (dx * if (isRtl) 1 else -1).toInt()
-                                        )
-                                    }
-                                }
-                            }
-                            root
-                        },
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .height(46.dp)
-                            .weight(1f, fill = false),
-                    )
-                    Icon(
-                        Icons.AutoMirrored.Default.KeyboardArrowRight,
-                        contentDescription = null,
-                        Modifier.combinedClickable(
-                            indication = rememberRipple(bounded = false),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = {
-                                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                buttonScrollSlider(+1)
-                            },
-                            onClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.day)
-                            ),
-                            onLongClick = { buttonScrollSlider(+365) },
-                            onLongClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.year)
-                            ),
-                        ),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            }
+                    .padding(bottom = 16.dp)
+                    .safeDrawingPadding(),
+                slider,
+                viewModel,
+                { showDayPickerDialog = true },
+                { slider = it },
+            )
         }
     ) { paddingValues ->
         Surface(
@@ -311,56 +216,171 @@ fun AstronomyScreen(
                 end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
             )
         ) {
-            BoxWithConstraints {
-                val maxHeight = maxHeight - paddingValues.calculateBottomPadding()
+            BoxWithConstraints(Modifier.fillMaxSize()) {
+                val bottomPadding = paddingValues.calculateBottomPadding()
+                val maxHeight = maxHeight - bottomPadding
                 val maxWidth = maxWidth
-                Column(
-                    Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    Spacer(Modifier.height(24.dp))
-                    if (isLandscape) Row(Modifier.fillMaxWidth()) {
-                        Header(
+                if (isLandscape) Row(Modifier.fillMaxWidth()) {
+                    Box(
+                        Modifier
+                            .weight(1f)
+                            .fillMaxHeight()
+                            .padding(top = 24.dp, start = 24.dp)
+                    ) {
+                        Header(Modifier.align(Alignment.TopCenter), viewModel)
+                        SliderBar(
                             Modifier
-                                .weight(1f)
-                                .padding(start = 24.dp),
-                            viewModel,
-                        )
-                        val circleSize = min(maxWidth, maxHeight)
-                        SolarDisplay(
-                            Modifier
-                                .weight(1f)
-                                .height(maxHeight),
-                            viewModel,
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = bottomPadding + 16.dp),
                             slider,
-                            circleSize,
-                            navigateToMap
-                        )
-                    } else Column {
-                        val minSize = 290.dp
-                        var headerHeightPx by remember { mutableStateOf(0) }
-                        val headerHeight = with(LocalDensity.current) { headerHeightPx.toDp() }
-                        Header(
-                            Modifier
-                                .onSizeChanged { headerHeightPx = it.height }
-                                .padding(horizontal = 24.dp),
                             viewModel,
-                        )
-                        Spacer(Modifier.height(16.dp))
-                        SolarDisplay(
-                            Modifier
-                                .fillMaxWidth()
-                                .height((maxHeight - headerHeight).coerceAtLeast(minSize)),
-                            viewModel,
-                            slider,
-                            min(maxWidth * 7 / 10, maxHeight - headerHeight).coerceAtLeast(minSize),
-                            navigateToMap
+                            { showDayPickerDialog = true },
+                            { slider = it },
                         )
                     }
-                    Spacer(modifier = Modifier.height(paddingValues.calculateBottomPadding()))
+                    SolarDisplay(
+                        Modifier
+                            .weight(1f)
+                            .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
+                            .height(maxHeight),
+                        viewModel,
+                        slider,
+                        min(maxWidth * 4f / 10, maxHeight),
+                        navigateToMap
+                    )
+                } else Column(Modifier.verticalScroll(rememberScrollState())) {
+                    val minSize = 290.dp
+                    var headerHeightPx by remember { mutableStateOf(0) }
+                    val headerHeight = with(LocalDensity.current) { headerHeightPx.toDp() }
+                    Header(
+                        Modifier
+                            .onSizeChanged { headerHeightPx = it.height }
+                            .padding(all = 24.dp),
+                        viewModel,
+                    )
+                    SolarDisplay(
+                        Modifier
+                            .fillMaxWidth()
+                            .height((maxHeight - headerHeight).coerceAtLeast(minSize)),
+                        viewModel,
+                        slider,
+                        min(maxWidth * 7 / 10, maxHeight - headerHeight).coerceAtLeast(minSize),
+                        navigateToMap
+                    )
+                    Spacer(modifier = Modifier.height(bottomPadding))
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun SliderBar(
+    modifier: Modifier,
+    slider: SliderView?,
+    viewModel: AstronomyViewModel,
+    showDayPickerDialog: () -> Unit,
+    setSlider: (SliderView) -> Unit,
+) {
+    val state by viewModel.astronomyState.collectAsState()
+    var lastButtonClickTimestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    fun buttonScrollSlider(days: Int): Boolean {
+        lastButtonClickTimestamp = System.currentTimeMillis()
+        slider?.smoothScrollBy(250f * days * if (isRtl) 1 else -1, 0f)
+        viewModel.animateToRelativeDayOffset(days)
+        return true
+    }
+
+    @OptIn(ExperimentalFoundationApi::class) Column(modifier.fillMaxWidth()) {
+        Text(
+            state.date.formatDateAndTime(),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .combinedClickable(
+                    onClick = { showDayPickerDialog() },
+                    onClickLabel = stringResource(R.string.goto_date),
+                    onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
+                    onLongClickLabel = stringResource(R.string.today),
+                ),
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp),
+        ) {
+            val hapticFeedback = LocalHapticFeedback.current
+            Icon(
+                Icons.AutoMirrored.Default.KeyboardArrowLeft,
+                contentDescription = null,
+                Modifier.combinedClickable(
+                    indication = rememberRipple(bounded = false),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                        buttonScrollSlider(-1)
+                    },
+                    onClickLabel = stringResource(
+                        R.string.previous_x, stringResource(R.string.day)
+                    ),
+                    onLongClick = { buttonScrollSlider(-365) },
+                    onLongClickLabel = stringResource(
+                        R.string.previous_x, stringResource(R.string.year)
+                    ),
+                ),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+            val primary = MaterialTheme.colorScheme.primary
+            AndroidView(
+                factory = { context ->
+                    val root = SliderView(context)
+                    root.setBarsColor(primary.toArgb())
+                    setSlider(root)
+                    var latestVibration = 0L
+                    root.smoothScrollBy(250f * if (isRtl) 1 else -1, 0f)
+                    root.onScrollListener = { dx, _ ->
+                        if (dx != 0f) {
+                            val current = System.currentTimeMillis()
+                            if (current - lastButtonClickTimestamp > 2000) {
+                                if (current >= latestVibration + 25_000_000 / abs(dx)) {
+                                    root.performHapticFeedbackVirtualKey()
+                                    latestVibration = current
+                                }
+                                viewModel.addMinutesOffset(
+                                    (dx * if (isRtl) 1 else -1).toInt()
+                                )
+                            }
+                        }
+                    }
+                    root
+                },
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .height(46.dp)
+                    .weight(1f, fill = false),
+            )
+            Icon(
+                Icons.AutoMirrored.Default.KeyboardArrowRight,
+                contentDescription = null,
+                Modifier.combinedClickable(
+                    indication = rememberRipple(bounded = false),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                        buttonScrollSlider(+1)
+                    },
+                    onClickLabel = stringResource(
+                        R.string.next_x, stringResource(R.string.day)
+                    ),
+                    onLongClick = { buttonScrollSlider(+365) },
+                    onLongClickLabel = stringResource(
+                        R.string.next_x, stringResource(R.string.year)
+                    ),
+                ),
+                tint = MaterialTheme.colorScheme.primary,
+            )
         }
     }
 }
