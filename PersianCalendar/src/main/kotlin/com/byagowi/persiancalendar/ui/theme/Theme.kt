@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.ui.theme
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.StringRes
@@ -25,12 +23,5 @@ enum class Theme(
     );
 
     @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-    fun isDynamicColors(): Boolean {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && hasDynamicColors
-    }
-
-    companion object {
-        fun isNightMode(context: Context): Boolean =
-            context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-    }
+    fun isDynamicColors() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && hasDynamicColors
 }

@@ -91,10 +91,10 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
-import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isPortrait
 import com.byagowi.persiancalendar.ui.utils.isRtl
+import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.AbstractDate
@@ -334,7 +334,7 @@ private fun createSunViewRemoteViews(
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = when {
-        prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
+        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
     val sunView = SunView(context)
@@ -395,7 +395,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     remoteViews.setRoundBackground(R.id.image_background, width, height)
 
     val contentColor = when {
-        prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
+        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
     val colors = DayPainterColors(
@@ -423,7 +423,7 @@ private fun createMapRemoteViews(
 ): RemoteViews {
     val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
-    val isNightMode = Theme.isNightMode(context)
+    val isNightMode = isSystemInDarkTheme(context)
     val backgroundColor =
         if (prefersWidgetsDynamicColors) context.getColor(
             if (isNightMode) android.R.color.system_accent2_800
@@ -826,7 +826,7 @@ private data class NotificationData(
 
         // Night mode doesn't like our custom notification in Samsung and HTC One UI
         val shouldDisableCustomNotification = when (Build.BRAND) {
-            "samsung", "htc" -> Theme.isNightMode(context)
+            "samsung", "htc" -> isSystemInDarkTheme(context)
             else -> false
         }
 

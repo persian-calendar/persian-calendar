@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.theme.Theme
+import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 
@@ -53,7 +53,7 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
     val context = LocalContext.current
     val patternDrawable = remember {
         // We like to reuse our drawable for now but can reconsider in future
-        PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(context), dp = dpAsPx)
+        PatternDrawable(prayerKey, darkBaseColor = isSystemInDarkTheme(context), dp = dpAsPx)
     }
     Box(
         modifier = Modifier

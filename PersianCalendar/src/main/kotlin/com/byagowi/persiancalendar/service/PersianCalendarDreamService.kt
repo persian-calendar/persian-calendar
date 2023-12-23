@@ -11,8 +11,8 @@ import android.view.animation.LinearInterpolator
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
-import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random
@@ -49,14 +49,14 @@ class PersianCalendarDreamService : DreamService() {
         isFullscreen = true
 
         val backgroundView = View(this).also {
-            val isNightMode = Theme.isNightMode(this)
+            val isNightMode = isSystemInDarkTheme(this)
             val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) getColor(
                 if (isNightMode) android.R.color.system_accent1_200
                 else android.R.color.system_accent1_400
             ) else null
             val pattern = PatternDrawable(
                 preferredTintColor = accentColor,
-                darkBaseColor = Theme.isNightMode(this),
+                darkBaseColor = isSystemInDarkTheme(this),
                 dp = resources.dp,
             )
             it.background = pattern
