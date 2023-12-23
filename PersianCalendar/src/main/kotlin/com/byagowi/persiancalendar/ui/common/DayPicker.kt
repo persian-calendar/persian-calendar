@@ -49,6 +49,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
@@ -58,6 +59,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -109,6 +111,7 @@ fun DayPicker(
                 label = daysFormat,
                 range = 1..monthsLength,
                 value = date.dayOfMonth,
+                onClickLabel = stringResource(R.string.day),
             ) {
                 setJdn(Jdn(calendarType, date.year, date.month, it))
                 view.performHapticFeedbackVirtualKey()
@@ -119,6 +122,7 @@ fun DayPicker(
                 label = monthsFormat,
                 range = 1..yearMonths,
                 value = date.month,
+                onClickLabel = stringResource(R.string.month),
             ) { month ->
                 val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(date.year, month))
                 setJdn(Jdn(calendarType, date.year, month, day))
@@ -130,6 +134,7 @@ fun DayPicker(
                 label = yearsFormat,
                 range = startYear..startYear + 400,
                 value = date.year,
+                onClickLabel = stringResource(R.string.year),
             ) { year ->
                 val month = date.month.coerceIn(1, calendarType.getYearMonths(year))
                 val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(year, month))
@@ -158,11 +163,12 @@ fun NumberPicker(
     label: (Int) -> String = { it.toString() },
     range: IntRange,
     value: Int,
+    onClickLabel: String? = null,
     onValueChange: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
     val verticalMargin = 8.dp
-    val numbersColumnHeight = 88.dp
+    val numbersColumnHeight = 96.dp
     val halfNumbersColumnHeight = numbersColumnHeight / 2
     val halfNumbersColumnHeightPx = with(LocalDensity.current) { halfNumbersColumnHeight.toPx() }
 
@@ -230,20 +236,16 @@ fun NumberPicker(
                     .padding(vertical = verticalMargin)
                     .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) }
             ) {
-                val baseLabelModifier = Modifier
-                    .align(Alignment.Center)
-                    .height(20.dp)
                 if (indexOfElement > 0) Label(
                     text = label(range.elementAt(indexOfElement - 1)),
-                    modifier = baseLabelModifier
+                    modifier = Modifier
+                        .height(numbersColumnHeight / 3)
                         .semantics {
                             @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
                         }
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
-                            maxOf(
-                                minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx
-                            )
+                            maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
@@ -264,38 +266,43 @@ fun NumberPicker(
                     val isFocused by interactionSource.collectIsFocusedAsState()
                     if (isFocused && !isCapturedOnce) isCapturedOnce = true
                     if (!isFocused && isCapturedOnce) showTextEdit = false
-                    BasicTextField(
-                        value = inputValue,
-                        interactionSource = interactionSource,
-                        maxLines = 1,
-                        onValueChange = { inputValue = it },
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                                showTextEdit = false
-                                inputValue.text.toIntOrNull()?.let {
-                                    if (it in range) onValueChange(it)
-                                }
-                            },
-                        ),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done,
-                        ),
-                        textStyle = LocalTextStyle.current.copy(
-                            textAlign = TextAlign.Center,
-                            color = LocalContentColor.current,
-                        ),
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .focusRequester(focusRequester),
-                    )
+                    Box(
+                        Modifier.height(numbersColumnHeight / 3),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        BasicTextField(
+                            value = inputValue,
+                            interactionSource = interactionSource,
+                            maxLines = 1,
+                            onValueChange = { inputValue = it },
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    focusManager.clearFocus()
+                                    showTextEdit = false
+                                    inputValue.text.toIntOrNull()?.let {
+                                        if (it in range) onValueChange(it)
+                                    }
+                                },
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done,
+                            ),
+                            textStyle = LocalTextStyle.current.copy(
+                                textAlign = TextAlign.Center,
+                                color = LocalContentColor.current,
+                            ),
+                            modifier = Modifier.focusRequester(focusRequester),
+                        )
+                    }
                 } else Label(
                     text = label(range.elementAt(indexOfElement)),
-                    modifier = baseLabelModifier
+                    modifier = Modifier
+                        .height(numbersColumnHeight / 3)
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() },
+                            onClickLabel = onClickLabel,
                         ) { showTextEdit = true }
                         .alpha(
                             (maxOf(
@@ -305,20 +312,15 @@ fun NumberPicker(
                         ),
                 )
                 if (indexOfElement < range.count() - 1) Label(
-                    text = label(
-                        range.elementAt(
-                            indexOfElement + 1
-                        )
-                    ),
-                    modifier = baseLabelModifier
+                    text = label(range.elementAt(indexOfElement + 1)),
+                    modifier = Modifier
+                        .height(numbersColumnHeight / 3)
                         .semantics {
                             @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
                         }
                         .offset(y = halfNumbersColumnHeight)
                         .alpha(
-                            maxOf(
-                                minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx
-                            )
+                            maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
                         ),
                 )
             }
@@ -358,7 +360,9 @@ fun NumberPicker(
 
 @Composable
 private fun Label(text: String, modifier: Modifier) {
-    Text(modifier = modifier, maxLines = 1, text = text, textAlign = TextAlign.Center)
+    Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
+        Text(maxLines = 1, text = text)
+    }
 }
 
 private suspend fun Animatable<Float, AnimationVector1D>.fling(
