@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -152,11 +151,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             modifier = Modifier.padding(horizontal = 16.dp),
                             label = {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        icon,
-                                        modifier = Modifier.size(24.dp),
-                                        contentDescription = null
-                                    )
+                                    Icon(icon, contentDescription = null)
                                     Spacer(Modifier.width(16.dp))
                                     Text(stringResource(title))
                                 }

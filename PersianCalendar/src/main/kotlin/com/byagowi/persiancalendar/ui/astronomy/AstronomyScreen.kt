@@ -477,16 +477,18 @@ private fun Seasons(jdn: Jdn) {
 private fun MoonIcon(astronomyState: AstronomyState) {
     val context = LocalContext.current
     val solarDraw = remember { SolarDraw(context) }
-    Box(modifier = Modifier
-        .size(24.dp)
-        .drawBehind {
-            drawIntoCanvas {
-                val radius = size.minDimension / 2f
-                val sun = astronomyState.sun
-                val moon = astronomyState.moon
-                solarDraw.moon(it.nativeCanvas, sun, moon, radius, radius, radius)
-            }
-        })
+    Box(
+        modifier = Modifier
+            .size(24.dp)
+            .drawBehind {
+                drawIntoCanvas {
+                    val radius = size.minDimension / 2f
+                    val sun = astronomyState.sun
+                    val moon = astronomyState.moon
+                    solarDraw.moon(it.nativeCanvas, sun, moon, radius, radius, radius)
+                }
+            },
+    )
 }
 
 @Stable
