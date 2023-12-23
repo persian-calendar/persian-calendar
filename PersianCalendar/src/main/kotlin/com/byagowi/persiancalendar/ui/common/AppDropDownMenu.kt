@@ -17,7 +17,10 @@ fun AppDropdownMenu(
     minWidth: Dp = 200.dp,
     content: @Composable ColumnScope.(closeMenu: () -> Unit) -> Unit,
 ) {
-    MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = MaterialTheme.shapes.extraLarge)) {
+    MaterialTheme(
+        shapes = MaterialTheme.shapes.copy(extraSmall = MaterialTheme.shapes.extraLarge),
+        typography = MaterialTheme.typography.copy(labelLarge = MaterialTheme.typography.bodyLarge),
+    ) {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = onDismissRequest,
