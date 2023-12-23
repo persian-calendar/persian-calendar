@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -75,7 +76,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -141,7 +141,9 @@ import java.util.Date
 
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        // Just to make sure we have an initial transparent system bars, it will be applied
+        // with correct values later also
+        enableEdgeToEdge()
         setTheme(R.style.BaseTheme)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
