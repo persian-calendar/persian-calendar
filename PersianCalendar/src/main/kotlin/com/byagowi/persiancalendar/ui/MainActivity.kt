@@ -116,7 +116,12 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         updateStoredPreference(this)
         update(applicationContext, true)
 
-        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS || key == PREF_APP_LANGUAGE) {
+        if (key == PREF_APP_LANGUAGE) {
+            applyAppLanguage(this)
+            loadLanguageResources(this)
+        }
+
+        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS) {
             loadLanguageResources(this)
         }
     }
