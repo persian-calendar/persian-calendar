@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,7 +30,6 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -77,6 +75,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
@@ -133,12 +132,10 @@ fun ConverterScreen(
                             )
                             Spacer(Modifier.width(8.dp))
                         }
-                        DropdownMenu(
+                        AppDropdownMenu(
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false },
-                            Modifier.defaultMinSize(
-                                minWidth = with(LocalDensity.current) { spinnerWidth.toDp() }
-                            ),
+                            minWidth = with(LocalDensity.current) { spinnerWidth.toDp() },
                         ) {
                             ConverterScreenMode.entries.filter {
                                 // Converter doesn't work in Android 5, let's hide it there
