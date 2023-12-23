@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -47,7 +45,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -149,13 +146,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     DrawerItems().forEach { (id, icon, title) ->
                         NavigationDrawerItem(
                             modifier = Modifier.padding(horizontal = 16.dp),
-                            label = {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(icon, contentDescription = null)
-                                    Spacer(Modifier.width(16.dp))
-                                    Text(stringResource(title))
-                                }
-                            },
+                            icon = { Icon(icon, contentDescription = null) },
+                            label = { Text(stringResource(title)) },
                             selected = when (val route = navBackStackEntry?.destination?.route) {
                                 levelRoute -> compassRoute
                                 mapRoute -> astronomyRoute
