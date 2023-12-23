@@ -563,7 +563,14 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                     transitionSpec = {
                         fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                     },
-                ) { state -> Text(state, style = MaterialTheme.typography.titleLarge) }
+                ) { state ->
+                    Text(
+                        state,
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
                 AnimatedContent(
                     subtitle,
                     label = "subtitle",
