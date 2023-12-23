@@ -29,7 +29,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,7 +51,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -109,7 +107,6 @@ fun DayPicker(
                 modifier = Modifier.weight(1f),
                 label = daysFormat,
                 range = 1..monthsLength,
-                textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.dayOfMonth,
             ) {
                 setJdn(Jdn(calendarType, date.year, date.month, it))
@@ -120,7 +117,6 @@ fun DayPicker(
                 modifier = Modifier.weight(1f),
                 label = monthsFormat,
                 range = 1..yearMonths,
-                textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.month,
             ) { month ->
                 val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(date.year, month))
@@ -132,7 +128,6 @@ fun DayPicker(
                 modifier = Modifier.weight(1f),
                 label = yearsFormat,
                 range = startYear..startYear + 400,
-                textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.year,
             ) { year ->
                 val month = date.month.coerceIn(1, calendarType.getYearMonths(year))
@@ -161,7 +156,6 @@ fun NumberPicker(
     modifier: Modifier = Modifier,
     label: (Int) -> String = { it.toString() },
     range: IntRange,
-    textStyle: TextStyle = LocalTextStyle.current,
     value: Int,
     onValueChange: (Int) -> Unit,
 ) {
@@ -238,94 +232,91 @@ fun NumberPicker(
                 val baseLabelModifier = Modifier
                     .align(Alignment.Center)
                     .height(20.dp)
-                ProvideTextStyle(textStyle) {
-                    if (indexOfElement > 0)
-                        Label(
-                            text = label(range.elementAt(indexOfElement - 1)),
-                            modifier = baseLabelModifier
-                                .semantics {
-                                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                                }
-                                .offset(y = -halfNumbersColumnHeight)
-                                .alpha(
-                                    maxOf(
-                                        minimumAlpha,
-                                        coercedAnimatedOffset / halfNumbersColumnHeightPx
-                                    )
-                                )
-                        )
-                    var showTextEdit by remember { mutableStateOf(false) }
-                    if (showTextEdit) {
-                        val focusRequester = remember { FocusRequester() }
-                        var inputValue by remember {
-                            val valueText = formatNumber(value)
-                            mutableStateOf(
-                                TextFieldValue(
-                                    valueText,
-                                    selection = TextRange(0, valueText.length)
-                                )
-                            )
+                if (indexOfElement > 0) Label(
+                    text = label(range.elementAt(indexOfElement - 1)),
+                    modifier = baseLabelModifier
+                        .semantics {
+                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
                         }
-                        LaunchedEffect(Unit) { focusRequester.requestFocus() }
-                        var isCapturedOnce by remember { mutableStateOf(false) }
-
-                        val interactionSource = remember { MutableInteractionSource() }
-                        val isFocused by interactionSource.collectIsFocusedAsState()
-                        if (isFocused && !isCapturedOnce) isCapturedOnce = true
-                        if (!isFocused && isCapturedOnce) showTextEdit = false
-                        BasicTextField(
-                            value = inputValue,
-                            interactionSource = interactionSource,
-                            maxLines = 1,
-                            onValueChange = { inputValue = it },
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    focusManager.clearFocus()
-                                    showTextEdit = false
-                                    inputValue.text.toIntOrNull()?.let {
-                                        if (it in range) onValueChange(it)
-                                    }
-                                }
-                            ),
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done,
-                            ),
-                            textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-                            modifier = Modifier
-                                .align(Alignment.Center)
-                                .focusRequester(focusRequester),
-                        )
-                    } else Label(
-                        text = label(range.elementAt(indexOfElement)),
-                        modifier = baseLabelModifier
-                            .clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                            ) { showTextEdit = true }
-                            .alpha(
-                                (maxOf(
-                                    minimumAlpha,
-                                    1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
-                                ))
+                        .offset(y = -halfNumbersColumnHeight)
+                        .alpha(
+                            maxOf(
+                                minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx
                             )
-                    )
-                    if (indexOfElement < range.count() - 1)
-                        Label(
-                            text = label(range.elementAt(indexOfElement + 1)),
-                            modifier = baseLabelModifier
-                                .semantics {
-                                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                                }
-                                .offset(y = halfNumbersColumnHeight)
-                                .alpha(
-                                    maxOf(
-                                        minimumAlpha,
-                                        -coercedAnimatedOffset / halfNumbersColumnHeightPx
-                                    )
-                                )
+                        ),
+                )
+                var showTextEdit by remember { mutableStateOf(false) }
+                if (showTextEdit) {
+                    val focusRequester = remember { FocusRequester() }
+                    var inputValue by remember {
+                        val valueText = formatNumber(value)
+                        mutableStateOf(
+                            TextFieldValue(
+                                valueText, selection = TextRange(0, valueText.length)
+                            )
                         )
-                }
+                    }
+                    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+                    var isCapturedOnce by remember { mutableStateOf(false) }
+
+                    val interactionSource = remember { MutableInteractionSource() }
+                    val isFocused by interactionSource.collectIsFocusedAsState()
+                    if (isFocused && !isCapturedOnce) isCapturedOnce = true
+                    if (!isFocused && isCapturedOnce) showTextEdit = false
+                    BasicTextField(
+                        value = inputValue,
+                        interactionSource = interactionSource,
+                        maxLines = 1,
+                        onValueChange = { inputValue = it },
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                                showTextEdit = false
+                                inputValue.text.toIntOrNull()?.let {
+                                    if (it in range) onValueChange(it)
+                                }
+                            },
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done,
+                        ),
+                        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .focusRequester(focusRequester),
+                    )
+                } else Label(
+                    text = label(range.elementAt(indexOfElement)),
+                    modifier = baseLabelModifier
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() },
+                        ) { showTextEdit = true }
+                        .alpha(
+                            (maxOf(
+                                minimumAlpha,
+                                1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
+                            ))
+                        ),
+                )
+                if (indexOfElement < range.count() - 1) Label(
+                    text = label(
+                        range.elementAt(
+                            indexOfElement + 1
+                        )
+                    ),
+                    modifier = baseLabelModifier
+                        .semantics {
+                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                        }
+                        .offset(y = halfNumbersColumnHeight)
+                        .alpha(
+                            maxOf(
+                                minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx
+                            )
+                        ),
+                )
             }
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
         }
