@@ -326,7 +326,8 @@ fun AstronomyScreen(
             )
         ) {
             BoxWithConstraints {
-                val maxSide = min(maxHeight, maxWidth)
+                val maxHeight = maxHeight
+                val maxWidth = maxWidth
                 Column(
                     Modifier
                         .fillMaxSize()
@@ -364,7 +365,13 @@ fun AstronomyScreen(
                         }
                     }
                     Spacer(Modifier.height(16.dp))
-                    Box(Modifier.fillMaxWidth()) {
+                    val minSize = 290.dp
+                    val headerSize = 380.dp
+                    Box(
+                        Modifier
+                            .height((maxHeight - headerSize).coerceAtLeast(minSize))
+                            .fillMaxWidth(),
+                    ) {
                         Column(Modifier.align(Alignment.CenterStart)) {
                             AstronomyMode.entries.forEach {
                                 NavigationRailItem(
@@ -398,7 +405,12 @@ fun AstronomyScreen(
                                 solarView
                             },
                             modifier = Modifier
-                                .size((maxSide / 2).coerceAtLeast(290.dp))
+                                .size(
+                                    min(
+                                        maxWidth * 7 / 10,
+                                        maxHeight - headerSize
+                                    ).coerceAtLeast(minSize)
+                                )
                                 .align(Alignment.Center),
                             update = {
                                 it.setSurfaceColor(surfaceColor.toArgb())
