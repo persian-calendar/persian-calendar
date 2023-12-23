@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.settings
 
 import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -65,7 +67,14 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 }
 
 @Composable
-fun SettingsDivider() = HorizontalDivider(Modifier.padding(horizontal = 8.dp))
+fun SettingsDivider() {
+    val color by animateColorAsState(
+        MaterialTheme.colorScheme.outlineVariant,
+        appColorAnimationSpec,
+        label = "divider color"
+    )
+    HorizontalDivider(Modifier.padding(horizontal = 8.dp), color = color)
+}
 
 @Composable
 fun SettingsClickable(
