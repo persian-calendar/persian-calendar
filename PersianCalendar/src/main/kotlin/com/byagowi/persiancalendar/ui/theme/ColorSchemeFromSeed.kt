@@ -152,18 +152,14 @@ private class CorePalette private constructor(argb: Int, isContent: Boolean) {
          *
          * @param argb ARGB representation of a color
          */
-        fun of(argb: Int): CorePalette {
-            return CorePalette(argb, false)
-        }
+        fun of(argb: Int) = CorePalette(argb, false)
 
         /**
          * Create content key tones from a color.
          *
          * @param argb ARGB representation of a color
          */
-        fun contentOf(argb: Int): CorePalette {
-            return CorePalette(argb, true)
-        }
+        fun contentOf(argb: Int) = CorePalette(argb, true)
     }
 }
 
@@ -198,9 +194,7 @@ private class TonalPalette private constructor(
          * @param chroma HCT chroma
          * @return Tones matching hue and chroma.
          */
-        fun fromHueAndChroma(hue: Double, chroma: Double): TonalPalette {
-            return TonalPalette(hue, chroma)
-        }
+        fun fromHueAndChroma(hue: Double, chroma: Double) = TonalPalette(hue, chroma)
     }
 }
 
@@ -232,10 +226,8 @@ private class Hct private constructor(argb: Int) {
          * @param tone 0 <= tone <= 100; invalid values are corrected.
          * @return HCT representation of a color in default viewing conditions.
          */
-        fun from(hue: Double, chroma: Double, tone: Double): Hct {
-            val argb = HctSolver.solveToInt(hue, chroma, tone)
-            return Hct(argb)
-        }
+        fun from(hue: Double, chroma: Double, tone: Double) =
+            Hct(HctSolver.solveToInt(hue, chroma, tone))
 
         /**
          * Create an HCT color from a color.
@@ -243,30 +235,20 @@ private class Hct private constructor(argb: Int) {
          * @param argb ARGB representation of a color.
          * @return HCT representation of a color in default viewing conditions
          */
-        fun fromInt(argb: Int): Hct {
-            return Hct(argb)
-        }
+        fun fromInt(argb: Int) = Hct(argb)
     }
 }
 
 object HctSolver {
     private val SCALED_DISCOUNT_FROM_LINRGB = arrayOf(
-        doubleArrayOf(
-            0.001200833568784504, 0.002389694492170889, 0.0002795742885861124
-        ), doubleArrayOf(
-            0.0005891086651375999, 0.0029785502573438758, 0.0003270666104008398
-        ), doubleArrayOf(
-            0.00010146692491640572, 0.0005364214359186694, 0.0032979401770712076
-        )
+        doubleArrayOf(0.001200833568784504, 0.002389694492170889, 0.0002795742885861124),
+        doubleArrayOf(0.0005891086651375999, 0.0029785502573438758, 0.0003270666104008398),
+        doubleArrayOf(0.00010146692491640572, 0.0005364214359186694, 0.0032979401770712076),
     )
     private val LINRGB_FROM_SCALED_DISCOUNT = arrayOf(
-        doubleArrayOf(
-            1373.2198709594231, -1100.4251190754821, -7.278681089101213
-        ), doubleArrayOf(
-            -271.815969077903, 559.6580465940733, -32.46047482791194
-        ), doubleArrayOf(
-            1.9622899599665666, -57.173814538844006, 308.7233197812385
-        )
+        doubleArrayOf(1373.2198709594231, -1100.4251190754821, -7.278681089101213),
+        doubleArrayOf(-271.815969077903, 559.6580465940733, -32.46047482791194),
+        doubleArrayOf(1.9622899599665666, -57.173814538844006, 308.7233197812385),
     )
     private val Y_FROM_LINRGB = doubleArrayOf(0.2126, 0.7152, 0.0722)
     private val CRITICAL_PLANES = doubleArrayOf(
@@ -596,7 +578,7 @@ object HctSolver {
         return doubleArrayOf(
             source[0] + (target[0] - source[0]) * t,
             source[1] + (target[1] - source[1]) * t,
-            source[2] + (target[2] - source[2]) * t
+            source[2] + (target[2] - source[2]) * t,
         )
     }
 
@@ -639,25 +621,13 @@ object HctSolver {
         val coordB = if (n % 2 == 0) 0.0 else 100.0
         return if (n < 4) {
             val r = (y - coordA * kG - coordB * kB) / kR
-            if (isBounded(r)) {
-                doubleArrayOf(r, coordA, coordB)
-            } else {
-                doubleArrayOf(-1.0, -1.0, -1.0)
-            }
+            if (isBounded(r)) doubleArrayOf(r, coordA, coordB) else doubleArrayOf(-1.0, -1.0, -1.0)
         } else if (n < 8) {
             val g = (y - coordB * kR - coordA * kB) / kG
-            if (isBounded(g)) {
-                doubleArrayOf(coordB, g, coordA)
-            } else {
-                doubleArrayOf(-1.0, -1.0, -1.0)
-            }
+            if (isBounded(g)) doubleArrayOf(coordB, g, coordA) else doubleArrayOf(-1.0, -1.0, -1.0)
         } else {
             val b = (y - coordA * kR - coordB * kG) / kB
-            if (isBounded(b)) {
-                doubleArrayOf(coordA, coordB, b)
-            } else {
-                doubleArrayOf(-1.0, -1.0, -1.0)
-            }
+            if (isBounded(b)) doubleArrayOf(coordA, coordB, b) else doubleArrayOf(-1.0, -1.0, -1.0)
         }
     }
 
@@ -678,9 +648,7 @@ object HctSolver {
         var uncut = true
         for (n in 0..11) {
             val mid = nthVertex(y, n)
-            if (mid[0] < 0) {
-                continue
-            }
+            if (mid[0] < 0) continue
             val midHue = hueOf(mid)
             if (!initialized) {
                 left = mid
@@ -704,19 +672,12 @@ object HctSolver {
         return arrayOf(left, right)
     }
 
-    private fun midpoint(a: DoubleArray, b: DoubleArray): DoubleArray {
-        return doubleArrayOf(
-            (a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2
-        )
-    }
+    private fun midpoint(a: DoubleArray, b: DoubleArray) =
+        doubleArrayOf((a[0] + b[0]) / 2, (a[1] + b[1]) / 2, (a[2] + b[2]) / 2)
 
-    private fun criticalPlaneBelow(x: Double): Int {
-        return floor(x - 0.5).toInt()
-    }
+    private fun criticalPlaneBelow(x: Double) = floor(x - 0.5).toInt()
 
-    private fun criticalPlaneAbove(x: Double): Int {
-        return ceil(x - 0.5).toInt()
-    }
+    private fun criticalPlaneAbove(x: Double) = ceil(x - 0.5).toInt()
 
     /**
      * Finds a color with the given Y and hue on the boundary of the cube.
@@ -816,16 +777,12 @@ object HctSolver {
             // ===========================================================
             // Operations inlined from Cam16 to avoid repeated calculation
             // ===========================================================
-            if (linrgb[0] < 0 || linrgb[1] < 0 || linrgb[2] < 0) {
-                return 0
-            }
+            if (linrgb[0] < 0 || linrgb[1] < 0 || linrgb[2] < 0) return 0
             val kR = Y_FROM_LINRGB[0]
             val kG = Y_FROM_LINRGB[1]
             val kB = Y_FROM_LINRGB[2]
             val fnj = kR * linrgb[0] + kG * linrgb[1] + kB * linrgb[2]
-            if (fnj <= 0) {
-                return 0
-            }
+            if (fnj <= 0) return 0
             if (iterationRound == 4 || abs(fnj - y) < 0.002) {
                 return if (linrgb[0] > 100.01 || linrgb[1] > 100.01 || linrgb[2] > 100.01) {
                     0
@@ -1181,19 +1138,13 @@ private object ColorUtils {
     }
 
     /** Returns the red component of a color in ARGB format.  */
-    private fun redFromArgb(argb: Int): Int {
-        return argb shr 16 and 255
-    }
+    private fun redFromArgb(argb: Int) = argb shr 16 and 255
 
     /** Returns the green component of a color in ARGB format.  */
-    private fun greenFromArgb(argb: Int): Int {
-        return argb shr 8 and 255
-    }
+    private fun greenFromArgb(argb: Int) = argb shr 8 and 255
 
     /** Returns the blue component of a color in ARGB format.  */
-    private fun blueFromArgb(argb: Int): Int {
-        return argb and 255
-    }
+    private fun blueFromArgb(argb: Int) = argb and 255
 
     /** Converts a color from XYZ to ARGB.  */
     private fun xyzFromArgb(argb: Int): DoubleArray {
@@ -1239,9 +1190,7 @@ private object ColorUtils {
      * @param lstar L* in L*a*b*
      * @return Y in XYZ
      */
-    fun yFromLstar(lstar: Double): Double {
-        return 100.0 * labInvf((lstar + 16.0) / 116.0)
-    }
+    fun yFromLstar(lstar: Double) = 100.0 * labInvf((lstar + 16.0) / 116.0)
 
     /**
      * Linearizes an RGB component.
@@ -1284,22 +1233,14 @@ private object ColorUtils {
     private fun labF(t: Double): Double {
         val e = 216.0 / 24389.0
         val kappa = 24389.0 / 27.0
-        return if (t > e) {
-            t.pow(1.0 / 3.0)
-        } else {
-            (kappa * t + 16) / 116
-        }
+        return if (t > e) t.pow(1.0 / 3.0) else (kappa * t + 16) / 116
     }
 
     private fun labInvf(ft: Double): Double {
         val e = 216.0 / 24389.0
         val kappa = 24389.0 / 27.0
         val ft3 = ft * ft * ft
-        return if (ft3 > e) {
-            ft3
-        } else {
-            (116 * ft - 16) / kappa
-        }
+        return if (ft3 > e) ft3 else (116 * ft - 16) / kappa
     }
 }
 
@@ -1309,9 +1250,8 @@ private object MathUtils {
      *
      * @return start if amount = 0 and stop if amount = 1
      */
-    fun lerp(start: Double, stop: Double, amount: Double): Double {
-        return (1.0 - amount) * start + amount * stop
-    }
+    fun lerp(start: Double, stop: Double, amount: Double) =
+        (1.0 - amount) * start + amount * stop
 
     /**
      * Sanitizes a degree measure as a floating-point number.
