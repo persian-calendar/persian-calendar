@@ -92,7 +92,7 @@ import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.isPortrait
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
@@ -247,12 +247,12 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
 
 fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, Int> {
     // https://stackoverflow.com/a/69080699
-    val isPortrait = context.resources.isPortrait
+    val isLandscape = context.resources.isLandscape
     val (width, height) = listOf(
-        if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
-        else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
-        if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-        else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+        if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
+        else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
+        if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+        else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
     ).map { (getAppWidgetOptions(widgetId).getInt(it, 0) * context.resources.dp).toInt() }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
     return if (width > 10 && height > 10) width to height else 250 to 250

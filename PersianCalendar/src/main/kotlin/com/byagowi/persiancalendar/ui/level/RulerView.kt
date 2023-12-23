@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.isPortrait
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val dp = resources.dp
@@ -30,8 +30,8 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }
 
     override fun onDraw(canvas: Canvas) {
-        val dpi = if (resources.isPortrait)
-            resources.displayMetrics.ydpi else resources.displayMetrics.xdpi
+        val dpi = if (resources.isLandscape)
+            resources.displayMetrics.xdpi else resources.displayMetrics.ydpi
 
         // Inch
         paint.textAlign = if (cmInchFlip) Paint.Align.RIGHT else Paint.Align.LEFT
