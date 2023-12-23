@@ -45,7 +45,6 @@ class PersianCalendarDreamService : DreamService() {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        isInteractive = true
         isFullscreen = true
 
         val backgroundView = View(this).also {
@@ -64,14 +63,17 @@ class PersianCalendarDreamService : DreamService() {
                 pattern.rotationDegree = valueAnimator.animatedFraction * 360f
                 pattern.invalidateSelf()
             }
-            it.setOnClickListener { wakeUp() }
+            // it.setOnClickListener { wakeUp() }
         }
+        // isInteractive = true
 
         runCatching {
             if (appPrefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE))
                 audioTrack.play()
         }.onFailure(logException)
 
+        // ComposeView can't be used in DreamService in my tries
+        // Even if worked someday, please test older devices also
         setContentView(backgroundView)
 
         listOf(valueAnimator::start, valueAnimator::reverse).random()()
