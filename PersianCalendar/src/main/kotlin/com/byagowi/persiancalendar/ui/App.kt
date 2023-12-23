@@ -41,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -104,6 +105,7 @@ import java.util.Date
 
 @Composable
 fun App(intentStartDestination: String?, finish: () -> Unit) {
+    // See xml/shortcuts.xml
     val startDestination = when (intentStartDestination) {
         "COMPASS" -> compassRoute
         "LEVEL" -> levelRoute
@@ -145,24 +147,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     DrawerSeasonsPager(drawerState)
-
-                    listOf(
-                        Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
-                        Triple(
-                            converterRoute,
-                            Icons.Default.SwapVerticalCircle,
-                            R.string.date_converter
-                        ),
-                        Triple(compassRoute, Icons.Default.Explore, R.string.compass),
-                        Triple(
-                            astronomyRoute,
-                            ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
-                            R.string.astronomy
-                        ),
-                        Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
-                        Triple(aboutRoute, Icons.Default.Info, R.string.about),
-                        Triple(null, Icons.Default.Cancel, R.string.exit),
-                    ).forEach { (id, icon, title) ->
+                    DrawerItems().forEach { (id, icon, title) ->
                         NavigationDrawerItem(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             label = {
@@ -334,6 +319,24 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             }
         }
     }
+}
+
+@Stable
+@Composable
+private fun DrawerItems(): List<Triple<String?, ImageVector, Int>> {
+    return listOf(
+        Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
+        Triple(converterRoute, Icons.Default.SwapVerticalCircle, R.string.date_converter),
+        Triple(compassRoute, Icons.Default.Explore, R.string.compass),
+        Triple(
+            astronomyRoute,
+            ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
+            R.string.astronomy
+        ),
+        Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
+        Triple(aboutRoute, Icons.Default.Info, R.string.about),
+        Triple(null, Icons.Default.Cancel, R.string.exit),
+    )
 }
 
 private const val calendarRoute = "calendar"
