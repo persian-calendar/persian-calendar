@@ -1,3 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dream xmlns:android="http://schemas.android.com/apk/res/android"
+    android:previewImage="@drawable/livewallpaper"
     android:settingsActivity="com.byagowi.persiancalendar.ui.settings.wallpaper.DreamSettingsActivity" />
