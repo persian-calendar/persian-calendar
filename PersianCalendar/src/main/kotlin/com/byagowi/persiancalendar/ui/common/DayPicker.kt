@@ -87,7 +87,7 @@ fun DayPicker(
         val monthsLength = remember(calendarType, date.year, date.month) {
             calendarType.getMonthLength(date.year, date.month)
         }
-        val yearMonth = remember(calendarType, date.year) {
+        val yearMonths = remember(calendarType, date.year) {
             calendarType.getYearMonths(date.year)
         }
         val monthsFormat = remember(calendarType, date.year) {
@@ -119,11 +119,12 @@ fun DayPicker(
             NumberPicker(
                 modifier = Modifier.weight(1f),
                 label = monthsFormat,
-                range = 1..yearMonth,
+                range = 1..yearMonths,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.month,
-            ) {
-                setJdn(Jdn(calendarType, date.year, it, date.dayOfMonth))
+            ) { month ->
+                val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(date.year, month))
+                setJdn(Jdn(calendarType, date.year, month, day))
                 view.performHapticFeedbackVirtualKey()
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -133,8 +134,10 @@ fun DayPicker(
                 range = startYear..startYear + 400,
                 textStyle = MaterialTheme.typography.bodyMedium,
                 value = date.year,
-            ) {
-                setJdn(Jdn(calendarType, it, date.month, date.dayOfMonth))
+            ) { year ->
+                val month = date.month.coerceIn(1, calendarType.getYearMonths(year))
+                val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(year, month))
+                setJdn(Jdn(calendarType, year, month, day))
                 view.performHapticFeedbackVirtualKey()
             }
         }
@@ -205,18 +208,15 @@ fun NumberPicker(
                             animationSpec = exponentialDecay(frictionMultiplier = 20f),
                             adjustTarget = { target ->
                                 val coercedTarget = target % halfNumbersColumnHeightPx
-                                val coercedAnchors =
-                                    listOf(
-                                        -halfNumbersColumnHeightPx,
-                                        0f,
-                                        halfNumbersColumnHeightPx
-                                    )
+                                val coercedAnchors = listOf(
+                                    -halfNumbersColumnHeightPx, 0f, halfNumbersColumnHeightPx
+                                )
                                 val coercedPoint =
                                     coercedAnchors.minByOrNull { abs(it - coercedTarget) }!!
                                 val base =
                                     halfNumbersColumnHeightPx * (target / halfNumbersColumnHeightPx).toInt()
                                 coercedPoint + base
-                            }
+                            },
                         ).endState.value
 
                         val result = range.elementAt(
@@ -225,7 +225,7 @@ fun NumberPicker(
                         onValueChange(result)
                         animatedOffset.snapTo(0f)
                     }
-                }
+                },
             )
             .padding(vertical = numbersColumnHeight / 3 + verticalMargin * 2),
         content = {
