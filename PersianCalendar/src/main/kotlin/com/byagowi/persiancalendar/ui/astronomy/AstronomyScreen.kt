@@ -62,8 +62,10 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -132,6 +134,9 @@ fun AstronomyScreen(
 
     // Bad practice, for now
     var slider by remember { mutableStateOf<SliderView?>(null) }
+
+    val isLandscape =
+        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -315,8 +320,6 @@ fun AstronomyScreen(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Spacer(Modifier.height(24.dp))
-                    val isLandscape =
-                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
                     if (isLandscape) Row(Modifier.fillMaxWidth()) {
                         Header(
                             Modifier
@@ -336,16 +339,22 @@ fun AstronomyScreen(
                         )
                     } else Column {
                         val minSize = 290.dp
-                        val headerSize = 240.dp // Just hypothetically
-                        Header(Modifier.padding(horizontal = 24.dp), viewModel)
+                        var headerHeightPx by remember { mutableStateOf(0) }
+                        val headerHeight = with(LocalDensity.current) { headerHeightPx.toDp() }
+                        Header(
+                            Modifier
+                                .onSizeChanged { headerHeightPx = it.height }
+                                .padding(horizontal = 24.dp),
+                            viewModel,
+                        )
                         Spacer(Modifier.height(16.dp))
                         SolarDisplay(
                             Modifier
                                 .fillMaxWidth()
-                                .height((maxHeight - headerSize).coerceAtLeast(minSize)),
+                                .height((maxHeight - headerHeight).coerceAtLeast(minSize)),
                             viewModel,
                             slider,
-                            min(maxWidth * 7 / 10, maxHeight - headerSize).coerceAtLeast(minSize),
+                            min(maxWidth * 7 / 10, maxHeight - headerHeight).coerceAtLeast(minSize),
                             navigateToMap
                         )
                     }
