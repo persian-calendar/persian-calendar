@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +46,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -184,11 +187,22 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                         onDismissRequest = onDismissRequest,
                     )
                 }
-                val showColorOptions = remember {
-                    !(theme.value.isDynamicColors() &&
-                            context.appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true))
+                val theme by theme.collectAsState()
+                var preferSystemColors by remember(theme) {
+                    mutableStateOf(
+                        context.appPrefs.getBoolean(
+                            PREF_WIDGETS_PREFER_SYSTEM_COLORS, theme.isDynamicColors()
+                        )
+                    )
                 }
-                if (showColorOptions) {
+                if (theme.isDynamicColors()) {
+                    SettingsSwitch(
+                        PREF_WIDGETS_PREFER_SYSTEM_COLORS, true,
+                        stringResource(R.string.widget_prefer_device_colors),
+                        onBeforeToggle = { preferSystemColors = it; it },
+                    )
+                }
+                AnimatedVisibility(!preferSystemColors) {
                     SettingsClickable(
                         stringResource(R.string.widget_text_color),
                         stringResource(R.string.select_widgets_text_color)
@@ -199,6 +213,8 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                             onDismissRequest = onDismissRequest,
                         )
                     }
+                }
+                AnimatedVisibility(!preferSystemColors) {
                     SettingsClickable(
                         stringResource(R.string.widget_background_color),
                         stringResource(R.string.select_widgets_background_color)
