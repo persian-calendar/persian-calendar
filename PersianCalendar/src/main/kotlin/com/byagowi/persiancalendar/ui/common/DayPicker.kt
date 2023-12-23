@@ -1,11 +1,16 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationResult
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -49,6 +54,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
@@ -249,68 +255,77 @@ fun NumberPicker(
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
-                if (showTextEdit) {
-                    val focusRequester = remember { FocusRequester() }
-                    var inputValue by remember {
-                        val valueText = formatNumber(value)
-                        mutableStateOf(
-                            TextFieldValue(
-                                valueText, selection = TextRange(0, valueText.length)
+                val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
+                AnimatedContent(
+                    showTextEdit,
+                    label = "edit toggle",
+                    transitionSpec = {
+                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
+                    },
+                ) { state ->
+                    if (state) {
+                        val focusRequester = remember { FocusRequester() }
+                        var inputValue by remember {
+                            val valueText = formatNumber(value)
+                            mutableStateOf(
+                                TextFieldValue(
+                                    valueText, selection = TextRange(0, valueText.length)
+                                )
                             )
-                        )
-                    }
-                    LaunchedEffect(Unit) { focusRequester.requestFocus() }
-                    var isCapturedOnce by remember { mutableStateOf(false) }
+                        }
+                        LaunchedEffect(Unit) { focusRequester.requestFocus() }
+                        var isCapturedOnce by remember { mutableStateOf(false) }
 
-                    val interactionSource = remember { MutableInteractionSource() }
-                    val isFocused by interactionSource.collectIsFocusedAsState()
-                    if (isFocused && !isCapturedOnce) isCapturedOnce = true
-                    if (!isFocused && isCapturedOnce) showTextEdit = false
-                    Box(
-                        Modifier.height(numbersColumnHeight / 3),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        BasicTextField(
-                            value = inputValue,
-                            interactionSource = interactionSource,
-                            maxLines = 1,
-                            onValueChange = { inputValue = it },
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    focusManager.clearFocus()
-                                    showTextEdit = false
-                                    inputValue.text.toIntOrNull()?.let {
-                                        if (it in range) onValueChange(it)
-                                    }
-                                },
+                        val interactionSource = remember { MutableInteractionSource() }
+                        val isFocused by interactionSource.collectIsFocusedAsState()
+                        if (isFocused && !isCapturedOnce) isCapturedOnce = true
+                        if (!isFocused && isCapturedOnce) showTextEdit = false
+                        Box(
+                            Modifier.height(numbersColumnHeight / 3),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            BasicTextField(
+                                value = inputValue,
+                                interactionSource = interactionSource,
+                                maxLines = 1,
+                                onValueChange = { inputValue = it },
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        focusManager.clearFocus()
+                                        showTextEdit = false
+                                        inputValue.text.toIntOrNull()?.let {
+                                            if (it in range) onValueChange(it)
+                                        }
+                                    },
+                                ),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done,
+                                ),
+                                textStyle = LocalTextStyle.current.copy(
+                                    textAlign = TextAlign.Center,
+                                    color = LocalContentColor.current,
+                                ),
+                                modifier = Modifier.focusRequester(focusRequester),
+                            )
+                        }
+                    } else Label(
+                        text = label(range.elementAt(indexOfElement)),
+                        modifier = Modifier
+                            .height(numbersColumnHeight / 3)
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClickLabel = onClickLabel,
+                            ) { showTextEdit = true }
+                            .alpha(
+                                (maxOf(
+                                    minimumAlpha,
+                                    1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
+                                ))
                             ),
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done,
-                            ),
-                            textStyle = LocalTextStyle.current.copy(
-                                textAlign = TextAlign.Center,
-                                color = LocalContentColor.current,
-                            ),
-                            modifier = Modifier.focusRequester(focusRequester),
-                        )
-                    }
-                } else Label(
-                    text = label(range.elementAt(indexOfElement)),
-                    modifier = Modifier
-                        .height(numbersColumnHeight / 3)
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClickLabel = onClickLabel,
-                        ) { showTextEdit = true }
-                        .alpha(
-                            (maxOf(
-                                minimumAlpha,
-                                1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
-                            ))
-                        ),
-                )
+                    )
+                }
                 if (indexOfElement < range.count() - 1) Label(
                     text = label(range.elementAt(indexOfElement + 1)),
                     modifier = Modifier
