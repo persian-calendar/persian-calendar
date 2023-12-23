@@ -167,7 +167,7 @@ fun NumberPicker(
 ) {
     val minimumAlpha = 0.3f
     val verticalMargin = 8.dp
-    val numbersColumnHeight = 80.dp
+    val numbersColumnHeight = 88.dp
     val halfNumbersColumnHeight = numbersColumnHeight / 2
     val halfNumbersColumnHeightPx = with(LocalDensity.current) { halfNumbersColumnHeight.toPx() }
 
