@@ -24,6 +24,9 @@ class AstronomyViewModel : ViewModel() {
     private val _isTropical = MutableStateFlow(false)
     val isTropical: StateFlow<Boolean> = _isTropical
 
+    private val _isDayPickerDialogShown = MutableStateFlow(false)
+    val isDayPickerDialogShown: StateFlow<Boolean> = _isDayPickerDialogShown
+
     // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
     // is meant to be used in animation thus is the visible one and the other is to keep final
     // animation value so we should keep the two in sync manually with a slight difference.
@@ -43,6 +46,14 @@ class AstronomyViewModel : ViewModel() {
         it.duration = 400 // android.R.integer.config_mediumAnimTime
         it.interpolator = AccelerateDecelerateInterpolator()
         it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
+    }
+
+    fun showDayPickerDialog() {
+        _isDayPickerDialogShown.value = true
+    }
+
+    fun dismissDayPickerDialog() {
+        _isDayPickerDialogShown.value = false
     }
 
     fun setMode(mode: AstronomyMode) {

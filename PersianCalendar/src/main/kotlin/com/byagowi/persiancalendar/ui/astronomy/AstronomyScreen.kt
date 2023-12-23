@@ -112,14 +112,6 @@ fun AstronomyScreen(
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
 ) {
-    val state by viewModel.astronomyState.collectAsState()
-    var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDayPickerDialog) DayPickerDialog(initialJdn = Jdn(state.date.toCivilDate()),
-        positiveButtonTitle = R.string.accept,
-        onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }) {
-        showDayPickerDialog = false
-    }
-
     LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
         if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
@@ -182,7 +174,7 @@ fun AstronomyScreen(
                             text = { Text(stringResource(R.string.goto_date)) },
                             onClick = {
                                 closeMenu()
-                                showDayPickerDialog = true
+                                viewModel.showDayPickerDialog()
                             },
                         )
                         DropdownMenuItem(
@@ -203,7 +195,6 @@ fun AstronomyScreen(
                     .safeDrawingPadding(),
                 slider,
                 viewModel,
-                { showDayPickerDialog = true },
                 { slider = it },
             )
         }
@@ -234,7 +225,6 @@ fun AstronomyScreen(
                                 .padding(bottom = bottomPadding + 16.dp),
                             slider,
                             viewModel,
-                            { showDayPickerDialog = true },
                             { slider = it },
                         )
                     }
@@ -272,6 +262,14 @@ fun AstronomyScreen(
             }
         }
     }
+
+    val isDayPickerDialogShown by viewModel.isDayPickerDialogShown.collectAsState()
+    if (isDayPickerDialogShown) DayPickerDialog(
+        initialJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate()),
+        positiveButtonTitle = R.string.accept,
+        onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) },
+        onDismissRequest = viewModel::dismissDayPickerDialog,
+    )
 }
 
 @Composable
@@ -279,7 +277,6 @@ private fun SliderBar(
     modifier: Modifier,
     slider: SliderView?,
     viewModel: AstronomyViewModel,
-    showDayPickerDialog: () -> Unit,
     setSlider: (SliderView) -> Unit,
 ) {
     val state by viewModel.astronomyState.collectAsState()
@@ -299,7 +296,7 @@ private fun SliderBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .combinedClickable(
-                    onClick = { showDayPickerDialog() },
+                    onClick = { viewModel.showDayPickerDialog() },
                     onClickLabel = stringResource(R.string.goto_date),
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
@@ -397,9 +394,7 @@ private fun SolarDisplay(
     val isTropical by viewModel.isTropical.collectAsState()
     val mode by viewModel.mode.collectAsState()
     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
-        showHoroscopeDialog = false
-    }
+    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) { showHoroscopeDialog = false }
     Box(modifier) {
         Column(Modifier.align(Alignment.CenterStart)) {
             AstronomyMode.entries.forEach {
