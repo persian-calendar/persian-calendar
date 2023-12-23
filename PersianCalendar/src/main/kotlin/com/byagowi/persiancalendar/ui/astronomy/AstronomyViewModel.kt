@@ -17,8 +17,12 @@ class AstronomyViewModel : ViewModel() {
     val minutesOffset: StateFlow<Int> = _minutesOffset
 
     private val dateSink = GregorianCalendar() // Just to avoid recreating it everytime
-    private var _astronomyState = MutableStateFlow(AstronomyState(dateSink))
-    var astronomyState: StateFlow<AstronomyState> = _astronomyState
+
+    private val _astronomyState = MutableStateFlow(AstronomyState(dateSink))
+    val astronomyState: StateFlow<AstronomyState> = _astronomyState
+
+    private val _isTropical = MutableStateFlow(false)
+    val isTropical: StateFlow<Boolean> = _isTropical
 
     // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
     // is meant to be used in animation thus is the visible one and the other is to keep final
@@ -29,6 +33,7 @@ class AstronomyViewModel : ViewModel() {
     // animation of the screen.
 
     // Commands
+
     private fun setAstronomyState(value: Int) {
         dateSink.timeInMillis = System.currentTimeMillis() + value * ONE_MINUTE_IN_MILLIS
         _astronomyState.value = AstronomyState(dateSink)
@@ -38,6 +43,14 @@ class AstronomyViewModel : ViewModel() {
         it.duration = 400 // android.R.integer.config_mediumAnimTime
         it.interpolator = AccelerateDecelerateInterpolator()
         it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
+    }
+
+    fun setMode(mode: AstronomyMode) {
+        _mode.value = mode
+    }
+
+    fun toggleIsTropical() {
+        _isTropical.value = !_isTropical.value
     }
 
     fun animateToAbsoluteMinutesOffset(value: Int) {

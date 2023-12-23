@@ -133,9 +133,6 @@ fun AstronomyScreen(
     // Bad practice, for now
     var slider by remember { mutableStateOf<SliderView?>(null) }
 
-    var isTropical by rememberSaveable { mutableStateOf(false) }
-    var mode by rememberSaveable { mutableStateOf(AstronomyMode.entries[0]) }
-
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -156,6 +153,8 @@ fun AstronomyScreen(
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()
+                    val isTropical by viewModel.isTropical.collectAsState()
+                    val mode by viewModel.mode.collectAsState()
                     TodayActionButton(visible = minutesOffset != 0) {
                         viewModel.animateToAbsoluteMinutesOffset(0)
                     }
@@ -164,12 +163,12 @@ fun AstronomyScreen(
                             Modifier.clickable(
                                 indication = rememberRipple(bounded = false),
                                 interactionSource = remember { MutableInteractionSource() },
-                            ) { isTropical = !isTropical },
+                            ) { viewModel.toggleIsTropical() },
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(stringResource(R.string.tropical))
                             Spacer(modifier = Modifier.width(8.dp))
-                            Switch(isTropical, onCheckedChange = { isTropical = !isTropical })
+                            Switch(isTropical, onCheckedChange = { viewModel.toggleIsTropical() })
                         }
                     }
                     ThreeDotsDropdownMenu { closeMenu ->
@@ -323,9 +322,7 @@ fun AstronomyScreen(
                             Modifier
                                 .weight(1f)
                                 .padding(start = 24.dp),
-                            isTropical,
-                            mode,
-                            state
+                            viewModel,
                         )
                         val circleSize = min(maxWidth, maxHeight)
                         SolarDisplay(
@@ -333,33 +330,24 @@ fun AstronomyScreen(
                                 .weight(1f)
                                 .height(maxHeight),
                             viewModel,
-                            mode,
-                            isTropical,
                             slider,
                             circleSize,
                             navigateToMap
-                        ) { mode = it }
+                        )
                     } else Column {
                         val minSize = 290.dp
                         val headerSize = 240.dp // Just hypothetically
-                        Header(
-                            Modifier.padding(horizontal = 24.dp),
-                            isTropical,
-                            mode,
-                            state
-                        )
+                        Header(Modifier.padding(horizontal = 24.dp), viewModel)
                         Spacer(Modifier.height(16.dp))
                         SolarDisplay(
                             Modifier
                                 .fillMaxWidth()
                                 .height((maxHeight - headerSize).coerceAtLeast(minSize)),
                             viewModel,
-                            mode,
-                            isTropical,
                             slider,
                             min(maxWidth * 7 / 10, maxHeight - headerSize).coerceAtLeast(minSize),
                             navigateToMap
-                        ) { mode = it }
+                        )
                     }
                     Spacer(modifier = Modifier.height(paddingValues.calculateBottomPadding()))
                 }
@@ -372,14 +360,13 @@ fun AstronomyScreen(
 private fun SolarDisplay(
     modifier: Modifier,
     viewModel: AstronomyViewModel,
-    mode: AstronomyMode,
-    isTropical: Boolean,
     slider: SliderView?,
     circleSize: Dp,
     navigateToMap: () -> Unit,
-    setMode: (AstronomyMode) -> Unit,
 ) {
     val state by viewModel.astronomyState.collectAsState()
+    val isTropical by viewModel.isTropical.collectAsState()
+    val mode by viewModel.mode.collectAsState()
     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
     if (showHoroscopeDialog) HoroscopesDialog(state.date.time) {
         showHoroscopeDialog = false
@@ -390,7 +377,7 @@ private fun SolarDisplay(
                 NavigationRailItem(
                     modifier = Modifier.size(56.dp),
                     selected = mode == it,
-                    onClick = { setMode(it) },
+                    onClick = { viewModel.setMode(it) },
                     icon = {
                         if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
                             ImageVector.vectorResource(it.icon),
@@ -446,12 +433,10 @@ private fun SolarDisplay(
 }
 
 @Composable
-private fun Header(
-    modifier: Modifier,
-    isTropical: Boolean,
-    mode: AstronomyMode,
-    state: AstronomyState,
-) {
+private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
+    val isTropical by viewModel.isTropical.collectAsState()
+    val mode by viewModel.mode.collectAsState()
+    val state by viewModel.astronomyState.collectAsState()
     val sunZodiac = if (isTropical) Zodiac.fromTropical(state.sun.elon)
     else Zodiac.fromIau(state.sun.elon)
     val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
