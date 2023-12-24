@@ -126,18 +126,6 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
-/**
- * Turns an attribute to a resource id from the theme
- *
- * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/resources/MaterialAttributes.java#L45
- */
-@AnyRes
-fun Context.resolveResourceIdFromTheme(@AttrRes attributeId: Int): Int {
-    val typedValue = TypedValue()
-    theme.resolveAttribute(attributeId, typedValue, true)
-    return typedValue.resourceId
-}
-
 // Return an empty drawable instead of crash, to be removed someday hopefully
 fun Context.getSafeDrawable(@DrawableRes drawableRes: Int): Drawable =
     runCatching { getDrawable(drawableRes) }.onFailure(logException).getOrNull().debugAssertNotNull

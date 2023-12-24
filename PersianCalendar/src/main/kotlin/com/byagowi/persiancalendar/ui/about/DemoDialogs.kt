@@ -74,8 +74,6 @@ import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -334,9 +332,9 @@ fun showFlingDemoDialog(activity: ComponentActivity) {
         private var storedVelocityY = 0f
 
         init {
-            setBackgroundResource(
-                activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
-            )
+//            setBackgroundResource(
+//                activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
+//            )
             horizontalFling.addUpdateListener { _, _, velocity ->
                 storedVelocityX = velocity
                 invalidate()
@@ -416,13 +414,13 @@ fun showFlingDemoDialog(activity: ComponentActivity) {
                 val index = ++counter % diatonicScale.size
                 lifecycle.launch { playSoundTick(diatonicScale[index].toDouble()) }
 
-                val rippleDrawable = background
-                if (rippleDrawable is RippleDrawable) {
-                    isPressed = false
-                    rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
-                    rippleDrawable.setHotspot(x.value, y.value)
-                    isPressed = true
-                }
+//                val rippleDrawable = background
+//                if (rippleDrawable is RippleDrawable) {
+//                    isPressed = false
+//                    rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
+//                    rippleDrawable.setHotspot(x.value, y.value)
+//                    isPressed = true
+//                }
             }
         }
 
@@ -1003,28 +1001,28 @@ fun showSpringDemoDialog(activity: ComponentActivity) {
         .setView(view)
         .show()
 
-    view.setBackgroundResource(
-        activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
-    )
-    val rippleDrawable = view.background
-    if (rippleDrawable is RippleDrawable) {
-        val handler = Handler(Looper.getMainLooper())
-        fun next() {
-            val delay = Random.nextLong(10, TWO_SECONDS_IN_MILLIS)
-            handler.postDelayed(delay) {
-                if (!dialog.isShowing) return@postDelayed
-                view.isPressed = false
-                rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
-                rippleDrawable.setHotspot(
-                    view.width * Random.nextFloat(),
-                    view.height * Random.nextFloat()
-                )
-                view.isPressed = true
-                next()
-            }
-        }
-        next()
-    }
+//    view.setBackgroundResource(
+//        activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
+//    )
+//    val rippleDrawable = view.background
+//    if (rippleDrawable is RippleDrawable) {
+//        val handler = Handler(Looper.getMainLooper())
+//        fun next() {
+//            val delay = Random.nextLong(10, TWO_SECONDS_IN_MILLIS)
+//            handler.postDelayed(delay) {
+//                if (!dialog.isShowing) return@postDelayed
+//                view.isPressed = false
+//                rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
+//                rippleDrawable.setHotspot(
+//                    view.width * Random.nextFloat(),
+//                    view.height * Random.nextFloat()
+//                )
+//                view.isPressed = true
+//                next()
+//            }
+//        }
+//        next()
+//    }
 }
 
 private fun getRandomTransparentColor(): Int {
