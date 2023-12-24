@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -75,10 +76,9 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
@@ -208,51 +208,44 @@ fun AstronomyScreen(
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val bottomPadding = paddingValues.calculateBottomPadding()
-                val maxHeight = maxHeight - bottomPadding
+                val maxHeight = maxHeight
                 val maxWidth = maxWidth
                 if (isLandscape) Row(Modifier.fillMaxWidth()) {
-                    Box(
+                    Column(
                         Modifier
-                            .weight(1f)
+                            .width((maxWidth / 2).coerceAtMost(480.dp))
                             .fillMaxHeight()
-                            .padding(top = 24.dp, start = 24.dp),
+                            .padding(top = 24.dp, start = 24.dp, bottom = bottomPadding + 16.dp),
                     ) {
-                        Header(Modifier.align(Alignment.TopCenter), viewModel)
-                        SliderBar(
-                            Modifier
-                                .align(Alignment.BottomCenter)
-                                .padding(bottom = bottomPadding + 16.dp),
-                            slider,
-                            viewModel,
-                        ) { slider = it }
+                        Header(Modifier, viewModel)
+                        Spacer(Modifier.weight(1f))
+                        SliderBar(Modifier, slider, viewModel) { slider = it }
                     }
                     SolarDisplay(
                         Modifier
                             .weight(1f)
                             .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
-                            .height(maxHeight),
+                            .height(maxHeight - bottomPadding),
                         viewModel,
                         slider,
-                        min(maxWidth * 4f / 10, maxHeight),
                         navigateToMap
                     )
                 } else Column(Modifier.verticalScroll(rememberScrollState())) {
-                    val minSize = 290.dp
+                    val minSize = maxWidth - 48.dp
                     var headerHeightPx by remember { mutableStateOf(0) }
                     val headerHeight = with(LocalDensity.current) { headerHeightPx.toDp() }
                     Header(
                         Modifier
                             .onSizeChanged { headerHeightPx = it.height }
-                            .padding(all = 24.dp),
+                            .padding(start = 24.dp, end = 24.dp, top = 24.dp),
                         viewModel,
                     )
                     SolarDisplay(
                         Modifier
                             .fillMaxWidth()
-                            .height((maxHeight - headerHeight).coerceAtLeast(minSize)),
+                            .height((maxHeight - bottomPadding - headerHeight).coerceAtLeast(minSize)),
                         viewModel,
                         slider,
-                        min(maxWidth * 7 / 10, maxHeight - headerHeight).coerceAtLeast(minSize),
                         navigateToMap
                     )
                     Spacer(modifier = Modifier.height(bottomPadding))
@@ -385,7 +378,6 @@ private fun SolarDisplay(
     modifier: Modifier,
     viewModel: AstronomyViewModel,
     slider: SliderView?,
-    circleSize: Dp,
     navigateToMap: () -> Unit,
 ) {
     val state by viewModel.astronomyState.collectAsState()
@@ -427,7 +419,8 @@ private fun SolarDisplay(
                 solarView
             },
             modifier = Modifier
-                .size(circleSize)
+                .padding(horizontal = 56.dp)
+                .aspectRatio(1f)
                 .align(Alignment.Center),
             update = {
                 it.setSurfaceColor(surfaceColor.toArgb())
