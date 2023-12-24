@@ -88,7 +88,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun applyEdgeToEdge(isBackgroundColorLight: Boolean, isSurfaceColorLight: Boolean) {
-        if (Build.VERSION.SDK_INT >= 26) enableEdgeToEdge(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) enableEdgeToEdge(
             if (isBackgroundColorLight)
                 SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
             else SystemBarStyle.dark(Color.TRANSPARENT),
