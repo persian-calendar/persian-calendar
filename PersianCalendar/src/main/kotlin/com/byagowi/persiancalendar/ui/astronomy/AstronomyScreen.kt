@@ -195,8 +195,7 @@ fun AstronomyScreen(
                     .safeDrawingPadding(),
                 slider,
                 viewModel,
-                { slider = it },
-            )
+            ) { slider = it }
         }
     ) { paddingValues ->
         Surface(
@@ -216,7 +215,7 @@ fun AstronomyScreen(
                         Modifier
                             .weight(1f)
                             .fillMaxHeight()
-                            .padding(top = 24.dp, start = 24.dp)
+                            .padding(top = 24.dp, start = 24.dp),
                     ) {
                         Header(Modifier.align(Alignment.TopCenter), viewModel)
                         SliderBar(
@@ -225,8 +224,7 @@ fun AstronomyScreen(
                                 .padding(bottom = bottomPadding + 16.dp),
                             slider,
                             viewModel,
-                            { slider = it },
-                        )
+                        ) { slider = it }
                     }
                     SolarDisplay(
                         Modifier
@@ -510,13 +508,9 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 private fun Seasons(jdn: Jdn) {
     val seasonsCache = remember { lruCache(1024, create = ::seasons) }
     val seasonsOrder = remember {
-        if (coordinates.value?.isSouthernHemisphere == true) listOf(
-            Season.WINTER,
-            Season.SPRING,
-            Season.SUMMER,
-            Season.AUTUMN
-        )
-        else listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
+        if (coordinates.value?.isSouthernHemisphere == true) {
+            listOf(Season.WINTER, Season.SPRING, Season.SUMMER, Season.AUTUMN)
+        } else listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
     }
     val equinoxes = (1..4).map { i ->
         Date(
