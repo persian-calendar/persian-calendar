@@ -101,9 +101,7 @@ fun LicensesScreen(navigateUp: () -> Unit) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
-                ) {
-                    Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp))
-                }
+                ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
             }
         }
     }
@@ -138,17 +136,16 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                 KotlinVersion.CURRENT.toString(), {
                     Text("Kotlin", style = MaterialTheme.typography.bodySmall)
                 }, ::showSpringDemoDialog
-            ), Triple(
-                "API ${Build.VERSION.SDK_INT}",
-                {
+            ),
+            Triple(
+                "API ${Build.VERSION.SDK_INT}", {
                     Icon(
                         modifier = Modifier.size(MaterialIconDimension.dp),
                         imageVector = Icons.Default.Motorcycle,
                         contentDescription = "API"
                     )
-                },
-                ::showFlingDemoDialog
-            )
+                }, ::showFlingDemoDialog
+            ),
         ).forEachIndexed { i, (title, icon, action) ->
             val clickHandler = remember { createEasterEggClickHandler(action) }
             val context = LocalContext.current
