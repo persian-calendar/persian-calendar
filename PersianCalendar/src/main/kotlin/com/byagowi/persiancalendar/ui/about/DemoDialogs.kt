@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ComposeShader
@@ -16,7 +15,6 @@ import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.graphics.Shader
 import android.graphics.SweepGradient
-import android.graphics.drawable.RippleDrawable
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -26,8 +24,6 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.opengl.GLSurfaceView
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.text.Html
 import android.text.Spanned
 import android.text.SpannedString
@@ -54,7 +50,6 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
-import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
