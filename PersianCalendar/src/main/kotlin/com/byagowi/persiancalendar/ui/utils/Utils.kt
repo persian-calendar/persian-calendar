@@ -105,14 +105,10 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
-// Return an empty drawable instead of crash, to be removed someday hopefully
+// Returns an empty drawable instead of crash, to be removed someday hopefully
 fun Context.getSafeDrawable(@DrawableRes drawableRes: Int): Drawable =
     runCatching { getDrawable(drawableRes) }.onFailure(logException).getOrNull().debugAssertNotNull
         ?: ColorDrawable(Color.TRANSPARENT)
-
-inline fun MenuItem.onClick(crossinline action: () -> Unit) {
-    this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }
-}
 
 fun Window.makeWallpaperTransparency() {
     this.navigationBarColor = Color.TRANSPARENT
