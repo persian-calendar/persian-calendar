@@ -124,12 +124,12 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.utils.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
