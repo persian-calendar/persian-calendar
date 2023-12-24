@@ -189,13 +189,10 @@ fun AstronomyScreen(
             )
         },
         bottomBar = {
-            if (!isLandscape) SliderBar(
-                Modifier
-                    .padding(bottom = 16.dp)
-                    .safeDrawingPadding(),
-                slider,
-                viewModel,
-            ) { slider = it }
+            val modifier = Modifier
+                .padding(bottom = 16.dp)
+                .safeDrawingPadding()
+            if (!isLandscape) SliderBar(modifier, slider, viewModel) { slider = it }
         }
     ) { paddingValues ->
         Surface(
