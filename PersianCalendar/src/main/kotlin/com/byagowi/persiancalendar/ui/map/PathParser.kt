@@ -1,14 +1,11 @@
-// Copied from https://android.googlesource.com/platform/frameworks/support/+/refs/heads/androidx-main/core/core/src/main/java/androidx/core/graphics/PathParser.java
-// We could use it in before but since androidx-core upgrade from 1.10.1 to 1.12.0 we just can't so let's have our copy for now
-// Support of 'a' and 'A' commands are removed.
 package com.byagowi.persiancalendar.ui.map
 
 import android.graphics.Path
-import com.byagowi.persiancalendar.utils.logException
-import kotlin.math.min
+import androidx.compose.ui.graphics.vector.PathNode
+import androidx.compose.ui.graphics.vector.addPathNodes
 
 /*
- * Copyright (C) 2017 The Android Open Source Project
+ * Copyright 2019 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,353 +21,214 @@ import kotlin.math.min
  */
 
 /**
- * Note: Arc support is removed.
+ * This has an interesting history in this project, initially we were using
+ * [androidx.core.graphics.PathParser.createPathFromPathData()] but after a
+ * version upgrade turned out the function wasn't supposed to be public, that's why
+ * we had to copy it's implementation to this project to be able to use it.
  *
- * @param pathData The string representing a path, the same as "d" string in svg file.
- * @return the generated Path object.
+ * But now after having Compose in the project turned out
+ * [androidx.compose.ui.graphics.vector.addPathNodes] or
+ * [androidx.compose.ui.graphics.vector.PathParser.parsePathString] is public
+ * but the catch is it it's toPath() returns a Compose Path instead of Android
+ * native one which as we use this in widget it's not we exactly want so implementation
+ * of [androidx.compose.ui.graphics.vector.toPath] is copied but changed to return
+ * an Android native path instead of Compose one.
+ *
+ * If PathParser of Compose also becomes private in future however we can revert the
+ * change and use the older version again.
+ *
+ * Note: Arc command support is removed.
  */
 fun createPathFromPathData(pathData: String): Path {
-    val path = Path()
-    runCatching {
-        val current = FloatArray(6)
-        var previousCommand = 'm'
-        var start = 0
-        var end = 1
-        while (end < pathData.length) {
-            var c: Char
-            while (end < pathData.length) {
-                c = pathData[end]
-                // Note that 'e' or 'E' are not valid path commands, but could be
-                // used for floating point numbers' scientific notation.
-                // Therefore, when searching for next command, we should ignore 'e'
-                // and 'E'.
-                if (((c.code - 'A'.code) * (c.code - 'Z'.code) <= 0 || (c.code - 'a'.code) * (c.code - 'z'.code) <= 0) && c != 'e' && c != 'E') {
-                    break
-                }
-                end++
-            }
-            val s = pathData.substring(start, end).trim()
-            if (s.isNotEmpty()) {
-                addCommand(path, current, previousCommand, s[0], getFloats(s))
-                previousCommand = s[0]
-            }
-            start = end
-            end++
-        }
-        if (end - start == 1 && start < pathData.length) {
-            addCommand(path, current, previousCommand, pathData[start], FloatArray(0))
-        }
-    }.onFailure(logException)
-    return path
-}
+    val nodes: List<PathNode> = addPathNodes(pathData)
+    val target = Path()
+    var currentX = 0.0f
+    var currentY = 0.0f
+    var ctrlX = 0.0f
+    var ctrlY = 0.0f
+    var segmentX = 0.0f
+    var segmentY = 0.0f
+    var reflectiveCtrlX: Float
+    var reflectiveCtrlY: Float
 
-/**
- * Parse the floats in the string.
- * This is an optimized version of parseFloat(s.split(",|\\s"));
- *
- * @param s the string containing a command and list of floats
- * @return array of floats
- */
-private fun getFloats(s: String): FloatArray {
-    return if (s[0] == 'z' || s[0] == 'Z') {
-        FloatArray(0)
-    } else try {
-        val results = FloatArray(s.length)
-        var count = 0
-        var startPosition = 1
-        var endPosition: Int
-        val result = ExtractFloatResult()
-        val totalLength = s.length
-
-        // The startPosition should always be the first character of the
-        // current number, and endPosition is the character after the current
-        // number.
-        while (startPosition < totalLength) {
-            extract(s, startPosition, result)
-            endPosition = result.endPosition
-            if (startPosition < endPosition) {
-                results[count++] = s.substring(startPosition, endPosition).toFloat()
-            }
-            startPosition = if (result.endWithNegOrDot) {
-                // Keep the '-' or '.' sign with next number.
-                endPosition
-            } else {
-                endPosition + 1
-            }
-        }
-        val originalLength = results.size
-        val resultLength = count
-        val copyLength = min(resultLength, originalLength - 0)
-        FloatArray(resultLength).also {
-            System.arraycopy(results, 0, it, 0, copyLength)
-        }
-    } catch (e: NumberFormatException) {
-        throw RuntimeException("error in parsing \"$s\"", e)
-    }
-}
-
-/**
- * Calculate the position of the next comma or space or negative sign
- *
- * @param s      the string to search
- * @param start  the position to start searching
- * @param result the result of the extraction, including the position of the
- * the starting position of next number, whether it is ending with a '-'.
- */
-private fun extract(s: String, start: Int, result: ExtractFloatResult) {
-    // Now looking for ' ', ',', '.' or '-' from the start.
-    var currentIndex = start
-    var foundSeparator = false
-    result.endWithNegOrDot = false
-    var secondDot = false
-    var isExponential = false
-    while (currentIndex < s.length) {
-        val isPrevExponential = isExponential
-        isExponential = false
-        when (s[currentIndex]) {
-            ' ', ',' -> foundSeparator = true
-            '-' ->                     // The negative sign following a 'e' or 'E' is not a separator.
-                if (currentIndex != start && !isPrevExponential) {
-                    foundSeparator = true
-                    result.endWithNegOrDot = true
-                }
-
-            '.' -> if (!secondDot) {
-                secondDot = true
-            } else {
-                // This is the second dot, and it is considered as a separator.
-                foundSeparator = true
-                result.endWithNegOrDot = true
+    var previousNode = if (nodes.isEmpty()) PathNode.Close else nodes[0]
+    nodes.forEach { node ->
+        when (node) {
+            is PathNode.Close -> {
+                currentX = segmentX
+                currentY = segmentY
+                ctrlX = segmentX
+                ctrlY = segmentY
+                target.close()
+                target.moveTo(currentX, currentY)
             }
 
-            'e', 'E' -> isExponential = true
-        }
-        if (foundSeparator) {
-            break
-        }
-        currentIndex++
-    }
-    // When there is nothing found, then we put the end position to the end
-    // of the string.
-    result.endPosition = currentIndex
-}
+            is PathNode.RelativeMoveTo -> {
+                currentX += node.dx
+                currentY += node.dy
+                target.rMoveTo(node.dx, node.dy)
+                segmentX = currentX
+                segmentY = currentY
+            }
 
-private class ExtractFloatResult(
-    // We need to return the position of the next separator and whether the
-    // next float starts with a '-' or a '.'.
-    var endPosition: Int = 0, var endWithNegOrDot: Boolean = false
-)
+            is PathNode.MoveTo -> {
+                currentX = node.x
+                currentY = node.y
+                target.moveTo(node.x, node.y)
+                segmentX = currentX
+                segmentY = currentY
+            }
 
-private fun addCommand(
-    path: Path, current: FloatArray, previousCommand: Char, cmd: Char, values: FloatArray
-) {
-    var previousCmd = previousCommand
-    var incr = 2
-    var currentX = current[0]
-    var currentY = current[1]
-    var ctrlPointX = current[2]
-    var ctrlPointY = current[3]
-    var currentSegmentStartX = current[4]
-    var currentSegmentStartY = current[5]
-    var reflectiveCtrlPointX: Float
-    var reflectiveCtrlPointY: Float
-    when (cmd) {
-        'z', 'Z' -> {
-            path.close()
-            // Path is closed here, but we need to move the pen to the
-            // closed position. So we cache the segment's starting position,
-            // and restore it here.
-            currentX = currentSegmentStartX
-            currentY = currentSegmentStartY
-            ctrlPointX = currentSegmentStartX
-            ctrlPointY = currentSegmentStartY
-            path.moveTo(currentX, currentY)
-        }
+            is PathNode.RelativeLineTo -> {
+                target.rLineTo(node.dx, node.dy)
+                currentX += node.dx
+                currentY += node.dy
+            }
 
-        'm', 'M', 'l', 'L', 't', 'T' -> incr = 2
-        'h', 'H', 'v', 'V' -> incr = 1
-        'c', 'C' -> incr = 6
-        's', 'S', 'q', 'Q' -> incr = 4
-    }
-    var k = 0
-    while (k < values.size) {
-        when (cmd) {
-            'm' -> {
-                currentX += values[k]
-                currentY += values[k + 1]
-                if (k > 0) {
-                    // According to the spec, if a moveto is followed by multiple
-                    // pairs of coordinates, the subsequent pairs are treated as
-                    // implicit lineto commands.
-                    path.rLineTo(values[k], values[k + 1])
+            is PathNode.LineTo -> {
+                target.lineTo(node.x, node.y)
+                currentX = node.x
+                currentY = node.y
+            }
+
+            is PathNode.RelativeHorizontalTo -> {
+                target.rLineTo(node.dx, 0.0f)
+                currentX += node.dx
+            }
+
+            is PathNode.HorizontalTo -> {
+                target.lineTo(node.x, currentY)
+                currentX = node.x
+            }
+
+            is PathNode.RelativeVerticalTo -> {
+                target.rLineTo(0.0f, node.dy)
+                currentY += node.dy
+            }
+
+            is PathNode.VerticalTo -> {
+                target.lineTo(currentX, node.y)
+                currentY = node.y
+            }
+
+            is PathNode.RelativeCurveTo -> {
+                target.rCubicTo(
+                    node.dx1, node.dy1,
+                    node.dx2, node.dy2,
+                    node.dx3, node.dy3
+                )
+                ctrlX = currentX + node.dx2
+                ctrlY = currentY + node.dy2
+                currentX += node.dx3
+                currentY += node.dy3
+            }
+
+            is PathNode.CurveTo -> {
+                target.cubicTo(
+                    node.x1, node.y1,
+                    node.x2, node.y2,
+                    node.x3, node.y3
+                )
+                ctrlX = node.x2
+                ctrlY = node.y2
+                currentX = node.x3
+                currentY = node.y3
+            }
+
+            is PathNode.RelativeReflectiveCurveTo -> {
+                if (previousNode.isCurve) {
+                    reflectiveCtrlX = currentX - ctrlX
+                    reflectiveCtrlY = currentY - ctrlY
                 } else {
-                    path.rMoveTo(values[0], values[1])
-                    currentSegmentStartX = currentX
-                    currentSegmentStartY = currentY
+                    reflectiveCtrlX = 0.0f
+                    reflectiveCtrlY = 0.0f
                 }
+                target.rCubicTo(
+                    reflectiveCtrlX, reflectiveCtrlY,
+                    node.dx1, node.dy1,
+                    node.dx2, node.dy2
+                )
+                ctrlX = currentX + node.dx1
+                ctrlY = currentY + node.dy1
+                currentX += node.dx2
+                currentY += node.dy2
             }
 
-            'M' -> {
-                currentX = values[k]
-                currentY = values[k + 1]
-                if (k > 0) {
-                    // According to the spec, if a moveto is followed by multiple
-                    // pairs of coordinates, the subsequent pairs are treated as
-                    // implicit lineto commands.
-                    path.lineTo(values[k], values[k + 1])
+            is PathNode.ReflectiveCurveTo -> {
+                if (previousNode.isCurve) {
+                    reflectiveCtrlX = 2 * currentX - ctrlX
+                    reflectiveCtrlY = 2 * currentY - ctrlY
                 } else {
-                    path.moveTo(values[0], values[1])
-                    currentSegmentStartX = currentX
-                    currentSegmentStartY = currentY
+                    reflectiveCtrlX = currentX
+                    reflectiveCtrlY = currentY
                 }
-            }
-
-            'l' -> {
-                path.rLineTo(values[k], values[k + 1])
-                currentX += values[k]
-                currentY += values[k + 1]
-            }
-
-            'L' -> {
-                path.lineTo(values[k], values[k + 1])
-                currentX = values[k]
-                currentY = values[k + 1]
-            }
-
-            'h' -> {
-                path.rLineTo(values[k], 0f)
-                currentX += values[k]
-            }
-
-            'H' -> {
-                path.lineTo(values[k], currentY)
-                currentX = values[k]
-            }
-
-            'v' -> {
-                path.rLineTo(0f, values[k])
-                currentY += values[k]
-            }
-
-            'V' -> {
-                path.lineTo(currentX, values[k])
-                currentY = values[k]
-            }
-
-            'c' -> {
-                path.rCubicTo(
-                    values[k + 0], values[k + 1], values[k + 2], values[k + 3],
-                    values[k + 4], values[k + 5]
+                target.cubicTo(
+                    reflectiveCtrlX, reflectiveCtrlY,
+                    node.x1, node.y1, node.x2, node.y2
                 )
-                ctrlPointX = currentX + values[k + 2]
-                ctrlPointY = currentY + values[k + 3]
-                currentX += values[k + 4]
-                currentY += values[k + 5]
+                ctrlX = node.x1
+                ctrlY = node.y1
+                currentX = node.x2
+                currentY = node.y2
             }
 
-            'C' -> {
-                path.cubicTo(
-                    values[k], values[k + 1], values[k + 2], values[k + 3],
-                    values[k + 4], values[k + 5]
-                )
-                currentX = values[k + 4]
-                currentY = values[k + 5]
-                ctrlPointX = values[k + 2]
-                ctrlPointY = values[k + 3]
+            is PathNode.RelativeQuadTo -> {
+                target.rQuadTo(node.dx1, node.dy1, node.dx2, node.dy2)
+                ctrlX = currentX + node.dx1
+                ctrlY = currentY + node.dy1
+                currentX += node.dx2
+                currentY += node.dy2
             }
 
-            's' -> {
-                reflectiveCtrlPointX = 0f
-                reflectiveCtrlPointY = 0f
-                if (previousCmd == 'c' || previousCmd == 's' || previousCmd == 'C' || previousCmd == 'S') {
-                    reflectiveCtrlPointX = currentX - ctrlPointX
-                    reflectiveCtrlPointY = currentY - ctrlPointY
+            is PathNode.QuadTo -> {
+                target.quadTo(node.x1, node.y1, node.x2, node.y2)
+                ctrlX = node.x1
+                ctrlY = node.y1
+                currentX = node.x2
+                currentY = node.y2
+            }
+
+            is PathNode.RelativeReflectiveQuadTo -> {
+                if (previousNode.isQuad) {
+                    reflectiveCtrlX = currentX - ctrlX
+                    reflectiveCtrlY = currentY - ctrlY
+                } else {
+                    reflectiveCtrlX = 0.0f
+                    reflectiveCtrlY = 0.0f
                 }
-                path.rCubicTo(
-                    reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k], values[k + 1],
-                    values[k + 2], values[k + 3]
+                target.rQuadTo(
+                    reflectiveCtrlX,
+                    reflectiveCtrlY, node.dx, node.dy
                 )
-                ctrlPointX = currentX + values[k]
-                ctrlPointY = currentY + values[k + 1]
-                currentX += values[k + 2]
-                currentY += values[k + 3]
+                ctrlX = currentX + reflectiveCtrlX
+                ctrlY = currentY + reflectiveCtrlY
+                currentX += node.dx
+                currentY += node.dy
             }
 
-            'S' -> {
-                reflectiveCtrlPointX = currentX
-                reflectiveCtrlPointY = currentY
-                if (previousCmd == 'c' || previousCmd == 's' || previousCmd == 'C' || previousCmd == 'S') {
-                    reflectiveCtrlPointX = 2 * currentX - ctrlPointX
-                    reflectiveCtrlPointY = 2 * currentY - ctrlPointY
+            is PathNode.ReflectiveQuadTo -> {
+                if (previousNode.isQuad) {
+                    reflectiveCtrlX = 2 * currentX - ctrlX
+                    reflectiveCtrlY = 2 * currentY - ctrlY
+                } else {
+                    reflectiveCtrlX = currentX
+                    reflectiveCtrlY = currentY
                 }
-                path.cubicTo(
-                    reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k], values[k + 1], values[k + 2], values[k + 3]
+                target.quadTo(
+                    reflectiveCtrlX,
+                    reflectiveCtrlY, node.x, node.y
                 )
-                ctrlPointX = values[k]
-                ctrlPointY = values[k + 1]
-                currentX = values[k + 2]
-                currentY = values[k + 3]
+                ctrlX = reflectiveCtrlX
+                ctrlY = reflectiveCtrlY
+                currentX = node.x
+                currentY = node.y
             }
 
-            'q' -> {
-                path.rQuadTo(values[k], values[k + 1], values[k + 2], values[k + 3])
-                ctrlPointX = currentX + values[k]
-                ctrlPointY = currentY + values[k + 1]
-                currentX += values[k + 2]
-                currentY += values[k + 3]
-            }
-
-            'Q' -> {
-                path.quadTo(values[k], values[k + 1], values[k + 2], values[k + 3])
-                ctrlPointX = values[k]
-                ctrlPointY = values[k + 1]
-                currentX = values[k + 2]
-                currentY = values[k + 3]
-            }
-
-            't' -> {
-                reflectiveCtrlPointX = 0f
-                reflectiveCtrlPointY = 0f
-                if (previousCmd == 'q' || previousCmd == 't' || previousCmd == 'Q' || previousCmd == 'T') {
-                    reflectiveCtrlPointX = currentX - ctrlPointX
-                    reflectiveCtrlPointY = currentY - ctrlPointY
-                }
-                path.rQuadTo(
-                    reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k], values[k + 1]
-                )
-                ctrlPointX = currentX + reflectiveCtrlPointX
-                ctrlPointY = currentY + reflectiveCtrlPointY
-                currentX += values[k]
-                currentY += values[k + 1]
-            }
-
-            'T' -> {
-                reflectiveCtrlPointX = currentX
-                reflectiveCtrlPointY = currentY
-                if (previousCmd == 'q' || previousCmd == 't' || previousCmd == 'Q' || previousCmd == 'T') {
-                    reflectiveCtrlPointX = 2 * currentX - ctrlPointX
-                    reflectiveCtrlPointY = 2 * currentY - ctrlPointY
-                }
-                path.quadTo(
-                    reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k], values[k + 1]
-                )
-                ctrlPointX = reflectiveCtrlPointX
-                ctrlPointY = reflectiveCtrlPointY
-                currentX = values[k]
-                currentY = values[k + 1]
-            }
+            // Not supported
+            is PathNode.RelativeArcTo -> Unit
+            is PathNode.ArcTo -> Unit
         }
-        previousCmd = cmd
-        k += incr
+        previousNode = node
     }
-    current[0] = currentX
-    current[1] = currentY
-    current[2] = ctrlPointX
-    current[3] = ctrlPointY
-    current[4] = currentSegmentStartX
-    current[5] = currentSegmentStartY
+    return target
 }

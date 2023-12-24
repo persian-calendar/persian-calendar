@@ -11,6 +11,7 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
 import androidx.annotation.RawRes
+import androidx.compose.ui.graphics.vector.addPathNodes
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
