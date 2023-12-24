@@ -85,6 +85,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -559,7 +560,9 @@ private fun Cell(modifier: Modifier, @ColorInt color: Int, label: String, value:
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val context = LocalContext.current
-        val isDynamicGrayscale = remember { context.isDynamicGrayscale }
+        val isDynamicGrayscale = remember(LocalConfiguration.current) {
+            theme.value.isDynamicColors() && context.isDynamicGrayscale
+        }
         Text(
             label,
             modifier = Modifier
