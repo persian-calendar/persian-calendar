@@ -38,7 +38,6 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -88,7 +87,7 @@ fun CalendarsOverview(
     toggleExpansion: () -> Unit
 ) {
     val context = LocalContext.current
-    val isToday by derivedStateOf { Jdn.today() == jdn }
+    val isToday = Jdn.today() == jdn
     Column(
         Modifier
             .clickable(
@@ -138,7 +137,7 @@ fun CalendarsOverview(
         CalendarsFlow(shownCalendars, jdn)
         Spacer(Modifier.height(4.dp))
 
-        val date by derivedStateOf { jdn.toCalendar(selectedCalendar) }
+        val date = jdn.toCalendar(selectedCalendar)
         val equinox = remember(selectedCalendar, jdn) {
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) {
                 val addition = if (date.month == 12) 1 else 0
@@ -189,9 +188,8 @@ fun CalendarsOverview(
             }
         }
 
-        val showIsMoonInScorpio by derivedStateOf {
+        val showIsMoonInScorpio =
             if (isAstronomicalExtraFeaturesEnabled) isMoonInScorpio(context, jdn) else ""
-        }
         AnimatedVisibility(showIsMoonInScorpio.isNotEmpty()) {
             SelectionContainer {
                 Text(
@@ -218,10 +216,10 @@ fun CalendarsOverview(
             }
         }
 
-        val startOfYearJdn by derivedStateOf { Jdn(selectedCalendar, date.year, 1, 1) }
-        val endOfYearJdn by derivedStateOf { Jdn(selectedCalendar, date.year + 1, 1, 1) - 1 }
-        val currentWeek by derivedStateOf { jdn.getWeekOfYear(startOfYearJdn) }
-        val weeksCount by derivedStateOf { endOfYearJdn.getWeekOfYear(startOfYearJdn) }
+        val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)
+        val endOfYearJdn = Jdn(selectedCalendar, date.year + 1, 1, 1) - 1
+        val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
+        val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
         val progresses = remember(jdn, selectedCalendar) {
             val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)

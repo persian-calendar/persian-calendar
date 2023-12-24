@@ -38,7 +38,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -122,8 +121,8 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
             formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
         }
     }
-    val sliderValue by derivedStateOf { if (isTimeShiftAnimate) timeShiftAnimate else timeShift }
-    val isSliderShown by derivedStateOf { sliderValue != 0f }
+    val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
+    val isSliderShown = sliderValue != 0f
     var baseTime by remember { mutableStateOf(Date()) }
     LaunchedEffect(Unit) {
         while (true) {
@@ -131,11 +130,9 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
             baseTime = Date()
         }
     }
-    val time by derivedStateOf {
-        GregorianCalendar().also {
-            it.time = baseTime
-            it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
-        }
+    val time = GregorianCalendar().also {
+        it.time = baseTime
+        it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
     }
     var isStopped by remember { mutableStateOf(false) }
     // Ugly, for now

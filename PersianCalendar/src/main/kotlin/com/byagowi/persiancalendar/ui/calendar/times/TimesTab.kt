@@ -27,7 +27,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,7 +77,7 @@ fun TimesTab(
     var isExpanded by remember { mutableStateOf(false) }
 
     val jdn by viewModel.selectedDay.collectAsState()
-    val prayTimes by derivedStateOf { coordinates.calculatePrayTimes(jdn.toGregorianCalendar()) }
+    val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
 
     Column(
         Modifier.clickable(
