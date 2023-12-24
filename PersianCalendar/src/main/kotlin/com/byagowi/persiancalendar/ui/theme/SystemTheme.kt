@@ -13,9 +13,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-
-// Best effort theme matching system, used for widget and wallpaper configuration screen meant to
-// not affected by app's internals
+// Best effort theme matching system, used for widget and wallpaper configuration activities,
+// meant to be not affected by app's internals and match the system
 @Composable
 fun SystemTheme(content: @Composable () -> Unit) {
     val context = LocalContext.current
