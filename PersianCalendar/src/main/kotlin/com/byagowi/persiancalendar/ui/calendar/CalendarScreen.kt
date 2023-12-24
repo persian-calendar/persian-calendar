@@ -242,7 +242,8 @@ fun CalendarScreen(
                 }
             } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
-                CalendarPager(viewModel, maxWidth, calendarHeight)
+                CalendarPager(viewModel, maxWidth, calendarHeight - 4.dp)
+                Spacer(Modifier.height(4.dp))
                 val detailsMinHeight = maxHeight - calendarHeight
                 Surface(
                     modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
