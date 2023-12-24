@@ -47,8 +47,8 @@ import kotlinx.coroutines.flow.StateFlow
 class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Just to make sure we have an initial transparent system bars
-        // System bars are tweaked later with project's with better values
-        enableEdgeToEdge(SystemBarStyle.dark(Color.TRANSPARENT))
+        // System bars are tweaked later with project's with real values
+        applyEdgeToEdge(isBackgroundColorLight = false, isSurfaceColorLight = true)
 
         setTheme(R.style.BaseTheme)
         applyAppLanguage(this)
@@ -69,14 +69,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
                 val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
                 val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
                 LaunchedEffect(isBackgroundColorLight, isSurfaceColorLight) {
-                    enableEdgeToEdge(
-                        if (isBackgroundColorLight)
-                            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-                        else SystemBarStyle.dark(Color.TRANSPARENT),
-                        if (isSurfaceColorLight)
-                            SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-                        else SystemBarStyle.dark(Color.TRANSPARENT),
-                    )
+                    applyEdgeToEdge(isBackgroundColorLight, isSurfaceColorLight)
                 }
 
                 App(intentStartDestination, ::finish)
@@ -94,11 +87,21 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    //        if (settingHasChanged) { // update when checked menu item is changed
-//            applyAppLanguage(this)
-//            update(applicationContext, true)
-//            settingHasChanged = false // reset for the next time
-//        }
+    private fun applyEdgeToEdge(isBackgroundColorLight: Boolean, isSurfaceColorLight: Boolean) {
+        if (Build.VERSION.SDK_INT >= 26) enableEdgeToEdge(
+            if (isBackgroundColorLight)
+                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+            else SystemBarStyle.dark(Color.TRANSPARENT),
+            if (isSurfaceColorLight)
+                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+            else SystemBarStyle.dark(Color.TRANSPARENT),
+        ) else enableEdgeToEdge( // Just don't tweak navigation bar in older Android versions
+            if (isBackgroundColorLight)
+                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+            else SystemBarStyle.dark(Color.TRANSPARENT)
+        )
+    }
+
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
         prefs ?: return
 
