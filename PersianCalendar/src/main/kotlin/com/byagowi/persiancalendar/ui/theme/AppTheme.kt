@@ -98,7 +98,7 @@ private fun AppColorScheme(): ColorScheme {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
         Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_800))
         Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
-        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_10))
+        Theme.MODERN -> colorScheme.surface
         else -> null.debugAssertNotNull ?: Color.Transparent
     } else when (resolvedTheme) {
         Theme.LIGHT -> Color(0xFF00695c)
