@@ -109,7 +109,7 @@ fun ConverterScreen(
                     Box(
                         Modifier
                             .clip(MaterialTheme.shapes.extraLarge)
-                            .background(Color.Gray.copy(alpha = .5f))
+                            .background(LocalContentColor.current.copy(alpha = .175f))
                             .clickable { showMenu = !showMenu },
                     ) {
                         var spinnerWidth by remember { mutableIntStateOf(0) }
