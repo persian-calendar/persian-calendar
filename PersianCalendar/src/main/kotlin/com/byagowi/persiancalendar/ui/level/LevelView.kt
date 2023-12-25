@@ -29,7 +29,6 @@ import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
@@ -41,7 +40,7 @@ import kotlin.math.sin
 
 class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val angleDisplay = AngleDisplay(context)
+    private val angleDisplay = AngleDisplay(resources)
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.BLACK
     }
@@ -96,12 +95,12 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     /**
      * Drawables
      */
-    private val level1D = context.getSafeDrawable(R.drawable.level_1d)
-    private val bubble1D = context.getSafeDrawable(R.drawable.bubble_1d)
-    private val marker1D = context.getSafeDrawable(R.drawable.marker_1d)
-    private val level2D = context.getSafeDrawable(R.drawable.level_2d)
-    private val bubble2D = context.getSafeDrawable(R.drawable.bubble_2d)
-    private val marker2D = context.getSafeDrawable(R.drawable.marker_2d)
+    private val level1D = resources.getDrawable(R.drawable.level_1d, null)
+    private val bubble1D = resources.getDrawable(R.drawable.bubble_1d, null)
+    private val marker1D = resources.getDrawable(R.drawable.marker_1d, null)
+    private val level2D = resources.getDrawable(R.drawable.level_2d, null)
+    private val bubble2D = resources.getDrawable(R.drawable.bubble_2d, null)
+    private val marker2D = resources.getDrawable(R.drawable.marker_2d, null)
 
     /**
      * Ajustement de la vitesse

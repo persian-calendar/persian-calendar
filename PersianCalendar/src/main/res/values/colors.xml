@@ -39,9 +39,6 @@
     <!-- Bubble -->
     <color name="bubble_center">@android:color/white</color>
     <color name="bubble_border">@color/level_liquid_dark</color>
-    <!-- LCD -->
-    <color name="lcd_front">#FF00FF00</color>
-    <color name="lcd_back">#44FFFFFF</color>
     <!-- Display -->
     <color name="display_border">#FF333333</color>
     <color name="display_dark">@android:color/black</color>

@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
@@ -35,7 +34,6 @@ import kotlin.math.round
 import kotlin.math.roundToInt
 
 class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
-
     var angle = 0f
         set(value) {
             if (value != field) {
@@ -85,7 +83,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.style = Paint.Style.FILL_AND_STROKE
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
-    private val kaaba = context.getSafeDrawable(R.drawable.kaaba)
+    private val kaaba = context.resources.getDrawable(R.drawable.kaaba, null)
         .toBitmap((32 * dp).toInt(), (32 * dp).toInt())
 
     private var cx = 0f
@@ -139,7 +137,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         textStrokePaint.color = color
     }
 
-    private val angleDisplay = AngleDisplay(context, "0", "888")
+    private val angleDisplay = AngleDisplay(resources, "0", "888")
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -222,7 +220,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         }
     }
 
-    private val solarDraw = SolarDraw(context)
+    private val solarDraw = SolarDraw(context.resources)
 
     private val shadeFactor = 1.5f
 

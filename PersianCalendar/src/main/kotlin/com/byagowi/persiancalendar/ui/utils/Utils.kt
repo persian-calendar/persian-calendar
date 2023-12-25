@@ -7,20 +7,16 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
-import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
-import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
@@ -29,7 +25,6 @@ import androidx.core.net.toUri
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -104,11 +99,6 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 // Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
 tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
-
-// Returns an empty drawable instead of crash, to be removed someday hopefully
-fun Context.getSafeDrawable(@DrawableRes drawableRes: Int): Drawable =
-    runCatching { getDrawable(drawableRes) }.onFailure(logException).getOrNull().debugAssertNotNull
-        ?: ColorDrawable(Color.TRANSPARENT)
 
 fun Window.makeWallpaperTransparency() {
     this.navigationBarColor = Color.TRANSPARENT

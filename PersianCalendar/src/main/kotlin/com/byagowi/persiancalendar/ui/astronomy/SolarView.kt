@@ -306,5 +306,5 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.color = 0x40808080
     }
 
-    private val solarDraw = SolarDraw(context)
+    private val solarDraw = SolarDraw(context.resources)
 }

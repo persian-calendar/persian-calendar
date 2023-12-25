@@ -1,21 +1,20 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.animation.ArgbEvaluator
-import android.content.Context
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.utils.getSafeDrawable
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import kotlin.math.abs
 import kotlin.math.cos
 
-class SolarDraw(context: Context) {
+class SolarDraw(resources: Resources) {
     private val argbEvaluator = ArgbEvaluator()
     fun sunColor(progress: Float): Int =
         (argbEvaluator.evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt()) as? Int) ?: 0
@@ -31,8 +30,8 @@ class SolarDraw(context: Context) {
         drawable.draw(canvas)
     }
 
-    private val sunDrawable = context.getSafeDrawable(R.drawable.ic_sun)
-    private val smallSunDrawable = context.getSafeDrawable(R.drawable.ic_sun_small)
+    private val sunDrawable = resources.getDrawable(R.drawable.ic_sun, null)
+    private val smallSunDrawable = resources.getDrawable(R.drawable.ic_sun_small, null)
 
     fun moon(
         canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
@@ -68,7 +67,7 @@ class SolarDraw(context: Context) {
         moonDrawable.draw(canvas)
     }
 
-    private val moonDrawable = context.getSafeDrawable(R.drawable.ic_moon)
+    private val moonDrawable = resources.getDrawable(R.drawable.ic_moon, null)
     private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
@@ -78,7 +77,7 @@ class SolarDraw(context: Context) {
         it.style = Paint.Style.FILL_AND_STROKE
     }
 
-    private val earthDrawable = context.getSafeDrawable(R.drawable.ic_earth)
+    private val earthDrawable = resources.getDrawable(R.drawable.ic_earth, null)
 
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)

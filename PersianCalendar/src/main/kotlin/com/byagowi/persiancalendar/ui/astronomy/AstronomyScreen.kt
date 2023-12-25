@@ -537,7 +537,7 @@ private fun Seasons(jdn: Jdn) {
 @Composable
 private fun MoonIcon(astronomyState: AstronomyState) {
     val context = LocalContext.current
-    val solarDraw = remember { SolarDraw(context) }
+    val solarDraw = remember { SolarDraw(context.resources) }
     Box(
         modifier = Modifier
             .size(24.dp)

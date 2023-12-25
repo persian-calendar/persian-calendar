@@ -19,7 +19,7 @@ import kotlin.math.roundToInt
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val solarDraw = SolarDraw(context)
+    private val solarDraw = SolarDraw(context.resources)
     private val animator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
         it.interpolator = AccelerateDecelerateInterpolator()
