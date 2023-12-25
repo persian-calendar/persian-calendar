@@ -118,13 +118,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    fun navigateUp(currentRoute: String) {
-        // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
-        if (navController.currentDestination?.route != currentRoute) return
-        // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
-        if (!navController.popBackStack()) finish()
-    }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -184,6 +177,22 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             val tabKey = "TAB"
             val settingsKey = "SETTINGS"
             val daysOffsetKey = "DAYS_OFFSET"
+
+            fun navigateToSettingsLocationTab() {
+                navController.graph.findNode(settingsRoute)?.let { destination ->
+                    navController.navigate(
+                        destination.id, bundleOf(tabKey to LOCATION_ATHAN_TAB)
+                    )
+                }
+            }
+
+            fun navigateUp(currentRoute: String) {
+                // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
+                if (navController.currentDestination?.route != currentRoute) return
+                // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
+                if (!navController.popBackStack()) finish()
+            }
+
             composable(calendarRoute) {
                 CalendarScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
@@ -197,13 +206,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             )
                         }
                     },
-                    navigateToSettingsLocationTab = {
-                        navController.graph.findNode(settingsRoute)?.let { destination ->
-                            navController.navigate(
-                                destination.id, bundleOf(tabKey to LOCATION_ATHAN_TAB)
-                            )
-                        }
-                    },
+                    navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                     navigateToAstronomy = { daysOffset ->
                         navController.graph.findNode(astronomyRoute)?.let { destination ->
                             navController.navigate(
@@ -227,6 +230,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     openDrawer = { scope.launch { drawerState.open() } },
                     navigateToLevel = { navController.navigate(levelRoute) },
                     navigateToMap = { navController.navigate(mapRoute) },
+                    navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                 )
             }
 

@@ -30,6 +30,7 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -92,7 +93,12 @@ import kotlin.random.Random
 // Lots of bad practices unfortunately
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateToMap: () -> Unit) {
+fun CompassScreen(
+    openDrawer: () -> Unit,
+    navigateToLevel: () -> Unit,
+    navigateToMap: () -> Unit,
+    navigateToSettingsLocationTab: () -> Unit,
+) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
         when (context.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
@@ -142,8 +148,18 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     fun showSnackbarMessage(message: String, duration: SnackbarDuration) {
+        scope.launch { snackbarHostState.showSnackbar(message, duration = duration) }
+    }
+
+    fun showSetLocationMessage() {
         scope.launch {
-            snackbarHostState.showSnackbar(message, duration = duration)
+            if (snackbarHostState.showSnackbar(
+                    context.getString(R.string.set_location),
+                    duration = SnackbarDuration.Long,
+                    actionLabel = context.getString(R.string.settings),
+                    withDismissAction = true,
+                ) == SnackbarResult.ActionPerformed
+            ) navigateToSettingsLocationTab()
         }
     }
 
@@ -240,8 +256,9 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                     icon = Icons.Default.Info,
                     title = stringResource(R.string.help),
                 ) {
-                    // show snackbar as a suspend function
-                    showSnackbarMessage(
+                    if (coordinates.value == null) {
+                        showSetLocationMessage()
+                    } else showSnackbarMessage(
                         context.getString(
                             if (sensorNotFound) R.string.compass_not_found
                             else R.string.calibrate_compass_summary
@@ -329,6 +346,7 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("compass: ON_RESUME")
+                if (coordinates.value == null) showSetLocationMessage()
                 if (orientationSensor != null) {
                     sensorManager.registerListener(
                         orientationSensorListener,
@@ -338,10 +356,6 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: orientation", Toast.LENGTH_SHORT
                     ).show()
-                    if (coordinates.value == null) showSnackbarMessage(
-                        context.getString(R.string.set_location),
-                        SnackbarDuration.Long,
-                    )
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
@@ -356,11 +370,7 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: acc+magnet", Toast.LENGTH_SHORT
                     ).show()
-                    if (coordinates.value == null) showSnackbarMessage(
-                        context.getString(R.string.set_location),
-                        SnackbarDuration.Short,
-                    )
-                } else {
+                } else if (coordinates.value != null) {
                     showSnackbarMessage(
                         context.getString(R.string.compass_not_found),
                         SnackbarDuration.Short,
