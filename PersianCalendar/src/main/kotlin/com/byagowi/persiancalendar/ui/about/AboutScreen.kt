@@ -148,7 +148,7 @@ fun AboutScreen(
             var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
             LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
 
-            val headerSize = 250.dp
+            val headerHeight = 250.dp
 
             val aboutTitle = stringResource(R.string.app_name)
             val aboutSubtitle = remember {
@@ -175,7 +175,7 @@ fun AboutScreen(
 
             @OptIn(ExperimentalAnimationGraphicsApi::class) Row(
                 Modifier
-                    .height(headerSize)
+                    .height(headerHeight)
                     .graphicsLayer { translationY = scrollState.value / -4f }
                     .fillMaxWidth(),
             ) {
@@ -223,7 +223,7 @@ fun AboutScreen(
                     remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
                 Box(modifier = Modifier
                     .fillMaxWidth()
-                    .height(headerSize)
+                    .height(headerHeight)
                     .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
                         logoAnimationAtEnd = !logoAnimationAtEnd
                         clickHandlerDialog(context.getActivity())
