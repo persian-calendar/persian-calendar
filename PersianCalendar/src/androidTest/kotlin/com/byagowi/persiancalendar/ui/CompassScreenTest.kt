@@ -17,7 +17,7 @@ class CompassScreenTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContent {
-            CompassScreen({}, {}, {}, ::navigateToSettingsLocationTab)
+            CompassScreen({}, {}, {}, {})
         }
     }
 
@@ -31,7 +31,7 @@ class CompassScreenTest {
                 openDrawer = {},
                 navigateToLevel = { navigateToLevelIsCalled = true },
                 navigateToMap = { assert(false) },
-                navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                navigateToSettingsLocationTab = {},
             )
         }
         assert(!navigateToLevelIsCalled)
@@ -51,7 +51,7 @@ class CompassScreenTest {
                 openDrawer = {},
                 navigateToLevel = { assert(false) },
                 navigateToMap = { navigateToMapIsCalled = true },
-                navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                navigateToSettingsLocationTab = {},
             )
         }
         assert(!navigateToMapIsCalled)
