@@ -112,7 +112,6 @@ fun Month(
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
         else EventsStore.empty()
     }
-    val dayPositions = remember(monthStartJdn) { mutableMapOf<Int, Pair<Int, Int>>() }
 
     val selectedDay by viewModel.selectedDay.collectAsState()
     var lastSelectedDay by remember { mutableStateOf(selectedDay) }
@@ -144,12 +143,14 @@ fun Month(
                     invalidationToken.run {}
                     val index = lastSelectedDay - monthStartJdn
                     if (index !in monthRange) return@drawIntoCanvas
-                    val (column, row) = dayPositions[index] ?: return@drawIntoCanvas
+                    val cellIndex = index + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
+                    val row = cellIndex / 7
+                    val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
                     selectionIndicator.draw(
                         canvas = it,
                         left = if (isRtl) widthPixels - (column + 1) * cellPixelsWidth
                         else column * cellPixelsWidth,
-                        top = row * cellPixelsHeight,
+                        top = (1 + row) * cellPixelsHeight,
                         width = cellPixelsWidth,
                         height = cellPixelsHeight,
                         halfDp = halfDp,
@@ -215,8 +216,6 @@ fun Month(
                             ),
                         dayPainter,
                     ) {
-                        dayPositions[dayOffset] =
-                            (column + if (isShowWeekOfYearEnabled) 1 else 0) to row + 1
                         val events =
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                         it.setDayOfMonthItem(
