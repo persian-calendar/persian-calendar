@@ -154,12 +154,7 @@ fun CoordinatesDialog(
                 transitionSpec = {
                     fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                 },
-            ) { state ->
-                Text(
-                    state,
-                    style = MaterialTheme.typography.titleSmall,
-                )
-            }
+            ) { state -> Text(state, style = MaterialTheme.typography.titleSmall) }
         }
         val context = LocalContext.current
         LaunchedEffect(changeCounter) {
