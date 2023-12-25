@@ -61,9 +61,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        val intentStartDestination = intent?.action
-        intent?.action = ""
-
         setContent {
             AppTheme {
                 val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
@@ -72,7 +69,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
                     applyEdgeToEdge(isBackgroundColorLight, isSurfaceColorLight)
                 }
 
-                App(intentStartDestination, ::finish)
+                App(intent?.action, ::finish)
             }
         }
 

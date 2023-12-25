@@ -21,7 +21,7 @@ class ActivitiesSmokeTest {
     @Test
     fun test() {
         val context = ApplicationProvider.getApplicationContext<Context>()
-//        ActivityScenario.launch<MainActivity>(Intent(context, MainActivity::class.java))
+        ActivityScenario.launch<MainActivity>(Intent(context, MainActivity::class.java))
         ActivityScenario.launch<AthanActivity>(Intent(context, AthanActivity::class.java))
         ActivityScenario.launch<WidgetConfigurationActivity>(
             Intent(context, WidgetConfigurationActivity::class.java)
