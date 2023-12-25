@@ -144,13 +144,13 @@ fun Month(
                     val index = lastSelectedDay - monthStartJdn
                     if (index !in monthRange) return@drawIntoCanvas
                     val cellIndex = index + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
-                    val row = cellIndex / 7
+                    val row = cellIndex / 7 + 1 // +1 for weekday names initials row
                     val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
                     selectionIndicator.draw(
                         canvas = it,
                         left = if (isRtl) widthPixels - (column + 1) * cellPixelsWidth
                         else column * cellPixelsWidth,
-                        top = (1 + row) * cellPixelsHeight,
+                        top = row * cellPixelsHeight,
                         width = cellPixelsWidth,
                         height = cellPixelsHeight,
                         halfDp = halfDp,
