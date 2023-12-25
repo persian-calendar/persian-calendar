@@ -177,7 +177,12 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                     if (coordinates != null) AppIconButton(
                         icon = In24HoursIcon,
                         title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
-                    ) { isTimeShiftAnimate = true }
+                    ) {
+                        if (isTimeShiftAnimate) {
+                            isTimeShiftAnimate = false
+                            timeShift = 0f
+                        } else isTimeShiftAnimate = true
+                    }
                     var showTrueNorth by rememberSaveable {
                         mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
                     }
