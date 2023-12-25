@@ -11,7 +11,9 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
 import androidx.annotation.RawRes
+import androidx.compose.ui.graphics.asAndroidPath
 import androidx.compose.ui.graphics.vector.addPathNodes
+import androidx.compose.ui.graphics.vector.toPath
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
@@ -72,7 +74,9 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
 
     private fun createPathFromResourceText(context: Context, @RawRes id: Int): Path {
         val path = context.resources.openRawResource(id).readBytes().decodeToString()
-        return createPathFromPathData(path)
+        // In case Compose addPathNodes became private bring back
+        // https://github.com/persian-calendar/persian-calendar/blob/5a7ff8a/PersianCalendar/src/main/kotlin/com/byagowi/persiancalendar/ui/map/PathParser.kt
+        return addPathNodes(path).toPath().asAndroidPath()
     }
 
     private val mapPath: Path = createPathFromResourceText(context, R.raw.worldmap)
