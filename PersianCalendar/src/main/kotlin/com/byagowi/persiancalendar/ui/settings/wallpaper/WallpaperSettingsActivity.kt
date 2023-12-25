@@ -31,7 +31,6 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 
 class WallpaperSettingsActivity : ComponentActivity() {
-
     private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = finish()
     }

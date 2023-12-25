@@ -99,9 +99,10 @@ private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
                     }
                 }
                 preview
-            }, modifier = Modifier
+            },
+            modifier = Modifier
                 .fillMaxWidth()
-                .padding(all = 16.dp)
+                .padding(all = 16.dp),
         )
         Column(
             Modifier
