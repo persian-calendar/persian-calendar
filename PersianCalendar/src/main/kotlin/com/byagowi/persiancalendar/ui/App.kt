@@ -118,6 +118,13 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
+    fun navigateUp(currentRoute: String) {
+        // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
+        if (navController.currentDestination?.route != currentRoute) return
+        // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
+        if (!navController.popBackStack()) finish()
+    }
+
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -225,11 +232,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(levelRoute) {
                 LevelScreen(
-                    navigateUp = {
-                        if (navController.currentDestination?.route == levelRoute) {
-                            navController.navigateUp()
-                        }
-                    },
+                    navigateUp = { navigateUp(levelRoute) },
                     navigateToCompass = {
                         // If compass wasn't in backstack (level is brought from shortcut), navigate to it
                         if (!navController.popBackStack(compassRoute, false)) {
@@ -262,11 +265,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     }
                 }
                 MapScreen(
-                    navigateUp = {
-                        if (navController.currentDestination?.route == mapRoute) {
-                            navController.navigateUp()
-                        }
-                    },
+                    navigateUp = { navigateUp(mapRoute) },
                     viewModel = viewModel,
                 )
             }
@@ -290,19 +289,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             }
 
             composable(licensesRoute) {
-                LicensesScreen {
-                    if (navController.currentDestination?.route == licensesRoute) {
-                        navController.navigateUp()
-                    }
-                }
+                LicensesScreen { navigateUp(licensesRoute) }
             }
 
             composable(deviceInformationRoute) {
-                DeviceInformationScreen {
-                    if (navController.currentDestination?.route == deviceInformationRoute) {
-                        navController.navigateUp()
-                    }
-                }
+                DeviceInformationScreen { navigateUp(deviceInformationRoute) }
             }
         }
     }
