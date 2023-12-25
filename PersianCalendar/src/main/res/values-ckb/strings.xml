@@ -240,11 +240,11 @@
         <item quantity="other">%1$s ڕۆژ</item>
     </plurals>
     <plurals name="n_work_days">
-        <item quantity="one">%1$s ڕۆژی کاری</item>
+        <item quantity="one">تەنها یەک ڕۆژی کاری</item>
         <item quantity="other">%1$s ڕۆژی کاری</item>
     </plurals>
     <plurals name="n_weeks">
-        <item quantity="one">%1$s حەفتە</item>
+        <item quantity="one">تەنها یەک حەفتە</item>
         <item quantity="other">%1$s حەفتە</item>
     </plurals>
     <plurals name="n_months">
@@ -391,7 +391,16 @@
     <string name="lock">قوفڵ</string>
     <string name="yes">بەڵێ</string>
     <plurals name="n_seconds">
-        <item quantity="one">%1$s چرکە</item>
+        <item quantity="one">تەنها یەک چرکە</item>
         <item quantity="other">%1$s چرکە</item>
     </plurals>
+    <string name="sample_inputs">داتایی نموونەیی</string>
+    <string name="navigate_up">ڕۆیشتن بۆ سەرەوە</string>
+    <string name="qr_code">کۆدی وەڵامدانەوەی خێرا</string>
+    <string name="color_gradient">لاری ڕەنگی</string>
+    <string name="time_zones">ناوچەی کاتییەکان</string>
+    <string name="exit_full_screen">دەرچوون لە شاشەی پڕ</string>
+    <string name="full_screen">پڕ بە شاشە</string>
+    <string name="open_drawer">کردنەوەی لیستی ڕێنیشاندەر</string>
+    <string name="more_options">هەڵبژاردەی زیاتر</string>
 </resources>
