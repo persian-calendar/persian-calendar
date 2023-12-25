@@ -92,6 +92,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 fun SettingsScreen(
     openDrawer: () -> Unit,
+    navigateToMap: () -> Unit,
     initialPage: Int,
     destination: String,
 ) {
@@ -136,7 +137,7 @@ fun SettingsScreen(
                     Icons.Default.Widgets, listOf(R.string.pref_notification, R.string.pref_widget)
                 ) { WidgetNotificationSettings() },
                 Triple(Icons.Default.LocationOn, listOf(R.string.location, R.string.athan)) {
-                    LocationAthanSettings()
+                    LocationAthanSettings(navigateToMap)
                 },
             )
 

@@ -277,6 +277,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             composable(settingsRoute) {
                 SettingsScreen(
                     openDrawer = { scope.launch { drawerState.open() } },
+                    navigateToMap = { navController.navigate(mapRoute) },
                     initialPage = it.arguments?.getInt(tabKey, 0) ?: 0,
                     destination = it.arguments?.getString(settingsKey) ?: ""
                 )

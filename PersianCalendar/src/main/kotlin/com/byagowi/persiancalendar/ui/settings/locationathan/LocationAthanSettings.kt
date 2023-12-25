@@ -75,7 +75,7 @@ import io.github.persiancalendar.praytimes.MidnightMethod
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun LocationAthanSettings() {
+fun LocationAthanSettings(navigateToMap: () -> Unit) {
     SettingsSection(stringResource(R.string.location))
     SettingsClickable(
         title = stringResource(R.string.gps_location),
@@ -85,11 +85,10 @@ fun LocationAthanSettings() {
         title = stringResource(R.string.location),
         summary = stringResource(R.string.location_help),
     ) { onDismissRequest -> LocationDialog(onDismissRequest) }
+
     SettingsClickable(stringResource(R.string.coordination)) { onDismissRequest ->
         CoordinatesDialog(
-            navigateToMap = {
-//                activity.findNavController(R.id.navHostFragment).navigate(R.id.map)
-            },
+            navigateToMap = navigateToMap,
             onDismissRequest = onDismissRequest
         )
     }
