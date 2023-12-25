@@ -195,8 +195,6 @@ fun NumberPicker(
     val indexOfElement =
         getItemIndexForOffset(range, value, animatedOffset.value, halfNumbersColumnHeightPx)
 
-    var dividersWidth by remember { mutableStateOf(0.dp) }
-
     val focusManager = LocalFocusManager.current
     Layout(
         modifier = modifier
@@ -342,32 +340,11 @@ fun NumberPicker(
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
         }
     ) { measurables, constraints ->
-        // Don't constrain child views further, measure them with given constraints
-        // List of measured children
-        val placeables = measurables.map { measurable ->
-            // Measure each children
-            measurable.measure(constraints)
-        }
-
-        dividersWidth = placeables
-            .drop(1)
-            .first()
-            .width
-            .toDp()
-
-        // Set the size of the layout as big as it can
-        layout(dividersWidth.toPx().toInt(), placeables.sumOf { it.height }) {
-            // Track the y co-ord we have placed children up to
-            var yPosition = 0
-
-            // Place children in the parent layout
-            placeables.forEach { placeable ->
-
-                // Position item on the screen
+        val placeables = measurables.map { measurable -> measurable.measure(constraints) }
+        layout(constraints.maxWidth, placeables.sumOf { it.height }) {
+            placeables.fold(0) { yPosition, placeable ->
                 placeable.placeRelative(x = 0, y = yPosition)
-
-                // Record the y co-ord placed up to
-                yPosition += placeable.height
+                yPosition + placeable.height
             }
         }
     }
