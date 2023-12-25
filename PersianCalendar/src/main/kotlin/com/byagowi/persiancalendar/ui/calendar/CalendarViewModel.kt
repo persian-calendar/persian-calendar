@@ -154,6 +154,8 @@ class CalendarViewModel @JvmOverloads constructor(
             resumeToken.collect {
                 delay(HALF_SECOND_IN_MILLIS)
                 refreshCalendar()
+                delay(HALF_SECOND_IN_MILLIS)
+                refreshCalendar()
             }
         }
     }

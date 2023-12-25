@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import java.util.concurrent.TimeUnit
 
 val HALF_SECOND_IN_MILLIS = TimeUnit.SECONDS.toMillis(1) / 2
-val ONE_SECOND_IN_MILLIS = TimeUnit.SECONDS.toMillis(1).toInt()
 val TWO_SECONDS_IN_MILLIS = TimeUnit.SECONDS.toMillis(2)
 val FIVE_SECONDS_IN_MILLIS = TimeUnit.SECONDS.toMillis(5)
 val TEN_SECONDS_IN_MILLIS = TimeUnit.SECONDS.toMillis(10)
