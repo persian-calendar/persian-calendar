@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -59,7 +60,7 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
                     contentDescription = null,
                     modifier = Modifier
-                        .width(iconSize.coerceAtMost(24.dp))
+                        .width(iconSize.coerceAtMost(MaterialIconDimension.dp))
                         .combinedClickable(
                             indication = rememberRipple(bounded = false),
                             interactionSource = remember { MutableInteractionSource() },
@@ -102,7 +103,7 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
                     Icons.AutoMirrored.Default.KeyboardArrowRight,
                     contentDescription = null,
                     modifier = Modifier
-                        .width(iconSize.coerceAtMost(24.dp))
+                        .width(iconSize.coerceAtMost(MaterialIconDimension.dp))
                         .combinedClickable(
                             indication = rememberRipple(bounded = false),
                             interactionSource = remember { MutableInteractionSource() },

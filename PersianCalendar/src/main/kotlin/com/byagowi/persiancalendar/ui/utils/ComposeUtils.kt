@@ -19,11 +19,6 @@ import androidx.compose.ui.graphics.colorspace.ColorSpaces
 val Color.isLight: Boolean get() = this.convert(ColorSpaces.CieXyz).component2() > .5
 
 /**
- * As [androidx.compose.material.icons.MaterialIconDimension] isn't accessible despite saying otherwise
- */
-const val MaterialIconDimension = 24f
-
-/**
  * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently
  * let's build our own based on Material's
  */

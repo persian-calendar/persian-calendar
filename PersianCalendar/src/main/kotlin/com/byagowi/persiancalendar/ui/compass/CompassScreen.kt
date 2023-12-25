@@ -71,6 +71,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
+import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
@@ -174,7 +175,7 @@ fun CompassScreen(openDrawer: () -> Unit, navigateToLevel: () -> Unit, navigateT
                 actions = {
                     val coordinates by coordinates.collectAsState()
                     if (coordinates != null) AppIconButton(
-                        icon = ImageVector.vectorResource(R.drawable.ic_in_24_hours),
+                        icon = In24HoursIcon,
                         title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
                     ) { isTimeShiftAnimate = true }
                     var showTrueNorth by rememberSaveable {

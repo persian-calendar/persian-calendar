@@ -59,7 +59,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -85,6 +84,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
+import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
 import com.byagowi.persiancalendar.ui.map.MapViewModel
@@ -315,11 +315,7 @@ private fun DrawerItems(): List<Triple<String?, ImageVector, Int>> {
         Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
         Triple(converterRoute, Icons.Default.SwapVerticalCircle, R.string.date_converter),
         Triple(compassRoute, Icons.Default.Explore, R.string.compass),
-        Triple(
-            astronomyRoute,
-            ImageVector.vectorResource(R.drawable.ic_astrology_horoscope),
-            R.string.astronomy
-        ),
+        Triple(astronomyRoute, AstrologyIcon, R.string.astronomy),
         Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
         Triple(aboutRoute, Icons.Default.Info, R.string.about),
         Triple(null, Icons.Default.Cancel, R.string.exit),
