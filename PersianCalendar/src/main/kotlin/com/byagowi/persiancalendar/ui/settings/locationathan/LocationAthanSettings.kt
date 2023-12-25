@@ -67,6 +67,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDi
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -86,22 +87,24 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         summary = stringResource(R.string.location_help),
     ) { onDismissRequest -> LocationDialog(onDismissRequest) }
 
-    SettingsClickable(stringResource(R.string.coordination)) { onDismissRequest ->
+    val coordinates by coordinates.collectAsState()
+    val context = LocalContext.current
+    val appPrefs = remember { context.appPrefs }
+    val cityName = remember(coordinates) { appPrefs.cityName }
+    SettingsClickable(stringResource(R.string.coordination), cityName) { onDismissRequest ->
         CoordinatesDialog(
             navigateToMap = navigateToMap,
             onDismissRequest = onDismissRequest
         )
     }
 
-    val isLocationSet by coordinates.map { it != null }.collectAsState(coordinates.value != null)
+    val isLocationSet = coordinates != null
     var showHighLatitudesMethod by remember {
         mutableStateOf(enableHighLatitudesConfiguration)
     }
     var showAsrCalculationMethod by remember {
         mutableStateOf(!calculationMethod.isJafari)
     }
-    val context = LocalContext.current
-    val appPrefs = remember { context.appPrefs }
     var athanSoundName by remember {
         mutableStateOf(
             appPrefs.getString(
