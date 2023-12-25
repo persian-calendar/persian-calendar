@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings
 
 import android.content.SharedPreferences
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
@@ -90,11 +91,15 @@ fun SettingsClickable(
             .padding(vertical = 16.dp, horizontal = 24.dp),
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
-        if (summary != null) Text(
-            summary,
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier.alpha(AppBlendAlpha)
-        )
+        AnimatedVisibility(visible = summary != null) {
+            AnimatedContent(summary ?: "", label = "summary") { state ->
+                Text(
+                    state,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.alpha(AppBlendAlpha)
+                )
+            }
+        }
     }
     if (showDialog) dialog { showDialog = false }
 }
