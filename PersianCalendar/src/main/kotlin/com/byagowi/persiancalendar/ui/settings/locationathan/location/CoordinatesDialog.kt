@@ -1,6 +1,12 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import android.location.Geocoder
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.LayoutDirection
@@ -134,13 +141,26 @@ fun CoordinatesDialog(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
-        if (!cityName.isNullOrBlank()) Text(
-            cityName ?: "",
-            style = MaterialTheme.typography.titleSmall,
+        val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
+        AnimatedVisibility(
+            !cityName.isNullOrBlank(),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(horizontal = 16.dp),
-        )
+        ) {
+            AnimatedContent(
+                cityName ?: "",
+                label = "summary",
+                transitionSpec = {
+                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
+                },
+            ) { state ->
+                Text(
+                    state,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
+        }
         val context = LocalContext.current
         LaunchedEffect(changeCounter) {
             launch(Dispatchers.IO) {
