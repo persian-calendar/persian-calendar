@@ -2,9 +2,11 @@ package com.byagowi.persiancalendar.ui.icons
 
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 
+@Stable
 val AstrologyIcon by lazy(LazyThreadSafetyMode.NONE) {
     makeIconFromPath(
         // CC-by-SA 4.0, https://commons.wikimedia.org/wiki/File:Horoscope_Astrology_Icon.svg
