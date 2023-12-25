@@ -230,7 +230,7 @@ fun AstronomyScreen(
                     )
                 } else Column(Modifier.verticalScroll(rememberScrollState())) {
                     val minSize = maxWidth - 48.dp
-                    var headerHeightPx by remember { mutableStateOf(0) }
+                    var headerHeightPx by remember { mutableStateOf(672) /* ~192dp, replaced ASAP */ }
                     val headerHeight = with(LocalDensity.current) { headerHeightPx.toDp() }
                     Header(
                         Modifier
