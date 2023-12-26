@@ -10,9 +10,7 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -20,8 +18,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -46,7 +42,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -68,6 +63,8 @@ import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.StopButton
@@ -206,7 +203,7 @@ fun CompassScreen(
                         mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
                     }
                     if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
-                        DropdownMenuCheckableItem(
+                        AppDropdownMenuCheckableItem(
                             stringResource(R.string.true_north),
                             showTrueNorth
                         ) {
@@ -214,14 +211,14 @@ fun CompassScreen(
                             closeMenu()
                             compassView?.isTrueNorth = it
                         }
-                        DropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
+                        AppDropdownMenuCheckableItem(stringResource(R.string.qibla), showQibla) {
                             showQibla = it
                             closeMenu()
                             compassView?.isShowQibla = it
                             prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
                         if (BuildConfig.DEVELOPMENT) {
-                            DropdownMenuItem(
+                            AppDropdownMenuItem(
                                 text = { Text("Do a rotation") },
                                 onClick = {
                                     closeMenu()
@@ -466,31 +463,6 @@ private abstract class AccelerometerMagneticSensorListener : BaseSensorListener(
             isMagneticFieldAvailable = false
         }
     }
-}
-
-@Composable
-private fun DropdownMenuCheckableItem(
-    text: String,
-    isChecked: Boolean,
-    setChecked: (Boolean) -> Unit,
-) {
-    DropdownMenuItem(
-        text = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-            ) {
-                Text(text)
-                Spacer(
-                    Modifier
-                        .weight(1f)
-                        .width(16.dp),
-                )
-                Checkbox(checked = isChecked, onCheckedChange = null)
-            }
-        },
-        onClick = { setChecked(!isChecked) },
-    )
 }
 
 @VisibleForTesting

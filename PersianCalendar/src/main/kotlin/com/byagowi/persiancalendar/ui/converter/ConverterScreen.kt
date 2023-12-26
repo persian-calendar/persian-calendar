@@ -28,7 +28,6 @@ import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -74,6 +73,7 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
@@ -141,7 +141,7 @@ fun ConverterScreen(
                                 // Disable timezone for now
                                 // || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
                             }.forEach {
-                                DropdownMenuItem(
+                                AppDropdownMenuItem(
                                     text = { Text(stringResource(it.title)) },
                                     onClick = {
                                         showMenu = false

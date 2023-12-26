@@ -25,7 +25,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Widgets
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -70,6 +69,7 @@ import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ScheduleAlarm
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
@@ -213,7 +213,7 @@ const val LOCATION_ATHAN_TAB = 2
 @Composable
 private fun MenuItems(closeMenu: () -> Unit) {
     val context = LocalContext.current
-    DropdownMenuItem(
+    AppDropdownMenuItem(
         text = { Text(stringResource(R.string.live_wallpaper_settings)) },
         onClick = {
             closeMenu()
@@ -222,7 +222,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
             }.onFailure(logException).getOrNull().debugAssertNotNull
         },
     )
-    DropdownMenuItem(
+    AppDropdownMenuItem(
         text = { Text(stringResource(R.string.screensaver_settings)) },
         onClick = {
             closeMenu()
@@ -232,7 +232,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
         },
     )
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text(stringResource(R.string.add_quick_settings_tile)) },
             onClick = {
                 closeMenu()
@@ -252,7 +252,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text("Static vs generated icons") },
             onClick = { showDialog = true },
         )
@@ -260,7 +260,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text("Dynamic Colors") },
             onClick = { showDialog = true },
         )
@@ -268,7 +268,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text("Color Scheme") },
             onClick = { showDialog = true },
         )
@@ -276,7 +276,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text("Typography") },
             onClick = { showDialog = true },
         )
@@ -284,13 +284,13 @@ private fun MenuItems(closeMenu: () -> Unit) {
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text("Shapes") },
             onClick = { showDialog = true },
         )
         if (showDialog) ShapesDemoDialog { showDialog = false }
     }
-    DropdownMenuItem(
+    AppDropdownMenuItem(
         text = { Text("Clear preferences store and exit") },
         onClick = {
             context.appPrefs.edit { clear() }
@@ -299,7 +299,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
     )
     run {
         var showDialog by remember { mutableStateOf(false) }
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text("Schedule an alarm") },
             onClick = { showDialog = true },
         )
@@ -339,7 +339,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
 //        it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
 //        it.add("Crash!").onClick { error("Unhandled Crash!") }
 //    }
-    DropdownMenuItem(
+    AppDropdownMenuItem(
         text = { Text("Start Dream") },
         onClick = {
             // https://stackoverflow.com/a/23112947
@@ -352,7 +352,7 @@ private fun MenuItems(closeMenu: () -> Unit) {
             }.onFailure(logException).getOrNull().debugAssertNotNull
         },
     )
-    DropdownMenuItem(
+    AppDropdownMenuItem(
         text = { Text("Cyberpunk") },
         onClick = {
             val appPrefs = context.appPrefs

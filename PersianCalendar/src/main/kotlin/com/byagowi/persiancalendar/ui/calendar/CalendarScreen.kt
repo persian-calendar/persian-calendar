@@ -16,14 +16,12 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -42,16 +40,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SnackbarDuration
@@ -77,7 +71,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -123,6 +116,9 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
@@ -638,7 +634,7 @@ private fun Menu(viewModel: CalendarViewModel) {
     }
 
     ThreeDotsDropdownMenu { closeMenu ->
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text(stringResource(R.string.goto_date)) },
             onClick = {
                 closeMenu()
@@ -646,7 +642,7 @@ private fun Menu(viewModel: CalendarViewModel) {
             },
         )
 
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text(stringResource(R.string.add_event)) },
             onClick = {
                 closeMenu()
@@ -654,7 +650,7 @@ private fun Menu(viewModel: CalendarViewModel) {
             },
         )
 
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text(stringResource(R.string.shift_work_settings)) },
             onClick = {
                 closeMenu()
@@ -665,7 +661,7 @@ private fun Menu(viewModel: CalendarViewModel) {
             },
         )
 
-        DropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text(stringResource(R.string.month_overview)) },
             onClick = {
                 closeMenu()
@@ -674,7 +670,7 @@ private fun Menu(viewModel: CalendarViewModel) {
         )
 
         val coordinates by coordinates.collectAsState()
-        if (coordinates != null) DropdownMenuItem(
+        if (coordinates != null) AppDropdownMenuItem(
             text = { Text(stringResource(R.string.month_pray_times)) },
             onClick = {
                 closeMenu()
@@ -689,27 +685,15 @@ private fun Menu(viewModel: CalendarViewModel) {
         if (isTalkBackEnabled && enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
 
         var showSecondaryCalendarSubMenu by remember { mutableStateOf(false) }
-        DropdownMenuItem(
-            text = {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(stringResource(R.string.show_secondary_calendar), Modifier.weight(1f))
-                    val angle by animateFloatAsState(
-                        if (showSecondaryCalendarSubMenu) 180f else 0f,
-                        label = "angle",
-                    )
-                    Icon(
-                        imageVector = Icons.Default.ExpandMore,
-                        contentDescription = null,
-                        modifier = Modifier.rotate(angle),
-                    )
-                }
-            },
+        AppDropdownMenuExpandableItem(
+            text = stringResource(R.string.show_secondary_calendar),
+            isExpanded = showSecondaryCalendarSubMenu,
             onClick = { showSecondaryCalendarSubMenu = !showSecondaryCalendarSubMenu },
         )
 
         (listOf(null) + enabledCalendars.drop(1)).forEach {
             AnimatedVisibility(showSecondaryCalendarSubMenu) {
-                DropdownMenuRadioItem(
+                AppDropdownMenuRadioItem(
                     stringResource(it?.title ?: R.string.none), it == secondaryCalendar
                 ) { _ ->
                     context.appPrefs.edit {
@@ -793,26 +777,6 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
             script { unsafe { +"print()" } }
         }
     }
-}
-
-@Composable
-private fun DropdownMenuRadioItem(
-    text: String,
-    isSelected: Boolean,
-    setSelected: (Boolean) -> Unit,
-) {
-    DropdownMenuItem(
-        text = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.End,
-            ) {
-                Text(text, Modifier.weight(1f))
-                RadioButton(selected = isSelected, onClick = null)
-            }
-        },
-        onClick = { setSelected(!isSelected) },
-    )
 }
 
 class AddEventContract : ActivityResultContract<Jdn, Void?>() {

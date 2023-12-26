@@ -30,7 +30,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -84,6 +83,7 @@ import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -168,14 +168,14 @@ fun AstronomyScreen(
                         }
                     }
                     ThreeDotsDropdownMenu { closeMenu ->
-                        DropdownMenuItem(
+                        AppDropdownMenuItem(
                             text = { Text(stringResource(R.string.goto_date)) },
                             onClick = {
                                 closeMenu()
                                 viewModel.showDayPickerDialog()
                             },
                         )
-                        DropdownMenuItem(
+                        AppDropdownMenuItem(
                             text = { Text(stringResource(R.string.map)) },
                             onClick = {
                                 closeMenu()
