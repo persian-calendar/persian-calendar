@@ -17,17 +17,15 @@ fun AppDropdownMenu(
     minWidth: Dp = 200.dp,
     content: @Composable ColumnScope.(closeMenu: () -> Unit) -> Unit,
 ) {
-    MaterialTheme(
-        shapes = MaterialTheme.shapes.copy(extraSmall = MaterialTheme.shapes.extraLarge),
-        typography = MaterialTheme.typography.copy(labelLarge = MaterialTheme.typography.bodyLarge),
-    ) {
+    val defaultShapes = MaterialTheme.shapes
+    MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = MaterialTheme.shapes.extraLarge)) {
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = onDismissRequest,
             modifier = Modifier
                 .defaultMinSize(minWidth = minWidth)
                 .padding(horizontal = 8.dp),
-            content = { content(onDismissRequest) },
+            content = { MaterialTheme(shapes = defaultShapes) { content(onDismissRequest) } },
         )
     }
 }
