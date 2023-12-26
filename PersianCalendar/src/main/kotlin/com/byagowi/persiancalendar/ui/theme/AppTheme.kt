@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
@@ -109,6 +112,17 @@ private fun AppColorScheme(): ColorScheme {
         background = backgroundColor,
         onBackground = if (backgroundColor.isLight) DefaultLightColorScheme.onBackground
         else DefaultDarkColorScheme.onBackground,
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun AppTopAppBarColors(): TopAppBarColors {
+    return TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.Transparent,
+        navigationIconContentColor = LocalContentColor.current,
+        actionIconContentColor = LocalContentColor.current,
+        titleContentColor = LocalContentColor.current,
     )
 }
 
