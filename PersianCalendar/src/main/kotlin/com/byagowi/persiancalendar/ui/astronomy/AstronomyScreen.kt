@@ -241,7 +241,8 @@ fun AstronomyScreen(
                         )
                     },
                 ) { measurables, constraints ->
-                    val (header, content) = measurables.map { it.measure(constraints) }
+                    val header = measurables[0].measure(constraints)
+                    val content = measurables[1].measure(constraints)
                     layout(
                         width = constraints.maxWidth,
                         height = header.height + content.height +
