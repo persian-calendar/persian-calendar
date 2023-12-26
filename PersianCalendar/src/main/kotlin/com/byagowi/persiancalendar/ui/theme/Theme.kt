@@ -14,13 +14,13 @@ enum class Theme(
 ) {
     SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, hasDynamicColors = true),
     LIGHT("LightTheme", R.string.theme_light),
-    DARK("DarkTheme", R.string.theme_dark, isDark = true),
-    MODERN("ClassicTheme",/*legacy*/R.string.theme_modern, hasDynamicColors = true),
     AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua),
+    DARK("DarkTheme", R.string.theme_dark, isDark = true),
     BLACK(
         "BlackTheme", R.string.theme_black,
         hasGradient = false, hasDynamicColors = true, isDark = true
-    );
+    ),
+    MODERN("ClassicTheme",/*legacy*/R.string.theme_modern, hasDynamicColors = true);
 
     @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
     fun isDynamicColors() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && hasDynamicColors
