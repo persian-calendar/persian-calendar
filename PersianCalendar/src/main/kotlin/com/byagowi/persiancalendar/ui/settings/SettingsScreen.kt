@@ -13,8 +13,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -56,7 +54,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -113,13 +110,7 @@ fun SettingsScreen(
             )
         }
     ) { paddingValues ->
-        Column(
-            Modifier.padding(
-                top = paddingValues.calculateTopPadding(),
-                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current)
-            )
-        ) {
+        Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             LaunchedEffect(Unit) {
                 context.appPrefs.edit {
                     putBoolean(

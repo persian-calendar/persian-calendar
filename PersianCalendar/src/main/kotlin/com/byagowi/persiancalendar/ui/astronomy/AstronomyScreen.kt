@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -197,11 +195,7 @@ fun AstronomyScreen(
     ) { paddingValues ->
         Surface(
             shape = MaterialCornerExtraLargeTop(),
-            modifier = Modifier.padding(
-                top = paddingValues.calculateTopPadding(),
-                start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-            ),
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val bottomPadding = paddingValues.calculateBottomPadding()

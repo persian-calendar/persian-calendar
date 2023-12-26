@@ -217,9 +217,8 @@ fun CalendarScreen(
         }
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-        val topPadding = paddingValues.calculateTopPadding()
         val bottomPadding = paddingValues.calculateBottomPadding()
-        BoxWithConstraints(Modifier.padding(top = topPadding)) {
+        BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val maxHeight = maxHeight
             val maxWidth = maxWidth
             if (isLandscape) Row {
@@ -622,7 +621,7 @@ private fun Menu(viewModel: CalendarViewModel) {
         { bringDate(viewModel, it, context) }) { showDayPickerDialog = false }
 
     val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
-    shiftWorkViewModel?.let { it ->
+    shiftWorkViewModel?.let {
         ShiftWorkDialog(
             it,
             viewModel.selectedDay.value,

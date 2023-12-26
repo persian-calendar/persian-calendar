@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -91,11 +89,7 @@ fun LicensesScreen(navigateUp: () -> Unit) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Surface(
                 shape = MaterialCornerExtraLargeTop(),
-                modifier = Modifier.padding(
-                    top = paddingValues.calculateTopPadding(),
-                    start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
-                    end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-                ),
+                modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
             ) {
                 Licenses(paddingValues.calculateBottomPadding())
                 Box(
