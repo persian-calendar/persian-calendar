@@ -230,7 +230,7 @@ fun AstronomyScreen(
                         SolarDisplay(
                             Modifier
                                 .fillMaxWidth()
-                                .height(maxWidth - 64.dp),
+                                .height(maxWidth - (56 * 2 + 8).dp),
                             viewModel, slider, navigateToMap,
                         )
                     },
