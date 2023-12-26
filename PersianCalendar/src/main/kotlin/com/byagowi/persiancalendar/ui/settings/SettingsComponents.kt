@@ -73,7 +73,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 }
 
 @Composable
-fun SettingsDivider() {
+fun SettingsHorizontalDivider() {
     val color by animateColorAsState(
         MaterialTheme.colorScheme.outlineVariant,
         appColorAnimationSpec,

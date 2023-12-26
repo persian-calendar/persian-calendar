@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.SettingsDivider
+import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
@@ -56,7 +56,7 @@ import java.util.TimeZone
 fun WidgetNotificationSettings() {
     SettingsSection(stringResource(R.string.pref_notification))
     NotificationSettings()
-    SettingsDivider()
+    SettingsHorizontalDivider()
     SettingsSection(stringResource(R.string.pref_widget))
     WidgetConfiguration()
 }

@@ -52,7 +52,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.SettingsDivider
+import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
@@ -91,10 +91,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     val appPrefs = remember { context.appPrefs }
     val cityName = remember(coordinates) { appPrefs.cityName }
     SettingsClickable(stringResource(R.string.coordination), cityName) { onDismissRequest ->
-        CoordinatesDialog(
-            navigateToMap = navigateToMap,
-            onDismissRequest = onDismissRequest
-        )
+        CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
     }
 
     val isLocationSet = coordinates != null
@@ -145,7 +142,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         appPrefs.registerOnSharedPreferenceChangeListener(listener)
         onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
     }
-    SettingsDivider()
+    SettingsHorizontalDivider()
     SettingsSection(
         stringResource(R.string.athan),
         if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
@@ -192,7 +189,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.custom_athan),
-            athanSoundName
+            athanSoundName,
         ) { onDismissRequest -> AthanSelectDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
@@ -246,21 +243,15 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
                 title = { Text(stringResource(R.string.midnight)) },
                 onDismissRequest = onDismissRequest,
                 dismissButton = {
-                    TextButton(onClick = onDismissRequest) {
-                        Text(stringResource(R.string.cancel))
-                    }
+                    TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
                 },
             ) {
                 val currentSelectionKey =
                     context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
-                (listOf(midnightDefaultTitle(context) to "DEFAULT") +
-                        MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
-                            .map {
-                                midnightMethodToString(
-                                    context,
-                                    it
-                                ) to it.name
-                            }).forEach { (title, key) ->
+                (listOf(midnightDefaultTitle(context) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
+                    .map {
+                        midnightMethodToString(context, it) to it.name
+                    }).forEach { (title, key) ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
@@ -274,7 +265,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
                                 }
                                 midnightSummary = title
                             }
-                            .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                            .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                     ) {
                         RadioButton(selected = key == currentSelectionKey, onClick = null)
                         Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
