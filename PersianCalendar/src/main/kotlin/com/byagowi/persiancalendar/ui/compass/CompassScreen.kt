@@ -274,7 +274,7 @@ fun CompassScreen(
     ) { paddingValues ->
         Surface(
             shape = MaterialCornerExtraLargeTop(),
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier.padding(paddingValues),
         ) {
             val surfaceColor = MaterialTheme.colorScheme.surface
             AndroidView(

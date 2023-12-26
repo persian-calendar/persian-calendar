@@ -160,7 +160,7 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
                                 Spacer(
                                     modifier = Modifier
                                         .weight(1f)
-                                        .fillMaxWidth()
+                                        .fillMaxWidth(),
                                 )
                                 Text(item.version)
                             }
@@ -207,7 +207,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                     Icon(
                         modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                         imageVector = icon,
-                        contentDescription = stringResource(R.string.help)
+                        contentDescription = stringResource(R.string.help),
                     )
                 },
             )

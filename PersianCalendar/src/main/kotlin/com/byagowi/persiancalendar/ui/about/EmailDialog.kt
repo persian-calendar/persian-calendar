@@ -44,13 +44,13 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
             singleLine = false,
             modifier = Modifier
                 .defaultMinSize(minHeight = 200.dp)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         )
         Text(
             text = formatNumber(message.length),
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(end = 8.dp)
+                .padding(end = 8.dp),
         )
     }
 }

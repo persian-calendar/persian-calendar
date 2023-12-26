@@ -142,7 +142,7 @@ fun AboutScreen(
                     start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
                     end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
                 )
-                .clip(MaterialCornerExtraLargeTop())
+                .clip(MaterialCornerExtraLargeTop()),
         ) {
             var logoAnimationAtEnd by remember { mutableStateOf(false) }
             var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
@@ -203,12 +203,14 @@ fun AboutScreen(
                     AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
                 Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Image(modifier = Modifier
-                            .graphicsLayer { renderEffect = logoEffect }
-                            .fillMaxSize(),
+                        Image(
+                            modifier = Modifier
+                                .graphicsLayer { renderEffect = logoEffect }
+                                .fillMaxSize(),
                             painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
                             contentDescription = stringResource(R.string.app_name),
-                            contentScale = ContentScale.Fit)
+                            contentScale = ContentScale.Fit,
+                        )
                     }
                 }
             }
@@ -274,7 +276,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
                 Icon(
                     modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                     imageVector = Icons.AutoMirrored.Default.Help,
-                    contentDescription = stringResource(R.string.help)
+                    contentDescription = stringResource(R.string.help),
                 )
                 Column {
                     Text(
@@ -380,12 +382,13 @@ private fun AboutScreenButton(
     Box(
         modifier = Modifier
             .clickable { action(context) }
-            .padding(start = 20.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)) {
+            .padding(start = 20.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+    ) {
         Row {
             Icon(
                 modifier = Modifier.padding(end = 4.dp),
                 imageVector = icon,
-                contentDescription = stringResource(title)
+                contentDescription = stringResource(title),
             )
             Column {
                 Text(stringResource(title), style = MaterialTheme.typography.bodyMedium)

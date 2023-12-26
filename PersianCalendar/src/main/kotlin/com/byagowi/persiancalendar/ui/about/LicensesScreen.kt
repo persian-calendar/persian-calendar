@@ -100,7 +100,7 @@ fun LicensesScreen(navigateUp: () -> Unit) {
                 Licenses(paddingValues.calculateBottomPadding())
                 Box(
                     modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd
+                    contentAlignment = Alignment.CenterEnd,
                 ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
             }
         }
@@ -142,7 +142,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                     Icon(
                         modifier = Modifier.size(MaterialIconDimension.dp),
                         imageVector = Icons.Default.Motorcycle,
-                        contentDescription = "API"
+                        contentDescription = "API",
                     )
                 }, ::showFlingDemoDialog
             ),
@@ -171,24 +171,26 @@ private fun Licenses(bottomPadding: Dp) {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) HorizontalDivider(
                 modifier = Modifier.padding(start = 16.dp, end = 88.dp),
-                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
+                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
             )
             val angle by animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle")
-            Column(modifier = Modifier
-                .clickable { expandedItem = if (i == expandedItem) -1 else i }
-                .padding(
-                    start = 16.dp,
-                    end = 88.dp,
-                    top = if (i == 0) 16.dp else 4.dp,
-                    bottom = 4.dp,
-                )
-                .fillMaxWidth()
-                .animateContentSize(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
+            Column(
+                modifier = Modifier
+                    .clickable { expandedItem = if (i == expandedItem) -1 else i }
+                    .padding(
+                        start = 16.dp,
+                        end = 88.dp,
+                        top = if (i == 0) 16.dp else 4.dp,
+                        bottom = 4.dp,
                     )
-                )) {
+                    .fillMaxWidth()
+                    .animateContentSize(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    ),
+            ) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Icon(
                         imageVector = Icons.Default.ExpandMore,

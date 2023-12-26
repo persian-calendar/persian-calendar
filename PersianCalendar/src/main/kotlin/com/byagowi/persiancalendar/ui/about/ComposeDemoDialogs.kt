@@ -170,7 +170,7 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
                         shape = shape,
                         modifier = Modifier
                             .size(160.dp)
-                            .padding(4.dp)
+                            .padding(4.dp),
                     ) {
                         Box(modifier = Modifier.fillMaxSize()) {
                             Text(
@@ -180,7 +180,7 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
                                     )
                                 } topEnd=${f(shape.bottomEnd)}",
                                 modifier = Modifier.align(Alignment.Center),
-                                color = MaterialTheme.colorScheme.surface
+                                color = MaterialTheme.colorScheme.surface,
                             )
                         }
                     }

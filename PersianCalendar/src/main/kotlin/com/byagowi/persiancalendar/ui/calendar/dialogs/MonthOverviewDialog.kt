@@ -113,7 +113,7 @@ fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
                 ) {
                     FloatingActionButton(
                         onClick = { showPrintReport(isLongClick = false) },
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
                     ) { Icon(Icons.Default.Print, contentDescription = "Print") }
                 }
             }
@@ -127,7 +127,7 @@ fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
                     Text(
                         stringResource(R.string.warn_if_events_not_set),
                         style = MaterialTheme.typography.titleLarge,
-                        modifier = Modifier.padding(all = 16.dp)
+                        modifier = Modifier.padding(all = 16.dp),
                     )
                 }
             }

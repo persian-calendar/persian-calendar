@@ -83,7 +83,7 @@ fun EventsTab(
                         textAlign = TextAlign.Center,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 16.dp)
+                            .padding(top = 16.dp),
                     )
                 }
             }

@@ -97,7 +97,7 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
                         modifier = Modifier
                             .padding(top = 10.dp)
                             .fillMaxWidth()
-                            .height(200.dp)
+                            .height(200.dp),
                     )
                 }
             }
@@ -122,7 +122,7 @@ private fun DrawBackground(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .drawBehind { drawIntoCanvas { patternDrawable.draw(it.nativeCanvas) } }
+            .drawBehind { drawIntoCanvas { patternDrawable.draw(it.nativeCanvas) } },
     )
 }
 

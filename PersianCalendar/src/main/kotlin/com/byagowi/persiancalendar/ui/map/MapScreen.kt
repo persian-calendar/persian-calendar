@@ -139,7 +139,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                                 showMapTypesDialog = false
                                 viewModel.changeMapType(it)
                             }
-                            .padding(vertical = 16.dp, horizontal = 24.dp)
+                            .padding(vertical = 16.dp, horizontal = 24.dp),
                     )
                 }
         }

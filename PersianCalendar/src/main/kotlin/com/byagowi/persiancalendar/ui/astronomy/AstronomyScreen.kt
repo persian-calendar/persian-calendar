@@ -202,7 +202,7 @@ fun AstronomyScreen(
                 top = paddingValues.calculateTopPadding(),
                 start = paddingValues.calculateStartPadding(LocalLayoutDirection.current),
                 end = paddingValues.calculateEndPadding(LocalLayoutDirection.current),
-            )
+            ),
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val bottomPadding = paddingValues.calculateBottomPadding()

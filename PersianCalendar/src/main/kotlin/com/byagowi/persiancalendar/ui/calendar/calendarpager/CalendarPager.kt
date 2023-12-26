@@ -54,7 +54,7 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .size(iconSize, height / 7 + 4.dp)
+                    .size(iconSize, height / 7 + 4.dp),
             ) {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
@@ -97,7 +97,7 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(iconSize, height / 7 + 4.dp)
+                    .size(iconSize, height / 7 + 4.dp),
             ) {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowRight,

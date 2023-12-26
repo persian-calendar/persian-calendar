@@ -171,7 +171,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                 modifier = Modifier
                     .height(48.dp)
                     .fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Spacer(Modifier.width(16.dp))
                 Text(text = formatNumber(position + 1) + spacedColon)
