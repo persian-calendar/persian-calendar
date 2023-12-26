@@ -48,6 +48,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -406,6 +407,7 @@ private fun launchReportIntent(context: Context) {
     }.onFailure(logException)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DevelopersChips() {
     val context = LocalContext.current
@@ -422,7 +424,10 @@ private fun DevelopersChips() {
             }
         }.shuffled()
     }
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Ltr,
+        LocalMinimumInteractiveComponentEnforcement provides false,
+    ) {
         @OptIn(ExperimentalLayoutApi::class)
         FlowRow(
             Modifier
@@ -431,7 +436,7 @@ private fun DevelopersChips() {
         ) {
             developers.forEach { (username, displayName, icon) ->
                 ElevatedFilterChip(
-                    modifier = Modifier.padding(all = 2.dp),
+                    modifier = Modifier.padding(all = 4.dp),
                     onClick = click@{
                         if (username == "ImanSoltanian") return@click // The only person without GitHub account
                         runCatching {
