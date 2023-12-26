@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
@@ -40,20 +43,15 @@ import com.byagowi.persiancalendar.utils.appPrefs
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val currentTheme = remember {
-        context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
-    }
+    val theme by theme.collectAsState()
     AppDialog(
         title = { Text(stringResource(R.string.select_skin)) },
         onDismissRequest = onDismissRequest,
         dismissButton = {
-            TextButton(onClick = onDismissRequest) {
-                Text(stringResource(R.string.cancel))
-            }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         neutralButton = {
-            val theme by theme.collectAsState()
-            if (theme.hasGradient) {
+            AnimatedVisibility(theme.hasGradient, enter = fadeIn(), exit = fadeOut()) {
                 var isChecked by rememberSaveable {
                     mutableStateOf(
                         context.appPrefs.getBoolean(
@@ -80,22 +78,21 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             }
         },
     ) {
-        Theme.entries.forEach { theme ->
-            fun onClick() {
-                onDismissRequest()
-                context.appPrefs.edit { putString(PREF_THEME, theme.key) }
-            }
+        Theme.entries.forEach { entry ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(SettingsItemHeight.dp)
-                    .clickable(onClick = ::onClick)
+                    .clickable {
+                        onDismissRequest()
+                        context.appPrefs.edit { putString(PREF_THEME, entry.key) }
+                    }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) {
-                RadioButton(selected = theme.key == currentTheme, onClick = null)
+                RadioButton(selected = entry == theme, onClick = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
-                Text(stringResource(theme.title))
+                Text(stringResource(entry.title))
             }
         }
     }
