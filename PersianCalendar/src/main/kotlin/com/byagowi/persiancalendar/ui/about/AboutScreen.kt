@@ -221,16 +221,18 @@ fun AboutScreen(
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 val clickHandlerDialog =
                     remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(headerHeight)
-                    .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
-                        logoAnimationAtEnd = !logoAnimationAtEnd
-                        clickHandlerDialog(context.getActivity())
-                        logoEffect = effectsGenerator
-                            ?.invoke()
-                            ?.asComposeRenderEffect()
-                    })
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(headerHeight)
+                        .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
+                            logoAnimationAtEnd = !logoAnimationAtEnd
+                            clickHandlerDialog(context.getActivity())
+                            logoEffect = effectsGenerator
+                                ?.invoke()
+                                ?.asComposeRenderEffect()
+                        },
+                )
                 Surface(shape = MaterialCornerExtraLargeTop()) {
                     AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
