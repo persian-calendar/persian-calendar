@@ -64,10 +64,9 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
@@ -224,29 +223,39 @@ fun AstronomyScreen(
                             .weight(1f)
                             .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
                             .height(maxHeight - bottomPadding),
-                        viewModel,
-                        slider,
-                        navigateToMap
+                        viewModel, slider, navigateToMap,
                     )
-                } else Column(Modifier.verticalScroll(rememberScrollState())) {
-                    val minSize = maxWidth - 48.dp
-                    var headerHeightPx by remember { mutableStateOf(672) /* ~192dp, replaced ASAP */ }
-                    val headerHeight = with(LocalDensity.current) { headerHeightPx.toDp() }
-                    Header(
-                        Modifier
-                            .onSizeChanged { headerHeightPx = it.height }
-                            .padding(start = 24.dp, end = 24.dp, top = 24.dp),
-                        viewModel,
-                    )
-                    SolarDisplay(
-                        Modifier
-                            .fillMaxWidth()
-                            .height((maxHeight - bottomPadding - headerHeight).coerceAtLeast(minSize)),
-                        viewModel,
-                        slider,
-                        navigateToMap
-                    )
-                    Spacer(modifier = Modifier.height(bottomPadding))
+                } else Layout(
+                    // Puts content in middle of available space after the measured header
+                    modifier = Modifier.verticalScroll(rememberScrollState()),
+                    content = {
+                        Header(
+                            Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                            viewModel,
+                        )
+                        SolarDisplay(
+                            Modifier
+                                .fillMaxWidth()
+                                .height(maxWidth - 64.dp),
+                            viewModel, slider, navigateToMap,
+                        )
+                    },
+                ) { measurables, constraints ->
+                    val (header, content) = measurables.map { it.measure(constraints) }
+                    layout(
+                        width = constraints.maxWidth,
+                        height = header.height + content.height +
+                                // To make solar display can be scrolled above bottom padding in smaller screen
+                                bottomPadding.roundToPx(),
+                    ) {
+                        // Put the header at top
+                        header.placeRelative(0, 0)
+
+                        val availableHeight =
+                            (maxHeight - bottomPadding).roundToPx() - header.height
+                        val space = availableHeight / 2 - content.height / 2
+                        content.placeRelative(0, header.height + space.coerceAtLeast(0))
+                    }
                 }
             }
         }
