@@ -73,7 +73,6 @@ import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
-import kotlinx.coroutines.flow.map
 
 @Composable
 fun LocationAthanSettings(navigateToMap: () -> Unit) {

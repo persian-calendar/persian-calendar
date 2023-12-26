@@ -8,7 +8,6 @@ import androidx.compose.ui.test.performClick
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import org.junit.Rule
 import org.junit.Test
 
