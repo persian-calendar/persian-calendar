@@ -457,7 +457,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
     val context = LocalContext.current
     val headerCache = remember {
         lruCache(1024, create = { jdn: Jdn ->
-            state.generateHeader(context, jdn).joinToString("\n")
+            state.generateHeader(context.resources, jdn).joinToString("\n")
         })
     }
 

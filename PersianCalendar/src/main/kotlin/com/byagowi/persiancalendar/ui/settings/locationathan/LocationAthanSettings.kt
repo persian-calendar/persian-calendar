@@ -249,7 +249,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             ) {
                 val currentSelectionKey =
                     context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
-                (listOf(midnightDefaultTitle(context) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
+                (listOf(midnightDefaultTitle(context.resources) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
                     .map {
                         midnightMethodToString(context.resources, it) to it.name
                     }).forEach { (title, key) ->
@@ -278,16 +278,16 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     }
 }
 
-private fun midnightDefaultTitle(context: Context): String {
-    return context.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
-        context.resources, calculationMethod.defaultMidnight
+private fun midnightDefaultTitle(resources: Resources): String {
+    return resources.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
+        resources, calculationMethod.defaultMidnight
     )
 }
 
 private fun getMidnightMethodPreferenceSummary(context: Context): String {
     return context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
         ?.let { midnightMethodToString(context.resources, MidnightMethod.valueOf(it)) }
-        ?: midnightDefaultTitle(context)
+        ?: midnightDefaultTitle(context.resources)
 }
 
 private fun midnightMethodToString(resources: Resources, method: MidnightMethod): String {

@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.content.Context
+import android.content.res.Resources
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
@@ -53,21 +53,21 @@ class AstronomyState(val date: GregorianCalendar) {
         solarSystemPlanets.map { it.titleStringId to equatorialToEcliptic(helioVector(it, time)) }
     }
 
-    fun generateHeader(context: Context, jdn: Jdn): List<String> {
+    fun generateHeader(resources: Resources, jdn: Jdn): List<String> {
         val observer = coordinates.value?.toObserver()
-        return listOf(
-            if (observer != null)
-                searchLocalSolarEclipse(time, observer).let { it.kind to it.peak.time }
-            else searchGlobalSolarEclipse(time).let { it.kind to it.peak },
-            searchLunarEclipse(time).let { it.kind to it.peak }
-        ).mapIndexed { i, (kind, peak) ->
-            val formattedDate = Date(peak.toMillisecondsSince1970()).toGregorianCalendar()
-                .formatDateAndTime()
+        return listOf(if (observer != null) searchLocalSolarEclipse(
+            time,
+            observer,
+        ).let { it.kind to it.peak.time }
+        else searchGlobalSolarEclipse(time).let { it.kind to it.peak },
+            searchLunarEclipse(time).let { it.kind to it.peak }).mapIndexed { i, (kind, peak) ->
+            val formattedDate =
+                Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
             val isSolar = i == 0
             val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
-            (language.value.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
-                    spacedColon + formattedDate
-        } + generateYearName(context.resources, jdn.toPersianDate(), true, date)
+            (language.value.tryTranslateEclipseType(isSolar, kind)
+                ?: resources.getString(title)) + spacedColon + formattedDate
+        } + generateYearName(resources, jdn.toPersianDate(), true, date)
     }
 
     companion object {
