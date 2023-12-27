@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
-import android.content.Context
+import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.annotation.StringRes
@@ -34,42 +34,36 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean
             persianDate.month).toInt() % 12 == 8
 }
 
-fun isMoonInScorpio(context: Context, jdn: Jdn): String {
-    val persian = jdn.toPersianDate()
-    val islamic = jdn.toIslamicDate()
-    return if (isMoonInScorpio(persian, islamic)) context.getString(R.string.moonInScorpio) else ""
-}
-
-fun generateZodiacInformation(context: Context, jdn: Jdn, withEmoji: Boolean): String {
+fun generateZodiacInformation(resources: Resources, jdn: Jdn, withEmoji: Boolean): String {
     val persianDate = jdn.toPersianDate()
     return "%s\n%s$spacedColon%s".format(
-        generateYearName(context, persianDate, withEmoji),
-        context.getString(R.string.zodiac),
-        Zodiac.fromPersianCalendar(persianDate).format(context, withEmoji)
+        generateYearName(resources, persianDate, withEmoji),
+        resources.getString(R.string.zodiac),
+        Zodiac.fromPersianCalendar(persianDate).format(resources, withEmoji)
     ).trim()
 }
 
 fun generateYearName(
-    context: Context,
+    resources: Resources,
     persianDate: PersianDate,
     withEmoji: Boolean,
     time: GregorianCalendar? = null
 ): String {
     val yearNames = listOfNotNull(
         language.value.inParentheses.format(
-            ChineseZodiac.fromPersianCalendar(persianDate).format(context, withEmoji),
-            context.getString(R.string.shamsi_calendar_short)
+            ChineseZodiac.fromPersianCalendar(persianDate).format(resources, withEmoji),
+            resources.getString(R.string.shamsi_calendar_short)
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val date = ChineseCalendar((time ?: Jdn(persianDate).toGregorianCalendar()).time)
             val year = date[ChineseCalendar.YEAR]
             language.value.inParentheses.format(
-                ChineseZodiac.fromChineseCalendar(date).format(context, withEmoji),
-                context.getString(R.string.chinese) + spacedComma + formatNumber(year)
+                ChineseZodiac.fromChineseCalendar(date).format(resources, withEmoji),
+                resources.getString(R.string.chinese) + spacedComma + formatNumber(year)
             )
         } else null
     ).let { if (language.value.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
-    return "%s$spacedColon%s".format(context.getString(R.string.year_name), yearNames)
+    return "%s$spacedColon%s".format(resources.getString(R.string.year_name), yearNames)
 }
 
 // https://github.com/cosinekitty/astronomy/blob/0547aaf/demo/csharp/camera/camera.cs#L98

@@ -804,7 +804,7 @@ private data class NotificationData(
             .setContentText(
                 when {
                     isTalkBackEnabled -> getA11yDaySummary(
-                        context = context, jdn = jdn,
+                        resources = context.resources, jdn = jdn,
                         isToday = false, // Don't set isToday, per a feedback
                         deviceCalendarEvents = deviceCalendarEvents, withZodiac = true,
                         withOtherCalendars = true, withTitle = false

@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.content.Context
+import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -45,9 +45,9 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
     DOG(R.string.animal_year_name_dog, "🐕"),
     PIG(R.string.animal_year_name_pig, "🐖");
 
-    fun format(context: Context, withEmoji: Boolean) = buildString {
+    fun format(resources: Resources, withEmoji: Boolean) = buildString {
         if (withEmoji) append("$emoji ")
-        append(context.getString(title))
+        append(resources.getString(title))
     }
 
     val bestMatches get() = bestMatchesRaw[ordinal]

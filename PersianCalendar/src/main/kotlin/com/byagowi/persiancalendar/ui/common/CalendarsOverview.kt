@@ -98,7 +98,7 @@ fun CalendarsOverview(
             )
             .semantics {
                 this.contentDescription = getA11yDaySummary(
-                    context,
+                    context.resources,
                     jdn,
                     isToday,
                     EventsStore.empty(),
@@ -188,12 +188,11 @@ fun CalendarsOverview(
             }
         }
 
-        val showIsMoonInScorpio =
-            if (isAstronomicalExtraFeaturesEnabled) isMoonInScorpio(context, jdn) else ""
-        AnimatedVisibility(showIsMoonInScorpio.isNotEmpty()) {
+        val showIsMoonInScorpio = isAstronomicalExtraFeaturesEnabled && isMoonInScorpio(jdn)
+        AnimatedVisibility(showIsMoonInScorpio) {
             SelectionContainer {
                 Text(
-                    showIsMoonInScorpio,
+                    stringResource(R.string.moonInScorpio),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
@@ -206,7 +205,7 @@ fun CalendarsOverview(
         AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             SelectionContainer {
                 Text(
-                    generateZodiacInformation(context, jdn, withEmoji = true),
+                    generateZodiacInformation(context.resources, jdn, withEmoji = true),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
@@ -243,7 +242,7 @@ fun CalendarsOverview(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                progresses.forEachIndexed { i, (stringId, current, max) ->
+                progresses.forEach { (stringId, current, max) ->
                     val title = stringResource(stringId)
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,

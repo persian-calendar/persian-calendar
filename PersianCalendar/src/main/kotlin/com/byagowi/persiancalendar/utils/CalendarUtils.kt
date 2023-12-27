@@ -65,13 +65,18 @@ val AbstractDate.monthName get() = this.calendarType.monthsNames.getOrNull(month
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
-    context: Context, jdn: Jdn, isToday: Boolean, deviceCalendarEvents: DeviceCalendarEventsStore,
-    withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
+    resources: Resources,
+    jdn: Jdn,
+    isToday: Boolean,
+    deviceCalendarEvents: DeviceCalendarEventsStore,
+    withZodiac: Boolean,
+    withOtherCalendars: Boolean,
+    withTitle: Boolean
 ): String = buildString {
     // It has some expensive calculations, lets not do that when not needed
     if (!isTalkBackEnabled) return@buildString
 
-    if (isToday) appendLine(context.getString(R.string.today))
+    if (isToday) appendLine(resources.getString(R.string.today))
 
     val mainDate = jdn.toCalendar(mainCalendar)
 
@@ -83,8 +88,7 @@ fun getA11yDaySummary(
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars.isNotEmpty()) {
-            appendLine().appendLine()
-                .append(context.getString(R.string.equivalent_to))
+            appendLine().appendLine().append(resources.getString(R.string.equivalent_to))
                 .append(" ")
                 .append(otherCalendars)
         }
@@ -96,8 +100,7 @@ fun getA11yDaySummary(
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
     )
     if (holidays.isNotEmpty()) {
-        appendLine().appendLine()
-            .appendLine(context.getString(R.string.holiday_reason, holidays))
+        appendLine().appendLine().appendLine(resources.getString(R.string.holiday_reason, holidays))
     }
 
     val nonHolidays = getEventsTitle(
@@ -105,8 +108,7 @@ fun getA11yDaySummary(
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
     )
     if (nonHolidays.isNotEmpty()) {
-        appendLine().appendLine()
-            .appendLine(context.getString(R.string.events))
+        appendLine().appendLine().appendLine(resources.getString(R.string.events))
             .append(nonHolidays)
     }
 
@@ -114,13 +116,13 @@ fun getA11yDaySummary(
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
         appendLine().appendLine()
-            .append(context.getString(R.string.nth_week_of_year, formatNumber(weekOfYearStart)))
+            .append(resources.getString(R.string.nth_week_of_year, formatNumber(weekOfYearStart)))
     }
 
     if (withZodiac && isAstronomicalExtraFeaturesEnabled) {
         appendLine().appendLine()
-            .appendLine(generateZodiacInformation(context, jdn, withEmoji = false))
-            .append(isMoonInScorpio(context, jdn))
+            .appendLine(generateZodiacInformation(resources, jdn, withEmoji = false))
+        if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moonInScorpio))
     }
 }
 

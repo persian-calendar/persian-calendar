@@ -478,7 +478,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                         Modifier.align(Alignment.Center),
                         0xcceaaa00.toInt(),
                         stringResource(R.string.sun),
-                        sunZodiac.format(context, true) // ☉☀️
+                        sunZodiac.format(context.resources, true) // ☉☀️
                     )
                 }
                 Box(Modifier.weight(1f)) {
@@ -486,7 +486,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                         Modifier.align(Alignment.Center),
                         0xcc606060.toInt(),
                         stringResource(R.string.moon),
-                        moonZodiac.format(context, true) // ☽it.moonPhaseEmoji
+                        moonZodiac.format(context.resources, true) // ☽it.moonPhaseEmoji
                     )
                 }
             }

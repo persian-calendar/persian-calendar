@@ -229,7 +229,7 @@ fun Month(
                                 interactionSource = remember { MutableInteractionSource() },
                                 onClick = { viewModel.changeSelectedDay(day) },
                                 onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
-                                    context,
+                                    context.resources,
                                     day,
                                     isToday,
                                     EventsStore.empty(),

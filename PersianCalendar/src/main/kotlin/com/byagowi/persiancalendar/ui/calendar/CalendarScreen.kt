@@ -299,7 +299,7 @@ private fun bringDate(
     // a11y
     if (isTalkBackEnabled && jdn != Jdn.today()) Toast.makeText(
         context, getA11yDaySummary(
-            context,
+            context.resources,
             jdn,
             false,
             EventsStore.empty(),

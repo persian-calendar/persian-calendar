@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
-import kotlin.test.assertTrue
 
 class CalendarLibraryTests {
 
@@ -27,7 +26,7 @@ class CalendarLibraryTests {
             assertEquals(it[3], converted.dayOfMonth)
 
             assertEquals(it[0].toLong(), converted.toJdn())
-            assertTrue(reference == IslamicDate(reference.toJdn()))
+            assertEquals(reference, IslamicDate(reference.toJdn()))
         }
 
         listOf(
