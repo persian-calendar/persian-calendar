@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -37,14 +37,14 @@ data class DayPainterColors(
 }
 
 class DayPainter(
-    context: Context,
+    resources: Resources,
     private val width: Float,
     private val height: Float,
     private val isRtl: Boolean,
     colors: DayPainterColors,
     isWidget: Boolean = false,
 ) {
-    private val paints = Paints(context, min(width, height), colors, isWidget)
+    private val paints = Paints(resources, min(width, height), colors, isWidget)
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -162,16 +162,17 @@ class DayPainter(
 }
 
 private class Paints(
-    context: Context, diameter: Float, colors: DayPainterColors, isWidget: Boolean
+    resources: Resources, diameter: Float, colors: DayPainterColors, isWidget: Boolean
 ) {
-    private val dp = context.resources.dp
+    private val dp = resources.dp
     val todayCirclePadding = .5f * dp
     val isArabicScript = language.value.isArabicScript
     val eventYOffset = diameter * 12 / 40
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
-    val scorpioSign = context.getString(R.string.scorpio).first() + if (isArabicScript) ZWJ else ""
+    val scorpioSign =
+        resources.getString(R.string.scorpio).first() + if (isArabicScript) ZWJ else ""
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
@@ -193,7 +194,7 @@ private class Paints(
 
     private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
     private val textSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
-    val dayOffset = if (mainCalendarDigitsIsArabic) 0f else context.resources.sp(3f)
+    val dayOffset = if (mainCalendarDigitsIsArabic) 0f else resources.sp(3f)
 
     private val secondaryCalendarDigitsIsArabic = secondaryCalendarDigits === Language.ARABIC_DIGITS
     private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)

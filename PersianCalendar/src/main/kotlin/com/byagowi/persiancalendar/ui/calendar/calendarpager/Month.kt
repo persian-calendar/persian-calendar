@@ -132,7 +132,7 @@ fun Month(
     val cellPixelsHeight = heightPixels / rowsCount
     val dayPainterColors = AppDayPainterColors()
     val dayPainter = remember(height, width, refreshToken, dayPainterColors) {
-        DayPainter(context, cellPixelsWidth, cellPixelsHeight, isRtl, dayPainterColors)
+        DayPainter(context.resources, cellPixelsWidth, cellPixelsHeight, isRtl, dayPainterColors)
     }
     val halfDp = with(LocalDensity.current) { .5f.dp.toPx() }
 
