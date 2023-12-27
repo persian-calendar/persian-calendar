@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import android.animation.ValueAnimator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -20,7 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Canvas
@@ -35,11 +40,13 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.min
 import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -54,6 +61,7 @@ import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -130,6 +138,7 @@ fun Month(
     val heightPixels = with(LocalDensity.current) { height.toPx() }
     val cellPixelsWidth = widthPixels / columnsCount
     val cellPixelsHeight = heightPixels / rowsCount
+    val diameter = min(cellSize.height, cellSize.width)
     val dayPainterColors = AppDayPainterColors()
     val dayPainter = remember(height, width, refreshToken, dayPainterColors) {
         DayPainter(context.resources, cellPixelsWidth, cellPixelsHeight, isRtl, dayPainterColors)
@@ -166,12 +175,22 @@ fun Month(
                 val description = stringResource(
                     R.string.week_days_name_column, getWeekDayName(weekDayPosition)
                 )
-                Cell(
+                Box(
                     Modifier
                         .semantics { this.contentDescription = description }
                         .size(cellSize),
-                    dayPainter,
-                ) { it.setInitialOfWeekDay(getInitialOfWeekDay(weekDayPosition)) }
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        getInitialOfWeekDay(weekDayPosition),
+                        fontSize = with(LocalDensity.current) { (diameter * .5f).toSp() },
+                        modifier = Modifier
+                            .alpha(AppBlendAlpha)
+                            .semantics {
+                                @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                            },
+                    )
+                }
             }
         }
         (0..<6).forEach { row ->
@@ -179,12 +198,22 @@ fun Month(
                 if (isShowWeekOfYearEnabled && row < weeksCount) {
                     val weekNumber = formatNumber(weekOfYearStart + row - 1)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
-                    Cell(
+                    Box(
                         Modifier
                             .semantics { this.contentDescription = description }
                             .size(cellSize),
-                        dayPainter,
-                    ) { it.setWeekNumber(weekNumber) }
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            weekNumber,
+                            fontSize = with(LocalDensity.current) { (diameter * .35f).toSp() },
+                            modifier = Modifier
+                                .alpha(AppBlendAlpha)
+                                .semantics {
+                                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                                },
+                        )
+                    }
                 }
                 (0..<7).forEach RowForEach@{ column ->
                     val dayOffset =
@@ -192,7 +221,7 @@ fun Month(
                     val day = monthStartJdn + dayOffset
                     if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier.width(cellSize.width))
                     val isToday = day == today
-                    Cell(
+                    Canvas(
                         Modifier
                             .size(cellSize)
                             .combinedClickable(
@@ -214,11 +243,10 @@ fun Month(
                                     addEvent()
                                 },
                             ),
-                        dayPainter,
                     ) {
                         val events =
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
-                        it.setDayOfMonthItem(
+                        dayPainter.setDayOfMonthItem(
                             isToday,
                             isHighlighted && selectedDay == day,
                             events.any { it !is CalendarEvent.DeviceCalendarEvent },
@@ -228,31 +256,12 @@ fun Month(
                             dayOffset + 1,
                             getShiftWorkTitle(day, true)
                         )
+                        drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                     }
                 }
             }
         }
     }
-}
-
-@Composable
-private fun Cell(
-    modifier: Modifier = Modifier,
-    dayPainter: DayPainter,
-    update: (DayPainter) -> Unit,
-) {
-    Box(
-        Modifier
-            .drawWithCache {
-                onDrawWithContent {
-                    drawIntoCanvas {
-                        update(dayPainter)
-                        dayPainter.drawDay(it.nativeCanvas)
-                    }
-                }
-            }
-            .then(modifier),
-    )
 }
 
 private class SelectionIndicator(
