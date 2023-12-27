@@ -19,20 +19,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
@@ -52,26 +49,17 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         },
         neutralButton = {
             AnimatedVisibility(theme.hasGradient, enter = fadeIn(), exit = fadeOut()) {
-                var isChecked by rememberSaveable {
-                    mutableStateOf(
-                        context.appPrefs.getBoolean(
-                            PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT
-                        )
-                    )
-                }
-
-                fun onClick() {
-                    isChecked = !isChecked
-                    context.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, isChecked) }
-                }
+                val isGradient by isGradient.collectAsState()
+                fun toggleIsGradient() =
+                    context.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) }
                 Row(
                     Modifier.clickable(
                         indication = rememberRipple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },
-                    ) { onClick() },
+                    ) { toggleIsGradient() },
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Switch(checked = isChecked, onCheckedChange = { onClick() })
+                    Switch(checked = isGradient, onCheckedChange = { toggleIsGradient() })
                     Spacer(Modifier.width(8.dp))
                     Text(stringResource(R.string.color_gradient))
                 }
