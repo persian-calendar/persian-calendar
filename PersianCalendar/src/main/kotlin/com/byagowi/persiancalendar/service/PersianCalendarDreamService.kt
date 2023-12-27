@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.service
 
 import android.animation.ValueAnimator
+import android.graphics.Canvas
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
@@ -47,26 +48,28 @@ class PersianCalendarDreamService : DreamService() {
         super.onAttachedToWindow()
         isFullscreen = true
 
-        val backgroundView = View(this).also {
-            val resources = this.resources
-            val isNightMode = isSystemInDarkTheme(resources.configuration)
-            val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) getColor(
-                if (isNightMode) android.R.color.system_accent1_200
-                else android.R.color.system_accent1_400
-            ) else null
-            val pattern = PatternDrawable(
-                preferredTintColor = accentColor,
-                darkBaseColor = isSystemInDarkTheme(resources.configuration),
-                dp = resources.dp,
-            )
-            it.background = pattern
-            valueAnimator.addUpdateListener {
-                pattern.rotationDegree = valueAnimator.animatedFraction * 360f
-                pattern.invalidateSelf()
-            }
+        val isNightMode = isSystemInDarkTheme(resources.configuration)
+        val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) getColor(
+            if (isNightMode) android.R.color.system_accent1_200
+            else android.R.color.system_accent1_400
+        ) else null
+        val pattern = PatternDrawable(
+            preferredTintColor = accentColor,
+            darkBaseColor = isSystemInDarkTheme(resources.configuration),
+            dp = resources.dp,
+        )
+
+        val view = object : View(this) {
+            override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) = pattern.setSize(w, h)
+            override fun onDraw(canvas: Canvas) = pattern.draw(canvas)
             // it.setOnClickListener { wakeUp() }
         }
         // isInteractive = true
+
+        valueAnimator.addUpdateListener {
+            pattern.rotationDegree = valueAnimator.animatedFraction * 360f
+            view.invalidate()
+        }
 
         runCatching {
             if (appPrefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE))
@@ -75,7 +78,7 @@ class PersianCalendarDreamService : DreamService() {
 
         // ComposeView can't be used in DreamService in my tries
         // Even if worked someday, please test older devices also
-        setContentView(backgroundView)
+        setContentView(view)
 
         listOf(valueAnimator::start, valueAnimator::reverse).random()()
     }

@@ -3,14 +3,10 @@ package com.byagowi.persiancalendar.ui.athan
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.ColorFilter
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.PixelFormat
-import android.graphics.Rect
 import android.graphics.Shader
-import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
@@ -42,8 +38,7 @@ class PatternDrawable(
     var rotationDegree: Float = 0f,
     private val darkBaseColor: Boolean = false,
     private val dp: Float,
-) : Drawable() {
-
+) {
     private val tintColor = preferredTintColor ?: when (prayerKey) {
         FAJR_KEY -> 0xFF009788
         DHUHR_KEY -> 0xFFF1A42A
@@ -57,11 +52,15 @@ class PatternDrawable(
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var centerX = 0f
     private var centerY = 0f
+    private var oldWidth = 0
+    private var oldHeight = 0
 
-    public override fun onBoundsChange(bounds: Rect) {
-        super.onBoundsChange(bounds)
+    fun setSize(width: Int, height: Int) {
+        if (width == oldWidth && height == oldHeight) return
+        oldWidth = width; oldHeight = height
+
         backgroundPaint.shader = LinearGradient(
-            0f, 0f, 0f, bounds.bottom.toFloat(),
+            0f, 0f, 0f, height.toFloat(),
             tintColor, if (darkBaseColor) Color.BLACK else Color.WHITE,
             Shader.TileMode.CLAMP
         )
@@ -74,20 +73,14 @@ class PatternDrawable(
         val bitmap = createBitmap(pattern.width.toInt(), pattern.height.toInt())
             .applyCanvas(pattern::draw)
         foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)
-        centerX = listOf(-.5f, .5f, 1.5f).random() * bounds.width()
-        centerY = listOf(-.5f, .5f, 1.5f).random() * bounds.height()
+        centerX = listOf(-.5f, .5f, 1.5f).random() * width
+        centerY = listOf(-.5f, .5f, 1.5f).random() * height
     }
 
-    override fun draw(canvas: Canvas) {
+    fun draw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
         canvas.withRotation(rotationDegree, centerX, centerY) { drawPaint(foregroundPaint) }
     }
-
-    override fun setAlpha(alpha: Int) = Unit
-    override fun setColorFilter(colorFilter: ColorFilter?) = Unit
-
-    @Deprecated("", ReplaceWith("PixelFormat.OPAQUE", "android.graphics.PixelFormat"))
-    override fun getOpacity(): Int = PixelFormat.OPAQUE
 }
 
 private interface Pattern {

@@ -62,10 +62,7 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
         modifier = Modifier
             .clickable { onClick() }
             .fillMaxSize()
-            .onSizeChanged {
-                val rect = android.graphics.Rect(0, 0, it.width, it.height)
-                patternDrawable.onBoundsChange(rect)
-            },
+            .onSizeChanged { patternDrawable.setSize(it.width, it.height) },
     ) {
         val direction = remember { listOf(1, -1).random() }
         val infiniteTransition = rememberInfiniteTransition(label = "rotation")

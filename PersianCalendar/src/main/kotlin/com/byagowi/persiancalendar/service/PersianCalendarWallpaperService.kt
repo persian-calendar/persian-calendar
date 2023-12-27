@@ -92,7 +92,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
                     xOffset += (centerX - touchX) / 400f
                     yOffset += (centerY - touchY) / 400f
                 }
-                patternDrawable.bounds = bounds
+                patternDrawable.setSize(bounds.width(), bounds.height())
                 patternDrawable.rotationDegree = rotationDegree + slideRotation + sensorRotation
                 canvas.withScale(scale, scale, centerX, centerY) {
                     canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
