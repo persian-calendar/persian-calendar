@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.animation.ArgbEvaluator
-import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
@@ -62,34 +62,34 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
-class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundColor: Int? = null) {
-    private val solarDraw = SolarDraw(context.resources)
-    private val pinDrawable = context.resources.getDrawable(R.drawable.ic_pin, null)
+class MapDraw(
+    resources: Resources, mapBackgroundColor: Int? = null, mapForegroundColor: Int? = null
+) {
+    private val solarDraw = SolarDraw(resources)
+    private val pinDrawable = resources.getDrawable(R.drawable.ic_pin, null)
 
     val mapScaleFactor = 16 // As the path bounds is 360x180 *16
     val mapWidth = 360 * mapScaleFactor
     val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
-    private fun createPathFromResourceText(context: Context, @RawRes id: Int): Path {
-        val path = context.resources.openRawResource(id).readBytes().decodeToString()
+    private fun createPathFromResourceText(resources: Resources, @RawRes id: Int): Path {
+        val path = resources.openRawResource(id).readBytes().decodeToString()
         // In case Compose addPathNodes became private bring back
         // https://github.com/persian-calendar/persian-calendar/blob/5a7ff8a/PersianCalendar/src/main/kotlin/com/byagowi/persiancalendar/ui/map/PathParser.kt
         return addPathNodes(path).toPath().asAndroidPath()
     }
 
-    private val mapPath: Path = createPathFromResourceText(context, R.raw.worldmap)
+    private val mapPath: Path = createPathFromResourceText(resources, R.raw.worldmap)
     private val timezones: Path by lazy(LazyThreadSafetyMode.NONE) {
-        createPathFromResourceText(context, R.raw.timezones)
+        createPathFromResourceText(resources, R.raw.timezones)
             // `topojson['transform']` result, turn it to degrees scale
-            .scaleBy(0.17586713f, 0.08793366f)
-            .translateBy(-180f, -90f)
+            .scaleBy(0.17586713f, 0.08793366f).translateBy(-180f, -90f)
             // Make it the same scale as mapPath
-            .translateBy(180f, -90f)
-            .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
+            .translateBy(180f, -90f).scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
     }
     private val tectonicPlates: Path by lazy(LazyThreadSafetyMode.NONE) {
-        createPathFromResourceText(context, R.raw.tectonicplates)
+        createPathFromResourceText(resources, R.raw.tectonicplates)
             // `topojson['transform']` result, turn it to degrees scale
             .scaleBy(0.17586713f, 0.074727945f)
             .translateBy(-180f, -66.1632f)
@@ -111,7 +111,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     var drawKaaba: Boolean = false
 
     private val kaabaIcon by lazy(LazyThreadSafetyMode.NONE) {
-        context.resources.getDrawable(R.drawable.kaaba, null)
+        resources.getDrawable(R.drawable.kaaba, null)
     }
 
     var markersScale = 1f
@@ -371,7 +371,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
     }
-    private val dp = context.resources.dp
+    private val dp = resources.dp
     private val miscPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 5 * dp

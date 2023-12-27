@@ -12,6 +12,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +35,6 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,17 +43,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 
 @Composable
 fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Unit) {
     val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
-    val context = LocalContext.current
+    val darkBaseColor = isSystemInDarkTheme()
     val patternDrawable = remember {
         // We like to reuse our drawable for now but can reconsider in future
-        PatternDrawable(prayerKey, darkBaseColor = isSystemInDarkTheme(context), dp = dpAsPx)
+        PatternDrawable(
+            prayerKey,
+            darkBaseColor = darkBaseColor,
+            dp = dpAsPx,
+        )
     }
     Box(
         modifier = Modifier

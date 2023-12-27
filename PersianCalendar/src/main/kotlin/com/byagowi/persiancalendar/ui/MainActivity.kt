@@ -124,11 +124,11 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 
         if (key == PREF_APP_LANGUAGE) {
             applyAppLanguage(this)
-            loadLanguageResources(this)
+            loadLanguageResources(this.resources)
         }
 
         if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS) {
-            loadLanguageResources(this)
+            loadLanguageResources(this.resources)
         }
     }
 

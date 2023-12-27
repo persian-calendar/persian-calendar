@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.global
 
 import android.content.Context
+import android.content.res.Resources
 import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
@@ -219,7 +220,7 @@ fun initGlobal(context: Context) {
     debugLog("Utils: initGlobal is called")
     updateStoredPreference(context)
     applyAppLanguage(context)
-    loadLanguageResources(context)
+    loadLanguageResources(context.resources)
     scheduleAlarms(context)
     configureCalendarsAndLoadEvents(context)
 }
@@ -236,15 +237,15 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     isIranHolidaysEnabled = eventsRepository?.iranHolidays ?: false
 }
 
-fun loadLanguageResources(context: Context) {
+fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
     val language = language.value
-    persianMonths = language.getPersianMonths(context)
-    islamicMonths = language.getIslamicMonths(context)
-    gregorianMonths = language.getGregorianMonths(context, alternativeGregorianMonths)
+    persianMonths = language.getPersianMonths(resources)
+    islamicMonths = language.getIslamicMonths(resources)
+    gregorianMonths = language.getGregorianMonths(resources, alternativeGregorianMonths)
     nepaliMonths = language.getNepaliMonths()
-    weekDays = language.getWeekDays(context)
-    weekDaysInitials = language.getWeekDaysInitials(context)
+    weekDays = language.getWeekDays(resources)
+    weekDaysInitials = language.getWeekDaysInitials(resources)
 }
 
 fun updateStoredPreference(context: Context) {

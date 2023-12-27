@@ -50,7 +50,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
 
         private fun initPatternDrawable() {
             val context = this@PersianCalendarWallpaperService
-            val isNightMode = isSystemInDarkTheme(context)
+            val isNightMode = isSystemInDarkTheme(context.resources.configuration)
             val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) context.getColor(
                 if (isNightMode) android.R.color.system_accent1_500
                 else android.R.color.system_accent1_300

@@ -37,11 +37,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
@@ -51,6 +51,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 @Composable
 private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
@@ -205,7 +206,13 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                 textAlign = TextAlign.Center
             )
         val text = buildAnnotatedString {
-            appendLine(formatCoordinate(context, coord, "\n"))
+            appendLine(
+                "%s$spacedColon%.2f%s%s$spacedColon%.7f".format(
+                    Locale.getDefault(),
+                    stringResource(R.string.latitude), coord.latitude, "\n",
+                    stringResource(R.string.longitude), coord.longitude
+                )
+            )
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
             cityName?.also(::appendLine)
             countryCode?.also(::appendLine)

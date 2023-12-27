@@ -1,19 +1,8 @@
 package com.byagowi.persiancalendar.utils
 
-import android.content.Context
 import android.location.Address
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.spacedColon
-import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Locale
 import kotlin.math.abs
-
-fun formatCoordinate(context: Context, coordinates: Coordinates, separator: String) =
-    "%s$spacedColon%.2f%s%s$spacedColon%.7f".format(
-        Locale.getDefault(),
-        context.getString(R.string.latitude), coordinates.latitude, separator,
-        context.getString(R.string.longitude), coordinates.longitude
-    )
 
 // https://stackoverflow.com/a/62499553
 // https://en.wikipedia.org/wiki/ISO_6709#Representation_at_the_human_interface_(Annex_D)

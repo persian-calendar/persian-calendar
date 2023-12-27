@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -250,7 +251,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
                     context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
                 (listOf(midnightDefaultTitle(context) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
                     .map {
-                        midnightMethodToString(context, it) to it.name
+                        midnightMethodToString(context.resources, it) to it.name
                     }).forEach { (title, key) ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -279,17 +280,17 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
 
 private fun midnightDefaultTitle(context: Context): String {
     return context.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
-        context, calculationMethod.defaultMidnight
+        context.resources, calculationMethod.defaultMidnight
     )
 }
 
 private fun getMidnightMethodPreferenceSummary(context: Context): String {
     return context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
-        ?.let { midnightMethodToString(context, MidnightMethod.valueOf(it)) }
+        ?.let { midnightMethodToString(context.resources, MidnightMethod.valueOf(it)) }
         ?: midnightDefaultTitle(context)
 }
 
-private fun midnightMethodToString(context: Context, method: MidnightMethod): String {
+private fun midnightMethodToString(resources: Resources, method: MidnightMethod): String {
     return when (method) {
         MidnightMethod.MidSunsetToSunrise -> listOf(R.string.sunset, R.string.sunrise)
 
@@ -298,5 +299,5 @@ private fun midnightMethodToString(context: Context, method: MidnightMethod): St
         MidnightMethod.MidMaghribToSunrise -> listOf(R.string.maghrib, R.string.sunrise)
 
         MidnightMethod.MidMaghribToFajr -> listOf(R.string.maghrib, R.string.fajr)
-    }.joinToString(EN_DASH) { context.getString(it) }
+    }.joinToString(EN_DASH) { resources.getString(it) }
 }

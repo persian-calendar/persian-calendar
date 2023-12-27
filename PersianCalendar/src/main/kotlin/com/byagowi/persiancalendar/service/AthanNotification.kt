@@ -138,7 +138,7 @@ class AthanNotification : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(applicationContext?.packageName, R.layout.custom_notification)
-            cv.setDirection(R.id.custom_notification_root, this)
+            cv.setDirection(R.id.custom_notification_root, this.resources)
             cv.setTextViewText(R.id.title, title)
             if (subtitle.isEmpty()) {
                 cv.setViewVisibility(R.id.body, View.GONE)

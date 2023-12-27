@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
-import android.content.Context
+import android.content.res.Resources
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.shiftWorkPeriod
@@ -36,15 +36,15 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean = false): String? {
     else title
 }
 
-fun getShiftWorksInDaysDistance(jdn: Jdn, context: Context): String? {
+fun getShiftWorksInDaysDistance(jdn: Jdn, resources: Resources): String? {
     if (shiftWorks.isEmpty()) return null
     val today = Jdn.today()
     if ((jdn - today) !in 1..365) return null
     val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::getShiftWorkTitle)
     if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
-    return context.getString(R.string.days_distance) + spacedColon +
+    return resources.getString(R.string.days_distance) + spacedColon +
             shiftWorksInDaysDistance.entries.joinToString(spacedComma) { (title, days) ->
-                context.resources.getQuantityString(
+                resources.getQuantityString(
                     R.plurals.n_days, days.size, formatNumber(days.size)
                 ) + " " + title
             }

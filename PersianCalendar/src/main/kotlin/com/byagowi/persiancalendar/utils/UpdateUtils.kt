@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -315,7 +316,7 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     )
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
     remoteViews.setRoundBackground(R.id.age_widget_background, width, height, backgroundColor)
-    remoteViews.setDirection(R.id.age_widget_root, context)
+    remoteViews.setDirection(R.id.age_widget_root, context.resources)
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title)
     remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
     listOf(R.id.textview_age_widget_title, R.id.textview_age_widget).forEach {
@@ -334,7 +335,8 @@ private fun createSunViewRemoteViews(
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = when {
-        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context)) Color.WHITE else Color.BLACK
+        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+
         else -> selectedWidgetTextColor
     }
     val sunView = SunView(context)
@@ -395,7 +397,8 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     remoteViews.setRoundBackground(R.id.image_background, width, height)
 
     val contentColor = when {
-        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context)) Color.WHITE else Color.BLACK
+        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+
         else -> selectedWidgetTextColor
     }
     val colors = DayPainterColors(
@@ -423,20 +426,18 @@ private fun createMapRemoteViews(
 ): RemoteViews {
     val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
-    val isNightMode = isSystemInDarkTheme(context)
-    val backgroundColor =
-        if (prefersWidgetsDynamicColors) context.getColor(
-            if (isNightMode) android.R.color.system_accent2_800
-            else android.R.color.system_accent2_50
-        )
-        else null
-    val foregroundColor =
-        if (prefersWidgetsDynamicColors) context.getColor(
-            if (isNightMode) android.R.color.system_accent1_50
-            else android.R.color.system_accent1_600
-        )
-        else null
-    val mapDraw = MapDraw(context, backgroundColor, foregroundColor)
+    val isNightMode = isSystemInDarkTheme(context.resources.configuration)
+    val backgroundColor = if (prefersWidgetsDynamicColors) context.getColor(
+        if (isNightMode) android.R.color.system_accent2_800
+        else android.R.color.system_accent2_50
+    )
+    else null
+    val foregroundColor = if (prefersWidgetsDynamicColors) context.getColor(
+        if (isNightMode) android.R.color.system_accent1_50
+        else android.R.color.system_accent1_600
+    )
+    else null
+    val mapDraw = MapDraw(context.resources, backgroundColor, foregroundColor)
     mapDraw.markersScale = .75f
     mapDraw.updateMap(time, MapType.DayNight)
     val matrix = Matrix()
@@ -471,7 +472,7 @@ private fun createMoonRemoteViews(context: Context, width: Int, height: Int): Re
 fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sample)
     remoteViews.setRoundBackground(R.id.widget_sample_background, width, height)
-    remoteViews.setDirection(R.id.widget_sample, context)
+    remoteViews.setDirection(R.id.widget_sample, context.resources)
     remoteViews.setupForegroundTextColors(
         R.id.sample_text, R.id.sample_clock, R.id.sample_clock_replacement
     )
@@ -494,7 +495,7 @@ private fun create1x1RemoteViews(
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
-    remoteViews.setDirection(R.id.widget_layout1x1, context)
+    remoteViews.setDirection(R.id.widget_layout1x1, context.resources)
     remoteViews.setupForegroundTextColors(R.id.textPlaceholder1_1x1, R.id.textPlaceholder2_1x1)
     if (prefersWidgetsDynamicColors)
         remoteViews.setDynamicTextColor(R.id.textPlaceholder1_1x1, android.R.attr.colorAccent)
@@ -520,7 +521,7 @@ private fun create4x1RemoteViews(
     )
     if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     remoteViews.setRoundBackground(R.id.widget_layout4x1_background, width, height)
-    remoteViews.setDirection(R.id.widget_layout4x1, context)
+    remoteViews.setDirection(R.id.widget_layout4x1, context.resources)
     remoteViews.setupForegroundTextColors(
         R.id.textPlaceholder1_4x1, R.id.textPlaceholder2_4x1, R.id.textPlaceholder3_4x1
     )
@@ -556,7 +557,7 @@ private fun create2x2RemoteViews(
     )
     if (isWidgetClock) remoteViews.configureClock(R.id.time_2x2)
     remoteViews.setRoundBackground(R.id.widget_layout2x2_background, width, height)
-    remoteViews.setDirection(R.id.widget_layout2x2, context)
+    remoteViews.setDirection(R.id.widget_layout2x2, context.resources)
     remoteViews.setupForegroundTextColors(
         R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2
     )
@@ -594,7 +595,7 @@ private fun create4x2RemoteViews(
 
     if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
     remoteViews.setRoundBackground(R.id.widget_layout4x2_background, width, height)
-    remoteViews.setDirection(R.id.widget_layout4x2, context)
+    remoteViews.setDirection(R.id.widget_layout4x2, context.resources)
 
     remoteViews.setupForegroundTextColors(
         R.id.textPlaceholder0_4x2, R.id.textPlaceholder1_4x2, R.id.textPlaceholder2_4x2,
@@ -826,7 +827,7 @@ private data class NotificationData(
 
         // Night mode doesn't like our custom notification in Samsung and HTC One UI
         val shouldDisableCustomNotification = when (Build.BRAND) {
-            "samsung", "htc" -> isSystemInDarkTheme(context)
+            "samsung", "htc" -> isSystemInDarkTheme(context.resources.configuration)
             else -> false
         }
 
@@ -853,7 +854,7 @@ private data class NotificationData(
                 builder.setCustomContentView(RemoteViews(
                     context.packageName, R.layout.custom_notification
                 ).also {
-                    it.setDirection(R.id.custom_notification_root, context)
+                    it.setDirection(R.id.custom_notification_root, context.resources)
                     it.setTextViewText(R.id.title, title)
                     it.setTextViewText(R.id.body, subtitle)
                 })
@@ -862,7 +863,7 @@ private data class NotificationData(
                     builder.setCustomBigContentView(RemoteViews(
                         context.packageName, R.layout.custom_notification_big
                     ).also {
-                        it.setDirection(R.id.custom_notification_root, context)
+                        it.setDirection(R.id.custom_notification_root, context.resources)
                         it.setTextViewText(R.id.title, title)
                         it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
@@ -895,11 +896,11 @@ private fun RemoteViews.setRoundBackground(
     }
 }
 
-fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
+fun RemoteViews.setDirection(@IdRes viewId: Int, resources: Resources) {
     val direction = when {
         // Apply RTL for Arabic script locales anyway just in case something went wrong
         language.value.isArabicScript -> View.LAYOUT_DIRECTION_RTL
-        else -> context.resources.configuration.layoutDirection
+        else -> resources.configuration.layoutDirection
     }
     setInt(viewId, "setLayoutDirection", direction)
 }

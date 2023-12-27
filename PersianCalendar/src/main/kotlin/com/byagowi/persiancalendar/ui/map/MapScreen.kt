@@ -103,7 +103,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
     val state by viewModel.state.collectAsState()
     val coord by coordinates.collectAsState()
     val context = LocalContext.current
-    val mapDraw = remember { MapDraw(context) }
+    val mapDraw = remember { MapDraw(context.resources) }
 
     LaunchedEffect(Unit) { coordinates.collectLatest { viewModel.turnOnDisplayLocation() } }
 

@@ -79,7 +79,8 @@ class AthanActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
             SystemBarStyle.dark(Color.TRANSPARENT),
-            if (isSystemInDarkTheme(this)) SystemBarStyle.dark(Color.TRANSPARENT)
+            if (isSystemInDarkTheme(resources.configuration))
+                SystemBarStyle.dark(Color.TRANSPARENT)
             else SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
         )
         applyAppLanguage(this)

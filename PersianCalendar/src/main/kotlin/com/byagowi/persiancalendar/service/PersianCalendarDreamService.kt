@@ -48,14 +48,15 @@ class PersianCalendarDreamService : DreamService() {
         isFullscreen = true
 
         val backgroundView = View(this).also {
-            val isNightMode = isSystemInDarkTheme(this)
+            val resources = this.resources
+            val isNightMode = isSystemInDarkTheme(resources.configuration)
             val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) getColor(
                 if (isNightMode) android.R.color.system_accent1_200
                 else android.R.color.system_accent1_400
             ) else null
             val pattern = PatternDrawable(
                 preferredTintColor = accentColor,
-                darkBaseColor = isSystemInDarkTheme(this),
+                darkBaseColor = isSystemInDarkTheme(resources.configuration),
                 dp = resources.dp,
             )
             it.background = pattern
