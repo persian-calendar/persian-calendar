@@ -11,6 +11,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -28,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
@@ -113,17 +113,12 @@ private fun DrawBackground(
     animationSpec: InfiniteRepeatableSpec<Float>,
 ) {
     val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = animationSpec,
-        label = "Rotation"
+        initialValue = 0f, targetValue = 360f, animationSpec = animationSpec, label = "Rotation"
     )
     patternDrawable.rotationDegree = rotation * direction
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .drawBehind { drawIntoCanvas { patternDrawable.draw(it.nativeCanvas) } },
-    )
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawIntoCanvas { patternDrawable.draw(it.nativeCanvas) }
+    }
 }
 
 @Preview
