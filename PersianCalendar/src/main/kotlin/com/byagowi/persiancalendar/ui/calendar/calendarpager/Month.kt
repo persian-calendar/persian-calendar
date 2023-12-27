@@ -195,8 +195,9 @@ fun Month(
         }
         (0..<6).forEach { row ->
             Row(Modifier.height(cellSize.height)) {
-                if (isShowWeekOfYearEnabled && row < weeksCount) {
-                    val weekNumber = formatNumber(weekOfYearStart + row - 1)
+                if (row >= weeksCount) return@Row
+                if (isShowWeekOfYearEnabled) {
+                    val weekNumber = formatNumber(weekOfYearStart + row)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Box(
                         Modifier
