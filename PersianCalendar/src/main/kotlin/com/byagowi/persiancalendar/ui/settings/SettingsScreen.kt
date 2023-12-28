@@ -202,8 +202,8 @@ fun SettingsScreen(
 
 @Immutable
 private data class TabItem(
-    val selectedIcon: ImageVector,
-    val normalIcon: ImageVector,
+    val outlinedIcon: ImageVector,
+    val filledIcon: ImageVector,
     @StringRes val firstTitle: Int,
     @StringRes val secondTitle: Int,
     val content: @Composable () -> Unit,
@@ -224,7 +224,7 @@ private data class TabItem(
             transitionSpec = {
                 fadeIn(tween(time)).togetherWith(fadeOut(tween(time)))
             },
-        ) { Icon(if (it) selectedIcon else normalIcon, contentDescription = null) }
+        ) { Icon(if (it) filledIcon else outlinedIcon, contentDescription = null) }
     }
 }
 
