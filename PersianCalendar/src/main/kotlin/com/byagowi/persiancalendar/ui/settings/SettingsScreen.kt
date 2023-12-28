@@ -8,7 +8,12 @@ import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +30,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Widgets
+import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -52,6 +60,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -109,23 +118,26 @@ fun SettingsScreen(
             LaunchedEffect(Unit) {
                 context.appPrefs.edit {
                     putBoolean(
-                        PREF_HAS_EVER_VISITED,
-                        true
+                        PREF_HAS_EVER_VISITED, true
                     )
                 }
             }
 
-            val tabs = listOf<Triple<ImageVector, List<Int>, @Composable () -> Unit>>(
-                Triple(Icons.Default.Palette, listOf(R.string.pref_interface, R.string.calendar)) {
-                    InterfaceCalendarSettings(destination)
-                },
-                Triple(
-                    Icons.Default.Widgets, listOf(R.string.pref_notification, R.string.pref_widget)
-                ) { WidgetNotificationSettings() },
-                Triple(Icons.Default.LocationOn, listOf(R.string.location, R.string.athan)) {
-                    LocationAthanSettings(navigateToMap)
-                },
-            )
+            val tabs =
+                listOf<Triple<Pair<ImageVector, ImageVector>, List<Int>, @Composable () -> Unit>>(
+                    Triple(
+                        Icons.Outlined.Palette to Icons.Default.Palette,
+                        listOf(R.string.pref_interface, R.string.calendar),
+                    ) { InterfaceCalendarSettings(destination) },
+                    Triple(
+                        Icons.Outlined.Widgets to Icons.Default.Widgets,
+                        listOf(R.string.pref_notification, R.string.pref_widget),
+                    ) { WidgetNotificationSettings() },
+                    Triple(
+                        Icons.Outlined.LocationOn to Icons.Default.LocationOn,
+                        listOf(R.string.location, R.string.athan),
+                    ) { LocationAthanSettings(navigateToMap) },
+                )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
             val scope = rememberCoroutineScope()
@@ -153,10 +165,27 @@ fun SettingsScreen(
                     }
                     val isLandscape =
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    val time = integerResource(android.R.integer.config_mediumAnimTime)
+
+                    @Composable
+                    fun TabIcon() {
+                        AnimatedContent(
+                            selectedTabIndex == index,
+                            label = "summary",
+                            transitionSpec = {
+                                fadeIn(tween(time)).togetherWith(fadeOut(tween(time)))
+                            },
+                        ) { state ->
+                            Icon(
+                                if (state) icon.second else icon.first,
+                                contentDescription = null,
+                            )
+                        }
+                    }
                     if (isLandscape) Tab(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Icon(icon, contentDescription = null)
+                                TabIcon()
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(title)
                             }
@@ -164,7 +193,7 @@ fun SettingsScreen(
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     ) else Tab(
-                        icon = { Icon(icon, contentDescription = null) },
+                        icon = { TabIcon() },
                         text = { Text(title) },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
