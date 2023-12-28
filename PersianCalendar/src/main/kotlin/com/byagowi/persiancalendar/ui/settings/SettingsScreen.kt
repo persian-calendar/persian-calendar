@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -46,6 +47,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -116,28 +118,23 @@ fun SettingsScreen(
     ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             LaunchedEffect(Unit) {
-                context.appPrefs.edit {
-                    putBoolean(
-                        PREF_HAS_EVER_VISITED, true
-                    )
-                }
+                context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
             }
 
-            val tabs =
-                listOf<Triple<Pair<ImageVector, ImageVector>, List<Int>, @Composable () -> Unit>>(
-                    Triple(
-                        Icons.Outlined.Palette to Icons.Default.Palette,
-                        listOf(R.string.pref_interface, R.string.calendar),
-                    ) { InterfaceCalendarSettings(destination) },
-                    Triple(
-                        Icons.Outlined.Widgets to Icons.Default.Widgets,
-                        listOf(R.string.pref_notification, R.string.pref_widget),
-                    ) { WidgetNotificationSettings() },
-                    Triple(
-                        Icons.Outlined.LocationOn to Icons.Default.LocationOn,
-                        listOf(R.string.location, R.string.athan),
-                    ) { LocationAthanSettings(navigateToMap) },
-                )
+            val tabs = listOf(
+                TabItem(
+                    Icons.Outlined.Palette, Icons.Default.Palette,
+                    R.string.pref_interface, R.string.calendar,
+                ) { InterfaceCalendarSettings(destination) },
+                TabItem(
+                    Icons.Outlined.Widgets, Icons.Default.Widgets,
+                    R.string.pref_notification, R.string.pref_widget,
+                ) { WidgetNotificationSettings() },
+                TabItem(
+                    Icons.Outlined.LocationOn, Icons.Default.LocationOn,
+                    R.string.location, R.string.athan,
+                ) { LocationAthanSettings(navigateToMap) },
+            )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
             val scope = rememberCoroutineScope()
@@ -159,42 +156,22 @@ fun SettingsScreen(
                     }
                 },
             ) {
-                tabs.forEachIndexed { index, (icon, titlesResId) ->
-                    val title = titlesResId.joinToString(stringResource(R.string.spaced_and)) {
-                        context.getString(it)
-                    }
+                tabs.forEachIndexed { index, tab ->
                     val isLandscape =
                         LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                    val time = integerResource(android.R.integer.config_mediumAnimTime)
-
-                    @Composable
-                    fun TabIcon() {
-                        AnimatedContent(
-                            selectedTabIndex == index,
-                            label = "summary",
-                            transitionSpec = {
-                                fadeIn(tween(time)).togetherWith(fadeOut(tween(time)))
-                            },
-                        ) { state ->
-                            Icon(
-                                if (state) icon.second else icon.first,
-                                contentDescription = null,
-                            )
-                        }
-                    }
                     if (isLandscape) Tab(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                TabIcon()
+                                tab.icon(selectedTabIndex == index)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(title)
+                                Text(tab.title())
                             }
                         },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     ) else Tab(
-                        icon = { TabIcon() },
-                        text = { Text(title) },
+                        icon = { tab.icon(selectedTabIndex == index) },
+                        text = { Text(tab.title()) },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     )
@@ -221,12 +198,40 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        tabs[index].third()
+                        tabs[index].content()
                         Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
                     }
                 }
             }
         }
+    }
+}
+
+@Immutable
+private data class TabItem(
+    val selectedIcon: ImageVector,
+    val normalIcon: ImageVector,
+    @StringRes val firstTitle: Int,
+    @StringRes val secondTitle: Int,
+    val content: @Composable () -> Unit,
+) {
+    @Composable
+    fun title(): String {
+        return stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
+            secondTitle
+        )
+    }
+
+    @Composable
+    fun icon(isSelected: Boolean) {
+        val time = integerResource(android.R.integer.config_mediumAnimTime)
+        AnimatedContent(
+            isSelected,
+            label = "icon",
+            transitionSpec = {
+                fadeIn(tween(time)).togetherWith(fadeOut(tween(time)))
+            },
+        ) { Icon(if (it) selectedIcon else normalIcon, contentDescription = null) }
     }
 }
 
