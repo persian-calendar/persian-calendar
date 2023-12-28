@@ -143,7 +143,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     DrawerSeasonsPager(drawerState)
-                    DrawerItems().forEach { (id, icon, title) ->
+                    navItems.forEach { (id, icon, title) ->
                         NavigationDrawerItem(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             icon = { Icon(icon, contentDescription = null) },
@@ -304,19 +304,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     }
 }
 
-@Stable
-@Composable
-private fun DrawerItems(): List<Triple<String?, ImageVector, Int>> {
-    return listOf(
-        Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
-        Triple(converterRoute, Icons.Default.SwapVerticalCircle, R.string.date_converter),
-        Triple(compassRoute, Icons.Default.Explore, R.string.compass),
-        Triple(astronomyRoute, AstrologyIcon, R.string.astronomy),
-        Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
-        Triple(aboutRoute, Icons.Default.Info, R.string.about),
-        Triple(null, Icons.Default.Cancel, R.string.exit),
-    )
-}
 
 private const val calendarRoute = "calendar"
 private const val compassRoute = "compass"
@@ -328,6 +315,17 @@ private const val settingsRoute = "settings"
 private const val aboutRoute = "about"
 private const val licensesRoute = "license"
 private const val deviceInformationRoute = "device"
+
+@Stable
+private val navItems: List<Triple<String?, ImageVector, Int>> = listOf(
+    Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
+    Triple(converterRoute, Icons.Default.SwapVerticalCircle, R.string.date_converter),
+    Triple(compassRoute, Icons.Default.Explore, R.string.compass),
+    Triple(astronomyRoute, AstrologyIcon, R.string.astronomy),
+    Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
+    Triple(aboutRoute, Icons.Default.Info, R.string.about),
+    Triple(null, Icons.Default.Cancel, R.string.exit),
+)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
