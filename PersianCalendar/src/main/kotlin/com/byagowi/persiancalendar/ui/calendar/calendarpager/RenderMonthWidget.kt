@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
@@ -82,7 +83,8 @@ fun renderMonthWidget(
                     isToday, false,
                     events.any { it !is CalendarEvent.DeviceCalendarEvent },
                     events.any { it is CalendarEvent.DeviceCalendarEvent },
-                    events.any { it.isHoliday }, day, dayOffset + 1,
+                    events.any { it.isHoliday }, day,
+                    formatNumber(dayOffset + 1, mainCalendarDigits),
                     getShiftWorkTitle(day, true)
                 )
 

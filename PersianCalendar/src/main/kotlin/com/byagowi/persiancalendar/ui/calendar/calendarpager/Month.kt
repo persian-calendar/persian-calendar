@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -32,6 +34,7 @@ import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +45,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -52,11 +57,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
@@ -143,7 +150,14 @@ fun Month(
     val dayPainter = remember(height, width, refreshToken, dayPainterColors) {
         DayPainter(context.resources, cellPixelsWidth, cellPixelsHeight, isRtl, dayPainterColors)
     }
-    val halfDp = with(LocalDensity.current) { .5f.dp.toPx() }
+    val oneDpInPx = with(LocalDensity.current) { 1.dp.toPx() }
+    val textMeasurer = rememberTextMeasurer()
+    val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
+    val daysTextSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
+    val daysStyle = LocalTextStyle.current.copy(
+        fontSize = with(LocalDensity.current) { daysTextSize.toSp() },
+    )
+    val contentColor = LocalContentColor.current
 
     Column(
         Modifier.drawWithCache {
@@ -162,7 +176,7 @@ fun Month(
                         top = row * cellPixelsHeight,
                         width = cellPixelsWidth,
                         height = cellPixelsHeight,
-                        halfDp = halfDp,
+                        halfDp = oneDpInPx / 2,
                     )
                 }
             }
@@ -247,17 +261,41 @@ fun Month(
                     ) {
                         val events =
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
+                        val isHoliday = events.any { it.isHoliday } || day.isWeekEnd()
                         dayPainter.setDayOfMonthItem(
-                            isToday,
+                            false,
                             isHighlighted && selectedDay == day,
                             events.any { it !is CalendarEvent.DeviceCalendarEvent },
                             events.any { it is CalendarEvent.DeviceCalendarEvent },
-                            events.any { it.isHoliday },
+                            false,
                             day,
-                            dayOffset + 1,
+                            "",
                             getShiftWorkTitle(day, true)
                         )
-                        drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
+                        drawIntoCanvas {
+                            if (isToday) drawCircle(
+                                Color(dayPainterColors.colorCurrentDay),
+                                radius = size.minDimension / 2 - oneDpInPx / 2,
+                                style = Stroke(width = oneDpInPx)
+                            )
+                            val textLayoutResult = textMeasurer.measure(
+                                text = formatNumber(dayOffset + 1, mainCalendarDigits),
+                                style = daysStyle,
+                            )
+                            drawText(
+                                textLayoutResult,
+                                color = when {
+                                    isHighlighted && selectedDay == day -> Color(dayPainterColors.colorTextDaySelected)
+                                    isHoliday -> Color(dayPainterColors.colorHolidays)
+                                    else -> contentColor
+                                },
+                                topLeft = Offset(
+                                    x = center.x - textLayoutResult.size.width / 2,
+                                    y = center.y - textLayoutResult.size.height / 2,
+                                ),
+                            )
+                            dayPainter.drawDay(it.nativeCanvas)
+                        }
                     }
                 }
             }

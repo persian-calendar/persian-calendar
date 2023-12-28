@@ -146,9 +146,9 @@ class DayPainter(
     fun setDayOfMonthItem(
         isToday: Boolean, isSelected: Boolean,
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        jdn: Jdn, dayOfMonth: Int, header: String?
+        jdn: Jdn, dayOfMonth: String, header: String?
     ) = setAll(
-        text = formatNumber(dayOfMonth, mainCalendarDigits), isToday = isToday,
+        text = dayOfMonth, isToday = isToday,
         isSelected = isSelected, hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
         header = header, isHoliday = isHoliday || jdn.isWeekEnd()
     )
