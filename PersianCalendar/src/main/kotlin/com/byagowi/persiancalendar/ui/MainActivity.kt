@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
-import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
@@ -103,7 +102,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
         prefs ?: return
 
         when (key) {
-            PREF_HAS_EVER_VISITED, PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
+            PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET -> prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
             PREF_PRAY_TIME_METHOD -> prefs.edit { remove(PREF_MIDNIGHT_METHOD) }

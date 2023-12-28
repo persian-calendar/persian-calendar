@@ -48,7 +48,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,7 +68,6 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
-import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
@@ -104,7 +102,6 @@ fun SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
-    val context = LocalContext.current
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -117,10 +114,6 @@ fun SettingsScreen(
         }
     ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            LaunchedEffect(Unit) {
-                context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
-            }
-
             val tabs = listOf(
                 TabItem(
                     Icons.Outlined.Palette, Icons.Default.Palette,
