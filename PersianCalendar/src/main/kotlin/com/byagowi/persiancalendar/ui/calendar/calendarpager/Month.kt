@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalContentColor
@@ -49,6 +50,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -88,6 +90,7 @@ fun Month(
     isCurrentSelection: Boolean,
     width: Dp,
     height: Dp,
+    scrollValue: Int,
 ) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
@@ -182,7 +185,11 @@ fun Month(
             }
         },
     ) {
-        Row(Modifier.height(cellSize.height)) {
+        Row(
+            Modifier
+                .height(cellSize.height)
+                .offset { IntOffset(0, scrollValue) },
+        ) {
             if (isShowWeekOfYearEnabled) Spacer(Modifier.width(cellSize.width))
             (0..<7).forEach { column ->
                 val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)

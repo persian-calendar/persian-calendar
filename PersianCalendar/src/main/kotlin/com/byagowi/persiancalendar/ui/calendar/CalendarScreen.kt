@@ -219,7 +219,7 @@ fun CalendarScreen(
             if (isLandscape) Row {
                 val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                 val height = 400.dp.coerceAtMost(maxHeight)
-                Box(Modifier.width(width)) { CalendarPager(viewModel, width, height) }
+                Box(Modifier.width(width)) { CalendarPager(viewModel, width, height, 0) }
                 Surface(
                     shape = MaterialCornerExtraLargeNoBottomEnd(),
                     modifier = Modifier.fillMaxHeight(),
@@ -234,23 +234,26 @@ fun CalendarScreen(
                         scrollableTabs = true,
                     )
                 }
-            } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
-                CalendarPager(viewModel, maxWidth, calendarHeight - 4.dp)
-                Spacer(Modifier.height(4.dp))
-                val detailsMinHeight = maxHeight - calendarHeight
-                Surface(
-                    modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                    shape = MaterialCornerExtraLargeTop(),
-                ) {
-                    Details(
-                        viewModel,
-                        navigateToHolidaysSettings,
-                        navigateToSettingsLocationTab,
-                        navigateToAstronomy,
-                        bottomPadding,
-                        detailsMinHeight,
-                    )
+            } else {
+                val scrollState = rememberScrollState()
+                Column(modifier = Modifier.verticalScroll(scrollState)) {
+                    val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
+                    CalendarPager(viewModel, maxWidth, calendarHeight - 4.dp, scrollState.value)
+                    Spacer(Modifier.height(4.dp))
+                    val detailsMinHeight = maxHeight - calendarHeight
+                    Surface(
+                        modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                        shape = MaterialCornerExtraLargeTop(),
+                    ) {
+                        Details(
+                            viewModel,
+                            navigateToHolidaysSettings,
+                            navigateToSettingsLocationTab,
+                            navigateToAstronomy,
+                            bottomPadding,
+                            detailsMinHeight,
+                        )
+                    }
                 }
             }
         }
