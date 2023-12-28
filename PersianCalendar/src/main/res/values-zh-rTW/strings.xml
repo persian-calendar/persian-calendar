@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="close">關閉</string>
+    <string name="help">幫助</string>
+    <string name="more">更多</string>
+    <string name="widget_name">波斯曆</string>
+    <string name="cancel">取消</string>
+    <string name="open">打開</string>
+    <string name="continue_button">繼續</string>
+    <string name="code">zh-Hant</string>
+    <string name="app_name">波斯曆</string>
+    <string name="accept">確認</string>
+    <string name="add">添加</string>
+    <string name="widget_age_name">波斯曆（年齡）</string>
+    <string name="widget_mini_name">波斯曆（迷你）</string>
+</resources>
