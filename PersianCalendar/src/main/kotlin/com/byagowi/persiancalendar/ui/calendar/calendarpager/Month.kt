@@ -25,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithCache
@@ -43,7 +42,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
@@ -190,9 +188,7 @@ fun Month(
                     R.string.week_days_name_column, getWeekDayName(weekDayPosition)
                 )
                 Box(
-                    Modifier
-                        .semantics { this.contentDescription = description }
-                        .size(cellSize),
+                    Modifier.size(cellSize),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -200,9 +196,7 @@ fun Month(
                         fontSize = with(LocalDensity.current) { (diameter * .5f).toSp() },
                         modifier = Modifier
                             .alpha(AppBlendAlpha)
-                            .semantics {
-                                @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                            },
+                            .semantics { this.contentDescription = description },
                     )
                 }
             }
@@ -214,9 +208,7 @@ fun Month(
                     val weekNumber = formatNumber(weekOfYearStart + row)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Box(
-                        Modifier
-                            .semantics { this.contentDescription = description }
-                            .size(cellSize),
+                        Modifier.size(cellSize),
                         contentAlignment = Alignment.Center,
                     ) {
                         Text(
@@ -224,9 +216,7 @@ fun Month(
                             fontSize = with(LocalDensity.current) { (diameter * .35f).toSp() },
                             modifier = Modifier
                                 .alpha(AppBlendAlpha)
-                                .semantics {
-                                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                                },
+                                .semantics { this.contentDescription = description },
                         )
                     }
                 }
