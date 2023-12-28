@@ -183,10 +183,7 @@ fun Month(
         Row(Modifier.height(cellSize.height)) {
             if (isShowWeekOfYearEnabled) Spacer(Modifier.width(cellSize.width))
             (0..<7).forEach { column ->
-                Box(
-                    Modifier.size(cellSize),
-                    contentAlignment = Alignment.Center,
-                ) {
+                Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
                     val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
                     val description = stringResource(
                         R.string.week_days_name_column, getWeekDayName(weekDayPosition)
@@ -205,10 +202,7 @@ fun Month(
             Row(Modifier.height(cellSize.height)) {
                 if (row >= weeksCount) return@Row
                 if (isShowWeekOfYearEnabled) {
-                    Box(
-                        Modifier.size(cellSize),
-                        contentAlignment = Alignment.Center,
-                    ) {
+                    Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
                         val weekNumber = formatNumber(weekOfYearStart + row)
                         val description = stringResource(R.string.nth_week_of_year, weekNumber)
                         Text(
