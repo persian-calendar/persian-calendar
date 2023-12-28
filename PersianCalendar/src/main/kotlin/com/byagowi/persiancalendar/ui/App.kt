@@ -3,23 +3,12 @@ package com.byagowi.persiancalendar.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DateRange
@@ -31,11 +20,14 @@ import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigation.suite.ExperimentalMaterial3AdaptiveNavigationSuiteApi
+import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigation.suite.NavigationSuiteType
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
@@ -48,8 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
@@ -92,13 +82,16 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
+@OptIn(
+    ExperimentalMaterial3AdaptiveNavigationSuiteApi::class,
+    ExperimentalMaterial3AdaptiveApi::class
+)
 @Composable
 fun App(intentStartDestination: String?, finish: () -> Unit) {
     // See xml/shortcuts.xml
@@ -118,57 +111,86 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
-                run {
-                    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-                    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-                    val needsVisibleStatusBarPlaceHolder =
-                        !isBackgroundColorLight && isSurfaceColorLight
-                    Spacer(
-                        Modifier
-                            .fillMaxWidth()
-                            .then(
-                                if (needsVisibleStatusBarPlaceHolder) Modifier.background(
-                                    Brush.verticalGradient(
-                                        0f to Color(0x70000000), 1f to Color.Transparent
-                                    )
-                                ) else Modifier
-                            )
-                            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
-                    )
-                }
+    val adaptiveInfo = currentWindowAdaptiveInfo()
+    val customNavSuiteType = with(adaptiveInfo) {
+        when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Expanded -> NavigationSuiteType.NavigationDrawer
+            WindowWidthSizeClass.Medium -> NavigationSuiteType.NavigationRail
+            WindowWidthSizeClass.Compact -> NavigationSuiteType.NavigationBar
+            else -> NavigationSuiteType.None
+        }
+    }
 
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    DrawerSeasonsPager(drawerState)
-                    navItems.forEach { (id, icon, title) ->
-                        NavigationDrawerItem(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            icon = { Icon(icon, contentDescription = null) },
-                            label = { Text(stringResource(title)) },
-                            selected = when (val route = navBackStackEntry?.destination?.route) {
-                                levelRoute -> compassRoute
-                                mapRoute -> astronomyRoute
-                                deviceInformationRoute, licensesRoute -> aboutRoute
-                                else -> route ?: calendarRoute
-                            } == id,
-                            onClick = {
-                                if (id == null) return@NavigationDrawerItem finish()
-                                scope.launch {
-                                    drawerState.close()
-                                    if (navBackStackEntry?.destination?.route != id) {
-                                        navController.navigate(id)
-                                    }
-                                }
-                            },
-                        )
+    NavigationSuiteScaffold(
+        layoutType = customNavSuiteType,
+        navigationSuiteItems = {
+            navItems.forEach { (id, icon, title) ->
+                item(
+                    icon = { Icon(icon, contentDescription = stringResource(title)) },
+                    label = { Text(stringResource(title)) },
+                    selected = navBackStackEntry?.destination?.route == id,
+                    onClick = {
+                        if (id == null) return@item finish()
+                        scope.launch {
+                            drawerState.close()
+                            if (navBackStackEntry?.destination?.route != id) {
+                                navController.navigate(id)
+                            }
+                        }
                     }
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-                }
+                )
             }
-        },
+        }
+//        drawerState = drawerState,
+//        drawerContent = {
+//            ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
+//                run {
+//                    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+//                    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+//                    val needsVisibleStatusBarPlaceHolder =
+//                        !isBackgroundColorLight && isSurfaceColorLight
+//                    Spacer(
+//                        Modifier
+//                            .fillMaxWidth()
+//                            .then(
+//                                if (needsVisibleStatusBarPlaceHolder) Modifier.background(
+//                                    Brush.verticalGradient(
+//                                        0f to Color(0x70000000), 1f to Color.Transparent
+//                                    )
+//                                ) else Modifier
+//                            )
+//                            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
+//                    )
+//                }
+//
+//                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+//                    DrawerSeasonsPager(drawerState)
+//                    DrawerItems().forEach { (id, icon, title) ->
+//                        NavigationDrawerItem(
+//                            modifier = Modifier.padding(horizontal = 16.dp),
+//                            icon = { Icon(icon, contentDescription = null) },
+//                            label = { Text(stringResource(title)) },
+//                            selected = when (val route = navBackStackEntry?.destination?.route) {
+//                                levelRoute -> compassRoute
+//                                mapRoute -> astronomyRoute
+//                                deviceInformationRoute, licensesRoute -> aboutRoute
+//                                else -> route ?: calendarRoute
+//                            } == id,
+//                            onClick = {
+//                                if (id == null) return@NavigationDrawerItem finish()
+//                                scope.launch {
+//                                    drawerState.close()
+//                                    if (navBackStackEntry?.destination?.route != id) {
+//                                        navController.navigate(id)
+//                                    }
+//                                }
+//                            },
+//                        )
+//                    }
+//                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+//                }
+//            }
+//        },
     ) {
         NavHost(
             navController = navController,
@@ -304,7 +326,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     }
 }
 
-
 private const val calendarRoute = "calendar"
 private const val compassRoute = "compass"
 private const val levelRoute = "level"
@@ -323,8 +344,8 @@ private val navItems: List<Triple<String?, ImageVector, Int>> = listOf(
     Triple(compassRoute, Icons.Default.Explore, R.string.compass),
     Triple(astronomyRoute, AstrologyIcon, R.string.astronomy),
     Triple(settingsRoute, Icons.Default.Settings, R.string.settings),
-    Triple(aboutRoute, Icons.Default.Info, R.string.about),
-    Triple(null, Icons.Default.Cancel, R.string.exit),
+//    Triple(aboutRoute, Icons.Default.Info, R.string.about),
+//    Triple(null, Icons.Default.Cancel, R.string.exit),
 )
 
 @OptIn(ExperimentalFoundationApi::class)

@@ -38,6 +38,9 @@ room = "2.6.1"
 sqlite = "2.4.0"
 truth = "1.2.0"
 work-manager = "2.9.0"
+material3-adaptive-navigation-suite-android = "1.0.0-alpha02"
+material3-adaptive-android = "1.0.0-alpha03"
+material3-window-size = "1.1.2"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -95,6 +98,9 @@ test-rules = { group = "androidx.test", name = "rules", version.ref = "android-t
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
+androidx-material3-adaptive-navigation-suite-android = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite-android", version.ref = "material3-adaptive-navigation-suite-android" }
+androidx-material3-adaptive-android = { group = "androidx.compose.material3", name = "material3-adaptive-android", version.ref = "material3-adaptive-android" }
+androidx-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3-window-size" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
