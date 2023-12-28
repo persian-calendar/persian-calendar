@@ -114,7 +114,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     val adaptiveInfo = currentWindowAdaptiveInfo()
     val customNavSuiteType = with(adaptiveInfo) {
         when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Expanded -> NavigationSuiteType.NavigationDrawer
+            WindowWidthSizeClass.Expanded -> NavigationSuiteType.NavigationRail
             WindowWidthSizeClass.Medium -> NavigationSuiteType.NavigationRail
             WindowWidthSizeClass.Compact -> NavigationSuiteType.NavigationBar
             else -> NavigationSuiteType.None

@@ -18,7 +18,7 @@
     <string name="update">Update</string>
     <!--Navigation drawers-->
     <string name="calendar">Calendar</string>
-    <string name="date_converter">Date Converter</string>
+    <string name="date_converter">Converter</string>
     <string name="compass">Compass</string>
     <string name="settings">Settings</string>
     <string name="about">About</string>
