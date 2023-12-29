@@ -155,9 +155,7 @@ fun ConverterScreen(
                 colors = AppTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
-                    val todayButtonVisibility by viewModel.todayButtonVisibilityEvent.collectAsState(
-                        initial = false
-                    )
+                    val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                     TodayActionButton(visible = todayButtonVisibility) {
                         val todayJdn = Jdn.today()
                         viewModel.changeSelectedDate(todayJdn)
