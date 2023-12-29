@@ -35,7 +35,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
@@ -131,11 +130,11 @@ private fun AppShapes(): Shapes {
     if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
     val isCyberpunk by isCyberpunk.collectAsState()
     return if (isCyberpunk) Shapes(
-        extraSmall = CutCornerShape(4.dp),
-        small = CutCornerShape(8.dp),
-        medium = CutCornerShape(12.dp),
-        large = CutCornerShape(16.dp),
-        extraLarge = CutCornerShape(28.dp),
+        extraSmall = CutCornerShape(MaterialTheme.shapes.extraSmall.topStart),
+        small = CutCornerShape(MaterialTheme.shapes.small.topStart),
+        medium = CutCornerShape(MaterialTheme.shapes.medium.topStart),
+        large = CutCornerShape(MaterialTheme.shapes.large.topStart),
+        extraLarge = CutCornerShape(MaterialTheme.shapes.extraLarge.topStart),
     ) else MaterialTheme.shapes
 }
 
