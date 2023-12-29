@@ -34,7 +34,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp, scrollValue: Int) {
+fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
     val pagerState = rememberPagerState(
         initialPage = applyOffset(0),
         pageCount = ::monthsLimit,
@@ -91,8 +91,7 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp, scrollVal
                     currentMonthOffset,
                     isCurrentSelection,
                     width - iconSize * 2,
-                    height,
-                    scrollValue,
+                    height
                 )
             }
             Box(
