@@ -63,6 +63,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
@@ -75,6 +76,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -108,7 +111,6 @@ fun AboutScreen(
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
 ) {
-    val context = LocalContext.current
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -118,6 +120,7 @@ fun AboutScreen(
                 colors = AppTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
+                    val context = LocalContext.current
                     AppIconButton(
                         icon = Icons.Default.Share,
                         title = stringResource(R.string.share),
@@ -136,100 +139,99 @@ fun AboutScreen(
                 .padding(top = paddingValues.calculateTopPadding())
                 .clip(MaterialCornerExtraLargeTop()),
         ) {
-            var logoAnimationAtEnd by remember { mutableStateOf(false) }
-            var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
-            LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
-
-            val headerHeight = 250.dp
-
-            val aboutTitle = stringResource(R.string.app_name)
-            val aboutSubtitle = remember {
-                buildString {
-                    val version =
-                        // Don't formatNumber it if is multi-parted
-                        if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
-                        else formatNumber(BuildConfig.VERSION_NAME)
-                    append(context.getString(R.string.version, version))
-                    if (language.value.isUserAbleToReadPersian) {
-                        appendLine()
-                        append(
-                            context.getString(
-                                R.string.about_help_subtitle,
-                                formatNumber(supportedYearOfIranCalendar - 1),
-                                formatNumber(supportedYearOfIranCalendar)
-                            )
-                        )
-                    }
-                }
-            }
-
             val scrollState = rememberScrollState()
-
-            @OptIn(ExperimentalAnimationGraphicsApi::class) Row(
-                Modifier
-                    .height(headerHeight)
-                    .offset { IntOffset(0, scrollState.value / -4) }
-                    .fillMaxWidth(),
-            ) {
-                Box(
-                    Modifier
-                        .weight(1f)
-                        .fillMaxSize()
-                        .padding(horizontal = MaterialIconDimension.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column {
-                        Text(
-                            aboutTitle,
-                            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
-                            color = LocalContentColor.current,
-                        )
-                        Text(
-                            aboutSubtitle,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = LocalContentColor.current,
-                        )
-                    }
-                }
-                val image =
-                    AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
-                Box(Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Image(
-                            modifier = Modifier
-                                .graphicsLayer { renderEffect = logoEffect }
-                                .fillMaxSize(),
-                            painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
-                            contentDescription = stringResource(R.string.app_name),
-                            contentScale = ContentScale.Fit,
-                        )
-                    }
-                }
-            }
-
-            val effectsGenerator = remember {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) createIconRandomEffects()
-                else null
-            }
-
             Column(modifier = Modifier.verticalScroll(scrollState)) {
-                val clickHandlerDialog =
-                    remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(headerHeight)
-                        .clickable(onClickLabel = aboutTitle + "\n" + aboutSubtitle) {
-                            logoAnimationAtEnd = !logoAnimationAtEnd
-                            clickHandlerDialog(context.getActivity())
-                            logoEffect = effectsGenerator
-                                ?.invoke()
-                                ?.asComposeRenderEffect()
-                        },
-                )
+                Header(scrollState.value)
                 Surface(shape = MaterialCornerExtraLargeTop()) {
                     AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
+            }
+        }
+    }
+}
+
+@Composable
+private fun Header(scrollValue: Int) {
+    val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
+
+    var logoAnimationAtEnd by remember { mutableStateOf(false) }
+    var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
+    LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
+
+    val effectsGenerator = remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) createIconRandomEffects()
+        else null
+    }
+
+    Row(
+        Modifier
+            .height(250.dp)
+            .offset { IntOffset(0, scrollValue * 3 / 4) }
+            .fillMaxWidth(),
+    ) {
+        Box(
+            Modifier
+                .weight(1f)
+                .fillMaxSize()
+                .padding(horizontal = MaterialIconDimension.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column {
+                Text(
+                    stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+                    color = LocalContentColor.current,
+                )
+                Text(
+                    buildString {
+                        val version =
+                            // Don't formatNumber it if is multi-parted
+                            if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
+                            else formatNumber(BuildConfig.VERSION_NAME)
+                        append(stringResource(R.string.version, version))
+                        if (language.value.isUserAbleToReadPersian) {
+                            appendLine()
+                            append(
+                                stringResource(
+                                    R.string.about_help_subtitle,
+                                    formatNumber(supportedYearOfIranCalendar - 1),
+                                    formatNumber(supportedYearOfIranCalendar)
+                                )
+                            )
+                        }
+                    },
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = LocalContentColor.current,
+                )
+            }
+        }
+        val context = LocalContext.current
+        Box(
+            Modifier
+                .weight(1f)
+                .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+                .clickable {
+                    logoAnimationAtEnd = !logoAnimationAtEnd
+                    clickHandlerDialog(context.getActivity())
+                    logoEffect = effectsGenerator
+                        ?.invoke()
+                        ?.asComposeRenderEffect()
+                },
+            contentAlignment = Alignment.Center,
+        ) {
+            @OptIn(ExperimentalAnimationGraphicsApi::class) CompositionLocalProvider(
+                LocalLayoutDirection provides LayoutDirection.Ltr
+            ) {
+                val image =
+                    AnimatedImageVector.animatedVectorResource(R.drawable.splash_icon_animation)
+                Image(
+                    modifier = Modifier
+                        .graphicsLayer { renderEffect = logoEffect }
+                        .fillMaxSize(),
+                    painter = rememberAnimatedVectorPainter(image, logoAnimationAtEnd),
+                    contentDescription = stringResource(R.string.app_name),
+                    contentScale = ContentScale.Fit,
+                )
             }
         }
     }
