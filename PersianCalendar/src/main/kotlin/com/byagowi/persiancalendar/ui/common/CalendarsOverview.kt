@@ -316,7 +316,6 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
-        val clipboardManager = LocalClipboardManager.current
         calendarsToShow.forEach { calendar ->
             AnimatedContent(
                 targetState = jdn.toCalendar(calendar),
@@ -328,8 +327,10 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                 Column(
                     modifier = Modifier.defaultMinSize(
                         minWidth = dimensionResource(R.dimen.calendar_item_size),
-                    ), horizontalAlignment = Alignment.CenterHorizontally
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
+                    val clipboardManager = LocalClipboardManager.current
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
@@ -345,14 +346,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                         )
                         Text(date.monthName)
                     }
-                    val linear = date.toLinearDate()
-                    Text(
-                        linear,
-                        modifier = Modifier.clickable(
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
-                        ) { clipboardManager.setText(AnnotatedString(linear)) },
-                    )
+                    SelectionContainer { Text(date.toLinearDate()) }
                 }
             }
         }
