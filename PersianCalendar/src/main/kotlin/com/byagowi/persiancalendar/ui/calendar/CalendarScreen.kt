@@ -486,10 +486,9 @@ private fun Search(viewModel: CalendarViewModel) {
         active = isActive,
         onActiveChange = {},
         trailingIcon = {
-            AppIconButton(
-                icon = Icons.Default.Close,
-                title = stringResource(R.string.close),
-            ) { viewModel.closeSearch() }
+            AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
+                viewModel.closeSearch()
+            }
         },
         modifier = Modifier
             .padding(horizontal = padding)
