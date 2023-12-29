@@ -24,6 +24,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,11 +44,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 
 @Composable
-fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Unit) {
+fun AthanActivityContent(prayerKey: String, onClick: () -> Unit) {
     val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
     val darkBaseColor = isSystemInDarkTheme()
     val patternDrawable = remember {
@@ -76,6 +78,7 @@ fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Un
                 shadow = Shadow(color = Color.Black, blurRadius = 2f, offset = Offset(1f, 1f))
             )
             Text(stringResource(getPrayTimeName(prayerKey)), fontSize = 36.sp, style = textStyle)
+            val cityName = cityName.collectAsState().value
             if (cityName != null) {
                 var visible by remember { mutableStateOf(false) }
                 LaunchedEffect(key1 = null) { visible = true }
@@ -123,4 +126,4 @@ private fun DrawBackground(
 
 @Preview
 @Composable
-private fun AthanActivityContentPreview() = AthanActivityContent(FAJR_KEY, "CITY NAME") {}
+private fun AthanActivityContentPreview() = AthanActivityContent(FAJR_KEY) {}

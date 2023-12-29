@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Build
 import android.provider.CalendarContract
 import android.widget.Toast
@@ -97,6 +98,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
@@ -134,7 +136,6 @@ import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendarType
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -671,7 +672,7 @@ private fun Menu(viewModel: CalendarViewModel) {
                 val selectedMonthOffset = viewModel.selectedMonthOffset.value
                 val selectedMonth =
                     mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-                context.openHtmlInBrowser(createOwghatHtmlReport(context, selectedMonth))
+                context.openHtmlInBrowser(createOwghatHtmlReport(context.resources, selectedMonth))
             },
         )
 
@@ -710,11 +711,11 @@ private fun Menu(viewModel: CalendarViewModel) {
     }
 }
 
-private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String {
+private fun createOwghatHtmlReport(resources: Resources, date: AbstractDate): String {
     return createHTML().html {
         val coordinates = coordinates.value ?: return@html
         attributes["lang"] = language.value.language
-        attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"
+        attributes["dir"] = if (resources.isRtl) "rtl" else "ltr"
         head {
             meta(charset = "utf8")
             style {
@@ -732,15 +733,15 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
         body {
             h1 {
                 +listOfNotNull(
-                    context.appPrefs.cityName,
+                    cityName.value,
                     language.value.my.format(date.monthName, formatNumber(date.year))
                 ).joinToString(spacedComma)
             }
             table {
                 thead {
                     tr {
-                        th { +context.getString(R.string.day) }
-                        getTimeNames().forEach { th { +context.getString(it) } }
+                        th { +resources.getString(R.string.day) }
+                        getTimeNames().forEach { th { +resources.getString(it) } }
                     }
                 }
                 tbody {
@@ -762,7 +763,8 @@ private fun createOwghatHtmlReport(context: Context, date: AbstractDate): String
                     tfoot {
                         tr {
                             td {
-                                colSpan = "10"; +context.getString(calculationMethod.titleStringId)
+                                colSpan = "10"
+                                +resources.getString(calculationMethod.titleStringId)
                             }
                         }
                     }

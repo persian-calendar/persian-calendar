@@ -25,16 +25,15 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.calculationMethod
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
@@ -96,7 +95,7 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val cityName = this.appPrefs.cityName
+        val cityName = cityName.value
         val prayTimeName = getString(getPrayTimeName(athanKey))
         val title =
             if (cityName == null) prayTimeName

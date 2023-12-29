@@ -67,6 +67,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.calculationMethod
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -175,7 +176,7 @@ fun update(context: Context, updateDate: Boolean) {
         append(context.getString(nextOwghatId))
         append(": ")
         append(prayTimes.getFromStringId(nextOwghatId).toFormattedString())
-        if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) prefs.cityName?.also { append(" ($it)") }
+        if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
     }
     // endregion
 
@@ -564,7 +565,7 @@ private fun create2x2RemoteViews(
     if (prefersWidgetsDynamicColors)
         remoteViews.setDynamicTextColor(R.id.time_2x2, android.R.attr.colorAccent)
 
-    setEventsInWidget(context, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
+    setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
 
     if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
@@ -685,30 +686,30 @@ private fun create4x2RemoteViews(
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
-    setEventsInWidget(context, jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
+    setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
 
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, context.launchAppPendingIntent())
     return remoteViews
 }
 
 private fun setEventsInWidget(
-    context: Context, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
+    resources: Resources, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
 ) {
     val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
     val holidays = getEventsTitle(
         events, holiday = true, compact = true, showDeviceCalendarEvents = true,
-        insertRLM = context.resources.isRtl, addIsHoliday = isHighTextContrastEnabled
+        insertRLM = resources.isRtl, addIsHoliday = isHighTextContrastEnabled
     )
     remoteViews.setTextViewTextOrHideIfEmpty(holidaysId, holidays)
     if (isTalkBackEnabled)
         remoteViews.setContentDescription(
             holidaysId,
-            context.getString(R.string.holiday_reason, holidays)
+            resources.getString(R.string.holiday_reason, holidays)
         )
 
     val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
         events, holiday = false, compact = true, showDeviceCalendarEvents = true,
-        insertRLM = context.resources.isRtl, addIsHoliday = false
+        insertRLM = resources.isRtl, addIsHoliday = false
     ) else ""
     remoteViews.setTextViewTextOrHideIfEmpty(eventsId, nonHolidays)
 

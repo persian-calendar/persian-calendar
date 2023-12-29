@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
@@ -142,8 +143,13 @@ private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
 val isGradient: StateFlow<Boolean> = isGradient_
 
 private var alternativeGregorianMonths = false
+
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
 val coordinates: StateFlow<Coordinates?> = coordinates_
+
+private val cityName_ = MutableStateFlow<String?>(null)
+val cityName: StateFlow<String?> = cityName_
+
 var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
@@ -309,12 +315,16 @@ fun updateStoredPreference(context: Context) {
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
     )
 
-    coordinates_.value = prefs.storedCity?.coordinates ?: run {
+    val storedCity = prefs.storedCity
+    coordinates_.value = storedCity?.coordinates ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).map {
             prefs.getString(it, null)?.toDoubleOrNull() ?: .0
         }.takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
             ?.let { (lat, lng, alt) -> Coordinates(lat, lng, alt) }
     }
+    cityName_.value = storedCity?.let(language::getCityName)
+        ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
+
     runCatching {
         val mainCalendar = CalendarType.valueOf(
             prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar

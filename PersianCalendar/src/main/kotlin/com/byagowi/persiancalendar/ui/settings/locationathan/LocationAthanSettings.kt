@@ -47,6 +47,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.calculationMethod
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
@@ -68,7 +69,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDi
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -90,7 +90,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     val coordinates by coordinates.collectAsState()
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
-    val cityName = remember(coordinates) { appPrefs.cityName }
+    val cityName by cityName.collectAsState()
     SettingsClickable(stringResource(R.string.coordination), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
     }

@@ -46,6 +46,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.ButtonsBar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
@@ -54,7 +55,6 @@ import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.cityName
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
@@ -64,7 +64,7 @@ fun TimesTab(
     viewModel: CalendarViewModel
 ) {
     val context = LocalContext.current
-    val cityName = remember { context.appPrefs.cityName }
+    val cityName by cityName.collectAsState()
     val coordinates = coordinates.collectAsState().value ?: return ButtonsBar(
         modifier = Modifier.padding(top = 24.dp),
         header = R.string.ask_user_to_set_location,
@@ -97,7 +97,7 @@ fun TimesTab(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (cityName != null) Text(cityName, style = MaterialTheme.typography.bodyLarge)
+            if (cityName != null) Text(cityName ?: "", style = MaterialTheme.typography.bodyLarge)
             val angle by animateFloatAsState(if (isExpanded) 180f else 0f, label = "angle")
             Icon(
                 imageVector = Icons.Default.ExpandMore,

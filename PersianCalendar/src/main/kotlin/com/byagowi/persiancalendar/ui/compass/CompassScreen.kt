@@ -60,6 +60,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -74,7 +75,6 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.delay
@@ -119,11 +119,8 @@ fun CompassScreen(
         }
     }
     val prefs = remember { context.appPrefs }
-    val cityName = remember {
-        prefs.cityName ?: coordinates.value?.run {
-            formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
-        }
-    }
+    val cityName by cityName.collectAsState()
+    val coordinates by coordinates.collectAsState()
     val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
     val isSliderShown = sliderValue != 0f
     var baseTime by remember { mutableStateOf(Date()) }
@@ -171,8 +168,15 @@ fun CompassScreen(
                                 R.string.compass
                             )
                         )
-                        if (cityName != null) Text(
-                            cityName,
+                        val subtitle = cityName ?: coordinates?.run {
+                            formatCoordinateISO6709(
+                                latitude,
+                                longitude,
+                                elevation.takeIf { it != 0.0 },
+                            )
+                        }
+                        if (subtitle != null) Text(
+                            subtitle,
                             style = MaterialTheme.typography.titleSmall,
                         )
                     }
@@ -180,7 +184,6 @@ fun CompassScreen(
                 colors = AppTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
-                    val coordinates by coordinates.collectAsState()
                     if (coordinates != null) AppIconButton(
                         icon = In24HoursIcon,
                         title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
@@ -247,7 +250,7 @@ fun CompassScreen(
                     icon = Icons.Default.Info,
                     title = stringResource(R.string.help),
                 ) {
-                    if (coordinates.value == null) {
+                    if (coordinates == null) {
                         showSetLocationMessage()
                     } else showSnackbarMessage(
                         context.getString(
@@ -337,7 +340,7 @@ fun CompassScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("compass: ON_RESUME")
-                if (coordinates.value == null) showSetLocationMessage()
+                if (coordinates == null) showSetLocationMessage()
                 if (orientationSensor != null) {
                     sensorManager.registerListener(
                         orientationSensorListener,
@@ -350,8 +353,7 @@ fun CompassScreen(
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
-                        accelerometerSensor,
-                        SensorManager.SENSOR_DELAY_GAME
+                        accelerometerSensor, SensorManager.SENSOR_DELAY_GAME
                     )
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
@@ -361,7 +363,7 @@ fun CompassScreen(
                     if (BuildConfig.DEVELOPMENT) Toast.makeText(
                         context, "dev: acc+magnet", Toast.LENGTH_SHORT
                     ).show()
-                } else if (coordinates.value != null) {
+                } else if (coordinates != null) {
                     showSnackbarMessage(
                         context.getString(R.string.compass_not_found),
                         SnackbarDuration.Short,

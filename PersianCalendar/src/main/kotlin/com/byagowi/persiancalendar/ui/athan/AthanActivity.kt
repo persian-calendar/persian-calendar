@@ -26,10 +26,8 @@ import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
@@ -142,8 +140,7 @@ class AthanActivity : ComponentActivity() {
             )
         }
 
-        val cityName = appPrefs.cityName
-        setContent { SystemTheme { AthanActivityContent(prayerKey, cityName, ::stop) } }
+        setContent { SystemTheme { AthanActivityContent(prayerKey, ::stop) } }
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 
