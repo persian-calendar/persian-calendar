@@ -141,7 +141,7 @@ fun AboutScreen(
         ) {
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
-                Header(scrollState.value)
+                Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
                 Surface(shape = MaterialCornerExtraLargeTop()) {
                     AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
@@ -151,7 +151,7 @@ fun AboutScreen(
 }
 
 @Composable
-private fun Header(scrollValue: Int) {
+private fun Header() {
     val clickHandlerDialog = remember { createEasterEggClickHandler(::showPeriodicTableDialog) }
 
     var logoAnimationAtEnd by remember { mutableStateOf(false) }
@@ -166,7 +166,6 @@ private fun Header(scrollValue: Int) {
     Row(
         Modifier
             .height(250.dp)
-            .offset { IntOffset(0, scrollValue * 3 / 4) }
             .fillMaxWidth(),
     ) {
         Box(
