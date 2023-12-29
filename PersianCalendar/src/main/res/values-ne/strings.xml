@@ -69,7 +69,7 @@
     <string name="length_of_day">दिवा समय</string>
     <string name="remaining_daylight">बाँकी</string>
     <string name="n_hours_minutes">%1$sघन्टा %2$sमिनेट</string>
-    <string name="owghat">प्रार्थना समय</string>
+    <string name="times">समय</string>
     <string name="imsak">इम्साक</string>
     <string name="sunrise">सूर्योदय</string>
     <string name="sunset">सूर्यास्त</string>

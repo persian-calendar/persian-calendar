@@ -58,7 +58,7 @@
     <string name="sunrise">日の出</string>
     <string name="sunset">夕焼け</string>
     <string name="midnight">深夜</string>
-    <string name="owghat">礼拝時刻</string>
+    <string name="times">時刻</string>
     <string name="events">祝日</string>
     <string name="events_summary">カレンダーにはどんな種類の祝日が表示されますか</string>
     <string name="today">今日</string>

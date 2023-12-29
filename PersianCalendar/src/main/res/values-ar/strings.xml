@@ -70,7 +70,7 @@
     <string name="length_of_day">النهار</string>
     <string name="remaining_daylight">الوقت المتبقي</string>
     <string name="n_hours_minutes">%1$sس %2$sد</string>
-    <string name="owghat">أوقات الصلوات</string>
+    <string name="times">أوقات</string>
     <string name="imsak">الإمساك</string>
     <string name="fajr">أذان الفجر</string>
     <string name="sunrise">الشروق</string>

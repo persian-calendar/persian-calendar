@@ -370,7 +370,7 @@ fun Details(
         R.string.calendar to { CalendarsTab(viewModel) },
         R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
-        if (enableTimesTab(context) && !removeThirdTab) R.string.owghat to {
+        if (enableTimesTab(context) && !removeThirdTab) R.string.times to {
             TimesTab(navigateToSettingsLocationTab, navigateToAstronomy, viewModel)
         } else null,
     )

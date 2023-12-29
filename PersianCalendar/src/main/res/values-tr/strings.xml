@@ -268,7 +268,7 @@
     <string name="sunrise">Gün Doğumu</string>
     <string name="fajr">Sabah Ezanı</string>
     <string name="imsak">İmsak</string>
-    <string name="owghat">Ezan Vakitleri</string>
+    <string name="times">Vakitleri</string>
     <string name="n_hours_minutes">%1$ssa %2$sdk</string>
     <string name="remaining_daylight">Kalan</string>
     <string name="length_of_day">Gündüz</string>

@@ -57,7 +57,7 @@
     <string name="length_of_day">白昼时长</string>
     <string name="remaining_daylight">剩余</string>
     <string name="n_hours_minutes">%1$s 时 %2$s 分</string>
-    <string name="owghat">礼拜时间</string>
+    <string name="times">时间</string>
     <string name="imsak">封斋</string>
     <string name="fajr">晨礼</string>
     <string name="spring_equinox">%1$s 年春分时间：%2$s</string>

@@ -100,7 +100,7 @@
     <string name="skin">Кожа</string>
     <string name="sunrise">Восход</string>
     <string name="n_hours_minutes">%1$sh %2$s m</string>
-    <string name="owghat">Время молитвы</string>
+    <string name="times">Время</string>
     <string name="isha">Иша</string>
     <string name="midnight">Полночь</string>
     <string name="select_skin">Выберите оформление</string>
