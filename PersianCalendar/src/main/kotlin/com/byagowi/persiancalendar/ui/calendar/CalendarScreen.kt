@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -79,6 +80,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -234,23 +236,28 @@ fun CalendarScreen(
                         scrollableTabs = true,
                     )
                 }
-            } else Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
-                CalendarPager(viewModel, maxWidth, calendarHeight - 4.dp)
-                Spacer(Modifier.height(4.dp))
-                val detailsMinHeight = maxHeight - calendarHeight
-                Surface(
-                    modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                    shape = MaterialCornerExtraLargeTop(),
-                ) {
-                    Details(
-                        viewModel,
-                        navigateToHolidaysSettings,
-                        navigateToSettingsLocationTab,
-                        navigateToAstronomy,
-                        bottomPadding,
-                        detailsMinHeight,
-                    )
+            } else {
+                val scrollState = rememberScrollState()
+                Column(modifier = Modifier.verticalScroll(scrollState)) {
+                    val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
+                    Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
+                        CalendarPager(viewModel, maxWidth, calendarHeight - 4.dp)
+                    }
+                    Spacer(Modifier.height(4.dp))
+                    val detailsMinHeight = maxHeight - calendarHeight
+                    Surface(
+                        modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                        shape = MaterialCornerExtraLargeTop(),
+                    ) {
+                        Details(
+                            viewModel,
+                            navigateToHolidaysSettings,
+                            navigateToSettingsLocationTab,
+                            navigateToAstronomy,
+                            bottomPadding,
+                            detailsMinHeight,
+                        )
+                    }
                 }
             }
         }
