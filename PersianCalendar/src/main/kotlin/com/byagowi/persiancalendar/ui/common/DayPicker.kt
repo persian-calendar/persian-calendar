@@ -89,7 +89,7 @@ fun DayPicker(
         val date = remember(jdn.value, calendarType) { jdn.toCalendar(calendarType) }
         val daysFormat = remember(calendarType, date.year, date.month) {
             val monthStart = Jdn(calendarType, date.year, date.month, 1);
-            { item: Int -> (monthStart + item).dayOfWeekName + " / " + formatNumber(item) }
+            { item: Int -> (monthStart + item - 1).dayOfWeekName + " / " + formatNumber(item) }
         }
         val monthsLength = remember(calendarType, date.year, date.month) {
             calendarType.getMonthLength(date.year, date.month)
@@ -103,9 +103,6 @@ fun DayPicker(
         }
         val todayYear = remember(calendarType) { Jdn.today().toCalendar(calendarType).year }
         val startYear = remember(calendarType) { todayYear - 200 }
-        val yearsFormat = remember(calendarType) {
-            { item: Int -> formatNumber(item) }
-        }
         var monthChangeToken by remember { mutableIntStateOf(0) }
         var previousMonth by remember { mutableIntStateOf(0) }
         if (previousMonth != date.month) ++monthChangeToken
@@ -137,7 +134,7 @@ fun DayPicker(
             Spacer(modifier = Modifier.width(8.dp))
             NumberPicker(
                 modifier = Modifier.weight(1f),
-                label = yearsFormat,
+                label = ::formatNumber,
                 range = startYear..startYear + 400,
                 value = date.year,
                 onClickLabel = stringResource(R.string.year),
