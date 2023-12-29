@@ -291,7 +291,7 @@ fun calculateDaysDifference(
             val workDays = eventsRepository?.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn, if (baseJdn > jdn) baseJdn else jdn
             ) ?: 0
-            if (workDays == days) return@run null
+            if (workDays == days || workDays == 0) return@run null
             resources.getQuantityString(R.plurals.n_work_days, workDays, formatNumber(workDays))
         }
     )
