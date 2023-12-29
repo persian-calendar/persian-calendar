@@ -529,7 +529,6 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val today by viewModel.today.collectAsState()
-    val todayDate = today.toCalendar(mainCalendar)
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
@@ -585,10 +584,9 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
         colors = AppTopAppBarColors(),
         navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
         actions = {
-            val isHighlighted by viewModel.isHighlighted.collectAsState()
-            TodayActionButton(
-                visible = selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month || isHighlighted
-            ) { bringDate(viewModel, Jdn.today(), context, highlight = false) }
+            TodayActionButton(viewModel.todayButtonVisibility.collectAsState().value) {
+                bringDate(viewModel, Jdn.today(), context, highlight = false)
+            }
 
             AppIconButton(
                 icon = Icons.Default.Search,

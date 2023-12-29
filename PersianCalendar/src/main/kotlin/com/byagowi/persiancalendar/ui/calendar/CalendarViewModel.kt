@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
 class CalendarViewModel @JvmOverloads constructor(
@@ -62,6 +63,9 @@ class CalendarViewModel @JvmOverloads constructor(
 
     private val _now = MutableStateFlow(System.currentTimeMillis())
     val now: StateFlow<Long> = _now
+
+    private val _todayButtonVisibility = MutableStateFlow(false)
+    val todayButtonVisibility: StateFlow<Boolean> = _todayButtonVisibility
 
     private val _today = MutableStateFlow(Jdn.today())
     val today: StateFlow<Jdn> = _today
@@ -156,6 +160,11 @@ class CalendarViewModel @JvmOverloads constructor(
                 refreshCalendar()
                 delay(HALF_SECOND_IN_MILLIS)
                 refreshCalendar()
+            }
+        }
+        viewModelScope.launch {
+            merge(selectedMonthOffset, isHighlighted).collectLatest {
+                _todayButtonVisibility.value = selectedMonthOffset.value != 0 || isHighlighted.value
             }
         }
     }
