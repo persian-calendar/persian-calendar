@@ -59,8 +59,8 @@
     <string name="sunrise">طلوع</string>
     <string name="sunset">غروب</string>
     <string name="midnight">نیمه‌شب</string>
-    <string name="times">اوقات شرعی</string>
-    <string name="events">مناسبت‌ها</string>
+    <string name="times">اوقات</string>
+    <string name="events">رویدادها</string>
     <string name="events_summary">چه نوع مناسبت‌هایی در تقویم نمایش داده شود</string>
     <string name="today">امروز</string>
     <string name="return_to_today">بازگشت به امروز</string>
