@@ -97,7 +97,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
-import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -364,7 +363,13 @@ private fun createSunViewRemoteViews(
         linesColor = ColorUtils.setAlphaComponent(color, 0x60)
     )
     remoteViews.setRoundBackground(R.id.image_background, width, height)
-    prepareViewForRendering(sunView, width, height)
+    sunView.layoutDirection = context.resources.configuration.layoutDirection
+    // https://stackoverflow.com/a/69080742
+    sunView.measure(
+        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
+        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
+    )
+    sunView.layout(0, 0, width, height)
     sunView.prayTimes = prayTimes
     sunView.setTime(System.currentTimeMillis())
     sunView.initiate()
