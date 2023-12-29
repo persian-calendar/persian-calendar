@@ -24,7 +24,6 @@ kotlin = "1.9.21"
 kotlinpoet = "1.15.3"
 kotlinx-html-jvm = "0.10.1"
 kotlinx-serialization-json = "1.6.2"
-ksp = "1.9.22-1.0.16"
 leakcanary = "2.12"
 lifecycle-runtime = "2.6.2"
 mockito-core = "5.8.0"
@@ -34,8 +33,6 @@ persiancalendar-calculator = "371a91149d1fea9c318ef0def94ca0f93a1be0c2"
 persiancalendar-calendar = "a029c1f7fdf7204b8315847b89612eb15a5d519e"
 persiancalendar-praytimes = "36eab5bf0b6f5057357d6fbf0007bea3fab73895"
 persiancalendar-qr = "60ad1863978b35205549eae6af177c45a1e67307"
-room = "2.6.1"
-sqlite = "2.4.0"
 truth = "1.2.0"
 work-manager = "2.9.0"
 
@@ -83,13 +80,6 @@ persiancalendar-calculator = { group = "com.github.persian-calendar", name = "ca
 persiancalendar-calendar = { group = "com.github.persian-calendar", name = "calendar", version.ref = "persiancalendar-calendar" }
 persiancalendar-praytimes = { group = "com.github.persian-calendar", name = "praytimes", version.ref = "persiancalendar-praytimes" }
 persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", version.ref = "persiancalendar-qr" }
-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-sqlite = { group = "androidx.sqlite", name = "sqlite", version.ref = "sqlite" }
-sqlite-framework = { group = "androidx.sqlite", name = "sqlite-framework", version.ref = "sqlite" }
-sqlite-ktx = { group = "androidx.sqlite", name = "sqlite-ktx", version.ref = "sqlite" }
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
@@ -101,9 +91,7 @@ com-android-application = { id = "com.android.application", version.ref = "agp" 
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 espresso = ["espresso-core", "espresso-contrib"]
 mockito = ["mockito-core", "mockito-kotlin"]
-room = ["room-ktx", "room-paging", "room-runtime", "sqlite", "sqlite-framework", "sqlite-ktx"]

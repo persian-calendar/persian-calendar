@@ -7,7 +7,6 @@ val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.kotlin.android)
-    // alias(libs.plugins.ksp)
     id("io.github.persiancalendar.appbuildplugin")
 }
 
@@ -157,11 +156,6 @@ dependencies {
 
     // implementation(libs.androidx.glance.appwidget)
     // implementation(libs.androidx.glance.material3)
-
-    // Not used directly on the app but is used by work manager anyway
-    implementation(libs.bundles.room)
-    annotationProcessor(libs.room.compiler)
-    // ksp(libs.room.compiler)
 
     // debugImplementation(libs.leakcanary)
 
