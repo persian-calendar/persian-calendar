@@ -7,12 +7,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -60,7 +56,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.language
@@ -322,49 +317,42 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
     ) {
         val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         val clipboardManager = LocalClipboardManager.current
-        enabledCalendars.forEach { calendarType ->
-            AnimatedVisibility(
-                visible = calendarType in calendarsToShow,
-                enter = fadeIn() + slideInVertically() + expandHorizontally(),
-                exit = fadeOut() + slideOutVertically() + shrinkHorizontally(),
-            ) {
-                AnimatedContent(
-                    targetState = jdn,
-                    label = "jdn",
-                    transitionSpec = {
-                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                    },
-                ) { state ->
-                    val date = state.toCalendar(calendarType)
+        calendarsToShow.forEach { calendar ->
+            AnimatedContent(
+                targetState = jdn.toCalendar(calendar),
+                label = "date",
+                transitionSpec = {
+                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
+                },
+            ) { date ->
+                Column(
+                    modifier = Modifier.defaultMinSize(
+                        minWidth = dimensionResource(R.dimen.calendar_item_size),
+                    ), horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Column(
-                        modifier = Modifier.defaultMinSize(
-                            minWidth = dimensionResource(R.dimen.calendar_item_size),
-                        ), horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = Modifier
-                                .clickable(
-                                    interactionSource = remember { MutableInteractionSource() },
-                                    indication = rememberRipple(bounded = false),
-                                ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
-                                .semantics { this.contentDescription = formatDate(date) },
-                        ) {
-                            Text(
-                                formatNumber(date.dayOfMonth),
-                                style = MaterialTheme.typography.displayMedium,
-                            )
-                            Text(date.monthName)
-                        }
-                        val linear = date.toLinearDate()
-                        Text(
-                            linear,
-                            modifier = Modifier.clickable(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
                                 indication = rememberRipple(bounded = false),
-                            ) { clipboardManager.setText(AnnotatedString(linear)) },
+                            ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
+                            .semantics { this.contentDescription = formatDate(date) },
+                    ) {
+                        Text(
+                            formatNumber(date.dayOfMonth),
+                            style = MaterialTheme.typography.displayMedium,
                         )
+                        Text(date.monthName)
                     }
+                    val linear = date.toLinearDate()
+                    Text(
+                        linear,
+                        modifier = Modifier.clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                        ) { clipboardManager.setText(AnnotatedString(linear)) },
+                    )
                 }
             }
         }
