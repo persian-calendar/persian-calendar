@@ -112,7 +112,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                 val preview = FrameLayout(context)
 
                 val widgetManager = AppWidgetManager.getInstance(context)
-                val (width, height) = widgetManager.getWidgetSize(context, appWidgetId)
+                val (width, height) = widgetManager.getWidgetSize(context.resources, appWidgetId)
                 fun updateWidget() {
                     preview.addView(
                         createAgeRemoteViews(context, width, height, appWidgetId)

@@ -246,15 +246,15 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
     }
 }
 
-fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, Int> {
+fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): Pair<Int, Int> {
     // https://stackoverflow.com/a/69080699
-    val isLandscape = context.resources.isLandscape
+    val isLandscape = resources.isLandscape
     val (width, height) = listOf(
         if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH
         else AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH,
         if (isLandscape) AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-    ).map { (getAppWidgetOptions(widgetId).getInt(it, 0) * context.resources.dp).toInt() }
+    ).map { (getAppWidgetOptions(widgetId).getInt(it, 0) * resources.dp).toInt() }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
     return if (width > 10 && height > 10) width to height else 250 to 250
 }
@@ -264,7 +264,7 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
 ) {
     runCatching {
         getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
-            val (width, height) = getWidgetSize(context, widgetId)
+            val (width, height) = getWidgetSize(context.resources, widgetId)
             updateAppWidget(widgetId, widgetUpdateAction(width, height, widgetId))
         }
     }.onFailure(logException).onFailure {
