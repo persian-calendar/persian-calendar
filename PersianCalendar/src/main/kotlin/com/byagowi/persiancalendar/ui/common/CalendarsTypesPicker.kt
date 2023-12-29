@@ -46,7 +46,7 @@ fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Un
             Tab(
                 text = { Text(title) },
                 selected = current == calendarType,
-                selectedContentColor = MaterialTheme.colorScheme.onSurface,
+                unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                 onClick = {
                     setCurrent(calendarType)
                     view.performHapticFeedbackVirtualKey()

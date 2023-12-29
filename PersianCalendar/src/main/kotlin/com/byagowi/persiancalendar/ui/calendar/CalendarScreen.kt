@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -45,7 +44,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -397,15 +395,9 @@ fun Details(
         ) {
             tabs.forEachIndexed { index, (titlesResId, _) ->
                 Tab(
-                    text = {
-                        val color by animateColorAsState(
-                            if (index == selectedTabIndex) LocalContentColor.current
-                            else MaterialTheme.colorScheme.onSurface,
-                            label = "tab text color",
-                        )
-                        Text(stringResource(titlesResId), color = color)
-                    },
+                    text = { Text(stringResource(titlesResId)) },
                     selected = pagerState.currentPage == index,
+                    unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                     onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                 )
             }
