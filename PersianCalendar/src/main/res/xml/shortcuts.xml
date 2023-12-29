@@ -35,8 +35,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_converter"
         android:shortcutId="CONVERTER"
-        android:shortcutLongLabel="@string/date_converter"
-        android:shortcutShortLabel="@string/date_converter">
+        android:shortcutLongLabel="@string/converter"
+        android:shortcutShortLabel="@string/converter">
 
         <intent
             android:action="CONVERTER"

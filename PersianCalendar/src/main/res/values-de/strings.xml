@@ -34,6 +34,7 @@
     <string name="animal_year_name_snake">Schlange</string>
     <string name="date_copied_clipboard">%1$s wurde in die Zwischenablage kopiert.</string>
     <string name="date_converter">Datumskonverter</string>
+    <string name="converter">Konverter</string>
     <string name="animal_year_name_horse">Pferd</string>
     <string name="compass">Kompass</string>
     <string name="search_in_events">Suche in Veranstaltungen</string>

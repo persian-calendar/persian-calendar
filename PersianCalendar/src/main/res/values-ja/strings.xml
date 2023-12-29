@@ -18,6 +18,7 @@
     <string name="about">就いて</string>
     <string name="gpl_logo">GNU一般公衆利用許諾契約書</string>
     <string name="date_converter">日付を変換</string>
+    <string name="converter">変換</string>
     <string name="widget_text_color">ウィジェットのテキストの色</string>
     <string name="select_widgets_text_color">ウィジェットテキストの色を選ぶ</string>
     <string name="notify_date">通知を点ける</string>

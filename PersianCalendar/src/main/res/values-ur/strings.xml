@@ -18,6 +18,7 @@
     <string name="about">تعارف</string>
     <string name="gpl_logo">نشان پروانهٔ جامع همگانی گنو</string>
     <string name="date_converter">تبدیلی تاریخ</string>
+    <string name="converter">تبدیلی</string>
     <string name="widget_text_color">رنگ نوشته‌های ویجت</string>
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ویجت</string>
     <string name="notify_date">اطلاع نامہ فعال کریں</string>

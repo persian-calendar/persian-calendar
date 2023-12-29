@@ -18,6 +18,7 @@
     <string name="about">لەبارە</string>
     <string name="gpl_logo">لۆگۆی GPL</string>
     <string name="date_converter">بگۆڕی ڕێککەوت</string>
+    <string name="converter">بگۆڕی</string>
     <string name="widget_text_color">ڕەنگی دەقی ویجیت</string>
     <string name="select_widgets_text_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ دەقی ویجیت</string>
     <string name="notify_date">ئاگاداریی ڕێککەوت</string>

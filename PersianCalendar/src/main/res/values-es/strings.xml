@@ -19,6 +19,7 @@
     <!--Navigation drawers-->
     <string name="calendar">Calendario</string>
     <string name="date_converter">Convertidor de fecha</string>
+    <string name="converter">Convertidor</string>
     <string name="compass">Brújula</string>
     <string name="settings">Ajustes</string>
     <string name="about">Acerca de</string>

@@ -74,7 +74,7 @@ fun Context.shareText(text: String) {
     runCatching {
         ShareCompat.IntentBuilder(this)
             .setType("text/plain")
-            .setChooserTitle(getString(R.string.date_converter))
+            .setChooserTitle(getString(R.string.converter))
             .setText(text)
             .startChooser()
     }.onFailure(logException)

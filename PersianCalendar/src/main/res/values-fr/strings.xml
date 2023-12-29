@@ -197,6 +197,7 @@
     <string name="settings">Paramètres</string>
     <string name="compass">Boussole</string>
     <string name="date_converter">Convertisseur de date</string>
+    <string name="date">Convertisseur</string>
     <string name="calendar">Calendrier</string>
     <string name="update">Mettre à jour</string>
     <string name="outdated_app">En raison de leur ancienneté, les informations peuvent être inexactes</string>

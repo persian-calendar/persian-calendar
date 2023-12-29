@@ -319,7 +319,7 @@ private const val deviceInformationRoute = "device"
 @Stable
 private val navItems: List<Triple<String?, ImageVector, Int>> = listOf(
     Triple(calendarRoute, Icons.Default.DateRange, R.string.calendar),
-    Triple(converterRoute, Icons.Default.SwapVerticalCircle, R.string.date_converter),
+    Triple(converterRoute, Icons.Default.SwapVerticalCircle, R.string.converter),
     Triple(compassRoute, Icons.Default.Explore, R.string.compass),
     Triple(astronomyRoute, AstrologyIcon, R.string.astronomy),
     Triple(settingsRoute, Icons.Default.Settings, R.string.settings),

@@ -159,6 +159,7 @@
     <string name="shift_work_morning">Субҳ</string>
     <string name="outdated_app">Аз сабаби кӯҳна шудан, чизҳо метавонанд нодуруст бошанд</string>
     <string name="date_converter">Табдилдиҳандаи сана</string>
+    <string name="converter">Табдилдиҳандаи</string>
     <string name="date_copied_clipboard">%1$s ба буфер нусхабардорӣ карда шуд.</string>
     <string name="animal_year_name_rooster">Хурӯс</string>
     <string name="compass">Компас</string>

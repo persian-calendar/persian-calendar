@@ -13,6 +13,7 @@
     <string name="continue_button">Продолжить</string>
     <string name="calendar">Календарь</string>
     <string name="date_converter">Конвертер дат</string>
+    <string name="converter">Конвертер</string>
     <string name="compass">Компас</string>
     <string name="settings">Настройки</string>
     <string name="about">Описание</string>

@@ -18,6 +18,7 @@
     <!--Navigation drawers-->
     <string name="calendar">التقويم</string>
     <string name="date_converter">محول التاريخ</string>
+    <string name="converter">محول</string>
     <string name="compass">البوصلة</string>
     <string name="settings">الإعدادات</string>
     <string name="about">عن التطبيق</string>

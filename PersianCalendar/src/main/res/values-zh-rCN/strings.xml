@@ -16,6 +16,7 @@
     <string name="calendar">日历</string>
     <string name="outdated_app">当前应用版本过旧，数据可能存在不准确的情况。</string>
     <string name="date_converter">日期转换</string>
+    <string name="converter">转换</string>
     <string name="compass">指南针</string>
     <string name="settings">设置</string>
     <string name="exit">退出</string>

@@ -319,6 +319,7 @@
     <string name="settings">Ayarlar</string>
     <string name="compass">Pusula</string>
     <string name="date_converter">Tarih Dönüştürücü</string>
+    <string name="converter">Dönüştürücü</string>
     <string name="calendar">Takvim</string>
     <string name="update">Güncelle</string>
     <string name="outdated_app">Eski bir sürüm kullandığınız için, tarih doğru olmayabilir</string>
