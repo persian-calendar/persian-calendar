@@ -75,36 +75,32 @@ class ConverterScreenTest {
         composeTestRule.setContent {
             LaunchedEffect(Unit) { viewModel.todayButtonVisibility.collect(values::add) }
         }
-        viewModel.changeSelectedDate(Jdn.today() + 1)
-        composeTestRule.waitForIdle()
-        viewModel.changeSelectedDate(Jdn.today())
-        composeTestRule.waitForIdle()
+        listOf(
+            { viewModel.changeSelectedDate(Jdn.today() + 1) },
+            { viewModel.changeSelectedDate(Jdn.today()) },
+        ).forEach { it(); composeTestRule.waitForIdle() }
         assertEquals(listOf(false, true, false), values)
     }
 
     @Test
-    fun testTodayButtonVisibilityDayDistance() {
+    fun testTodayButtonVisibility() {
         val values = mutableListOf<Boolean>()
         val viewModel = ConverterViewModel()
         composeTestRule.setContent {
             LaunchedEffect(Unit) { viewModel.todayButtonVisibility.collect(values::add) }
         }
-        viewModel.changeScreenMode(ConverterScreenMode.Distance)
-        composeTestRule.waitForIdle()
-        viewModel.changeSecondSelectedDate(Jdn.today() + 1)
-        composeTestRule.waitForIdle()
-        viewModel.changeSecondSelectedDate(Jdn.today())
-        composeTestRule.waitForIdle()
-        viewModel.changeSecondSelectedDate(Jdn.today() + 1)
-        composeTestRule.waitForIdle()
-        viewModel.changeScreenMode(ConverterScreenMode.Converter)
-        composeTestRule.waitForIdle()
-        viewModel.changeSecondSelectedDate(Jdn.today())
-        composeTestRule.waitForIdle()
-        viewModel.changeScreenMode(ConverterScreenMode.Calculator)
-        composeTestRule.waitForIdle()
-        viewModel.changeSecondSelectedDate(Jdn.today() + 1)
-        composeTestRule.waitForIdle()
+        listOf(
+            { viewModel.changeScreenMode(ConverterScreenMode.Distance) },
+            { viewModel.changeSecondSelectedDate(Jdn.today() + 1) },
+            { viewModel.changeSecondSelectedDate(Jdn.today()) },
+            { viewModel.changeSecondSelectedDate(Jdn.today() + 1) },
+            { viewModel.changeScreenMode(ConverterScreenMode.Converter) },
+            { viewModel.changeSecondSelectedDate(Jdn.today()) },
+            { viewModel.changeScreenMode(ConverterScreenMode.Calculator) },
+            { viewModel.changeSecondSelectedDate(Jdn.today()) },
+            { viewModel.changeScreenMode(ConverterScreenMode.QrCode) },
+            { viewModel.changeSecondSelectedDate(Jdn.today()) },
+        ).forEach { it(); composeTestRule.waitForIdle() }
         assertEquals(listOf(false, true, false, true, false), values)
     }
 }
