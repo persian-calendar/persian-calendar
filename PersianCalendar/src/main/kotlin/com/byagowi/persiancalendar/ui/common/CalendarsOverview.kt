@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.calendar.PersianDate
 import java.util.Date
 
 @Composable
@@ -139,6 +140,7 @@ fun CalendarsOverview(
 
         val date = jdn.toCalendar(selectedCalendar)
         val equinox = remember(selectedCalendar, jdn) {
+            if (date !is PersianDate) return@remember null
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) {
                 val addition = if (date.month == 12) 1 else 0
                 val equinoxYear = date.year + addition
