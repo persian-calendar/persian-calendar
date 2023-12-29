@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
 @Composable
 fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
-    // TODO: Should be scrollable?
     TabRow(
         selectedTabIndex = enabledCalendars.indexOf(current),
         divider = {},

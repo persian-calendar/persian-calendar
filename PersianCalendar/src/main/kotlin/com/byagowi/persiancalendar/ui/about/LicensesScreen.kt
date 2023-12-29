@@ -95,7 +95,7 @@ fun LicensesScreen(navigateUp: () -> Unit) {
     }
 }
 
-// TODO: Sidesheet content not used anymore as Material library of Jetpack Compose doesn't have sidesheet
+// Sidesheet content not used anymore as Material library of Jetpack Compose doesn't have sidesheet
 //    """Events count:
 //   Persian Events: ${persianEvents.size + 1}
 //   Islamic Events: ${islamicEvents.size + 1}
@@ -190,7 +190,7 @@ private fun Licenses(bottomPadding: Dp) {
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                     Spacer(modifier = Modifier.width(4.dp))
                     if (license != null) Text(
-                        // TODO: Linkify them just like https://stackoverflow.com/q/66130513
+                        // Maybe linkify them just like https://stackoverflow.com/q/66130513
                         //  Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                         license,
                         modifier = Modifier
