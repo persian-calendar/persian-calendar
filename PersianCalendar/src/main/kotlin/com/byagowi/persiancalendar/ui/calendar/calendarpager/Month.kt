@@ -245,16 +245,19 @@ fun Month(
                     ) {
                         val events =
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
-                        val isHoliday = events.any { it.isHoliday } || day.isWeekEnd()
+                        val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
+                        val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
+                        val shiftWorkTitle = getShiftWorkTitle(day, true)
+                        val isSelected = isHighlighted && selectedDay == day
                         dayPainter.setDayOfMonthItem(
                             false,
-                            isHighlighted && selectedDay == day,
-                            events.any { it !is CalendarEvent.DeviceCalendarEvent },
-                            events.any { it is CalendarEvent.DeviceCalendarEvent },
+                            isSelected,
+                            hasEvents,
+                            hasAppointments,
                             false,
                             day,
                             "",
-                            getShiftWorkTitle(day, true)
+                            shiftWorkTitle,
                         )
                         drawIntoCanvas {
                             if (isToday) drawCircle(
@@ -266,11 +269,12 @@ fun Month(
                                 text = formatNumber(dayOffset + 1, mainCalendarDigits),
                                 style = daysStyle,
                             )
+                            val isHoliday = events.any { it.isHoliday }
                             drawText(
                                 textLayoutResult,
                                 color = when {
-                                    isHighlighted && selectedDay == day -> Color(dayPainterColors.colorTextDaySelected)
-                                    isHoliday -> Color(dayPainterColors.colorHolidays)
+                                    isSelected -> Color(dayPainterColors.colorTextDaySelected)
+                                    isHoliday || day.isWeekEnd() -> Color(dayPainterColors.colorHolidays)
                                     else -> contentColor
                                 },
                                 topLeft = Offset(
