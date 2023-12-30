@@ -351,6 +351,11 @@ class MapDraw(
         it.textSize = gridLinesWidth * 10
         it.textAlign = Paint.Align.CENTER
     }
+    private val moaiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = Color.BLACK
+        it.textSize = 1.5f
+        it.textAlign = Paint.Align.CENTER
+    }
 
     private val parallelsLatitudes = listOf(
         // Circles of latitude are often called parallels
@@ -400,6 +405,11 @@ class MapDraw(
                     (userX + 8).roundToInt(), (userY + 8).roundToInt(),
                 )
                 kaabaIcon.draw(this)
+            }
+            if (scaleBack < .1) {
+                val userX = (-109.366f + 180) * mapScaleFactor
+                val userY = (90 - -27.116f) * mapScaleFactor
+                drawText("🗿", userX - 1f, userY + 2.5f, moaiPaint)
             }
             val coordinates = coordinates.value
             if (coordinates != null && displayLocation) {
