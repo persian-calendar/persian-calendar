@@ -22,6 +22,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -45,6 +46,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -71,6 +73,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -291,12 +294,6 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
     Column {
         val today by viewModel.today.collectAsState()
         val date = today.toCalendar(mainCalendar)
-        Text(
-            formatNumber(date.year),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-        )
         val monthNames = mainCalendar.monthsNames
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -309,29 +306,29 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
         val horizontalPadding = 4.dp
 
         repeat(if (isLandscape) 3 else 4) { row ->
-            Row {
+            Row(Modifier.padding(bottom = titleHeight / 3)) {
                 repeat(if (isLandscape) 4 else 3) { column ->
                     val month = 1 + column + row * if (isLandscape) 4 else 3
                     val offset = month - date.month
                     Column(
                         Modifier
+                            .padding(horizontal = horizontalPadding)
+                            .clip(MaterialTheme.shapes.large)
                             .clickable {
                                 viewModel.closeYearView()
                                 viewModel.changeSelectedMonthOffsetCommand(offset)
                             }
-                            .padding(horizontal = horizontalPadding),
+                            .background(LocalContentColor.current.copy(alpha = .1f)),
                     ) {
                         Text(
                             monthNames[month - 1],
-                            Modifier
-                                .height(titleHeight)
-                                .width(width - horizontalPadding * 2),
+                            Modifier.width(width - horizontalPadding * 2),
                             fontSize = titleHeightSp,
                             textAlign = TextAlign.Center
                         )
                         Month(
                             viewModel = viewModel,
-                            offset = month - date.month,
+                            offset = offset,
                             isCurrentSelection = false,
                             width = width - horizontalPadding * 2,
                             height = height - titleHeight,
