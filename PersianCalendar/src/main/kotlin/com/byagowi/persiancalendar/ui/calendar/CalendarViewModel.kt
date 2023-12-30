@@ -70,6 +70,9 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _today = MutableStateFlow(Jdn.today())
     val today: StateFlow<Jdn> = _today
 
+    private val _isYearView = MutableStateFlow(false)
+    val isYearView: StateFlow<Boolean> = _isYearView
+
     // Commands
     fun changeSelectedMonthOffset(offset: Int) {
         _selectedMonthOffset.value = offset
@@ -124,6 +127,14 @@ class CalendarViewModel @JvmOverloads constructor(
         _sunViewNeedAnimation.value = true
     }
 
+    fun openYearView() {
+        _isYearView.value = true
+    }
+
+    fun closeYearView() {
+        _isYearView.value = false
+    }
+
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
     // or user has added an appointment on their calendar outside the app.
     fun initializeEventsRepository() {
@@ -163,8 +174,9 @@ class CalendarViewModel @JvmOverloads constructor(
             }
         }
         viewModelScope.launch {
-            merge(selectedMonthOffset, isHighlighted).collectLatest {
-                _todayButtonVisibility.value = selectedMonthOffset.value != 0 || isHighlighted.value
+            merge(selectedMonthOffset, isHighlighted, isYearView).collectLatest {
+                _todayButtonVisibility.value =
+                    !isYearView.value && (selectedMonthOffset.value != 0 || isHighlighted.value)
             }
         }
     }

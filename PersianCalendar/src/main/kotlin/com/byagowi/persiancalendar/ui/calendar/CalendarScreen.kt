@@ -76,6 +76,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -111,6 +112,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
@@ -219,7 +221,11 @@ fun CalendarScreen(
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val maxHeight = maxHeight
             val maxWidth = maxWidth
-            if (isLandscape) Row {
+            val isYearView by viewModel.isYearView.collectAsState()
+            BackHandler(enabled = isYearView) { viewModel.closeYearView() }
+            if (isYearView) {
+                YearView(viewModel, maxWidth, maxHeight - bottomPadding)
+            } else if (isLandscape) Row {
                 val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                 val height = 400.dp.coerceAtMost(maxHeight)
                 Box(Modifier.width(width)) { CalendarPager(viewModel, width, height) }
@@ -276,6 +282,63 @@ fun CalendarScreen(
                     withDismissAction = true,
                 ) == SnackbarResult.ActionPerformed
             ) context.bringMarketPage()
+        }
+    }
+}
+
+@Composable
+private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) {
+    Column {
+        val today by viewModel.today.collectAsState()
+        val date = today.toCalendar(mainCalendar)
+        Text(
+            formatNumber(date.year),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+        )
+        val monthNames = mainCalendar.monthsNames
+        val isLandscape =
+            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+        val width = maxWidth / if (isLandscape) 4 else 3
+        val height = maxHeight / if (isLandscape) 3 else 4
+
+        val titleHeight = height / 7
+        val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 2 }
+        val horizontalPadding = 4.dp
+
+        repeat(if (isLandscape) 3 else 4) { row ->
+            Row {
+                repeat(if (isLandscape) 4 else 3) { column ->
+                    val month = 1 + column + row * if (isLandscape) 4 else 3
+                    val offset = month - date.month
+                    Column(
+                        Modifier
+                            .clickable {
+                                viewModel.closeYearView()
+                                viewModel.changeSelectedMonthOffsetCommand(offset)
+                            }
+                            .padding(horizontal = horizontalPadding),
+                    ) {
+                        Text(
+                            monthNames[month - 1],
+                            Modifier
+                                .height(titleHeight)
+                                .width(width - horizontalPadding * 2),
+                            fontSize = titleHeightSp,
+                            textAlign = TextAlign.Center
+                        )
+                        Month(
+                            viewModel = viewModel,
+                            offset = month - date.month,
+                            isCurrentSelection = false,
+                            width = width - horizontalPadding * 2,
+                            height = height - titleHeight,
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -537,6 +600,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val today by viewModel.today.collectAsState()
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
+    val isYearView by viewModel.isYearView.collectAsState()
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
@@ -547,7 +611,10 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             val secondaryCalendar = secondaryCalendar
             val title: String
             val subtitle: String
-            if (secondaryCalendar == null) {
+            if (isYearView) {
+                title = stringResource(R.string.year_view)
+                subtitle = formatNumber(selectedMonth.year)
+            } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
             } else {
@@ -591,16 +658,25 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
         colors = AppTopAppBarColors(),
         navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
         actions = {
+            AnimatedVisibility(isYearView) {
+                AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
+                    viewModel.closeYearView()
+                }
+            }
+
             TodayActionButton(viewModel.todayButtonVisibility.collectAsState().value) {
+                viewModel.closeYearView()
                 bringDate(viewModel, Jdn.today(), context, highlight = false)
             }
 
-            AppIconButton(
-                icon = Icons.Default.Search,
-                title = stringResource(R.string.search_in_events),
-            ) { viewModel.openSearch() }
+            AnimatedVisibility(!isYearView) {
+                AppIconButton(
+                    icon = Icons.Default.Search,
+                    title = stringResource(R.string.search_in_events),
+                ) { viewModel.openSearch() }
+            }
 
-            Menu(viewModel)
+            AnimatedVisibility(!isYearView) { Menu(viewModel) }
         },
     )
 }
@@ -678,6 +754,14 @@ private fun Menu(viewModel: CalendarViewModel) {
                 val selectedMonth =
                     mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
                 context.openHtmlInBrowser(createOwghatHtmlReport(context.resources, selectedMonth))
+            },
+        )
+
+        if (!isTalkBackEnabled) AppDropdownMenuItem(
+            text = { Text(stringResource(R.string.year_view)) },
+            onClick = {
+                closeMenu()
+                viewModel.openYearView()
             },
         )
 
