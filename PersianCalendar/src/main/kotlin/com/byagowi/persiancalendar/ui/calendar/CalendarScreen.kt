@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -319,17 +320,18 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
                     val offset = yearOffsetInMonths + month - date.month
                     Column(
                         Modifier
-                            .height(height - padding * 2)
+                            .size(width, height - padding * 2)
                             .padding(start = padding, end = padding)
                             .clip(MaterialTheme.shapes.large)
-                            .clickable { viewModel.closeYearView() }
+                            .clickable {
+                                viewModel.closeYearView()
+                                viewModel.changeSelectedMonthOffsetCommand(offset)
+                            }
                             .background(LocalContentColor.current.copy(alpha = .1f)),
                     ) {
                         Text(
                             monthNames[month - 1],
-                            Modifier
-                                .width(width - padding * 2)
-                                .height(titleHeight),
+                            Modifier.size(width - padding * 2, titleHeight),
                             fontSize = titleHeightSp,
                             textAlign = TextAlign.Center
                         )
@@ -665,6 +667,8 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             AnimatedVisibility(isYearView) {
                 AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
                     viewModel.closeYearView()
+                    // Ugly, why it needs setting the offset back?
+                    viewModel.changeSelectedMonthOffsetCommand(viewModel.selectedMonthOffset.value)
                 }
             }
 
