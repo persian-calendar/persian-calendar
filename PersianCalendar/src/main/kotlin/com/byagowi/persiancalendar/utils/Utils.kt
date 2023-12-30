@@ -69,10 +69,3 @@ val HighLatitudesMethod.titleStringId
         HighLatitudesMethod.OneSeventh -> R.string.high_latitudes_one_seventh
         HighLatitudesMethod.None -> R.string.none
     }
-
-/**
- * Returns the linear interpolation of `amount` between `start` and `stop`.
- *
- * Source: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/math/MathUtils.java#L36)
- */
-fun lerp(start: Float, stop: Float, amount: Float): Float = (1 - amount) * start + amount * stop

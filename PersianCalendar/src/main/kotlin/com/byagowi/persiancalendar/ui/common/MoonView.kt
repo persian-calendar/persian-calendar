@@ -6,9 +6,9 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.compose.ui.util.lerp
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.utils.lerp
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time

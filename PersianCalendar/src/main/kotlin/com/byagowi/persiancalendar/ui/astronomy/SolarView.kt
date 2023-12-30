@@ -11,6 +11,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.ColorInt
+import androidx.compose.ui.util.lerp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
@@ -24,7 +25,6 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.utils.lerp
 import com.byagowi.persiancalendar.variants.debugLog
 import java.util.GregorianCalendar
 import java.util.Locale
