@@ -296,6 +296,12 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
         val today by viewModel.today.collectAsState()
         val date = today.toCalendar(mainCalendar)
         val monthNames = mainCalendar.monthsNames
+        val yearOffsetInMonths = run {
+            val selectedMonthOffset = viewModel.selectedMonthOffset.value
+            val selectedMonth =
+                mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
+            (selectedMonth.year - date.year) * 12
+        }
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -310,16 +316,13 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
             Row {
                 repeat(if (isLandscape) 4 else 3) { column ->
                     val month = 1 + column + row * if (isLandscape) 4 else 3
-                    val offset = month - date.month
+                    val offset = yearOffsetInMonths + month - date.month
                     Column(
                         Modifier
                             .height(height - padding * 2)
                             .padding(start = padding, end = padding)
                             .clip(MaterialTheme.shapes.large)
-                            .clickable {
-                                viewModel.closeYearView()
-                                viewModel.changeSelectedMonthOffsetCommand(offset)
-                            }
+                            .clickable { viewModel.closeYearView() }
                             .background(LocalContentColor.current.copy(alpha = .1f)),
                     ) {
                         Text(
@@ -666,7 +669,6 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             }
 
             TodayActionButton(viewModel.todayButtonVisibility.collectAsState().value) {
-                viewModel.closeYearView()
                 bringDate(viewModel, Jdn.today(), context, highlight = false)
             }
 
