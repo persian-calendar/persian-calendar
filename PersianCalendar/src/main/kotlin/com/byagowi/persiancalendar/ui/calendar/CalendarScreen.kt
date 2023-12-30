@@ -24,6 +24,7 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -291,7 +292,7 @@ fun CalendarScreen(
 
 @Composable
 private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) {
-    Column {
+    Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.height(maxHeight)) {
         val today by viewModel.today.collectAsState()
         val date = today.toCalendar(mainCalendar)
         val monthNames = mainCalendar.monthsNames
@@ -301,18 +302,19 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
         val width = maxWidth / if (isLandscape) 4 else 3
         val height = maxHeight / if (isLandscape) 3 else 4
 
-        val titleHeight = height / 7
-        val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 2 }
-        val horizontalPadding = 4.dp
+        val titleHeight = height / 10
+        val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
+        val padding = 4.dp
 
         repeat(if (isLandscape) 3 else 4) { row ->
-            Row(Modifier.padding(bottom = titleHeight / 3)) {
+            Row {
                 repeat(if (isLandscape) 4 else 3) { column ->
                     val month = 1 + column + row * if (isLandscape) 4 else 3
                     val offset = month - date.month
                     Column(
                         Modifier
-                            .padding(horizontal = horizontalPadding)
+                            .height(height - padding * 2)
+                            .padding(start = padding, end = padding)
                             .clip(MaterialTheme.shapes.large)
                             .clickable {
                                 viewModel.closeYearView()
@@ -322,7 +324,9 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
                     ) {
                         Text(
                             monthNames[month - 1],
-                            Modifier.width(width - horizontalPadding * 2),
+                            Modifier
+                                .width(width - padding * 2)
+                                .height(titleHeight),
                             fontSize = titleHeightSp,
                             textAlign = TextAlign.Center
                         )
@@ -330,8 +334,8 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
                             viewModel = viewModel,
                             offset = offset,
                             isCurrentSelection = false,
-                            width = width - horizontalPadding * 2,
-                            height = height - titleHeight,
+                            width = width - padding * 2,
+                            height = height - titleHeight - padding * 2,
                         )
                     }
                 }
