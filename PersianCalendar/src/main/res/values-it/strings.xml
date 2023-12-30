@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="close">chiusura</string>
+    <string name="converter">convertitore</string>
+    <string name="outdated_app">A causa dell\'obsolescenza, le cose possono essere imprecise</string>
+    <string name="date_converter">Convertitore di data</string>
+    <string name="compass">bussola</string>
+    <string name="update">aggiornamento</string>
+    <string name="help">aiuto</string>
+    <string name="more">più</string>
+    <string name="widget_name">Calendario Persiano</string>
+    <string name="cancel">cancella</string>
+    <string name="open">aperto</string>
+    <string name="settings">configurazione</string>
+    <string name="continue_button">continuare</string>
+    <string name="app_name">Calendario Persiano</string>
+    <string name="accept">OK</string>
+    <string name="calendar">Calendario</string>
+    <string name="widget_age_name">"Calendario Persiano  (età)"</string>
+    <string name="widget_mini_name">Calendario Persiano (piccolo)</string>
+</resources>
