@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -34,12 +35,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
-    val pagerState = rememberPagerState(
-        initialPage = applyOffset(0),
-        pageCount = ::monthsLimit,
-    )
-
+fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: Dp, height: Dp) {
     val scope = rememberCoroutineScope()
 
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
@@ -128,6 +124,12 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
             }
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun CalendarPagerState(): PagerState {
+    return rememberPagerState(initialPage = applyOffset(0), pageCount = ::monthsLimit)
 }
 
 private val monthsLimit = 5000 // this should be an even number

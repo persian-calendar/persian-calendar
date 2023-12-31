@@ -131,6 +131,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
@@ -195,6 +196,7 @@ import kotlinx.html.tr
 import kotlinx.html.unsafe
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarScreen(
     openDrawer: () -> Unit,
@@ -250,6 +252,10 @@ fun CalendarScreen(
                 AnimatedVisibility(isYearView) {
                     YearViewPager(viewModel, maxWidth, maxHeight, bottomPadding)
                 }
+
+                // To preserve pager's state even in year view where calendar isn't in the tree
+                val pagerState = CalendarPagerState()
+
                 AnimatedVisibility(
                     !isYearView,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
@@ -257,7 +263,9 @@ fun CalendarScreen(
                     if (isLandscape) Row {
                         val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                         val height = 400.dp.coerceAtMost(maxHeight)
-                        Box(Modifier.width(width)) { CalendarPager(viewModel, width, height) }
+                        Box(Modifier.width(width)) {
+                            CalendarPager(viewModel, pagerState, width, height)
+                        }
                         Surface(
                             shape = MaterialCornerExtraLargeNoBottomEnd(),
                             modifier = Modifier.fillMaxHeight(),
@@ -277,7 +285,8 @@ fun CalendarScreen(
                         Column(modifier = Modifier.verticalScroll(scrollState)) {
                             val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
                             Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
-                                CalendarPager(viewModel, maxWidth, calendarHeight - 4.dp)
+                                val height = calendarHeight - 4.dp
+                                CalendarPager(viewModel, pagerState, maxWidth, height)
                             }
                             Spacer(Modifier.height(4.dp))
                             val detailsMinHeight = maxHeight - calendarHeight
@@ -777,8 +786,6 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             AnimatedVisibility(isYearView) {
                 AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
                     viewModel.closeYearView()
-                    // Ugly, why it needs setting the offset back?
-                    viewModel.changeSelectedMonthOffsetCommand(viewModel.selectedMonthOffset.value)
                 }
             }
 
