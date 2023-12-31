@@ -17,6 +17,7 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -92,6 +93,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -359,8 +361,7 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, 
                             .clip(MaterialTheme.shapes.large)
                             .clickable(
                                 onClickLabel = language.value.my.format(
-                                    monthNames[month - 1],
-                                    formatNumber(yearOffset + todayDate.year)
+                                    monthNames[month - 1], formatNumber(yearOffset + todayDate.year)
                                 ),
                             ) {
                                 viewModel.closeYearView()
@@ -692,9 +693,16 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                         fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                     },
                 ) { state ->
+                    val fraction by animateFloatAsState(
+                        targetValue = if (isYearView) 1f else 0f, label = "font size"
+                    )
                     Text(
                         state,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = lerp(
+                            MaterialTheme.typography.titleLarge,
+                            MaterialTheme.typography.titleMedium,
+                            fraction,
+                        ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -706,9 +714,16 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                         fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
                     },
                 ) { state ->
+                    val fraction by animateFloatAsState(
+                        targetValue = if (isYearView) 1f else 0f, label = "font size"
+                    )
                     Text(
                         state,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = lerp(
+                            MaterialTheme.typography.titleMedium,
+                            MaterialTheme.typography.titleLarge,
+                            fraction,
+                        ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
