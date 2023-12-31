@@ -71,6 +71,7 @@ fun EventsTab(
             AnimatedContent(
                 targetState = shiftWorkTitle ?: "",
                 label = "shift work title",
+                transitionSpec = appFadeTransitionSpec,
             ) { state ->
                 SelectionContainer {
                     Text(
@@ -91,6 +92,7 @@ fun EventsTab(
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance ?: "",
                 label = "shift work days diff",
+                transitionSpec = appFadeTransitionSpec,
             ) { state ->
                 SelectionContainer {
                     Text(
