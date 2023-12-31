@@ -16,12 +16,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
-import androidx.core.view.setPadding
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.Locale
 
@@ -73,12 +71,11 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                     )
                     if (!isBackgroundPick) it.hideAlphaSeekBar()
                     it.setPickedColor(initialColor)
-                    it.setPadding((10 * context.resources.dp).toInt())
                 }
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 24.dp),
         )
     }
 }

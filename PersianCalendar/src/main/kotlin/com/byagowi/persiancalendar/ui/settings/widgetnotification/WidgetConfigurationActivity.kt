@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -31,7 +32,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -76,34 +76,35 @@ class WidgetConfigurationActivity : ComponentActivity() {
 @Composable
 private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
     Column(Modifier.safeDrawingPadding()) {
-        AndroidView(
-            factory = { context ->
-                val preview = FrameLayout(context)
-
-                val width = (200 * context.resources.dp).toInt()
-                val height = (60 * context.resources.dp).toInt()
-                fun updateWidget() {
-                    preview.addView(
-                        createSampleRemoteViews(
-                            context, width, height
-                        ).apply(context.applicationContext, preview)
-                    )
-                }
-                updateWidget()
-
-                context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
-                    // TODO: Investigate why sometimes gets out of sync
-                    preview.post {
-                        preview.removeAllViews()
-                        updateWidget()
+        run {
+            val width = with(LocalDensity.current) { 200.dp.roundToPx() }
+            val height = with(LocalDensity.current) { 60.dp.roundToPx() }
+            AndroidView(
+                factory = { context ->
+                    val preview = FrameLayout(context)
+                    fun updateWidget() {
+                        preview.addView(
+                            createSampleRemoteViews(
+                                context, width, height
+                            ).apply(context.applicationContext, preview)
+                        )
                     }
-                }
-                preview
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 16.dp),
-        )
+                    updateWidget()
+
+                    context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
+                        // TODO: Investigate why sometimes gets out of sync
+                        preview.post {
+                            preview.removeAllViews()
+                            updateWidget()
+                        }
+                    }
+                    preview
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(all = 16.dp),
+            )
+        }
         Column(
             Modifier
                 .alpha(AppBlendAlpha)
