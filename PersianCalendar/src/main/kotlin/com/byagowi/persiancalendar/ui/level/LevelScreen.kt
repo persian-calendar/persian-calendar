@@ -54,6 +54,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -151,7 +152,11 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
             )
         ) {
             Box {
-                AnimatedContent(targetState = cmInchFlip, label = "ruler") { state ->
+                AnimatedContent(
+                    targetState = cmInchFlip,
+                    label = "ruler",
+                    transitionSpec = appFadeTransitionSpec,
+                ) { state ->
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()
