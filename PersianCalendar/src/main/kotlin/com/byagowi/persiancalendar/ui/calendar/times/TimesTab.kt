@@ -2,10 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +32,6 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
@@ -53,6 +48,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -123,7 +119,6 @@ private fun AstronomicalOverview(
     val now by viewModel.now.collectAsState()
     LaunchedEffect(Unit) { viewModel.astronomicalOverviewLaunched() }
 
-    val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
     AnimatedContent(
         jdn == today,
         label = "heading",
@@ -131,9 +126,7 @@ private fun AstronomicalOverview(
             .fillMaxWidth()
             .height(100.dp)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
-        transitionSpec = {
-            fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-        },
+        transitionSpec = appFadeTransitionSpec,
     ) { state ->
         val sunViewColors = AppSunViewColors()
         if (state) AndroidView(

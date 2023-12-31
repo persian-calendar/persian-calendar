@@ -1,9 +1,15 @@
 package com.byagowi.persiancalendar.ui.theme
 
 import android.view.View
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -139,6 +145,8 @@ private fun AppShapes(): Shapes {
 }
 
 val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
+private val fadeSpec = fadeIn(tween(400)).togetherWith(fadeOut(tween(400)))
+val appFadeTransitionSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { fadeSpec }
 
 @Composable
 private fun AppBackground(): Brush {

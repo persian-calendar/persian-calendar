@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -140,10 +139,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
 
         val topCornersRoundness by animateDpAsState(
             if (isFullscreen) 0.dp else ExtraLargeShapeCornerSize.dp,
-            animationSpec = tween(
-                durationMillis = integerResource(android.R.integer.config_longAnimTime),
-                easing = LinearEasing
-            ),
+            animationSpec = tween(durationMillis = 500, easing = LinearEasing),
             label = "corner",
         )
         Surface(

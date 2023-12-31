@@ -58,7 +58,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -491,17 +490,16 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
 @Composable
 private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: CalendarType) {
     val context = LocalContext.current
-    val longAnimationTime = integerResource(android.R.integer.config_longAnimTime)
     AnimatedContent(
         calculateDaysDifference(context.resources, jdn, baseJdn, calendar),
         modifier = Modifier.padding(vertical = 12.dp),
         transitionSpec = {
             slideIntoContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(durationMillis = longAnimationTime)
+                animationSpec = tween(500)
             ) togetherWith slideOutOfContainer(
                 towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                animationSpec = tween(durationMillis = longAnimationTime)
+                animationSpec = tween(500)
             )
         },
         label = "day distance",

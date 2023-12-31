@@ -10,11 +10,9 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,7 +59,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -85,6 +82,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettin
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -217,13 +215,10 @@ private data class TabItem(
 
     @Composable
     fun icon(isSelected: Boolean) {
-        val time = integerResource(android.R.integer.config_mediumAnimTime)
         AnimatedContent(
             isSelected,
             label = "icon",
-            transitionSpec = {
-                fadeIn(tween(time)).togetherWith(fadeOut(tween(time)))
-            },
+            transitionSpec = appFadeTransitionSpec,
         ) { Icon(if (it) filledIcon else outlinedIcon, contentDescription = null) }
     }
 }

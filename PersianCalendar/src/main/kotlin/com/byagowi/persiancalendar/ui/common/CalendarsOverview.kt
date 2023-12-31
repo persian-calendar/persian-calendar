@@ -7,9 +7,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +41,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -60,6 +56,7 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -105,7 +102,6 @@ fun CalendarsOverview(
             },
     ) {
         Spacer(Modifier.height(24.dp))
-        val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 24.dp)
@@ -123,9 +119,7 @@ fun CalendarsOverview(
                 if (isToday && isForcedIranTimeEnabled) language.value.inParentheses.format(
                     jdn.dayOfWeekName, stringResource(R.string.iran_time)
                 ) else jdn.dayOfWeekName,
-                transitionSpec = {
-                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                },
+                transitionSpec = appFadeTransitionSpec,
                 label = "weekday name",
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
         }
@@ -167,9 +161,7 @@ fun CalendarsOverview(
                     spacedColon,
                     calculateDaysDifference(context.resources, jdn)
                 ).joinToString(""),
-                transitionSpec = {
-                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                },
+                transitionSpec = appFadeTransitionSpec,
                 label = "diff days",
             ) { state ->
                 SelectionContainer {
@@ -230,7 +222,7 @@ fun CalendarsOverview(
         LaunchedEffect(Unit) { firstShow = false }
         val indicatorStrokeWidth by animateDpAsState(
             if (isExpanded && !firstShow) ProgressIndicatorDefaults.CircularStrokeWidth else 0.dp,
-            animationSpec = tween(animationTime * 2),
+            animationSpec = tween(800),
             label = "stroke width",
         )
 
@@ -315,14 +307,11 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         calendarsToShow.forEach { calendar ->
             AnimatedContent(
                 targetState = jdn.toCalendar(calendar),
                 label = "date",
-                transitionSpec = {
-                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                },
+                transitionSpec = appFadeTransitionSpec,
             ) { date ->
                 Column(
                     modifier = Modifier.defaultMinSize(

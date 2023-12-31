@@ -2,12 +2,10 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -22,9 +20,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getTimeNames
@@ -38,7 +36,6 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         getTimeNames().forEach { timeId ->
             AnimatedVisibility(
                 visible = isExpanded || when (timeId) {
@@ -51,11 +48,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
                 AnimatedContent(
                     targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
                     label = "time",
-                    transitionSpec = {
-                        fadeIn(animationSpec = tween(animationTime)).togetherWith(
-                            fadeOut(animationSpec = tween(animationTime))
-                        )
-                    },
+                    transitionSpec = appFadeTransitionSpec,
                 ) { state ->
                     Column(
                         modifier = Modifier.defaultMinSize(

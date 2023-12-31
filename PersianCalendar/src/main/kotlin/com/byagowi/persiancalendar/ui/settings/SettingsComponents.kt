@@ -4,10 +4,6 @@ import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,13 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -97,13 +93,10 @@ fun SettingsClickable(
     ) {
         Text(title, style = MaterialTheme.typography.bodyLarge)
         AnimatedVisibility(visible = summary != null) {
-            val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
             AnimatedContent(
                 summary ?: "",
                 label = "summary",
-                transitionSpec = {
-                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                },
+                transitionSpec = appFadeTransitionSpec,
             ) { state ->
                 Text(
                     state,

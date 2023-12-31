@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -96,14 +95,12 @@ fun Month(
     if (isCurrentSelection) ++invalidationFlow.value
     val invalidationToken by invalidationFlow.collectAsState()
     val indicatorColor = AppDaySelectionColor()
-    val mediumAnimTime = integerResource(android.R.integer.config_mediumAnimTime)
-    val shortAnimTime = integerResource(android.R.integer.config_shortAnimTime)
     // New indicator for every launch, needed when a day is selected and we are
     // coming back from other screens
     var launchId by remember { mutableStateOf(0) }
     LaunchedEffect(Unit) { ++launchId }
     val selectionIndicator = remember(indicatorColor, launchId) {
-        SelectionIndicator(mediumAnimTime, shortAnimTime, indicatorColor) {
+        SelectionIndicator(400, 200, indicatorColor) {
             ++invalidationFlow.value
         }
     }

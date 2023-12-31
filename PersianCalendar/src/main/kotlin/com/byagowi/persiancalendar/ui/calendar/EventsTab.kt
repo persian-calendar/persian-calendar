@@ -10,10 +10,6 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -39,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -53,6 +48,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -132,7 +128,6 @@ fun EventsTab(
         val launcher =
             rememberLauncherForActivityResult(ViewEvent()) { viewModel.refreshCalendar() }
 
-        val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
         events.forEach { event ->
             val backgroundColor by animateColorAsState(
                 when {
@@ -156,9 +151,7 @@ fun EventsTab(
                     event.title, holidayString
                 ) else event.title) + eventTime,
                 label = "event title",
-                transitionSpec = {
-                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                },
+                transitionSpec = appFadeTransitionSpec,
             ) { title ->
                 Row(
                     @OptIn(ExperimentalFoundationApi::class) Modifier

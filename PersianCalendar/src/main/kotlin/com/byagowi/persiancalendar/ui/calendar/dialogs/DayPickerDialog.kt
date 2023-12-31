@@ -19,7 +19,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.byagowi.persiancalendar.R
@@ -60,7 +59,6 @@ fun DayPickerDialog(
         CalendarsTypesPicker(current = calendarType) { calendarType = it }
 
         DayPicker(calendarType, jdn) { jdn = it }
-        val longAnimationTime = integerResource(android.R.integer.config_longAnimTime)
         AnimatedContent(
             targetState = if (jdn == today) " " else listOf(
                 stringResource(R.string.days_distance), spacedColon,
@@ -73,10 +71,10 @@ fun DayPickerDialog(
             transitionSpec = {
                 slideIntoContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(durationMillis = longAnimationTime)
+                    animationSpec = tween(500)
                 ) togetherWith slideOutOfContainer(
                     towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                    animationSpec = tween(durationMillis = longAnimationTime)
+                    animationSpec = tween(500)
                 )
             },
             label = "days distance",

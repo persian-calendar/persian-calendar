@@ -18,10 +18,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -91,7 +87,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.integerResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextAlign
@@ -147,6 +142,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
+import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -207,13 +203,10 @@ fun CalendarScreen(
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
             BackHandler(enabled = searchBoxIsOpen) { viewModel.closeSearch() }
 
-            val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
             AnimatedContent(
                 searchBoxIsOpen,
                 label = "toolbar",
-                transitionSpec = {
-                    fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                },
+                transitionSpec = appFadeTransitionSpec,
             ) { if (it) Search(viewModel) else Toolbar(openDrawer, viewModel) }
         },
         floatingActionButton = {
@@ -683,7 +676,6 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 )
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
             }
-            val animationTime = integerResource(android.R.integer.config_mediumAnimTime)
             Column(
                 if (isYearView) Modifier else Modifier.clickable(
                     indication = rememberRipple(bounded = false),
@@ -694,9 +686,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 AnimatedContent(
                     title,
                     label = "title",
-                    transitionSpec = {
-                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                    },
+                    transitionSpec = appFadeTransitionSpec,
                 ) { state ->
                     val fraction by animateFloatAsState(
                         targetValue = if (isYearView) 1f else 0f, label = "font size"
@@ -715,9 +705,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 AnimatedContent(
                     subtitle,
                     label = "subtitle",
-                    transitionSpec = {
-                        fadeIn(tween(animationTime)).togetherWith(fadeOut(tween(animationTime)))
-                    },
+                    transitionSpec = appFadeTransitionSpec,
                 ) { state ->
                     val fraction by animateFloatAsState(
                         targetValue = if (isYearView) 1f else 0f, label = "font size"
