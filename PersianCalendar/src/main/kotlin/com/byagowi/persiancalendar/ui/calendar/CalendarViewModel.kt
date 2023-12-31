@@ -151,7 +151,9 @@ class CalendarViewModel @JvmOverloads constructor(
         _yearViewSubtitle.value = year
     }
 
-    fun jumpYearView(command: Int?) { _yearViewCommand.value = command }
+    fun jumpYearView(command: Int?) {
+        _yearViewCommand.value = command
+    }
 
     init {
         viewModelScope.launch {
