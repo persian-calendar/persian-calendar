@@ -326,99 +326,102 @@ private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight:
             mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
         selectedMonth.year - todayDate.year
     }
+
+    val monthNames = mainCalendar.monthsNames
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    val width = maxWidth / if (isLandscape) 4 else 3
+    val height = maxHeight / if (isLandscape) 3 else 4
+
+    val titleHeight = height / 10
+    val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
+    val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
+    val padding = 4.dp
+
+    val widthInPx = with(LocalDensity.current) { width.toPx() }
+    val heightInPx = with(LocalDensity.current) { height.toPx() }
+    val paddingInPx = with(LocalDensity.current) { padding.toPx() }
+
+    val context = LocalContext.current
+    val yearStartJdn = Jdn(mainCalendar.createDate(today.toCalendar(mainCalendar).year, 1, 1))
+    val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+        if (isShowDeviceCalendarEvents) context.readYearDeviceEvents(yearStartJdn)
+        else EventsStore.empty()
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    val dayPainterColors = AppDayPainterColors()
+    val dayPainter = remember(dayPainterColors, widthInPx, heightInPx) {
+        DayPainter(
+            context.resources,
+            (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
+            (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
+            isRtl,
+            dayPainterColors,
+        )
+    }
+
     val halfPages = 100
     val state = rememberPagerState(halfPages + yearOffsetInMonths, pageCount = { halfPages * 2 })
-    viewModel.changeYearViewSubtitle(todayDate.year + state.currentPage - 100)
+    viewModel.changeYearViewSubtitle(todayDate.year + state.currentPage - halfPages)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
         scope.launch { state.animateScrollToPage(state.currentPage + command) }
         viewModel.jumpYearView(null)
     }
-    VerticalPager(state) { YearView(viewModel, maxWidth, maxHeight, it - halfPages) }
-}
-
-@Composable
-private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, yearOffset: Int) {
-    Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.height(maxHeight)) {
-        val today by viewModel.today.collectAsState()
-        val todayDate = today.toCalendar(mainCalendar)
-        val monthNames = mainCalendar.monthsNames
-        val isLandscape =
-            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-        val width = maxWidth / if (isLandscape) 4 else 3
-        val height = maxHeight / if (isLandscape) 3 else 4
-
-        val titleHeight = height / 10
-        val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
-        val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
-        val padding = 4.dp
-
-        val widthInPx = with(LocalDensity.current) { width.toPx() }
-        val heightInPx = with(LocalDensity.current) { height.toPx() }
-        val paddingInPx = with(LocalDensity.current) { padding.toPx() }
-
-        val context = LocalContext.current
-        val yearStartJdn = Jdn(mainCalendar.createDate(today.toCalendar(mainCalendar).year, 1, 1))
-        val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-            if (isShowDeviceCalendarEvents) context.readYearDeviceEvents(yearStartJdn)
-            else EventsStore.empty()
-        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-
-        val dayPainterColors = AppDayPainterColors()
-        val dayPainter = remember(dayPainterColors) {
-            DayPainter(
-                context.resources,
-                (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
-                (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
-                isRtl,
-                dayPainterColors,
-            )
-        }
-
-        repeat(if (isLandscape) 3 else 4) { row ->
-            Row {
-                repeat(if (isLandscape) 4 else 3) { column ->
-                    val month = 1 + column + row * if (isLandscape) 4 else 3
-                    val offset = yearOffset * 12 + month - todayDate.month
-                    Column(
-                        Modifier
-                            .size(width, height - padding * 2)
-                            .padding(start = padding, end = padding)
-                            .clip(MaterialTheme.shapes.large)
-                            .clickable(
-                                onClickLabel = language.value.my.format(
-                                    monthNames[month - 1], formatNumber(yearOffset + todayDate.year)
-                                ),
-                            ) {
-                                viewModel.closeYearView()
-                                viewModel.changeSelectedMonthOffsetCommand(offset)
-                            }
-                            .background(LocalContentColor.current.copy(alpha = .1f)),
-                    ) {
-                        Text(
-                            monthNames[month - 1],
-                            Modifier.size(width - padding * 2, titleHeight),
-                            fontSize = titleHeightSp,
-                            textAlign = TextAlign.Center
-                        )
-                        Canvas(
-                            Modifier.size(width - padding * 2, height - titleHeight - padding * 2)
-                        ) {
-                            drawIntoCanvas {
-                                renderMonthWidget(
-                                    dayPainter = dayPainter,
-                                    width = (widthInPx - paddingInPx * 2).roundToInt(),
-                                    canvas = it.nativeCanvas,
-                                    today = today,
-                                    baseDate = mainCalendar.getMonthStartFromMonthsDistance(
-                                        today, offset
+    VerticalPager(state) {
+        val yearOffset = it - halfPages
+        Column(
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.height(maxHeight),
+        ) {
+            repeat(if (isLandscape) 3 else 4) { row ->
+                Row {
+                    repeat(if (isLandscape) 4 else 3) { column ->
+                        val month = 1 + column + row * if (isLandscape) 4 else 3
+                        val offset = yearOffset * 12 + month - todayDate.month
+                        Column(
+                            Modifier
+                                .size(width, height - padding * 2)
+                                .padding(horizontal = padding)
+                                .clip(MaterialTheme.shapes.large)
+                                .clickable(
+                                    onClickLabel = language.value.my.format(
+                                        monthNames[month - 1],
+                                        formatNumber(yearOffset + todayDate.year)
                                     ),
-                                    deviceEvents = yearDeviceEvents,
-                                    isRtl = isRtl,
-                                    isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                ) {
+                                    viewModel.closeYearView()
+                                    viewModel.changeSelectedMonthOffsetCommand(offset)
+                                }
+                                .background(LocalContentColor.current.copy(alpha = .1f)),
+                        ) {
+                            Text(
+                                monthNames[month - 1],
+                                Modifier.size(width - padding * 2, titleHeight),
+                                fontSize = titleHeightSp,
+                                textAlign = TextAlign.Center
+                            )
+                            Canvas(
+                                Modifier.size(
+                                    width - padding * 2,
+                                    height - titleHeight - padding * 2,
                                 )
+                            ) {
+                                drawIntoCanvas { canvas ->
+                                    renderMonthWidget(
+                                        dayPainter = dayPainter,
+                                        width = size.width.roundToInt(),
+                                        canvas = canvas.nativeCanvas,
+                                        today = today,
+                                        baseDate = mainCalendar.getMonthStartFromMonthsDistance(
+                                            today, offset
+                                        ),
+                                        deviceEvents = yearDeviceEvents,
+                                        isRtl = isRtl,
+                                        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                    )
+                                }
                             }
                         }
                     }
