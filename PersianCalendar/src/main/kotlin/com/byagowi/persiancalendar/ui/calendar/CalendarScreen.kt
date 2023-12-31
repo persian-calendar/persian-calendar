@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -234,7 +235,7 @@ fun CalendarScreen(
             val maxHeight = maxHeight
             val maxWidth = maxWidth
             if (isYearView) {
-                YearView(viewModel, maxWidth, maxHeight - bottomPadding)
+                YearViewPager(viewModel, maxWidth, maxHeight - bottomPadding)
             } else if (isLandscape) Row {
                 val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                 val height = 400.dp.coerceAtMost(maxHeight)
@@ -296,18 +297,29 @@ fun CalendarScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) {
+private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) {
+    val today by viewModel.today.collectAsState()
+    val todayDate = today.toCalendar(mainCalendar)
+    val yearOffsetInMonths = run {
+        val selectedMonthOffset = viewModel.selectedMonthOffset.value
+        val selectedMonth =
+            mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
+        selectedMonth.year - todayDate.year
+    }
+    val halfPages = 100
+    val state = rememberPagerState(halfPages + yearOffsetInMonths, pageCount = { halfPages * 2 })
+    viewModel.changeYearViewSubtitle(todayDate.year + state.currentPage - 100)
+    VerticalPager(state) { YearView(viewModel, maxWidth, maxHeight, it - halfPages) }
+}
+
+@Composable
+private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, yearOffset: Int) {
     Column(verticalArrangement = Arrangement.SpaceAround, modifier = Modifier.height(maxHeight)) {
         val today by viewModel.today.collectAsState()
-        val date = today.toCalendar(mainCalendar)
+        val todayDate = today.toCalendar(mainCalendar)
         val monthNames = mainCalendar.monthsNames
-        val yearOffsetInMonths = run {
-            val selectedMonthOffset = viewModel.selectedMonthOffset.value
-            val selectedMonth =
-                mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-            (selectedMonth.year - date.year) * 12
-        }
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
@@ -329,13 +341,18 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
             Row {
                 repeat(if (isLandscape) 4 else 3) { column ->
                     val month = 1 + column + row * if (isLandscape) 4 else 3
-                    val offset = yearOffsetInMonths + month - date.month
+                    val offset = yearOffset * 12 + month - todayDate.month
                     Column(
                         Modifier
                             .size(width, height - padding * 2)
                             .padding(start = padding, end = padding)
                             .clip(MaterialTheme.shapes.large)
-                            .clickable {
+                            .clickable(
+                                onClickLabel = language.value.my.format(
+                                    monthNames[month - 1],
+                                    formatNumber(yearOffset + todayDate.year)
+                                ),
+                            ) {
                                 viewModel.closeYearView()
                                 viewModel.changeSelectedMonthOffsetCommand(offset)
                             }
@@ -639,7 +656,8 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             val subtitle: String
             if (isYearView) {
                 title = stringResource(R.string.year_view)
-                subtitle = formatNumber(selectedMonth.year)
+                val yearViewSubtitle by viewModel.yearViewSubtitle.collectAsState()
+                subtitle = formatNumber(yearViewSubtitle)
             } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
@@ -784,7 +802,7 @@ private fun Menu(viewModel: CalendarViewModel) {
             },
         )
 
-        if (!isTalkBackEnabled) AppDropdownMenuItem(
+        AppDropdownMenuItem(
             text = { Text(stringResource(R.string.year_view)) },
             onClick = {
                 closeMenu()

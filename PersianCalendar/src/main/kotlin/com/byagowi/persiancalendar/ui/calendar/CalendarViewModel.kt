@@ -73,6 +73,9 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _isYearView = MutableStateFlow(false)
     val isYearView: StateFlow<Boolean> = _isYearView
 
+    private val _yearViewSubtitle = MutableStateFlow(0)
+    val yearViewSubtitle: StateFlow<Int> = _yearViewSubtitle
+
     // Commands
     fun changeSelectedMonthOffset(offset: Int) {
         _selectedMonthOffset.value = offset
@@ -141,6 +144,9 @@ class CalendarViewModel @JvmOverloads constructor(
         repository = SearchEventsRepository(getApplication())
     }
 
+    fun changeYearViewSubtitle(year: Int) {
+        _yearViewSubtitle.value = year
+    }
 
     init {
         viewModelScope.launch {
