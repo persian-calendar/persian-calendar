@@ -19,7 +19,6 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import kotlin.math.min
@@ -194,7 +193,7 @@ private class Paints(
 
     private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
     private val textSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
-    val dayOffset = if (mainCalendarDigitsIsArabic) 0f else resources.sp(3f)
+    val dayOffset = if (mainCalendarDigitsIsArabic) 0f else diameter
 
     private val secondaryCalendarDigitsIsArabic = secondaryCalendarDigits === Language.ARABIC_DIGITS
     private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)
