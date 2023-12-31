@@ -44,8 +44,10 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
 
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
     selectedMonthOffsetCommand?.let {
-        viewModel.changeSelectedMonthOffsetCommand(null)
-        scope.launch { pagerState.animateScrollToPage(applyOffset(-it)) }
+        scope.launch {
+            pagerState.animateScrollToPage(applyOffset(-it))
+            viewModel.changeSelectedMonthOffsetCommand(null)
+        }
     }
 
     HorizontalPager(state = pagerState) { index ->
