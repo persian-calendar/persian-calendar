@@ -98,6 +98,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -333,7 +334,7 @@ private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight:
     val width = maxWidth / if (isLandscape) 4 else 3
     val height = maxHeight / if (isLandscape) 3 else 4
 
-    val titleHeight = height / 10
+    val titleHeight = (height / 10).coerceAtLeast(20.dp)
     val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
     val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
     val padding = 4.dp
