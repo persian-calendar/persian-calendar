@@ -116,7 +116,7 @@ fun renderMonthWidget(
             it.color = colors.contentColor
             it.alpha = 90
         }
-        it.drawText(footer, width / 2f, height * .95f, footerPaint)
+        if (drawFooter) it.drawText(footer, width / 2f, height * .95f, footerPaint)
     }
 
     return footer
