@@ -437,7 +437,7 @@ private fun YearViewPager(
                         }
                     }
                 }
-                Spacer(Modifier.height(bottomPadding))
+                Spacer(Modifier.height(bottomPadding.coerceAtLeast(24.dp)))
                 if (yearOffset != halfPages - 1) Text(
                     formatNumber(yearOffset + todayDate.year + 1),
                     style = MaterialTheme.typography.headlineMedium,
