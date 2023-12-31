@@ -73,9 +73,6 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _isYearView = MutableStateFlow(false)
     val isYearView: StateFlow<Boolean> = _isYearView
 
-    private val _yearViewSubtitle = MutableStateFlow(0)
-    val yearViewSubtitle: StateFlow<Int> = _yearViewSubtitle
-
     private val _yearViewCommand = MutableStateFlow<Int?>(null)
     val yearViewCommand: StateFlow<Int?> = _yearViewCommand
 
@@ -145,10 +142,6 @@ class CalendarViewModel @JvmOverloads constructor(
     // or user has added an appointment on their calendar outside the app.
     fun initializeEventsRepository() {
         repository = SearchEventsRepository(getApplication())
-    }
-
-    fun changeYearViewSubtitle(year: Int) {
-        _yearViewSubtitle.value = year
     }
 
     fun jumpYearView(command: Int?) {

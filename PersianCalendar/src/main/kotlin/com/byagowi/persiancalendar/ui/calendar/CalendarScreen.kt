@@ -17,7 +17,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Canvas
@@ -25,7 +24,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -40,8 +38,9 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -80,6 +79,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -92,7 +92,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.lerp
+import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -247,7 +248,7 @@ fun CalendarScreen(
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(isYearView) {
-                    YearViewPager(viewModel, maxWidth, maxHeight - bottomPadding)
+                    YearViewPager(viewModel, maxWidth, maxHeight, bottomPadding)
                 }
                 AnimatedVisibility(
                     !isYearView,
@@ -316,9 +317,10 @@ fun CalendarScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) {
+private fun YearViewPager(
+    viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp
+) {
     val today by viewModel.today.collectAsState()
     val todayDate = today.toCalendar(mainCalendar)
     val yearOffsetInMonths = run {
@@ -332,7 +334,7 @@ private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight:
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val width = maxWidth / if (isLandscape) 4 else 3
-    val height = maxHeight / if (isLandscape) 3 else 4
+    val height = (maxHeight - bottomPadding) / if (isLandscape) 3 else 4
 
     val titleHeight = (height / 10).coerceAtLeast(20.dp)
     val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
@@ -362,71 +364,79 @@ private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight:
     }
 
     val halfPages = 100
-    val state = rememberPagerState(halfPages + yearOffsetInMonths, pageCount = { halfPages * 2 })
-    viewModel.changeYearViewSubtitle(todayDate.year + state.currentPage - halfPages)
+    val state = rememberLazyListState(halfPages + yearOffsetInMonths)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
-        scope.launch { state.animateScrollToPage(state.currentPage + command) }
+        scope.launch { state.animateScrollToItem(state.firstVisibleItemIndex + command) }
         viewModel.jumpYearView(null)
     }
-    VerticalPager(state) {
-        val yearOffset = it - halfPages
-        Column(
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier.height(maxHeight),
-        ) {
-            repeat(if (isLandscape) 3 else 4) { row ->
-                Row {
-                    repeat(if (isLandscape) 4 else 3) { column ->
-                        val month = 1 + column + row * if (isLandscape) 4 else 3
-                        val offset = yearOffset * 12 + month - todayDate.month
-                        Column(
-                            Modifier
-                                .size(width, height - padding * 2)
-                                .padding(horizontal = padding)
-                                .clip(MaterialTheme.shapes.large)
-                                .clickable(
-                                    onClickLabel = language.value.my.format(
-                                        monthNames[month - 1],
-                                        formatNumber(yearOffset + todayDate.year)
-                                    ),
-                                ) {
-                                    viewModel.closeYearView()
-                                    viewModel.changeSelectedMonthOffsetCommand(offset)
-                                }
-                                .background(LocalContentColor.current.copy(alpha = .1f)),
-                        ) {
-                            Text(
+    LazyColumn(state = state) {
+        items(halfPages * 2) {
+            val yearOffset = it - halfPages
+            Column {
+                repeat(if (isLandscape) 3 else 4) { row ->
+                    Row(Modifier.padding(vertical = padding)) {
+                        repeat(if (isLandscape) 4 else 3) { column ->
+                            val month = 1 + column + row * if (isLandscape) 4 else 3
+                            val offset = yearOffset * 12 + month - todayDate.month
+                            val title = language.value.my.format(
                                 monthNames[month - 1],
-                                Modifier.size(width - padding * 2, titleHeight),
-                                fontSize = titleHeightSp,
-                                textAlign = TextAlign.Center
+                                formatNumber(yearOffset + todayDate.year),
                             )
-                            Canvas(
-                                Modifier.size(
-                                    width - padding * 2,
-                                    height - titleHeight - padding * 2,
-                                )
+                            Column(
+                                Modifier
+                                    .size(width, height - padding * 2)
+                                    .padding(horizontal = padding)
+                                    .clip(MaterialTheme.shapes.large)
+                                    .clickable(onClickLabel = title) {
+                                        viewModel.closeYearView()
+                                        viewModel.changeSelectedMonthOffsetCommand(offset)
+                                    }
+                                    .background(LocalContentColor.current.copy(alpha = .1f)),
                             ) {
-                                drawIntoCanvas { canvas ->
-                                    renderMonthWidget(
-                                        dayPainter = dayPainter,
-                                        width = size.width.roundToInt(),
-                                        canvas = canvas.nativeCanvas,
-                                        today = today,
-                                        baseDate = mainCalendar.getMonthStartFromMonthsDistance(
-                                            today, offset
-                                        ),
-                                        deviceEvents = yearDeviceEvents,
-                                        isRtl = isRtl,
-                                        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                Text(
+                                    title,
+                                    Modifier.size(width - padding * 2, titleHeight),
+                                    fontSize = titleHeightSp,
+                                    textAlign = TextAlign.Center
+                                )
+                                Canvas(
+                                    Modifier.size(
+                                        width - padding * 2,
+                                        height - titleHeight - padding * 2,
                                     )
+                                ) {
+                                    drawIntoCanvas { canvas ->
+                                        renderMonthWidget(
+                                            dayPainter = dayPainter,
+                                            width = size.width.roundToInt(),
+                                            canvas = canvas.nativeCanvas,
+                                            today = today,
+                                            baseDate = mainCalendar.getMonthStartFromMonthsDistance(
+                                                today, offset
+                                            ),
+                                            deviceEvents = yearDeviceEvents,
+                                            isRtl = isRtl,
+                                            isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                        )
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                Spacer(Modifier.height(bottomPadding))
+                if (yearOffset != halfPages - 1) Text(
+                    formatNumber(yearOffset + todayDate.year + 1),
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .semantics {
+                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                        },
+                )
             }
         }
     }
@@ -702,8 +712,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
             val subtitle: String
             if (isYearView) {
                 title = stringResource(R.string.year_view)
-                val yearViewSubtitle by viewModel.yearViewSubtitle.collectAsState()
-                subtitle = formatNumber(yearViewSubtitle)
+                subtitle = ""
             } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
@@ -725,38 +734,26 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                     label = "title",
                     transitionSpec = appFadeTransitionSpec,
                 ) { state ->
-                    val fraction by animateFloatAsState(
-                        targetValue = if (isYearView) 1f else 0f, label = "font size"
-                    )
                     Text(
                         state,
-                        style = lerp(
-                            MaterialTheme.typography.titleLarge,
-                            MaterialTheme.typography.titleMedium,
-                            fraction,
-                        ),
+                        style = MaterialTheme.typography.titleLarge,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                AnimatedContent(
-                    subtitle,
-                    label = "subtitle",
-                    transitionSpec = appFadeTransitionSpec,
-                ) { state ->
-                    val fraction by animateFloatAsState(
-                        targetValue = if (isYearView) 1f else 0f, label = "font size"
-                    )
-                    Text(
-                        state,
-                        style = lerp(
-                            MaterialTheme.typography.titleMedium,
-                            MaterialTheme.typography.titleLarge,
-                            fraction,
-                        ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                AnimatedVisibility(visible = !isYearView) {
+                    AnimatedContent(
+                        subtitle,
+                        label = "subtitle",
+                        transitionSpec = appFadeTransitionSpec,
+                    ) { state ->
+                        Text(
+                            state,
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
                 }
             }
         },
