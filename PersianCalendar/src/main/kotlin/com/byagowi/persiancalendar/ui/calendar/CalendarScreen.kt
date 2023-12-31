@@ -18,6 +18,8 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -239,7 +241,10 @@ fun CalendarScreen(
                 AnimatedVisibility(isYearView) {
                     YearViewPager(viewModel, maxWidth, maxHeight - bottomPadding)
                 }
-                AnimatedVisibility(!isYearView) {
+                AnimatedVisibility(
+                    !isYearView,
+                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
+                ) {
                     if (isLandscape) Row {
                         val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                         val height = 400.dp.coerceAtMost(maxHeight)
