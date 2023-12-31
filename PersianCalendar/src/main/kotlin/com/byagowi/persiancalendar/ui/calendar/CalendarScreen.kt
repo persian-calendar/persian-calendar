@@ -48,6 +48,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
@@ -313,6 +315,12 @@ private fun YearViewPager(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight:
     val halfPages = 100
     val state = rememberPagerState(halfPages + yearOffsetInMonths, pageCount = { halfPages * 2 })
     viewModel.changeYearViewSubtitle(todayDate.year + state.currentPage - 100)
+    val yearViewCommand by viewModel.yearViewCommand.collectAsState()
+    val scope = rememberCoroutineScope()
+    yearViewCommand?.let { command ->
+        scope.launch { state.animateScrollToPage(state.currentPage + command) }
+        viewModel.jumpYearView(null)
+    }
     VerticalPager(state) { YearView(viewModel, maxWidth, maxHeight, it - halfPages) }
 }
 
@@ -710,6 +718,18 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
         colors = AppTopAppBarColors(),
         navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
         actions = {
+            AnimatedVisibility(isYearView) {
+                AppIconButton(
+                    icon = Icons.Default.KeyboardArrowDown,
+                    title = stringResource(R.string.next_x, stringResource(R.string.year)),
+                ) { viewModel.jumpYearView(+1) }
+            }
+            AnimatedVisibility(isYearView) {
+                AppIconButton(
+                    icon = Icons.Default.KeyboardArrowUp,
+                    title = stringResource(R.string.previous_x, stringResource(R.string.year)),
+                ) { viewModel.jumpYearView(-1) }
+            }
             AnimatedVisibility(isYearView) {
                 AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
                     viewModel.closeYearView()
