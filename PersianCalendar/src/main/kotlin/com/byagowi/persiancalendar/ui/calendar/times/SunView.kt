@@ -204,7 +204,7 @@ class SunView(context: Context) : View(context) {
         )
     }
 
-    private val solarDraw = SolarDraw(context.resources)
+    private val solarDraw = SolarDraw(resources)
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f

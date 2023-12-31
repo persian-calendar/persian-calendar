@@ -37,7 +37,6 @@ import kotlin.math.roundToLong
 import kotlin.math.sign
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
-
     private var state = AstronomyState(GregorianCalendar())
 
     var mode: AstronomyMode = AstronomyMode.entries[0]
@@ -306,5 +305,5 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.color = 0x40808080
     }
 
-    private val solarDraw = SolarDraw(context.resources)
+    private val solarDraw = SolarDraw(resources)
 }

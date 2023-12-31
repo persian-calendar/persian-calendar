@@ -83,7 +83,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.style = Paint.Style.FILL_AND_STROKE
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
-    private val kaaba = context.resources.getDrawable(R.drawable.kaaba, null)
+    private val kaaba = resources.getDrawable(R.drawable.kaaba, null)
         .toBitmap((32 * dp).toInt(), (32 * dp).toInt())
 
     private var cx = 0f
@@ -220,7 +220,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         }
     }
 
-    private val solarDraw = SolarDraw(context.resources)
+    private val solarDraw = SolarDraw(resources)
 
     private val shadeFactor = 1.5f
 
