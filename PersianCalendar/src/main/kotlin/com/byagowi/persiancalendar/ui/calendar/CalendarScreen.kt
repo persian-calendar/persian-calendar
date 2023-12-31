@@ -21,6 +21,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -79,6 +80,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -117,7 +120,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
@@ -135,6 +138,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -310,9 +314,16 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
         val height = maxHeight / if (isLandscape) 3 else 4
 
         val titleHeight = height / 10
+        val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
         val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
         val padding = 4.dp
 
+        val widthInPx = with(LocalDensity.current) { width.roundToPx() }
+        val heightInPx = with(LocalDensity.current) { height.roundToPx() }
+        val paddingInPx = with(LocalDensity.current) { padding.roundToPx() }
+
+        val context = LocalContext.current
+        val dayPainterColors = AppDayPainterColors()
         repeat(if (isLandscape) 3 else 4) { row ->
             Row {
                 repeat(if (isLandscape) 4 else 3) { column ->
@@ -335,13 +346,21 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp) 
                             fontSize = titleHeightSp,
                             textAlign = TextAlign.Center
                         )
-                        Month(
-                            viewModel = viewModel,
-                            offset = offset,
-                            isCurrentSelection = false,
-                            width = width - padding * 2,
-                            height = height - titleHeight - padding * 2,
-                        )
+                        Canvas(
+                            Modifier.size(width - padding * 2, height - titleHeight - padding * 2)
+                        ) {
+                            drawIntoCanvas {
+                                renderMonthWidget(
+                                    context = context,
+                                    colors = dayPainterColors,
+                                    width = widthInPx - paddingInPx * 2,
+                                    height = heightInPx - paddingInPx * 2 - titleHeightPx,
+                                    canvas = it.nativeCanvas,
+                                    offset = offset,
+                                    drawFooter = false
+                                )
+                            }
+                        }
                     }
                 }
             }

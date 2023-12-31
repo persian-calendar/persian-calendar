@@ -419,7 +419,9 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         colorCurrentDay = contentColor,
         colorTextDaySelected = contentColor,
     )
-    val (bitmap, contentDescription) = renderMonthWidget(context, colors, width, height)
+    val bitmap = createBitmap(width, height)
+    val canvas = Canvas(bitmap)
+    val contentDescription = renderMonthWidget(context, colors, width, height, canvas, 0, true)
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)
 

@@ -156,7 +156,6 @@ fun Month(
         fontSize = with(LocalDensity.current) { daysTextSize.toSp() },
     )
     val contentColor = LocalContentColor.current
-    val isYearView by viewModel.isYearView.collectAsState()
 
     Column(
         Modifier.drawWithCache {
@@ -221,28 +220,29 @@ fun Month(
                     val day = monthStartJdn + dayOffset
                     if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier.width(cellSize.width))
                     val isToday = day == today
-                    val clickableModifier = if (isYearView) {
-                        Modifier
-                    } else Modifier.combinedClickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = { viewModel.changeSelectedDay(day) },
-                        onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
-                            context.resources,
-                            day,
-                            isToday,
-                            EventsStore.empty(),
-                            withZodiac = isToday,
-                            withOtherCalendars = false,
-                            withTitle = true
-                        ) else (dayOffset + 1).toString(),
-                        onLongClickLabel = stringResource(R.string.add_event),
-                        onLongClick = {
-                            viewModel.changeSelectedDay(day)
-                            addEvent()
-                        },
-                    )
-                    Canvas(modifier = Modifier.size(cellSize) then clickableModifier) {
+                    Canvas(
+                        modifier = Modifier
+                            .size(cellSize)
+                            .combinedClickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                                onClick = { viewModel.changeSelectedDay(day) },
+                                onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
+                                    context.resources,
+                                    day,
+                                    isToday,
+                                    EventsStore.empty(),
+                                    withZodiac = isToday,
+                                    withOtherCalendars = false,
+                                    withTitle = true
+                                ) else (dayOffset + 1).toString(),
+                                onLongClickLabel = stringResource(R.string.add_event),
+                                onLongClick = {
+                                    viewModel.changeSelectedDay(day)
+                                    addEvent()
+                                },
+                            ),
+                    ) {
                         val events =
                             eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                         val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }

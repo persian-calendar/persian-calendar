@@ -1,11 +1,9 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.View
-import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withTranslation
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -30,20 +28,22 @@ fun renderMonthWidget(
     context: Context,
     colors: DayPainterColors,
     width: Int,
-    height: Int
-): Pair<Bitmap, String> {
+    height: Int,
+    canvas: Canvas,
+    offset: Int,
+    drawFooter: Boolean,
+): String {
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
     val rowsCount = 7
     val cellHeight = height.toFloat() / rowsCount
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val cellWidth = width.toFloat() / columnsCount
     val diameter = min(cellWidth, cellHeight)
-    val todayJdn = Jdn.today()
-    val today = todayJdn.toCalendar(mainCalendar)
-    val baseDate = mainCalendar.createDate(today.year, today.month, 1)
+    val today = Jdn.today()
+    val baseDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(baseDate)
     val startingDayOfWeek = monthStartJdn.dayOfWeek
-    val monthLength = mainCalendar.getMonthLength(today.year, today.month)
+    val monthLength = mainCalendar.getMonthLength(baseDate.year, baseDate.month)
 
     val isRtl =
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -54,8 +54,8 @@ fun renderMonthWidget(
         else EventsStore.empty()
 
     val footer = language.value.my.format(baseDate.monthName, formatNumber(baseDate.year))
-    val bitmap = createBitmap(width, height)
-    Canvas(bitmap).also {
+
+    canvas.also {
         (0..<7).forEach { column ->
             val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
             it.withTranslation(
@@ -77,7 +77,7 @@ fun renderMonthWidget(
                 if (dayOffset !in monthRange) return@cell
                 val day = monthStartJdn + dayOffset
                 val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
-                val isToday = day == todayJdn
+                val isToday = day == today
 
                 dayPainter.setDayOfMonthItem(
                     isToday, false,
@@ -97,7 +97,7 @@ fun renderMonthWidget(
             }
         }
         if (isShowWeekOfYearEnabled) {
-            val startOfYearJdn = Jdn(mainCalendar, today.year, 1, 1)
+            val startOfYearJdn = Jdn(mainCalendar, baseDate.year, 1, 1)
             val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
             val weeksCount = (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
                     weekOfYearStart + 1
@@ -118,6 +118,7 @@ fun renderMonthWidget(
         }
         it.drawText(footer, width / 2f, height * .95f, footerPaint)
     }
-    return bitmap to footer
+
+    return footer
 }
 
