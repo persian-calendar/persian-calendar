@@ -190,6 +190,9 @@ fun CalendarScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val isYearView by viewModel.isYearView.collectAsState()
+    BackHandler(enabled = isYearView) { viewModel.closeYearView() }
+
     Scaffold(
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -211,7 +214,7 @@ fun CalendarScreen(
             val addEvent = AddEvent(viewModel)
             ShrinkingFloatingActionButton(
                 modifier = Modifier.padding(end = 8.dp),
-                isVisible = selectedTabIndex == EVENTS_TAB,
+                isVisible = selectedTabIndex == EVENTS_TAB && !isYearView,
                 action = addEvent,
                 icon = Icons.Default.Add,
                 title = stringResource(R.string.add_event),
@@ -230,8 +233,6 @@ fun CalendarScreen(
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val maxHeight = maxHeight
             val maxWidth = maxWidth
-            val isYearView by viewModel.isYearView.collectAsState()
-            BackHandler(enabled = isYearView) { viewModel.closeYearView() }
             if (isYearView) {
                 YearView(viewModel, maxWidth, maxHeight - bottomPadding)
             } else if (isLandscape) Row {
