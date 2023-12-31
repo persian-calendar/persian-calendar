@@ -118,6 +118,7 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -163,6 +164,7 @@ import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.update
@@ -353,6 +355,13 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, 
         val paddingInPx = with(LocalDensity.current) { padding.roundToPx() }
 
         val context = LocalContext.current
+        val yearStartDate = mainCalendar.getMonthStartFromMonthsDistance(
+            today, yearOffset * 12 - todayDate.month + 1
+        )
+        val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+            if (isShowDeviceCalendarEvents) context.readYearDeviceEvents(Jdn(yearStartDate))
+            else EventsStore.empty()
+
         val dayPainterColors = AppDayPainterColors()
         repeat(if (isLandscape) 3 else 4) { row ->
             Row {
@@ -390,8 +399,12 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, 
                                     width = widthInPx - paddingInPx * 2,
                                     height = heightInPx - paddingInPx * 2 - titleHeightPx,
                                     canvas = it.nativeCanvas,
-                                    offset = offset,
-                                    drawFooter = false
+                                    today = today,
+                                    baseDate = mainCalendar.getMonthStartFromMonthsDistance(
+                                        today, offset
+                                    ),
+                                    deviceEvents = yearDeviceEvents,
+                                    drawFooter = false,
                                 )
                             }
                         }

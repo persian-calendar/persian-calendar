@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
@@ -421,7 +422,22 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     )
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
-    val contentDescription = renderMonthWidget(context, colors, width, height, canvas, 0, true)
+    val today = Jdn.today()
+    val baseDate = mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
+    val monthDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+        if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
+        else EventsStore.empty()
+    val contentDescription = renderMonthWidget(
+        context = context,
+        colors = colors,
+        width = width,
+        height = height,
+        canvas = canvas,
+        baseDate = baseDate,
+        today = today,
+        deviceEvents = monthDeviceEvents,
+        drawFooter = true,
+    )
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)
 

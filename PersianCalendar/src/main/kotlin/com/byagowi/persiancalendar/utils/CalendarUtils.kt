@@ -214,6 +214,15 @@ fun Context.readMonthDeviceEvents(jdn: Jdn) =
         )
     )
 
+fun Context.readYearDeviceEvents(jdn: Jdn) =
+    DeviceCalendarEventsStore(
+        readDeviceEvents(
+            this,
+            jdn.toGregorianCalendar(),
+            366 * DAY_IN_MILLIS
+        )
+    )
+
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
     this, GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
