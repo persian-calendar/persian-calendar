@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.math.min
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -153,6 +154,11 @@ fun Month(
         fontSize = with(LocalDensity.current) { daysTextSize.toSp() },
     )
     val contentColor = LocalContentColor.current
+
+    // Slight fix for the particular font we use for native digits in Persian and so
+    val dayOffsetY = if (mainCalendarDigits === Language.ARABIC_DIGITS) 0f else min(
+        cellPixelsWidth, cellPixelsHeight
+    ) * 2 / 40
 
     Column(
         Modifier.drawWithCache {
@@ -276,7 +282,7 @@ fun Month(
                                 },
                                 topLeft = Offset(
                                     x = center.x - textLayoutResult.size.width / 2,
-                                    y = center.y - textLayoutResult.size.height / 2,
+                                    y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
                                 ),
                             )
                             dayPainter.drawDay(it.nativeCanvas)

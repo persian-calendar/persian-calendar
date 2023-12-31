@@ -87,7 +87,7 @@ class DayPainter(
         textPaint.getTextBounds(sample, 0, sample.length, textBounds)
         val yPos = (height + textBounds.height()) / 2f
         // Draw day number/label
-        canvas.drawText(text, width / 2f, yPos + paints.dayOffset, textPaint)
+        canvas.drawText(text, width / 2f, yPos + paints.dayOffsetY, textPaint)
     }
 
     private fun drawIndicators(canvas: Canvas) {
@@ -193,7 +193,7 @@ private class Paints(
 
     private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
     private val textSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
-    val dayOffset = if (mainCalendarDigitsIsArabic) 0f else diameter
+    val dayOffsetY = if (mainCalendarDigitsIsArabic) 0f else diameter * 3 / 40
 
     private val secondaryCalendarDigitsIsArabic = secondaryCalendarDigits === Language.ARABIC_DIGITS
     private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)
