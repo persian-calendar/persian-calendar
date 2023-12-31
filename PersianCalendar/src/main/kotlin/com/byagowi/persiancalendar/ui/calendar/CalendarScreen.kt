@@ -90,12 +90,14 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -119,6 +121,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -126,6 +129,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
@@ -187,6 +191,7 @@ import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
+import kotlin.math.roundToInt
 
 @Composable
 fun CalendarScreen(
@@ -350,19 +355,28 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, 
         val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
         val padding = 4.dp
 
-        val widthInPx = with(LocalDensity.current) { width.roundToPx() }
-        val heightInPx = with(LocalDensity.current) { height.roundToPx() }
-        val paddingInPx = with(LocalDensity.current) { padding.roundToPx() }
+        val widthInPx = with(LocalDensity.current) { width.toPx() }
+        val heightInPx = with(LocalDensity.current) { height.toPx() }
+        val paddingInPx = with(LocalDensity.current) { padding.toPx() }
 
         val context = LocalContext.current
-        val yearStartDate = mainCalendar.getMonthStartFromMonthsDistance(
-            today, yearOffset * 12 - todayDate.month + 1
-        )
+        val yearStartJdn = Jdn(mainCalendar.createDate(today.toCalendar(mainCalendar).year, 1, 1))
         val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-            if (isShowDeviceCalendarEvents) context.readYearDeviceEvents(Jdn(yearStartDate))
+            if (isShowDeviceCalendarEvents) context.readYearDeviceEvents(yearStartJdn)
             else EventsStore.empty()
+        val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
         val dayPainterColors = AppDayPainterColors()
+        val dayPainter = remember(dayPainterColors) {
+            DayPainter(
+                context.resources,
+                (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
+                (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
+                isRtl,
+                dayPainterColors,
+            )
+        }
+
         repeat(if (isLandscape) 3 else 4) { row ->
             Row {
                 repeat(if (isLandscape) 4 else 3) { column ->
@@ -394,17 +408,16 @@ private fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, 
                         ) {
                             drawIntoCanvas {
                                 renderMonthWidget(
-                                    context = context,
-                                    colors = dayPainterColors,
-                                    width = widthInPx - paddingInPx * 2,
-                                    height = heightInPx - paddingInPx * 2 - titleHeightPx,
+                                    dayPainter = dayPainter,
+                                    width = (widthInPx - paddingInPx * 2).roundToInt(),
                                     canvas = it.nativeCanvas,
                                     today = today,
                                     baseDate = mainCalendar.getMonthStartFromMonthsDistance(
                                         today, offset
                                     ),
                                     deviceEvents = yearDeviceEvents,
-                                    drawFooter = false,
+                                    isRtl = isRtl,
+                                    isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                                 )
                             }
                         }

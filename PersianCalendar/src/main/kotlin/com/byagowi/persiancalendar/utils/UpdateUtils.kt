@@ -35,6 +35,7 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.withClip
+import androidx.core.text.layoutDirection
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
@@ -77,6 +78,7 @@ import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
@@ -86,6 +88,7 @@ import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
@@ -427,17 +430,34 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val monthDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
         else EventsStore.empty()
+    val isRtl =
+        language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     val contentDescription = renderMonthWidget(
-        context = context,
-        colors = colors,
+        dayPainter = DayPainter(
+            context.resources,
+            width.toFloat() / if (isShowWeekOfYearEnabled) 8 else 7,
+            height.toFloat() / 7/* row count*/,
+            isRtl,
+            colors,
+            true
+        ),
         width = width,
-        height = height,
         canvas = canvas,
         baseDate = baseDate,
         today = today,
         deviceEvents = monthDeviceEvents,
-        drawFooter = true,
+        isRtl = isRtl,
+        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
     )
+    canvas.also {
+        val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.textAlign = Paint.Align.CENTER
+            it.textSize = min(width, height) / 7f * 20 / 40
+            it.color = colors.contentColor
+            it.alpha = 90
+        }
+        it.drawText(contentDescription, width / 2f, height * .95f, footerPaint)
+    }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)
 

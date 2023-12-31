@@ -38,8 +38,8 @@ data class DayPainterColors(
 
 class DayPainter(
     resources: Resources,
-    private val width: Float,
-    private val height: Float,
+    val width: Float,
+    val height: Float,
     private val isRtl: Boolean,
     colors: DayPainterColors,
     isWidget: Boolean = false,
