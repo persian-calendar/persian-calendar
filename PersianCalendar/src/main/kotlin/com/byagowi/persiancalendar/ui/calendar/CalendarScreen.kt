@@ -368,8 +368,10 @@ private fun YearViewPager(
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
-        scope.launch { state.animateScrollToItem(state.firstVisibleItemIndex + command) }
-        viewModel.jumpYearView(null)
+        scope.launch {
+            state.animateScrollToItem(state.firstVisibleItemIndex + command)
+            viewModel.jumpYearView(null)
+        }
     }
     LazyColumn(state = state) {
         items(halfPages * 2) {
