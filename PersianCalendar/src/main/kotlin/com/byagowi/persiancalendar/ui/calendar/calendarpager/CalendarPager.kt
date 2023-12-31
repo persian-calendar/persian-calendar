@@ -85,7 +85,7 @@ fun CalendarPager(viewModel: CalendarViewModel, width: Dp, height: Dp) {
             }
             val isCurrentSelection = pagerState.currentPage == index
             if (pagerState.currentPage == index)
-                viewModel.changeSelectedMonthOffset(-applyOffset(index))
+                viewModel.notifySelectedMonthOffset(-applyOffset(index))
             val currentMonthOffset = -applyOffset(index)
             Box(modifier = Modifier.padding(start = iconSize, end = iconSize)) {
                 Month(

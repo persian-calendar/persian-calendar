@@ -77,12 +77,16 @@ class CalendarViewModel @JvmOverloads constructor(
     val yearViewCommand: StateFlow<Int?> = _yearViewCommand
 
     // Commands
-    fun changeSelectedMonthOffset(offset: Int) {
-        _selectedMonthOffset.value = offset
-    }
-
     fun changeSelectedMonthOffsetCommand(offset: Int?) {
         _selectedMonthOffsetCommand.value = offset
+    }
+
+    /**
+     * This is just to notify readers of selectedMonthOffset,
+     * use [changeSelectedMonthOffsetCommand] for actually altering viewpager's state
+     */
+    fun notifySelectedMonthOffset(offset: Int) {
+        _selectedMonthOffset.value = offset
     }
 
     fun changeSelectedDay(jdn: Jdn) {
