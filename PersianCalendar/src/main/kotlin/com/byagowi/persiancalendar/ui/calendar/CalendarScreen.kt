@@ -23,7 +23,10 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -345,8 +348,13 @@ private fun YearViewPager(
     val monthNames = mainCalendar.monthsNames
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    val width = maxWidth / if (isLandscape) 4 else 3
-    val height = (maxHeight - bottomPadding) / if (isLandscape) 3 else 4
+    var scale by remember { mutableStateOf(1f) }
+    val transformState = rememberTransformableState { zoomChange, _, _ ->
+        scale *= zoomChange
+    }
+
+    val width = (maxWidth / if (isLandscape) 4 else 3) * scale
+    val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale
 
     val titleHeight = (height / 10).coerceAtLeast(20.dp)
     val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
@@ -385,11 +393,15 @@ private fun YearViewPager(
             viewModel.jumpYearView(null)
         }
     }
-    LazyColumn(state = state) {
+
+    LazyColumn(state = state, modifier = Modifier.transformable(transformState)) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
             Column {
-                FlowRow {
+                FlowRow(
+                    horizontalArrangement = Arrangement.SpaceAround,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
                     repeat(if (isLandscape) 3 else 4) { row ->
                         repeat(if (isLandscape) 4 else 3) { column ->
                             val month = 1 + column + row * if (isLandscape) 4 else 3
