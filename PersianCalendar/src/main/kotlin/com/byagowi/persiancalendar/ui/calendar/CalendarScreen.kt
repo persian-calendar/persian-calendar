@@ -27,6 +27,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -326,6 +328,7 @@ fun CalendarScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun YearViewPager(
     viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp
@@ -386,8 +389,8 @@ private fun YearViewPager(
         items(halfPages * 2) {
             val yearOffset = it - halfPages
             Column {
-                repeat(if (isLandscape) 3 else 4) { row ->
-                    Row(Modifier.padding(vertical = padding)) {
+                FlowRow {
+                    repeat(if (isLandscape) 3 else 4) { row ->
                         repeat(if (isLandscape) 4 else 3) { column ->
                             val month = 1 + column + row * if (isLandscape) 4 else 3
                             val offset = yearOffset * 12 + month - todayDate.month
@@ -397,8 +400,8 @@ private fun YearViewPager(
                             )
                             Column(
                                 Modifier
-                                    .size(width, height - padding * 2)
-                                    .padding(horizontal = padding)
+                                    .size(width, height)
+                                    .padding(padding)
                                     .clip(MaterialTheme.shapes.large)
                                     .clickable(onClickLabel = title) {
                                         viewModel.closeYearView()
