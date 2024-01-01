@@ -499,7 +499,7 @@ fun ButtonsBar(
     discardAction: () -> Unit = {},
     acceptAction: () -> Unit,
 ) {
-    var shown by remember { mutableStateOf(true) }
+    var shown by rememberSaveable { mutableStateOf(true) }
     AnimatedVisibility(modifier = modifier, visible = shown) {
         Column(
             Modifier
@@ -606,7 +606,7 @@ fun Details(
 private fun CalendarsTab(viewModel: CalendarViewModel) {
     Column {
         val jdn by viewModel.selectedDay.collectAsState()
-        var isExpanded by remember { mutableStateOf(false) }
+        var isExpanded by rememberSaveable { mutableStateOf(false) }
         CalendarsOverview(jdn, mainCalendar, enabledCalendars, isExpanded) {
             isExpanded = !isExpanded
         }
@@ -825,7 +825,7 @@ private fun Menu(viewModel: CalendarViewModel) {
         ) { viewModel.refreshCalendar() }
     }
 
-    var showMonthOverview by remember { mutableStateOf(false) }
+    var showMonthOverview by rememberSaveable { mutableStateOf(false) }
     if (showMonthOverview) {
         val selectedMonthOffset = viewModel.selectedMonthOffset.value
         val selectedMonth =
@@ -892,7 +892,7 @@ private fun Menu(viewModel: CalendarViewModel) {
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
         if (isTalkBackEnabled && enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
 
-        var showSecondaryCalendarSubMenu by remember { mutableStateOf(false) }
+        var showSecondaryCalendarSubMenu by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuExpandableItem(
             text = stringResource(R.string.show_secondary_calendar),
             isExpanded = showSecondaryCalendarSubMenu,
@@ -1010,7 +1010,7 @@ fun AddEvent(viewModel: CalendarViewModel): () -> Unit {
 
     val context = LocalContext.current
 
-    var showDialog by remember { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(false) }
     if (showDialog) AskForCalendarPermissionDialog { isGranted ->
         viewModel.refreshCalendar()
         showDialog = false

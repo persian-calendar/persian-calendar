@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -285,7 +286,7 @@ fun IconsDemoDialog(onDismissRequest: () -> Unit) {
 @Composable
 fun ScheduleAlarm(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    var seconds by remember { mutableStateOf("5") }
+    var seconds by rememberSaveable { mutableStateOf("5") }
     AppDialog(title = { Text("Enter seconds to schedule alarm") }, confirmButton = {
         TextButton(onClick = onClick@{
             onDismissRequest()

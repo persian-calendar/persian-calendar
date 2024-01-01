@@ -124,7 +124,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
         onDismissRequest = { showCoordinatesDialog = false },
     )
 
-    var showMapTypesDialog by remember { mutableStateOf(false) }
+    var showMapTypesDialog by rememberSaveable { mutableStateOf(false) }
     if (showMapTypesDialog) AppDialog(onDismissRequest = { showMapTypesDialog = false }) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             MapType.entries.drop(1) // Hide "None" option

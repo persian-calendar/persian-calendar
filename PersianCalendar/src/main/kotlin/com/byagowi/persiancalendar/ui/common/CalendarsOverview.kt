@@ -34,6 +34,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -218,7 +219,7 @@ fun CalendarsOverview(
             )
         }
 
-        var firstShow by remember { mutableStateOf(true) }
+        var firstShow by rememberSaveable { mutableStateOf(true) }
         LaunchedEffect(Unit) { firstShow = false }
         val indicatorStrokeWidth by animateDpAsState(
             if (isExpanded && !firstShow) ProgressIndicatorDefaults.CircularStrokeWidth else 0.dp,

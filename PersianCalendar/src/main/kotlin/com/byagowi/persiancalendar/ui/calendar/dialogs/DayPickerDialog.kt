@@ -55,7 +55,7 @@ fun DayPickerDialog(
             }
         },
     ) {
-        var calendarType by remember { mutableStateOf(mainCalendar) }
+        var calendarType by rememberSaveable { mutableStateOf(mainCalendar) }
         CalendarsTypesPicker(current = calendarType) { calendarType = it }
 
         DayPicker(calendarType, jdn) { jdn = it }
