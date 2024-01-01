@@ -61,7 +61,6 @@
     <string name="midnight">نیمه‌شب</string>
     <string name="times">اوقات</string>
     <string name="events">تقریبات</string>
-    <string name="events_summary">چه نوع مناسبت‌هایی در تقویم نمایش داده شود</string>
     <string name="today">آج</string>
     <string name="return_to_today">بازگشت به امروز</string>
     <string name="select_type_date">انتخاب گونهٔ تاریخ</string>
