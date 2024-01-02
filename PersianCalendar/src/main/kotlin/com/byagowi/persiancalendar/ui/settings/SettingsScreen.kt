@@ -9,7 +9,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -79,7 +79,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettin
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -212,11 +211,9 @@ private data class TabItem(
 
     @Composable
     fun icon(isSelected: Boolean) {
-        AnimatedContent(
-            isSelected,
-            label = "icon",
-            transitionSpec = appFadeTransitionSpec,
-        ) { Icon(if (it) filledIcon else outlinedIcon, contentDescription = null) }
+        Crossfade(isSelected, label = "icon") {
+            Icon(if (it) filledIcon else outlinedIcon, contentDescription = null)
+        }
     }
 }
 

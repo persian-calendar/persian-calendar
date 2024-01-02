@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationResult
 import androidx.compose.animation.core.AnimationVector1D
@@ -63,7 +63,6 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -246,11 +245,7 @@ fun NumberPicker(
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
-                AnimatedContent(
-                    showTextEdit,
-                    label = "edit toggle",
-                    transitionSpec = appFadeTransitionSpec,
-                ) { state ->
+                Crossfade(showTextEdit, label = "edit toggle") { state ->
                     if (state) {
                         val focusRequester = remember { FocusRequester() }
                         var inputValue by remember {

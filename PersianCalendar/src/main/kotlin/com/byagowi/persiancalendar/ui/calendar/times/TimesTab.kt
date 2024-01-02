@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -49,7 +49,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -120,14 +119,13 @@ private fun AstronomicalOverview(
     val now by viewModel.now.collectAsState()
     LaunchedEffect(Unit) { viewModel.astronomicalOverviewLaunched() }
 
-    AnimatedContent(
+    Crossfade(
         jdn == today,
         label = "heading",
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
-        transitionSpec = appFadeTransitionSpec,
     ) { state ->
         val sunViewColors = AppSunViewColors()
         if (state) AndroidView(

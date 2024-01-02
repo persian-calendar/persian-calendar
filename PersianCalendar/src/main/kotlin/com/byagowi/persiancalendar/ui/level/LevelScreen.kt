@@ -3,8 +3,8 @@ package com.byagowi.persiancalendar.ui.level
 import android.content.pm.ActivityInfo
 import android.os.PowerManager
 import android.view.Surface
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -54,7 +54,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -152,11 +151,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
             )
         ) {
             Box {
-                AnimatedContent(
-                    targetState = cmInchFlip,
-                    label = "ruler",
-                    transitionSpec = appFadeTransitionSpec,
-                ) { state ->
+                Crossfade(targetState = cmInchFlip, label = "ruler") { state ->
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()

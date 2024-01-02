@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
@@ -222,11 +223,9 @@ fun CalendarScreen(
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
             BackHandler(enabled = searchBoxIsOpen) { viewModel.closeSearch() }
 
-            AnimatedContent(
-                searchBoxIsOpen,
-                label = "toolbar",
-                transitionSpec = appFadeTransitionSpec,
-            ) { if (it) Search(viewModel) else Toolbar(openDrawer, viewModel) }
+            Crossfade(searchBoxIsOpen, label = "toolbar") {
+                if (it) Search(viewModel) else Toolbar(openDrawer, viewModel)
+            }
         },
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
