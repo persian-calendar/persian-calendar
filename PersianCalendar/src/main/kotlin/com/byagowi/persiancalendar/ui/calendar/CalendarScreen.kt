@@ -93,6 +93,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -158,6 +159,7 @@ import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
+import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
@@ -254,7 +256,7 @@ fun CalendarScreen(
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(isYearView) {
-                    YearViewPager(viewModel, maxWidth, maxHeight, bottomPadding)
+                    YearView(viewModel, maxWidth, maxHeight, bottomPadding)
                 }
 
                 // To preserve pager's state even in year view where calendar isn't in the tree
@@ -332,7 +334,7 @@ fun CalendarScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun YearViewPager(
+private fun YearView(
     viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp
 ) {
     val today by viewModel.today.collectAsState()
@@ -371,8 +373,9 @@ private fun YearViewPager(
         else EventsStore.empty()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
+    val indicatorColor = AppDaySelectionColor()
     val dayPainterColors = AppDayPainterColors()
-    val dayPainter = remember(dayPainterColors, widthInPx, heightInPx) {
+    val dayPainter = remember(dayPainterColors, indicatorColor, widthInPx, heightInPx) {
         DayPainter(
             context.resources,
             (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
@@ -380,6 +383,7 @@ private fun YearViewPager(
             isRtl,
             dayPainterColors,
             isYearView = true,
+            selectedDayColor = indicatorColor.toArgb(),
         )
     }
 
@@ -447,6 +451,7 @@ private fun YearViewPager(
                                             deviceEvents = yearDeviceEvents,
                                             isRtl = isRtl,
                                             isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                            selectedDay = viewModel.selectedDay.value,
                                         )
                                     }
                                 }

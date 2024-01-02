@@ -448,6 +448,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         deviceEvents = monthDeviceEvents,
         isRtl = isRtl,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+        selectedDay = null,
     )
     canvas.also {
         val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

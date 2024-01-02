@@ -26,6 +26,7 @@ fun renderMonthWidget(
     deviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent>,
     isRtl: Boolean,
     isShowWeekOfYearEnabled: Boolean,
+    selectedDay: Jdn?,
 ): String {
     val monthStartJdn = Jdn(baseDate)
     val startingDayOfWeek = monthStartJdn.dayOfWeek
@@ -62,7 +63,7 @@ fun renderMonthWidget(
                 val isToday = day == today
 
                 dayPainter.setDayOfMonthItem(
-                    isToday, false,
+                    isToday, day == selectedDay,
                     events.any { it !is CalendarEvent.DeviceCalendarEvent },
                     events.any { it is CalendarEvent.DeviceCalendarEvent },
                     events.any { it.isHoliday }, day,

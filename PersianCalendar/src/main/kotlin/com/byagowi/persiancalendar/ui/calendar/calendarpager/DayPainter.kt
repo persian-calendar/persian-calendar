@@ -43,8 +43,10 @@ class DayPainter(
     colors: DayPainterColors,
     isWidget: Boolean = false,
     isYearView: Boolean = false,
+    selectedDayColor: Int? = null,
 ) {
-    private val paints = Paints(resources, min(width, height), colors, isWidget, isYearView)
+    private val paints =
+        Paints(resources, min(width, height), colors, isWidget, isYearView, selectedDayColor)
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -63,11 +65,16 @@ class DayPainter(
     }
 
     private fun drawCircle(canvas: Canvas) {
+        if (dayIsSelected) paints.selectedDayPaint?.let { selectedDayPaint ->
+            canvas.drawCircle(
+                width / 2,
+                height / 2,
+                radius(width, height) - paints.circlePadding,
+                selectedDayPaint
+            )
+        }
         if (today) canvas.drawCircle(
-            width / 2,
-            height / 2,
-            radius(width, height) - paints.todayCirclePadding,
-            paints.todayPaint
+            width / 2, height / 2, radius(width, height) - paints.circlePadding, paints.todayPaint
         )
     }
 
@@ -166,10 +173,11 @@ private class Paints(
     diameter: Float,
     colors: DayPainterColors,
     isWidget: Boolean,
-    isYearView: Boolean
+    isYearView: Boolean,
+    @ColorInt selectedDayColor: Int?,
 ) {
     private val dp = resources.dp
-    val todayCirclePadding = .5f * dp
+    val circlePadding = .5f * dp
     val isArabicScript = language.value.isArabicScript
     val eventYOffset = diameter * 12 / 40
     val eventIndicatorRadius = diameter * 2 / 40
@@ -194,6 +202,12 @@ private class Paints(
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1 * dp
         it.color = colors.colorCurrentDay
+    }
+    val selectedDayPaint = selectedDayColor?.let {
+        Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.style = Paint.Style.FILL
+            it.color = selectedDayColor
+        }
     }
 
     private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
