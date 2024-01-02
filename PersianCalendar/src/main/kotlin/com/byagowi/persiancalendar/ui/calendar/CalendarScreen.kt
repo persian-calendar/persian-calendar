@@ -339,8 +339,8 @@ private fun YearView(
 ) {
     val today by viewModel.today.collectAsState()
     val todayDate = today.toCalendar(mainCalendar)
+    val selectedMonthOffset = viewModel.selectedMonthOffset.value
     val yearOffsetInMonths = run {
-        val selectedMonthOffset = viewModel.selectedMonthOffset.value
         val selectedMonth =
             mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
         selectedMonth.year - todayDate.year
@@ -425,7 +425,11 @@ private fun YearView(
                                         viewModel.closeYearView()
                                         viewModel.changeSelectedMonthOffsetCommand(offset)
                                     }
-                                    .background(LocalContentColor.current.copy(alpha = .1f)),
+                                    .background(
+                                        LocalContentColor.current.copy(
+                                            alpha = if (offset == selectedMonthOffset) .025f else .1f,
+                                        )
+                                    ),
                             ) {
                                 Text(
                                     title,
