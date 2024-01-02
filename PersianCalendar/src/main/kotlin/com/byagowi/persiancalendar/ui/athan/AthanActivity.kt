@@ -21,6 +21,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
+import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
@@ -29,7 +30,6 @@ import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
-import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
 
@@ -144,7 +144,7 @@ class AthanActivity : ComponentActivity() {
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 
-        if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
+        if (ascendingAthan.value) handler.post(ascendVolume)
 
         preventPhoneCallIntervention.startListener(this)
     }
@@ -162,7 +162,7 @@ class AthanActivity : ComponentActivity() {
         ringtone?.stop()
 
         handler.removeCallbacks(stopTask)
-        if (isAscendingAthanVolumeEnabled) handler.removeCallbacks(ascendVolume)
+        if (ascendingAthan.value) handler.removeCallbacks(ascendVolume)
         finish()
     }
 }

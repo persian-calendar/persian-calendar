@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.locationathan
 
 import android.Manifest
 import android.content.Context
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
@@ -20,7 +19,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,11 +43,13 @@ import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -97,35 +97,8 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
 
     val isLocationSet = coordinates != null
     val calculationMethod by calculationMethod.collectAsState()
-    var showAscendingAthanVolume by remember {
-        mutableStateOf(
-            !appPrefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
-        )
-    }
-    var showAthanVolume by remember {
-        mutableStateOf(
-            !appPrefs.getBoolean(
-                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
-            ) && !appPrefs.getBoolean(
-                PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME
-            )
-        )
-    }
-    DisposableEffect(Unit) {
-        val listener = { _: SharedPreferences, _: String? ->
-            updateStoredPreference(context)
-            showAscendingAthanVolume = !appPrefs.getBoolean(
-                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
-            )
-            showAthanVolume = !appPrefs.getBoolean(
-                PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
-            ) && !appPrefs.getBoolean(
-                PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME
-            )
-        }
-        appPrefs.registerOnSharedPreferenceChangeListener(listener)
-        onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-    }
+    val notificationAthan by notificationAthan.collectAsState()
+    val ascendingAthan by ascendingAthan.collectAsState()
     SettingsHorizontalDivider()
     SettingsSection(
         stringResource(R.string.athan),
@@ -206,7 +179,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             followChanges = true,
         )
     }
-    AnimatedVisibility(isLocationSet && showAscendingAthanVolume) {
+    AnimatedVisibility(isLocationSet && !notificationAthan) {
         SettingsSwitch(
             PREF_ASCENDING_ATHAN_VOLUME,
             DEFAULT_ASCENDING_ATHAN_VOLUME,
@@ -214,7 +187,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             stringResource(R.string.enable_ascending_athan_volume),
         )
     }
-    AnimatedVisibility(isLocationSet && showAthanVolume) {
+    AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
         SettingsClickable(
             stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary)
         ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }

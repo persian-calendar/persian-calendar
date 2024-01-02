@@ -51,19 +51,19 @@ class AthanNotification : Service() {
 
         val notificationId =
             if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000)
-            else (if (notificationAthan) 3000 else 3001)
+            else (if (notificationAthan.value) 3000 else 3001)
         val notificationChannelId = notificationId.toString()
 
         val notificationManager = getSystemService<NotificationManager>()
 
         val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
-        if (!notificationAthan) startActivity(
+        if (!notificationAthan.value) startActivity(
             Intent(this, AthanActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .putExtra(KEY_EXTRA_PRAYER, athanKey)
         )
 
-        val soundUri = if (notificationAthan) getAthanUri(this) else null
+        val soundUri = if (notificationAthan.value) getAthanUri(this) else null
         if (soundUri != null) runCatching {
             // ensure custom reminder sounds play well
             grantUriPermission(
@@ -74,7 +74,7 @@ class AthanNotification : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 notificationChannelId, getString(R.string.athan),
-                if (notificationAthan) NotificationManager.IMPORTANCE_HIGH
+                if (notificationAthan.value) NotificationManager.IMPORTANCE_HIGH
                 else NotificationManager.IMPORTANCE_DEFAULT
             ).also {
                 it.description = getString(R.string.athan)
@@ -127,7 +127,7 @@ class AthanNotification : Service() {
             .setContentText(subtitle)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
-        if (notificationAthan) {
+        if (notificationAthan.value) {
             notificationBuilder.priority = NotificationCompat.PRIORITY_MAX
             notificationBuilder.setSound(soundUri, AudioManager.STREAM_NOTIFICATION)
             notificationBuilder.setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -154,7 +154,7 @@ class AthanNotification : Service() {
 
         var stop = {}
         val preventPhoneCallIntervention =
-            if (notificationAthan) PreventPhoneCallIntervention(stop) else null
+            if (notificationAthan.value) PreventPhoneCallIntervention(stop) else null
         stop = {
             preventPhoneCallIntervention?.let { it.stopListener() }
             notificationManager?.cancel(notificationId)

@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
+import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
@@ -26,6 +27,7 @@ import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
@@ -120,8 +122,11 @@ var isWidgetClock = DEFAULT_WIDGET_CLOCK
     private set
 var isNotifyDate = DEFAULT_NOTIFY_DATE
     private set
-var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
-    private set
+
+private val notificationAthan_ = MutableStateFlow(DEFAULT_NOTIFICATION_ATHAN)
+val notificationAthan: StateFlow<Boolean> = notificationAthan_
+private val ascendingAthan_ = MutableStateFlow(DEFAULT_ASCENDING_ATHAN_VOLUME)
+val ascendingAthan: StateFlow<Boolean> = ascendingAthan_
 
 private val calculationMethod_ =
     MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
@@ -302,7 +307,9 @@ fun updateStoredPreference(context: Context) {
     )
     isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
-    notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+    notificationAthan_.value = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+    ascendingAthan_.value =
+        prefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
     isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others

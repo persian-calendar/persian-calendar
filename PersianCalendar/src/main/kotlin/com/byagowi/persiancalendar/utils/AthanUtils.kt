@@ -63,9 +63,6 @@ fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
 
 val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 
-val Context.isAscendingAthanVolumeEnabled: Boolean
-    get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
-
 fun getAthanUri(context: Context): Uri =
     (context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }
         ?: context.resources.getRawUri(R.raw.special)).toUri()
@@ -100,7 +97,7 @@ private fun startAthanBody(context: Context, prayTimeKey: String) {
             )?.acquire(THIRTY_SECONDS_IN_MILLIS)
         }.onFailure(logException)
 
-        if (!notificationAthan && ActivityCompat.checkSelfPermission(
+        if (!notificationAthan.value && ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
