@@ -379,6 +379,7 @@ private fun YearViewPager(
             (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
             isRtl,
             dayPainterColors,
+            isYearView = true,
         )
     }
 

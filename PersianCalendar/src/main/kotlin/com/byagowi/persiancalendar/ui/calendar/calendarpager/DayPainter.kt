@@ -42,8 +42,9 @@ class DayPainter(
     private val isRtl: Boolean,
     colors: DayPainterColors,
     isWidget: Boolean = false,
+    isYearView: Boolean = false,
 ) {
-    private val paints = Paints(resources, min(width, height), colors, isWidget)
+    private val paints = Paints(resources, min(width, height), colors, isWidget, isYearView)
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -161,7 +162,11 @@ class DayPainter(
 }
 
 private class Paints(
-    resources: Resources, diameter: Float, colors: DayPainterColors, isWidget: Boolean
+    resources: Resources,
+    diameter: Float,
+    colors: DayPainterColors,
+    isWidget: Boolean,
+    isYearView: Boolean
 ) {
     private val dp = resources.dp
     val todayCirclePadding = .5f * dp
@@ -234,7 +239,7 @@ private class Paints(
     }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
-        it.textSize = headerTextSize
+        it.textSize = if (isYearView) textSize else headerTextSize
         it.color = colors.colorTextDayName
         if (isWidget) addShadowIfNeeded(it)
     }
