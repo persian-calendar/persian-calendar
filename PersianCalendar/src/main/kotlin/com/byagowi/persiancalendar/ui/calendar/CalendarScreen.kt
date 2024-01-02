@@ -389,7 +389,9 @@ private fun YearViewPager(
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
         scope.launch {
-            state.animateScrollToItem(state.firstVisibleItemIndex + command)
+            if (command != 0) {
+                state.animateScrollToItem(state.firstVisibleItemIndex + command)
+            } else state.animateScrollToItem(halfPages)
             viewModel.jumpYearView(null)
         }
     }
@@ -749,11 +751,13 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
             }
             Column(
-                if (isYearView) Modifier else Modifier.clickable(
+                Modifier.clickable(
                     indication = rememberRipple(bounded = false),
                     interactionSource = remember { MutableInteractionSource() },
-                    onClickLabel = stringResource(R.string.year_view)
-                ) { viewModel.openYearView() }
+                    onClickLabel = stringResource(
+                        if (isYearView) R.string.return_to_today else R.string.year_view
+                    )
+                ) { if (isYearView) viewModel.jumpYearView(0) else viewModel.openYearView() }
             ) {
                 AnimatedContent(
                     title,

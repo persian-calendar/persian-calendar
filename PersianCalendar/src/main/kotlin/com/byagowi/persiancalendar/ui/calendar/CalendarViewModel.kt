@@ -148,6 +148,7 @@ class CalendarViewModel @JvmOverloads constructor(
         repository = SearchEventsRepository(getApplication())
     }
 
+    // +1 => go to the next year, -1 => go to the previous year, 0 => go to the current year
     fun jumpYearView(command: Int?) {
         _yearViewCommand.value = command
     }
