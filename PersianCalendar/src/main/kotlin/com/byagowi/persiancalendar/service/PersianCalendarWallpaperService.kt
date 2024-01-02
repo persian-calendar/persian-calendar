@@ -62,8 +62,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
             )
         }
 
-        private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            initPatternDrawable()
+        private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+            if (key == PREF_WALLPAPER_DARK) initPatternDrawable()
         }
 
         private var sensorRotation = 0f
