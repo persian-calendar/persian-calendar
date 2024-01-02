@@ -48,7 +48,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -71,7 +71,7 @@ fun EventsTab(
             AnimatedContent(
                 targetState = shiftWorkTitle ?: "",
                 label = "shift work title",
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer {
                     Text(
@@ -92,7 +92,7 @@ fun EventsTab(
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance ?: "",
                 label = "shift work days diff",
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
             ) { state ->
                 SelectionContainer {
                     Text(
@@ -153,7 +153,7 @@ fun EventsTab(
                     event.title, holidayString
                 ) else event.title) + eventTime,
                 label = "event title",
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
             ) { title ->
                 Row(
                     @OptIn(ExperimentalFoundationApi::class) Modifier

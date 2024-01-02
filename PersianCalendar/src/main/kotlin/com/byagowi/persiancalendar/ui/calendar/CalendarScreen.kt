@@ -159,7 +159,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -757,7 +757,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 AnimatedContent(
                     title,
                     label = "title",
-                    transitionSpec = appFadeTransitionSpec,
+                    transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Text(
                         state,
@@ -770,7 +770,7 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                     AnimatedContent(
                         subtitle,
                         label = "subtitle",
-                        transitionSpec = appFadeTransitionSpec,
+                        transitionSpec = appCrossfadeSpec,
                     ) { state ->
                         Text(
                             state,

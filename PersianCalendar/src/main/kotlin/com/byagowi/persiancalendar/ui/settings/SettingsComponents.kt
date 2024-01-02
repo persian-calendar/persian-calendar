@@ -39,7 +39,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -96,7 +96,7 @@ fun SettingsClickable(
             AnimatedContent(
                 summary ?: "",
                 label = "summary",
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
             ) { state ->
                 Text(
                     state,

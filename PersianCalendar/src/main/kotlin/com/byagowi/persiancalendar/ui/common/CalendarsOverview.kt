@@ -57,7 +57,7 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -120,7 +120,7 @@ fun CalendarsOverview(
                 if (isToday && isForcedIranTimeEnabled) language.value.inParentheses.format(
                     jdn.dayOfWeekName, stringResource(R.string.iran_time)
                 ) else jdn.dayOfWeekName,
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
                 label = "weekday name",
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
         }
@@ -162,7 +162,7 @@ fun CalendarsOverview(
                     spacedColon,
                     calculateDaysDifference(context.resources, jdn)
                 ).joinToString(""),
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
                 label = "diff days",
             ) { state ->
                 SelectionContainer {
@@ -312,7 +312,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
             AnimatedContent(
                 targetState = jdn.toCalendar(calendar),
                 label = "date",
-                transitionSpec = appFadeTransitionSpec,
+                transitionSpec = appCrossfadeSpec,
             ) { date ->
                 Column(
                     modifier = Modifier.defaultMinSize(

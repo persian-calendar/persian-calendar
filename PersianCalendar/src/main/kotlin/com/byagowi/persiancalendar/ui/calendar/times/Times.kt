@@ -22,7 +22,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.ui.theme.appFadeTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getTimeNames
@@ -48,7 +48,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
                 AnimatedContent(
                     targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
                     label = "time",
-                    transitionSpec = appFadeTransitionSpec,
+                    transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Column(
                         modifier = Modifier.defaultMinSize(
