@@ -313,7 +313,7 @@ fun updateStoredPreference(context: Context) {
             ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
             ?: calculationMethod.value.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
-        if (!enableHighLatitudesConfiguration) DEFAULT_HIGH_LATITUDES_METHOD
+        if (coordinates.value?.enableHighLatitudesConfiguration != true) DEFAULT_HIGH_LATITUDES_METHOD
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
     )
 

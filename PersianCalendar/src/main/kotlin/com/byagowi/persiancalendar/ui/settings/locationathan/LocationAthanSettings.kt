@@ -96,9 +96,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     }
 
     val isLocationSet = coordinates != null
-    var showHighLatitudesMethod by remember {
-        mutableStateOf(enableHighLatitudesConfiguration)
-    }
     val calculationMethod by calculationMethod.collectAsState()
     var athanSoundName by remember {
         mutableStateOf(
@@ -124,7 +121,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     DisposableEffect(Unit) {
         val listener = { _: SharedPreferences, _: String? ->
             updateStoredPreference(context)
-            showHighLatitudesMethod = enableHighLatitudesConfiguration
             athanSoundName = appPrefs.getString(
                 PREF_ATHAN_NAME, context.getString(R.string.default_athan)
             )
@@ -155,7 +151,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             title = stringResource(R.string.pray_methods)
         )
     }
-    AnimatedVisibility(isLocationSet && showHighLatitudesMethod) {
+    AnimatedVisibility(coordinates?.enableHighLatitudesConfiguration == true) {
         SettingsSingleSelect(
             PREF_HIGH_LATITUDES_METHOD,
             HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },

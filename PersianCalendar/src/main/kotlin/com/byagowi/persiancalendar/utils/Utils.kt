@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.coordinates
 import io.github.cosinekitty.astronomy.Observer
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -59,8 +58,7 @@ val CalculationMethod.titleStringId
 
 // Midnight sun occurs at latitudes from 65°44' to 90° north or south as
 // https://en.wikipedia.org/wiki/Midnight_sun
-val enableHighLatitudesConfiguration: Boolean
-    get() = coordinates.value?.let { abs(it.latitude) > 50 } ?: false
+val Coordinates.enableHighLatitudesConfiguration: Boolean get() = abs(latitude) > 50
 
 val HighLatitudesMethod.titleStringId
     get(): @StringRes Int = when (this) {
