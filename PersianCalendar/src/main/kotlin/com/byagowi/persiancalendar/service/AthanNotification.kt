@@ -105,12 +105,12 @@ class AthanNotification : Service() {
         val subtitle = when (athanKey) {
             FAJR_KEY -> listOf(R.string.sunrise)
             DHUHR_KEY ->
-                if (calculationMethod.isJafari) listOf(R.string.sunset)
+                if (calculationMethod.value.isJafari) listOf(R.string.sunset)
                 else listOf(R.string.asr, R.string.maghrib)
 
             ASR_KEY -> listOf(R.string.maghrib)
             MAGHRIB_KEY ->
-                if (calculationMethod.isJafari) listOf(R.string.midnight)
+                if (calculationMethod.value.isJafari) listOf(R.string.midnight)
                 else listOf(R.string.isha, R.string.midnight)
 
             ISHA_KEY -> listOf(R.string.midnight)

@@ -1000,12 +1000,12 @@ private fun createOwghatHtmlReport(resources: Resources, date: AbstractDate): St
                         }
                     }
                 }
-                if (calculationMethod != language.value.preferredCalculationMethod) {
+                if (calculationMethod.value != language.value.preferredCalculationMethod) {
                     tfoot {
                         tr {
                             td {
                                 colSpan = "10"
-                                +resources.getString(calculationMethod.titleStringId)
+                                +resources.getString(calculationMethod.value.titleStringId)
                             }
                         }
                     }

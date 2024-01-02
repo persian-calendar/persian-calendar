@@ -121,10 +121,12 @@ var isNotifyDate = DEFAULT_NOTIFY_DATE
     private set
 var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
     private set
-var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
+
+val calculationMethod_ = MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
+val calculationMethod: StateFlow<CalculationMethod> = calculationMethod_
+var midnightMethod = calculationMethod.value.defaultMidnight
     private set
-var midnightMethod = calculationMethod.defaultMidnight
-    private set
+
 var asrMethod = AsrMethod.Standard
     private set
 var highLatitudesMethod = HighLatitudesMethod.NightMiddle
@@ -299,17 +301,17 @@ fun updateStoredPreference(context: Context) {
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
-    calculationMethod = CalculationMethod.valueOf(
+    calculationMethod_.value = CalculationMethod.valueOf(
         prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
     )
-    asrMethod = if (calculationMethod.isJafari || !prefs.getBoolean(
+    asrMethod = if (calculationMethod.value.isJafari || !prefs.getBoolean(
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
     midnightMethod =
         context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
-            ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }
-            ?: calculationMethod.defaultMidnight
+            ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
+            ?: calculationMethod.value.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
         if (!enableHighLatitudesConfiguration) DEFAULT_HIGH_LATITUDES_METHOD
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD

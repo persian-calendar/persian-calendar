@@ -232,7 +232,7 @@ fun update(context: Context, updateDate: Boolean) {
 @StringRes
 private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
     val clock = current.toHoursFraction()
-    val isJafari = calculationMethod.isJafari
+    val isJafari = calculationMethod.value.isJafari
     return when {
         fajr > clock -> R.string.fajr
         sunrise > clock -> R.string.sunrise
@@ -666,7 +666,7 @@ private fun create4x2RemoteViews(
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
         ).zip(
-            if (calculationMethod.isJafari) {
+            if (calculationMethod.value.isJafari) {
                 if (
                     nowMinutes < prayTimes.getFromStringId(R.string.dhuhr).toMinutes() ||
                     nowMinutes > prayTimes.getFromStringId(R.string.isha).toMinutes()

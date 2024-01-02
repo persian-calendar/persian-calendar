@@ -209,5 +209,5 @@ private val TIME_NAMES = listOf(
 )
 
 fun getTimeNames(): List<Int> {
-    return if (calculationMethod.isJafari) TIME_NAMES else TIME_NAMES - R.string.sunset
+    return if (calculationMethod.value.isJafari) TIME_NAMES else TIME_NAMES - R.string.sunset
 }

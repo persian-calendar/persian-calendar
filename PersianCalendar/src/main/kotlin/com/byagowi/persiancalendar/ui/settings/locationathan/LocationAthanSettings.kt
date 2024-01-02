@@ -99,9 +99,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     var showHighLatitudesMethod by remember {
         mutableStateOf(enableHighLatitudesConfiguration)
     }
-    var showAsrCalculationMethod by remember {
-        mutableStateOf(!calculationMethod.isJafari)
-    }
+    val calculationMethod by calculationMethod.collectAsState()
     var athanSoundName by remember {
         mutableStateOf(
             appPrefs.getString(
@@ -127,7 +125,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         val listener = { _: SharedPreferences, _: String? ->
             updateStoredPreference(context)
             showHighLatitudesMethod = enableHighLatitudesConfiguration
-            showAsrCalculationMethod = !calculationMethod.isJafari
             athanSoundName = appPrefs.getString(
                 PREF_ATHAN_NAME, context.getString(R.string.default_athan)
             )
@@ -168,7 +165,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             title = stringResource(R.string.high_latitudes_method)
         )
     }
-    AnimatedVisibility(isLocationSet && showAsrCalculationMethod) {
+    AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
         SettingsSwitch(
             PREF_ASR_HANAFI_JURISTIC,
             language.value.isHanafiMajority,
@@ -279,8 +276,8 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
 }
 
 private fun midnightDefaultTitle(resources: Resources): String {
-    return resources.getString(calculationMethod.titleStringId) + spacedComma + midnightMethodToString(
-        resources, calculationMethod.defaultMidnight
+    return resources.getString(calculationMethod.value.titleStringId) + spacedComma + midnightMethodToString(
+        resources, calculationMethod.value.defaultMidnight
     )
 }
 

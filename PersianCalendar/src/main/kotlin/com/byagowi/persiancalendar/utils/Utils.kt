@@ -22,7 +22,7 @@ fun String.splitFilterNotEmpty(delim: String) = this.split(delim).filter { it.is
 
 fun Coordinates.calculatePrayTimes(
     calendar: GregorianCalendar = GregorianCalendar(),
-    calculationMethod: CalculationMethod = com.byagowi.persiancalendar.global.calculationMethod,
+    calculationMethod: CalculationMethod = com.byagowi.persiancalendar.global.calculationMethod.value,
     asrMethod: AsrMethod = com.byagowi.persiancalendar.global.asrMethod,
     highLatitudesMethod: HighLatitudesMethod = com.byagowi.persiancalendar.global.highLatitudesMethod,
     midnightMethod: MidnightMethod = com.byagowi.persiancalendar.global.midnightMethod,
