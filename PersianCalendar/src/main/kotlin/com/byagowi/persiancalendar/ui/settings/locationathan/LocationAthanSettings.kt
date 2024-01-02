@@ -40,12 +40,12 @@ import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
-import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -97,13 +97,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
 
     val isLocationSet = coordinates != null
     val calculationMethod by calculationMethod.collectAsState()
-    var athanSoundName by remember {
-        mutableStateOf(
-            appPrefs.getString(
-                PREF_ATHAN_NAME, context.getString(R.string.default_athan)
-            )
-        )
-    }
     var showAscendingAthanVolume by remember {
         mutableStateOf(
             !appPrefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
@@ -121,9 +114,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     DisposableEffect(Unit) {
         val listener = { _: SharedPreferences, _: String? ->
             updateStoredPreference(context)
-            athanSoundName = appPrefs.getString(
-                PREF_ATHAN_NAME, context.getString(R.string.default_athan)
-            )
             showAscendingAthanVolume = !appPrefs.getBoolean(
                 PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN
             )
@@ -181,6 +171,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         ) { onDismissRequest -> PrayerSelectDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
+        val athanSoundName by athanSoundName.collectAsState()
         SettingsClickable(
             stringResource(R.string.custom_athan),
             athanSoundName,

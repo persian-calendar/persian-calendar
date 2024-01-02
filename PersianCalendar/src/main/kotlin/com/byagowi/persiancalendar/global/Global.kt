@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
+import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
@@ -122,8 +123,13 @@ var isNotifyDate = DEFAULT_NOTIFY_DATE
 var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
     private set
 
-val calculationMethod_ = MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
+private val calculationMethod_ =
+    MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
 val calculationMethod: StateFlow<CalculationMethod> = calculationMethod_
+
+private val athanSoundName_ = MutableStateFlow("")
+val athanSoundName: StateFlow<String> = athanSoundName_
+
 var midnightMethod = calculationMethod.value.defaultMidnight
     private set
 
@@ -309,13 +315,15 @@ fun updateStoredPreference(context: Context) {
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
     midnightMethod =
-        context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
+        prefs.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
             ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
             ?: calculationMethod.value.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
         if (coordinates.value?.enableHighLatitudesConfiguration != true) DEFAULT_HIGH_LATITUDES_METHOD
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
     )
+    athanSoundName_.value =
+        prefs.getString(PREF_ATHAN_NAME, null) ?: context.getString(R.string.default_athan)
 
     val storedCity = prefs.storedCity
     coordinates_.value = storedCity?.coordinates ?: run {
