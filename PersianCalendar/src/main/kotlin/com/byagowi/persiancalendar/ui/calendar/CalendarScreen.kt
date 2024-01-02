@@ -388,19 +388,19 @@ private fun YearView(
     }
 
     val halfPages = 100
-    val state = rememberLazyListState(halfPages + yearOffsetInMonths)
+    val lazyColumnState = rememberLazyListState(halfPages + yearOffsetInMonths)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
         scope.launch {
             if (command != 0) {
-                state.animateScrollToItem(state.firstVisibleItemIndex + command)
-            } else state.animateScrollToItem(halfPages)
+                lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex + command)
+            } else lazyColumnState.animateScrollToItem(halfPages)
             viewModel.jumpYearView(null)
         }
     }
 
-    LazyColumn(state = state, modifier = Modifier.transformable(transformState)) {
+    LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
             Column {
