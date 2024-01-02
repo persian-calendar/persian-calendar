@@ -226,8 +226,8 @@ fun SettingsSwitch(
     var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
     if (followChanges) {
         DisposableEffect(Unit) {
-            val listener = { prefs: SharedPreferences, changeKey: String? ->
-                if (changeKey == key) currentValue = prefs.getBoolean(key, defaultValue)
+            val listener = { _: SharedPreferences, changedKey: String? ->
+                if (changedKey == key) currentValue = appPrefs.getBoolean(key, defaultValue)
             }
             appPrefs.registerOnSharedPreferenceChangeListener(listener)
             onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
