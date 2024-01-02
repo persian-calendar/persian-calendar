@@ -149,16 +149,16 @@ fun SettingsScreen(
                     if (isLandscape) Tab(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                tab.icon(selectedTabIndex == index)
+                                tab.Icon(selectedTabIndex == index)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(tab.title())
+                                Text(tab.Title())
                             }
                         },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     ) else Tab(
-                        icon = { tab.icon(selectedTabIndex == index) },
-                        text = { Text(tab.title()) },
+                        icon = { tab.Icon(selectedTabIndex == index) },
+                        text = { Text(tab.Title()) },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     )
@@ -203,14 +203,14 @@ private data class TabItem(
     val content: @Composable () -> Unit,
 ) {
     @Composable
-    fun title(): String {
+    fun Title(): String {
         return stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
             secondTitle
         )
     }
 
     @Composable
-    fun icon(isSelected: Boolean) {
+    fun Icon(isSelected: Boolean) {
         Crossfade(isSelected, label = "icon") {
             Icon(if (it) filledIcon else outlinedIcon, contentDescription = null)
         }
