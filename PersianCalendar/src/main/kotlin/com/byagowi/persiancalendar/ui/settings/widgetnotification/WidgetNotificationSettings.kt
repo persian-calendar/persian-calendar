@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -45,6 +44,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.TimeZone
@@ -66,9 +66,9 @@ fun NotificationSettings() {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted -> context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
-        SettingsSwitch(
+        SettingsSwitchWithValue(
             key = PREF_NOTIFY_DATE,
-            defaultValue = DEFAULT_NOTIFY_DATE,
+            value = isNotifyDate,
             title = stringResource(R.string.notify_date),
             summary = stringResource(R.string.enable_notify),
             onBeforeToggle = { value: Boolean ->
@@ -80,7 +80,6 @@ fun NotificationSettings() {
                     false
                 } else value
             },
-            followChanges = true,
         )
     }
     AnimatedVisibility(isNotifyDate) {

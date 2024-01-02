@@ -233,13 +233,37 @@ fun SettingsSwitch(
             onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
         }
     }
-    val toggle = remember {
-        {
-            val previousValue = currentValue
-            currentValue = onBeforeToggle(!currentValue)
-            if (previousValue != currentValue) appPrefs.edit { putBoolean(key, currentValue) }
-        }
+    val toggle = {
+        val previousValue = currentValue
+        currentValue = onBeforeToggle(!currentValue)
+        if (previousValue != currentValue) appPrefs.edit { putBoolean(key, currentValue) }
     }
+    SettingsSwitchLayout(toggle, title, summary, currentValue)
+}
+
+@Composable
+fun SettingsSwitchWithValue(
+    key: String,
+    value: Boolean,
+    title: String,
+    summary: String? = null,
+    onBeforeToggle: (Boolean) -> Boolean = { it },
+) {
+    val context = LocalContext.current
+    val toggle = {
+        val newValue = onBeforeToggle(!value)
+        if (value != newValue) context.appPrefs.edit { putBoolean(key, newValue) }
+    }
+    SettingsSwitchLayout(toggle, title, summary, value)
+}
+
+@Composable
+private fun SettingsSwitchLayout(
+    toggle: () -> Unit,
+    title: String,
+    summary: String?,
+    value: Boolean
+) {
     Box(
         Modifier
             .fillMaxWidth()
@@ -263,7 +287,7 @@ fun SettingsSwitch(
             modifier = Modifier
                 .align(alignment = Alignment.CenterEnd)
                 .padding(end = 16.dp),
-            checked = currentValue,
+            checked = value,
             onCheckedChange = null,
         )
     }
