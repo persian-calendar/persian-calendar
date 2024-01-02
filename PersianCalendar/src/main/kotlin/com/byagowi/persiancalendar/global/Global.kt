@@ -120,8 +120,9 @@ var isNotifyDateOnLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     private set
 var isWidgetClock = DEFAULT_WIDGET_CLOCK
     private set
-var isNotifyDate = DEFAULT_NOTIFY_DATE
-    private set
+
+val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
+val isNotifyDate: StateFlow<Boolean> = isNotifyDate_
 
 private val notificationAthan_ = MutableStateFlow(DEFAULT_NOTIFICATION_ATHAN)
 val notificationAthan: StateFlow<Boolean> = notificationAthan_
@@ -306,7 +307,7 @@ fun updateStoredPreference(context: Context) {
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     )
     isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
-    isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+    isNotifyDate_.value = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan_.value = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
     ascendingAthan_.value =
         prefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)

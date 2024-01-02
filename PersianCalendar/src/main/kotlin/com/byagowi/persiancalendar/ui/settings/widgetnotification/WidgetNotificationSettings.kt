@@ -1,14 +1,12 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.Manifest
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,10 +36,10 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.theme
-import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
@@ -49,7 +47,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.update
 import java.util.TimeZone
 
 @Composable
@@ -64,26 +61,11 @@ fun WidgetNotificationSettings() {
 @Composable
 fun NotificationSettings() {
     val context = LocalContext.current
-    val appPrefs = remember { context.appPrefs }
-    var showDateLockScreen by remember {
-        mutableStateOf(appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
-    }
-    DisposableEffect(Unit) {
-        val listener = { prefs: SharedPreferences, changeKey: String? ->
-            if (changeKey == PREF_NOTIFY_DATE)
-                showDateLockScreen = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
-        }
-        appPrefs.registerOnSharedPreferenceChangeListener(listener)
-        onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-    }
+    val isNotifyDate by isNotifyDate.collectAsState()
     run {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted ->
-            context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
-            updateStoredPreference(context)
-            if (isGranted) update(context, updateDate = true)
-        }
+        ) { isGranted -> context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
         SettingsSwitch(
             key = PREF_NOTIFY_DATE,
             defaultValue = DEFAULT_NOTIFY_DATE,
@@ -96,15 +78,12 @@ fun NotificationSettings() {
                 ) {
                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                     false
-                } else {
-                    showDateLockScreen = value
-                    value
-                }
+                } else value
             },
             followChanges = true,
         )
     }
-    AnimatedVisibility(showDateLockScreen) {
+    AnimatedVisibility(isNotifyDate) {
         SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,
             defaultValue = true,

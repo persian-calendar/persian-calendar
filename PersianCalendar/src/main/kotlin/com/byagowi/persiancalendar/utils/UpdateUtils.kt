@@ -766,7 +766,7 @@ private var latestPostedNotification: NotificationData? = null
 private fun updateNotification(
     context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
 ) {
-    if (!isNotifyDate) {
+    if (!isNotifyDate.value) {
         val notificationManager = context.getSystemService<NotificationManager>()
         notificationManager?.cancel(NOTIFICATION_ID_LOW_PRIORITY)
         notificationManager?.cancel(NOTIFICATION_ID_DEFAULT_PRIORITY)
