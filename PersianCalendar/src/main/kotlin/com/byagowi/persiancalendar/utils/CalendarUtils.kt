@@ -154,7 +154,7 @@ private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULT
 
 private fun readDeviceEvents(
     context: Context, startingDate: GregorianCalendar, rangeInMillis: Long
-): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
+): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents.value ||
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
     ) != PackageManager.PERMISSION_GRANTED

@@ -428,7 +428,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val today = Jdn.today()
     val baseDate = mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
     val monthDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-        if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(Jdn(baseDate))
+        if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
         else EventsStore.empty()
     val isRtl =
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL

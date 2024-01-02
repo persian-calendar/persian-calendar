@@ -119,7 +119,8 @@ fun Month(
 
     val refreshToken by viewModel.refreshToken.collectAsState()
     val context = LocalContext.current
-    val monthDeviceEvents = remember(refreshToken) {
+    val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
+    val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
         if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
         else EventsStore.empty()
     }

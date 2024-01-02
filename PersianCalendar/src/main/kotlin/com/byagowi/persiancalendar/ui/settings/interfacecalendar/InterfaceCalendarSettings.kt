@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -38,6 +39,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -101,8 +103,9 @@ fun InterfaceCalendarSettings(destination: String? = null) {
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        SettingsSwitch(
-            PREF_SHOW_DEVICE_CALENDAR_EVENTS, false,
+        val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
+        SettingsSwitchWithValue(
+            PREF_SHOW_DEVICE_CALENDAR_EVENTS, isShowDeviceCalendarEvents,
             stringResource(R.string.show_device_calendar_events),
             stringResource(R.string.show_device_calendar_events_summary),
             onBeforeToggle = {
@@ -114,7 +117,6 @@ fun InterfaceCalendarSettings(destination: String? = null) {
                     false
                 } else it
             },
-            followChanges = true,
         )
         if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
     }

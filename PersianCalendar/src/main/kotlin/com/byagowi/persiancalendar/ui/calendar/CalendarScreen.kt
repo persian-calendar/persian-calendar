@@ -369,7 +369,7 @@ private fun YearView(
     val context = LocalContext.current
     val yearStartJdn = Jdn(mainCalendar.createDate(today.toCalendar(mainCalendar).year, 1, 1))
     val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-        if (isShowDeviceCalendarEvents) context.readYearDeviceEvents(yearStartJdn)
+        if (isShowDeviceCalendarEvents.value) context.readYearDeviceEvents(yearStartJdn)
         else EventsStore.empty()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 

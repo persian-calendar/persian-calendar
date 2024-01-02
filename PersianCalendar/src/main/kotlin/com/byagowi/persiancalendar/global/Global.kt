@@ -190,8 +190,10 @@ var weekStartOffset = 0
     private set
 var weekEnds = BooleanArray(7)
     private set
-var isShowDeviceCalendarEvents = false
-    private set
+
+private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
+val isShowDeviceCalendarEvents: StateFlow<Boolean> = isShowDeviceCalendarEvents_
+
 var whatToShowOnWidgets = emptySet<String>()
     private set
 var isAstronomicalExtraFeaturesEnabled = false
@@ -367,7 +369,8 @@ fun updateStoredPreference(context: Context) {
     (prefs.getStringSet(PREF_WEEK_ENDS, null)
         ?: language.defaultWeekEnds).mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
 
-    isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
+    isShowDeviceCalendarEvents_.value =
+        prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
     whatToShowOnWidgets =
         prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
