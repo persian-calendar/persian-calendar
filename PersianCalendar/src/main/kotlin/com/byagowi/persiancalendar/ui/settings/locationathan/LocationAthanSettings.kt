@@ -33,7 +33,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
-import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
@@ -58,6 +57,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanVolumeDialog
@@ -162,9 +162,9 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
             updateStoredPreference(context)
         }
-        SettingsSwitch(
+        SettingsSwitchWithValue(
             PREF_NOTIFICATION_ATHAN,
-            DEFAULT_NOTIFICATION_ATHAN,
+            notificationAthan,
             stringResource(R.string.notification_athan),
             stringResource(R.string.enable_notification_athan),
             onBeforeToggle = { value ->
@@ -176,7 +176,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
                     false
                 } else value
             },
-            followChanges = true,
         )
     }
     AnimatedVisibility(isLocationSet && !notificationAthan) {

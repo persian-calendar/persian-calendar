@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings
 
-import android.content.SharedPreferences
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -21,7 +20,6 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -219,20 +217,10 @@ fun SettingsSwitch(
     title: String,
     summary: String? = null,
     onBeforeToggle: (Boolean) -> Boolean = { it },
-    followChanges: Boolean = false,
 ) {
     val context = LocalContext.current
     val appPrefs = remember { context.appPrefs }
     var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
-    if (followChanges) {
-        DisposableEffect(Unit) {
-            val listener = { _: SharedPreferences, changedKey: String? ->
-                if (changedKey == key) currentValue = appPrefs.getBoolean(key, defaultValue)
-            }
-            appPrefs.registerOnSharedPreferenceChangeListener(listener)
-            onDispose { appPrefs.unregisterOnSharedPreferenceChangeListener(listener) }
-        }
-    }
     val toggle = {
         val previousValue = currentValue
         currentValue = onBeforeToggle(!currentValue)
