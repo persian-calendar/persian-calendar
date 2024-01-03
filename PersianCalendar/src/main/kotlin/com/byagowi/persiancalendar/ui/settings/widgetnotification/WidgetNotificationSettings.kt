@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.isNotifyDate
+import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.theme
@@ -83,9 +84,10 @@ fun NotificationSettings() {
         )
     }
     AnimatedVisibility(isNotifyDate) {
-        SettingsSwitch(
+        val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen.collectAsState()
+        SettingsSwitchWithValue(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,
-            defaultValue = true,
+            value = isNotifyDateOnLockScreen,
             title = stringResource(R.string.notify_date_lock_screen),
             summary = stringResource(R.string.notify_date_lock_screen_summary)
         )

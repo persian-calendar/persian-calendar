@@ -108,9 +108,8 @@ import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.min
 
-
 private val useDefaultPriority
-    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen
+    get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastDate: AbstractDate? = null
@@ -779,7 +778,7 @@ private fun updateNotification(
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
         isTalkBackEnabled = isTalkBackEnabled,
         isHighTextContrastEnabled = isHighTextContrastEnabled,
-        isNotifyDateOnLockScreen = isNotifyDateOnLockScreen,
+        isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
         whatToShowOnWidgets = whatToShowOnWidgets,
         spacedComma = spacedComma,
