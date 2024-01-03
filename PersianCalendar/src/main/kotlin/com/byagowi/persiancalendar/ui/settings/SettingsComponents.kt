@@ -51,11 +51,17 @@ fun SettingsSection(title: String, subtitle: String? = null) {
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 8.dp),
     ) {
-        Text(
+        AnimatedContent(
             title,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.primary,
-        )
+            label = "title",
+            transitionSpec = appCrossfadeSpec,
+        ) { state ->
+            Text(
+                state,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
         AnimatedVisibility(visible = subtitle != null) {
             Text(
                 subtitle ?: "",
@@ -89,7 +95,11 @@ fun SettingsClickable(
             .clickable { showDialog = true }
             .padding(vertical = 16.dp, horizontal = 24.dp),
     ) {
-        Text(title, style = MaterialTheme.typography.bodyLarge)
+        AnimatedContent(
+            title,
+            label = "title",
+            transitionSpec = appCrossfadeSpec,
+        ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
         AnimatedVisibility(visible = summary != null) {
             AnimatedContent(
                 summary ?: "",
@@ -261,12 +271,24 @@ private fun SettingsSwitchLayout(
                 // 68 is brought from androidx.preferences
                 .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = (16 + 68).dp)
         ) {
-            Text(title, style = MaterialTheme.typography.bodyLarge)
-            if (summary != null) Text(
-                summary,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.alpha(AppBlendAlpha)
-            )
+            AnimatedContent(
+                title,
+                label = "title",
+                transitionSpec = appCrossfadeSpec,
+            ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
+            if (summary != null) {
+                AnimatedContent(
+                    summary,
+                    label = "summary",
+                    transitionSpec = appCrossfadeSpec,
+                ) { state ->
+                    Text(
+                        state,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.alpha(AppBlendAlpha)
+                    )
+                }
+            }
         }
         Switch(
             modifier = Modifier
