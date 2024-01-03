@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
@@ -12,38 +10,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
-import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
-import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
-import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
-import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
-import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
-import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
-import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
-import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
-import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.initGlobal
-import com.byagowi.persiancalendar.global.loadLanguageResources
-import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
-import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Just to make sure we have an initial transparent system bars
         // System bars are tweaked later with project's with real values
@@ -72,8 +51,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        appPrefs.registerOnSharedPreferenceChangeListener(this)
-
         applyAppLanguage(this)
 
         // There is a window:enforceNavigationBarContrast set to false in styles.xml as the following
@@ -96,37 +73,6 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
                 SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
             else SystemBarStyle.dark(Color.TRANSPARENT)
         )
-    }
-
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
-        when (key) {
-            PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
-            LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
-            PREF_ISLAMIC_OFFSET -> {
-                appPrefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
-            }
-
-            PREF_PRAY_TIME_METHOD -> appPrefs.edit { remove(PREF_MIDNIGHT_METHOD) }
-            PREF_NOTIFY_DATE -> {
-                if (!appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
-                    stopService(Intent(this, ApplicationService::class.java))
-                    startWorker(applicationContext)
-                }
-            }
-        }
-
-        configureCalendarsAndLoadEvents(this)
-        updateStoredPreference(this)
-        update(applicationContext, true)
-
-        if (key == PREF_APP_LANGUAGE) {
-            applyAppLanguage(this)
-            loadLanguageResources(this.resources)
-        }
-
-        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS) {
-            loadLanguageResources(this.resources)
-        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
