@@ -89,7 +89,6 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
 
     val coordinates by coordinates.collectAsState()
     val context = LocalContext.current
-    val appPrefs = remember { context.appPrefs }
     val cityName by cityName.collectAsState()
     SettingsClickable(stringResource(R.string.coordination), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
@@ -159,7 +158,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
-            appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
+            context.appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
             updateStoredPreference(context)
         }
         SettingsSwitchWithValue(

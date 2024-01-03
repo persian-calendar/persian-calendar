@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.language
@@ -148,9 +149,10 @@ fun WidgetConfiguration() {
         (language.value.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
     if (isInIranTimeVisible) {
-        SettingsSwitch(
+        val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
+        SettingsSwitchWithValue(
             key = PREF_IRAN_TIME,
-            defaultValue = false,
+            value = isForcedIranTimeEnabled,
             title = stringResource(R.string.iran_time),
             summary = stringResource(R.string.showing_iran_time)
         )

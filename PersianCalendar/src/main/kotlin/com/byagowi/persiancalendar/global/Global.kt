@@ -115,8 +115,9 @@ var preferredDigits = Language.PERSIAN_DIGITS
     private set
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
-var isForcedIranTimeEnabled = DEFAULT_IRAN_TIME
-    private set
+
+private val isForcedIranTimeEnabled_ = MutableStateFlow(DEFAULT_IRAN_TIME)
+val isForcedIranTimeEnabled: StateFlow<Boolean> = isForcedIranTimeEnabled_
 
 val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
 val isNotifyDateOnLockScreen: StateFlow<Boolean> = isNotifyDateOnLockScreen_
@@ -311,7 +312,7 @@ fun updateStoredPreference(context: Context) {
     else language.preferredDigits
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
-    isForcedIranTimeEnabled = language.showIranTimeOption && prefs.getBoolean(
+    isForcedIranTimeEnabled_.value = language.showIranTimeOption && prefs.getBoolean(
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     isNotifyDateOnLockScreen_.value = prefs.getBoolean(

@@ -218,11 +218,10 @@ fun SettingsSwitch(
     summary: String? = null,
 ) {
     val context = LocalContext.current
-    val appPrefs = remember { context.appPrefs }
-    var currentValue by remember { mutableStateOf(appPrefs.getBoolean(key, defaultValue)) }
+    var currentValue by remember { mutableStateOf(context.appPrefs.getBoolean(key, defaultValue)) }
     val toggle = {
         currentValue = !currentValue
-        appPrefs.edit { putBoolean(key, currentValue) }
+        context.appPrefs.edit { putBoolean(key, currentValue) }
     }
     SettingsSwitchLayout(toggle, title, summary, currentValue)
 }

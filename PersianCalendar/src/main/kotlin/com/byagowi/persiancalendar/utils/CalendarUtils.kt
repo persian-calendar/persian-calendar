@@ -136,7 +136,7 @@ fun GregorianCalendar.toCivilDate(): CivilDate {
 
 fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
     val calendar = GregorianCalendar()
-    if (!forceLocalTime && isForcedIranTimeEnabled)
+    if (!forceLocalTime && isForcedIranTimeEnabled.value)
         calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar.time = this
     return calendar

@@ -576,7 +576,7 @@ private fun create4x1RemoteViews(
     })
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
-        if (isWidgetClock && isForcedIranTimeEnabled) "(" + context.getString(R.string.iran_time) + ")" else ""
+        if (isWidgetClock && isForcedIranTimeEnabled.value) "(" + context.getString(R.string.iran_time) + ")" else ""
     )
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, context.launchAppPendingIntent())
     return remoteViews
@@ -947,7 +947,7 @@ fun RemoteViews.setDirection(@IdRes viewId: Int, resources: Resources) {
 }
 
 private fun RemoteViews.configureClock(@IdRes viewId: Int) {
-    if (isForcedIranTimeEnabled) setString(viewId, "setTimeZone", IRAN_TIMEZONE_ID)
+    if (isForcedIranTimeEnabled.value) setString(viewId, "setTimeZone", IRAN_TIMEZONE_ID)
     val clockFormat = if (clockIn24) "kk:mm" else "h:mm"
     setCharSequence(viewId, "setFormat12Hour", clockFormat)
     setCharSequence(viewId, "setFormat24Hour", clockFormat)
