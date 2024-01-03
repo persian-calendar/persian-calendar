@@ -50,7 +50,6 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
-import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.Widget1x1
@@ -83,8 +82,8 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
@@ -121,8 +120,8 @@ private var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 @ColorInt
 private var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
-@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-private var prefersWidgetsDynamicColors = false
+@get:ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+val prefersWidgetsDynamicColors: Boolean get() = prefersWidgetsDynamicColorsFlow.value
 
 // Is called from MainActivity to make sure is updated, probably should be removed however
 fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
@@ -184,8 +183,6 @@ fun update(context: Context, updateDate: Boolean) {
 
     selectedWidgetTextColor = getWidgetTextColor(prefs)
     selectedWidgetBackgroundColor = getWidgetBackgroundColor(prefs)
-    prefersWidgetsDynamicColors = theme.value.isDynamicColors() &&
-            prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
 
     roundPixelSize =
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16 * context.resources.dp

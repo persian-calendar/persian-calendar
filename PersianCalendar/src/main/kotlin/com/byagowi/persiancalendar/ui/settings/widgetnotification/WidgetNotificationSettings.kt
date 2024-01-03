@@ -9,9 +9,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
@@ -39,6 +37,7 @@ import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
@@ -97,22 +96,15 @@ fun NotificationSettings() {
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
 fun WidgetConfiguration() {
-    val context = LocalContext.current
-    val appPrefs = remember { context.appPrefs }
     val theme by theme.collectAsState()
-    var preferSystemColors by remember(theme) {
-        mutableStateOf(
-            appPrefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, theme.isDynamicColors())
-        )
-    }
+    val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     if (theme.isDynamicColors()) {
-        SettingsSwitch(
-            PREF_WIDGETS_PREFER_SYSTEM_COLORS, true,
+        SettingsSwitchWithValue(
+            PREF_WIDGETS_PREFER_SYSTEM_COLORS, prefersWidgetsDynamicColors,
             stringResource(R.string.widget_prefer_device_colors),
-            onBeforeToggle = { preferSystemColors = it; it },
         )
     }
-    AnimatedVisibility(!preferSystemColors) {
+    AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsClickable(
             stringResource(R.string.widget_text_color),
             stringResource(R.string.select_widgets_text_color)
@@ -120,7 +112,7 @@ fun WidgetConfiguration() {
             ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR, onDismissRequest)
         }
     }
-    AnimatedVisibility(!preferSystemColors) {
+    AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsClickable(
             stringResource(R.string.widget_background_color),
             stringResource(R.string.select_widgets_background_color)

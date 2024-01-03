@@ -61,6 +61,7 @@ import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
+import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
@@ -119,6 +120,9 @@ var isForcedIranTimeEnabled = DEFAULT_IRAN_TIME
 
 val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
 val isNotifyDateOnLockScreen: StateFlow<Boolean> = isNotifyDateOnLockScreen_
+
+private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
+val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> = prefersWidgetsDynamicColors_
 
 var isWidgetClock = DEFAULT_WIDGET_CLOCK
     private set
@@ -296,6 +300,9 @@ fun updateStoredPreference(context: Context) {
 
         else -> false
     }
+
+    prefersWidgetsDynamicColors_.value = theme.value.isDynamicColors() &&
+            prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
 
     preferredDigits = if (!prefs.getBoolean(
             PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS
