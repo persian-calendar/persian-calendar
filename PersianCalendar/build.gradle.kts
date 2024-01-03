@@ -131,7 +131,7 @@ dependencies {
     // Google/JetBrains owned libraries (roughly platform libraries)
     implementation(libs.dynamicanimation)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.bundles.lifecycle)
     implementation(libs.browser)
     implementation(libs.work.manager.ktx)
     implementation(libs.kotlinx.coroutines.android)

@@ -25,7 +25,7 @@ kotlinpoet = "1.15.3"
 kotlinx-html-jvm = "0.10.1"
 kotlinx-serialization-json = "1.6.2"
 leakcanary = "2.13"
-lifecycle-runtime = "2.6.2"
+lifecycle = "2.6.2"
 mockito-core = "5.8.0"
 mockito-kotlin = "5.2.1"
 openlocationcode = "1.0.4"
@@ -72,7 +72,8 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm", version.ref = "kotlinx-html-jvm" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 openlocationcode = { group = "com.google.openlocationcode", name = "openlocationcode", version.ref = "openlocationcode" }
@@ -95,3 +96,4 @@ kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization"
 [bundles]
 espresso = ["espresso-core", "espresso-contrib"]
 mockito = ["mockito-core", "mockito-kotlin"]
+lifecycle = ["lifecycle-runtime-ktx", "lifecycle-service"]

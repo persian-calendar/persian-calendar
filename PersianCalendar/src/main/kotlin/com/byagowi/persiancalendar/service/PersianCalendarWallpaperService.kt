@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.service
 
-import android.content.SharedPreferences
 import android.graphics.Rect
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -11,30 +10,72 @@ import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
+import androidx.annotation.CallSuper
 import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
-import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ServiceLifecycleDispatcher
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.global.wallpaperDark
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import kotlinx.coroutines.launch
 
-class PersianCalendarWallpaperService : WallpaperService() {
+class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
+    /**
+     * The best practice is to derive from [androidx.lifecycle.LifecycleService] instead
+     * but we need a WallpaperService so we have to mimic that ourselves this way
+     * */
+    private val dispatcher = ServiceLifecycleDispatcher(this)
+
+    @CallSuper
+    override fun onCreate() {
+        dispatcher.onServicePreSuperOnCreate()
+        super.onCreate()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                wallpaperDark.collect { wallpaperDark ->
+                    val isNightMode = isSystemInDarkTheme(resources.configuration)
+                    val accentColor =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) resources.getColor(
+                            if (isNightMode) android.R.color.system_accent1_500
+                            else android.R.color.system_accent1_300,
+                            null
+                        ) else null
+                    patternDrawable = PatternDrawable(
+                        preferredTintColor = accentColor,
+                        darkBaseColor = wallpaperDark,
+                        dp = resources.dp
+                    )
+                }
+            }
+        }
+    }
+
+    @CallSuper
+    override fun onDestroy() {
+        dispatcher.onServicePreSuperOnDestroy()
+        super.onDestroy()
+    }
+
+    private var patternDrawable: PatternDrawable? = null
+    override val lifecycle: Lifecycle get() = dispatcher.lifecycle
+
     override fun onCreateEngine() = object : Engine() {
-        private var patternDrawable = PatternDrawable(dp = resources.dp)
         private val drawRunner = Runnable { draw() }
         private val handler = Handler(Looper.getMainLooper()).also { it.post(drawRunner) }
         private var visible = true
         private val bounds = Rect()
         private val sensorManager = getSystemService<SensorManager>()
         private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.getOrNull(0)
-        private val appPrefs = this@PersianCalendarWallpaperService.appPrefs
         override fun onVisibilityChanged(visible: Boolean) {
-            initPatternDrawable()
             this.visible = visible
             if (visible) handler.post(drawRunner) else handler.removeCallbacks(drawRunner)
 
@@ -44,26 +85,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 ) else sensorManager?.unregisterListener(sensorListener)
             }
 
-            if (visible) appPrefs.registerOnSharedPreferenceChangeListener(prefListener)
-            else appPrefs.unregisterOnSharedPreferenceChangeListener(prefListener)
-        }
-
-        private fun initPatternDrawable() {
-            val context = this@PersianCalendarWallpaperService
-            val isNightMode = isSystemInDarkTheme(context.resources.configuration)
-            val accentColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) context.getColor(
-                if (isNightMode) android.R.color.system_accent1_500
-                else android.R.color.system_accent1_300
-            ) else null
-            patternDrawable = PatternDrawable(
-                preferredTintColor = accentColor,
-                darkBaseColor = wallpaperDark.value,
-                dp = resources.dp
-            )
-        }
-
-        private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-            if (key == PREF_WALLPAPER_DARK) initPatternDrawable()
+            if (visible) dispatcher.onServicePreSuperOnStart()
         }
 
         private var sensorRotation = 0f
@@ -79,8 +101,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private val direction = listOf(1, -1).random()
         private fun draw() {
             val surfaceHolder = surfaceHolder
-            val fasterUpdate = fasterUpdateTimestamp != 0L &&
-                    fasterUpdateTimestamp + TWO_SECONDS_IN_MILLIS > System.currentTimeMillis()
+            val fasterUpdate = fasterUpdateTimestamp != 0L && fasterUpdateTimestamp + TWO_SECONDS_IN_MILLIS > System.currentTimeMillis()
             if (!fasterUpdate) rotationDegree += .05f * direction
             handler.removeCallbacks(drawRunner)
             runCatching {
@@ -92,10 +113,12 @@ class PersianCalendarWallpaperService : WallpaperService() {
                     xOffset += (centerX - touchX) / 400f
                     yOffset += (centerY - touchY) / 400f
                 }
-                patternDrawable.setSize(bounds.width(), bounds.height())
-                patternDrawable.rotationDegree = rotationDegree + slideRotation + sensorRotation
-                canvas.withScale(scale, scale, centerX, centerY) {
-                    canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
+                patternDrawable?.also { patternDrawable ->
+                    patternDrawable.setSize(bounds.width(), bounds.height())
+                    patternDrawable.rotationDegree = rotationDegree + slideRotation + sensorRotation
+                    canvas.withScale(scale, scale, centerX, centerY) {
+                        canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
+                    }
                 }
                 surfaceHolder.unlockCanvasAndPost(canvas)
             }.onFailure(logException)
