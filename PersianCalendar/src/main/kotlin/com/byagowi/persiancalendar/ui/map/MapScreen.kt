@@ -84,6 +84,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -346,7 +347,8 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                 AnimatedContent(
                     modifier = Modifier.weight(1f, fill = false),
                     targetState = formattedTime,
-                    label = "time"
+                    label = "time",
+                    transitionSpec = appCrossfadeSpec,
                 ) { state ->
                     Text(
                         state,

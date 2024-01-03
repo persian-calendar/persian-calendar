@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -91,6 +92,7 @@ import com.byagowi.persiancalendar.ui.map.MapViewModel
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -147,7 +149,15 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         NavigationDrawerItem(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             icon = { Icon(icon, contentDescription = null) },
-                            label = { Text(stringResource(title)) },
+                            label = {
+                                // Apparently language strings isn't applied immediately in drawer
+                                // items titles but only when drawer opens so let's animate it!
+                                AnimatedContent(
+                                    targetState = stringResource(title),
+                                    label = "title",
+                                    transitionSpec = appCrossfadeSpec,
+                                ) { state -> Text(state) }
+                            },
                             selected = when (val route = navBackStackEntry?.destination?.route) {
                                 levelRoute -> compassRoute
                                 mapRoute -> astronomyRoute
