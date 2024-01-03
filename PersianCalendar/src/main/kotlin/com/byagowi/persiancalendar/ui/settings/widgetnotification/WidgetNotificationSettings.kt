@@ -45,7 +45,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.TimeZone
@@ -67,7 +67,7 @@ fun NotificationSettings() {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted -> context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             key = PREF_NOTIFY_DATE,
             value = isNotifyDate,
             title = stringResource(R.string.notify_date),
@@ -85,7 +85,7 @@ fun NotificationSettings() {
     }
     AnimatedVisibility(isNotifyDate) {
         val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen.collectAsState()
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,
             value = isNotifyDateOnLockScreen,
             title = stringResource(R.string.notify_date_lock_screen),
@@ -100,7 +100,7 @@ fun WidgetConfiguration() {
     val theme by theme.collectAsState()
     val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     if (theme.isDynamicColors()) {
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             PREF_WIDGETS_PREFER_SYSTEM_COLORS, prefersWidgetsDynamicColors,
             stringResource(R.string.widget_prefer_device_colors),
         )
@@ -121,25 +121,25 @@ fun WidgetConfiguration() {
             ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR, onDismissRequest)
         }
     }
-    SettingsSwitch(
+    SettingsSwitchWithInnerState(
         key = PREF_NUMERICAL_DATE_PREFERRED,
         defaultValue = false,
         title = stringResource(R.string.prefer_linear_date),
         summary = stringResource(R.string.prefer_linear_date_summary)
     )
-    SettingsSwitch(
+    SettingsSwitchWithInnerState(
         key = PREF_WIDGET_CLOCK,
         defaultValue = true,
         title = stringResource(R.string.clock_on_widget),
         summary = stringResource(R.string.showing_clock_on_widget)
     )
-    SettingsSwitch(
+    SettingsSwitchWithInnerState(
         key = PREF_WIDGET_IN_24,
         defaultValue = false,
         title = stringResource(R.string.clock_in_24),
         summary = stringResource(R.string.showing_clock_in_24)
     )
-    SettingsSwitch(
+    SettingsSwitchWithInnerState(
         key = PREF_CENTER_ALIGN_WIDGETS,
         defaultValue = true,
         title = stringResource(R.string.center_align_widgets),
@@ -150,7 +150,7 @@ fun WidgetConfiguration() {
     }
     if (isInIranTimeVisible) {
         val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             key = PREF_IRAN_TIME,
             value = isForcedIranTimeEnabled,
             title = stringResource(R.string.iran_time),

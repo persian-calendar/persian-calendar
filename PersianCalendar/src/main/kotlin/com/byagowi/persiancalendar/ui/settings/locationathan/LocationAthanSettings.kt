@@ -55,7 +55,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanVolumeDialog
@@ -124,7 +124,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
     }
     AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
         val asrMethod by asrMethod.collectAsState()
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             key = PREF_ASR_HANAFI_JURISTIC,
             value = asrMethod == AsrMethod.Hanafi,
             title = stringResource(R.string.asr_hanafi_juristic)
@@ -161,7 +161,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
             context.appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
             updateStoredPreference(context)
         }
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             PREF_NOTIFICATION_ATHAN,
             notificationAthan,
             stringResource(R.string.notification_athan),
@@ -178,7 +178,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         )
     }
     AnimatedVisibility(isLocationSet && !notificationAthan) {
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             PREF_ASCENDING_ATHAN_VOLUME,
             ascendingAthan,
             stringResource(R.string.ascending_athan_volume),

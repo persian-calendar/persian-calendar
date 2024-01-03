@@ -39,7 +39,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -65,7 +65,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
         summary = language.nativeName,
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
     AnimatedVisibility(language.isArabic) {
-        SettingsSwitch(
+        SettingsSwitchWithInnerState(
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
             DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
             "السنة الميلادية بالاسماء الشرقية",
@@ -73,7 +73,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
         )
     }
     AnimatedVisibility(language.isPersian) {
-        SettingsSwitch(
+        SettingsSwitchWithInnerState(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             "ماه‌های میلادی با نام انگلیسی",
@@ -82,7 +82,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
     }
     // TODO: To be integrated into the language selection dialog one day
     AnimatedVisibility(language.canHaveLocalDigits) {
-        SettingsSwitch(
+        SettingsSwitchWithInnerState(
             PREF_LOCAL_DIGITS,
             true,
             stringResource(R.string.native_digits),
@@ -104,7 +104,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
-        SettingsSwitchWithValue(
+        SettingsSwitch(
             PREF_SHOW_DEVICE_CALENDAR_EVENTS, isShowDeviceCalendarEvents,
             stringResource(R.string.show_device_calendar_events),
             stringResource(R.string.show_device_calendar_events_summary),
@@ -124,13 +124,13 @@ fun InterfaceCalendarSettings(destination: String? = null) {
         stringResource(R.string.calendars_priority),
         stringResource(R.string.calendars_priority_summary)
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
-    SettingsSwitch(
+    SettingsSwitchWithInnerState(
         PREF_ASTRONOMICAL_FEATURES,
         false,
         stringResource(R.string.astronomy),
         stringResource(R.string.astronomical_info_summary)
     )
-    SettingsSwitch(
+    SettingsSwitchWithInnerState(
         PREF_SHOW_WEEK_OF_YEAR_NUMBER,
         false,
         stringResource(R.string.week_number),

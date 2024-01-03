@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.dreamNoise
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -69,7 +69,7 @@ class DreamSettingsActivity : ComponentActivity() {
                             )
                         }
                         val dreamNoise by dreamNoise.collectAsState()
-                        SettingsSwitchWithValue(
+                        SettingsSwitch(
                             PREF_DREAM_NOISE,
                             dreamNoise,
                             "🔊🔊🔊",

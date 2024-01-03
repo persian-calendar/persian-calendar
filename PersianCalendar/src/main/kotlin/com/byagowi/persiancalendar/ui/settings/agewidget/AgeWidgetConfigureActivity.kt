@@ -47,7 +47,7 @@ import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -192,7 +192,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
                 val theme by theme.collectAsState()
                 if (theme.isDynamicColors()) {
-                    SettingsSwitchWithValue(
+                    SettingsSwitch(
                         key = PREF_WIDGETS_PREFER_SYSTEM_COLORS,
                         value = prefersWidgetsDynamicColors,
                         title = stringResource(R.string.widget_prefer_device_colors),

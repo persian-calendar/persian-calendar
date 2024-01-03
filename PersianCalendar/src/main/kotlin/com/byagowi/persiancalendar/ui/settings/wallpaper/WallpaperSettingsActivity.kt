@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.wallpaperDark
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -69,7 +69,7 @@ class WallpaperSettingsActivity : ComponentActivity() {
                             )
                         }
                         val wallpaperDark by wallpaperDark.collectAsState()
-                        SettingsSwitchWithValue(
+                        SettingsSwitch(
                             PREF_WALLPAPER_DARK,
                             wallpaperDark,
                             stringResource(R.string.theme_dark)

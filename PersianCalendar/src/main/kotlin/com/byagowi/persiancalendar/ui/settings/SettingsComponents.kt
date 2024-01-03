@@ -221,7 +221,7 @@ fun SettingsMultiSelect(
 }
 
 @Composable
-fun SettingsSwitch(
+fun SettingsSwitchWithInnerState(
     key: String,
     defaultValue: Boolean,
     title: String,
@@ -237,7 +237,7 @@ fun SettingsSwitch(
 }
 
 @Composable
-fun SettingsSwitchWithValue(
+fun SettingsSwitch(
     key: String,
     value: Boolean,
     title: String,
