@@ -9,12 +9,10 @@ import android.os.Build
 import android.service.dreams.DreamService
 import android.view.View
 import android.view.animation.LinearInterpolator
-import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
-import com.byagowi.persiancalendar.PREF_DREAM_NOISE
+import com.byagowi.persiancalendar.global.dreamNoise
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.random.Random
 
@@ -71,10 +69,7 @@ class PersianCalendarDreamService : DreamService() {
             view.invalidate()
         }
 
-        runCatching {
-            if (appPrefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE))
-                audioTrack.play()
-        }.onFailure(logException)
+        runCatching { if (dreamNoise.value) audioTrack.play() }.onFailure(logException)
 
         // ComposeView can't be used in DreamService in my tries
         // Even if worked someday, please test older devices also
