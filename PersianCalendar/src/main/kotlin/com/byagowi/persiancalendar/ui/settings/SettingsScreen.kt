@@ -44,6 +44,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,6 +65,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
@@ -100,7 +102,11 @@ fun SettingsScreen(
         containerColor = Color.Transparent,
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.settings)) },
+                title = {
+                    val language by language.collectAsState()
+                    language.run {}
+                    Text(stringResource(R.string.settings))
+                },
                 colors = AppTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = { ThreeDotsDropdownMenu { closeMenu -> MenuItems(closeMenu) } },
@@ -151,14 +157,14 @@ fun SettingsScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 tab.Icon(selectedTabIndex == index)
                                 Spacer(modifier = Modifier.width(8.dp))
-                                Text(tab.Title())
+                                tab.Title()
                             }
                         },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     ) else Tab(
                         icon = { tab.Icon(selectedTabIndex == index) },
-                        text = { Text(tab.Title()) },
+                        text = { tab.Title() },
                         selected = pagerState.currentPage == index,
                         onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
                     )
@@ -203,9 +209,13 @@ private data class TabItem(
     val content: @Composable () -> Unit,
 ) {
     @Composable
-    fun Title(): String {
-        return stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
-            secondTitle
+    fun Title() {
+        val language by language.collectAsState()
+        language.run {}
+        Text(
+            stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
+                secondTitle
+            )
         )
     }
 
