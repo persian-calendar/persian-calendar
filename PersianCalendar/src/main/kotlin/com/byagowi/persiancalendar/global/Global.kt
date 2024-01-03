@@ -146,8 +146,9 @@ val athanSoundName: StateFlow<String> = athanSoundName_
 var midnightMethod = calculationMethod.value.defaultMidnight
     private set
 
-var asrMethod = AsrMethod.Standard
-    private set
+private val asrMethod_ = MutableStateFlow(AsrMethod.Standard)
+val asrMethod: StateFlow<AsrMethod> = asrMethod_
+
 var highLatitudesMethod = HighLatitudesMethod.NightMiddle
     private set
 
@@ -330,7 +331,7 @@ fun updateStoredPreference(context: Context) {
     calculationMethod_.value = CalculationMethod.valueOf(
         prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
     )
-    asrMethod = if (calculationMethod.value.isJafari || !prefs.getBoolean(
+    asrMethod_.value = if (calculationMethod.value.isJafari || !prefs.getBoolean(
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi

@@ -31,7 +31,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.EN_DASH
@@ -43,11 +42,11 @@ import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.ascendingAthan
+import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
@@ -56,7 +55,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanGapDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.athan.AthanSelectDialog
@@ -71,6 +69,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.titleStringId
+import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
@@ -124,10 +123,11 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         )
     }
     AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
-        SettingsSwitch(
-            PREF_ASR_HANAFI_JURISTIC,
-            language.value.isHanafiMajority,
-            stringResource(R.string.asr_hanafi_juristic)
+        val asrMethod by asrMethod.collectAsState()
+        SettingsSwitchWithValue(
+            key = PREF_ASR_HANAFI_JURISTIC,
+            value = asrMethod == AsrMethod.Hanafi,
+            title = stringResource(R.string.asr_hanafi_juristic)
         )
     }
     AnimatedVisibility(isLocationSet) {
@@ -178,9 +178,9 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         )
     }
     AnimatedVisibility(isLocationSet && !notificationAthan) {
-        SettingsSwitch(
+        SettingsSwitchWithValue(
             PREF_ASCENDING_ATHAN_VOLUME,
-            DEFAULT_ASCENDING_ATHAN_VOLUME,
+            ascendingAthan,
             stringResource(R.string.ascending_athan_volume),
             stringResource(R.string.enable_ascending_athan_volume),
         )
