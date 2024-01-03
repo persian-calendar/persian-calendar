@@ -9,6 +9,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -81,6 +82,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettin
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -105,7 +107,11 @@ fun SettingsScreen(
                 title = {
                     val language by language.collectAsState()
                     language.run {}
-                    Text(stringResource(R.string.settings))
+                    AnimatedContent(
+                        targetState = stringResource(R.string.settings),
+                        label = "title",
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state -> Text(state) }
                 },
                 colors = AppTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
