@@ -15,15 +15,17 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
+import com.byagowi.persiancalendar.global.wallpaperDark
+import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithValue
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -66,9 +68,10 @@ class WallpaperSettingsActivity : ComponentActivity() {
                                 modifier = Modifier.padding(horizontal = 8.dp),
                             )
                         }
-                        SettingsSwitch(
+                        val wallpaperDark by wallpaperDark.collectAsState()
+                        SettingsSwitchWithValue(
                             PREF_WALLPAPER_DARK,
-                            DEFAULT_WALLPAPER_DARK,
+                            wallpaperDark,
                             stringResource(R.string.theme_dark)
                         )
                     }

@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
+import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
@@ -60,6 +61,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
+import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
@@ -203,6 +205,9 @@ var weekEnds = BooleanArray(7)
 
 private val dreamNoise_ = MutableStateFlow(DEFAULT_DREAM_NOISE)
 val dreamNoise: StateFlow<Boolean> = dreamNoise_
+
+private val wallpaperDark_ = MutableStateFlow(DEFAULT_WALLPAPER_DARK)
+val wallpaperDark: StateFlow<Boolean> = wallpaperDark_
 
 private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
 val isShowDeviceCalendarEvents: StateFlow<Boolean> = isShowDeviceCalendarEvents_
@@ -352,6 +357,7 @@ fun updateStoredPreference(context: Context) {
         prefs.getString(PREF_ATHAN_NAME, null) ?: context.getString(R.string.default_athan)
 
     dreamNoise_.value = prefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE)
+    wallpaperDark_.value = prefs.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
 
     val storedCity = prefs.storedCity
     coordinates_.value = storedCity?.coordinates ?: run {

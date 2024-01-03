@@ -14,8 +14,8 @@ import android.view.MotionEvent
 import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
-import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
+import com.byagowi.persiancalendar.global.wallpaperDark
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
@@ -57,7 +57,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             ) else null
             patternDrawable = PatternDrawable(
                 preferredTintColor = accentColor,
-                darkBaseColor = appPrefs.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK),
+                darkBaseColor = wallpaperDark.value,
                 dp = resources.dp
             )
         }
