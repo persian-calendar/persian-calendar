@@ -66,7 +66,8 @@ fun EventsTab(
         val context = LocalContext.current
 
         val jdn by viewModel.selectedDay.collectAsState()
-        val shiftWorkTitle = remember(jdn) { getShiftWorkTitle(jdn) }
+        val refreshToken by viewModel.refreshToken.collectAsState()
+        val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
         AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle ?: "",
@@ -105,7 +106,6 @@ fun EventsTab(
             }
         }
 
-        val refreshToken by viewModel.refreshToken.collectAsState()
         val events = remember(jdn, refreshToken) {
             (eventsRepository?.getEvents(jdn, context.readDayDeviceEvents(jdn))
                 ?: emptyList()).sortedBy {
