@@ -140,7 +140,7 @@ private fun AstronomicalOverview(
                 } else it.initiate()
             },
             modifier = Modifier.fillMaxHeight(),
-        ) else Box {
+        ) else Box(Modifier.fillMaxWidth()) {
             AndroidView(
                 factory = ::MoonView,
                 update = { if (jdn != today) it.jdn = jdn.value.toFloat() },
