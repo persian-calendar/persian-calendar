@@ -39,7 +39,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -84,7 +84,6 @@ import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -146,10 +145,11 @@ fun SettingsScreen(
                 divider = {},
                 indicator = @Composable { tabPositions ->
                     if (selectedTabIndex < tabPositions.size) {
-                        SecondaryIndicator(
-                            Modifier
-                                .tabIndicatorOffset(tabPositions[selectedTabIndex])
-                                .padding(horizontal = ExtraLargeShapeCornerSize.dp),
+                        val isLandscape =
+                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                        TabRowDefaults.PrimaryIndicator(
+                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
+                            width = if (isLandscape) 92.dp else 64.dp,
                             color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
                         )
                     }
