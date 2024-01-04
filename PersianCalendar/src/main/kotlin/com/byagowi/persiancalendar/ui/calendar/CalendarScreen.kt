@@ -20,19 +20,12 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -42,10 +35,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -59,7 +49,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -85,28 +74,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.invisibleToUser
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -129,8 +107,6 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -139,8 +115,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPagerState
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
@@ -148,6 +122,7 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
+import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
@@ -158,8 +133,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
-import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
@@ -179,7 +152,6 @@ import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.update
@@ -202,7 +174,6 @@ import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -328,153 +299,6 @@ fun CalendarScreen(
                     withDismissAction = true,
                 ) == SnackbarResult.ActionPerformed
             ) context.bringMarketPage()
-        }
-    }
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun YearView(
-    viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp
-) {
-    val today by viewModel.today.collectAsState()
-    val todayDate = today.toCalendar(mainCalendar)
-    val selectedMonthOffset = viewModel.selectedMonthOffset.value
-    val yearOffsetInMonths = run {
-        val selectedMonth =
-            mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-        selectedMonth.year - todayDate.year
-    }
-
-    val monthNames = mainCalendar.monthsNames
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
-    var scale by remember { mutableStateOf(1f) }
-    val transformState = rememberTransformableState { zoomChange, _, _ ->
-        scale *= zoomChange
-    }
-
-    val width = (maxWidth / if (isLandscape) 4 else 3) * scale
-    val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale
-
-    val titleHeight = (height / 10).coerceAtLeast(20.dp)
-    val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
-    val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
-    val padding = 4.dp
-
-    val widthInPx = with(LocalDensity.current) { width.toPx() }
-    val heightInPx = with(LocalDensity.current) { height.toPx() }
-    val paddingInPx = with(LocalDensity.current) { padding.toPx() }
-
-    val context = LocalContext.current
-    val yearStartJdn = Jdn(mainCalendar.createDate(today.toCalendar(mainCalendar).year, 1, 1))
-    val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-        if (isShowDeviceCalendarEvents.value) context.readYearDeviceEvents(yearStartJdn)
-        else EventsStore.empty()
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-
-    val indicatorColor = AppDaySelectionColor()
-    val dayPainterColors = AppDayPainterColors()
-    val dayPainter = remember(dayPainterColors, indicatorColor, widthInPx, heightInPx) {
-        DayPainter(
-            context.resources,
-            (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
-            (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
-            isRtl,
-            dayPainterColors,
-            isYearView = true,
-            selectedDayColor = indicatorColor.toArgb(),
-        )
-    }
-
-    val halfPages = 100
-    val lazyColumnState = rememberLazyListState(halfPages + yearOffsetInMonths)
-    val yearViewCommand by viewModel.yearViewCommand.collectAsState()
-    val scope = rememberCoroutineScope()
-    yearViewCommand?.let { command ->
-        scope.launch {
-            if (command != 0) {
-                lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex + command)
-            } else lazyColumnState.animateScrollToItem(halfPages)
-            viewModel.jumpYearView(null)
-        }
-    }
-
-    LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
-        items(halfPages * 2) {
-            val yearOffset = it - halfPages
-            Column {
-                FlowRow(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    repeat(if (isLandscape) 3 else 4) { row ->
-                        repeat(if (isLandscape) 4 else 3) { column ->
-                            val month = 1 + column + row * if (isLandscape) 4 else 3
-                            val offset = yearOffset * 12 + month - todayDate.month
-                            val title = language.value.my.format(
-                                monthNames[month - 1],
-                                formatNumber(yearOffset + todayDate.year),
-                            )
-                            Column(
-                                Modifier
-                                    .size(width, height)
-                                    .padding(padding)
-                                    .clip(MaterialTheme.shapes.large)
-                                    .clickable(onClickLabel = title) {
-                                        viewModel.closeYearView()
-                                        viewModel.changeSelectedMonthOffsetCommand(offset)
-                                    }
-                                    .background(
-                                        LocalContentColor.current.copy(
-                                            alpha = if (offset == selectedMonthOffset) .025f else .1f,
-                                        )
-                                    ),
-                            ) {
-                                Text(
-                                    title,
-                                    Modifier.size(width - padding * 2, titleHeight),
-                                    fontSize = titleHeightSp,
-                                    textAlign = TextAlign.Center
-                                )
-                                Canvas(
-                                    Modifier.size(
-                                        width - padding * 2,
-                                        height - titleHeight - padding * 2,
-                                    )
-                                ) {
-                                    drawIntoCanvas { canvas ->
-                                        renderMonthWidget(
-                                            dayPainter = dayPainter,
-                                            width = size.width.roundToInt(),
-                                            canvas = canvas.nativeCanvas,
-                                            today = today,
-                                            baseDate = mainCalendar.getMonthStartFromMonthsDistance(
-                                                today, offset
-                                            ),
-                                            deviceEvents = yearDeviceEvents,
-                                            isRtl = isRtl,
-                                            isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-                                            selectedDay = viewModel.selectedDay.value,
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                Spacer(Modifier.height(bottomPadding.coerceAtLeast(24.dp)))
-                if (yearOffset != halfPages - 1) Text(
-                    formatNumber(yearOffset + todayDate.year + 1),
-                    style = MaterialTheme.typography.headlineMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .semantics {
-                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                        },
-                )
-            }
         }
     }
 }
