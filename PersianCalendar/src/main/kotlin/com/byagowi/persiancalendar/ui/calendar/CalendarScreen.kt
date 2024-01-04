@@ -123,6 +123,7 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
+import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
@@ -590,7 +591,10 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                     onClickLabel = stringResource(
                         if (isYearView) R.string.return_to_today else R.string.year_view
                     )
-                ) { if (isYearView) viewModel.jumpYearView(0) else viewModel.openYearView() }
+                ) {
+                    if (isYearView) viewModel.commandYearView(YearViewCommand.TodayMonth)
+                    else viewModel.openYearView()
+                }
             ) {
                 AnimatedContent(
                     title,
@@ -627,13 +631,13 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
-                ) { viewModel.jumpYearView(+1) }
+                ) { viewModel.commandYearView(YearViewCommand.NextMonth) }
             }
             AnimatedVisibility(isYearView) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
-                ) { viewModel.jumpYearView(-1) }
+                ) { viewModel.commandYearView(YearViewCommand.PreviousMonth) }
             }
             AnimatedVisibility(isYearView) {
                 AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {

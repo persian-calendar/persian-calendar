@@ -122,10 +122,18 @@ fun YearView(
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
         scope.launch {
-            if (command != 0) {
-                lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex + command)
-            } else lazyColumnState.animateScrollToItem(halfPages)
-            viewModel.jumpYearView(null)
+            when (command) {
+                YearViewCommand.PreviousMonth -> {
+                    lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex - 1)
+                }
+
+                YearViewCommand.NextMonth -> {
+                    lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex + 1)
+                }
+
+                YearViewCommand.TodayMonth -> lazyColumnState.animateScrollToItem(halfPages)
+            }
+            viewModel.clearYearViewCommand()
         }
     }
 

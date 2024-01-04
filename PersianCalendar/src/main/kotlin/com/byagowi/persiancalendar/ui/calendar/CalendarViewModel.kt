@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
+import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -73,8 +74,8 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _isYearView = MutableStateFlow(false)
     val isYearView: StateFlow<Boolean> = _isYearView
 
-    private val _yearViewCommand = MutableStateFlow<Int?>(null)
-    val yearViewCommand: StateFlow<Int?> = _yearViewCommand
+    private val _yearViewCommand = MutableStateFlow<YearViewCommand?>(null)
+    val yearViewCommand: StateFlow<YearViewCommand?> = _yearViewCommand
 
     // Commands
     fun changeSelectedMonthOffsetCommand(offset: Int?) {
@@ -148,9 +149,12 @@ class CalendarViewModel @JvmOverloads constructor(
         repository = SearchEventsRepository(getApplication())
     }
 
-    // +1 => go to the next year, -1 => go to the previous year, 0 => go to the current year
-    fun jumpYearView(command: Int?) {
+    fun commandYearView(command: YearViewCommand) {
         _yearViewCommand.value = command
+    }
+
+    fun clearYearViewCommand() {
+        _yearViewCommand.value = null
     }
 
     init {
