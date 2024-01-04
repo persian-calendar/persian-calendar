@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import kotlinx.coroutines.launch
@@ -46,13 +47,15 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
         }
     }
 
+    val language by language.collectAsState()
+
     HorizontalPager(state = pagerState) { index ->
         Box(modifier = Modifier.height(height)) {
             val iconSize = width / 12
             Box(
                 modifier = Modifier
                     .align(Alignment.TopStart)
-                    .size(iconSize, height / 7 + 4.dp),
+                    .size(iconSize, height / 7 + (if (language.isArabicScript) 4 else 0).dp),
             ) {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowLeft,
@@ -95,7 +98,7 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
             Box(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
-                    .size(iconSize, height / 7 + 4.dp),
+                    .size(iconSize, height / 7 + (if (language.isArabicScript) 4 else 0).dp),
             ) {
                 Icon(
                     Icons.AutoMirrored.Default.KeyboardArrowRight,
