@@ -63,11 +63,8 @@ import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun YearView(
-    viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp
-) {
+fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
     val today by viewModel.today.collectAsState()
     val todayDate = today.toCalendar(mainCalendar)
     val selectedMonthOffset = viewModel.selectedMonthOffset.value
@@ -145,7 +142,7 @@ fun YearView(
         items(halfPages * 2) {
             val yearOffset = it - halfPages
             Column {
-                FlowRow(
+                @OptIn(ExperimentalLayoutApi::class) FlowRow(
                     horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier.fillMaxWidth(),
                 ) {
