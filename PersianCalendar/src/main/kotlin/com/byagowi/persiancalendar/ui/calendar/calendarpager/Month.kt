@@ -159,7 +159,7 @@ fun Month(
     // Slight fix for the particular font we use for native digits in Persian and so
     val dayOffsetY = if (mainCalendarDigits === Language.ARABIC_DIGITS) 0f else min(
         cellPixelsWidth, cellPixelsHeight
-    ) * 2 / 40
+    ) * 1 / 40
 
     Column(
         Modifier.drawWithCache {
