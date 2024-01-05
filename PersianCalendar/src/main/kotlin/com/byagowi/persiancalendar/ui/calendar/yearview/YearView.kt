@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -56,6 +57,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
+import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
@@ -136,6 +138,7 @@ fun YearView(
             viewModel.clearYearViewCommand()
         }
     }
+    val shape = MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale))
 
     LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
         items(halfPages * 2) {
@@ -157,7 +160,7 @@ fun YearView(
                                 Modifier
                                     .size(width, height)
                                     .padding(padding)
-                                    .clip(MaterialTheme.shapes.large)
+                                    .clip(shape)
                                     .clickable(onClickLabel = title) {
                                         viewModel.closeYearView()
                                         viewModel.changeSelectedMonthOffsetCommand(offset)
