@@ -81,12 +81,14 @@ fun YearView(
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     var scale by remember { mutableStateOf(1f) }
+    val horizontalDivisions = if (isLandscape) 4 else 3
     val transformState = rememberTransformableState { zoomChange, _, _ ->
-        scale *= zoomChange
+        scale = (scale * zoomChange).coerceAtMost(horizontalDivisions.toFloat())
     }
 
-    val width = (maxWidth / if (isLandscape) 4 else 3) * scale
+    val width = maxWidth / horizontalDivisions * scale
     val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale
+    val shape = MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale))
 
     val titleHeight = (height / 10).coerceAtLeast(20.dp)
     val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
@@ -138,7 +140,6 @@ fun YearView(
             viewModel.clearYearViewCommand()
         }
     }
-    val shape = MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale))
 
     LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
         items(halfPages * 2) {
