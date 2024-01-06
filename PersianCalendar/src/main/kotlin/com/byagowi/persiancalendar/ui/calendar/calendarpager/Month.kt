@@ -145,7 +145,8 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
         repeat(monthLength) { dayOffset ->
             if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingDayOfWeek) % 7 == 0)) {
                 Box(contentAlignment = Alignment.Center) {
-                    val weekNumber = formatNumber(weekOfYearStart + dayOffset / 8)
+                    val weekNumber =
+                        formatNumber(weekOfYearStart + (dayOffset + startingDayOfWeek) / 7)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
                         weekNumber,
