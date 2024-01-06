@@ -19,13 +19,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,12 +36,9 @@ fun SelectionIndicator(
     viewModel: CalendarViewModel,
     monthStartJdn: Jdn,
     monthLength: Int,
-    size: DpSize,
+    tableSize: DpSize,
     startingDayOfWeek: Int,
-    widthPixels: Float,
-    cellWidthPx: Float,
-    cellHeightPx: Float,
-    oneDpInPx: Float,
+    isShowWeekOfYearEnabled: Boolean,
 ) {
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
@@ -64,21 +62,29 @@ fun SelectionIndicator(
         painter.startSelection()
     }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    Canvas(Modifier.size(size)) {
+    val widthPx = with(LocalDensity.current) { tableSize.width.toPx() }
+
+    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
+    val rowsCount = 7
+    val cellWidthPx = with(LocalDensity.current) { tableSize.width.toPx() / columnsCount }
+    val cellHeightPx = with(LocalDensity.current) { tableSize.height.toPx() / rowsCount }
+
+    Canvas(Modifier.size(tableSize)) {
         invalidationToken.run {}
         val index = lastSelectedDay - monthStartJdn
         if (index !in monthRange) return@Canvas
         val cellIndex = index + startingDayOfWeek
         val row = cellIndex / 7 + 1 // +1 for weekday names initials row
         val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
+
         drawIntoCanvas {
             painter.draw(
                 canvas = it,
-                left = if (isRtl) widthPixels - (column + 1) * cellWidthPx else column * cellWidthPx,
+                left = if (isRtl) widthPx - (column + 1) * cellWidthPx else column * cellWidthPx,
                 top = row * cellHeightPx,
                 width = cellWidthPx,
                 height = cellHeightPx,
-                halfDp = oneDpInPx / 2,
+                halfDp = .5.dp.toPx(),
             )
         }
     }

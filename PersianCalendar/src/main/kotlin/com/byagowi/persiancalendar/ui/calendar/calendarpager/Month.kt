@@ -64,38 +64,35 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
+fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
 
-    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
-    val rowsCount = 7
+    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
 
     val startingDayOfWeek = applyWeekStartOffsetToWeekDay(monthStartJdn.dayOfWeek)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
-    val width = size.width
-    val height = size.height
-    val widthPixels = with(LocalDensity.current) { width.toPx() }
-    val heightPixels = with(LocalDensity.current) { height.toPx() }
-    val cellWidthPx = widthPixels / columnsCount
-    val cellHeightPx = heightPixels / rowsCount
-    val oneDpInPx = with(LocalDensity.current) { 1.dp.toPx() }
-
     SelectionIndicator(
         viewModel = viewModel,
         monthStartJdn = monthStartJdn,
         monthLength = monthLength,
-        size = size,
+        tableSize = tableSize,
         startingDayOfWeek = startingDayOfWeek,
-        widthPixels = widthPixels,
-        cellWidthPx = cellWidthPx,
-        cellHeightPx = cellHeightPx,
-        oneDpInPx = oneDpInPx,
+        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
     )
+
+    val width = tableSize.width
+    val height = tableSize.height
+    val widthPx = with(LocalDensity.current) { width.toPx() }
+    val heightPx = with(LocalDensity.current) { height.toPx() }
+    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
+    val rowsCount = 7
+    val cellWidthPx = widthPx / columnsCount
+    val cellHeightPx = heightPx / rowsCount
 
     val refreshToken by viewModel.refreshToken.collectAsState()
     val context = LocalContext.current
@@ -108,7 +105,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
     val diameter = min(width / columnsCount, height / rowsCount)
     val dayPainterColors = AppDayPainterColors()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val dayPainter = remember(size, refreshToken, dayPainterColors) {
+    val dayPainter = remember(tableSize, refreshToken, dayPainterColors) {
         DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, dayPainterColors)
     }
     val textMeasurer = rememberTextMeasurer()
@@ -127,7 +124,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
     val addEvent = AddEvent(viewModel)
     val selectedDay by viewModel.selectedDay.collectAsState()
     val isHighlighted by viewModel.isHighlighted.collectAsState()
-    FixedSizeTableLayout(size, columnsCount, rowsCount) {
+    FixedSizeTableLayout(tableSize, columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(contentAlignment = Alignment.Center) {
@@ -198,6 +195,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
                     "",
                     shiftWorkTitle,
                 )
+                val oneDpInPx = .5.dp.toPx()
                 drawIntoCanvas {
                     if (isToday) drawCircle(
                         Color(dayPainterColors.colorCurrentDay),
