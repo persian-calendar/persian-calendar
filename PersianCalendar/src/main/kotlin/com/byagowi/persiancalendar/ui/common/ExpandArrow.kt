@@ -21,12 +21,11 @@ fun ExpandArrow(
     contentDescription: String? = null,
     isLineStart: Boolean = false,
 ) {
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val targetValue = when {
-        isExpanded && !isLineStart -> if (isRtl) 180f else -180f
-        !isExpanded && isLineStart -> if (isRtl) 90f else -90f
+        isExpanded && !isLineStart -> -180f
+        !isExpanded && isLineStart -> -90f
         else -> 0f
-    }
+    } * if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
     val angle by animateFloatAsState(targetValue = targetValue, label = "angle")
     Icon(
         imageVector = Icons.Default.ExpandMore,
