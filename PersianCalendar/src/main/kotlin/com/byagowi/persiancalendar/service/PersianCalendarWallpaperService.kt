@@ -101,7 +101,8 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
         private val direction = listOf(1, -1).random()
         private fun draw() {
             val surfaceHolder = surfaceHolder
-            val fasterUpdate = fasterUpdateTimestamp != 0L && fasterUpdateTimestamp + TWO_SECONDS_IN_MILLIS > System.currentTimeMillis()
+            val fasterUpdate =
+                fasterUpdateTimestamp != 0L && fasterUpdateTimestamp + TWO_SECONDS_IN_MILLIS > System.currentTimeMillis()
             if (!fasterUpdate) rotationDegree += .05f * direction
             handler.removeCallbacks(drawRunner)
             runCatching {

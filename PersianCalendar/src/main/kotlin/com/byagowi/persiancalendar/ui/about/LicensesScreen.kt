@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +23,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Motorcycle
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,7 +44,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -56,6 +53,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
@@ -158,7 +156,6 @@ private fun Licenses(bottomPadding: Dp) {
                 modifier = Modifier.padding(start = 16.dp, end = 88.dp),
                 color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
             )
-            val angle by animateFloatAsState(if (expandedItem == i) 0f else -90f, label = "angle")
             Column(
                 modifier = Modifier
                     .clickable { expandedItem = if (i == expandedItem) -1 else i }
@@ -177,11 +174,11 @@ private fun Licenses(bottomPadding: Dp) {
                     ),
             ) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
-                    Icon(
-                        imageVector = Icons.Default.ExpandMore,
-                        contentDescription = stringResource(R.string.more),
-                        modifier = Modifier.rotate(angle),
+                    ExpandArrow(
+                        isExpanded = expandedItem == i,
                         tint = MaterialTheme.colorScheme.primary,
+                        contentDescription = stringResource(R.string.more),
+                        isLineStart = true,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
