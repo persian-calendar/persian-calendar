@@ -92,15 +92,10 @@ fun InterfaceCalendarSettings(destination: String? = null) {
 
     SettingsHorizontalDivider()
     SettingsSection(stringResource(R.string.calendar))
-    run {
-        SettingsClickable(
-            stringResource(R.string.events), stringResource(R.string.events_summary)
-        ) { onDismissRequest -> HolidaysTypesDialog(onDismissRequest) }
-
-        var showDialog by rememberSaveable { mutableStateOf(false) }
-        LaunchedEffect(Unit) { if (destination == PREF_HOLIDAY_TYPES) showDialog = true }
-        if (showDialog) HolidaysTypesDialog { showDialog = false }
-    }
+    SettingsClickable(
+        stringResource(R.string.events), stringResource(R.string.events_summary),
+        defaultOpen = destination == PREF_HOLIDAY_TYPES,
+    ) { onDismissRequest -> HolidaysTypesDialog(onDismissRequest) }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()

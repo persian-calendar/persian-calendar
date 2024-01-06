@@ -86,9 +86,10 @@ fun SettingsHorizontalDivider() {
 fun SettingsClickable(
     title: String,
     summary: String? = null,
+    defaultOpen: Boolean = false,
     dialog: @Composable (onDismissRequest: () -> Unit) -> Unit,
 ) {
-    var showDialog by rememberSaveable { mutableStateOf(false) }
+    var showDialog by rememberSaveable { mutableStateOf(defaultOpen) }
     Column(
         Modifier
             .fillMaxWidth()
