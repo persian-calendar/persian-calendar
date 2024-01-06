@@ -239,14 +239,15 @@ internal fun TableLayout(
     content: @Composable () -> Unit,
 ) {
     Layout(content = content) { measurables, constraints ->
-        val placeables = measurables.map { measurable -> measurable.measure(constraints) }
-        val cellWidthPx = (width / columnsCount).toPx()
-        val cellHeightPx = (height / rowsCount).toPx()
-        layout(width.roundToPx(), height.roundToPx()) {
-            placeables.forEachIndexed { cellIndex, placeable ->
+        val widthPx = width.toPx()
+        val heightPx = height.toPx()
+        val cellWidthPx = widthPx / columnsCount
+        val cellHeightPx = heightPx / rowsCount
+        layout(widthPx.roundToInt(), heightPx.roundToInt()) {
+            measurables.forEachIndexed { cellIndex, measurable ->
                 val row = cellIndex / columnsCount
                 val column = cellIndex % columnsCount
-                placeable.placeRelative(
+                measurable.measure(constraints).placeRelative(
                     (column * cellWidthPx).roundToInt(),
                     (row * cellHeightPx).roundToInt(),
                 )
