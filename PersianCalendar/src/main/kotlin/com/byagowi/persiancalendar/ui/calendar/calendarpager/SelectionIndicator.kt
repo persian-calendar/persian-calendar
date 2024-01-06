@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 fun SelectionIndicator(
     viewModel: CalendarViewModel,
     monthStartJdn: Jdn,
-    monthRange: IntRange,
+    monthLength: Int,
     size: DpSize,
     startingDayOfWeek: Int,
     widthPixels: Float,
@@ -59,6 +59,7 @@ fun SelectionIndicator(
         }
     }
     if (isHighlighted) lastSelectedDay = selectedDay else painter.clearSelection()
+    val monthRange = 0..<monthLength
     if (isHighlighted && selectedDay - monthStartJdn in monthRange) {
         painter.startSelection()
     }

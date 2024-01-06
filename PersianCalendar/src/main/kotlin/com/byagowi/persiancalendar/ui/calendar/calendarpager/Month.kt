@@ -74,7 +74,6 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
 
     val startingDayOfWeek = applyWeekStartOffsetToWeekDay(monthStartJdn.dayOfWeek)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
-    val monthRange = 0..<monthLength
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
@@ -89,7 +88,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
     SelectionIndicator(
         viewModel = viewModel,
         monthStartJdn = monthStartJdn,
-        monthRange = monthRange,
+        monthLength = monthLength,
         size = size,
         startingDayOfWeek = startingDayOfWeek,
         widthPixels = widthPixels,
@@ -146,7 +145,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
             }
         }
         val daysInteractionSource = remember { MutableInteractionSource() }
-        monthRange.forEach { dayOffset ->
+        repeat(monthLength) { dayOffset ->
             if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingDayOfWeek) % 7 == 0)) {
                 Box(contentAlignment = Alignment.Center) {
                     val weekNumber = formatNumber(weekOfYearStart + dayOffset / 8)
