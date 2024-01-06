@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -69,15 +70,16 @@ fun SelectionIndicator(
         val cellIndex = index + startingDayOfWeek
         val row = cellIndex / 7 + 1 // +1 for weekday names initials row
         val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
-        painter.draw(
-            canvas = drawContext.canvas,
-            left = if (isRtl) widthPixels - (column + 1) * cellWidthPx
-            else column * cellWidthPx,
-            top = row * cellHeightPx,
-            width = cellWidthPx,
-            height = cellHeightPx,
-            halfDp = oneDpInPx / 2,
-        )
+        drawIntoCanvas {
+            painter.draw(
+                canvas = it,
+                left = if (isRtl) widthPixels - (column + 1) * cellWidthPx else column * cellWidthPx,
+                top = row * cellHeightPx,
+                width = cellWidthPx,
+                height = cellHeightPx,
+                halfDp = oneDpInPx / 2,
+            )
+        }
     }
 }
 

@@ -106,8 +106,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
         else EventsStore.empty()
     }
 
-    val cellSize = DpSize(width / columnsCount, height / rowsCount)
-    val diameter = min(cellSize.height, cellSize.width)
+    val diameter = min(width / columnsCount, height / rowsCount)
     val dayPainterColors = AppDayPainterColors()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val dayPainter = remember(size, refreshToken, dayPainterColors) {
@@ -132,7 +131,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
     FixedSizeTableLayout(size, columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
-            Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
+            Box(contentAlignment = Alignment.Center) {
                 val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
                 val description = stringResource(
                     R.string.week_days_name_column, getWeekDayName(weekDayPosition)
@@ -146,9 +145,10 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
                 )
             }
         }
+        val daysInteractionSource = remember { MutableInteractionSource() }
         monthRange.forEach { dayOffset ->
             if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingDayOfWeek) % 7 == 0)) {
-                Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
+                Box(contentAlignment = Alignment.Center) {
                     val weekNumber = formatNumber(weekOfYearStart + dayOffset / 8)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
@@ -164,27 +164,25 @@ fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
             val day = monthStartJdn + dayOffset
             val isToday = day == today
             Canvas(
-                modifier = Modifier
-                    .size(cellSize)
-                    .combinedClickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = { viewModel.changeSelectedDay(day) },
-                        onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
-                            context.resources,
-                            day,
-                            isToday,
-                            EventsStore.empty(),
-                            withZodiac = isToday,
-                            withOtherCalendars = false,
-                            withTitle = true
-                        ) else (dayOffset + 1).toString(),
-                        onLongClickLabel = stringResource(R.string.add_event),
-                        onLongClick = {
-                            viewModel.changeSelectedDay(day)
-                            addEvent()
-                        },
-                    ),
+                Modifier.combinedClickable(
+                    indication = null,
+                    interactionSource = daysInteractionSource,
+                    onClick = { viewModel.changeSelectedDay(day) },
+                    onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
+                        context.resources,
+                        day,
+                        isToday,
+                        EventsStore.empty(),
+                        withZodiac = isToday,
+                        withOtherCalendars = false,
+                        withTitle = true
+                    ) else (dayOffset + 1).toString(),
+                    onLongClickLabel = stringResource(R.string.add_event),
+                    onLongClick = {
+                        viewModel.changeSelectedDay(day)
+                        addEvent()
+                    },
+                )
             ) {
                 val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                 val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
