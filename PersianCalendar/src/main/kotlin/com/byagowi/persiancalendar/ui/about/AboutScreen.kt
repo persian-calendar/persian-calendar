@@ -154,7 +154,7 @@ private fun Header() {
 
     var logoAnimationAtEnd by remember { mutableStateOf(false) }
     var logoEffect by remember { mutableStateOf<RenderEffect?>(null) }
-    LaunchedEffect(key1 = null) { logoAnimationAtEnd = !logoAnimationAtEnd }
+    LaunchedEffect(Unit) { logoAnimationAtEnd = !logoAnimationAtEnd }
 
     val effectsGenerator = remember {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) createIconRandomEffects()

@@ -81,7 +81,7 @@ fun AthanActivityContent(prayerKey: String, onClick: () -> Unit) {
             val cityName = cityName.collectAsState().value
             if (cityName != null) {
                 var visible by remember { mutableStateOf(false) }
-                LaunchedEffect(key1 = null) { visible = true }
+                LaunchedEffect(Unit) { visible = true }
                 val density = LocalDensity.current
                 // Just an exaggerated demo for https://developer.android.com/jetpack/compose/animation#animatedvisibility
                 AnimatedVisibility(
