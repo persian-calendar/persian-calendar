@@ -208,10 +208,10 @@ fun SettingsScreen(
 
 @Immutable
 private data class TabItem(
-    val outlinedIcon: ImageVector,
-    val filledIcon: ImageVector,
-    @StringRes val firstTitle: Int,
-    @StringRes val secondTitle: Int,
+    private val outlinedIcon: ImageVector,
+    private val filledIcon: ImageVector,
+    @StringRes private val firstTitle: Int,
+    @StringRes private val secondTitle: Int,
     val content: @Composable () -> Unit,
 ) {
     @Composable
