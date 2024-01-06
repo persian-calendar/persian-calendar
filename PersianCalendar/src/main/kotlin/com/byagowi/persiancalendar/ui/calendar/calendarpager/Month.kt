@@ -149,7 +149,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
                         weekNumber,
-                        fontSize = with(LocalDensity.current) { (diameter * .35f).toSp() },
+                        fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
                         modifier = Modifier
                             .alpha(AppBlendAlpha)
                             .semantics { this.contentDescription = description },
