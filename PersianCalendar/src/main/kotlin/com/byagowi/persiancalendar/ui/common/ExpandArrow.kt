@@ -10,6 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 
 @Composable
 fun ExpandArrow(
@@ -18,7 +20,8 @@ fun ExpandArrow(
     tint: Color = LocalContentColor.current,
     contentDescription: String? = null,
 ) {
-    val angle by animateFloatAsState(if (isExpanded) 180f else 0f, label = "angle")
+    val unexpandedAngle = if (LocalLayoutDirection.current == LayoutDirection.Ltr) -180f else 180f
+    val angle by animateFloatAsState(if (isExpanded) unexpandedAngle else 0f, label = "angle")
     Icon(
         imageVector = Icons.Default.ExpandMore,
         contentDescription = contentDescription,
