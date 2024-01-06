@@ -8,12 +8,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -36,6 +32,7 @@ import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -77,6 +74,7 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -161,8 +159,8 @@ fun Month(
         cellPixelsWidth, cellPixelsHeight
     ) * 1 / 40
 
-    Column(
-        Modifier.drawWithCache {
+    Layout(
+        modifier = Modifier.drawWithCache {
             onDrawBehind {
                 drawIntoCanvas {
                     invalidationToken.run {}
@@ -183,9 +181,8 @@ fun Month(
                 }
             }
         },
-    ) {
-        Row(Modifier.height(cellSize.height)) {
-            if (isShowWeekOfYearEnabled) Spacer(Modifier.width(cellSize.width))
+        content = {
+            if (isShowWeekOfYearEnabled) Spacer(Modifier)
             (0..<7).forEach { column ->
                 Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
                     val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
@@ -201,10 +198,8 @@ fun Month(
                     )
                 }
             }
-        }
-        (0..<6).forEach { row ->
-            Row(Modifier.height(cellSize.height)) {
-                if (row >= weeksCount) return@Row
+            (0..<6).forEach { row ->
+                if (row >= weeksCount) return@forEach
                 if (isShowWeekOfYearEnabled) {
                     Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
                         val weekNumber = formatNumber(weekOfYearStart + row)
@@ -222,7 +217,7 @@ fun Month(
                     val dayOffset =
                         (column + row * 7) - applyWeekStartOffsetToWeekDay(startingDayOfWeek)
                     val day = monthStartJdn + dayOffset
-                    if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier.width(cellSize.width))
+                    if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier)
                     val isToday = day == today
                     Canvas(
                         modifier = Modifier
@@ -290,6 +285,18 @@ fun Month(
                         }
                     }
                 }
+            }
+        }
+    ) { measurables, constraints ->
+        val placeables = measurables.map { measurable -> measurable.measure(constraints) }
+        layout(width.roundToPx(), height.roundToPx()) {
+            placeables.forEachIndexed { cellIndex, placeable ->
+                val row = cellIndex / (if (isShowWeekOfYearEnabled) 8 else 7)
+                val column = cellIndex % (if (isShowWeekOfYearEnabled) 8 else 7)
+                placeable.placeRelative(
+                    (column * cellPixelsWidth).roundToInt(),
+                    (row * cellPixelsHeight).roundToInt()
+                )
             }
         }
     }
