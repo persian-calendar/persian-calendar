@@ -19,8 +19,6 @@ import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -56,6 +54,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -193,12 +193,13 @@ fun ColumnScope.ShiftWorkDialogContent(
                             }
                         }
                     )
-                    DropdownMenu(
+                    AppDropdownMenu(
                         expanded = selectedTypeDropdownIndex == position,
                         onDismissRequest = { selectedTypeDropdownIndex = -1 },
+                        minWidth = 40.dp,
                     ) {
                         (shiftWorkTitles.values + language.value.additionalShiftWorkTitles).forEach {
-                            DropdownMenuItem(
+                            AppDropdownMenuItem(
                                 onClick = {
                                     selectedTypeDropdownIndex = -1
                                     viewModel.changeShiftWorkTypeOfPosition(position, it)
@@ -228,15 +229,16 @@ fun ColumnScope.ShiftWorkDialogContent(
                             }
                             .focusRequester(focusRequester),
                     )
-                    DropdownMenu(
+                    AppDropdownMenu(
                         expanded = selectedLengthDropdownIndex == position,
                         onDismissRequest = {
                             focusManager.clearFocus()
                             selectedLengthDropdownIndex = -1
                         },
+                        minWidth = 40.dp,
                     ) {
                         (0..14).map { length ->
-                            DropdownMenuItem(
+                            AppDropdownMenuItem(
                                 onClick = {
                                     focusManager.clearFocus()
                                     selectedLengthDropdownIndex = -1
