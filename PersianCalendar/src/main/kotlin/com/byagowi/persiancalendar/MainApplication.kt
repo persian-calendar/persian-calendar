@@ -42,7 +42,6 @@ class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChang
 
         configureCalendarsAndLoadEvents(this)
         updateStoredPreference(this)
-        update(applicationContext, true)
 
         if (key == PREF_APP_LANGUAGE) {
             applyAppLanguage(this)
@@ -52,5 +51,7 @@ class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChang
         if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS) {
             loadLanguageResources(this.resources)
         }
+
+        update(applicationContext, true)
     }
 }
