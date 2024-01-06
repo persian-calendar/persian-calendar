@@ -81,6 +81,7 @@ import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
@@ -111,6 +112,7 @@ private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
+private var pastLanguage: Language? = null
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
 
@@ -146,11 +148,15 @@ fun update(context: Context, updateDate: Boolean) {
 
     debugLog("UpdateUtils: update")
     applyAppLanguage(context)
+    if (pastLanguage != language.value) {
+        loadLanguageResources(context.resources)
+        pastLanguage = language.value
+    }
 
     val jdn = Jdn.today()
     val date = jdn.toCalendar(mainCalendar)
 
-    if (pastDate == null || pastDate != date || updateDate) {
+    if (pastDate != date || updateDate) {
         debugLog("UpdateUtils: date has changed")
         scheduleAlarms(context)
         pastDate = date
