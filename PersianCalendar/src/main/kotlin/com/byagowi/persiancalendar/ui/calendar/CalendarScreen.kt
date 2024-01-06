@@ -13,7 +13,6 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -47,10 +46,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SnackbarDuration
@@ -81,7 +78,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -343,49 +339,6 @@ private fun bringDate(
 }
 
 @Composable
-fun ButtonsBar(
-    modifier: Modifier = Modifier,
-    @StringRes header: Int,
-    @StringRes acceptButton: Int = R.string.settings,
-    discardAction: () -> Unit = {},
-    acceptAction: () -> Unit,
-) {
-    var shown by rememberSaveable { mutableStateOf(true) }
-    AnimatedVisibility(modifier = modifier, visible = shown) {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
-        ) {
-            Text(
-                stringResource(header),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Row {
-                OutlinedButton(
-                    onClick = {
-                        discardAction()
-                        shown = false
-                    },
-                    Modifier.weight(1f),
-                ) { Text(stringResource(R.string.ignore)) }
-                Spacer(modifier = Modifier.width(8.dp))
-                Button(
-                    onClick = {
-                        shown = false
-                        acceptAction()
-                    },
-                    Modifier.weight(1f),
-                ) { Text(stringResource(acceptButton)) }
-            }
-        }
-    }
-}
-
-@Composable
 private fun Details(
     viewModel: CalendarViewModel,
     navigateToHolidaysSettings: () -> Unit,
@@ -474,9 +427,9 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 updateStoredPreference(context)
                 if (isGranted) update(context, updateDate = true)
             }
-            ButtonsBar(
-                header = R.string.enable_notification,
-                acceptButton = R.string.yes,
+            SettingsPromotionButtons(
+                header = stringResource(R.string.enable_notification),
+                acceptButton = stringResource(R.string.yes),
                 discardAction = {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },

@@ -39,8 +39,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.calendar.ButtonsBar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.calendar.SettingsPromotionButtons
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
@@ -56,9 +56,9 @@ fun TimesTab(
 ) {
     val context = LocalContext.current
     val cityName by cityName.collectAsState()
-    val coordinates = coordinates.collectAsState().value ?: return ButtonsBar(
+    val coordinates = coordinates.collectAsState().value ?: return SettingsPromotionButtons(
         modifier = Modifier.padding(top = 24.dp),
-        header = R.string.ask_user_to_set_location,
+        header = stringResource(R.string.ask_user_to_set_location),
         discardAction = {
             context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
             viewModel.removeThirdTab()
