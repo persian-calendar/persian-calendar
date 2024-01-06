@@ -346,9 +346,7 @@ private fun HelpItems() {
                     Icon(
                         imageVector = Icons.Default.ExpandMore,
                         contentDescription = stringResource(R.string.more),
-                        modifier = Modifier
-                            .rotate(angle)
-                            .size(MaterialIconDimension.dp),
+                        modifier = Modifier.rotate(angle),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.width(4.dp))

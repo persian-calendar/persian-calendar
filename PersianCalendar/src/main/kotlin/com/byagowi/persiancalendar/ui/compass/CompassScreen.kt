@@ -86,7 +86,6 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-// Lots of bad practices unfortunately
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompassScreen(

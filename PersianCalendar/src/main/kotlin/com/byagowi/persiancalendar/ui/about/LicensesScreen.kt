@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -58,7 +57,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -128,7 +126,6 @@ private fun Sidebar(modifier: Modifier = Modifier) {
             Triple(
                 "API ${Build.VERSION.SDK_INT}", {
                     Icon(
-                        modifier = Modifier.size(MaterialIconDimension.dp),
                         imageVector = Icons.Default.Motorcycle,
                         contentDescription = "API",
                     )

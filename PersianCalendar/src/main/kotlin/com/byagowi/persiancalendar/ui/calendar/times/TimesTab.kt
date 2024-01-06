@@ -47,7 +47,6 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.ButtonsBar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.common.MoonView
-import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -98,9 +97,7 @@ fun TimesTab(
             Icon(
                 imageVector = Icons.Default.ExpandMore,
                 contentDescription = null,
-                modifier = Modifier
-                    .rotate(angle)
-                    .size(MaterialIconDimension.dp),
+                modifier = Modifier.rotate(angle),
                 tint = MaterialTheme.colorScheme.primary,
             )
         }
