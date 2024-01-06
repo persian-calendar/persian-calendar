@@ -355,7 +355,7 @@ fun ButtonsBar(
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp)
+                .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
         ) {
             Text(
                 stringResource(header),
@@ -386,7 +386,7 @@ fun ButtonsBar(
 }
 
 @Composable
-fun Details(
+private fun Details(
     viewModel: CalendarViewModel,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
@@ -844,7 +844,7 @@ private fun createOwghatHtmlReport(resources: Resources, date: AbstractDate): St
     }
 }
 
-class AddEventContract : ActivityResultContract<Jdn, Void?>() {
+private class AddEventContract : ActivityResultContract<Jdn, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
     override fun createIntent(context: Context, input: Jdn): Intent {
         val time = input.toGregorianCalendar().timeInMillis
