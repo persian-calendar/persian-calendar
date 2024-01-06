@@ -196,12 +196,11 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
                     "",
                     shiftWorkTitle,
                 )
-                val oneDpInPx = .5.dp.toPx()
                 drawIntoCanvas {
                     if (isToday) drawCircle(
                         Color(dayPainterColors.colorCurrentDay),
-                        radius = this.size.minDimension / 2 - oneDpInPx / 2,
-                        style = Stroke(width = oneDpInPx)
+                        radius = this.size.minDimension / 2 - .5.dp.toPx(),
+                        style = Stroke(width = 1.dp.toPx())
                     )
                     val textLayoutResult = textMeasurer.measure(
                         text = formatNumber(dayOffset + 1, mainCalendarDigits),
