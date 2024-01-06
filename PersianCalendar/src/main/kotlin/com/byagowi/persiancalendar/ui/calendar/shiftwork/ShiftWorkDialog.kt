@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -57,6 +59,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
@@ -156,13 +159,21 @@ fun ColumnScope.ShiftWorkDialogContent(
                     shiftWorkKeyToString(it.type)
                 )
             }.joinToString(spacedComma)
-            if (summary.isNotEmpty()) Text(
-                summary,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-            )
+            AnimatedVisibility(summary.isNotEmpty()) {
+                AnimatedContent(
+                    summary,
+                    transitionSpec = appCrossfadeSpec,
+                    label = "summary",
+                ) { state ->
+                    Text(
+                        state,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    )
+                }
+            }
         }
         itemsIndexed(shiftWorkRows) { position, (type, length) ->
             Row(
