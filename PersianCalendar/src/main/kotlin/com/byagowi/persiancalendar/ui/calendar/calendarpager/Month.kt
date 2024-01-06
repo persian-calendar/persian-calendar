@@ -31,6 +31,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -128,7 +129,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
     val addEvent = AddEvent(viewModel)
     val selectedDay by viewModel.selectedDay.collectAsState()
     val isHighlighted by viewModel.isHighlighted.collectAsState()
-    TableLayout(width, height, columnsCount, rowsCount) {
+    FixedSizeTableLayout(Modifier.size(width, height), columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
@@ -231,23 +232,24 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
 }
 
 @Composable
-internal fun TableLayout(
-    width: Dp,
-    height: Dp,
+private fun FixedSizeTableLayout(
+    modifier: Modifier,
     columnsCount: Int,
     rowsCount: Int,
     content: @Composable () -> Unit,
 ) {
-    Layout(content = content) { measurables, constraints ->
-        val widthPx = width.toPx()
-        val heightPx = height.toPx()
-        val cellWidthPx = widthPx / columnsCount
-        val cellHeightPx = heightPx / rowsCount
-        layout(widthPx.roundToInt(), heightPx.roundToInt()) {
+    Layout(content, modifier) { measurables, constraints ->
+        val widthPx = constraints.maxWidth
+        val heightPx = constraints.maxHeight
+        val cellWidthPx = widthPx / columnsCount.toFloat()
+        val cellHeightPx = heightPx / rowsCount.toFloat()
+        val cellsConstraints =
+            Constraints.fixed(cellWidthPx.roundToInt(), cellHeightPx.roundToInt())
+        layout(widthPx, heightPx) {
             measurables.forEachIndexed { cellIndex, measurable ->
                 val row = cellIndex / columnsCount
                 val column = cellIndex % columnsCount
-                measurable.measure(constraints).placeRelative(
+                measurable.measure(cellsConstraints).placeRelative(
                     (column * cellWidthPx).roundToInt(),
                     (row * cellHeightPx).roundToInt(),
                 )
