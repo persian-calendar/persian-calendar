@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
@@ -46,6 +41,7 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.ButtonsBar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -93,13 +89,7 @@ fun TimesTab(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (cityName != null) Text(cityName ?: "", style = MaterialTheme.typography.bodyLarge)
-            val angle by animateFloatAsState(if (isExpanded) 180f else 0f, label = "angle")
-            Icon(
-                imageVector = Icons.Default.ExpandMore,
-                contentDescription = null,
-                modifier = Modifier.rotate(angle),
-                tint = MaterialTheme.colorScheme.primary,
-            )
+            ExpandArrow(isExpanded = isExpanded, tint = MaterialTheme.colorScheme.primary)
         }
     }
 }

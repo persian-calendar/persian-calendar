@@ -1,22 +1,16 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -92,14 +86,7 @@ fun AppDropdownMenuExpandableItem(
 ) {
     AppDropdownMenuItem(
         text = { Text(text) },
-        trailingIcon = {
-            val angle by animateFloatAsState(if (isExpanded) 180f else 0f, label = "angle")
-            Icon(
-                imageVector = Icons.Default.ExpandMore,
-                contentDescription = null,
-                modifier = Modifier.rotate(angle),
-            )
-        },
+        trailingIcon = { ExpandArrow(isExpanded = isExpanded) },
         onClick = onClick,
     )
 }

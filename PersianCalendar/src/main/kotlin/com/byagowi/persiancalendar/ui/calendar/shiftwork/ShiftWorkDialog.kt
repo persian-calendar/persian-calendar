@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +15,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
@@ -41,7 +39,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -59,6 +56,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
@@ -188,14 +186,9 @@ fun ColumnScope.ShiftWorkDialogContent(
                         },
                         trailingIcon = {
                             IconButton(onClick = { selectedTypeDropdownIndex = position }) {
-                                val angle by animateFloatAsState(
-                                    if (selectedTypeDropdownIndex == position) 180f else 0f,
-                                    label = "angle",
-                                )
-                                Icon(
-                                    Icons.Default.ExpandMore,
+                                ExpandArrow(
+                                    isExpanded = selectedTypeDropdownIndex == position,
                                     contentDescription = stringResource(R.string.more_options),
-                                    modifier = Modifier.rotate(angle),
                                 )
                             }
                         }
