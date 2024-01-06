@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
@@ -86,7 +87,7 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
                 viewModel.notifySelectedMonthOffset(-applyOffset(index))
             val currentMonthOffset = -applyOffset(index)
             Box(modifier = Modifier.padding(start = iconSize, end = iconSize)) {
-                Month(viewModel, currentMonthOffset, width - iconSize * 2, height)
+                Month(viewModel, currentMonthOffset, DpSize(width - iconSize * 2, height))
             }
             Box(
                 modifier = Modifier

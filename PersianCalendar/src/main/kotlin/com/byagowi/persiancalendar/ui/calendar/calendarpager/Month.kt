@@ -32,7 +32,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -65,7 +64,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
+fun Month(viewModel: CalendarViewModel, offset: Int, size: DpSize) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
@@ -79,6 +78,8 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
+    val width = size.width
+    val height = size.height
     val widthPixels = with(LocalDensity.current) { width.toPx() }
     val heightPixels = with(LocalDensity.current) { height.toPx() }
     val cellWidthPx = widthPixels / columnsCount
@@ -89,8 +90,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
         viewModel = viewModel,
         monthStartJdn = monthStartJdn,
         monthRange = monthRange,
-        width = width,
-        height = height,
+        size = size,
         startingDayOfWeek = startingDayOfWeek,
         widthPixels = widthPixels,
         cellWidthPx = cellWidthPx,
@@ -110,7 +110,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
     val diameter = min(cellSize.height, cellSize.width)
     val dayPainterColors = AppDayPainterColors()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val dayPainter = remember(height, width, refreshToken, dayPainterColors) {
+    val dayPainter = remember(size, refreshToken, dayPainterColors) {
         DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, dayPainterColors)
     }
     val textMeasurer = rememberTextMeasurer()
@@ -129,7 +129,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
     val addEvent = AddEvent(viewModel)
     val selectedDay by viewModel.selectedDay.collectAsState()
     val isHighlighted by viewModel.isHighlighted.collectAsState()
-    FixedSizeTableLayout(Modifier.size(width, height), columnsCount, rowsCount) {
+    FixedSizeTableLayout(size, columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
@@ -204,7 +204,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
                 drawIntoCanvas {
                     if (isToday) drawCircle(
                         Color(dayPainterColors.colorCurrentDay),
-                        radius = size.minDimension / 2 - oneDpInPx / 2,
+                        radius = this.size.minDimension / 2 - oneDpInPx / 2,
                         style = Stroke(width = oneDpInPx)
                     )
                     val textLayoutResult = textMeasurer.measure(
@@ -233,12 +233,12 @@ fun Month(viewModel: CalendarViewModel, offset: Int, width: Dp, height: Dp) {
 
 @Composable
 private fun FixedSizeTableLayout(
-    modifier: Modifier,
+    size: DpSize,
     columnsCount: Int,
     rowsCount: Int,
     content: @Composable () -> Unit,
 ) {
-    Layout(content, modifier) { measurables, constraints ->
+    Layout(content, Modifier.size(size)) { measurables, constraints ->
         val widthPx = constraints.maxWidth
         val heightPx = constraints.maxHeight
         val cellWidthPx = widthPx / columnsCount.toFloat()

@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.util.lerp
 import androidx.core.animation.doOnEnd
@@ -34,8 +34,7 @@ fun SelectionIndicator(
     viewModel: CalendarViewModel,
     monthStartJdn: Jdn,
     monthRange: IntRange,
-    width: Dp,
-    height: Dp,
+    size: DpSize,
     startingDayOfWeek: Int,
     widthPixels: Float,
     cellWidthPx: Float,
@@ -63,7 +62,7 @@ fun SelectionIndicator(
         painter.startSelection()
     }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    Canvas(Modifier.size(width, height)) {
+    Canvas(Modifier.size(size)) {
         invalidationToken.run {}
         val index = lastSelectedDay - monthStartJdn
         if (index !in monthRange) return@Canvas
