@@ -23,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
@@ -107,13 +106,11 @@ fun Month(
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val rowsCount = 7
 
-    val startingDayOfWeek = monthStartJdn.dayOfWeek
+    val startingDayOfWeek = applyWeekStartOffsetToWeekDay(monthStartJdn.dayOfWeek)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val monthRange = 0..<monthLength
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
-    val weeksCount =
-        (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) - weekOfYearStart + 1
 
     val refreshToken by viewModel.refreshToken.collectAsState()
     val context = LocalContext.current
@@ -138,12 +135,12 @@ fun Month(
     val cellSize = DpSize(width / columnsCount, height / rowsCount)
     val widthPixels = with(LocalDensity.current) { width.toPx() }
     val heightPixels = with(LocalDensity.current) { height.toPx() }
-    val cellPixelsWidth = widthPixels / columnsCount
-    val cellPixelsHeight = heightPixels / rowsCount
+    val cellWidthPx = widthPixels / columnsCount
+    val cellHeightPx = heightPixels / rowsCount
     val diameter = min(cellSize.height, cellSize.width)
     val dayPainterColors = AppDayPainterColors()
     val dayPainter = remember(height, width, refreshToken, dayPainterColors) {
-        DayPainter(context.resources, cellPixelsWidth, cellPixelsHeight, isRtl, dayPainterColors)
+        DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, dayPainterColors)
     }
     val oneDpInPx = with(LocalDensity.current) { 1.dp.toPx() }
     val textMeasurer = rememberTextMeasurer()
@@ -156,146 +153,148 @@ fun Month(
 
     // Slight fix for the particular font we use for native digits in Persian and so
     val dayOffsetY = if (mainCalendarDigits === Language.ARABIC_DIGITS) 0f else min(
-        cellPixelsWidth, cellPixelsHeight
+        cellWidthPx, cellHeightPx
     ) * 1 / 40
 
-    Layout(
-        modifier = Modifier.drawWithCache {
-            onDrawBehind {
-                drawIntoCanvas {
-                    invalidationToken.run {}
-                    val index = lastSelectedDay - monthStartJdn
-                    if (index !in monthRange) return@drawIntoCanvas
-                    val cellIndex = index + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
-                    val row = cellIndex / 7 + 1 // +1 for weekday names initials row
-                    val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
-                    selectionIndicator.draw(
-                        canvas = it,
-                        left = if (isRtl) widthPixels - (column + 1) * cellPixelsWidth
-                        else column * cellPixelsWidth,
-                        top = row * cellPixelsHeight,
-                        width = cellPixelsWidth,
-                        height = cellPixelsHeight,
-                        halfDp = oneDpInPx / 2,
-                    )
-                }
+    Canvas(Modifier.size(width, height)) {
+        invalidationToken.run {}
+        val index = lastSelectedDay - monthStartJdn
+        if (index !in monthRange) return@Canvas
+        val cellIndex = index + startingDayOfWeek
+        val row = cellIndex / 7 + 1 // +1 for weekday names initials row
+        val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
+        selectionIndicator.draw(
+            canvas = drawContext.canvas,
+            left = if (isRtl) widthPixels - (column + 1) * cellWidthPx
+            else column * cellWidthPx,
+            top = row * cellHeightPx,
+            width = cellWidthPx,
+            height = cellHeightPx,
+            halfDp = oneDpInPx / 2,
+        )
+    }
+
+    TableLayout(width, height, columnsCount, rowsCount) {
+        if (isShowWeekOfYearEnabled) Spacer(Modifier)
+        (0..<7).forEach { column ->
+            Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
+                val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
+                val description = stringResource(
+                    R.string.week_days_name_column, getWeekDayName(weekDayPosition)
+                )
+                Text(
+                    getInitialOfWeekDay(weekDayPosition),
+                    fontSize = with(LocalDensity.current) { (diameter * .5f).toSp() },
+                    modifier = Modifier
+                        .alpha(AppBlendAlpha)
+                        .semantics { this.contentDescription = description },
+                )
             }
-        },
-        content = {
-            if (isShowWeekOfYearEnabled) Spacer(Modifier)
-            (0..<7).forEach { column ->
+        }
+        monthRange.forEach { dayOffset ->
+            if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingDayOfWeek) % 7 == 0)) {
                 Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
-                    val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
-                    val description = stringResource(
-                        R.string.week_days_name_column, getWeekDayName(weekDayPosition)
-                    )
+                    val weekNumber = formatNumber(weekOfYearStart + dayOffset / 8)
+                    val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
-                        getInitialOfWeekDay(weekDayPosition),
-                        fontSize = with(LocalDensity.current) { (diameter * .5f).toSp() },
+                        weekNumber,
+                        fontSize = with(LocalDensity.current) { (diameter * .35f).toSp() },
                         modifier = Modifier
                             .alpha(AppBlendAlpha)
                             .semantics { this.contentDescription = description },
                     )
                 }
             }
-            (0..<6).forEach { row ->
-                if (row >= weeksCount) return@forEach
-                if (isShowWeekOfYearEnabled) {
-                    Box(Modifier.size(cellSize), contentAlignment = Alignment.Center) {
-                        val weekNumber = formatNumber(weekOfYearStart + row)
-                        val description = stringResource(R.string.nth_week_of_year, weekNumber)
-                        Text(
-                            weekNumber,
-                            fontSize = with(LocalDensity.current) { (diameter * .35f).toSp() },
-                            modifier = Modifier
-                                .alpha(AppBlendAlpha)
-                                .semantics { this.contentDescription = description },
-                        )
-                    }
-                }
-                (0..<7).forEach RowForEach@{ column ->
-                    val dayOffset =
-                        (column + row * 7) - applyWeekStartOffsetToWeekDay(startingDayOfWeek)
-                    val day = monthStartJdn + dayOffset
-                    if (dayOffset !in monthRange) return@RowForEach Spacer(Modifier)
-                    val isToday = day == today
-                    Canvas(
-                        modifier = Modifier
-                            .size(cellSize)
-                            .combinedClickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                                onClick = { viewModel.changeSelectedDay(day) },
-                                onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
-                                    context.resources,
-                                    day,
-                                    isToday,
-                                    EventsStore.empty(),
-                                    withZodiac = isToday,
-                                    withOtherCalendars = false,
-                                    withTitle = true
-                                ) else (dayOffset + 1).toString(),
-                                onLongClickLabel = stringResource(R.string.add_event),
-                                onLongClick = {
-                                    viewModel.changeSelectedDay(day)
-                                    addEvent()
-                                },
-                            ),
-                    ) {
-                        val events =
-                            eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
-                        val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
-                        val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
-                        val shiftWorkTitle = getShiftWorkTitle(day, true)
-                        val isSelected = isHighlighted && selectedDay == day
-                        dayPainter.setDayOfMonthItem(
-                            false,
-                            isSelected,
-                            hasEvents,
-                            hasAppointments,
-                            false,
+            if (dayOffset == 0) repeat(startingDayOfWeek) { Spacer(Modifier) }
+            val day = monthStartJdn + dayOffset
+            val isToday = day == today
+            Canvas(
+                modifier = Modifier
+                    .size(cellSize)
+                    .combinedClickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = { viewModel.changeSelectedDay(day) },
+                        onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
+                            context.resources,
                             day,
-                            "",
-                            shiftWorkTitle,
-                        )
-                        drawIntoCanvas {
-                            if (isToday) drawCircle(
-                                Color(dayPainterColors.colorCurrentDay),
-                                radius = size.minDimension / 2 - oneDpInPx / 2,
-                                style = Stroke(width = oneDpInPx)
-                            )
-                            val textLayoutResult = textMeasurer.measure(
-                                text = formatNumber(dayOffset + 1, mainCalendarDigits),
-                                style = daysStyle,
-                            )
-                            val isHoliday = events.any { it.isHoliday }
-                            drawText(
-                                textLayoutResult,
-                                color = when {
-                                    isSelected -> Color(dayPainterColors.colorTextDaySelected)
-                                    isHoliday || day.isWeekEnd() -> Color(dayPainterColors.colorHolidays)
-                                    else -> contentColor
-                                },
-                                topLeft = Offset(
-                                    x = center.x - textLayoutResult.size.width / 2,
-                                    y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
-                                ),
-                            )
-                            dayPainter.drawDay(it.nativeCanvas)
-                        }
-                    }
+                            isToday,
+                            EventsStore.empty(),
+                            withZodiac = isToday,
+                            withOtherCalendars = false,
+                            withTitle = true
+                        ) else (dayOffset + 1).toString(),
+                        onLongClickLabel = stringResource(R.string.add_event),
+                        onLongClick = {
+                            viewModel.changeSelectedDay(day)
+                            addEvent()
+                        },
+                    ),
+            ) {
+                val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
+                val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
+                val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
+                val shiftWorkTitle = getShiftWorkTitle(day, true)
+                val isSelected = isHighlighted && selectedDay == day
+                dayPainter.setDayOfMonthItem(
+                    false,
+                    isSelected,
+                    hasEvents,
+                    hasAppointments,
+                    false,
+                    day,
+                    "",
+                    shiftWorkTitle,
+                )
+                drawIntoCanvas {
+                    if (isToday) drawCircle(
+                        Color(dayPainterColors.colorCurrentDay),
+                        radius = size.minDimension / 2 - oneDpInPx / 2,
+                        style = Stroke(width = oneDpInPx)
+                    )
+                    val textLayoutResult = textMeasurer.measure(
+                        text = formatNumber(dayOffset + 1, mainCalendarDigits),
+                        style = daysStyle,
+                    )
+                    val isHoliday = events.any { it.isHoliday }
+                    drawText(
+                        textLayoutResult,
+                        color = when {
+                            isSelected -> Color(dayPainterColors.colorTextDaySelected)
+                            isHoliday || day.isWeekEnd() -> Color(dayPainterColors.colorHolidays)
+                            else -> contentColor
+                        },
+                        topLeft = Offset(
+                            x = center.x - textLayoutResult.size.width / 2,
+                            y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
+                        ),
+                    )
+                    dayPainter.drawDay(it.nativeCanvas)
                 }
             }
         }
-    ) { measurables, constraints ->
+    }
+}
+
+@Composable
+internal fun TableLayout(
+    width: Dp,
+    height: Dp,
+    columnsCount: Int,
+    rowsCount: Int,
+    content: @Composable () -> Unit,
+) {
+    Layout(content = content) { measurables, constraints ->
         val placeables = measurables.map { measurable -> measurable.measure(constraints) }
+        val cellWidthPx = (width / columnsCount).toPx()
+        val cellHeightPx = (height / rowsCount).toPx()
         layout(width.roundToPx(), height.roundToPx()) {
             placeables.forEachIndexed { cellIndex, placeable ->
-                val row = cellIndex / (if (isShowWeekOfYearEnabled) 8 else 7)
-                val column = cellIndex % (if (isShowWeekOfYearEnabled) 8 else 7)
+                val row = cellIndex / columnsCount
+                val column = cellIndex % columnsCount
                 placeable.placeRelative(
-                    (column * cellPixelsWidth).roundToInt(),
-                    (row * cellPixelsHeight).roundToInt()
+                    (column * cellWidthPx).roundToInt(),
+                    (row * cellHeightPx).roundToInt(),
                 )
             }
         }
