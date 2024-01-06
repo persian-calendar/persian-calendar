@@ -190,8 +190,7 @@ class CalendarViewModel @JvmOverloads constructor(
         }
         viewModelScope.launch {
             merge(selectedMonthOffset, isHighlighted, isYearView).collectLatest {
-                _todayButtonVisibility.value =
-                    !isYearView.value && (selectedMonthOffset.value != 0 || isHighlighted.value)
+                _todayButtonVisibility.value = selectedMonthOffset.value != 0 || isHighlighted.value
             }
         }
     }

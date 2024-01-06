@@ -598,17 +598,17 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                 }
             }
 
-            TodayActionButton(viewModel.todayButtonVisibility.collectAsState().value) {
-                bringDate(viewModel, Jdn.today(), context, highlight = false)
+            AnimatedVisibility(!isYearView) {
+                TodayActionButton(viewModel.todayButtonVisibility.collectAsState().value) {
+                    bringDate(viewModel, Jdn.today(), context, highlight = false)
+                }
             }
-
             AnimatedVisibility(!isYearView) {
                 AppIconButton(
                     icon = Icons.Default.Search,
                     title = stringResource(R.string.search_in_events),
                 ) { viewModel.openSearch() }
             }
-
             AnimatedVisibility(!isYearView) { Menu(viewModel) }
         },
     )
