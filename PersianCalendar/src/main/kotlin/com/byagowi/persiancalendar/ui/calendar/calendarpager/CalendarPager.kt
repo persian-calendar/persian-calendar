@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,6 +34,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppMonthColors
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -57,83 +59,70 @@ fun CalendarPager(
     val language by language.collectAsState()
     val monthColors = AppMonthColors()
 
+    viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
+
     HorizontalPager(state = pagerState) { index ->
         Box(modifier = Modifier.height(height)) {
-            val iconSize = width / 12
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .size(iconSize, height / 7 + (if (language.isArabicScript) 4 else 0).dp),
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(iconSize.coerceAtMost(MaterialIconDimension.dp))
-                        .combinedClickable(
-                            indication = rememberRipple(bounded = false),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = {
-                                scope.launch { pagerState.animateScrollToPage(index - 1) }
-                            },
-                            onClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.month)
-                            ),
-                            onLongClick = {
-                                scope.launch { pagerState.scrollToPage(index - 12) }
-                            },
-                            onLongClickLabel = stringResource(
-                                R.string.previous_x, stringResource(R.string.year)
-                            ),
-                        )
-                        .align(Alignment.CenterEnd)
-                        .alpha(.9f),
-                )
-            }
-            if (pagerState.currentPage == index)
-                viewModel.notifySelectedMonthOffset(-applyOffset(index))
-            val currentMonthOffset = -applyOffset(index)
-            Box(modifier = Modifier.padding(start = iconSize, end = iconSize)) {
+            val arrowWidth = width / 12
+            val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
+            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, index, isPrevious = true)
+            Box(modifier = Modifier.padding(start = arrowWidth, end = arrowWidth)) {
+                val currentMonthOffset = -applyOffset(index)
                 Month(
                     viewModel,
                     currentMonthOffset,
-                    width - iconSize * 2,
+                    width - arrowWidth * 2,
                     height,
                     addEvent,
                     monthColors,
                 )
             }
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(iconSize, height / 7 + (if (language.isArabicScript) 4 else 0).dp),
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Default.KeyboardArrowRight,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(iconSize.coerceAtMost(MaterialIconDimension.dp))
-                        .combinedClickable(
-                            indication = rememberRipple(bounded = false),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = {
-                                scope.launch { pagerState.animateScrollToPage(index + 1) }
-                            },
-                            onClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.month)
-                            ),
-                            onLongClick = {
-                                scope.launch { pagerState.scrollToPage(index + 12) }
-                            },
-                            onLongClickLabel = stringResource(
-                                R.string.next_x, stringResource(R.string.year)
-                            ),
-                        )
-                        .align(Alignment.CenterStart)
-                        .alpha(.9f),
-                )
-            }
+            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, index, isPrevious = false)
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun BoxScope.PagerArrow(
+    arrowWidth: Dp,
+    arrowHeight: Dp,
+    scope: CoroutineScope,
+    pagerState: PagerState,
+    index: Int,
+    isPrevious: Boolean,
+) {
+    Box(
+        modifier = Modifier
+            .align(if (isPrevious) Alignment.TopStart else Alignment.TopEnd)
+            .size(arrowWidth, arrowHeight),
+    ) {
+        val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
+        Icon(
+            if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
+            else Icons.AutoMirrored.Default.KeyboardArrowRight,
+            contentDescription = null,
+            modifier = Modifier
+                .width(arrowWidth.coerceAtMost(MaterialIconDimension.dp))
+                .combinedClickable(
+                    indication = rememberRipple(bounded = false),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                        }
+                    },
+                    onClickLabel = stringResource(stringId, stringResource(R.string.month)),
+                    onLongClick = {
+                        scope.launch {
+                            pagerState.scrollToPage(index + 12 * if (isPrevious) -1 else 1)
+                        }
+                    },
+                    onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
+                )
+                .align(if (isPrevious) Alignment.CenterEnd else Alignment.CenterStart)
+                .alpha(.9f),
+        )
     }
 }
 
