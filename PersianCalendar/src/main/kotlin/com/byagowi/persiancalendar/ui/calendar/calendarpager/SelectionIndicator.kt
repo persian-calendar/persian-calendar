@@ -13,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -63,20 +62,18 @@ fun SelectionIndicator(
     isHideOrReveal = !isHighlighted
 
     Canvas(Modifier.fillMaxSize()) {
-        drawIntoCanvas { canvas ->
-            val cellWidthPx = size.width / columnsCount
-            val cellHeightPx = size.height / rowsCount
+        val cellWidthPx = size.width / columnsCount
+        val cellHeightPx = size.height / rowsCount
 
-            val left = if (isRtl) size.width - (column + 1) * cellWidthPx else column * cellWidthPx
-            val top = row * cellHeightPx
+        val left = if (isRtl) size.width - (column + 1) * cellWidthPx else column * cellWidthPx
+        val top = row * cellHeightPx
 
-            val radius = min(cellWidthPx, cellHeightPx) / 2 - .5.dp.toPx()
-            drawCircle(
-                color = indicatorColor,
-                center = Offset(left + cellWidthPx / 2f, top + cellHeightPx / 2f),
-                radius = radius * radiusFraction,
-            )
-        }
+        val radius = min(cellWidthPx, cellHeightPx) / 2 - .5.dp.toPx()
+        drawCircle(
+            color = indicatorColor,
+            center = Offset(left + cellWidthPx / 2f, top + cellHeightPx / 2f),
+            radius = radius * radiusFraction,
+        )
     }
 }
 

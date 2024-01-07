@@ -195,31 +195,29 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
                     "",
                     shiftWorkTitle,
                 )
-                drawIntoCanvas {
-                    if (isToday) drawCircle(
-                        Color(dayPainterColors.colorCurrentDay),
-                        radius = this.size.minDimension / 2 - .5.dp.toPx(),
-                        style = Stroke(width = 1.dp.toPx())
-                    )
-                    val textLayoutResult = textMeasurer.measure(
-                        text = formatNumber(dayOffset + 1, mainCalendarDigits),
-                        style = daysStyle,
-                    )
-                    val isHoliday = events.any { it.isHoliday }
-                    drawText(
-                        textLayoutResult,
-                        color = when {
-                            isSelected -> Color(dayPainterColors.colorTextDaySelected)
-                            isHoliday || day.isWeekEnd() -> Color(dayPainterColors.colorHolidays)
-                            else -> contentColor
-                        },
-                        topLeft = Offset(
-                            x = center.x - textLayoutResult.size.width / 2,
-                            y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
-                        ),
-                    )
-                    dayPainter.drawDay(it.nativeCanvas)
-                }
+                drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
+                if (isToday) drawCircle(
+                    Color(dayPainterColors.colorCurrentDay),
+                    radius = this.size.minDimension / 2 - .5.dp.toPx(),
+                    style = Stroke(width = 1.dp.toPx())
+                )
+                val textLayoutResult = textMeasurer.measure(
+                    text = formatNumber(dayOffset + 1, mainCalendarDigits),
+                    style = daysStyle,
+                )
+                val isHoliday = events.any { it.isHoliday }
+                drawText(
+                    textLayoutResult,
+                    color = when {
+                        isSelected -> Color(dayPainterColors.colorTextDaySelected)
+                        isHoliday || day.isWeekEnd() -> Color(dayPainterColors.colorHolidays)
+                        else -> contentColor
+                    },
+                    topLeft = Offset(
+                        x = center.x - textLayoutResult.size.width / 2,
+                        y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
+                    ),
+                )
             }
         }
     }
