@@ -1,32 +1,25 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import android.animation.ValueAnimator
-import android.view.animation.LinearInterpolator
-import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.lerp
-import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlin.math.min
 
 @Composable
 fun SelectionIndicator(
@@ -37,122 +30,58 @@ fun SelectionIndicator(
     isHighlighted: Boolean,
     selectedDay: Jdn,
 ) {
-    var lastSelectedDay by remember { mutableStateOf(selectedDay) }
-    // Why the moving circle feels faster this way
-    val invalidationFlow = remember { MutableStateFlow(0) }
-    val invalidationToken by invalidationFlow.collectAsState()
     val indicatorColor = AppDaySelectionColor()
-    // New indicator for every launch, needed when a day is selected and we are
-    // coming back from other screens
-    var launchId by remember { mutableStateOf(0) }
-    LaunchedEffect(Unit) { ++launchId }
-    val painter = remember(indicatorColor, launchId) {
-        SelectionIndicatorPainter(400, 200, indicatorColor) {
-            ++invalidationFlow.value
-        }
-    }
-    if (isHighlighted) lastSelectedDay = selectedDay else painter.clearSelection()
-    val monthRange = 0..<monthLength
-    if (isHighlighted && selectedDay - monthStartJdn in monthRange) {
-        painter.startSelection()
-    }
+
+    var lastHighlightedDay by remember { mutableStateOf(selectedDay) }
+    if (isHighlighted) lastHighlightedDay = selectedDay
+
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val rowsCount = 7
 
-    Canvas(Modifier.fillMaxSize()) {
-        invalidationToken.run {}
-        val index = lastSelectedDay - monthStartJdn
-        if (index !in monthRange) return@Canvas
-        val cellIndex = index + startingDayOfWeek
-        val row = cellIndex / 7 + 1 // +1 for weekday names initials row
-        val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
+    val monthRange = 0..<monthLength
+    val lastHighlightedDayOfMonth = lastHighlightedDay - monthStartJdn
+    val radiusFraction by animateFloatAsState(
+        targetValue = if (isHighlighted && lastHighlightedDayOfMonth in monthRange) 1f else 0f,
+        animationSpec = springSpec,
+        label = "radius",
+    )
+    if (lastHighlightedDayOfMonth !in monthRange) return
+    val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
+    var isHideOrReveal by remember { mutableStateOf(true) }
+    val row by animateFloatAsState(
+        targetValue = cellIndex / 7 + 1f, // +1 for weekday names initials row
+        animationSpec = if (isHideOrReveal) applyImmediately else springSpec,
+        label = "row",
+    )
+    val column by animateFloatAsState(
+        targetValue = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1f else 0f,
+        animationSpec = if (isHideOrReveal) applyImmediately else springSpec,
+        label = "column",
+    )
+    isHideOrReveal = !isHighlighted
 
-        drawIntoCanvas {
+    Canvas(Modifier.fillMaxSize()) {
+        drawIntoCanvas { canvas ->
             val cellWidthPx = size.width / columnsCount
             val cellHeightPx = size.height / rowsCount
-            painter.draw(
-                canvas = it,
-                left = if (isRtl) size.width - (column + 1) * cellWidthPx else column * cellWidthPx,
-                top = row * cellHeightPx,
-                width = cellWidthPx,
-                height = cellHeightPx,
-                halfDp = .5.dp.toPx(),
+
+            val left = if (isRtl) size.width - (column + 1) * cellWidthPx else column * cellWidthPx
+            val top = row * cellHeightPx
+
+            val radius = min(cellWidthPx, cellHeightPx) / 2 - .5.dp.toPx()
+            drawCircle(
+                color = indicatorColor,
+                center = Offset(left + cellWidthPx / 2f, top + cellHeightPx / 2f),
+                radius = radius * radiusFraction,
             )
         }
     }
 }
 
-private class SelectionIndicatorPainter(
-    transitionAnimTime: Int,
-    hideAnimTime: Int,
-    color: Color,
-    invalidate: () -> Unit,
-) {
-    private var isCurrentlySelected = false
-    private var currentX = 0f
-    private var currentY = 0f
-    private var lastX = 0f
-    private var lastY = 0f
-    private var lastRadius = 0f
-    private var isReveal = false
-    private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = transitionAnimTime.toLong()
-        it.interpolator = LinearInterpolator()
-        it.addUpdateListener { invalidate() }
-        it.doOnEnd { isReveal = false }
-    }
-    private val hideAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = hideAnimTime.toLong()
-        it.addUpdateListener { invalidate() }
-    }
-    private val paint = Paint().also {
-        it.style = PaintingStyle.Fill
-        it.color = color
-    }
-    private val transitionInterpolators = listOf(1f, 1.25f).map(::OvershootInterpolator)
-    private val revealInterpolator = OvershootInterpolator(1.5f)
-
-    fun clearSelection() {
-        if (isCurrentlySelected) {
-            isReveal = false
-            isCurrentlySelected = false
-            hideAnimator.start()
-        }
-    }
-
-    fun startSelection() {
-        isReveal = !isCurrentlySelected
-        isCurrentlySelected = true
-        currentX = lastX
-        currentY = lastY
-        transitionAnimator.start()
-    }
-
-    fun draw(canvas: Canvas, left: Float, top: Float, width: Float, height: Float, halfDp: Float) {
-        if (hideAnimator.isRunning) canvas.drawCircle(
-            Offset(left + width / 2f, top + height / 2f),
-            lastRadius * (1 - hideAnimator.animatedFraction),
-            paint
-        ) else if (isReveal) {
-            val fraction = revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = left
-            lastY = top
-            lastRadius = (DayPainter.radius(width, height) - halfDp) * fraction
-            canvas.drawCircle(
-                Offset(lastX + width / 2f, lastY + height / 2f),
-                (DayPainter.radius(width, height) - halfDp) * fraction,
-                paint
-            )
-        } else if (isCurrentlySelected) transitionInterpolators.forEach { interpolator ->
-            val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
-            lastX = lerp(currentX, left, fraction)
-            lastY = lerp(currentY, top, fraction)
-            lastRadius = (DayPainter.radius(width, height) - halfDp)
-            canvas.drawCircle(
-                Offset(lastX + width / 2f, lastY + height / 2f), lastRadius, paint
-            )
-        }
-    }
-}
+private val springSpec = spring<Float>(
+    dampingRatio = Spring.DampingRatioLowBouncy,
+    stiffness = Spring.StiffnessLow,
+)
+private val applyImmediately = snap<Float>(0)
