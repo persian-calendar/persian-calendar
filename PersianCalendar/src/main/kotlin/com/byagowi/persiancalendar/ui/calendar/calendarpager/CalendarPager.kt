@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppMonthColors
@@ -51,6 +52,7 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
 
     val language by language.collectAsState()
     val monthColors = AppMonthColors()
+    val addEvent = AddEvent(viewModel)
 
     HorizontalPager(state = pagerState) { index ->
         Box(modifier = Modifier.height(height)) {
@@ -93,7 +95,8 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
                     viewModel,
                     currentMonthOffset,
                     DpSize(width - iconSize * 2, height),
-                    monthColors
+                    addEvent,
+                    monthColors,
                 )
             }
             Box(

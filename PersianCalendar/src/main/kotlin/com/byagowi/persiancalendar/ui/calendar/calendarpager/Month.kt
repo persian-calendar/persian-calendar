@@ -46,7 +46,6 @@ import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
@@ -62,7 +61,13 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize, monthColors: MonthColors) {
+fun Month(
+    viewModel: CalendarViewModel,
+    offset: Int,
+    tableSize: DpSize,
+    addEvent: () -> Unit,
+    monthColors: MonthColors,
+) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
@@ -120,7 +125,6 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize, monthCol
         cellWidthPx, cellHeightPx
     ) * 1 / 40
 
-    val addEvent = AddEvent(viewModel)
     FixedSizeTableLayout(columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
