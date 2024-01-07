@@ -61,23 +61,22 @@ fun CalendarPager(
 
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
 
-    HorizontalPager(state = pagerState) { index ->
+    HorizontalPager(state = pagerState) { page ->
         Box(modifier = Modifier.height(height)) {
             val arrowWidth = width / 12
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
-            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, index, isPrevious = true)
+            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = true)
             Box(modifier = Modifier.padding(start = arrowWidth, end = arrowWidth)) {
-                val currentMonthOffset = -applyOffset(index)
                 Month(
-                    viewModel,
-                    currentMonthOffset,
-                    width - arrowWidth * 2,
-                    height,
-                    addEvent,
-                    monthColors,
+                    viewModel = viewModel,
+                    offset = -applyOffset(page),
+                    width = width - arrowWidth * 2,
+                    height = height,
+                    addEvent = addEvent,
+                    monthColors = monthColors,
                 )
             }
-            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, index, isPrevious = false)
+            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = false)
         }
     }
 }
@@ -128,9 +127,8 @@ private fun BoxScope.PagerArrow(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarPagerState(): PagerState {
-    return rememberPagerState(initialPage = applyOffset(0), pageCount = ::monthsLimit)
-}
+fun CalendarPagerState(): PagerState =
+    rememberPagerState(initialPage = applyOffset(0), pageCount = ::monthsLimit)
 
 private val monthsLimit = 5000 // this should be an even number
 
