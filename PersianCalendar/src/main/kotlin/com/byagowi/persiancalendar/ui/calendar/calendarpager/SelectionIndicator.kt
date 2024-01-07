@@ -4,7 +4,7 @@ import android.animation.ValueAnimator
 import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,29 +19,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.core.animation.doOnEnd
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun SelectionIndicator(
-    viewModel: CalendarViewModel,
     monthStartJdn: Jdn,
     monthLength: Int,
-    tableSize: DpSize,
     startingDayOfWeek: Int,
     isShowWeekOfYearEnabled: Boolean,
+    isHighlighted: Boolean,
+    selectedDay: Jdn,
 ) {
-    val isHighlighted by viewModel.isHighlighted.collectAsState()
-    val selectedDay by viewModel.selectedDay.collectAsState()
     var lastSelectedDay by remember { mutableStateOf(selectedDay) }
     // Why the moving circle feels faster this way
     val invalidationFlow = remember { MutableStateFlow(0) }
@@ -62,14 +57,11 @@ fun SelectionIndicator(
         painter.startSelection()
     }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val widthPx = with(LocalDensity.current) { tableSize.width.toPx() }
 
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val rowsCount = 7
-    val cellWidthPx = with(LocalDensity.current) { tableSize.width.toPx() / columnsCount }
-    val cellHeightPx = with(LocalDensity.current) { tableSize.height.toPx() / rowsCount }
 
-    Canvas(Modifier.size(tableSize)) {
+    Canvas(Modifier.fillMaxSize()) {
         invalidationToken.run {}
         val index = lastSelectedDay - monthStartJdn
         if (index !in monthRange) return@Canvas
@@ -78,9 +70,11 @@ fun SelectionIndicator(
         val column = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0
 
         drawIntoCanvas {
+            val cellWidthPx = size.width / columnsCount
+            val cellHeightPx = size.height / rowsCount
             painter.draw(
                 canvas = it,
-                left = if (isRtl) widthPx - (column + 1) * cellWidthPx else column * cellWidthPx,
+                left = if (isRtl) size.width - (column + 1) * cellWidthPx else column * cellWidthPx,
                 top = row * cellHeightPx,
                 width = cellWidthPx,
                 height = cellHeightPx,

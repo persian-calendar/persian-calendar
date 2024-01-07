@@ -6,7 +6,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -76,11 +75,13 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
+    val isHighlighted by viewModel.isHighlighted.collectAsState()
+    val selectedDay by viewModel.selectedDay.collectAsState()
     SelectionIndicator(
-        viewModel = viewModel,
+        isHighlighted = isHighlighted,
+        selectedDay = selectedDay,
         monthStartJdn = monthStartJdn,
         monthLength = monthLength,
-        tableSize = tableSize,
         startingDayOfWeek = startingDayOfWeek,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
     )
@@ -122,9 +123,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
     ) * 1 / 40
 
     val addEvent = AddEvent(viewModel)
-    val selectedDay by viewModel.selectedDay.collectAsState()
-    val isHighlighted by viewModel.isHighlighted.collectAsState()
-    FixedSizeTableLayout(tableSize, columnsCount, rowsCount) {
+    FixedSizeTableLayout(columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(contentAlignment = Alignment.Center) {
@@ -228,12 +227,11 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
 
 @Composable
 private fun FixedSizeTableLayout(
-    size: DpSize,
     columnsCount: Int,
     rowsCount: Int,
     content: @Composable () -> Unit,
 ) {
-    Layout(content, Modifier.size(size)) { measurables, constraints ->
+    Layout(content) { measurables, constraints ->
         val widthPx = constraints.maxWidth
         val heightPx = constraints.maxHeight
         val cellWidthPx = widthPx / columnsCount.toFloat()
