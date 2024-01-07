@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.AppMonthColors
@@ -39,7 +38,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: Dp, height: Dp) {
+fun CalendarPager(
+    viewModel: CalendarViewModel,
+    pagerState: PagerState,
+    addEvent: () -> Unit,
+    width: Dp,
+    height: Dp,
+) {
     val scope = rememberCoroutineScope()
 
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
@@ -52,7 +57,6 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
 
     val language by language.collectAsState()
     val monthColors = AppMonthColors()
-    val addEvent = AddEvent(viewModel)
 
     HorizontalPager(state = pagerState) { index ->
         Box(modifier = Modifier.height(height)) {

@@ -186,6 +186,8 @@ fun CalendarScreen(
     val isYearView by viewModel.isYearView.collectAsState()
     BackHandler(enabled = isYearView) { viewModel.closeYearView() }
 
+    val addEvent = AddEvent(viewModel)
+
     Scaffold(
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -194,12 +196,11 @@ fun CalendarScreen(
             BackHandler(enabled = searchBoxIsOpen) { viewModel.closeSearch() }
 
             Crossfade(searchBoxIsOpen, label = "toolbar") {
-                if (it) Search(viewModel) else Toolbar(openDrawer, viewModel)
+                if (it) Search(viewModel) else Toolbar(addEvent, openDrawer, viewModel)
             }
         },
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-            val addEvent = AddEvent(viewModel)
             ShrinkingFloatingActionButton(
                 modifier = Modifier.padding(end = 8.dp),
                 isVisible = selectedTabIndex == EVENTS_TAB && !isYearView,
@@ -238,7 +239,7 @@ fun CalendarScreen(
                         val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                         val height = 400.dp.coerceAtMost(maxHeight)
                         Box(Modifier.width(width)) {
-                            CalendarPager(viewModel, pagerState, width, height)
+                            CalendarPager(viewModel, pagerState, addEvent, width, height)
                         }
                         Surface(
                             shape = MaterialCornerExtraLargeNoBottomEnd(),
@@ -260,7 +261,7 @@ fun CalendarScreen(
                             val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
                             Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
                                 val height = calendarHeight - 4.dp
-                                CalendarPager(viewModel, pagerState, maxWidth, height)
+                                CalendarPager(viewModel, pagerState, addEvent, maxWidth, height)
                             }
                             Spacer(Modifier.height(4.dp))
                             val detailsMinHeight = maxHeight - calendarHeight
@@ -508,7 +509,7 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
 }
 
 @Composable
-private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
+private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
@@ -609,15 +610,14 @@ private fun Toolbar(openDrawer: () -> Unit, viewModel: CalendarViewModel) {
                     title = stringResource(R.string.search_in_events),
                 ) { viewModel.openSearch() }
             }
-            AnimatedVisibility(!isYearView) { Menu(viewModel) }
+            AnimatedVisibility(!isYearView) { Menu(addEvent, viewModel) }
         },
     )
 }
 
 @Composable
-private fun Menu(viewModel: CalendarViewModel) {
+private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
-    val addEvent = AddEvent(viewModel)
 
     var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDayPickerDialog) DayPickerDialog(
@@ -812,7 +812,7 @@ private class AddEventContract : ActivityResultContract<Jdn, Void?>() {
 }
 
 @Composable
-fun AddEvent(viewModel: CalendarViewModel): () -> Unit {
+private fun AddEvent(viewModel: CalendarViewModel): () -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
         viewModel.refreshCalendar()
     }
