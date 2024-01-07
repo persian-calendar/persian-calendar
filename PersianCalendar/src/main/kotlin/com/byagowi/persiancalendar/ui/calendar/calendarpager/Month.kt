@@ -29,7 +29,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -61,7 +61,8 @@ import kotlin.math.min
 fun Month(
     viewModel: CalendarViewModel,
     offset: Int,
-    tableSize: DpSize,
+    width: Dp,
+    height: Dp,
     addEvent: () -> Unit,
     monthColors: MonthColors,
 ) {
@@ -87,8 +88,6 @@ fun Month(
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
     )
 
-    val width = tableSize.width
-    val height = tableSize.height
     val widthPx = with(LocalDensity.current) { width.toPx() }
     val heightPx = with(LocalDensity.current) { height.toPx() }
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
@@ -106,7 +105,7 @@ fun Month(
 
     val diameter = min(width / columnsCount, height / rowsCount)
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val dayPainter = remember(tableSize, refreshToken, monthColors) {
+    val dayPainter = remember(width, height, refreshToken, monthColors) {
         DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, monthColors)
     }
     val textMeasurer = rememberTextMeasurer()
