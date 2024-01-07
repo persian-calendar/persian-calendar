@@ -63,12 +63,14 @@ fun renderMonthWidget(
                 val isToday = day == today
 
                 dayPainter.setDayOfMonthItem(
-                    isToday, day == selectedDay,
-                    events.any { it !is CalendarEvent.DeviceCalendarEvent },
-                    events.any { it is CalendarEvent.DeviceCalendarEvent },
-                    events.any { it.isHoliday }, day,
-                    formatNumber(dayOffset + 1, mainCalendarDigits),
-                    getShiftWorkTitle(day, true)
+                    isToday = isToday,
+                    isSelected = day == selectedDay,
+                    hasEvent = events.any { it !is CalendarEvent.DeviceCalendarEvent },
+                    hasAppointment = events.any { it is CalendarEvent.DeviceCalendarEvent },
+                    isHoliday = events.any { it.isHoliday },
+                    jdn = day,
+                    dayOfMonth = formatNumber(dayOffset + 1, mainCalendarDigits),
+                    header = getShiftWorkTitle(day, true)
                 )
 
                 val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0

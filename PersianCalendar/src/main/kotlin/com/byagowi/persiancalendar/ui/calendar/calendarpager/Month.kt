@@ -188,14 +188,14 @@ fun Month(
                 val shiftWorkTitle = getShiftWorkTitle(day, true)
                 val isSelected = isHighlighted && selectedDay == day
                 dayPainter.setDayOfMonthItem(
-                    false,
-                    isSelected,
-                    hasEvents,
-                    hasAppointments,
-                    false,
-                    day,
-                    "",
-                    shiftWorkTitle,
+                    isToday = false,
+                    isSelected = isSelected,
+                    hasEvent = hasEvents,
+                    hasAppointment = hasAppointments,
+                    isHoliday = false,
+                    jdn = day,
+                    dayOfMonth = "",
+                    header = shiftWorkTitle,
                 )
                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                 if (isToday) drawCircle(
