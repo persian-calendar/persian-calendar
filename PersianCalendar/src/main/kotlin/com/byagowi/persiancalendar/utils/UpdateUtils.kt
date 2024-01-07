@@ -501,7 +501,7 @@ private fun createMapRemoteViews(
 }
 
 private fun createMoonRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_moon)
     val solarDraw = SolarDraw(context.resources)
     val bitmap = createBitmap(width, height).applyCanvas {
         val state = AstronomyState(GregorianCalendar())
