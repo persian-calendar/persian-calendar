@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.theme.AppMonthColors
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -49,6 +50,7 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
     }
 
     val language by language.collectAsState()
+    val monthColors = AppMonthColors()
 
     HorizontalPager(state = pagerState) { index ->
         Box(modifier = Modifier.height(height)) {
@@ -87,7 +89,12 @@ fun CalendarPager(viewModel: CalendarViewModel, pagerState: PagerState, width: D
                 viewModel.notifySelectedMonthOffset(-applyOffset(index))
             val currentMonthOffset = -applyOffset(index)
             Box(modifier = Modifier.padding(start = iconSize, end = iconSize)) {
-                Month(viewModel, currentMonthOffset, DpSize(width - iconSize * 2, height))
+                Month(
+                    viewModel,
+                    currentMonthOffset,
+                    DpSize(width - iconSize * 2, height),
+                    monthColors
+                )
             }
             Box(
                 modifier = Modifier

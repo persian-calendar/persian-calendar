@@ -104,14 +104,14 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val indicatorColor = AppDaySelectionColor()
-    val dayPainterColors = AppMonthColors()
-    val dayPainter = remember(dayPainterColors, indicatorColor, widthInPx, heightInPx) {
+    val monthColors = AppMonthColors()
+    val dayPainter = remember(monthColors, indicatorColor, widthInPx, heightInPx) {
         DayPainter(
             context.resources,
             (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
             (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
             isRtl,
-            dayPainterColors,
+            monthColors,
             isYearView = true,
             selectedDayColor = indicatorColor.toArgb(),
         )

@@ -48,7 +48,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.theme.AppMonthColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -63,7 +62,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
+fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize, monthColors: MonthColors) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
@@ -104,10 +103,9 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
     }
 
     val diameter = min(width / columnsCount, height / rowsCount)
-    val dayPainterColors = AppMonthColors()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    val dayPainter = remember(tableSize, refreshToken, dayPainterColors) {
-        DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, dayPainterColors)
+    val dayPainter = remember(tableSize, refreshToken, monthColors) {
+        DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, monthColors)
     }
     val textMeasurer = rememberTextMeasurer()
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
@@ -197,7 +195,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
                 )
                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                 if (isToday) drawCircle(
-                    Color(dayPainterColors.colorCurrentDay),
+                    Color(monthColors.colorCurrentDay),
                     radius = this.size.minDimension / 2 - .5.dp.toPx(),
                     style = Stroke(width = 1.dp.toPx())
                 )
@@ -209,8 +207,8 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
                 drawText(
                     textLayoutResult,
                     color = when {
-                        isSelected -> Color(dayPainterColors.colorTextDaySelected)
-                        isHoliday || day.isWeekEnd() -> Color(dayPainterColors.colorHolidays)
+                        isSelected -> Color(monthColors.colorTextDaySelected)
+                        isHoliday || day.isWeekEnd() -> Color(monthColors.colorHolidays)
                         else -> contentColor
                     },
                     topLeft = Offset(
