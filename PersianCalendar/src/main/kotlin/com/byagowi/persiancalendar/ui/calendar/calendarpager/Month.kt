@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -30,7 +29,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -57,7 +55,6 @@ import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -125,7 +122,7 @@ fun Month(
         cellWidthPx, cellHeightPx
     ) * 1 / 40
 
-    FixedSizeTableLayout(columnsCount, rowsCount) {
+    FixedSizeHorizontalGrid(columnsCount, rowsCount) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(contentAlignment = Alignment.Center) {
@@ -219,32 +216,6 @@ fun Month(
                         x = center.x - textLayoutResult.size.width / 2,
                         y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
                     ),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun FixedSizeTableLayout(
-    columnsCount: Int,
-    rowsCount: Int,
-    content: @Composable () -> Unit,
-) {
-    Layout(content) { measurables, constraints ->
-        val widthPx = constraints.maxWidth
-        val heightPx = constraints.maxHeight
-        val cellWidthPx = widthPx / columnsCount.toFloat()
-        val cellHeightPx = heightPx / rowsCount.toFloat()
-        val cellsConstraints =
-            Constraints.fixed(cellWidthPx.roundToInt(), cellHeightPx.roundToInt())
-        layout(widthPx, heightPx) {
-            measurables.forEachIndexed { cellIndex, measurable ->
-                val row = cellIndex / columnsCount
-                val column = cellIndex % columnsCount
-                measurable.measure(cellsConstraints).placeRelative(
-                    (column * cellWidthPx).roundToInt(),
-                    (row * cellHeightPx).roundToInt(),
                 )
             }
         }
