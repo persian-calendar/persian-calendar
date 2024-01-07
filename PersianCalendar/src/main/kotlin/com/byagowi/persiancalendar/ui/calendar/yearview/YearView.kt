@@ -55,7 +55,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
-import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
+import com.byagowi.persiancalendar.ui.theme.AppMonthColors
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -104,7 +104,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val indicatorColor = AppDaySelectionColor()
-    val dayPainterColors = AppDayPainterColors()
+    val dayPainterColors = AppMonthColors()
     val dayPainter = remember(dayPainterColors, indicatorColor, widthInPx, heightInPx) {
         DayPainter(
             context.resources,

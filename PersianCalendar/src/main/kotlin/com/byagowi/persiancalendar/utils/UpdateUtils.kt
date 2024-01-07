@@ -89,7 +89,7 @@ import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
@@ -413,7 +413,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
 
         else -> selectedWidgetTextColor
     }
-    val colors = DayPainterColors(
+    val colors = MonthColors(
         contentColor = contentColor,
         colorAppointments =
         if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)

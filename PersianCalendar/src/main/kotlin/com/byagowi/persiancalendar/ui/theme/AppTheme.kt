@@ -49,7 +49,7 @@ import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainterColors
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLight
@@ -209,7 +209,7 @@ private fun AppBackground(): Brush {
 }
 
 @Composable
-fun AppDayPainterColors(): DayPainterColors {
+fun AppMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme by theme.collectAsState()
     val resolvedTheme =
@@ -276,7 +276,7 @@ fun AppDayPainterColors(): DayPainterColors {
         Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    return DayPainterColors(
+    return MonthColors(
         contentColor = contentColor.toArgb(),
         colorAppointments = colorAppointments.toArgb(),
         colorHolidays = colorHolidays.toArgb(),

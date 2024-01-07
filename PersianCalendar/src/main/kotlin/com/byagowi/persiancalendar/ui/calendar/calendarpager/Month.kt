@@ -48,7 +48,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.AddEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.theme.AppDayPainterColors
+import com.byagowi.persiancalendar.ui.theme.AppMonthColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -104,7 +104,7 @@ fun Month(viewModel: CalendarViewModel, offset: Int, tableSize: DpSize) {
     }
 
     val diameter = min(width / columnsCount, height / rowsCount)
-    val dayPainterColors = AppDayPainterColors()
+    val dayPainterColors = AppMonthColors()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val dayPainter = remember(tableSize, refreshToken, dayPainterColors) {
         DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, dayPainterColors)

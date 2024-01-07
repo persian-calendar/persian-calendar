@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
 import androidx.annotation.ColorInt
-import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Jdn
@@ -23,24 +22,12 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import kotlin.math.min
 
-data class DayPainterColors(
-    @ColorInt val contentColor: Int,
-    @ColorInt val colorAppointments: Int,
-    @ColorInt val colorHolidays: Int,
-    @ColorInt val colorEventIndicator: Int,
-    @ColorInt val colorCurrentDay: Int,
-    @ColorInt val colorTextDaySelected: Int,
-) {
-    @ColorInt
-    val colorTextDayName = ColorUtils.setAlphaComponent(contentColor, 0xCC)
-}
-
 class DayPainter(
     resources: Resources,
     val width: Float,
     val height: Float,
     private val isRtl: Boolean,
-    colors: DayPainterColors,
+    colors: MonthColors,
     isWidget: Boolean = false,
     isYearView: Boolean = false,
     selectedDayColor: Int? = null,
@@ -170,7 +157,7 @@ class DayPainter(
 private class Paints(
     resources: Resources,
     diameter: Float,
-    colors: DayPainterColors,
+    colors: MonthColors,
     isWidget: Boolean,
     isYearView: Boolean,
     @ColorInt selectedDayColor: Int?,
