@@ -69,12 +69,15 @@ class DayPainter(
             canvas.drawCircle(
                 width / 2,
                 height / 2,
-                radius(width, height) - paints.circlePadding,
+                min(width, height) / 2 - paints.circlePadding,
                 selectedDayPaint
             )
         }
         if (today) canvas.drawCircle(
-            width / 2, height / 2, radius(width, height) - paints.circlePadding, paints.todayPaint
+            width / 2,
+            height / 2,
+            min(width, height) / 2 - paints.circlePadding,
+            paints.todayPaint,
         )
     }
 
@@ -162,10 +165,6 @@ class DayPainter(
 
     fun setInitialOfWeekDay(text: String) = setAll(text)
     fun setWeekNumber(text: String) = setAll(text, isWeekNumber = true)
-
-    companion object {
-        fun radius(width: Float, height: Float): Float = min(width, height) / 2f
-    }
 }
 
 private class Paints(
