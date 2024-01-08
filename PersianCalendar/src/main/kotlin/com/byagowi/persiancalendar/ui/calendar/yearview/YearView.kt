@@ -55,8 +55,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
-import com.byagowi.persiancalendar.ui.theme.AppMonthColors
 import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
+import com.byagowi.persiancalendar.ui.theme.AppMonthColors
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
@@ -97,10 +97,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val paddingInPx = with(LocalDensity.current) { padding.toPx() }
 
     val context = LocalContext.current
-    val yearStartJdn = Jdn(mainCalendar.createDate(today.toCalendar(mainCalendar).year, 1, 1))
-    val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-        if (isShowDeviceCalendarEvents.value) context.readYearDeviceEvents(yearStartJdn)
-        else EventsStore.empty()
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val indicatorColor = AppDaySelectionColor()
@@ -141,6 +137,18 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
+
+            val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+                remember(yearOffset, today) {
+                    val yearStartJdn = Jdn(
+                        mainCalendar.createDate(
+                            today.toCalendar(mainCalendar).year + yearOffset, 1, 1
+                        )
+                    )
+                    if (isShowDeviceCalendarEvents.value) context.readYearDeviceEvents(yearStartJdn)
+                    else EventsStore.empty()
+                }
+
             Column {
                 @OptIn(ExperimentalLayoutApi::class) FlowRow(
                     horizontalArrangement = Arrangement.SpaceAround,
