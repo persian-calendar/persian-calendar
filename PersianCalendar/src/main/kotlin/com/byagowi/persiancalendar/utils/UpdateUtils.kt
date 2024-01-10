@@ -415,15 +415,15 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     }
     val colors = MonthColors(
         contentColor = contentColor,
-        colorAppointments =
+        appointments =
         if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
         else 0xFF376E9F.toInt(),
-        colorHolidays =
+        holidays =
         if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
         else 0xFFE51C23.toInt(),
-        colorEventIndicator = contentColor,
-        colorCurrentDay = contentColor,
-        colorTextDaySelected = contentColor,
+        eventIndicator = contentColor,
+        currentDay = contentColor,
+        textDaySelected = contentColor,
     )
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)

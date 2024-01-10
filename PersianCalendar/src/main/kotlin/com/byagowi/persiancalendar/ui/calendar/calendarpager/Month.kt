@@ -197,7 +197,7 @@ fun Month(
                 )
                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                 if (isToday) drawCircle(
-                    Color(monthColors.colorCurrentDay),
+                    Color(monthColors.currentDay),
                     radius = this.size.minDimension / 2 - .5.dp.toPx(),
                     style = Stroke(width = 1.dp.toPx())
                 )
@@ -209,8 +209,8 @@ fun Month(
                 drawText(
                     textLayoutResult,
                     color = when {
-                        isSelected -> Color(monthColors.colorTextDaySelected)
-                        isHoliday || day.isWeekEnd() -> Color(monthColors.colorHolidays)
+                        isSelected -> Color(monthColors.textDaySelected)
+                        isHoliday || day.isWeekEnd() -> Color(monthColors.holidays)
                         else -> contentColor
                     },
                     topLeft = Offset(

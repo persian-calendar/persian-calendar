@@ -178,16 +178,16 @@ private class Paints(
     }
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = colors.colorAppointments
+        it.color = colors.appointments
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = colors.colorEventIndicator
+        it.color = colors.eventIndicator
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1 * dp
-        it.color = colors.colorCurrentDay
+        it.color = colors.currentDay
     }
     val selectedDayPaint = selectedDayColor?.let {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -207,7 +207,7 @@ private class Paints(
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colors.colorHolidays
+        it.color = colors.holidays
         if (isWidget) addShadowIfNeeded(it)
     }
 
@@ -221,13 +221,13 @@ private class Paints(
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colors.colorTextDaySelected
+        it.color = colors.textDaySelected
         if (isWidget) addShadowIfNeeded(it)
     }
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colors.colorTextDaySelected
+        it.color = colors.textDaySelected
         if (isWidget) addShadowIfNeeded(it)
     }
 

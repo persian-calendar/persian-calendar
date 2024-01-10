@@ -278,11 +278,11 @@ fun AppMonthColors(): MonthColors {
     }
     return MonthColors(
         contentColor = contentColor.toArgb(),
-        colorAppointments = colorAppointments.toArgb(),
-        colorHolidays = colorHolidays.toArgb(),
-        colorCurrentDay = colorCurrentDay.toArgb(),
-        colorEventIndicator = colorEventIndicator.toArgb(),
-        colorTextDaySelected = colorTextDaySelected.toArgb(),
+        appointments = colorAppointments.toArgb(),
+        holidays = colorHolidays.toArgb(),
+        currentDay = colorCurrentDay.toArgb(),
+        eventIndicator = colorEventIndicator.toArgb(),
+        textDaySelected = colorTextDaySelected.toArgb(),
     )
 }
 
