@@ -76,68 +76,71 @@ fun DayPicker(
     jdn: Jdn,
     setJdn: (Jdn) -> Unit,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        val date = remember(jdn.value, calendarType) { jdn.toCalendar(calendarType) }
-        val daysFormat = remember(calendarType, date.year, date.month) {
-            val monthStart = Jdn(calendarType, date.year, date.month, 1);
-            { item: Int -> (monthStart + item - 1).dayOfWeekName + " / " + formatNumber(item) }
-        }
-        val monthsLength = remember(calendarType, date.year, date.month) {
-            calendarType.getMonthLength(date.year, date.month)
-        }
-        val yearMonths = remember(calendarType, date.year) {
-            calendarType.getYearMonths(date.year)
-        }
-        val monthsFormat = remember(calendarType, date.year) {
-            val months = date.calendarType.monthsNames
-            { item: Int -> months[item - 1] + " / " + formatNumber(item) }
-        }
-        val todayYear = remember(calendarType) { Jdn.today().toCalendar(calendarType).year }
-        val startYear = remember(calendarType) { todayYear - 200 }
-        var monthChangeToken by remember { mutableIntStateOf(0) }
-        var previousMonth by remember { mutableIntStateOf(0) }
-        if (previousMonth != date.month) ++monthChangeToken
-        previousMonth = date.month
-        Row(modifier = Modifier.fillMaxWidth()) {
-            val view = LocalView.current
-            NumberPicker(
-                modifier = Modifier.weight(1f),
-                label = daysFormat,
-                range = 1..monthsLength,
-                value = date.dayOfMonth,
-                onClickLabel = stringResource(R.string.day),
-            ) {
-                setJdn(Jdn(calendarType, date.year, date.month, it))
-                view.performHapticFeedbackVirtualKey()
+    Crossfade(targetState = calendarType, label = "day picker") { calendar ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            val date = remember(jdn.value, calendar) { jdn.toCalendar(calendar) }
+            val daysFormat = remember(calendar, date.year, date.month) {
+                val monthStart = Jdn(calendar, date.year, date.month, 1);
+                { item: Int -> (monthStart + item - 1).dayOfWeekName + " / " + formatNumber(item) }
             }
-            Spacer(modifier = Modifier.width(8.dp))
-            NumberPicker(
-                modifier = Modifier.weight(1f),
-                label = monthsFormat,
-                range = 1..yearMonths,
-                value = date.month,
-                onClickLabel = stringResource(R.string.month),
-            ) { month ->
-                val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(date.year, month))
-                setJdn(Jdn(calendarType, date.year, month, day))
-                view.performHapticFeedbackVirtualKey()
+            val monthsLength = remember(calendar, date.year, date.month) {
+                calendar.getMonthLength(date.year, date.month)
             }
-            Spacer(modifier = Modifier.width(8.dp))
-            NumberPicker(
-                modifier = Modifier.weight(1f),
-                label = ::formatNumber,
-                range = startYear..startYear + 400,
-                value = date.year,
-                onClickLabel = stringResource(R.string.year),
-            ) { year ->
-                val month = date.month.coerceIn(1, calendarType.getYearMonths(year))
-                val day = date.dayOfMonth.coerceIn(1, calendarType.getMonthLength(year, month))
-                setJdn(Jdn(calendarType, year, month, day))
-                view.performHapticFeedbackVirtualKey()
+            val yearMonths = remember(calendar, date.year) {
+                calendar.getYearMonths(date.year)
+            }
+            val monthsFormat = remember(calendar, date.year) {
+                val months = date.calendarType.monthsNames
+                { item: Int -> months[item - 1] + " / " + formatNumber(item) }
+            }
+            val todayYear = remember(calendar) { Jdn.today().toCalendar(calendar).year }
+            val startYear = remember(calendar) { todayYear - 200 }
+            var monthChangeToken by remember { mutableIntStateOf(0) }
+            var previousMonth by remember { mutableIntStateOf(0) }
+            if (previousMonth != date.month) ++monthChangeToken
+            previousMonth = date.month
+            Row(modifier = Modifier.fillMaxWidth()) {
+                val view = LocalView.current
+                NumberPicker(
+                    modifier = Modifier.weight(1f),
+                    label = daysFormat,
+                    range = 1..monthsLength,
+                    value = date.dayOfMonth,
+                    onClickLabel = stringResource(R.string.day),
+                ) {
+                    setJdn(Jdn(calendar, date.year, date.month, it))
+                    view.performHapticFeedbackVirtualKey()
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                NumberPicker(
+                    modifier = Modifier.weight(1f),
+                    label = monthsFormat,
+                    range = 1..yearMonths,
+                    value = date.month,
+                    onClickLabel = stringResource(R.string.month),
+                ) { month ->
+                    val day =
+                        date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
+                    setJdn(Jdn(calendar, date.year, month, day))
+                    view.performHapticFeedbackVirtualKey()
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                NumberPicker(
+                    modifier = Modifier.weight(1f),
+                    label = ::formatNumber,
+                    range = startYear..startYear + 400,
+                    value = date.year,
+                    onClickLabel = stringResource(R.string.year),
+                ) { year ->
+                    val month = date.month.coerceIn(1, calendar.getYearMonths(year))
+                    val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(year, month))
+                    setJdn(Jdn(calendar, year, month, day))
+                    view.performHapticFeedbackVirtualKey()
+                }
             }
         }
     }
