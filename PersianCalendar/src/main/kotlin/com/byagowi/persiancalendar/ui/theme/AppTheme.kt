@@ -276,23 +276,7 @@ fun AppMonthColors(): MonthColors {
         Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    return MonthColors(
-        contentColor = contentColor.toArgb(),
-        appointments = colorAppointments.toArgb(),
-        holidays = colorHolidays.toArgb(),
-        currentDay = colorCurrentDay.toArgb(),
-        eventIndicator = colorEventIndicator.toArgb(),
-        textDaySelected = colorTextDaySelected.toArgb(),
-    )
-}
-
-@Composable
-fun AppDaySelectionColor(): Color {
-    val theme by theme.collectAsState()
-    val resolvedTheme =
-        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
-    val context = LocalContext.current
-    return if (theme.isDynamicColors()) when (resolvedTheme) {
+    val indicator = if (theme.isDynamicColors()) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_800))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_600))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_100))
@@ -304,6 +288,15 @@ fun AppDaySelectionColor(): Color {
         Theme.MODERN -> Color(0xFFDDDEE2)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
+    return MonthColors(
+        contentColor = contentColor.toArgb(),
+        appointments = colorAppointments.toArgb(),
+        holidays = colorHolidays.toArgb(),
+        currentDay = colorCurrentDay.toArgb(),
+        eventIndicator = colorEventIndicator.toArgb(),
+        textDaySelected = colorTextDaySelected.toArgb(),
+        indicator = indicator,
+    )
 }
 
 @Composable

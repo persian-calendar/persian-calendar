@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import androidx.annotation.ColorInt
+import androidx.compose.ui.graphics.Color
 import androidx.core.graphics.ColorUtils
 
 data class MonthColors(
@@ -10,6 +11,7 @@ data class MonthColors(
     @ColorInt val eventIndicator: Int,
     @ColorInt val currentDay: Int,
     @ColorInt val textDaySelected: Int,
+    val indicator: Color,
 ) {
     @ColorInt
     val colorTextDayName = ColorUtils.setAlphaComponent(contentColor, 0xCC)

@@ -65,7 +65,6 @@ fun Month(
     height: Dp,
     addEvent: () -> Unit,
     monthColors: MonthColors,
-    indicatorColor: Color,
 ) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
@@ -87,7 +86,7 @@ fun Month(
         monthLength = monthLength,
         startingDayOfWeek = startingDayOfWeek,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-        indicatorColor = indicatorColor,
+        indicatorColor = monthColors.indicator,
     )
 
     val widthPx = with(LocalDensity.current) { width.toPx() }
