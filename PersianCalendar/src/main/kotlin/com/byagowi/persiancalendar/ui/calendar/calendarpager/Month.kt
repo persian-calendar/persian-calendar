@@ -45,7 +45,6 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -66,6 +65,7 @@ fun Month(
     height: Dp,
     addEvent: () -> Unit,
     monthColors: MonthColors,
+    indicatorColor: Color,
 ) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
@@ -87,7 +87,7 @@ fun Month(
         monthLength = monthLength,
         startingDayOfWeek = startingDayOfWeek,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-        indicatorColor = AppDaySelectionColor(),
+        indicatorColor = indicatorColor,
     )
 
     val widthPx = with(LocalDensity.current) { width.toPx() }
