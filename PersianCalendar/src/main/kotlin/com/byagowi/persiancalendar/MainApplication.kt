@@ -21,6 +21,7 @@ class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChang
         super.onCreate()
         initGlobal(applicationContext) // mostly used for things should be provided in locale level
         appPrefs.registerOnSharedPreferenceChangeListener(this)
+        update(this, true)
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
@@ -52,6 +53,6 @@ class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChang
             loadLanguageResources(this.resources)
         }
 
-        update(applicationContext, true)
+        update(this, true)
     }
 }
