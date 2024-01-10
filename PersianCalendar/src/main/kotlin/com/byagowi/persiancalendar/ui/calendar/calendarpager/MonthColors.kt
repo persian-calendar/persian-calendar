@@ -1,18 +1,16 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.Color
-import androidx.core.graphics.ColorUtils
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 
 data class MonthColors(
-    @ColorInt val contentColor: Int,
-    @ColorInt val appointments: Int,
-    @ColorInt val holidays: Int,
-    @ColorInt val eventIndicator: Int,
-    @ColorInt val currentDay: Int,
-    @ColorInt val textDaySelected: Int,
+    val contentColor: Color,
+    val appointments: Color,
+    val holidays: Color,
+    val eventIndicator: Color,
+    val currentDay: Color,
+    val textDaySelected: Color,
     val indicator: Color,
 ) {
-    @ColorInt
-    val colorTextDayName = ColorUtils.setAlphaComponent(contentColor, 0xCC)
+    val colorTextDayName = contentColor.copy(alpha = AppBlendAlpha)
 }

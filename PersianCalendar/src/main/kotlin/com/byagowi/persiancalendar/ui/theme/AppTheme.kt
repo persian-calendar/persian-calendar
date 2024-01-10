@@ -289,12 +289,12 @@ fun AppMonthColors(): MonthColors {
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
     return MonthColors(
-        contentColor = contentColor.toArgb(),
-        appointments = colorAppointments.toArgb(),
-        holidays = colorHolidays.toArgb(),
-        currentDay = colorCurrentDay.toArgb(),
-        eventIndicator = colorEventIndicator.toArgb(),
-        textDaySelected = colorTextDaySelected.toArgb(),
+        contentColor = contentColor,
+        appointments = colorAppointments,
+        holidays = colorHolidays,
+        currentDay = colorCurrentDay,
+        eventIndicator = colorEventIndicator,
+        textDaySelected = colorTextDaySelected,
         indicator = indicator,
     )
 }

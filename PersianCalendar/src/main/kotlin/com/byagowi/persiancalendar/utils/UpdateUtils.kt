@@ -27,6 +27,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
@@ -408,22 +409,27 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
 
-    val contentColor = when {
-        prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+    val contentColor = androidx.compose.ui.graphics.Color(
+        when {
+            prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
 
-        else -> selectedWidgetTextColor
-    }
+            else -> selectedWidgetTextColor
+        }
+    )
     val colors = MonthColors(
         contentColor = contentColor,
-        appointments =
-        if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
-        else 0xFF376E9F.toInt(),
-        holidays =
-        if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
-        else 0xFFE51C23.toInt(),
+        appointments = androidx.compose.ui.graphics.Color(
+            if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
+            else 0xFF376E9F.toInt()
+        ),
+        holidays = androidx.compose.ui.graphics.Color(
+            if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
+            else 0xFFE51C23.toInt()
+        ),
         eventIndicator = contentColor,
         currentDay = contentColor,
         textDaySelected = contentColor,
+        indicator = androidx.compose.ui.graphics.Color.Transparent,
     )
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
@@ -456,7 +462,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.textAlign = Paint.Align.CENTER
             it.textSize = min(width, height) / 7f * 20 / 40
-            it.color = colors.contentColor
+            it.color = colors.contentColor.toArgb()
             it.alpha = 90
         }
         it.drawText(contentDescription, width / 2f, height * .95f, footerPaint)

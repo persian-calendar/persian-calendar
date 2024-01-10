@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -196,7 +195,7 @@ fun Month(
                 )
                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                 if (isToday) drawCircle(
-                    Color(monthColors.currentDay),
+                    monthColors.currentDay,
                     radius = this.size.minDimension / 2 - .5.dp.toPx(),
                     style = Stroke(width = 1.dp.toPx())
                 )
@@ -208,8 +207,8 @@ fun Month(
                 drawText(
                     textLayoutResult,
                     color = when {
-                        isSelected -> Color(monthColors.textDaySelected)
-                        isHoliday || day.isWeekEnd() -> Color(monthColors.holidays)
+                        isSelected -> monthColors.textDaySelected
+                        isHoliday || day.isWeekEnd() -> monthColors.holidays
                         else -> contentColor
                     },
                     topLeft = Offset(

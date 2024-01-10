@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
 import androidx.annotation.ColorInt
+import androidx.compose.ui.graphics.toArgb
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Jdn
@@ -178,16 +179,16 @@ private class Paints(
     }
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = colors.appointments
+        it.color = colors.appointments.toArgb()
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = colors.eventIndicator
+        it.color = colors.eventIndicator.toArgb()
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1 * dp
-        it.color = colors.currentDay
+        it.color = colors.currentDay.toArgb()
     }
     val selectedDayPaint = selectedDayColor?.let {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -207,46 +208,46 @@ private class Paints(
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colors.holidays
+        it.color = colors.holidays.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
 
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colors.contentColor
+        it.color = colors.contentColor.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
 
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize
-        it.color = colors.textDaySelected
+        it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colors.textDaySelected
+        it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
 
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colors.colorTextDayName
+        it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = if (isYearView) textSize else headerTextSize
-        it.color = colors.colorTextDayName
+        it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
     val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = diameter * 20 / 40
-        it.color = colors.colorTextDayName
+        it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
     }
 }
