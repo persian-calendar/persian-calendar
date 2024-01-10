@@ -13,11 +13,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.theme.AppDaySelectionColor
 import kotlin.math.min
 
 @Composable
@@ -28,9 +28,8 @@ fun SelectionIndicator(
     isShowWeekOfYearEnabled: Boolean,
     isHighlighted: Boolean,
     selectedDay: Jdn,
+    indicatorColor: Color,
 ) {
-    val indicatorColor = AppDaySelectionColor()
-
     var lastHighlightedDay by remember { mutableStateOf(selectedDay) }
     if (isHighlighted) lastHighlightedDay = selectedDay
 
