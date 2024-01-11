@@ -417,4 +417,6 @@
     <string name="yes">Sí</string>
     <string name="sample_inputs">Ejemplos de entradas</string>
     <string name="year_view">Vista del año</string>
+    <string name="ask_for_calendar_permission">¿Quieres activar tus eventos personales desde el calendario de tu dispositivo?</string>
+    <string name="exempt_app_battery_optimization">¿Te gustaría añadir la aplicación a la excepción de optimización de la batería para el correcto funcionamiento de la notificación?</string>
 </resources>
