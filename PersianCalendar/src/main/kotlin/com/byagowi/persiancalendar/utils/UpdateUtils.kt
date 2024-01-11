@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -930,7 +931,21 @@ private data class NotificationData(
 
         if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
 
-        notificationManager.notify(notificationId, builder.build())
+        val notification = builder.build()
+
+        // https://stackoverflow.com/a/40708431
+        @SuppressLint("PrivateApi") if (Build.BRAND.lowercase() == "xiaomi") runCatching {
+            val miuiNotification = Class.forName("android.app.MiuiNotification").newInstance()
+            val customizedIconField = miuiNotification.javaClass.getDeclaredField("customizedIcon")
+            customizedIconField.isAccessible = true
+            customizedIconField.set(miuiNotification, true)
+
+            val extraNotificationField = notification::class.java.getField("extraNotification")
+            extraNotificationField.isAccessible = true
+            extraNotificationField.set(notification, miuiNotification)
+        }.onFailure(logException)
+
+        notificationManager.notify(notificationId, notification)
         return true
     }
 }
