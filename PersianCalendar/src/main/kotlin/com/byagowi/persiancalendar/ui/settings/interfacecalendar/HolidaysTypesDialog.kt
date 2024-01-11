@@ -2,11 +2,14 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.ClickableText
@@ -111,7 +114,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                 )
             }
             Box(
-                Modifier.height(HolidaysSettingsItemHeight.dp),
+                Modifier.defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(
@@ -137,6 +140,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
 @Composable
 private fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 @VisibleForTesting
 fun CountryEvents(
@@ -160,7 +164,7 @@ fun CountryEvents(
                     if (nonHolidaysKey !in enabledTypes) enabledTypes.add(nonHolidaysKey)
                 }
             }
-            .height(HolidaysSettingsItemHeight.dp),
+            .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         TriStateCheckbox(
@@ -172,23 +176,28 @@ fun CountryEvents(
                 else -> ToggleableState.Off
             },
             onClick = null,
-            modifier = Modifier.padding(start = SettingsHorizontalPaddingItem.dp),
+            modifier = Modifier
+                .padding(start = SettingsHorizontalPaddingItem.dp)
+                .align(Alignment.CenterVertically),
         )
         Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
-        Text(calendarCenterName)
-        val context = LocalContext.current
-        if (sourceLink.isNotEmpty()) {
-            Text(spacedComma)
-            ClickableText(
-                AnnotatedString(stringResource(R.string.view_source)),
-                style = MaterialTheme.typography.bodySmall.copy(
-                    color = MaterialTheme.colorScheme.primary,
-                    textDecoration = TextDecoration.Underline
-                ),
-            ) {
-                runCatching {
-                    CustomTabsIntent.Builder().build().launchUrl(context, sourceLink.toUri())
-                }.onFailure(logException)
+        FlowRow(verticalArrangement = Arrangement.Center) {
+            Text(calendarCenterName, modifier = Modifier.align(Alignment.CenterVertically))
+            val context = LocalContext.current
+            if (sourceLink.isNotEmpty()) {
+                Text(spacedComma)
+                ClickableText(
+                    AnnotatedString(stringResource(R.string.view_source)),
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    modifier = Modifier.align(Alignment.CenterVertically),
+                ) {
+                    runCatching {
+                        CustomTabsIntent.Builder().build().launchUrl(context, sourceLink.toUri())
+                    }.onFailure(logException)
+                }
             }
         }
     }
@@ -208,7 +217,7 @@ private fun IndentedCheckBox(
             .clickable {
                 if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
             }
-            .height(HolidaysSettingsItemHeight.dp)
+            .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(
                 start = (24/*checkbox size*/ + HolidaysHorizontalPaddingItem + SettingsHorizontalPaddingItem).dp,
                 end = HolidaysHorizontalPaddingItem.dp,
