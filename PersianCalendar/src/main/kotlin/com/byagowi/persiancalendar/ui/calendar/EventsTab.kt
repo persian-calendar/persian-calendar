@@ -217,8 +217,7 @@ fun EventsTab(
             }
         }
 
-        val isHolidaysAlreadySet = remember { PREF_HOLIDAY_TYPES !in context.appPrefs }
-        if (isHolidaysAlreadySet && language.value.isIranExclusive) {
+        if (PREF_HOLIDAY_TYPES !in context.appPrefs && language.value.isIranExclusive) {
             Spacer(modifier = Modifier.height(16.dp))
             SettingsPromotionButtons(
                 header = stringResource(R.string.warn_if_events_not_set),
@@ -229,7 +228,7 @@ fun EventsTab(
                 },
                 acceptAction = navigateToHolidaysSettings,
             )
-        } else if (remember { PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.appPrefs }) {
+        } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.appPrefs) {
             var showDialog by remember { mutableStateOf(false) }
             if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 

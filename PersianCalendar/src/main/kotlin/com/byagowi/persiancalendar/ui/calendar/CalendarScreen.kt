@@ -7,12 +7,15 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
+import android.os.PowerManager
 import android.provider.CalendarContract
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -85,8 +88,10 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -103,6 +108,7 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
+import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -435,8 +441,27 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
+        } else if (PREF_BATTERY_OPTIMIZATION_IGNORED !in context.appPrefs && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (!isIgnoringBatteryOptimizations(context) && isNotifyDate.value) {
+                SettingsPromotionButtons(
+                    header = stringResource(R.string.exempt_app_battery_optimization),
+                    acceptButton = stringResource(R.string.yes),
+                    discardAction = {
+                        context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                    },
+                ) { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+            }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.M)
+private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
+    return runCatching {
+        context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(
+            context.applicationContext.packageName
+        )
+    }.onFailure(logException).getOrNull() ?: false
 }
 
 @Composable
