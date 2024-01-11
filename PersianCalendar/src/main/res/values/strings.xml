@@ -66,6 +66,7 @@
     <string name="events">Events</string>
     <string name="no_event">No event or appointment for this day</string>
     <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
+    <string name="ask_for_calendar_permission">"Would you like to enable your personal events from your device's calendar?"</string>
     <string name="sunriseSunView">Sunrise</string>
     <string name="middaySunView">Midday</string>
     <string name="sunsetSunView">Sunset</string>

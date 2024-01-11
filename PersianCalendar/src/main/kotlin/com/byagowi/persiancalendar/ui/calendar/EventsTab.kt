@@ -29,7 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,12 +44,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -224,6 +228,19 @@ fun EventsTab(
                     }
                 },
                 acceptAction = navigateToHolidaysSettings,
+            )
+        } else if (remember { PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.appPrefs }) {
+            var showDialog by remember { mutableStateOf(false) }
+            if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            SettingsPromotionButtons(
+                header = stringResource(R.string.ask_for_calendar_permission),
+                discardAction = {
+                    context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                },
+                acceptButton = stringResource(R.string.yes),
+                acceptAction = { showDialog = true },
             )
         }
 
