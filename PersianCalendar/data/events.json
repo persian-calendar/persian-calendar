@@ -24,19 +24,15 @@
     "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201402.pdf",
     "مرکز تقویم دانشگاه تهران",
 
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-2-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-2-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-hijri-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-hijri-2-data.txt",
+    "https://github.com/ilius/starcal/tree/main/plugins",
     "مطابق با استخراج و تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران (مناسبت‌ها از شورای فرهنگ عمومی)",
     "گردآوری، فرمت‌بندی و به روزآوری: سعید رسولی <saeed.gnu@gmail.com>، مولا پهنادایان <mola.mp@gmail.com>",
 
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "جشن‌های باستانی ایران",
     "Ardalan Razavi",
-    "رضا مرادی غیاث‌آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>",
+    "رضا مرادی غیاث‌آبادی (www.ghiasabadi.com)",
+    "سعید رسولی <saeed.gnu@gmail.com>",
 
     "http://www.un.org/en/sections/observances/international-days/"
   ],
