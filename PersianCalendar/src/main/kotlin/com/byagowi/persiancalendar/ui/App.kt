@@ -69,6 +69,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
@@ -211,7 +212,17 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             navController.navigate(
                                 destination.id, bundleOf(
                                     tabKey to INTERFACE_CALENDAR_TAB,
-                                    settingsKey to PREF_HOLIDAY_TYPES
+                                    settingsKey to PREF_HOLIDAY_TYPES,
+                                )
+                            )
+                        }
+                    },
+                    navigateToSettingsLocationTabSetAthanAlarm = {
+                        navController.graph.findNode(settingsRoute)?.let { destination ->
+                            navController.navigate(
+                                destination.id, bundleOf(
+                                    tabKey to LOCATION_ATHAN_TAB,
+                                    settingsKey to PREF_ATHAN_ALARM,
                                 )
                             )
                         }

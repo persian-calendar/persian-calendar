@@ -184,6 +184,7 @@ fun CalendarScreen(
     openDrawer: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
+    navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel,
 ) {
@@ -252,12 +253,13 @@ fun CalendarScreen(
                             modifier = Modifier.fillMaxHeight(),
                         ) {
                             Details(
-                                viewModel,
-                                navigateToHolidaysSettings,
-                                navigateToSettingsLocationTab,
-                                navigateToAstronomy,
-                                bottomPadding,
-                                maxHeight,
+                                viewModel = viewModel,
+                                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                navigateToAstronomy = navigateToAstronomy,
+                                bottomPadding = bottomPadding,
+                                contentMinHeight = maxHeight,
                                 scrollableTabs = true,
                             )
                         }
@@ -276,12 +278,13 @@ fun CalendarScreen(
                                 shape = MaterialCornerExtraLargeTop(),
                             ) {
                                 Details(
-                                    viewModel,
-                                    navigateToHolidaysSettings,
-                                    navigateToSettingsLocationTab,
-                                    navigateToAstronomy,
-                                    bottomPadding,
-                                    detailsMinHeight,
+                                    viewModel = viewModel,
+                                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                                    navigateToAstronomy = navigateToAstronomy,
+                                    bottomPadding = bottomPadding,
+                                    contentMinHeight = detailsMinHeight,
                                 )
                             }
                         }
@@ -350,6 +353,7 @@ private fun Details(
     viewModel: CalendarViewModel,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
+    navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     bottomPadding: Dp,
     contentMinHeight: Dp,
@@ -362,7 +366,12 @@ private fun Details(
         R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
         if (enableTimesTab(context) && !removeThirdTab) R.string.times to {
-            TimesTab(navigateToSettingsLocationTab, navigateToAstronomy, viewModel)
+            TimesTab(
+                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                navigateToAstronomy = navigateToAstronomy,
+                viewModel = viewModel
+            )
         } else null,
     )
 

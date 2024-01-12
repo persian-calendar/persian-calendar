@@ -131,7 +131,7 @@ fun SettingsScreen(
                 TabItem(
                     Icons.Outlined.LocationOn, Icons.Default.LocationOn,
                     R.string.location, R.string.athan,
-                ) { LocationAthanSettings(navigateToMap) },
+                ) { LocationAthanSettings(navigateToMap, destination) },
             )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)

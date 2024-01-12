@@ -34,11 +34,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.SettingsPromotionButtons
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -51,6 +53,7 @@ import io.github.persiancalendar.praytimes.PrayTimes
 @Composable
 fun TimesTab(
     navigateToSettingsLocationTab: () -> Unit,
+    navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel
 ) {
@@ -70,26 +73,40 @@ fun TimesTab(
     val jdn by viewModel.selectedDay.collectAsState()
     val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
 
-    Column(
-        Modifier.clickable(
-            indication = rememberRipple(bounded = false),
-            interactionSource = remember { MutableInteractionSource() },
-            onClickLabel = stringResource(R.string.more),
-            onClick = { isExpanded = !isExpanded },
-        ),
-    ) {
-        Spacer(Modifier.height(16.dp))
-        AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy)
-        Spacer(Modifier.height(16.dp))
-        Times(isExpanded, prayTimes)
-        Spacer(Modifier.height(8.dp))
-        Row(
-            Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
+    Column {
+        Column(
+            Modifier.clickable(
+                indication = rememberRipple(bounded = false),
+                interactionSource = remember { MutableInteractionSource() },
+                onClickLabel = stringResource(R.string.more),
+                onClick = { isExpanded = !isExpanded },
+            ),
         ) {
-            if (cityName != null) Text(cityName ?: "", style = MaterialTheme.typography.bodyLarge)
-            ExpandArrow(isExpanded = isExpanded, tint = MaterialTheme.colorScheme.primary)
+            Spacer(Modifier.height(16.dp))
+            AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy)
+            Spacer(Modifier.height(16.dp))
+            Times(isExpanded, prayTimes)
+            Spacer(Modifier.height(8.dp))
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                if (cityName != null) Text(
+                    cityName ?: "", style = MaterialTheme.typography.bodyLarge
+                )
+                ExpandArrow(isExpanded = isExpanded, tint = MaterialTheme.colorScheme.primary)
+            }
+        }
+
+        val language by language.collectAsState()
+        if ((language.isPersian || language.isDari) && PREF_ATHAN_ALARM !in context.appPrefs) {
+            SettingsPromotionButtons(
+                modifier = Modifier.padding(top = 16.dp),
+                header = "مایلید برنامه اذان پخش کند؟",
+                discardAction = { context.appPrefs.edit { putString(PREF_ATHAN_ALARM, "") } },
+                acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
+            )
         }
     }
 }

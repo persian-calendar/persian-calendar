@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
+import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
@@ -75,7 +76,7 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
 @Composable
-fun LocationAthanSettings(navigateToMap: () -> Unit) {
+fun LocationAthanSettings(navigateToMap: () -> Unit, destination: String) {
     SettingsSection(stringResource(R.string.location))
     SettingsClickable(
         title = stringResource(R.string.gps_location),
@@ -140,6 +141,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit) {
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),
+            defaultOpen = destination == PREF_ATHAN_ALARM,
         ) { onDismissRequest -> PrayerSelectDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
