@@ -443,7 +443,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 updateStoredPreference(context)
                 if (isGranted) update(context, updateDate = true)
             }
-            SettingsPromotionButtons(
+            EncourageActionLayout(
                 header = stringResource(R.string.enable_notification),
                 acceptButton = stringResource(R.string.yes),
                 discardAction = {
@@ -452,7 +452,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
         } else if (PREF_BATTERY_OPTIMIZATION_IGNORED !in context.appPrefs && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!isIgnoringBatteryOptimizations(context) && isNotifyDate.value) {
-                SettingsPromotionButtons(
+                EncourageActionLayout(
                     header = stringResource(R.string.exempt_app_battery_optimization),
                     acceptButton = stringResource(R.string.yes),
                     discardAction = {

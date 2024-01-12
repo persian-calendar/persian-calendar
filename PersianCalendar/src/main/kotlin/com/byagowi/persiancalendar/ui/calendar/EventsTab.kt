@@ -219,7 +219,7 @@ fun EventsTab(
 
         if (PREF_HOLIDAY_TYPES !in context.appPrefs && language.value.isIranExclusive) {
             Spacer(modifier = Modifier.height(16.dp))
-            SettingsPromotionButtons(
+            EncourageActionLayout(
                 header = stringResource(R.string.warn_if_events_not_set),
                 discardAction = {
                     context.appPrefs.edit {
@@ -233,7 +233,7 @@ fun EventsTab(
             if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
             Spacer(modifier = Modifier.height(16.dp))
-            SettingsPromotionButtons(
+            EncourageActionLayout(
                 header = stringResource(R.string.ask_for_calendar_permission),
                 discardAction = {
                     context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }

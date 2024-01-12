@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 
 @Composable
-fun SettingsPromotionButtons(
+fun EncourageActionLayout(
     modifier: Modifier = Modifier,
     header: String,
     acceptButton: String = stringResource(R.string.settings),
