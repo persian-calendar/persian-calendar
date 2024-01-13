@@ -416,6 +416,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendar by viewModel.calendar.collectAsState()
+    if (calendar !in enabledCalendars) viewModel.changeCalendar(mainCalendar)
     val jdn by viewModel.selectedDate.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {

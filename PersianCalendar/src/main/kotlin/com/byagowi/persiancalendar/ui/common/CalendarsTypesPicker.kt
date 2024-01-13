@@ -18,12 +18,14 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
 @Composable
 fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
+    val selectedTabIndex = enabledCalendars.indexOf(current)
+        // If user returned from disabling one of the calendar, do a fallback
+        .coerceAtLeast(0)
     TabRow(
-        selectedTabIndex = enabledCalendars.indexOf(current),
+        selectedTabIndex = selectedTabIndex,
         divider = {},
         containerColor = Color.Transparent,
         indicator = @Composable { tabPositions ->
-            val selectedTabIndex = enabledCalendars.indexOf(current)
             if (selectedTabIndex < tabPositions.size) {
                 PrimaryIndicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
             }
