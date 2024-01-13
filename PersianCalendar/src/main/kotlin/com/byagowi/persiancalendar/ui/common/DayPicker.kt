@@ -146,7 +146,8 @@ fun DayPicker(
     }
 }
 
-// The following is brought from https://github.com/ChargeMap/Compose-NumberPicker and customized
+// The following functions are brought from
+// https://github.com/ChargeMap/Compose-NumberPicker and customized to support number edits
 // MIT licensed
 private fun getItemIndexForOffset(
     range: IntRange,
@@ -159,7 +160,7 @@ private fun getItemIndexForOffset(
 }
 
 @Composable
-fun NumberPicker(
+private fun NumberPicker(
     modifier: Modifier = Modifier,
     label: (Int) -> String = { it.toString() },
     range: IntRange,
