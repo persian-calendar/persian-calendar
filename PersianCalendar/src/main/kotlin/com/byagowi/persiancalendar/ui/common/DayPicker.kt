@@ -155,7 +155,7 @@ private fun getItemIndexForOffset(
     offset: Float,
     halfNumbersColumnHeightPx: Float
 ): Int {
-    val indexOf = range.indexOf(value) - (offset / halfNumbersColumnHeightPx).toInt()
+    val indexOf = value - range.first - (offset / halfNumbersColumnHeightPx).toInt()
     return indexOf.coerceIn(0, range.last - range.first)
 }
 
@@ -177,14 +177,10 @@ private fun NumberPicker(
     val coroutineScope = rememberCoroutineScope()
 
     val animatedOffset = remember { Animatable(0f) }
-        .apply {
-            val index = range.indexOf(value)
-            val offsetRange = remember(value, range) {
-                -((range.count() - 1) - index) * halfNumbersColumnHeightPx to
-                        index * halfNumbersColumnHeightPx
-            }
-            updateBounds(offsetRange.first, offsetRange.second)
-        }
+    animatedOffset.updateBounds(
+        (value - range.last) * halfNumbersColumnHeightPx,
+        (value - range.first) * halfNumbersColumnHeightPx,
+    )
 
     val coercedAnimatedOffset = animatedOffset.value % halfNumbersColumnHeightPx
 
@@ -220,10 +216,14 @@ private fun NumberPicker(
                             },
                         ).endState.value
 
-                        val result = range.elementAt(
-                            getItemIndexForOffset(range, value, endValue, halfNumbersColumnHeightPx)
+                        onValueChange(
+                            range.first + getItemIndexForOffset(
+                                range,
+                                value,
+                                endValue,
+                                halfNumbersColumnHeightPx
+                            )
                         )
-                        onValueChange(result)
                         animatedOffset.snapTo(0f)
                     }
                 },
@@ -237,7 +237,7 @@ private fun NumberPicker(
                     .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) }
             ) {
                 if (indexOfElement > 0) Label(
-                    text = label(range.elementAt(indexOfElement - 1)),
+                    text = label(range.first + indexOfElement - 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
                         .semantics {
@@ -297,7 +297,7 @@ private fun NumberPicker(
                             )
                         }
                     } else Label(
-                        text = label(range.elementAt(indexOfElement)),
+                        text = label(range.first + indexOfElement),
                         modifier = Modifier
                             .height(numbersColumnHeight / 3)
                             .clickable(
@@ -313,8 +313,8 @@ private fun NumberPicker(
                             ),
                     )
                 }
-                if (indexOfElement < range.count() - 1) Label(
-                    text = label(range.elementAt(indexOfElement + 1)),
+                if (indexOfElement < range.last - range.first) Label(
+                    text = label(range.first + indexOfElement + 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
                         .semantics {
