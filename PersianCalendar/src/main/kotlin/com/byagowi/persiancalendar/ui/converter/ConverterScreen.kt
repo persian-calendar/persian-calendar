@@ -441,7 +441,9 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 val secondJdn by viewModel.secondSelectedDate.collectAsState()
                 DaysDistance(jdn, secondJdn, calendar)
                 DayPicker(
-                    calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+                    calendarType = calendar,
+                    jdn = secondJdn,
+                    setJdn = viewModel::changeSecondSelectedDate,
                 )
             }
         }
@@ -470,7 +472,9 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 val secondJdn by viewModel.secondSelectedDate.collectAsState()
                 DaysDistance(jdn, secondJdn, calendar)
                 DayPicker(
-                    calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+                    calendarType = calendar,
+                    jdn = secondJdn,
+                    setJdn = viewModel::changeSecondSelectedDate,
                 )
             }
         }
