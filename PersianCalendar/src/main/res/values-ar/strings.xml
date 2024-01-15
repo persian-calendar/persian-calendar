@@ -462,4 +462,6 @@
     <string name="yes">نعم</string>
     <string name="sample_inputs">المدخلات نموذجية</string>
     <string name="year_view">عرض السنوي</string>
+    <string name="ask_for_calendar_permission">هل ترغب في تمكين الأحداث الشخصية من تقويم جهازك؟</string>
+    <string name="exempt_app_battery_optimization">هل ترغب في إضافة التطبيق إلى قائمة استثناءات تحسين البطارية لضمان وظائف الإشعار بشكل صحيح؟</string>
 </resources>
