@@ -426,8 +426,9 @@ private fun Details(
 private fun CalendarsTab(viewModel: CalendarViewModel) {
     Column {
         val jdn by viewModel.selectedDay.collectAsState()
+        val today by viewModel.today.collectAsState()
         var isExpanded by rememberSaveable { mutableStateOf(false) }
-        CalendarsOverview(jdn, mainCalendar, enabledCalendars, isExpanded) {
+        CalendarsOverview(jdn, today, mainCalendar, enabledCalendars, isExpanded) {
             isExpanded = !isExpanded
         }
 

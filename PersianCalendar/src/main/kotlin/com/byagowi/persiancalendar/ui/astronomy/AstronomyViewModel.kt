@@ -11,21 +11,21 @@ import kotlin.math.roundToInt
 
 class AstronomyViewModel : ViewModel() {
     private val _mode = MutableStateFlow(AstronomyMode.entries[0])
-    val mode: StateFlow<AstronomyMode> = _mode
+    val mode: StateFlow<AstronomyMode> get() = _mode
 
     private val _minutesOffset = MutableStateFlow(DEFAULT_TIME)
-    val minutesOffset: StateFlow<Int> = _minutesOffset
+    val minutesOffset: StateFlow<Int> get() = _minutesOffset
 
     private val dateSink = GregorianCalendar() // Just to avoid recreating it everytime
 
     private val _astronomyState = MutableStateFlow(AstronomyState(dateSink))
-    val astronomyState: StateFlow<AstronomyState> = _astronomyState
+    val astronomyState: StateFlow<AstronomyState> get() = _astronomyState
 
     private val _isTropical = MutableStateFlow(false)
-    val isTropical: StateFlow<Boolean> = _isTropical
+    val isTropical: StateFlow<Boolean> get() = _isTropical
 
     private val _isDayPickerDialogShown = MutableStateFlow(false)
-    val isDayPickerDialogShown: StateFlow<Boolean> = _isDayPickerDialogShown
+    val isDayPickerDialogShown: StateFlow<Boolean> get() = _isDayPickerDialogShown
 
     // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
     // is meant to be used in animation thus is the visible one and the other is to keep final

@@ -71,13 +71,14 @@ import java.util.Date
 @Composable
 fun CalendarsOverview(
     jdn: Jdn,
+    today: Jdn,
     selectedCalendar: CalendarType,
     shownCalendars: List<CalendarType>,
     isExpanded: Boolean,
     toggleExpansion: () -> Unit
 ) {
     val context = LocalContext.current
-    val isToday = Jdn.today() == jdn
+    val isToday = today == jdn
     Column(
         Modifier
             .clickable(
@@ -156,7 +157,7 @@ fun CalendarsOverview(
                 listOf(
                     stringResource(R.string.days_distance),
                     spacedColon,
-                    calculateDaysDifference(context.resources, jdn)
+                    calculateDaysDifference(context.resources, jdn, today)
                 ).joinToString(""),
                 transitionSpec = appCrossfadeSpec,
                 label = "diff days",

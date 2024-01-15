@@ -418,6 +418,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
     val calendar by viewModel.calendar.collectAsState()
     if (calendar !in enabledCalendars) viewModel.changeCalendar(mainCalendar)
     val jdn by viewModel.selectedDate.collectAsState()
+    val today by viewModel.today.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
@@ -434,6 +435,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         ) { state ->
             if (state) CalendarsOverview(
                 jdn = jdn,
+                today = today,
                 selectedCalendar = calendar,
                 shownCalendars = enabledCalendars - calendar,
                 isExpanded = isExpanded
@@ -453,6 +455,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
             ) {
                 CalendarsOverview(
                     jdn = jdn,
+                    today = today,
                     selectedCalendar = calendar,
                     shownCalendars = enabledCalendars - calendar,
                     isExpanded = isExpanded

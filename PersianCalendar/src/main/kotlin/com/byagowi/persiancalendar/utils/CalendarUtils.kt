@@ -270,8 +270,9 @@ fun calculateDatePartsDifference(
 }
 
 fun calculateDaysDifference(
-    resources: Resources, jdn: Jdn,
-    baseJdn: Jdn = Jdn.today(),
+    resources: Resources,
+    jdn: Jdn,
+    baseJdn: Jdn,
     calendarType: CalendarType = mainCalendar,
     isInWidget: Boolean = false
 ): String {

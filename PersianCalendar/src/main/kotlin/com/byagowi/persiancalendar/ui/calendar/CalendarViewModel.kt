@@ -42,40 +42,40 @@ class CalendarViewModel @JvmOverloads constructor(
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
 
     private val _isSearchOpenFlow = MutableStateFlow(false)
-    val isSearchOpen: StateFlow<Boolean> = _isSearchOpenFlow
+    val isSearchOpen: StateFlow<Boolean> get() = _isSearchOpenFlow
 
     private val _eventsFlow = MutableSharedFlow<List<CalendarEvent<*>>>()
     val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
     private val _refreshToken = MutableStateFlow(0)
-    val refreshToken: StateFlow<Int> = _refreshToken
+    val refreshToken: StateFlow<Int> get() = _refreshToken
 
     private val _isHighlighted = MutableStateFlow(false)
-    val isHighlighted: StateFlow<Boolean> = _isHighlighted
+    val isHighlighted: StateFlow<Boolean> get() = _isHighlighted
 
     private val _removedThirdTab = MutableStateFlow(false)
-    val removedThirdTab: StateFlow<Boolean> = _removedThirdTab
+    val removedThirdTab: StateFlow<Boolean> get() = _removedThirdTab
 
     private val _shiftWorkViewModel = MutableStateFlow<ShiftWorkViewModel?>(null)
-    val shiftWorkViewModel: StateFlow<ShiftWorkViewModel?> = _shiftWorkViewModel
+    val shiftWorkViewModel: StateFlow<ShiftWorkViewModel?> get() = _shiftWorkViewModel
 
     private val _sunViewNeedAnimation = MutableStateFlow(false)
-    val sunViewNeedsAnimation: StateFlow<Boolean> = _sunViewNeedAnimation
+    val sunViewNeedsAnimation: StateFlow<Boolean> get() = _sunViewNeedAnimation
 
     private val _now = MutableStateFlow(System.currentTimeMillis())
-    val now: StateFlow<Long> = _now
+    val now: StateFlow<Long> get() = _now
 
     private val _todayButtonVisibility = MutableStateFlow(false)
-    val todayButtonVisibility: StateFlow<Boolean> = _todayButtonVisibility
+    val todayButtonVisibility: StateFlow<Boolean> get() = _todayButtonVisibility
 
     private val _today = MutableStateFlow(Jdn.today())
-    val today: StateFlow<Jdn> = _today
+    val today: StateFlow<Jdn> get() = _today
 
     private val _isYearView = MutableStateFlow(false)
-    val isYearView: StateFlow<Boolean> = _isYearView
+    val isYearView: StateFlow<Boolean> get() = _isYearView
 
     private val _yearViewCommand = MutableStateFlow<YearViewCommand?>(null)
-    val yearViewCommand: StateFlow<YearViewCommand?> = _yearViewCommand
+    val yearViewCommand: StateFlow<YearViewCommand?> get() = _yearViewCommand
 
     // Commands
     fun changeSelectedMonthOffsetCommand(offset: Int?) {

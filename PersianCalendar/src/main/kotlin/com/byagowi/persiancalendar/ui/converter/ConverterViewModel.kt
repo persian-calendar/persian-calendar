@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -17,10 +19,13 @@ class ConverterViewModel : ViewModel() {
     private val _calendar = MutableStateFlow(mainCalendar)
     val calendar: StateFlow<CalendarType> get() = _calendar
 
-    private val _selectedDate = MutableStateFlow(Jdn.today())
+    private val _today = MutableStateFlow(Jdn.today())
+    val today: StateFlow<Jdn> get() = _today
+
+    private val _selectedDate = MutableStateFlow(_today.value)
     val selectedDate: StateFlow<Jdn> get() = _selectedDate
 
-    private val _secondSelectedDate = MutableStateFlow(Jdn.today())
+    private val _secondSelectedDate = MutableStateFlow(_today.value)
     val secondSelectedDate: StateFlow<Jdn> get() = _secondSelectedDate
 
     private val _screenMode = MutableStateFlow(ConverterScreenMode.entries[0])
@@ -46,24 +51,30 @@ class ConverterViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            merge(selectedDate, secondSelectedDate, screenMode, clock).collectLatest {
+            merge(selectedDate, secondSelectedDate, screenMode, clock, today).collectLatest {
                 _todayButtonVisibility.value = when (screenMode.value) {
                     ConverterScreenMode.Calculator, ConverterScreenMode.QrCode -> false
 
-                    ConverterScreenMode.Converter -> selectedDate.value != Jdn.today()
+                    ConverterScreenMode.Converter -> selectedDate.value != today.value
 
                     ConverterScreenMode.Distance -> {
-                        val today = Jdn.today()
-                        selectedDate.value != today || secondSelectedDate.value != today
+                        selectedDate.value != today.value || secondSelectedDate.value != today.value
                     }
 
                     ConverterScreenMode.TimeZones -> {
                         !haveSameClock(
                             clock.value,
-                            GregorianCalendar(clock.value.timeZone)
+                            GregorianCalendar(clock.value.timeZone),
                         ) || firstTimeZone.value != TimeZone.getDefault() || secondTimeZone.value != utc
                     }
                 }
+            }
+        }
+        viewModelScope.launch {
+            while (true) {
+                delay(THIRTY_SECONDS_IN_MILLIS)
+                val today = Jdn.today()
+                if (_today.value != today) _today.value = today
             }
         }
     }

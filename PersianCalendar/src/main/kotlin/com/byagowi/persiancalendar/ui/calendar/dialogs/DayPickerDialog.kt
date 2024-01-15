@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,7 +29,9 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
+import kotlinx.coroutines.delay
 
 @Composable
 fun DayPickerDialog(
@@ -40,7 +43,13 @@ fun DayPickerDialog(
     var jdn by rememberSaveable(
         saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
     ) { mutableStateOf(initialJdn) }
-    val today = remember { Jdn.today() }
+    var today by remember { mutableStateOf(Jdn.today()) }
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(THIRTY_SECONDS_IN_MILLIS)
+            today = Jdn.today()
+        }
+    }
     AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
@@ -65,6 +74,7 @@ fun DayPickerDialog(
                 calculateDaysDifference(
                     LocalContext.current.resources,
                     jdn,
+                    today,
                     calendarType = calendarType,
                 ),
             ).joinToString(""),
