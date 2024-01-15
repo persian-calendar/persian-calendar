@@ -106,11 +106,12 @@ fun ColumnScope.ShiftWorkDialogContent(
 ) {
     val context = LocalContext.current
     val isFirstSetup by viewModel.isFirstSetup.collectAsState()
+    val startingDate by viewModel.startingDate.collectAsState()
     Text(
         stringResource(
             if (isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit,
-            formatDate(viewModel.startingDate.value.toCalendar(mainCalendar))
+            formatDate(startingDate.toCalendar(mainCalendar))
         ),
         modifier = Modifier.padding(horizontal = 24.dp),
     )

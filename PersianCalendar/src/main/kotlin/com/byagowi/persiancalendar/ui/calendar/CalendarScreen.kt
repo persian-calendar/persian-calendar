@@ -658,7 +658,8 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
     if (showDayPickerDialog) DayPickerDialog(
         viewModel.selectedDay.value,
         R.string.go,
-        { bringDate(viewModel, it, context) }) { showDayPickerDialog = false }
+        { bringDate(viewModel, it, context) },
+    ) { showDayPickerDialog = false }
 
     val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
     shiftWorkViewModel?.let {
