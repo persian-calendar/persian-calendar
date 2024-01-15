@@ -437,15 +437,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 selectedCalendar = calendar,
                 shownCalendars = enabledCalendars - calendar,
                 isExpanded = isExpanded
-            ) { isExpanded = !isExpanded } else Column {
-                val secondJdn by viewModel.secondSelectedDate.collectAsState()
-                DaysDistance(jdn, secondJdn, calendar)
-                DayPicker(
-                    calendarType = calendar,
-                    jdn = secondJdn,
-                    setJdn = viewModel::changeSecondSelectedDate,
-                )
-            }
+            ) { isExpanded = !isExpanded } else DaysDistanceSecondPart(viewModel, jdn, calendar)
         }
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
@@ -468,16 +460,25 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
             }
         }
         AnimatedVisibility(screenMode == ConverterScreenMode.Distance) {
-            Column {
-                val secondJdn by viewModel.secondSelectedDate.collectAsState()
-                DaysDistance(jdn, secondJdn, calendar)
-                DayPicker(
-                    calendarType = calendar,
-                    jdn = secondJdn,
-                    setJdn = viewModel::changeSecondSelectedDate,
-                )
-            }
+            DaysDistanceSecondPart(viewModel, jdn, calendar)
         }
+    }
+}
+
+@Composable
+private fun DaysDistanceSecondPart(
+    viewModel: ConverterViewModel,
+    jdn: Jdn,
+    calendar: CalendarType
+) {
+    Column {
+        val secondJdn by viewModel.secondSelectedDate.collectAsState()
+        DaysDistance(jdn, secondJdn, calendar)
+        DayPicker(
+            calendarType = calendar,
+            jdn = secondJdn,
+            setJdn = viewModel::changeSecondSelectedDate,
+        )
     }
 }
 
