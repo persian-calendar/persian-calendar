@@ -39,9 +39,8 @@ fun SelectionIndicator(
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val rowsCount = 7
 
-    val monthRange = 0..<monthLength
     val lastHighlightedDayOfMonth = lastHighlightedDay - monthStartJdn
-    val isInRange = lastHighlightedDayOfMonth in monthRange
+    val isInRange = lastHighlightedDayOfMonth in 0..<monthLength
     val radiusFraction by animateFloatAsState(
         targetValue = if (isHighlighted && isInRange) 1f else 0f,
         animationSpec = if (isInRange) revealOrHideSpec else revealOrHideImmediately,
