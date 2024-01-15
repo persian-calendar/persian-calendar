@@ -88,6 +88,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
+import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
@@ -109,6 +110,7 @@ import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
@@ -482,9 +484,12 @@ private fun createMapRemoteViews(
     val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val isNightMode = isSystemInDarkTheme(context.resources.configuration)
-    val backgroundColor = if (prefersWidgetsDynamicColors) context.getColor(
-        if (isNightMode) android.R.color.system_accent2_800
-        else android.R.color.system_accent2_50
+    val backgroundColor = if (prefersWidgetsDynamicColors) ColorUtils.setAlphaComponent(
+        context.getColor(
+            if (isNightMode) android.R.color.system_accent2_800
+            else android.R.color.system_accent2_50
+        ),
+        (255 * (1 - widgetTransparency.value)).roundToInt().coerceIn(0, 255)
     )
     else null
     val foregroundColor = if (prefersWidgetsDynamicColors) context.getColor(
@@ -957,7 +962,11 @@ private fun RemoteViews.setRoundBackground(
     @ColorInt color: Int = selectedWidgetBackgroundColor
 ) {
     when {
-        prefersWidgetsDynamicColors -> setImageViewResource(viewId, R.drawable.widget_background)
+        prefersWidgetsDynamicColors -> {
+            setImageViewResource(viewId, R.drawable.widget_background)
+            setFloat(viewId, "setAlpha", 1 - widgetTransparency.value)
+        }
+
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
         else -> {
             val roundBackground = createRoundedBitmap(width, height, color, roundPixelSize)

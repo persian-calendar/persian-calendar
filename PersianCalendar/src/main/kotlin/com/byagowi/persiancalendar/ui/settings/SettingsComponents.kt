@@ -16,6 +16,7 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -258,7 +259,7 @@ private fun SettingsSwitchLayout(
     toggle: () -> Unit,
     title: String,
     summary: String?,
-    value: Boolean
+    value: Boolean,
 ) {
     Box(
         Modifier
@@ -297,6 +298,25 @@ private fun SettingsSwitchLayout(
                 .padding(end = 16.dp),
             checked = value,
             onCheckedChange = null,
+        )
+    }
+}
+
+@Composable
+fun SettingsSlider(
+    title: String,
+    value: Float,
+    onValueChange: (Float) -> Unit,
+) {
+    Column(Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)) {
+        AnimatedContent(
+            title,
+            label = "title",
+            transitionSpec = appCrossfadeSpec,
+        ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
+        Slider(
+            value = value,
+            onValueChange = onValueChange,
         )
     }
 }

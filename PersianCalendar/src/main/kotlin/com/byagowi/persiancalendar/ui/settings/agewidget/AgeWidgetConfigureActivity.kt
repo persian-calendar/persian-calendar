@@ -40,15 +40,13 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
-import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
-import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -190,14 +188,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                     )
                 }
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
-                val theme by theme.collectAsState()
-                if (theme.isDynamicColors()) {
-                    SettingsSwitch(
-                        key = PREF_WIDGETS_PREFER_SYSTEM_COLORS,
-                        value = prefersWidgetsDynamicColors,
-                        title = stringResource(R.string.widget_prefer_device_colors),
-                    )
-                }
+                WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
                 AnimatedVisibility(!prefersWidgetsDynamicColors) {
                     SettingsClickable(
                         stringResource(R.string.widget_text_color),

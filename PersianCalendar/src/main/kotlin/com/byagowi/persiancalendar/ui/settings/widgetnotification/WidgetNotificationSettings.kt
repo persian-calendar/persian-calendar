@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
+import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
@@ -40,14 +42,20 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
+import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
+import com.byagowi.persiancalendar.utils.QUARTER_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 
 @Composable
@@ -97,14 +105,8 @@ fun NotificationSettings() {
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
 fun WidgetConfiguration() {
-    val theme by theme.collectAsState()
     val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
-    if (theme.isDynamicColors()) {
-        SettingsSwitch(
-            PREF_WIDGETS_PREFER_SYSTEM_COLORS, prefersWidgetsDynamicColors,
-            stringResource(R.string.widget_prefer_device_colors),
-        )
-    }
+    WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsClickable(
             stringResource(R.string.widget_text_color),
@@ -173,4 +175,33 @@ fun WidgetConfiguration() {
         stringResource(R.string.customize_widget),
         stringResource(R.string.customize_widget_summary),
     )
+}
+
+@Composable
+fun WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
+    val theme by theme.collectAsState()
+    if (theme.isDynamicColors()) {
+        SettingsSwitch(
+            key = PREF_WIDGETS_PREFER_SYSTEM_COLORS,
+            value = prefersWidgetsDynamicColors,
+            title = stringResource(R.string.widget_prefer_device_colors),
+        )
+    }
+    AnimatedVisibility(prefersWidgetsDynamicColors) {
+        val context = LocalContext.current
+        val widgetTransparencyFlow = remember { MutableStateFlow(widgetTransparency.value) }
+        @OptIn(FlowPreview::class)
+        LaunchedEffect(Unit) {
+            widgetTransparencyFlow
+                // Debounce to not spam prefs much but specially is needed for
+                // map widget as its expensive calculations
+                .debounce(QUARTER_SECOND_IN_MILLIS)
+                .collect { context.appPrefs.edit { putFloat(PREF_WIDGET_TRANSPARENCY, it) } }
+        }
+        val widgetTransparency by widgetTransparencyFlow.collectAsState()
+        SettingsSlider(
+            title = stringResource(R.string.widget_background_transparency),
+            value = widgetTransparency,
+        ) { widgetTransparencyFlow.value = it }
+    }
 }

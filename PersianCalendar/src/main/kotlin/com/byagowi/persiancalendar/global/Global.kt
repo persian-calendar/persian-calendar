@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -68,6 +69,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
+import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsRepository
@@ -121,60 +123,63 @@ var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
 
 private val isForcedIranTimeEnabled_ = MutableStateFlow(DEFAULT_IRAN_TIME)
-val isForcedIranTimeEnabled: StateFlow<Boolean> = isForcedIranTimeEnabled_
+val isForcedIranTimeEnabled: StateFlow<Boolean> get() = isForcedIranTimeEnabled_
 
 val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
-val isNotifyDateOnLockScreen: StateFlow<Boolean> = isNotifyDateOnLockScreen_
+val isNotifyDateOnLockScreen: StateFlow<Boolean> get() = isNotifyDateOnLockScreen_
 
 private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
-val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> = prefersWidgetsDynamicColors_
+val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> get() = prefersWidgetsDynamicColors_
 
 var isWidgetClock = DEFAULT_WIDGET_CLOCK
     private set
 
 val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
-val isNotifyDate: StateFlow<Boolean> = isNotifyDate_
+val isNotifyDate: StateFlow<Boolean> get() = isNotifyDate_
 
 private val notificationAthan_ = MutableStateFlow(DEFAULT_NOTIFICATION_ATHAN)
-val notificationAthan: StateFlow<Boolean> = notificationAthan_
+val notificationAthan: StateFlow<Boolean> get() = notificationAthan_
 private val ascendingAthan_ = MutableStateFlow(DEFAULT_ASCENDING_ATHAN_VOLUME)
-val ascendingAthan: StateFlow<Boolean> = ascendingAthan_
+val ascendingAthan: StateFlow<Boolean> get() = ascendingAthan_
 
 private val calculationMethod_ =
     MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
-val calculationMethod: StateFlow<CalculationMethod> = calculationMethod_
+val calculationMethod: StateFlow<CalculationMethod> get() = calculationMethod_
 
 private val athanSoundName_ = MutableStateFlow("")
-val athanSoundName: StateFlow<String> = athanSoundName_
+val athanSoundName: StateFlow<String> get() = athanSoundName_
 
 var midnightMethod = calculationMethod.value.defaultMidnight
     private set
 
 private val asrMethod_ = MutableStateFlow(AsrMethod.Standard)
-val asrMethod: StateFlow<AsrMethod> = asrMethod_
+val asrMethod: StateFlow<AsrMethod> get() = asrMethod_
 
 var highLatitudesMethod = HighLatitudesMethod.NightMiddle
     private set
 
 private val language_ = MutableStateFlow(Language.FA)
-val language: StateFlow<Language> = language_
+val language: StateFlow<Language> get() = language_
 
 private val theme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
-val theme: StateFlow<Theme> = theme_
+val theme: StateFlow<Theme> get() = theme_
 
 private val isCyberpunk_ = MutableStateFlow(DEFAULT_THEME_CYBERPUNK)
-val isCyberpunk: StateFlow<Boolean> = isCyberpunk_
+val isCyberpunk: StateFlow<Boolean> get() = isCyberpunk_
 
 private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
-val isGradient: StateFlow<Boolean> = isGradient_
+val isGradient: StateFlow<Boolean> get() = isGradient_
 
 private var alternativeGregorianMonths = false
 
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
-val coordinates: StateFlow<Coordinates?> = coordinates_
+val coordinates: StateFlow<Coordinates?> get() = coordinates_
 
 private val cityName_ = MutableStateFlow<String?>(null)
-val cityName: StateFlow<String?> = cityName_
+val cityName: StateFlow<String?> get() = cityName_
+
+private val widgetTransparency_ = MutableStateFlow(.0f)
+val widgetTransparency: StateFlow<Float> get() = widgetTransparency_
 
 var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
@@ -204,13 +209,13 @@ var weekEnds = BooleanArray(7)
     private set
 
 private val dreamNoise_ = MutableStateFlow(DEFAULT_DREAM_NOISE)
-val dreamNoise: StateFlow<Boolean> = dreamNoise_
+val dreamNoise: StateFlow<Boolean> get() = dreamNoise_
 
 private val wallpaperDark_ = MutableStateFlow(DEFAULT_WALLPAPER_DARK)
-val wallpaperDark: StateFlow<Boolean> = wallpaperDark_
+val wallpaperDark: StateFlow<Boolean> get() = wallpaperDark_
 
 private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
-val isShowDeviceCalendarEvents: StateFlow<Boolean> = isShowDeviceCalendarEvents_
+val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarEvents_
 
 var whatToShowOnWidgets = emptySet<String>()
     private set
@@ -368,6 +373,9 @@ fun updateStoredPreference(context: Context) {
     }
     cityName_.value = storedCity?.let(language::getCityName)
         ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
+
+    widgetTransparency_.value =
+        prefs.getFloat(PREF_WIDGET_TRANSPARENCY, DEFAULT_WIDGET_TRANSPARENCY)
 
     runCatching {
         val mainCalendar = CalendarType.valueOf(

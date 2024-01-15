@@ -65,6 +65,7 @@ const val PREF_SHOW_QIBLA_IN_COMPASS = "showQibla"
 const val PREF_TRUE_NORTH_IN_COMPASS = "trueNorth"
 const val PREF_WALLPAPER_DARK = "WallpaperDark"
 const val PREF_DREAM_NOISE = "DreamNoise"
+const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
@@ -88,6 +89,7 @@ const val DEFAULT_WALLPAPER_DARK = true
 const val DEFAULT_DREAM_NOISE = false
 const val DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS = false
 const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
+const val DEFAULT_WIDGET_TRANSPARENCY = 0f
 
 const val ALARMS_BASE_ID = 2000
 
