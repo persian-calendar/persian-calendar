@@ -40,12 +40,13 @@ fun SelectionIndicator(
 
     val monthRange = 0..<monthLength
     val lastHighlightedDayOfMonth = lastHighlightedDay - monthStartJdn
+    val isInRange = lastHighlightedDayOfMonth in monthRange
     val radiusFraction by animateFloatAsState(
-        targetValue = if (isHighlighted && lastHighlightedDayOfMonth in monthRange) 1f else 0f,
-        animationSpec = springSpec,
+        targetValue = if (isHighlighted && isInRange) 1f else 0f,
+        animationSpec = if (isInRange) springSpec else applyImmediately,
         label = "radius",
     )
-    if (lastHighlightedDayOfMonth !in monthRange) return
+    if (!isInRange) return
     val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
     var isHideOrReveal by remember { mutableStateOf(true) }
     val row by animateFloatAsState(
