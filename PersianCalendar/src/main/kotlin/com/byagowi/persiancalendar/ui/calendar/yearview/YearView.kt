@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -45,6 +46,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -86,29 +88,31 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale
     val shape = MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale))
 
-    val titleHeight = (height / 10).coerceAtLeast(20.dp)
-    val titleHeightPx = with(LocalDensity.current) { titleHeight.roundToPx() }
-    val titleHeightSp = with(LocalDensity.current) { titleHeight.toSp() / 1.6f }
+    val titleHeight = with(LocalDensity.current) {
+        (height / 10).coerceAtLeast(20.dp).toSp() / 1.6f
+    }
+    val titleLineHeight = titleHeight * 1.6f
     val padding = 4.dp
 
     val widthInPx = with(LocalDensity.current) { width.toPx() }
-    val heightInPx = with(LocalDensity.current) { height.toPx() }
     val paddingInPx = with(LocalDensity.current) { padding.toPx() }
 
     val context = LocalContext.current
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val monthColors = AppMonthColors()
-    val dayPainter = remember(monthColors, widthInPx, heightInPx) {
-        DayPainter(
-            context.resources,
-            (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
-            (heightInPx - paddingInPx * 2f - titleHeightPx) / 7,/* row count*/
-            isRtl,
-            monthColors,
-            isYearView = true,
-            selectedDayColor = monthColors.indicator.toArgb(),
-        )
+    val dayPainter = remember(monthColors, widthInPx) {
+        lruCache(4, create = { height: Float ->
+            DayPainter(
+                context.resources,
+                (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
+                height / 7,/* rows count*/
+                isRtl,
+                monthColors,
+                isYearView = true,
+                selectedDayColor = monthColors.indicator.toArgb(),
+            )
+        })
     }
 
     val halfPages = 100
@@ -177,19 +181,15 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                             ) {
                                 Text(
                                     title,
-                                    Modifier.size(width - padding * 2, titleHeight),
-                                    fontSize = titleHeightSp,
-                                    textAlign = TextAlign.Center
+                                    Modifier.fillMaxWidth(),
+                                    fontSize = titleHeight,
+                                    textAlign = TextAlign.Center,
+                                    lineHeight = titleLineHeight,
                                 )
-                                Canvas(
-                                    Modifier.size(
-                                        width - padding * 2,
-                                        height - titleHeight - padding * 2,
-                                    )
-                                ) {
+                                Canvas(Modifier.fillMaxSize()) {
                                     drawIntoCanvas { canvas ->
                                         renderMonthWidget(
-                                            dayPainter = dayPainter,
+                                            dayPainter = dayPainter[this.size.height],
                                             width = size.width.roundToInt(),
                                             canvas = canvas.nativeCanvas,
                                             today = today,
