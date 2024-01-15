@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
@@ -43,21 +44,19 @@ fun SelectionIndicator(
     val isInRange = lastHighlightedDayOfMonth in monthRange
     val radiusFraction by animateFloatAsState(
         targetValue = if (isHighlighted && isInRange) 1f else 0f,
-        animationSpec = if (isInRange) springSpec else applyImmediately,
+        animationSpec = if (isInRange) revealOrHideSpec else revealOrHideImmediately,
         label = "radius",
     )
     if (!isInRange) return
     val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
     var isHideOrReveal by remember { mutableStateOf(true) }
-    val row by animateFloatAsState(
-        targetValue = cellIndex / 7 + 1f, // +1 for weekday names initials row
-        animationSpec = if (isHideOrReveal) applyImmediately else springSpec,
-        label = "row",
-    )
-    val column by animateFloatAsState(
-        targetValue = cellIndex % 7 + if (isShowWeekOfYearEnabled) 1f else 0f,
-        animationSpec = if (isHideOrReveal) applyImmediately else springSpec,
-        label = "column",
+    val offset by animateOffsetAsState(
+        targetValue = Offset(
+            cellIndex % 7 + if (isShowWeekOfYearEnabled) 1f else 0f,
+            cellIndex / 7 + 1f, // +1 for weekday names initials row
+        ),
+        animationSpec = if (isHideOrReveal) moveImmediately else moveSpec,
+        label = "offset",
     )
     isHideOrReveal = !isHighlighted
 
@@ -65,8 +64,8 @@ fun SelectionIndicator(
         val cellWidthPx = size.width / columnsCount
         val cellHeightPx = size.height / rowsCount
 
-        val left = if (isRtl) size.width - (column + 1) * cellWidthPx else column * cellWidthPx
-        val top = row * cellHeightPx
+        val left = if (isRtl) size.width - (offset.x + 1) * cellWidthPx else offset.x * cellWidthPx
+        val top = offset.y * cellHeightPx
 
         val radius = min(cellWidthPx, cellHeightPx) / 2 - .5.dp.toPx()
         drawCircle(
@@ -77,8 +76,13 @@ fun SelectionIndicator(
     }
 }
 
-private val springSpec = spring<Float>(
+private val revealOrHideSpec = spring<Float>(
     dampingRatio = Spring.DampingRatioLowBouncy,
     stiffness = Spring.StiffnessLow,
 )
-private val applyImmediately = snap<Float>(0)
+private val revealOrHideImmediately = snap<Float>()
+private val moveSpec = spring<Offset>(
+    dampingRatio = Spring.DampingRatioLowBouncy,
+    stiffness = Spring.StiffnessLow,
+)
+private val moveImmediately = snap<Offset>()
