@@ -169,7 +169,7 @@ fun CalendarsOverview(
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 24.dp, vertical = 4.dp)
+                            .padding(start = 24.dp, end = 24.dp, top = 4.dp)
                     )
                 }
             }
@@ -184,7 +184,7 @@ fun CalendarsOverview(
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 4.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 4.dp),
                 )
             }
         }
@@ -197,7 +197,7 @@ fun CalendarsOverview(
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 4.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 4.dp),
                 )
             }
         }
