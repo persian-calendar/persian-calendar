@@ -76,9 +76,14 @@ fun Month(
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
+    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
+    val rowsCount = 7
+
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
     SelectionIndicator(
+        columnsCount = columnsCount,
+        rowsCount = rowsCount,
         isHighlighted = isHighlighted,
         selectedDay = selectedDay,
         monthStartJdn = monthStartJdn,
@@ -90,8 +95,6 @@ fun Month(
 
     val widthPx = with(LocalDensity.current) { width.toPx() }
     val heightPx = with(LocalDensity.current) { height.toPx() }
-    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
-    val rowsCount = 7
     val cellWidthPx = widthPx / columnsCount
     val cellHeightPx = heightPx / rowsCount
 

@@ -23,6 +23,8 @@ import kotlin.math.min
 
 @Composable
 fun SelectionIndicator(
+    columnsCount: Int,
+    rowsCount: Int,
     monthStartJdn: Jdn,
     monthLength: Int,
     startingDayOfWeek: Int,
@@ -35,9 +37,6 @@ fun SelectionIndicator(
     if (isHighlighted) lastHighlightedDay = selectedDay
 
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-
-    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
-    val rowsCount = 7
 
     val lastHighlightedDayOfMonth = lastHighlightedDay - monthStartJdn
     val isInRange = lastHighlightedDayOfMonth in 0..<monthLength
