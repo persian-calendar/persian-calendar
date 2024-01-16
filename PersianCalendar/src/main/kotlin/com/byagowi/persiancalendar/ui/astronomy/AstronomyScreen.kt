@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -555,7 +556,7 @@ private fun MoonIcon(astronomyState: AstronomyState) {
 @Composable
 private fun Cell(modifier: Modifier, @ColorInt color: Int, label: String, value: String) {
     Row(
-        modifier,
+        modifier.animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val context = LocalContext.current
