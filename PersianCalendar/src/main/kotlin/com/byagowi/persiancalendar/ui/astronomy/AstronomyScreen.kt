@@ -271,11 +271,10 @@ private fun SliderBar(
     val state by viewModel.astronomyState.collectAsState()
     var lastButtonClickTimestamp by remember { mutableLongStateOf(System.currentTimeMillis()) }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-    fun buttonScrollSlider(days: Int): Boolean {
+    fun buttonScrollSlider(days: Int) {
         lastButtonClickTimestamp = System.currentTimeMillis()
         slider?.smoothScrollBy(250f * days * if (isRtl) 1 else -1, 0f)
         viewModel.animateToRelativeDayOffset(days)
-        return true
     }
 
     @OptIn(ExperimentalFoundationApi::class) Column(modifier.fillMaxWidth()) {
@@ -297,27 +296,7 @@ private fun SliderBar(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 16.dp),
         ) {
-            val hapticFeedback = LocalHapticFeedback.current
-            Icon(
-                Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                contentDescription = null,
-                Modifier.combinedClickable(
-                    indication = rememberRipple(bounded = false),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = {
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                        buttonScrollSlider(-1)
-                    },
-                    onClickLabel = stringResource(
-                        R.string.previous_x, stringResource(R.string.day)
-                    ),
-                    onLongClick = { buttonScrollSlider(-365) },
-                    onLongClickLabel = stringResource(
-                        R.string.previous_x, stringResource(R.string.year)
-                    ),
-                ),
-                tint = MaterialTheme.colorScheme.primary,
-            )
+            TimeArrow(::buttonScrollSlider, isPrevious = true)
             val primary = MaterialTheme.colorScheme.primary
             AndroidView(
                 factory = { context ->
@@ -347,28 +326,38 @@ private fun SliderBar(
                     .height(46.dp)
                     .weight(1f, fill = false),
             )
-            Icon(
-                Icons.AutoMirrored.Default.KeyboardArrowRight,
-                contentDescription = null,
-                Modifier.combinedClickable(
-                    indication = rememberRipple(bounded = false),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = {
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                        buttonScrollSlider(+1)
-                    },
-                    onClickLabel = stringResource(
-                        R.string.next_x, stringResource(R.string.day)
-                    ),
-                    onLongClick = { buttonScrollSlider(+365) },
-                    onLongClickLabel = stringResource(
-                        R.string.next_x, stringResource(R.string.year)
-                    ),
-                ),
-                tint = MaterialTheme.colorScheme.primary,
-            )
+            TimeArrow(::buttonScrollSlider, isPrevious = false)
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
+    val hapticFeedback = LocalHapticFeedback.current
+    Icon(
+        if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
+        else Icons.AutoMirrored.Default.KeyboardArrowRight,
+        contentDescription = null,
+        Modifier.combinedClickable(
+            indication = rememberRipple(bounded = false),
+            interactionSource = remember { MutableInteractionSource() },
+            onClick = {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                buttonScrollSlider(if (isPrevious) -1 else 1)
+            },
+            onClickLabel = stringResource(
+                if (isPrevious) R.string.previous_x else R.string.next_x,
+                stringResource(R.string.day),
+            ),
+            onLongClick = { buttonScrollSlider(if (isPrevious) -365 else 365) },
+            onLongClickLabel = stringResource(
+                if (isPrevious) R.string.previous_x else R.string.next_x,
+                stringResource(R.string.year)
+            ),
+        ),
+        tint = MaterialTheme.colorScheme.primary,
+    )
 }
 
 @Composable

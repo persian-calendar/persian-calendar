@@ -325,25 +325,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     .height(46.dp)
                     .fillMaxWidth(),
             ) {
-                val hapticFeedback = LocalHapticFeedback.current
-                Icon(
-                    Icons.AutoMirrored.Default.KeyboardArrowLeft,
-                    contentDescription = null,
-                    Modifier.combinedClickable(
-                        indication = rememberRipple(bounded = false),
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
-                            else viewModel.subtractOneHour()
-                        },
-                        onClickLabel = stringResource(
-                            R.string.previous_x, stringResource(R.string.day)
-                        ),
-                        onLongClick = { viewModel.addDays(-10) },
-                    ),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
+                TimeArrow(mapDraw, viewModel, isPrevious = true)
                 AnimatedContent(
                     modifier = Modifier.weight(1f, fill = false),
                     targetState = formattedTime,
@@ -353,9 +335,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     Text(
                         state,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .combinedClickable(
+                        modifier = Modifier.fillMaxWidth().combinedClickable(
                                 onClick = { showDayPickerDialog = true },
                                 onClickLabel = stringResource(R.string.goto_date),
                                 onLongClick = { viewModel.changeToTime(Date()) },
@@ -364,27 +344,38 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
-                Icon(
-                    Icons.AutoMirrored.Default.KeyboardArrowRight,
-                    contentDescription = null,
-                    Modifier.combinedClickable(
-                        indication = rememberRipple(bounded = false),
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = {
-                            hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
-                            else viewModel.addOneHour()
-                        },
-                        onClickLabel = stringResource(
-                            R.string.next_x, stringResource(R.string.day)
-                        ),
-                        onLongClick = { viewModel.addDays(10) },
-                    ),
-                    tint = MaterialTheme.colorScheme.primary,
-                )
+                TimeArrow(mapDraw, viewModel, isPrevious = false)
             }
         }
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boolean) {
+    val hapticFeedback = LocalHapticFeedback.current
+    Icon(
+        if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
+        else Icons.AutoMirrored.Default.KeyboardArrowRight,
+        contentDescription = null,
+        Modifier.combinedClickable(
+            indication = rememberRipple(bounded = false),
+            interactionSource = remember { MutableInteractionSource() },
+            onClick = {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(if (isPrevious) -1 else 1)
+                else {
+                    if (isPrevious) viewModel.subtractOneHour() else viewModel.addOneHour()
+                }
+            },
+            onClickLabel = stringResource(
+                if (isPrevious) R.string.previous_x else R.string.next_x,
+                stringResource(R.string.day)
+            ),
+            onLongClick = { viewModel.addDays(if (isPrevious) -10 else 10) },
+        ),
+        tint = MaterialTheme.colorScheme.primary,
+    )
 }
 
 private const val menuHeight = 56
