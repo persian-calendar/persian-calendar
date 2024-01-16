@@ -106,7 +106,13 @@ fun Month(
     val diameter = min(width / columnsCount, height / rowsCount)
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val dayPainter = remember(width, height, refreshToken, monthColors) {
-        DayPainter(context.resources, cellWidthPx, cellHeightPx, isRtl, monthColors)
+        DayPainter(
+            resources = context.resources,
+            width = cellWidthPx,
+            height = cellHeightPx,
+            isRtl = isRtl,
+            colors = monthColors
+        )
     }
     val textMeasurer = rememberTextMeasurer()
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS

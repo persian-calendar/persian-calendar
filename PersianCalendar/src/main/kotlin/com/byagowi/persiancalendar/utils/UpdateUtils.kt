@@ -446,12 +446,12 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     val contentDescription = renderMonthWidget(
         dayPainter = DayPainter(
-            context.resources,
-            width.toFloat() / if (isShowWeekOfYearEnabled) 8 else 7,
-            height.toFloat() / 7/* row count*/,
-            isRtl,
-            colors,
-            true
+            resources = context.resources,
+            width = width.toFloat() / if (isShowWeekOfYearEnabled) 8 else 7,
+            height = height.toFloat() / 7/* row count*/,
+            isRtl = isRtl,
+            colors = colors,
+            isWidget = true
         ),
         width = width,
         canvas = canvas,

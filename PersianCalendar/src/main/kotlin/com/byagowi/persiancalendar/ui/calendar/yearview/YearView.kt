@@ -104,11 +104,11 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val dayPainter = remember(monthColors, widthInPx) {
         lruCache(4, create = { height: Float ->
             DayPainter(
-                context.resources,
-                (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
-                height / 7,/* rows count*/
-                isRtl,
-                monthColors,
+                resources = context.resources,
+                width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
+                height = height / 7,/* rows count*/
+                isRtl = isRtl,
+                colors = monthColors,
                 isYearView = true,
                 selectedDayColor = monthColors.indicator.toArgb(),
             )
