@@ -24,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -121,6 +122,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
         scope.launch {
+            viewModel.clearYearViewCommand()
             when (command) {
                 YearViewCommand.PreviousMonth -> {
                     lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex - 1)
@@ -132,9 +134,12 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
                 YearViewCommand.TodayMonth -> lazyColumnState.animateScrollToItem(halfPages)
             }
-            viewModel.clearYearViewCommand()
         }
     }
+
+    viewModel.notifyYearViewOffset(
+        derivedStateOf { lazyColumnState.firstVisibleItemIndex - halfPages }.value
+    )
 
     LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
         items(halfPages * 2) {

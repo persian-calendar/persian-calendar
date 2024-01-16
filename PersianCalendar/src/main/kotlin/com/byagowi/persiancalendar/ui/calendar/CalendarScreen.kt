@@ -20,6 +20,7 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -81,6 +82,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -132,6 +134,7 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -549,11 +552,13 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val today by viewModel.today.collectAsState()
+    val todayDate = remember(today, mainCalendar) { today.toCalendar(mainCalendar) }
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
+            val yearViewOffset by viewModel.yearViewOffset.collectAsState()
             val refreshToken by viewModel.refreshToken.collectAsState()
             // just a noop to update title and subtitle when secondary calendar is toggled
             refreshToken.run {}
@@ -563,7 +568,8 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
             val subtitle: String
             if (isYearView) {
                 title = stringResource(R.string.year_view)
-                subtitle = ""
+                subtitle =
+                    if (yearViewOffset == 0) "" else formatNumber(todayDate.year + yearViewOffset)
             } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
@@ -580,32 +586,44 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                     onClickLabel = stringResource(
                         if (isYearView) R.string.return_to_today else R.string.year_view
                     )
-                ) {
-                    if (isYearView) viewModel.commandYearView(YearViewCommand.TodayMonth)
-                    else viewModel.openYearView()
-                }
+                ) { if (isYearView) viewModel.closeYearView() else viewModel.openYearView() }
             ) {
                 AnimatedContent(
                     title,
                     label = "title",
                     transitionSpec = appCrossfadeSpec,
                 ) { state ->
+                    val fraction by animateFloatAsState(
+                        targetValue = if (isYearView && subtitle.isNotEmpty()) 1f else 0f,
+                        label = "font size"
+                    )
                     Text(
                         state,
-                        style = MaterialTheme.typography.titleLarge,
+                        style = lerp(
+                            MaterialTheme.typography.titleLarge,
+                            MaterialTheme.typography.titleMedium,
+                            fraction,
+                        ),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                AnimatedVisibility(visible = !isYearView) {
+                AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     AnimatedContent(
                         subtitle,
                         label = "subtitle",
                         transitionSpec = appCrossfadeSpec,
                     ) { state ->
+                        val fraction by animateFloatAsState(
+                            targetValue = if (isYearView) 1f else 0f, label = "font size"
+                        )
                         Text(
                             state,
-                            style = MaterialTheme.typography.titleMedium,
+                            style = lerp(
+                                MaterialTheme.typography.titleMedium,
+                                MaterialTheme.typography.titleLarge,
+                                fraction,
+                            ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -614,8 +632,19 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
             }
         },
         colors = AppTopAppBarColors(),
-        navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+        navigationIcon = {
+            Crossfade(targetState = isYearView, label = "nav icon") { state ->
+                if (state) NavigationNavigateUpIcon { viewModel.closeYearView() }
+                else NavigationOpenDrawerIcon(openDrawer)
+            }
+        },
         actions = {
+            AnimatedVisibility(isYearView) {
+                val yearViewOffset by viewModel.yearViewOffset.collectAsState()
+                TodayActionButton(yearViewOffset != 0) {
+                    viewModel.commandYearView(YearViewCommand.TodayMonth)
+                }
+            }
             AnimatedVisibility(isYearView) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
@@ -628,14 +657,10 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.PreviousMonth) }
             }
-            AnimatedVisibility(isYearView) {
-                AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
-                    viewModel.closeYearView()
-                }
-            }
 
             AnimatedVisibility(!isYearView) {
-                TodayActionButton(viewModel.todayButtonVisibility.collectAsState().value) {
+                val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
+                TodayActionButton(todayButtonVisibility) {
                     bringDate(viewModel, Jdn.today(), context, highlight = false)
                 }
             }

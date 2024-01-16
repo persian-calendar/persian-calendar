@@ -77,9 +77,16 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _yearViewCommand = MutableStateFlow<YearViewCommand?>(null)
     val yearViewCommand: StateFlow<YearViewCommand?> get() = _yearViewCommand
 
+    private val _yearViewOffset = MutableStateFlow(0)
+    val yearViewOffset: StateFlow<Int> get() = _yearViewOffset
+
     // Commands
     fun changeSelectedMonthOffsetCommand(offset: Int?) {
         _selectedMonthOffsetCommand.value = offset
+    }
+
+    fun notifyYearViewOffset(value: Int) {
+        _yearViewOffset.value = value
     }
 
     /**
@@ -190,7 +197,9 @@ class CalendarViewModel @JvmOverloads constructor(
         }
         viewModelScope.launch {
             merge(selectedMonthOffset, isHighlighted, isYearView).collectLatest {
-                _todayButtonVisibility.value = selectedMonthOffset.value != 0 || isHighlighted.value
+                _todayButtonVisibility.value = if (isYearView.value)
+                    true
+                else selectedMonthOffset.value != 0 || isHighlighted.value
             }
         }
     }
