@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -10,6 +11,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -153,23 +155,22 @@ fun CalendarsOverview(
         }
 
         AnimatedVisibility(!isToday) {
-            AnimatedContent(
-                listOf(
-                    stringResource(R.string.days_distance),
-                    spacedColon,
-                    calculateDaysDifference(context.resources, jdn, today)
-                ).joinToString(""),
-                transitionSpec = appCrossfadeSpec,
-                label = "diff days",
-            ) { state ->
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 4.dp)
+                    .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center,
+            ) {
                 SelectionContainer {
                     Text(
-                        state,
-                        textAlign = TextAlign.Center,
+                        listOf(
+                            stringResource(R.string.days_distance),
+                            spacedColon,
+                            calculateDaysDifference(context.resources, jdn, today)
+                        ).joinToString(""),
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 24.dp, end = 24.dp, top = 4.dp)
+                        modifier = Modifier.animateContentSize(),
                     )
                 }
             }
@@ -190,15 +191,21 @@ fun CalendarsOverview(
         }
 
         AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            SelectionContainer {
-                Text(
-                    generateZodiacInformation(context.resources, jdn, withEmoji = true),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 4.dp),
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 4.dp)
+                    .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center,
+            ) {
+                SelectionContainer {
+                    Text(
+                        generateZodiacInformation(context.resources, jdn, withEmoji = true),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier.animateContentSize(),
+                    )
+                }
             }
         }
 
@@ -304,34 +311,35 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         calendarsToShow.forEach { calendar ->
-            AnimatedContent(
-                targetState = jdn.toCalendar(calendar),
-                label = "date",
-                transitionSpec = appCrossfadeSpec,
-            ) { date ->
+            val date = jdn.toCalendar(calendar)
+            Column(
+                modifier = Modifier.defaultMinSize(
+                    minWidth = dimensionResource(R.dimen.calendar_item_size),
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                val clipboardManager = LocalClipboardManager.current
                 Column(
-                    modifier = Modifier.defaultMinSize(
-                        minWidth = dimensionResource(R.dimen.calendar_item_size),
-                    ),
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = rememberRipple(bounded = false),
+                        ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
+                        .semantics { this.contentDescription = formatDate(date) },
                 ) {
-                    val clipboardManager = LocalClipboardManager.current
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier
-                            .clickable(
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = rememberRipple(bounded = false),
-                            ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
-                            .semantics { this.contentDescription = formatDate(date) },
-                    ) {
-                        Text(
-                            formatNumber(date.dayOfMonth),
-                            style = MaterialTheme.typography.displayMedium,
-                        )
-                        Text(date.monthName)
-                    }
-                    SelectionContainer { Text(date.toLinearDate()) }
+                    Text(
+                        formatNumber(date.dayOfMonth),
+                        style = MaterialTheme.typography.displayMedium,
+                        modifier = Modifier.animateContentSize(),
+                    )
+                    Text(date.monthName, modifier = Modifier.animateContentSize())
+                }
+                SelectionContainer {
+                    Text(
+                        date.toLinearDate(),
+                        modifier = Modifier.animateContentSize(),
+                    )
                 }
             }
         }
