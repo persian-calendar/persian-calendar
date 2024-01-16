@@ -423,4 +423,5 @@
     <string name="year_view">Просмотр года</string>
     <string name="ask_for_calendar_permission">Хотите включить личные события из системного календаря вашего устройства?</string>
     <string name="exempt_app_battery_optimization">Хотите исключить приложение из оптимизации батареи для нормального функционирования уведомлений?</string>
+    <string name="widget_background_transparency">Прозрачность фона виджета</string>
 </resources>
