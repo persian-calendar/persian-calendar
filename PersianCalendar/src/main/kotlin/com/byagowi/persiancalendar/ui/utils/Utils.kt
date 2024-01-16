@@ -129,7 +129,7 @@ fun isSystemInDarkTheme(configuration: Configuration): Boolean =
 // I guess there will be better ways to check for that in the future I guess but this does the trick
 // Android 13, at least in Extension 5 emulator image, also provides such theme.
 // https://stackoverflow.com/a/76272434
-val Context.isDynamicGrayscale: Boolean
+val Resources.isDynamicGrayscale: Boolean
     get() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return false
         val hsv = FloatArray(3)
@@ -137,7 +137,7 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent1_500,
             android.R.color.system_accent2_500,
             android.R.color.system_accent3_500,
-        ).all { Color.colorToHSV(getColor(it), hsv); hsv[1] < .25 }
+        ).all { Color.colorToHSV(getColor(it, null), hsv); hsv[1] < .25 }
     }
 
 fun View.performHapticFeedbackVirtualKey() {
