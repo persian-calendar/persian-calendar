@@ -44,6 +44,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -134,7 +135,6 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
-import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
@@ -584,8 +584,8 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                     indication = rememberRipple(bounded = false),
                     interactionSource = remember { MutableInteractionSource() },
                     onClickLabel = stringResource(
-                        if (isYearView) R.string.return_to_today else R.string.year_view
-                    )
+                        if (isYearView) R.string.close else R.string.year_view
+                    ),
                 ) { if (isYearView) viewModel.closeYearView() else viewModel.openYearView() }
             ) {
                 AnimatedContent(
@@ -634,8 +634,10 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
         colors = AppTopAppBarColors(),
         navigationIcon = {
             Crossfade(targetState = isYearView, label = "nav icon") { state ->
-                if (state) NavigationNavigateUpIcon { viewModel.closeYearView() }
-                else NavigationOpenDrawerIcon(openDrawer)
+                if (state) AppIconButton(
+                    icon = Icons.AutoMirrored.Default.ArrowBack,
+                    title = stringResource(R.string.close),
+                ) { viewModel.closeYearView() } else NavigationOpenDrawerIcon(openDrawer)
             }
         },
         actions = {
