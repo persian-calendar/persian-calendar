@@ -63,6 +63,7 @@ import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
+import kotlin.math.floor
 
 @Composable
 fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
@@ -84,7 +85,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         scale = (scale * zoomChange).coerceAtMost(horizontalDivisions.toFloat())
     }
 
-    val width = maxWidth / horizontalDivisions * scale
+    val width = floor(maxWidth.value / horizontalDivisions * scale).coerceAtLeast(1f).dp
     val height = ((maxHeight - bottomPadding) / if (isLandscape) 3 else 4) * scale
     val shape = MaterialTheme.shapes.large.copy(CornerSize(LargeShapeCornerSize.dp * scale))
 
