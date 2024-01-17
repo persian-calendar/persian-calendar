@@ -453,7 +453,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
             colors = colors,
             isWidget = true
         ),
-        width = width,
+        width = width.toFloat(),
         canvas = canvas,
         baseDate = baseDate,
         today = today,

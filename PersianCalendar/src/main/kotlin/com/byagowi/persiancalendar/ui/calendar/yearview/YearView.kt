@@ -63,7 +63,6 @@ import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 @Composable
 fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
@@ -195,7 +194,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                     drawIntoCanvas { canvas ->
                                         renderMonthWidget(
                                             dayPainter = dayPainter[this.size.height],
-                                            width = size.width.roundToInt(),
+                                            width = size.width,
                                             canvas = canvas.nativeCanvas,
                                             today = today,
                                             baseDate = mainCalendar.getMonthStartFromMonthsDistance(

@@ -19,7 +19,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 
 fun renderMonthWidget(
     dayPainter: DayPainter,
-    width: Int,
+    width: Float,
     canvas: Canvas,
     baseDate: AbstractDate,
     today: Jdn,
