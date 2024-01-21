@@ -400,4 +400,10 @@
     <string name="navigate_up">Yukarı git</string>
     <string name="open_drawer">Gezinme çekmecesini aç</string>
     <string name="more_options">Daha fazla seçenek</string>
+    <string name="widget_background_transparency">Widget arka plan şeffaflığı</string>
+    <string name="ask_for_calendar_permission">Aygıtınızın takviminden kişisel etkinliklerinizi etkinleştirmek ister misiniz?</string>
+    <string name="yes">Evet</string>
+    <string name="sample_inputs">Örnek girdiler</string>
+    <string name="year_view">Yıl görünümü</string>
+    <string name="exempt_app_battery_optimization">Bildirimin doğru çalışması için uygulamayı pil iyileştirmesi istisnasına eklemek ister misiniz?</string>
 </resources>
