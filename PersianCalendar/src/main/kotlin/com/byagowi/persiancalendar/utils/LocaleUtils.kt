@@ -10,18 +10,21 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
-    val locale = language.value.asSystemLocale()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        context.getSystemService<LocaleManager>()?.applicationLocales = LocaleList(locale)
-    } else {
-        Locale.setDefault(locale)
-        val resources = context.resources
-        val config = applyLanguageToConfiguration(resources.configuration, locale)
-        resources.updateConfiguration(config, resources.displayMetrics)
-    }
+    runCatching {
+        val locale = language.value.asSystemLocale()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            context.getSystemService<LocaleManager>()?.applicationLocales = LocaleList(locale)
+        } else {
+            Locale.setDefault(locale)
+            val resources = context.resources
+            val config = applyLanguageToConfiguration(resources.configuration, locale)
+            resources.updateConfiguration(config, resources.displayMetrics)
+        }
+    }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
 fun applyLanguageToConfiguration(
