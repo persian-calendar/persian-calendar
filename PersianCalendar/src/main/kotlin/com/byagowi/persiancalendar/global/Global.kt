@@ -6,6 +6,7 @@ import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
+import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
@@ -54,6 +55,7 @@ import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
@@ -76,6 +78,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -85,7 +88,6 @@ import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
-import com.byagowi.persiancalendar.utils.storedCity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.IslamicDate
@@ -364,7 +366,8 @@ fun updateStoredPreference(context: Context) {
     dreamNoise_.value = prefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE)
     wallpaperDark_.value = prefs.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
 
-    val storedCity = prefs.storedCity
+    val storedCity = prefs.getString(PREF_SELECTED_LOCATION, null)
+        ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
     coordinates_.value = storedCity?.coordinates ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).map {
             prefs.getString(it, null)?.toDoubleOrNull() ?: .0

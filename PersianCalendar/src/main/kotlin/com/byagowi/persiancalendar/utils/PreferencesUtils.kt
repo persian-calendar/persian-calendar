@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.overrideCoordinatesGlobalVariable
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Locale
@@ -47,10 +46,6 @@ fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) {
 
 fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
     getLong(key, -1).takeIf { it != -1L }?.let { Jdn(it) }
-
-val SharedPreferences.storedCity: CityItem?
-    get() = getString(PREF_SELECTED_LOCATION, null)
-        ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
 
 // Ignore offset if it isn't set in less than month ago
 val SharedPreferences.isIslamicOffsetExpired
