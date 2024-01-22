@@ -176,8 +176,6 @@ dependencies {
     androidTestImplementation(libs.test.rules)
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.androidx.test.ext.junit)
-
-    androidTestImplementation(libs.bundles.espresso)
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
