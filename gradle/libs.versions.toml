@@ -13,9 +13,7 @@ compose-accompanist = "0.32.0"
 compose-compiler = "1.5.8" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 compose-material3 = "1.2.0-beta02"
 coroutines = "1.7.3"
-datastore = "1.0.0"
 dynamicanimation = "1.0.0"
-glance = "1.0.0"
 junit = "4.13.2"
 junit-runner = "1.10.1"
 junit5 = "5.10.1"
@@ -23,7 +21,6 @@ kotlin = "1.9.22"
 kotlinpoet = "1.16.0"
 kotlinx-html-jvm = "0.10.1"
 kotlinx-serialization-json = "1.6.2"
-leakcanary = "2.13"
 lifecycle = "2.7.0"
 mockito-core = "5.9.0"
 mockito-kotlin = "5.2.1"
@@ -38,8 +35,6 @@ work-manager = "2.9.0"
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
-androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "glance" }
-androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
@@ -56,7 +51,6 @@ compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4
 compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit5" }
@@ -68,7 +62,6 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm", version.ref = "kotlinx-html-jvm" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-leakcanary = { group = "com.squareup.leakcanary", name = "leakcanary-android", version.ref = "leakcanary" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
