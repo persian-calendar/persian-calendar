@@ -127,7 +127,7 @@ var clockIn24 = DEFAULT_WIDGET_IN_24
 private val isForcedIranTimeEnabled_ = MutableStateFlow(DEFAULT_IRAN_TIME)
 val isForcedIranTimeEnabled: StateFlow<Boolean> get() = isForcedIranTimeEnabled_
 
-val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
+private val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
 val isNotifyDateOnLockScreen: StateFlow<Boolean> get() = isNotifyDateOnLockScreen_
 
 private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
@@ -136,7 +136,7 @@ val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> get() = prefersWidgetsDy
 var isWidgetClock = DEFAULT_WIDGET_CLOCK
     private set
 
-val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
+private val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
 val isNotifyDate: StateFlow<Boolean> get() = isNotifyDate_
 
 private val notificationAthan_ = MutableStateFlow(DEFAULT_NOTIFICATION_ATHAN)
