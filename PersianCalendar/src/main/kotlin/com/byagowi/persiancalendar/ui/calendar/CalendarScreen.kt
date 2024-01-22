@@ -488,7 +488,7 @@ private fun Search(viewModel: CalendarViewModel) {
     }
     var query by rememberSaveable { mutableStateOf("") }
     viewModel.searchEvent(query)
-    val events by viewModel.eventsFlow.collectAsState(initial = emptyList())
+    val events by viewModel.eventsFlow.collectAsState()
     val isActive = query.isNotEmpty()
     val padding by animateDpAsState(if (isActive) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }

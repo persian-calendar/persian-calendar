@@ -16,9 +16,7 @@ import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -44,8 +42,8 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _isSearchOpenFlow = MutableStateFlow(false)
     val isSearchOpen: StateFlow<Boolean> get() = _isSearchOpenFlow
 
-    private val _eventsFlow = MutableSharedFlow<List<CalendarEvent<*>>>()
-    val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
+    private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
+    val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
     private val _refreshToken = MutableStateFlow(0)
     val refreshToken: StateFlow<Int> get() = _refreshToken
