@@ -3,7 +3,10 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -59,8 +62,8 @@ fun DayPickerDialog(
             }) { Text(stringResource(positiveButtonTitle)) }
         },
         neutralButton = {
-            if (jdn != today) TextButton(onClick = { jdn = today }) {
-                Text(stringResource(R.string.today))
+            AnimatedVisibility(visible = jdn != today, enter = fadeIn(), exit = fadeOut()) {
+                TextButton(onClick = { jdn = today }) { Text(stringResource(R.string.today)) }
             }
         },
     ) {
