@@ -81,7 +81,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     var scale by remember { mutableStateOf(1f) }
     val horizontalDivisions = if (isLandscape) 4 else 3
-    val transformState = rememberTransformableState { zoomChange, _, _ ->
+    val transformableState = rememberTransformableState { zoomChange, _, _ ->
         scale = (scale * zoomChange).coerceAtMost(horizontalDivisions.toFloat())
     }
 
@@ -117,7 +117,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     }
 
     val halfPages = 100
-    val lazyColumnState = rememberLazyListState(halfPages + yearOffsetInMonths)
+    val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
     val scope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
@@ -125,23 +125,23 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
             viewModel.clearYearViewCommand()
             when (command) {
                 YearViewCommand.PreviousMonth -> {
-                    lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex - 1)
+                    lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex - 1)
                 }
 
                 YearViewCommand.NextMonth -> {
-                    lazyColumnState.animateScrollToItem(lazyColumnState.firstVisibleItemIndex + 1)
+                    lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex + 1)
                 }
 
-                YearViewCommand.TodayMonth -> lazyColumnState.animateScrollToItem(halfPages)
+                YearViewCommand.TodayMonth -> lazyListState.animateScrollToItem(halfPages)
             }
         }
     }
 
     viewModel.notifyYearViewOffset(
-        derivedStateOf { lazyColumnState.firstVisibleItemIndex - halfPages }.value
+        derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages }.value
     )
 
-    LazyColumn(state = lazyColumnState, modifier = Modifier.transformable(transformState)) {
+    LazyColumn(state = lazyListState, modifier = Modifier.transformable(transformableState)) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
 
