@@ -143,7 +143,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private var repository: SearchEventsRepository? = null
 
     fun searchEvent(query: CharSequence) {
-        viewModelScope.launch { _eventsFlow.emit(repository?.findEvent(query) ?: emptyList()) }
+        viewModelScope.launch { _eventsFlow.value = repository?.findEvent(query) ?: emptyList() }
     }
 
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
