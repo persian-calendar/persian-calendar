@@ -246,10 +246,8 @@
 |    |    \--- androidx.work:work-runtime-ktx:2.9.0 (c)
 |    \--- androidx.work:work-runtime:2.9.0 (c)
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3 (*)
-+--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.10.1
-|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.10 -> 1.9.22 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.9.10 -> 1.9.22
-|         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 (*)
++--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.11.0
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 (*)
 +--- com.google.openlocationcode:openlocationcode:1.0.4
 +--- androidx.activity:activity-ktx:1.8.2
 |    +--- androidx.activity:activity:1.8.2
@@ -320,7 +318,8 @@
 |    |    \--- androidx.compose.runtime:runtime-android:1.6.0-rc01
 |    |         +--- androidx.collection:collection:1.4.0-rc01 (*)
 |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
-|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22
+|    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 (*)
 |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1 -> 1.7.3 (*)
 |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1 -> 1.7.3 (*)
 |    |         \--- androidx.compose.runtime:runtime-saveable:1.6.0-rc01 (c)
