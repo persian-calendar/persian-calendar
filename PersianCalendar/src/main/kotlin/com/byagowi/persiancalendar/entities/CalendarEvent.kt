@@ -37,6 +37,17 @@ sealed class CalendarEvent<T : AbstractDate>(
             else -> title
         }
 
+    val formattedTitle
+        get() = when (this) {
+            is GregorianCalendarEvent,
+            is IslamicCalendarEvent,
+            is PersianCalendarEvent,
+            is NepaliCalendarEvent -> title
+
+            is DeviceCalendarEvent -> oneLinerTitleWithTime +
+                    if (description.isNotBlank()) "$title ($description)" else ""
+        }
+
     override fun equals(other: Any?): Boolean {
         return other is CalendarEvent<*>
                 && other.title == title && other.isHoliday == isHoliday && other.date == date

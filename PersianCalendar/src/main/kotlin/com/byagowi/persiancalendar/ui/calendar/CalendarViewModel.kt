@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
@@ -23,10 +22,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
-class CalendarViewModel @JvmOverloads constructor(
-    application: Application,
-    private var repository: ISearchEventsRepository = ISearchEventsRepository.empty() // TODO: Inject maybe
-) : AndroidViewModel(application) {
+class CalendarViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedDay = MutableStateFlow(Jdn.today())
     val selectedDay: StateFlow<Jdn> get() = _selectedDay
 
@@ -124,10 +120,6 @@ class CalendarViewModel @JvmOverloads constructor(
         _isSearchOpenFlow.value = false
     }
 
-    fun searchEvent(query: CharSequence) {
-        viewModelScope.launch { _eventsFlow.emit(repository.findEvent(query)) }
-    }
-
     fun setShiftWorkViewModel(shiftWorkViewModel: ShiftWorkViewModel?) {
         _shiftWorkViewModel.value = shiftWorkViewModel
     }
@@ -146,6 +138,12 @@ class CalendarViewModel @JvmOverloads constructor(
 
     fun closeYearView() {
         _isYearView.value = false
+    }
+
+    private var repository: SearchEventsRepository? = null
+
+    fun searchEvent(query: CharSequence) {
+        viewModelScope.launch { _eventsFlow.emit(repository?.findEvent(query) ?: emptyList()) }
     }
 
     // Events store cache needs to be invalidated as preferences of enabled events can be changed

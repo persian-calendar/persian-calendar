@@ -122,7 +122,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
-import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobalVariables
