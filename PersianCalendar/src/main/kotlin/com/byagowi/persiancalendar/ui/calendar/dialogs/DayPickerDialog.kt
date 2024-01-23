@@ -8,7 +8,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -72,7 +75,7 @@ fun DayPickerDialog(
 
         DayPicker(calendarType, jdn) { jdn = it }
         AnimatedContent(
-            targetState = if (jdn == today) " " else listOf(
+            targetState = if (jdn == today) null else listOf(
                 stringResource(R.string.days_distance), spacedColon,
                 calculateDaysDifference(
                     LocalContext.current.resources,
@@ -92,13 +95,18 @@ fun DayPickerDialog(
             },
             label = "days distance",
         ) { state ->
-            SelectionContainer {
-                Text(
-                    state,
-                    modifier = Modifier.fillMaxSize(),
-                    style = MaterialTheme.typography.bodySmall,
-                    textAlign = TextAlign.Center,
-                )
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                if (state != null) SelectionContainer {
+                    Text(
+                        state,
+                        modifier = Modifier.fillMaxSize(),
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center,
+                    )
+                }
             }
         }
     }
