@@ -60,11 +60,7 @@ fun SelectionIndicator(
     isHideOrReveal = !isHighlighted
 
     Canvas(Modifier.fillMaxSize()) {
-        drawCircle(
-            color = indicatorColor,
-            center = offset,
-            radius = cellRadius * radiusFraction,
-        )
+        drawCircle(color = indicatorColor, center = offset, radius = cellRadius * radiusFraction)
     }
 }
 
