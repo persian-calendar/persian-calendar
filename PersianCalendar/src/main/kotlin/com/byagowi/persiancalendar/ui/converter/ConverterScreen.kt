@@ -184,27 +184,18 @@ fun ConverterScreen(
                         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
                             .sortedBy { it.rawOffset }
                     }
-                    val zoneNames = remember {
-                        zones.map {
-                            val offset =
-                                Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
-                                    .toTimeZoneOffsetFormat()
-                            val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
-                            "$id ($offset)"
-                        }
-                    }
                     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
                         Box(Modifier.weight(1f)) {
-                            TimezoneClock(viewModel, zones, zoneNames, isFirst = true)
+                            TimezoneClock(viewModel, zones, isFirst = true)
                         }
                         Spacer(modifier = Modifier.width(8.dp))
                         Box(Modifier.weight(1f)) {
-                            TimezoneClock(viewModel, zones, zoneNames, isFirst = false)
+                            TimezoneClock(viewModel, zones, isFirst = false)
                         }
                     } else Column(Modifier.padding(horizontal = 24.dp)) {
-                        TimezoneClock(viewModel, zones, zoneNames, isFirst = true)
+                        TimezoneClock(viewModel, zones, isFirst = true)
                         Spacer(modifier = Modifier.height(8.dp))
-                        TimezoneClock(viewModel, zones, zoneNames, isFirst = false)
+                        TimezoneClock(viewModel, zones, isFirst = false)
                     }
                 }
 
@@ -505,9 +496,7 @@ private val hoursRange = 0..23
 private val minutesRange = 0..59
 
 @Composable
-private fun TimezoneClock(
-    viewModel: ConverterViewModel, zones: List<TimeZone>, zoneNames: List<String>, isFirst: Boolean
-) {
+private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, isFirst: Boolean) {
     val timeZone by (if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone).collectAsState()
     val clock by viewModel.clock.collectAsState()
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -522,7 +511,13 @@ private fun TimezoneClock(
                     if (isFirst) viewModel.changeFirstTimeZone(zones[it])
                     else viewModel.changeSecondTimeZone(zones[it])
                 },
-                label = { zoneNames[it] },
+                label = {
+                    val offset = Clock.fromMinutesCount(
+                        minutes = zones[it].rawOffset / ONE_MINUTE_IN_MILLIS.toInt()
+                    ).toTimeZoneOffsetFormat()
+                    val id = zones[it].id.replace("_", " ").replace(Regex(".*/"), "")
+                    "$id ($offset)"
+                },
                 disableEdit = true,
             )
             Spacer(modifier = Modifier.width(4.dp))
