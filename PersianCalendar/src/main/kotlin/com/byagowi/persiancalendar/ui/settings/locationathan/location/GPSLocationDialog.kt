@@ -175,8 +175,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         }
     }
 
-    run {
-        val coord = coordinates ?: return@run
+    coordinates?.also { coord ->
         LaunchedEffect(coord.latitude, coord.longitude) {
             launch(Dispatchers.IO) {
                 runCatching {
@@ -188,14 +187,24 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                 }.onFailure(logException).getOrNull()
             }
         }
-        remember(coord.latitude, coord.longitude) {
+        LaunchedEffect(coord.latitude, coord.longitude) {
             // Don't set elevation/altitude even from GPS, See #1011
             val coordinate = Coordinates(coord.latitude, coord.longitude, .0)
             context.appPrefs.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
         }
     }
 
-    AppDialog(onDismissRequest = onDismissRequest) {
+    AppDialog(
+        onDismissRequest = onDismissRequest,
+        dismissButton = coordinates?.run {
+            {
+                TextButton(
+                    onClick = onDismissRequest,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { Text(stringResource(R.string.close)) }
+            }
+        },
+    ) {
         val textModifier = Modifier
             .padding(16.dp)
             .fillMaxWidth()

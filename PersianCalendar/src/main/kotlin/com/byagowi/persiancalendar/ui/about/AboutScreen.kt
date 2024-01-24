@@ -55,6 +55,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -262,7 +263,8 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         )
 
         // Help
-        if (language.value.isUserAbleToReadPersian) {
+        val language by language.collectAsState()
+        if (language.isUserAbleToReadPersian) {
             Row(modifier = Modifier.padding(top = 16.dp, start = 12.dp)) {
                 Icon(
                     modifier = Modifier.padding(start = 8.dp, end = 4.dp),

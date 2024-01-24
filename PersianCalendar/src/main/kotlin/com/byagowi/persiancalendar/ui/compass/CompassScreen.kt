@@ -389,7 +389,7 @@ private abstract class BaseSensorListener : SensorEventListener {
      * value basically means more smoothing See:
      * https://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
      */
-    private val ALPHA = 0.15f
+    private val alpha = 0.15f
     private var azimuth: Float = 0f
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
@@ -414,7 +414,7 @@ private abstract class BaseSensorListener : SensorEventListener {
      */
     private fun lowPass(input: Float, output: Float): Float = when {
         abs(180 - input) > 170 -> input
-        else -> output + ALPHA * (input - output)
+        else -> output + alpha * (input - output)
     }
 }
 

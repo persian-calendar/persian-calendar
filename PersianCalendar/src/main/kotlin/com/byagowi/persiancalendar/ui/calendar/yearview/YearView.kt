@@ -69,7 +69,7 @@ import kotlin.math.floor
 fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
     val today by viewModel.today.collectAsState()
     val todayDate = today.toCalendar(mainCalendar)
-    val selectedMonthOffset = viewModel.selectedMonthOffset.value
+    val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val yearOffsetInMonths = run {
         val selectedMonth =
             mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
@@ -138,7 +138,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     }
 
     viewModel.notifyYearViewOffset(
-        derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages }.value
+        remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }.value
     )
 
     LazyColumn(state = lazyListState, modifier = Modifier.transformable(transformableState)) {

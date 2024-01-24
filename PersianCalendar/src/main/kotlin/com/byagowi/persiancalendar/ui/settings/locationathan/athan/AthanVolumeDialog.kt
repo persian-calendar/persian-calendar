@@ -8,8 +8,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -26,18 +27,19 @@ import com.byagowi.persiancalendar.utils.getAthanUri
 @Composable
 fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    var volume by rememberSaveable { mutableStateOf(context.athanVolume) }
+    var volume by rememberSaveable { mutableIntStateOf(context.athanVolume) }
 
     val audioManager =
         remember { context.getSystemService<AudioManager>() } ?: return onDismissRequest()
     val originalAlarmVolume = remember { audioManager.getStreamVolume(AudioManager.STREAM_ALARM) }
-    remember { audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0) }
+    LaunchedEffect(Unit) { audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0) }
     val maxValue = remember { audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM) }
 
-    val ringtone = remember { RingtoneManager.getRingtone(context, getAthanUri(context)) }
-    remember {
+    val ringtone = remember {
+        val ringtone = RingtoneManager.getRingtone(context, getAthanUri(context))
         ringtone?.streamType = AudioManager.STREAM_ALARM
         ringtone?.play()
+        ringtone
     }
 
     DisposableEffect(Unit) {

@@ -75,6 +75,7 @@ import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -114,7 +115,11 @@ fun ConverterScreen(
                                 .onSizeChanged { spinnerWidth = it.width },
                         ) {
                             Spacer(Modifier.width(16.dp))
-                            Text(stringResource(viewModel.screenMode.value.title))
+                            AnimatedContent(
+                                targetState = stringResource(screenMode.title),
+                                label = "title",
+                                transitionSpec = appCrossfadeSpec,
+                            ) { Text(it) }
                             ExpandArrow(isExpanded = showMenu)
                             Spacer(Modifier.width(8.dp))
                         }
@@ -312,7 +317,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
             result,
             label = "calculator result",
             modifier = Modifier.weight(1f),
-        ) { it ->
+        ) {
             Text(
                 it,
                 textAlign = TextAlign.Center,

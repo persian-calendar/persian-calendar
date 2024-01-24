@@ -205,12 +205,13 @@ fun ColumnScope.ShiftWorkDialogContent(
                             }
                         }
                     )
+                    val language by language.collectAsState()
                     AppDropdownMenu(
                         expanded = selectedTypeDropdownIndex == position,
                         onDismissRequest = { selectedTypeDropdownIndex = -1 },
                         minWidth = 40.dp,
                     ) {
-                        (shiftWorkTitles.values + language.value.additionalShiftWorkTitles).forEach {
+                        (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
                             AppDropdownMenuItem(
                                 onClick = {
                                     selectedTypeDropdownIndex = -1

@@ -21,6 +21,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -51,9 +53,10 @@ import org.jetbrains.annotations.VisibleForTesting
 @Composable
 fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
+    val language by language.collectAsState()
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
-    ) { EventsRepository.getEnabledTypes(context.appPrefs, language.value).toMutableStateList() }
+    ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
     AppDialog(title = { Text(stringResource(R.string.events)) }, dismissButton = {
         TextButton(onClick = onDismissRequest) {
             Text(stringResource(R.string.cancel))
@@ -68,7 +71,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
         CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.bodyMedium
         ) {
-            if (!language.value.showNepaliCalendar) {
+            if (!language.showNepaliCalendar) {
                 @Composable
                 fun Iran() {
                     CountryEvents(
@@ -95,7 +98,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     )
                 }
 
-                if (language.value.isAfghanistanExclusive) {
+                if (language.isAfghanistanExclusive) {
                     Afghanistan()
                     Iran()
                 } else {
@@ -122,7 +125,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                     modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 )
             }
-            if (!language.value.isAfghanistanExclusive) IndentedCheckBox(
+            if (!language.isAfghanistanExclusive) IndentedCheckBox(
                 stringResource(R.string.iran_ancient),
                 enabledTypes,
                 EventsRepository.iranAncientKey,

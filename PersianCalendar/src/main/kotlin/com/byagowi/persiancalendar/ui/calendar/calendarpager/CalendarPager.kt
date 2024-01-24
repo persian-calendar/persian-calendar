@@ -83,10 +83,10 @@ fun CalendarPager(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CalendarPagerState(): PagerState =
+fun calendarPagerState(): PagerState =
     rememberPagerState(initialPage = applyOffset(0), pageCount = ::monthsLimit)
 
-private val monthsLimit = 5000 // this should be an even number
+private const val monthsLimit = 5000 // this should be an even number
 
 private fun applyOffset(position: Int) = monthsLimit / 2 - position
 

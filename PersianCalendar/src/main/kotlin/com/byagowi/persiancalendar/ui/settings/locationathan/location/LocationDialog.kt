@@ -10,6 +10,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,10 +40,11 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     var showProvincesDialog by rememberSaveable { mutableStateOf(false) }
     if (showProvincesDialog) return ProvincesDialog(onDismissRequest)
     val cities = remember { citiesStore.values.sortCityNames }
+    val language by language.collectAsState()
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.location)) },
-        confirmButton = if (language.value.isIranExclusive) {
+        confirmButton = if (language.isIranExclusive) {
             {
                 TextButton(
                     modifier = Modifier.fillMaxWidth(),
@@ -66,13 +68,13 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
             ) {
                 Text(
                     buildAnnotatedString {
-                        append(language.value.getCityName(city))
+                        append(language.getCityName(city))
                         append(" ")
                         withStyle(
                             LocalTextStyle.current.toSpanStyle().copy(
                                 color = LocalContentColor.current.copy(.5f)
                             )
-                        ) { append(language.value.getCountryName(city)) }
+                        ) { append(language.getCountryName(city)) }
                     }
                 )
             }

@@ -253,12 +253,15 @@ fun AstronomyScreen(
     }
 
     val isDayPickerDialogShown by viewModel.isDayPickerDialogShown.collectAsState()
-    if (isDayPickerDialogShown) DayPickerDialog(
-        initialJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate()),
-        positiveButtonTitle = R.string.accept,
-        onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) },
-        onDismissRequest = viewModel::dismissDayPickerDialog,
-    )
+    if (isDayPickerDialogShown) {
+        val astronomyState by viewModel.astronomyState.collectAsState()
+        DayPickerDialog(
+            initialJdn = Jdn(astronomyState.date.toCivilDate()),
+            positiveButtonTitle = R.string.accept,
+            onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) },
+            onDismissRequest = viewModel::dismissDayPickerDialog,
+        )
+    }
 }
 
 @Composable
@@ -452,7 +455,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
     }
 
     Column(modifier) {
-        val jdn by derivedStateOf { Jdn(state.date.toCivilDate()) }
+        val jdn by remember { derivedStateOf { Jdn(state.date.toCivilDate()) } }
         SelectionContainer {
             Text(
                 headerCache[jdn],

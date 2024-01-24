@@ -30,6 +30,7 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -115,8 +116,10 @@ fun CalendarsOverview(
                         .size(20.dp)
                 )
             }
+            val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
+            val language by language.collectAsState()
             AnimatedContent(
-                if (isToday && isForcedIranTimeEnabled.value) language.value.inParentheses.format(
+                if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
                     jdn.dayOfWeekName, stringResource(R.string.iran_time)
                 ) else jdn.dayOfWeekName,
                 transitionSpec = appCrossfadeSpec,

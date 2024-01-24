@@ -217,7 +217,8 @@ fun EventsTab(
             }
         }
 
-        if (PREF_HOLIDAY_TYPES !in context.appPrefs && language.value.isIranExclusive) {
+        val language by language.collectAsState()
+        if (PREF_HOLIDAY_TYPES !in context.appPrefs && language.isIranExclusive) {
             Spacer(modifier = Modifier.height(16.dp))
             EncourageActionLayout(
                 header = stringResource(R.string.warn_if_events_not_set),

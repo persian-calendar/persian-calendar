@@ -42,7 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -284,8 +284,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 val previousEntry = navController.previousBackStackEntry
                 if (previousEntry?.destination?.route == astronomyRoute) {
                     val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
-                    viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
                     LaunchedEffect(Unit) {
+                        viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
                         viewModel.state.collectLatest { astronomyViewModel.changeToTime(it.time) }
                     }
                 }
@@ -352,7 +352,7 @@ private val navItems: List<Triple<String?, ImageVector, Int>> = listOf(
 @Composable
 private fun DrawerSeasonsPager(drawerState: DrawerState) {
     var actualSeason by remember {
-        mutableStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
+        mutableIntStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
     }
     val pageSize = 200
     val seasonState = rememberPagerState(

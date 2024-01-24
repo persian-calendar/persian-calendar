@@ -13,6 +13,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -52,7 +53,7 @@ fun CoordinatesDialog(
     inputCoordinates: Coordinates? = null,
     onDismissRequest: () -> Unit,
 ) {
-    val coordinates = inputCoordinates ?: coordinates.value
+    val coordinates = inputCoordinates ?: coordinates.collectAsState().value
     val fields = listOf(
         R.string.latitude to PREF_LATITUDE,
         R.string.longitude to PREF_LONGITUDE,

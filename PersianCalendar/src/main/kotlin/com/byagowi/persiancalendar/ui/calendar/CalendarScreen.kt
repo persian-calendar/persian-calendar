@@ -119,7 +119,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPagerState
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
@@ -195,7 +195,7 @@ fun CalendarScreen(
     val isYearView by viewModel.isYearView.collectAsState()
     BackHandler(enabled = isYearView) { viewModel.closeYearView() }
 
-    val addEvent = AddEvent(viewModel)
+    val addEvent = addEvent(viewModel)
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -238,7 +238,7 @@ fun CalendarScreen(
                 }
 
                 // To preserve pager's state even in year view where calendar isn't in the tree
-                val pagerState = CalendarPagerState()
+                val pagerState = calendarPagerState()
 
                 AnimatedVisibility(
                     !isYearView,
@@ -454,7 +454,8 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
         } else if (PREF_BATTERY_OPTIMIZATION_IGNORED !in context.appPrefs && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!isIgnoringBatteryOptimizations(context) && isNotifyDate.value) {
+            val isNotifyDate by isNotifyDate.collectAsState()
+            if (!isIgnoringBatteryOptimizations(context) && isNotifyDate) {
                 EncourageActionLayout(
                     header = stringResource(R.string.exempt_app_battery_optimization),
                     acceptButton = stringResource(R.string.yes),
@@ -573,7 +574,8 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
             } else {
-                title = language.value.my.format(
+                val language by language.collectAsState()
+                title = language.my.format(
                     selectedMonth.monthName, formatNumber(selectedMonth.year)
                 )
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
@@ -681,24 +683,28 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
 
     var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDayPickerDialog) DayPickerDialog(
-        viewModel.selectedDay.value,
-        R.string.go,
-        { bringDate(viewModel, it, context) },
-    ) { showDayPickerDialog = false }
+    if (showDayPickerDialog) {
+        val selectedDay by viewModel.selectedDay.collectAsState()
+        DayPickerDialog(
+            selectedDay,
+            R.string.go,
+            { bringDate(viewModel, it, context) },
+        ) { showDayPickerDialog = false }
+    }
 
     val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
     shiftWorkViewModel?.let {
+        val selectedDay by viewModel.selectedDay.collectAsState()
         ShiftWorkDialog(
             it,
-            viewModel.selectedDay.value,
+            selectedDay,
             onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
         ) { viewModel.refreshCalendar() }
     }
 
     var showMonthOverview by rememberSaveable { mutableStateOf(false) }
     if (showMonthOverview) {
-        val selectedMonthOffset = viewModel.selectedMonthOffset.value
+        val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
         val selectedMonth =
             mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
         MonthOverviewDialog(selectedMonth) { showMonthOverview = false }
@@ -874,7 +880,7 @@ private class AddEventContract : ActivityResultContract<Jdn, Void?>() {
 }
 
 @Composable
-private fun AddEvent(viewModel: CalendarViewModel): () -> Unit {
+private fun addEvent(viewModel: CalendarViewModel): () -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
         viewModel.refreshCalendar()
     }

@@ -301,9 +301,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
 
     var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDayPickerDialog) {
-        val currentJdn = Jdn(
-            Date(viewModel.state.value.time).toGregorianCalendar().toCivilDate()
-        )
+        val currentJdn = Jdn(Date(state.time).toGregorianCalendar().toCivilDate())
         DayPickerDialog(currentJdn, R.string.accept, { jdn ->
             viewModel.addDays(jdn - currentJdn)
         }) { showDayPickerDialog = false }

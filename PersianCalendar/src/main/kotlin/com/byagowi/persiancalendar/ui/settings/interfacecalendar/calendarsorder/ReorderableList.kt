@@ -215,7 +215,7 @@ internal class ReorderableScopeImpl(
         onDragStarted: suspend CoroutineScope.(startedPosition: Offset) -> Unit,
         onDragStopped: suspend CoroutineScope.(velocity: Float) -> Unit,
         interactionSource: MutableInteractionSource?,
-    ) = draggable(
+    ) = this.draggable(
         state = state.draggableStates[index],
         orientation = orientation,
         enabled = enabled && (state.isItemDragging(index).value || !state.isAnItemDragging().value),
