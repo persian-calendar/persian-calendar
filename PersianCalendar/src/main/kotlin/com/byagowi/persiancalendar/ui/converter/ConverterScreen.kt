@@ -49,10 +49,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -101,11 +103,16 @@ fun ConverterScreen(
             TopAppBar(
                 title = {
                     var showMenu by rememberSaveable { mutableStateOf(false) }
+                    val hapticFeedback = LocalHapticFeedback.current
                     Box(
                         Modifier
                             .clip(MaterialTheme.shapes.extraLarge)
                             .background(LocalContentColor.current.copy(alpha = .175f))
-                            .clickable { showMenu = !showMenu },
+                            .clickable {
+                                showMenu = !showMenu
+                                if (showMenu)
+                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                            },
                     ) {
                         var spinnerWidth by remember { mutableIntStateOf(0) }
                         Row(
@@ -138,6 +145,7 @@ fun ConverterScreen(
                                     text = { Text(stringResource(it.title)) },
                                     onClick = {
                                         showMenu = false
+                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                                         viewModel.changeScreenMode(it)
                                     },
                                 )
