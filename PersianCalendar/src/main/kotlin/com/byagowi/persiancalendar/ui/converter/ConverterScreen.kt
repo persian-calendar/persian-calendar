@@ -194,15 +194,15 @@ fun ConverterScreen(
                             "$id ($offset)"
                         }
                     }
-                    if (isLandscape) Row {
+                    if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
                         Box(Modifier.weight(1f)) {
                             TimezoneClock(viewModel, zones, zoneNames, isFirst = true)
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Box(Modifier.weight(1f)) {
                             TimezoneClock(viewModel, zones, zoneNames, isFirst = false)
                         }
-                    } else Column {
+                    } else Column(Modifier.padding(horizontal = 24.dp)) {
                         TimezoneClock(viewModel, zones, zoneNames, isFirst = true)
                         Spacer(modifier = Modifier.height(8.dp))
                         TimezoneClock(viewModel, zones, zoneNames, isFirst = false)
@@ -512,10 +512,7 @@ private fun TimezoneClock(
     val timeZone by (if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone).collectAsState()
     val clock by viewModel.clock.collectAsState()
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Row(
-            modifier = Modifier.padding(horizontal = 24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             val view = LocalView.current
             NumberPicker(
                 modifier = Modifier.weight(3f),
@@ -538,7 +535,7 @@ private fun TimezoneClock(
                 onValueChange = { hours ->
                     view.performHapticFeedbackVirtualKey()
                     viewModel.changeClock(GregorianCalendar(timeZone).also {
-                        it.time = viewModel.clock.value.time
+                        it.time = clock.time
                         it[GregorianCalendar.HOUR_OF_DAY] = hours
                     })
                 },
@@ -552,7 +549,7 @@ private fun TimezoneClock(
                 onValueChange = { minutes ->
                     view.performHapticFeedbackVirtualKey()
                     viewModel.changeClock(GregorianCalendar(timeZone).also {
-                        it.time = viewModel.clock.value.time
+                        it.time = clock.time
                         it[GregorianCalendar.MINUTE] = minutes
                     })
                 },
