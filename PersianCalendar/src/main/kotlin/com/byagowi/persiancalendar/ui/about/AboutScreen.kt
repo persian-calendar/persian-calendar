@@ -91,10 +91,10 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getActivity
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -115,7 +115,7 @@ fun AboutScreen(
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
                 title = { Text(stringResource(R.string.about)) },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     val context = LocalContext.current
@@ -135,12 +135,12 @@ fun AboutScreen(
         Box(
             modifier = Modifier
                 .padding(top = paddingValues.calculateTopPadding())
-                .clip(MaterialCornerExtraLargeTop()),
+                .clip(materialCornerExtraLargeTop()),
         ) {
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
-                Surface(shape = MaterialCornerExtraLargeTop()) {
+                Surface(shape = materialCornerExtraLargeTop()) {
                     AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
             }

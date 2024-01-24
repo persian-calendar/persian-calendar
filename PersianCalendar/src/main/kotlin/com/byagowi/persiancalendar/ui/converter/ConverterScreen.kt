@@ -75,8 +75,8 @@ import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -140,7 +140,7 @@ fun ConverterScreen(
                         }
                     }
                 },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
@@ -156,7 +156,7 @@ fun ConverterScreen(
         }
     ) { paddingValues ->
         Surface(
-            shape = MaterialCornerExtraLargeTop(),
+            shape = materialCornerExtraLargeTop(),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding()),

@@ -85,7 +85,7 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
@@ -193,7 +193,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
             Column {
                 Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
                 Spacer(Modifier.height((16 + menuHeight + 16).dp))
-                Surface(Modifier.fillMaxSize(), shape = MaterialCornerExtraLargeTop()) {}
+                Surface(Modifier.fillMaxSize(), shape = materialCornerExtraLargeTop()) {}
             }
         }
         AndroidView(
@@ -335,7 +335,9 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                     Text(
                         state,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().combinedClickable(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
                                 onClick = { showDayPickerDialog = true },
                                 onClickLabel = stringResource(R.string.goto_date),
                                 onLongClick = { viewModel.changeToTime(Date()) },

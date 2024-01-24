@@ -138,12 +138,12 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeNoBottomEnd
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isRtl
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -251,7 +251,7 @@ fun CalendarScreen(
                             CalendarPager(viewModel, pagerState, addEvent, width, height)
                         }
                         Surface(
-                            shape = MaterialCornerExtraLargeNoBottomEnd(),
+                            shape = materialCornerExtraLargeNoBottomEnd(),
                             modifier = Modifier.fillMaxHeight(),
                         ) {
                             Details(
@@ -277,7 +277,7 @@ fun CalendarScreen(
                             val detailsMinHeight = maxHeight - calendarHeight
                             Surface(
                                 modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                                shape = MaterialCornerExtraLargeTop(),
+                                shape = materialCornerExtraLargeTop(),
                             ) {
                                 Details(
                                     viewModel = viewModel,
@@ -630,7 +630,7 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                 }
             }
         },
-        colors = AppTopAppBarColors(),
+        colors = appTopAppBarColors(),
         navigationIcon = {
             Crossfade(targetState = isYearView, label = "nav icon") { state ->
                 if (state) AppIconButton(

@@ -88,9 +88,9 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -141,7 +141,7 @@ fun AstronomyScreen(
                         overflow = TextOverflow.Ellipsis,
                     )
                 },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()
@@ -190,7 +190,7 @@ fun AstronomyScreen(
         }
     ) { paddingValues ->
         Surface(
-            shape = MaterialCornerExtraLargeTop(),
+            shape = materialCornerExtraLargeTop(),
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {

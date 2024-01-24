@@ -69,9 +69,9 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -180,7 +180,7 @@ fun CompassScreen(
                         )
                     }
                 },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = {
                     if (coordinates != null) AppIconButton(
@@ -266,7 +266,7 @@ fun CompassScreen(
         }
     ) { paddingValues ->
         Surface(
-            shape = MaterialCornerExtraLargeTop(),
+            shape = materialCornerExtraLargeTop(),
             modifier = Modifier.padding(paddingValues),
         ) {
             val surfaceColor = MaterialTheme.colorScheme.surface

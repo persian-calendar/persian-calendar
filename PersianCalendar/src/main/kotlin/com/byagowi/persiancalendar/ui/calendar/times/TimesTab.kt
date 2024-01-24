@@ -46,7 +46,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
-import com.byagowi.persiancalendar.ui.theme.AppSunViewColors
+import com.byagowi.persiancalendar.ui.theme.appSunViewColors
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -132,7 +132,7 @@ private fun AstronomicalOverview(
             .height(100.dp)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) { state ->
-        val sunViewColors = AppSunViewColors()
+        val sunViewColors = appSunViewColors()
         if (state) AndroidView(
             factory = ::SunView,
             update = {

@@ -57,7 +57,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = AppColorScheme(), shapes = AppShapes()) {
+    MaterialTheme(colorScheme = appColorScheme(), shapes = appShapes()) {
         val contentColor by animateColorAsState(
             MaterialTheme.colorScheme.onBackground,
             animationSpec = appColorAnimationSpec,
@@ -79,14 +79,14 @@ fun AppTheme(content: @Composable () -> Unit) {
                     .windowInsetsPadding(sidesInsets)
                     .clipToBounds()
                     // Don't move this upper to top of the chain so clip to bound can be applied to it
-                    .background(AppBackground()),
+                    .background(appBackground()),
             ) { content() }
         }
     }
 }
 
 @Composable
-private fun AppColorScheme(): ColorScheme {
+private fun appColorScheme(): ColorScheme {
     val theme by theme.collectAsState()
     val context = LocalContext.current
     val systemInDarkTheme = isSystemInDarkTheme()
@@ -122,7 +122,7 @@ private fun AppColorScheme(): ColorScheme {
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun AppTopAppBarColors(): TopAppBarColors {
+fun appTopAppBarColors(): TopAppBarColors {
     return TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent,
         navigationIconContentColor = LocalContentColor.current,
@@ -132,7 +132,7 @@ fun AppTopAppBarColors(): TopAppBarColors {
 }
 
 @Composable
-private fun AppShapes(): Shapes {
+private fun appShapes(): Shapes {
     if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
     val isCyberpunk by isCyberpunk.collectAsState()
     return if (isCyberpunk) Shapes(
@@ -154,7 +154,7 @@ private val crossfadeSpec = fadeIn(tween()).togetherWith(fadeOut(tween()))
 val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { crossfadeSpec }
 
 @Composable
-private fun AppBackground(): Brush {
+private fun appBackground(): Brush {
     val backgroundColor = MaterialTheme.colorScheme.background
     val theme by theme.collectAsState()
     val context = LocalContext.current
@@ -209,7 +209,7 @@ private fun AppBackground(): Brush {
 }
 
 @Composable
-fun AppMonthColors(): MonthColors {
+fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme by theme.collectAsState()
     val resolvedTheme =
@@ -300,7 +300,7 @@ fun AppMonthColors(): MonthColors {
 }
 
 @Composable
-fun AppSunViewColors(): SunViewColors {
+fun appSunViewColors(): SunViewColors {
     val theme by theme.collectAsState()
     val context = LocalContext.current
     var nightColor = ContextCompat.getColor(

@@ -55,9 +55,9 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @Preview
 @Composable
@@ -71,14 +71,14 @@ fun LicensesScreen(navigateUp: () -> Unit) {
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
                 title = { Text(stringResource(R.string.licenses)) },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             )
         }
     ) { paddingValues ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Surface(
-                shape = MaterialCornerExtraLargeTop(),
+                shape = materialCornerExtraLargeTop(),
                 modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
             ) {
                 Licenses(paddingValues.calculateBottomPadding())

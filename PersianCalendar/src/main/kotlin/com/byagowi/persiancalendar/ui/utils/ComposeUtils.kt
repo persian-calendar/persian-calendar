@@ -24,7 +24,7 @@ val Color.isLight: Boolean get() = this.convert(ColorSpaces.CieXyz).component2()
  */
 @Composable
 @Stable
-fun MaterialCornerExtraLargeTop(): CornerBasedShape {
+fun materialCornerExtraLargeTop(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(
         bottomStart = ZeroCornerSize,
         bottomEnd = ZeroCornerSize,
@@ -33,7 +33,7 @@ fun MaterialCornerExtraLargeTop(): CornerBasedShape {
 
 @Composable
 @Stable
-fun MaterialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
+fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
 }
 

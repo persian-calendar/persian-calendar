@@ -53,7 +53,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -122,7 +122,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
         AnimatedVisibility(visible = !isFullscreen) {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.level)) },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
                     AppIconButton(

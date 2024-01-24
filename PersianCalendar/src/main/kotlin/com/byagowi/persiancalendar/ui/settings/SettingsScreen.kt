@@ -80,12 +80,12 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.getActivity
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -112,7 +112,7 @@ fun SettingsScreen(
                         transitionSpec = appCrossfadeSpec,
                     ) { state -> Text(state) }
                 },
-                colors = AppTopAppBarColors(),
+                colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
                 actions = { ThreeDotsDropdownMenu { closeMenu -> MenuItems(closeMenu) } },
             )
@@ -179,7 +179,7 @@ fun SettingsScreen(
 
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.clip(MaterialCornerExtraLargeTop()),
+                modifier = Modifier.clip(materialCornerExtraLargeTop()),
             ) { index ->
                 val surfaceColor by animateColorAsState(
                     MaterialTheme.colorScheme.surface,

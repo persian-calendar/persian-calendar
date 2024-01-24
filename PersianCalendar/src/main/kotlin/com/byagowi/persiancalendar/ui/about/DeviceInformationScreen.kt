@@ -68,9 +68,9 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.theme.AppTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.MaterialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
@@ -106,7 +106,7 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
             title = { Text(stringResource(R.string.device_information)) },
-            colors = AppTopAppBarColors(),
+            colors = appTopAppBarColors(),
             navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             actions = {
                 AppIconButton(
@@ -136,7 +136,7 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
                 }
             },
         )
-        Surface(shape = MaterialCornerExtraLargeTop()) {
+        Surface(shape = materialCornerExtraLargeTop()) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 LazyColumn {
                     item { Spacer(Modifier.height(16.dp)) }
