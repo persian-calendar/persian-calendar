@@ -51,7 +51,10 @@ class ConverterViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            merge(selectedDate, secondSelectedDate, screenMode, clock, today).collectLatest {
+            merge(
+                selectedDate, secondSelectedDate, screenMode, today,
+                clock, firstTimeZone, secondTimeZone,
+            ).collectLatest {
                 _todayButtonVisibility.value = when (screenMode.value) {
                     ConverterScreenMode.Calculator, ConverterScreenMode.QrCode -> false
 
@@ -104,11 +107,8 @@ class ConverterViewModel : ViewModel() {
         _qrCodeInputText.value = text
     }
 
-    fun changeClock(hourOfDay: Int, minute: Int, timeZone: TimeZone) {
-        val newClock = GregorianCalendar(timeZone)
-        newClock[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
-        newClock[GregorianCalendar.MINUTE] = minute
-        if (newClock.timeInMillis != _clock.value.timeInMillis) _clock.value = newClock
+    fun changeClock(newClock: GregorianCalendar) {
+        _clock.value = newClock
     }
 
     fun changeFirstTimeZone(timeZone: TimeZone) {

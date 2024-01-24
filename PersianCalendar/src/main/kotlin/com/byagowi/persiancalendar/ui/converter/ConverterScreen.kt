@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
 import android.content.res.Configuration
-import android.view.View
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -56,6 +55,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -76,17 +76,20 @@ import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DayPicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.formatNumber
 import io.github.persiancalendar.calculator.eval
-import kotlinx.coroutines.flow.StateFlow
+import java.util.GregorianCalendar
 import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,8 +113,9 @@ fun ConverterScreen(
                             .background(LocalContentColor.current.copy(alpha = .175f))
                             .clickable {
                                 showMenu = !showMenu
-                                if (showMenu)
-                                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                if (showMenu) hapticFeedback.performHapticFeedback(
+                                    HapticFeedbackType.LongPress
+                                )
                             },
                     ) {
                         var spinnerWidth by remember { mutableIntStateOf(0) }
@@ -135,12 +139,7 @@ fun ConverterScreen(
                             onDismissRequest = { showMenu = false },
                             minWidth = with(LocalDensity.current) { spinnerWidth.toDp() },
                         ) {
-                            ConverterScreenMode.entries.filter {
-                                // Converter doesn't work in Android 5, let's hide it there
-                                it != ConverterScreenMode.TimeZones
-                                // Disable timezone for now
-                                // || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-                            }.forEach {
+                            ConverterScreenMode.entries.forEach {
                                 AppDropdownMenuItem(
                                     text = { Text(stringResource(it.title)) },
                                     onClick = {
@@ -182,7 +181,6 @@ fun ConverterScreen(
 
                 // Timezones
                 AnimatedVisibility(screenMode == ConverterScreenMode.TimeZones) {
-                    // TODO: Enable timezone
                     val zones = remember {
                         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
                             .sortedBy { it.rawOffset }
@@ -194,30 +192,20 @@ fun ConverterScreen(
                                     .toTimeZoneOffsetFormat()
                             val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
                             "$id ($offset)"
-                        }.toTypedArray()
+                        }
                     }
                     if (isLandscape) Row {
                         Box(Modifier.weight(1f)) {
-                            TimezoneClock(
-                                viewModel,
-                                zones,
-                                zoneNames,
-                                viewModel.firstTimeZone,
-                                0
-                            )
+                            TimezoneClock(viewModel, zones, zoneNames, isFirst = true)
                         }
+                        Spacer(modifier = Modifier.height(8.dp))
                         Box(Modifier.weight(1f)) {
-                            TimezoneClock(
-                                viewModel,
-                                zones,
-                                zoneNames,
-                                viewModel.secondTimeZone,
-                                1
-                            )
+                            TimezoneClock(viewModel, zones, zoneNames, isFirst = false)
                         }
                     } else Column {
-                        TimezoneClock(viewModel, zones, zoneNames, viewModel.firstTimeZone, 0)
-                        TimezoneClock(viewModel, zones, zoneNames, viewModel.secondTimeZone, 1)
+                        TimezoneClock(viewModel, zones, zoneNames, isFirst = true)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TimezoneClock(viewModel, zones, zoneNames, isFirst = false)
                     }
                 }
 
@@ -248,16 +236,10 @@ fun ConverterScreen(
 }
 
 @Composable
-private fun ShareActionButton(
-    viewModel: ConverterViewModel,
-    qrShareAction: () -> Unit
-) {
+private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -> Unit) {
     val screenMode by viewModel.screenMode.collectAsState()
     val context = LocalContext.current
-    AppIconButton(
-        icon = Icons.Default.Share,
-        title = stringResource(R.string.share)
-    ) {
+    AppIconButton(icon = Icons.Default.Share, title = stringResource(R.string.share)) {
         when (screenMode) {
             ConverterScreenMode.Converter -> {
                 val jdn = viewModel.selectedDate.value
@@ -291,14 +273,13 @@ private fun ShareActionButton(
             }
 
             ConverterScreenMode.TimeZones -> {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//                    shareText(zoneNames[pickerBinding.timeZone.value] + ": " +
-//                            Clock(
-//                                pickerBinding.clock.hour,
-//                                pickerBinding.clock.minute
-//                            )
-//                                .toBasicFormatString())
-//                } else ""
+                context.shareText(listOf(
+                    viewModel.firstTimeZone.value, viewModel.secondTimeZone.value,
+                ).joinToString("\n") {
+                    it.displayName + ": " + Clock(GregorianCalendar(it).also {
+                        it.time = viewModel.clock.value.time
+                    }).toBasicFormatString()
+                })
             }
 
             ConverterScreenMode.QrCode -> qrShareAction()
@@ -521,47 +502,62 @@ private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: CalendarType) {
     }
 }
 
+private val hoursRange = 0..23
+private val minutesRange = 0..59
+
 @Composable
 private fun TimezoneClock(
-    viewModel: ConverterViewModel,
-    zones: List<TimeZone>,
-    zoneNames: Array<String>,
-    flow: StateFlow<TimeZone>,
-    i: Int
+    viewModel: ConverterViewModel, zones: List<TimeZone>, zoneNames: List<String>, isFirst: Boolean
 ) {
-    val commonClock = viewModel.clock.collectAsState()
-    AndroidView(
-        factory = {
-//            val binding = TimeZoneClockPickerBinding.inflate(it.layoutInflater)
-//            binding.timeZone.minValue = 0
-//            binding.timeZone.maxValue = zones.size - 1
-//            binding.timeZone.displayedValues = zoneNames
-//            binding.timeZone.value = zones.indexOf(flow.value)
-//            binding.timeZone.setOnValueChangedListener { picker, _, index ->
-//                picker.performHapticFeedbackVirtualKey()
-//                if (i == 0) viewModel.changeFirstTimeZone(zones[index])
-//                else viewModel.changeSecondTimeZone(zones[index])
-//            }
-//            binding.clock.setOnTimeChangedListener { view, hourOfDay, minute ->
-//                view.performHapticFeedbackVirtualKey()
-//                viewModel.changeClock(hourOfDay, minute, flow.value)
-//            }
-//            binding.root
-            View(it)
-        },
-        update = {
-//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return@AndroidView
-//            val binding = TimeZoneClockPickerBinding.bind(it)
-//            val clock = GregorianCalendar(flow.value)
-//            clock.timeInMillis = commonClock.value.timeInMillis
-//            val hour = clock[GregorianCalendar.HOUR_OF_DAY]
-//            val clockView = binding.clock
-//            if (clockView.hour != hour) clockView.hour = hour
-//            val minute = clock[GregorianCalendar.MINUTE]
-//            if (clockView.minute != minute) clockView.minute = minute
-//            val zoneView = binding.timeZone
-//            val zoneIndex = zones.indexOf(flow.value)
-//            if (zoneView.value != zoneIndex) zoneView.value = zoneIndex
-        },
-    )
+    val timeZone by (if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone).collectAsState()
+    val clock by viewModel.clock.collectAsState()
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        Row(
+            modifier = Modifier.padding(horizontal = 24.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            val view = LocalView.current
+            NumberPicker(
+                modifier = Modifier.weight(3f),
+                range = zones.indices,
+                value = zones.indexOf(timeZone).coerceAtLeast(0),
+                onValueChange = {
+                    view.performHapticFeedbackVirtualKey()
+                    if (isFirst) viewModel.changeFirstTimeZone(zones[it])
+                    else viewModel.changeSecondTimeZone(zones[it])
+                },
+                label = { zoneNames[it] },
+                disableEdit = true,
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            val time = GregorianCalendar(timeZone).also { it.time = clock.time }
+            NumberPicker(
+                modifier = Modifier.weight(1f),
+                range = hoursRange,
+                value = time[GregorianCalendar.HOUR_OF_DAY],
+                onValueChange = { hours ->
+                    view.performHapticFeedbackVirtualKey()
+                    viewModel.changeClock(GregorianCalendar(timeZone).also {
+                        it.time = viewModel.clock.value.time
+                        it[GregorianCalendar.HOUR_OF_DAY] = hours
+                    })
+                },
+                label = ::formatNumber,
+            )
+            Text(":")
+            NumberPicker(
+                modifier = Modifier.weight(1f),
+                range = minutesRange,
+                value = time[GregorianCalendar.MINUTE],
+                onValueChange = { minutes ->
+                    view.performHapticFeedbackVirtualKey()
+                    viewModel.changeClock(GregorianCalendar(timeZone).also {
+                        it.time = viewModel.clock.value.time
+                        it[GregorianCalendar.MINUTE] = minutes
+                    })
+                },
+                label = ::formatNumber,
+            )
+        }
+    }
 }
