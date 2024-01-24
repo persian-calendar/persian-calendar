@@ -62,7 +62,7 @@ import kotlin.math.roundToInt
 @Composable
 fun NumberPicker(
     modifier: Modifier = Modifier,
-    label: (Int) -> String = { it.toString() },
+    label: (Int) -> String = { formatNumber(it) },
     range: IntRange,
     value: Int,
     onClickLabel: String? = null,

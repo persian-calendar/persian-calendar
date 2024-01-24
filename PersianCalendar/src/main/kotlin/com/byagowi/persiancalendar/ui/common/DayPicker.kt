@@ -86,7 +86,6 @@ fun DayPicker(
                 Spacer(modifier = Modifier.width(8.dp))
                 NumberPicker(
                     modifier = Modifier.weight(1f),
-                    label = ::formatNumber,
                     range = startYear..startYear + 400,
                     value = date.year,
                     onClickLabel = stringResource(R.string.year),

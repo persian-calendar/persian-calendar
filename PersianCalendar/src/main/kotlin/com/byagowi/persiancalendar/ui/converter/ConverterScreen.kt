@@ -87,7 +87,6 @@ import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
-import com.byagowi.persiancalendar.utils.formatNumber
 import io.github.persiancalendar.calculator.eval
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -539,7 +538,6 @@ private fun TimezoneClock(
                         it[GregorianCalendar.HOUR_OF_DAY] = hours
                     })
                 },
-                label = ::formatNumber,
             )
             Text(":")
             NumberPicker(
@@ -553,7 +551,6 @@ private fun TimezoneClock(
                         it[GregorianCalendar.MINUTE] = minutes
                     })
                 },
-                label = ::formatNumber,
             )
         }
     }
