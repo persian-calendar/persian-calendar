@@ -15,15 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import com.byagowi.persiancalendar.entities.Jdn
-import kotlin.math.min
 
 @Composable
 fun SelectionIndicator(
-    columnsCount: Int,
-    rowsCount: Int,
     monthStartJdn: Jdn,
     monthLength: Int,
     startingDayOfWeek: Int,
@@ -32,9 +27,10 @@ fun SelectionIndicator(
     selectedDay: Jdn,
     indicatorColor: Color,
     widthPx: Float,
-    heightPx: Float,
-    halfDpInPx: Float,
     isRtl: Boolean,
+    cellWidthPx: Float,
+    cellHeightPx: Float,
+    cellRadius: Float,
 ) {
     var lastHighlightedDay by remember { mutableStateOf(selectedDay) }
     if (isHighlighted) lastHighlightedDay = selectedDay
@@ -50,16 +46,13 @@ fun SelectionIndicator(
     val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
     var isHideOrReveal by remember { mutableStateOf(true) }
 
-    val cellWidthPx = widthPx / columnsCount
-    val cellHeightPx = heightPx / rowsCount
-
     val offset by animateOffsetAsState(
         targetValue = Offset(
             x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
             } + cellWidthPx / 2f,
             // +1 for weekday names initials row
-            y = (cellIndex / 7 + 1) * cellHeightPx + cellHeightPx / 2f,
+            y = (cellIndex / 7 + 1.5f) * cellHeightPx,
         ),
         animationSpec = if (isHideOrReveal) moveImmediately else moveSpec,
         label = "offset",
@@ -70,7 +63,7 @@ fun SelectionIndicator(
         drawCircle(
             color = indicatorColor,
             center = offset,
-            radius = (min(cellWidthPx, cellHeightPx) / 2 - halfDpInPx) * radiusFraction,
+            radius = cellRadius * radiusFraction,
         )
     }
 }
