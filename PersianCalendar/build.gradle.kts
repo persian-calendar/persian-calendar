@@ -1,7 +1,7 @@
 import org.codehaus.groovy.runtime.ProcessGroovyMethods
 
-operator fun File.div(child: String) = File(this, child)
-fun String.execute() = ProcessGroovyMethods.execute(this)
+operator fun File.div(child: String): File = File(this, child)
+fun String.execute(): Process = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
 plugins {
@@ -172,35 +172,6 @@ dependencies {
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
-
-//// Just a personal debugging tool, isn't that useful as it doesn't resolve all the dependencies
-//// later to be completed by ideas of
-//// https://github.com/ProtonMail/proton-mail-android/blob/release/scripts/extract_dependencies/ExtractDeps.kts
-//val dependenciesURLs: Sequence<Pair<String, URL?>>
-//    get() = project.configurations.getByName(
-//        "implementation"
-//    ).dependencies.asSequence().mapNotNull {
-//        it.run { "$group:$name:$version" } to project.repositories.mapNotNull { repo ->
-//            (repo as? UrlArtifactRepository)?.url
-//        }.flatMap { repoUrl ->
-//            "%s/%s/%s/%s/%s-%s".format(
-//                repoUrl.toString().trimEnd('/'),
-//                it.group?.replace('.', '/') ?: "", it.name, it.version,
-//                it.name, it.version
-//            ).let { x -> listOf("$x.jar", "$x.aar") }
-//        }.toList().firstNotNullOfOrNull { url ->
-//            runCatching {
-//                val connection = URL(url).openConnection()
-//                connection.getInputStream() ?: throw Exception()
-//                connection.url
-//            }.getOrNull()
-//        }
-//    }
-//tasks.register("printDependenciesURLs") {
-//    doLast {
-//        dependenciesURLs.forEach { (dependency: String, url: URL?) -> println("$dependency => $url") }
-//    }
-//}
 
 // Can be called like: ./gradlew mergeWeblate
 tasks.register("mergeWeblate") {
