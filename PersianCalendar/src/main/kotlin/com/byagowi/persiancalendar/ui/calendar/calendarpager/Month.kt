@@ -81,6 +81,9 @@ fun Month(
 
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
+    val widthPx = with(LocalDensity.current) { width.toPx() }
+    val heightPx = with(LocalDensity.current) { height.toPx() }
+    val halfDpInPx = with(LocalDensity.current) { .5.dp.toPx() }
     SelectionIndicator(
         columnsCount = columnsCount,
         rowsCount = rowsCount,
@@ -91,10 +94,12 @@ fun Month(
         startingDayOfWeek = startingDayOfWeek,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         indicatorColor = monthColors.indicator,
+        widthPx = widthPx,
+        heightPx = heightPx,
+        halfDpInPx = halfDpInPx,
+        isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl,
     )
 
-    val widthPx = with(LocalDensity.current) { width.toPx() }
-    val heightPx = with(LocalDensity.current) { height.toPx() }
     val cellWidthPx = widthPx / columnsCount
     val cellHeightPx = heightPx / rowsCount
 
@@ -205,7 +210,7 @@ fun Month(
                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                 if (isToday) drawCircle(
                     monthColors.currentDay,
-                    radius = this.size.minDimension / 2 - .5.dp.toPx(),
+                    radius = this.size.minDimension / 2 - halfDpInPx,
                     style = Stroke(width = 1.dp.toPx())
                 )
                 val textLayoutResult = textMeasurer.measure(

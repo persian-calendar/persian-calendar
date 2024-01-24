@@ -17,7 +17,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Jdn
 import kotlin.math.min
 
@@ -32,11 +31,13 @@ fun SelectionIndicator(
     isHighlighted: Boolean,
     selectedDay: Jdn,
     indicatorColor: Color,
+    widthPx: Float,
+    heightPx: Float,
+    halfDpInPx: Float,
+    isRtl: Boolean,
 ) {
     var lastHighlightedDay by remember { mutableStateOf(selectedDay) }
     if (isHighlighted) lastHighlightedDay = selectedDay
-
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val lastHighlightedDayOfMonth = lastHighlightedDay - monthStartJdn
     val isInRange = lastHighlightedDayOfMonth in 0..<monthLength
@@ -48,10 +49,17 @@ fun SelectionIndicator(
     if (!isInRange) return
     val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
     var isHideOrReveal by remember { mutableStateOf(true) }
+
+    val cellWidthPx = widthPx / columnsCount
+    val cellHeightPx = heightPx / rowsCount
+
     val offset by animateOffsetAsState(
         targetValue = Offset(
-            cellIndex % 7 + if (isShowWeekOfYearEnabled) 1f else 0f,
-            cellIndex / 7 + 1f, // +1 for weekday names initials row
+            x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
+                if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
+            } + cellWidthPx / 2f,
+            // +1 for weekday names initials row
+            y = (cellIndex / 7 + 1) * cellHeightPx + cellHeightPx / 2f,
         ),
         animationSpec = if (isHideOrReveal) moveImmediately else moveSpec,
         label = "offset",
@@ -59,17 +67,10 @@ fun SelectionIndicator(
     isHideOrReveal = !isHighlighted
 
     Canvas(Modifier.fillMaxSize()) {
-        val cellWidthPx = size.width / columnsCount
-        val cellHeightPx = size.height / rowsCount
-
-        val left = if (isRtl) size.width - (offset.x + 1) * cellWidthPx else offset.x * cellWidthPx
-        val top = offset.y * cellHeightPx
-
-        val radius = min(cellWidthPx, cellHeightPx) / 2 - .5.dp.toPx()
         drawCircle(
             color = indicatorColor,
-            center = Offset(left + cellWidthPx / 2f, top + cellHeightPx / 2f),
-            radius = radius * radiusFraction,
+            center = offset,
+            radius = (min(cellWidthPx, cellHeightPx) / 2 - halfDpInPx) * radiusFraction,
         )
     }
 }
