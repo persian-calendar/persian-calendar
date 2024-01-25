@@ -130,7 +130,10 @@ private fun AstronomicalOverview(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
+            .semantics {
+                if (jdn != today)
+                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+            },
     ) { state ->
         val sunViewColors = appSunViewColors()
         if (state) AndroidView(
