@@ -52,6 +52,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
@@ -738,6 +739,8 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
             },
         )
 
+        HorizontalDivider()
+
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.month_overview)) },
             onClick = {
@@ -768,6 +771,8 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
         if (isTalkBackEnabled && enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
+
+        HorizontalDivider()
 
         var showSecondaryCalendarSubMenu by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuExpandableItem(
