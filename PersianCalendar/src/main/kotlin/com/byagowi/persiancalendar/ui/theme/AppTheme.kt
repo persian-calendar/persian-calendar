@@ -125,6 +125,7 @@ private fun appColorScheme(): ColorScheme {
 fun appTopAppBarColors(): TopAppBarColors {
     return TopAppBarDefaults.topAppBarColors(
         containerColor = Color.Transparent,
+        scrolledContainerColor = Color.Transparent,
         navigationIconContentColor = LocalContentColor.current,
         actionIconContentColor = LocalContentColor.current,
         titleContentColor = LocalContentColor.current,
