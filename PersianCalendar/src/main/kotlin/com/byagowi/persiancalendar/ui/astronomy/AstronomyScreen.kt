@@ -341,7 +341,10 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
     Icon(
         if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
         else Icons.AutoMirrored.Default.KeyboardArrowRight,
-        contentDescription = null,
+        contentDescription = stringResource(
+            if (isPrevious) R.string.previous_x else R.string.next_x,
+            stringResource(R.string.day),
+        ),
         Modifier.combinedClickable(
             indication = rememberRipple(bounded = false),
             interactionSource = remember { MutableInteractionSource() },
@@ -349,10 +352,7 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
                 buttonScrollSlider(if (isPrevious) -1 else 1)
             },
-            onClickLabel = stringResource(
-                if (isPrevious) R.string.previous_x else R.string.next_x,
-                stringResource(R.string.day),
-            ),
+            onClickLabel = stringResource(R.string.select_day),
             onLongClick = { buttonScrollSlider(if (isPrevious) -365 else 365) },
             onLongClickLabel = stringResource(
                 if (isPrevious) R.string.previous_x else R.string.next_x,

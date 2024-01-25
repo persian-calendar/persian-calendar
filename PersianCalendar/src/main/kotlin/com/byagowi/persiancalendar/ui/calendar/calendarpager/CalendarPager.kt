@@ -106,10 +106,11 @@ private fun BoxScope.PagerArrow(
             .size(arrowWidth, arrowHeight),
     ) {
         val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
+        val contentDescription = stringResource(stringId, stringResource(R.string.month))
         Icon(
             if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
             else Icons.AutoMirrored.Default.KeyboardArrowRight,
-            contentDescription = null,
+            contentDescription = contentDescription,
             modifier = Modifier
                 .width(arrowWidth.coerceAtMost(MaterialIconDimension.dp))
                 .combinedClickable(
@@ -120,7 +121,7 @@ private fun BoxScope.PagerArrow(
                             pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
                         }
                     },
-                    onClickLabel = stringResource(stringId, stringResource(R.string.month)),
+                    onClickLabel = stringResource(R.string.select_month),
                     onLongClick = {
                         scope.launch {
                             pagerState.scrollToPage(index + 12 * if (isPrevious) -1 else 1)

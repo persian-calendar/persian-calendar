@@ -171,25 +171,29 @@ fun Month(
             val day = monthStartJdn + dayOffset
             val isToday = day == today
             Canvas(
-                Modifier.combinedClickable(
-                    indication = null,
-                    interactionSource = daysInteractionSource,
-                    onClick = { viewModel.changeSelectedDay(day) },
-                    onClickLabel = if (isTalkBackEnabled) getA11yDaySummary(
-                        context.resources,
-                        day,
-                        isToday,
-                        EventsStore.empty(),
-                        withZodiac = isToday,
-                        withOtherCalendars = false,
-                        withTitle = true
-                    ) else (dayOffset + 1).toString(),
-                    onLongClickLabel = stringResource(R.string.add_event),
-                    onLongClick = {
-                        viewModel.changeSelectedDay(day)
-                        addEvent()
+                modifier = Modifier
+                    .combinedClickable(
+                        indication = null,
+                        interactionSource = daysInteractionSource,
+                        onClick = { viewModel.changeSelectedDay(day) },
+                        onClickLabel = stringResource(R.string.select_day),
+                        onLongClickLabel = stringResource(R.string.add_event),
+                        onLongClick = {
+                            viewModel.changeSelectedDay(day)
+                            addEvent()
+                        },
+                    )
+                    .semantics {
+                        this.contentDescription = if (isTalkBackEnabled) getA11yDaySummary(
+                            context.resources,
+                            day,
+                            isToday,
+                            EventsStore.empty(),
+                            withZodiac = isToday,
+                            withOtherCalendars = false,
+                            withTitle = true
+                        ) else (dayOffset + 1).toString()
                     },
-                )
             ) {
                 val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                 val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }

@@ -357,7 +357,10 @@ private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boo
     Icon(
         if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
         else Icons.AutoMirrored.Default.KeyboardArrowRight,
-        contentDescription = null,
+        contentDescription = stringResource(
+            if (isPrevious) R.string.previous_x else R.string.next_x,
+            stringResource(R.string.day)
+        ),
         Modifier.combinedClickable(
             indication = rememberRipple(bounded = false),
             interactionSource = remember { MutableInteractionSource() },
@@ -368,10 +371,7 @@ private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boo
                     if (isPrevious) viewModel.subtractOneHour() else viewModel.addOneHour()
                 }
             },
-            onClickLabel = stringResource(
-                if (isPrevious) R.string.previous_x else R.string.next_x,
-                stringResource(R.string.day)
-            ),
+            onClickLabel = stringResource(R.string.select_day),
             onLongClick = { viewModel.addDays(if (isPrevious) -10 else 10) },
         ),
         tint = MaterialTheme.colorScheme.primary,
