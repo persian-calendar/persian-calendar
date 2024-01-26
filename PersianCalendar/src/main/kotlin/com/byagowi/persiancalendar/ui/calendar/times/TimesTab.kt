@@ -129,11 +129,7 @@ private fun AstronomicalOverview(
         label = "heading",
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
-            .semantics {
-                if (jdn != today)
-                    @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-            },
+            .height(100.dp),
     ) { state ->
         val sunViewColors = appSunViewColors()
         if (state) AndroidView(
@@ -155,6 +151,7 @@ private fun AstronomicalOverview(
                 modifier = Modifier
                     .size(70.dp)
                     .align(Alignment.Center)
+                    .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
                     .clickable(
                         indication = rememberRipple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },
