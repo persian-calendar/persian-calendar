@@ -196,6 +196,8 @@ fun CalendarScreen(
     val isYearView by viewModel.isYearView.collectAsState()
     BackHandler(enabled = isYearView) { viewModel.closeYearView() }
 
+    val context = LocalContext.current
+
     val addEvent = addEvent(viewModel)
 
     Scaffold(
@@ -220,7 +222,6 @@ fun CalendarScreen(
             )
         },
     ) { paddingValues ->
-        val context = LocalContext.current
         // Refresh the calendar on resume
         LaunchedEffect(Unit) {
             viewModel.refreshCalendar()
@@ -297,7 +298,6 @@ fun CalendarScreen(
         }
     }
 
-    val context = LocalContext.current
     LaunchedEffect(Unit) {
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && Jdn.today()
                 .toPersianDate().year > supportedYearOfIranCalendar
@@ -384,7 +384,7 @@ private fun Details(
             initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
             pageCount = tabs::size,
         )
-        val scope = rememberCoroutineScope()
+        val coroutineScope = rememberCoroutineScope()
         viewModel.changeSelectedTabIndex(pagerState.currentPage)
 
         TabRow(
@@ -401,7 +401,7 @@ private fun Details(
                     text = { Text(stringResource(titlesResId)) },
                     selected = pagerState.currentPage == index,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurface,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                    onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                 )
             }
         }

@@ -115,9 +115,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     }
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
 
-    BackHandler(enabled = drawerState.isOpen) { scope.launch { drawerState.close() } }
+    BackHandler(enabled = drawerState.isOpen) { coroutineScope.launch { drawerState.close() } }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
@@ -167,7 +167,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             } == id,
                             onClick = {
                                 if (id == null) return@NavigationDrawerItem finish()
-                                scope.launch {
+                                coroutineScope.launch {
                                     drawerState.close()
                                     if (navBackStackEntry?.destination?.route != id) {
                                         navController.navigate(id)
@@ -206,7 +206,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(calendarRoute) {
                 CalendarScreen(
-                    openDrawer = { scope.launch { drawerState.open() } },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                     navigateToHolidaysSettings = {
                         navController.graph.findNode(settingsRoute)?.let { destination ->
                             navController.navigate(
@@ -241,14 +241,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(converterRoute) {
                 ConverterScreen(
-                    openDrawer = { scope.launch { drawerState.open() } },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                     viewModel = viewModel<ConverterViewModel>()
                 )
             }
 
             composable(compassRoute) {
                 CompassScreen(
-                    openDrawer = { scope.launch { drawerState.open() } },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                     navigateToLevel = { navController.navigate(levelRoute) },
                     navigateToMap = { navController.navigate(mapRoute) },
                     navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
@@ -273,7 +273,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
                 }
                 AstronomyScreen(
-                    openDrawer = { scope.launch { drawerState.open() } },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                     navigateToMap = { navController.navigate(mapRoute) },
                     viewModel = viewModel,
                 )
@@ -297,7 +297,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(settingsRoute) {
                 SettingsScreen(
-                    openDrawer = { scope.launch { drawerState.open() } },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                     navigateToMap = { navController.navigate(mapRoute) },
                     initialPage = it.arguments?.getInt(tabKey, 0) ?: 0,
                     destination = it.arguments?.getString(settingsKey) ?: ""
@@ -306,7 +306,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
             composable(aboutRoute) {
                 AboutScreen(
-                    openDrawer = { scope.launch { drawerState.open() } },
+                    openDrawer = { coroutineScope.launch { drawerState.open() } },
                     navigateToLicenses = { navController.navigate(licensesRoute) },
                     navigateToDeviceInformation = {
                         navController.navigate(deviceInformationRoute)
@@ -355,19 +355,19 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
         mutableIntStateOf(Season.fromDate(Date(), coordinates.value).ordinal)
     }
     val pageSize = 200
-    val seasonState = rememberPagerState(
+    val pagerState = rememberPagerState(
         initialPage = pageSize / 2 + actualSeason - 3, // minus 3 so it does an initial animation
         pageCount = { pageSize },
     )
     if (drawerState.isOpen) {
         LaunchedEffect(Unit) {
-            seasonState.animateScrollToPage(pageSize / 2 + actualSeason)
+            pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
             while (true) {
                 delay(THIRTY_SECONDS_IN_MILLIS)
                 val seasonIndex = Season.fromDate(Date(), coordinates.value).ordinal
                 if (seasonIndex != actualSeason) {
                     actualSeason = seasonIndex
-                    seasonState.animateScrollToPage(pageSize / 2 + actualSeason)
+                    pagerState.animateScrollToPage(pageSize / 2 + actualSeason)
                 }
             }
         }
@@ -384,7 +384,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
     }
 
     HorizontalPager(
-        state = seasonState,
+        state = pagerState,
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)

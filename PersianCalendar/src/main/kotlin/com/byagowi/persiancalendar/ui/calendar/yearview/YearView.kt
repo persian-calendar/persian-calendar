@@ -26,7 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -81,7 +81,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val monthNames = mainCalendar.monthsNames
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    var scale by remember { mutableStateOf(1f) }
+    var scale by remember { mutableFloatStateOf(1f) }
     val horizontalDivisions = if (isLandscape) 4 else 3
     val transformableState = rememberTransformableState { zoomChange, _, _ ->
         scale = (scale * zoomChange).coerceAtMost(horizontalDivisions.toFloat())
@@ -121,9 +121,9 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val halfPages = 100
     val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     yearViewCommand?.let { command ->
-        scope.launch {
+        coroutineScope.launch {
             viewModel.clearYearViewCommand()
             when (command) {
                 YearViewCommand.PreviousMonth -> {

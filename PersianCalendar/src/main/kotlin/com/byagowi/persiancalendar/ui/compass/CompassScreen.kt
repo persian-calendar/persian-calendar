@@ -138,13 +138,13 @@ fun CompassScreen(
     var compassView by remember { mutableStateOf<CompassView?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+    val coroutineScope = rememberCoroutineScope()
     fun showSnackbarMessage(message: String, duration: SnackbarDuration) {
-        scope.launch { snackbarHostState.showSnackbar(message, duration = duration) }
+        coroutineScope.launch { snackbarHostState.showSnackbar(message, duration = duration) }
     }
 
     fun showSetLocationMessage() {
-        scope.launch {
+        coroutineScope.launch {
             if (snackbarHostState.showSnackbar(
                     context.getString(R.string.set_location),
                     duration = SnackbarDuration.Long,

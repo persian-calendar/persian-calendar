@@ -135,7 +135,7 @@ fun SettingsScreen(
             )
 
             val pagerState = rememberPagerState(initialPage = initialPage, pageCount = tabs::size)
-            val scope = rememberCoroutineScope()
+            val coroutineScope = rememberCoroutineScope()
 
             val selectedTabIndex = pagerState.currentPage
             TabRow(
@@ -167,12 +167,12 @@ fun SettingsScreen(
                             }
                         },
                         selected = pagerState.currentPage == index,
-                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                     ) else Tab(
                         icon = { tab.Icon(selectedTabIndex == index) },
                         text = { tab.Title() },
                         selected = pagerState.currentPage == index,
-                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                        onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
                     )
                 }
             }
