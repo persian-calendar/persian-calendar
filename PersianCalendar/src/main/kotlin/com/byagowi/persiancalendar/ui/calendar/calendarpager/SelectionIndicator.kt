@@ -48,8 +48,8 @@ fun SelectionIndicator(
     val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
     var isHideOrReveal by remember { mutableStateOf(true) }
 
-    val offset = remember { Animatable(Offset.Zero, Offset.VectorConverter, null) }
-    LaunchedEffect(key1 = cellIndex) {
+    val center = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
+    LaunchedEffect(cellIndex) {
         val target = Offset(
             x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
@@ -57,14 +57,14 @@ fun SelectionIndicator(
             // +1 for weekday names initials row
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
         )
-        if (isHideOrReveal) offset.snapTo(target)
-        else offset.animateTo(targetValue = target, animationSpec = springMoveSpec)
+        if (isHideOrReveal) center.snapTo(target)
+        else center.animateTo(targetValue = target, animationSpec = springMoveSpec)
         isHideOrReveal = !isHighlighted
     }
 
     Canvas(Modifier.fillMaxSize()) {
-        val center = offset.value
-        drawCircle(color = indicatorColor, center = center, radius = cellRadius * radiusFraction)
+        val radius = cellRadius * radiusFraction
+        drawCircle(color = indicatorColor, center = center.value, radius = radius)
     }
 }
 
