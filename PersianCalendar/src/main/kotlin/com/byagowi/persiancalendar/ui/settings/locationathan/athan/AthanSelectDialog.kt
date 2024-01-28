@@ -71,6 +71,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                         putString(PREF_ATHAN_URI, context.resources.getRawUri(rawId))
                         putString(PREF_ATHAN_NAME, context.getString(stringId))
                     }
+                    onDismissRequest()
                 }
             } + (R.string.more to {
                 runCatching { launcher.launch(Unit) }
@@ -80,10 +81,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
-                    .clickable(onClick = {
-                        onDismissRequest()
-                        callback()
-                    })
+                    .clickable(onClick = callback)
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     .height(SettingsItemHeight.dp)
                     .fillMaxWidth(),
