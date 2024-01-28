@@ -95,22 +95,22 @@ private fun startAthanBody(context: Context, prayTimeKey: String) {
             )?.acquire(THIRTY_SECONDS_IN_MILLIS)
         }.onFailure(logException)
 
-        if (!notificationAthan.value && ActivityCompat.checkSelfPermission(
+        if (notificationAthan.value || ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            context.startActivity(
-                Intent(context, AthanActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                    .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
-            )
-        } else {
-            ContextCompat.startForegroundService(
-                context, Intent(context, AthanNotification::class.java)
-                    .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
-            )
-        }
+            ) == PackageManager.PERMISSION_GRANTED
+        ) ContextCompat.startForegroundService(
+            context, Intent(context, AthanNotification::class.java)
+                .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
+        ) else startAthanActivity(context, prayTimeKey)
     }.onFailure(logException)
+}
+
+fun startAthanActivity(context: Context, prayerKey: String?) {
+    context.startActivity(
+        Intent(context, AthanActivity::class.java)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra(KEY_EXTRA_PRAYER, prayerKey)
+    )
 }
 
 fun getEnabledAlarms(context: Context): Set<String> {

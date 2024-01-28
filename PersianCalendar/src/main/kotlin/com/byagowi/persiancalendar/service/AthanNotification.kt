@@ -29,7 +29,6 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -39,6 +38,7 @@ import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.setDirection
+import com.byagowi.persiancalendar.utils.startAthanActivity
 import kotlin.random.Random
 
 class AthanNotification : Service() {
@@ -57,11 +57,7 @@ class AthanNotification : Service() {
         val notificationManager = getSystemService<NotificationManager>()
 
         val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
-        if (!notificationAthan.value) startActivity(
-            Intent(this, AthanActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(KEY_EXTRA_PRAYER, athanKey)
-        )
+        if (!notificationAthan.value) startAthanActivity(this, athanKey)
 
         val soundUri = if (notificationAthan.value) getAthanUri(this) else null
         if (soundUri != null) runCatching {
