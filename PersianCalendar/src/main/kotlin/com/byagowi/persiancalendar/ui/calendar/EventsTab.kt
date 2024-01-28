@@ -132,7 +132,7 @@ fun EventsTab(
         }
 
         val launcher =
-            rememberLauncherForActivityResult(ViewEvent()) { viewModel.refreshCalendar() }
+            rememberLauncherForActivityResult(ViewEventContract()) { viewModel.refreshCalendar() }
 
         events.forEach { event ->
             val backgroundColor by animateColorAsState(
@@ -249,7 +249,7 @@ fun EventsTab(
     }
 }
 
-private class ViewEvent : ActivityResultContract<Long, Void?>() {
+private class ViewEventContract : ActivityResultContract<Long, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?) = null
     override fun createIntent(context: Context, input: Long): Intent {
         return Intent(Intent.ACTION_VIEW).setData(
