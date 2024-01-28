@@ -1,13 +1,15 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,21 +48,23 @@ fun SelectionIndicator(
     val cellIndex = lastHighlightedDayOfMonth + startingDayOfWeek
     var isHideOrReveal by remember { mutableStateOf(true) }
 
-    val offset by animateOffsetAsState(
-        targetValue = Offset(
+    val offset = remember { Animatable(Offset.Zero, Offset.VectorConverter, null) }
+    LaunchedEffect(key1 = cellIndex) {
+        val target = Offset(
             x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
             } + cellWidthPx / 2f,
             // +1 for weekday names initials row
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
-        ),
-        animationSpec = if (isHideOrReveal) moveImmediately else moveSpec,
-        label = "offset",
-    )
-    isHideOrReveal = !isHighlighted
+        )
+        if (isHideOrReveal) offset.snapTo(target)
+        else offset.animateTo(targetValue = target, animationSpec = springMoveSpec)
+        isHideOrReveal = !isHighlighted
+    }
 
     Canvas(Modifier.fillMaxSize()) {
-        drawCircle(color = indicatorColor, center = offset, radius = cellRadius * radiusFraction)
+        val center = offset.value
+        drawCircle(color = indicatorColor, center = center, radius = cellRadius * radiusFraction)
     }
 }
 
@@ -69,8 +73,7 @@ private val revealOrHideSpec = spring<Float>(
     stiffness = Spring.StiffnessLow,
 )
 private val revealOrHideImmediately = snap<Float>()
-private val moveSpec = spring<Offset>(
+private val springMoveSpec = spring<Offset>(
     dampingRatio = Spring.DampingRatioLowBouncy,
     stiffness = Spring.StiffnessLow,
 )
-private val moveImmediately = snap<Offset>()
