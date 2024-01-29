@@ -40,7 +40,10 @@ fun SelectionIndicator(color: Color, radius: Float, center: Offset, visible: Boo
     }
 
     Canvas(Modifier.fillMaxSize()) {
-        val animatedRadius = radius * animatedRadiusFraction.value
-        drawCircle(color = color, center = animatedCenter.value, radius = animatedRadius)
+        val radiusFraction = animatedRadiusFraction.value
+        if (radiusFraction != 0f) {
+            val animatedRadius = radius * radiusFraction
+            drawCircle(color = color, center = animatedCenter.value, radius = animatedRadius)
+        }
     }
 }
