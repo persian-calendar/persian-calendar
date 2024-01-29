@@ -242,6 +242,14 @@ fun CalendarScreen(
                 // To preserve pager's state even in year view where calendar isn't in the tree
                 val pagerState = calendarPagerState()
 
+                val detailsTabs = detailsTabs(
+                    viewModel = viewModel,
+                    navigateToHolidaysSettings = navigateToHolidaysSettings,
+                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+                    navigateToAstronomy = navigateToAstronomy,
+                )
+
                 AnimatedVisibility(
                     !isYearView,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
@@ -258,10 +266,7 @@ fun CalendarScreen(
                         ) {
                             Details(
                                 viewModel = viewModel,
-                                navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                                navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                navigateToAstronomy = navigateToAstronomy,
+                                tabs = detailsTabs,
                                 bottomPadding = bottomPadding,
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
@@ -283,10 +288,7 @@ fun CalendarScreen(
                             ) {
                                 Details(
                                     viewModel = viewModel,
-                                    navigateToHolidaysSettings = navigateToHolidaysSettings,
-                                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                                    navigateToAstronomy = navigateToAstronomy,
+                                    tabs = detailsTabs,
                                     bottomPadding = bottomPadding,
                                     contentMinHeight = detailsMinHeight,
                                 )
@@ -351,20 +353,19 @@ private fun bringDate(
     ).show()
 }
 
+typealias DetailsTab = Pair<Int, @Composable () -> Unit>
+
 @Composable
-private fun Details(
+private fun detailsTabs(
     viewModel: CalendarViewModel,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
-    bottomPadding: Dp,
-    contentMinHeight: Dp,
-    scrollableTabs: Boolean = false
-) {
+): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
-    val tabs = listOfNotNull<Pair<Int, @Composable () -> Unit>>(
+    return listOfNotNull(
         R.string.calendar to { CalendarsTab(viewModel) },
         R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
@@ -377,7 +378,16 @@ private fun Details(
             )
         } else null,
     )
+}
 
+@Composable
+private fun Details(
+    viewModel: CalendarViewModel,
+    tabs: List<DetailsTab>,
+    bottomPadding: Dp,
+    contentMinHeight: Dp,
+    scrollableTabs: Boolean = false
+) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     @OptIn(ExperimentalFoundationApi::class) Column(Modifier.fillMaxHeight()) {
         val pagerState = rememberPagerState(
@@ -406,10 +416,7 @@ private fun Details(
             }
         }
 
-        HorizontalPager(
-            state = pagerState,
-            verticalAlignment = Alignment.Top,
-        ) { index ->
+        HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
             Column(
                 Modifier
                     .defaultMinSize(minHeight = contentMinHeight * 3 / 4)
