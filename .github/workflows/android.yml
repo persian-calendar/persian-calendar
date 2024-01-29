@@ -22,7 +22,7 @@ jobs:
           distribution: "temurin"
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
       - name: Build debug APK and run JVM tests
         run: |
@@ -59,7 +59,7 @@ jobs:
           distribution: "temurin"
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
 
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@76c2bf6f95ed6458fd659a1bdb680a0f8df232dc
