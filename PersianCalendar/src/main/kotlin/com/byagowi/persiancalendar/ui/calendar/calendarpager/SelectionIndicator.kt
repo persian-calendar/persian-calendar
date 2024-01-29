@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.Color
 fun SelectionIndicator(color: Color, radius: Float, center: Offset, visible: Boolean) {
     val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
     LaunchedEffect(center) {
-        if (visible) animatedCenter.animateTo(
+        if (visible && animatedCenter.value != center) animatedCenter.animateTo(
             targetValue = center,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
@@ -29,8 +29,9 @@ fun SelectionIndicator(color: Color, radius: Float, center: Offset, visible: Boo
     val animatedRadiusFraction = remember { Animatable(0f) }
     LaunchedEffect(visible) {
         if (visible) animatedCenter.snapTo(center)
-        animatedRadiusFraction.animateTo(
-            targetValue = if (visible) 1f else 0f,
+        val target = if (visible) 1f else 0f
+        if (animatedRadiusFraction.value != target) animatedRadiusFraction.animateTo(
+            targetValue = target,
             animationSpec = spring(
                 dampingRatio = Spring.DampingRatioLowBouncy,
                 stiffness = Spring.StiffnessLow,
