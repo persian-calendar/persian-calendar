@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -249,6 +250,7 @@ fun CalendarScreen(
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                     navigateToAstronomy = navigateToAstronomy,
                 )
+                val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
                 AnimatedVisibility(
                     !isYearView,
@@ -267,6 +269,7 @@ fun CalendarScreen(
                             Details(
                                 viewModel = viewModel,
                                 tabs = detailsTabs,
+                                pagerState = detailsPagerState,
                                 bottomPadding = bottomPadding,
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
@@ -289,6 +292,7 @@ fun CalendarScreen(
                                 Details(
                                     viewModel = viewModel,
                                     tabs = detailsTabs,
+                                    pagerState = detailsPagerState,
                                     bottomPadding = bottomPadding,
                                     contentMinHeight = detailsMinHeight,
                                 )
@@ -380,22 +384,34 @@ private fun detailsTabs(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun detailsPagerState(
+    viewModel: CalendarViewModel,
+    tabs: List<DetailsTab>,
+): PagerState {
+    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+    val pagerState = rememberPagerState(
+        initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
+        pageCount = tabs::size,
+    )
+    viewModel.changeSelectedTabIndex(pagerState.currentPage)
+    return pagerState
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun Details(
     viewModel: CalendarViewModel,
     tabs: List<DetailsTab>,
+    pagerState: PagerState,
     bottomPadding: Dp,
     contentMinHeight: Dp,
     scrollableTabs: Boolean = false
 ) {
-    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-    @OptIn(ExperimentalFoundationApi::class) Column(Modifier.fillMaxHeight()) {
-        val pagerState = rememberPagerState(
-            initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
-            pageCount = tabs::size,
-        )
+    Column(Modifier.fillMaxHeight()) {
+        val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
         val coroutineScope = rememberCoroutineScope()
-        viewModel.changeSelectedTabIndex(pagerState.currentPage)
 
         TabRow(
             selectedTabIndex = selectedTabIndex,
