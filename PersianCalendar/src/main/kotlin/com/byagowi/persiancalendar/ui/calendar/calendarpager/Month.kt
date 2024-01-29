@@ -87,20 +87,24 @@ fun Month(
     val cellHeightPx = heightPx / rowsCount
     val cellRadius =
         min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5.dp.toPx() }
-    SelectionIndicator(
-        isHighlighted = isHighlighted,
-        selectedDay = selectedDay,
-        monthStartJdn = monthStartJdn,
-        monthLength = monthLength,
-        startingDayOfWeek = startingDayOfWeek,
-        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-        indicatorColor = monthColors.indicator,
-        widthPx = widthPx,
-        isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl,
-        cellWidthPx = cellWidthPx,
-        cellHeightPx = cellHeightPx,
-        cellRadius = cellRadius,
-    )
+    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+
+    run {
+        val highlightedDayOfMonth = selectedDay - monthStartJdn
+        val cellIndex = highlightedDayOfMonth + startingDayOfWeek
+        SelectionIndicator(
+            color = monthColors.indicator,
+            radius = cellRadius,
+            center = Offset(
+                x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
+                    if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
+                } + cellWidthPx / 2f,
+                // +1 for weekday names initials row
+                y = (cellIndex / 7 + 1.5f) * cellHeightPx,
+            ),
+            visible = isHighlighted && highlightedDayOfMonth in 0..<monthLength,
+        )
+    }
 
     val refreshToken by viewModel.refreshToken.collectAsState()
     val context = LocalContext.current
@@ -111,7 +115,6 @@ fun Month(
     }
 
     val diameter = min(width / columnsCount, height / rowsCount)
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val dayPainter = remember(width, height, refreshToken, monthColors) {
         DayPainter(
             resources = context.resources,
