@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.formatDate
 import io.github.persiancalendar.calculator.eval
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -248,12 +249,16 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                 val jdn = viewModel.selectedDate.value
                 val secondJdn = viewModel.secondSelectedDate.value
                 context.shareText(
-                    calculateDaysDifference(
-                        context.resources,
-                        jdn,
-                        secondJdn,
-                        calendarType = viewModel.calendar.value,
-                    ),
+                    listOf(
+                        calculateDaysDifference(
+                            context.resources,
+                            jdn,
+                            secondJdn,
+                            calendarType = viewModel.calendar.value,
+                        ),
+                        formatDate(jdn.toCalendar(viewModel.calendar.value)),
+                        formatDate(secondJdn.toCalendar(viewModel.calendar.value)),
+                    ).joinToString("\n"),
                     chooserTitle,
                 )
             }
@@ -365,12 +370,12 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
                         1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
                         2 -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
                         else -> """BEGIN:VEVENT
-                            SUMMARY:Event title
-                            DTSTART:20201011T173000Z
-                            DTEND:20201011T173000Z
-                            LOCATION:Location name
-                            DESCRIPTION:Event description
-                            END:VEVENT""".trimIndent()
+                            |SUMMARY:Event title
+                            |DTSTART:20201011T173000Z
+                            |DTEND:20201011T173000Z
+                            |LOCATION:Location name
+                            |DESCRIPTION:Event description
+                            |END:VEVENT""".trimMargin()
                     }
                 )
             },
