@@ -95,7 +95,7 @@ import java.util.TimeZone
 @Composable
 fun ConverterScreen(
     openDrawer: () -> Unit,
-    viewModel: ConverterViewModel
+    viewModel: ConverterViewModel,
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
@@ -164,7 +164,7 @@ fun ConverterScreen(
                     ShareActionButton(viewModel, qrShareAction)
                 },
             )
-        }
+        },
     ) { paddingValues ->
         Surface(
             shape = materialCornerExtraLargeTop(),
@@ -230,6 +230,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
     val screenMode by viewModel.screenMode.collectAsState()
     val context = LocalContext.current
     AppIconButton(icon = Icons.Default.Share, title = stringResource(R.string.share)) {
+        val chooserTitle = context.getString(screenMode.title)
         when (screenMode) {
             ConverterScreenMode.Converter -> {
                 val jdn = viewModel.selectedDate.value
@@ -238,7 +239,8 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                         dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                         context.getString(R.string.equivalent_to),
                         dateStringOfOtherCalendars(jdn, spacedComma)
-                    ).joinToString(" ")
+                    ).joinToString(" "),
+                    chooserTitle,
                 )
             }
 
@@ -250,26 +252,34 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                         context.resources,
                         jdn,
                         secondJdn,
-                        calendarType = viewModel.calendar.value
-                    )
+                        calendarType = viewModel.calendar.value,
+                    ),
+                    chooserTitle,
                 )
             }
 
             ConverterScreenMode.Calculator -> {
-                context.shareText(runCatching {
-                    // running this inside a runCatching block is absolutely important
-                    eval(viewModel.calculatorInputText.value)
-                }.getOrElse { it.message } ?: "")
+                context.shareText(
+                    runCatching {
+                        // running this inside a runCatching block is absolutely important
+                        eval(viewModel.calculatorInputText.value)
+                    }.getOrElse { it.message } ?: "",
+                    chooserTitle,
+                )
             }
 
             ConverterScreenMode.TimeZones -> {
-                context.shareText(listOf(
-                    viewModel.firstTimeZone.value, viewModel.secondTimeZone.value,
-                ).joinToString("\n") {
-                    it.displayName + ": " + Clock(GregorianCalendar(it).also {
-                        it.time = viewModel.clock.value.time
-                    }).toBasicFormatString()
-                })
+                context.shareText(
+                    listOf(
+                        viewModel.firstTimeZone.value,
+                        viewModel.secondTimeZone.value,
+                    ).joinToString("\n") {
+                        it.displayName + ": " + Clock(GregorianCalendar(it).also {
+                            it.time = viewModel.clock.value.time
+                        }).toBasicFormatString()
+                    },
+                    chooserTitle,
+                )
             }
 
             ConverterScreenMode.QrCode -> qrShareAction()
@@ -354,9 +364,13 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
                         0 -> "https://example.com"
                         1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
                         2 -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
-                        else -> "BEGIN:VEVENT\nSUMMARY:Event title\nDTSTART:20201011T173000Z\n" +
-                                "DTEND:20201011T173000Z\nLOCATION:Location name\n" +
-                                "DESCRIPTION:Event description\nEND:VEVENT"
+                        else -> """BEGIN:VEVENT
+                            SUMMARY:Event title
+                            DTSTART:20201011T173000Z
+                            DTEND:20201011T173000Z
+                            LOCATION:Location name
+                            DESCRIPTION:Event description
+                            END:VEVENT""".trimIndent()
                     }
                 )
             },
@@ -366,8 +380,7 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
         ) { Text(stringResource(R.string.sample_inputs)) }
     }
 
-    val isLandscape =
-        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         Column(modifier = Modifier.weight(1f)) {
             TextField(
@@ -456,7 +469,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
 private fun DaysDistanceSecondPart(
     viewModel: ConverterViewModel,
     jdn: Jdn,
-    calendar: CalendarType
+    calendar: CalendarType,
 ) {
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()

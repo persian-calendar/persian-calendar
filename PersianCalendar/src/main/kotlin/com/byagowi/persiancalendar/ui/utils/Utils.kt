@@ -70,11 +70,11 @@ fun Context.openHtmlInBrowser(html: String) {
     }.onFailure(logException)
 }
 
-fun Context.shareText(text: String) {
+fun Context.shareText(text: String, chooserTitle: String) {
     runCatching {
         ShareCompat.IntentBuilder(this)
             .setType("text/plain")
-            .setChooserTitle(getString(R.string.converter))
+            .setChooserTitle(chooserTitle)
             .setText(text)
             .startChooser()
     }.onFailure(logException)
