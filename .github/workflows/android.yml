@@ -13,7 +13,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/wrapper-validation-action@v2
 
       - name: Set up JDK
         uses: actions/setup-java@v4
