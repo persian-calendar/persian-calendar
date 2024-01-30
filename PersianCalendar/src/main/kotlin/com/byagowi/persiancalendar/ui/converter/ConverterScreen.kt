@@ -278,8 +278,8 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                     listOf(
                         viewModel.firstTimeZone.value,
                         viewModel.secondTimeZone.value,
-                    ).joinToString("\n") {
-                        it.displayName + ": " + Clock(GregorianCalendar(it).also {
+                    ).joinToString("\n") { timeZone ->
+                        timeZone.displayName + ": " + Clock(GregorianCalendar(timeZone).also {
                             it.time = viewModel.clock.value.time
                         }).toBasicFormatString()
                     },
