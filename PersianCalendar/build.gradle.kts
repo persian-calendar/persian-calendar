@@ -139,6 +139,10 @@ dependencies {
     implementation(libs.kotlinx.html.jvm)
     implementation(libs.openlocationcode)
     implementation(libs.activity.ktx)
+
+    val composeBom = platform(libs.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
     implementation(libs.compose.activity)
     implementation(libs.compose.accompanist.flowlayout)
     implementation(libs.compose.ui)

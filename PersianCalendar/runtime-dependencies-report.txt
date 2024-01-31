@@ -1,8 +1,8 @@
 +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22
 |    +--- org.jetbrains:annotations:13.0 -> 23.0.0
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 1.9.10 (c)
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22 (c)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 1.9.10 (c)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 1.9.10 (c)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.9.22 (c)
 +--- com.github.persian-calendar:calendar:a029c1f7fdf7204b8315847b89612eb15a5d519e
 +--- com.github.persian-calendar:praytimes:36eab5bf0b6f5057357d6fbf0007bea3fab73895
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.10
@@ -52,6 +52,8 @@
 |    |    |    |    |    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3 (c)
 |    |    |    |    |    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3 (c)
 |    |    |    |    |    |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.3 (c)
+|    |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20 -> 1.9.22
+|    |    |    |    |    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 (*)
 |    |    |    |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20 -> 1.9.10 (*)
 |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.7.3 (*)
 |    |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20 -> 1.9.10 (*)
@@ -80,10 +82,10 @@
 |    |    |    +--- androidx.lifecycle:lifecycle-common:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-service:2.7.0 (c)
-|    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-livedata:2.7.0 (c)
+|    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-common-java8:2.7.0 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.7.0 (c)
@@ -156,16 +158,16 @@
 |         |         +--- androidx.annotation:annotation:1.1.0 -> 1.7.0 (*)
 |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
 |         |         +--- androidx.lifecycle:lifecycle-common:2.7.0 (c)
+|         |         +--- androidx.lifecycle:lifecycle-common-java8:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-livedata:2.7.0 (c)
+|         |         +--- androidx.lifecycle:lifecycle-livedata-core:2.7.0 (c)
+|         |         +--- androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-runtime:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-runtime-ktx:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-service:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0 (c)
 |         |         +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0 (c)
-|         |         +--- androidx.lifecycle:lifecycle-common-java8:2.7.0 (c)
-|         |         +--- androidx.lifecycle:lifecycle-livedata-core:2.7.0 (c)
-|         |         +--- androidx.lifecycle:lifecycle-livedata-core-ktx:2.7.0 (c)
 |         |         \--- androidx.lifecycle:lifecycle-process:2.7.0 (c)
 |         +--- androidx.localbroadcastmanager:localbroadcastmanager:1.0.0
 |         |    \--- androidx.annotation:annotation:1.0.0 -> 1.7.0 (*)
@@ -184,10 +186,10 @@
 |    +--- androidx.lifecycle:lifecycle-runtime:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-service:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0 (c)
-|    +--- androidx.lifecycle:lifecycle-viewmodel:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-common:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-livedata:2.7.0 (c)
+|    +--- androidx.lifecycle:lifecycle-viewmodel:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-common-java8:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-livedata-core:2.7.0 (c)
@@ -199,10 +201,10 @@
 |    +--- androidx.lifecycle:lifecycle-runtime:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0 (c)
-|    +--- androidx.lifecycle:lifecycle-viewmodel:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-common:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-livedata:2.7.0 (c)
+|    +--- androidx.lifecycle:lifecycle-viewmodel:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-common-java8:2.7.0 (c)
 |    +--- androidx.lifecycle:lifecycle-livedata-core:2.7.0 (c)
@@ -312,14 +314,48 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
 |    +--- androidx.activity:activity:1.8.2 (c)
 |    \--- androidx.activity:activity-compose:1.8.2 (c)
-+--- androidx.activity:activity-compose:1.8.2
++--- androidx.compose:compose-bom:2024.01.00
+|    +--- androidx.compose.animation:animation-graphics-android:1.6.0 (c)
+|    +--- androidx.compose.material:material-icons-extended:1.6.0 (c)
+|    +--- androidx.compose.material3:material3:1.1.2 -> 1.2.0-rc01 (c)
+|    +--- androidx.compose.runtime:runtime:1.6.0 (c)
+|    +--- androidx.compose.ui:ui:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-tooling-preview:1.6.0 (c)
+|    +--- androidx.compose.foundation:foundation:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-util:1.6.0 (c)
+|    +--- androidx.compose.animation:animation:1.6.0 (c)
+|    +--- androidx.compose.foundation:foundation-layout:1.6.0 (c)
+|    +--- androidx.compose.runtime:runtime-saveable:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-geometry:1.6.0 (c)
+|    +--- androidx.compose.material:material-icons-extended-android:1.6.0 (c)
+|    +--- androidx.compose.runtime:runtime-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-tooling-preview-android:1.6.0 (c)
+|    +--- androidx.compose.foundation:foundation-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-util-android:1.6.0 (c)
+|    +--- androidx.compose.animation:animation-core:1.6.0 (c)
+|    +--- androidx.compose.material:material-icons-core:1.6.0 (c)
+|    +--- androidx.compose.material:material-ripple:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-graphics:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-text:1.6.0 (c)
+|    +--- androidx.compose.animation:animation-android:1.6.0 (c)
+|    +--- androidx.compose.foundation:foundation-layout-android:1.6.0 (c)
+|    +--- androidx.compose.runtime:runtime-saveable-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-geometry-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-unit:1.6.0 (c)
+|    +--- androidx.compose.animation:animation-core-android:1.6.0 (c)
+|    +--- androidx.compose.material:material-icons-core-android:1.6.0 (c)
+|    +--- androidx.compose.material:material-ripple-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-graphics-android:1.6.0 (c)
+|    +--- androidx.compose.ui:ui-text-android:1.6.0 (c)
+|    \--- androidx.compose.ui:ui-unit-android:1.6.0 (c)
++--- androidx.activity:activity-compose -> 1.8.2
 |    +--- androidx.activity:activity-ktx:1.8.2 (*)
 |    +--- androidx.compose.runtime:runtime:1.0.1 -> 1.6.0
 |    |    \--- androidx.compose.runtime:runtime-android:1.6.0
 |    |         +--- androidx.collection:collection:1.4.0 (*)
 |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
-|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22
-|    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 (*)
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1 -> 1.7.3 (*)
 |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1 -> 1.7.3 (*)
 |    |         \--- androidx.compose.runtime:runtime-saveable:1.6.0 (c)
@@ -355,6 +391,7 @@
 |    |         |         |         +--- androidx.compose.ui:ui-tooling-preview:1.6.0 (c)
 |    |         |         |         \--- androidx.compose.ui:ui-unit:1.6.0 (c)
 |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
+|    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    |         |         +--- androidx.compose.ui:ui:1.6.0 (c)
 |    |         |         +--- androidx.compose.ui:ui-graphics:1.6.0 (c)
 |    |         |         +--- androidx.compose.ui:ui-text:1.6.0 (c)
@@ -376,6 +413,7 @@
 |    |         |         |         +--- androidx.compose.ui:ui-geometry:1.6.0 (*)
 |    |         |         |         +--- androidx.compose.ui:ui-util:1.6.0 (*)
 |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
+|    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    |         |         |         +--- androidx.compose.ui:ui:1.6.0 (c)
 |    |         |         |         +--- androidx.compose.ui:ui-geometry:1.6.0 (c)
 |    |         |         |         +--- androidx.compose.ui:ui-graphics:1.6.0 (c)
@@ -383,6 +421,7 @@
 |    |         |         |         +--- androidx.compose.ui:ui-tooling-preview:1.6.0 (c)
 |    |         |         |         \--- androidx.compose.ui:ui-util:1.6.0 (c)
 |    |         |         +--- androidx.compose.ui:ui-util:1.6.0 (*)
+|    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    |         |         +--- androidx.compose.ui:ui:1.6.0 (c)
 |    |         |         +--- androidx.compose.ui:ui-geometry:1.6.0 (c)
 |    |         |         +--- androidx.compose.ui:ui-text:1.6.0 (c)
@@ -422,6 +461,7 @@
 |    |         |         |    |    \--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.7.0 (c)
 |    |         |         |    \--- androidx.startup:startup-runtime:1.0.0 -> 1.1.1 (*)
 |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
+|    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1 -> 1.7.3 (*)
 |    |         |         +--- androidx.compose.ui:ui:1.6.0 (c)
 |    |         |         +--- androidx.compose.ui:ui-geometry:1.6.0 (c)
@@ -472,6 +512,7 @@
 |    |         |         |         +--- androidx.compose.ui:ui-unit:1.6.0 (*)
 |    |         |         |         +--- androidx.compose.ui:ui-util:1.6.0 (*)
 |    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
+|    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1 -> 1.7.3 (*)
 |    |         |         |         \--- androidx.compose.animation:animation:1.6.0 (c)
 |    |         |         +--- androidx.compose.foundation:foundation-layout:1.6.0
@@ -502,7 +543,7 @@
 |    +--- androidx.compose.ui:ui-util:1.6.0 (*)
 |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 -> 1.7.3 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 (*)
-+--- androidx.compose.ui:ui:1.6.0 (*)
++--- androidx.compose.ui:ui -> 1.6.0 (*)
 +--- androidx.compose.material3:material3:1.2.0-rc01
 |    \--- androidx.compose.material3:material3-android:1.2.0-rc01
 |         +--- androidx.activity:activity-compose:1.5.0 -> 1.8.2 (*)
@@ -516,6 +557,7 @@
 |         |    \--- androidx.compose.material:material-icons-core-android:1.6.0
 |         |         +--- androidx.compose.ui:ui:1.6.0 (*)
 |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 1.9.22 (*)
+|         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |         |         +--- androidx.compose.material:material-icons-extended:1.6.0 (c)
 |         |         \--- androidx.compose.material:material-ripple:1.6.0 (c)
 |         +--- androidx.compose.material:material-ripple:1.6.0-rc01 -> 1.6.0
@@ -524,6 +566,7 @@
 |         |         +--- androidx.compose.foundation:foundation:1.6.0 (*)
 |         |         +--- androidx.compose.runtime:runtime:1.6.0 (*)
 |         |         +--- androidx.compose.ui:ui-util:1.6.0 (*)
+|         |         +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |         |         +--- androidx.compose.material:material-icons-core:1.6.0 (c)
 |         |         \--- androidx.compose.material:material-icons-extended:1.6.0 (c)
 |         +--- androidx.compose.runtime:runtime:1.6.0-rc01 -> 1.6.0 (*)
@@ -618,7 +661,7 @@
 |    +--- androidx.navigation:navigation-common-ktx:2.7.6 (c)
 |    +--- androidx.navigation:navigation-runtime:2.7.6 (c)
 |    \--- androidx.navigation:navigation-common:2.7.6 (c)
-+--- androidx.compose.animation:animation-graphics-android:1.6.0
++--- androidx.compose.animation:animation-graphics-android -> 1.6.0
 |    +--- androidx.annotation:annotation:1.1.0 -> 1.7.0 (*)
 |    +--- androidx.compose.animation:animation:1.6.0 (*)
 |    +--- androidx.compose.foundation:foundation-layout:1.6.0 (*)
@@ -630,7 +673,7 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 1.9.22 (*)
 |    +--- androidx.compose.animation:animation:1.6.0 (c)
 |    \--- androidx.compose.animation:animation-core:1.6.0 (c)
-+--- androidx.compose.ui:ui-tooling-preview:1.6.0
++--- androidx.compose.ui:ui-tooling-preview -> 1.6.0
 |    \--- androidx.compose.ui:ui-tooling-preview-android:1.6.0
 |         +--- androidx.annotation:annotation:1.2.0 -> 1.7.0 (*)
 |         +--- androidx.compose.runtime:runtime:1.6.0 (*)
@@ -641,8 +684,8 @@
 |         +--- androidx.compose.ui:ui-text:1.6.0 (c)
 |         +--- androidx.compose.ui:ui-unit:1.6.0 (c)
 |         \--- androidx.compose.ui:ui-util:1.6.0 (c)
-+--- androidx.compose.runtime:runtime:1.6.0 (*)
-\--- androidx.compose.material:material-icons-extended:1.6.0
++--- androidx.compose.runtime:runtime -> 1.6.0 (*)
+\--- androidx.compose.material:material-icons-extended -> 1.6.0
      \--- androidx.compose.material:material-icons-extended-android:1.6.0
           +--- androidx.compose.material:material-icons-core:1.6.0 (*)
           +--- androidx.compose.runtime:runtime:1.6.0 (*)
