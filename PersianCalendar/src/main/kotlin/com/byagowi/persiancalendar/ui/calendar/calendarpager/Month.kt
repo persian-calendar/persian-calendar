@@ -92,16 +92,14 @@ fun Month(
     run {
         val highlightedDayOfMonth = selectedDay - monthStartJdn
         val cellIndex = highlightedDayOfMonth + startingDayOfWeek
-        val isVisible = isHighlighted && highlightedDayOfMonth in 0..<monthLength
-        val center = if (isVisible) Offset(
+        val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
             x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
             } + cellWidthPx / 2f,
             // +1 for weekday names initials row
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
-        ) else Offset.Zero
-        val color = monthColors.indicator
-        SelectionIndicator(color = color, radius = cellRadius, center = center, visible = isVisible)
+        ) else null
+        SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
     }
 
     val refreshToken by viewModel.refreshToken.collectAsState()
