@@ -592,7 +592,9 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
             val title: String
             val subtitle: String
             if (isYearView) {
-                title = stringResource(R.string.year_view)
+                title = stringResource(
+                    if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
+                )
                 subtitle = if (yearViewOffset == 0 || yearViewIsInYearSelection) "" else {
                     formatNumber(todayDate.year + yearViewOffset)
                 }
@@ -611,12 +613,13 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                     indication = rememberRipple(bounded = false),
                     interactionSource = remember { MutableInteractionSource() },
                     onClickLabel = stringResource(
-                        if (isYearView) R.string.select_year else R.string.year_view
+                        if (isYearView && !yearViewIsInYearSelection) R.string.select_year
+                        else R.string.year_view
                     ),
                 ) {
                     if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
                     else viewModel.openYearView()
-                }
+                },
             ) {
                 AnimatedContent(
                     title,
