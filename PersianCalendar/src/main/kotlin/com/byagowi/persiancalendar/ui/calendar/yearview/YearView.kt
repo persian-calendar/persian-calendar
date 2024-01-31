@@ -135,7 +135,10 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                     lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex + 1)
                 }
 
-                YearViewCommand.TodayMonth -> lazyListState.animateScrollToItem(halfPages)
+                YearViewCommand.TodayMonth -> {
+                    scale = 1f
+                    lazyListState.animateScrollToItem(halfPages)
+                }
             }
         }
     }
