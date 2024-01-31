@@ -23,6 +23,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
+import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
@@ -44,7 +46,7 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
 
     DisposableEffect(Unit) {
         onDispose {
-            ringtone?.stop()
+            runCatching { ringtone?.stop() }.onFailure(logException).getOrNull().debugAssertNotNull
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalAlarmVolume, 0)
         }
     }

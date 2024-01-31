@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import java.util.concurrent.TimeUnit
 
 class AthanActivity : ComponentActivity() {
@@ -159,7 +160,7 @@ class AthanActivity : ComponentActivity() {
         alreadyStopped = true
         preventPhoneCallIntervention.stopListener()
 
-        ringtone?.stop()
+        runCatching { ringtone?.stop() }.onFailure(logException).getOrNull().debugAssertNotNull
 
         handler.removeCallbacks(stopTask)
         if (ascendingAthan.value) handler.removeCallbacks(ascendVolume)
