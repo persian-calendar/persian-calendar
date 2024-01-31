@@ -118,7 +118,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         })
     }
 
-    val halfPages = 100
     val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
     val coroutineScope = rememberCoroutineScope()
@@ -244,3 +243,4 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 }
 
 private const val yearSelectionModeMaxScale = .2f
+private const val halfPages = 200
