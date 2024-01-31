@@ -579,12 +579,12 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
     val todayDate = remember(today, mainCalendar) { today.toCalendar(mainCalendar) }
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
+    val yearViewOffset by viewModel.yearViewOffset.collectAsState()
+    val yearViewIsInYearSelection by viewModel.yearViewIsInYearSelection.collectAsState()
 
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
-            val yearViewOffset by viewModel.yearViewOffset.collectAsState()
             val refreshToken by viewModel.refreshToken.collectAsState()
-            val yearViewIsInYearSelection by viewModel.yearViewIsInYearSelection.collectAsState()
             // just a noop to update title and subtitle when secondary calendar is toggled
             refreshToken.run {}
 
@@ -675,8 +675,7 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
         },
         actions = {
             AnimatedVisibility(isYearView) {
-                val yearViewOffset by viewModel.yearViewOffset.collectAsState()
-                TodayActionButton(yearViewOffset != 0) {
+                TodayActionButton(yearViewOffset != 0 || yearViewIsInYearSelection) {
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
