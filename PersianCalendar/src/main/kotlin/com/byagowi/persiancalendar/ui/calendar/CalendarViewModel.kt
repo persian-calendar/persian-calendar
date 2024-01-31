@@ -74,6 +74,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _yearViewOffset = MutableStateFlow(0)
     val yearViewOffset: StateFlow<Int> get() = _yearViewOffset
 
+    private val _yearViewIsInYearSelection = MutableStateFlow(false)
+    val yearViewIsInYearSelection: StateFlow<Boolean> get() = _yearViewIsInYearSelection
+
     // Commands
     fun changeSelectedMonthOffsetCommand(offset: Int?) {
         _selectedMonthOffsetCommand.value = offset
@@ -158,6 +161,10 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun clearYearViewCommand() {
         _yearViewCommand.value = null
+    }
+
+    fun yearViewIsInYearSelection(value: Boolean) {
+        _yearViewIsInYearSelection.value = value
     }
 
     init {

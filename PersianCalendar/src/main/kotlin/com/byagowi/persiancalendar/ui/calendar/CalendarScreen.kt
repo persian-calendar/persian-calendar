@@ -584,6 +584,7 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
         title = {
             val yearViewOffset by viewModel.yearViewOffset.collectAsState()
             val refreshToken by viewModel.refreshToken.collectAsState()
+            val yearViewIsInYearSelection by viewModel.yearViewIsInYearSelection.collectAsState()
             // just a noop to update title and subtitle when secondary calendar is toggled
             refreshToken.run {}
 
@@ -592,8 +593,9 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
             val subtitle: String
             if (isYearView) {
                 title = stringResource(R.string.year_view)
-                subtitle =
-                    if (yearViewOffset == 0) "" else formatNumber(todayDate.year + yearViewOffset)
+                subtitle = if (yearViewOffset == 0 || yearViewIsInYearSelection) "" else {
+                    formatNumber(todayDate.year + yearViewOffset)
+                }
             } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
@@ -609,9 +611,12 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                     indication = rememberRipple(bounded = false),
                     interactionSource = remember { MutableInteractionSource() },
                     onClickLabel = stringResource(
-                        if (isYearView) R.string.close else R.string.year_view
+                        if (isYearView) R.string.select_year else R.string.year_view
                     ),
-                ) { if (isYearView) viewModel.closeYearView() else viewModel.openYearView() }
+                ) {
+                    if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
+                    else viewModel.openYearView()
+                }
             ) {
                 AnimatedContent(
                     title,
