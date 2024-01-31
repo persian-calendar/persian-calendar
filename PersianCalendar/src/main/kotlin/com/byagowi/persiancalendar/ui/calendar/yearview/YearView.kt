@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.yearview
 import android.content.res.Configuration
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.rememberTransformableState
 import androidx.compose.foundation.gestures.transformable
@@ -180,9 +181,12 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                         viewModel.closeYearView()
                                         viewModel.changeSelectedMonthOffsetCommand(offset)
                                     }
-                                    .background(
-                                        LocalContentColor.current.copy(
-                                            alpha = if (offset == selectedMonthOffset) .025f else .1f,
+                                    .background(LocalContentColor.current.copy(alpha = .1f))
+                                    .then(
+                                        if (offset != selectedMonthOffset) Modifier else Modifier.border(
+                                            width = 2.dp,
+                                            color = LocalContentColor.current.copy(alpha = .15f),
+                                            shape = shape
                                         )
                                     ),
                             ) {
