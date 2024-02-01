@@ -39,8 +39,6 @@ value class Jdn(val value: Long) {
     fun toPersianDate() = PersianDate(value)
     fun toNepaliDate() = NepaliDate(value)
 
-    fun createMonthDaysList(monthLength: Int) = (value..<value + monthLength).map(::Jdn)
-
     operator fun compareTo(other: Jdn) = value.compareTo(other.value)
     operator fun plus(other: Int): Jdn = Jdn(value + other)
     operator fun minus(other: Int): Jdn = Jdn(value - other)
