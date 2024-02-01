@@ -30,6 +30,5 @@ jobs:
           title: 'Upgrade Gradle version'
           body: ''
           delete-branch: false
-          author: github-actions <41898282+github-actions[bot]@users.noreply.github.com>
           branch: 'upgrade-gradle-version'
           commit-message: 'Upgrade Gradle version'
