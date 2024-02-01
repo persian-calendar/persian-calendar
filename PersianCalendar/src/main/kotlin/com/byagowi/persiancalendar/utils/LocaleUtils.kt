@@ -22,6 +22,7 @@ fun applyAppLanguage(context: Context) {
             Locale.setDefault(locale)
             val resources = context.resources
             val config = applyLanguageToConfiguration(resources.configuration, locale)
+            @Suppress("DEPRECATION")
             resources.updateConfiguration(config, resources.displayMetrics)
         }
     }.onFailure(logException).getOrNull().debugAssertNotNull
