@@ -18,7 +18,7 @@ fun SelectionIndicator(color: Color, radius: Float, center: Offset?) {
     val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
     val animatedRadiusFraction = remember { Animatable(0f) }
 
-    LaunchedEffect(center != null) {
+    LaunchedEffect(key1 = center != null) {
         if (center != null) animatedCenter.snapTo(center)
         val target = if (center != null) 1f else 0f
         if (animatedRadiusFraction.value != target) animatedRadiusFraction.animateTo(
@@ -27,7 +27,7 @@ fun SelectionIndicator(color: Color, radius: Float, center: Offset?) {
         )
     }
 
-    LaunchedEffect(center) {
+    LaunchedEffect(key1 = center) {
         if (center != null && animatedCenter.value != center) animatedCenter.animateTo(
             targetValue = center,
             animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
