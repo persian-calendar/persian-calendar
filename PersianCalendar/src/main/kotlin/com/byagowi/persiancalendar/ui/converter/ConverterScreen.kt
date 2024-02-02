@@ -430,21 +430,22 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
             )
         }
         Spacer(Modifier.width(8.dp))
-        AnimatedContent(
-            screenMode == ConverterScreenMode.Converter,
-            Modifier.weight(1f),
-            label = "converter/distance second pane",
-        ) { state ->
-            if (state) Column {
-                Spacer(Modifier.height(12.dp))
-                CalendarsOverview(
-                    jdn = jdn,
-                    today = today,
-                    selectedCalendar = calendar,
-                    shownCalendars = enabledCalendars - calendar,
-                    isExpanded = isExpanded
-                ) { isExpanded = !isExpanded }
-            } else DaysDistanceSecondPart(viewModel, jdn, calendar)
+        Column(Modifier.weight(1f)) {
+            AnimatedVisibility(visible = screenMode == ConverterScreenMode.Converter) {
+                Column {
+                    Spacer(Modifier.height(12.dp))
+                    CalendarsOverview(
+                        jdn = jdn,
+                        today = today,
+                        selectedCalendar = calendar,
+                        shownCalendars = enabledCalendars - calendar,
+                        isExpanded = isExpanded
+                    ) { isExpanded = !isExpanded }
+                }
+            }
+            AnimatedVisibility(visible = screenMode == ConverterScreenMode.Distance) {
+                DaysDistanceSecondPart(viewModel, jdn, calendar)
+            }
         }
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
