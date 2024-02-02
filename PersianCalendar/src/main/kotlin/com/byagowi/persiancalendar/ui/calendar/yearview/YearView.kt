@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 import kotlin.math.floor
 
 @Composable
@@ -137,7 +138,9 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
                 YearViewCommand.TodayMonth -> {
                     scale = 1f
-                    lazyListState.animateScrollToItem(halfPages)
+                    if (abs(lazyListState.firstVisibleItemIndex - halfPages) > 2) {
+                        lazyListState.scrollToItem(halfPages)
+                    } else lazyListState.animateScrollToItem(halfPages)
                 }
             }
         }
