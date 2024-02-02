@@ -677,7 +677,11 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                 if (state) AppIconButton(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
-                ) { viewModel.closeYearView() } else NavigationOpenDrawerIcon(openDrawer)
+                ) {
+                    if (viewModel.yearViewIsInYearSelection.value) {
+                        viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
+                    } else viewModel.closeYearView()
+                } else NavigationOpenDrawerIcon(openDrawer)
             }
         },
         actions = {
