@@ -452,7 +452,10 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         DayPicker(
             calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
         )
-        AnimatedVisibility(screenMode == ConverterScreenMode.Converter) {
+        AnimatedVisibility(
+            visible = screenMode == ConverterScreenMode.Converter,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -469,9 +472,10 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 ) { isExpanded = !isExpanded }
             }
         }
-        AnimatedVisibility(screenMode == ConverterScreenMode.Distance) {
-            DaysDistanceSecondPart(viewModel, jdn, calendar)
-        }
+        AnimatedVisibility(
+            visible = screenMode == ConverterScreenMode.Distance,
+            modifier = Modifier.fillMaxWidth(),
+        ) { DaysDistanceSecondPart(viewModel, jdn, calendar) }
     }
 }
 
