@@ -118,12 +118,12 @@ fun ConverterScreen(
                                 )
                             },
                     ) {
-                        var spinnerWidth by remember { mutableIntStateOf(0) }
+                        var dropDownWidth by remember { mutableIntStateOf(0) }
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .padding(vertical = 4.dp)
-                                .onSizeChanged { spinnerWidth = it.width },
+                                .onSizeChanged { dropDownWidth = it.width },
                         ) {
                             Spacer(Modifier.width(16.dp))
                             AnimatedContent(
@@ -137,7 +137,7 @@ fun ConverterScreen(
                         AppDropdownMenu(
                             expanded = showMenu,
                             onDismissRequest = { showMenu = false },
-                            minWidth = with(LocalDensity.current) { spinnerWidth.toDp() },
+                            minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
                         ) {
                             ConverterScreenMode.entries.forEach {
                                 AppDropdownMenuItem(
