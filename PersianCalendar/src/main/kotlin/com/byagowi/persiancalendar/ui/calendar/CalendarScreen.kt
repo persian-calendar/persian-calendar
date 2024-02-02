@@ -162,6 +162,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -486,7 +487,13 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     discardAction = {
                         context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                     },
-                ) { context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)) }
+                ) {
+                    runCatching {
+                        context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                    }.onFailure(logException).onFailure {
+                        context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                    }.getOrNull().debugAssertNotNull
+                }
             }
         }
     }
