@@ -455,6 +455,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
         val jdn by viewModel.selectedDay.collectAsState()
         val today by viewModel.today.collectAsState()
         var isExpanded by rememberSaveable { mutableStateOf(false) }
+        Spacer(Modifier.height(24.dp))
         CalendarsOverview(jdn, today, mainCalendar, enabledCalendars, isExpanded) {
             isExpanded = !isExpanded
         }

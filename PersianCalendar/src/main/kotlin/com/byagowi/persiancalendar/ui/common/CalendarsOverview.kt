@@ -102,7 +102,6 @@ fun CalendarsOverview(
                 )
             },
     ) {
-        Spacer(Modifier.height(24.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 24.dp)

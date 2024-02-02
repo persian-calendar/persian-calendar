@@ -435,13 +435,16 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
             Modifier.weight(1f),
             label = "converter/distance second pane",
         ) { state ->
-            if (state) CalendarsOverview(
-                jdn = jdn,
-                today = today,
-                selectedCalendar = calendar,
-                shownCalendars = enabledCalendars - calendar,
-                isExpanded = isExpanded
-            ) { isExpanded = !isExpanded } else DaysDistanceSecondPart(viewModel, jdn, calendar)
+            if (state) Column {
+                Spacer(Modifier.height(12.dp))
+                CalendarsOverview(
+                    jdn = jdn,
+                    today = today,
+                    selectedCalendar = calendar,
+                    shownCalendars = enabledCalendars - calendar,
+                    isExpanded = isExpanded
+                ) { isExpanded = !isExpanded }
+            } else DaysDistanceSecondPart(viewModel, jdn, calendar)
         }
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
@@ -455,6 +458,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 onClick = { isExpanded = !isExpanded },
                 modifier = Modifier.padding(top = 16.dp),
             ) {
+                Spacer(Modifier.height(20.dp))
                 CalendarsOverview(
                     jdn = jdn,
                     today = today,
