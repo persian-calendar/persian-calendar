@@ -90,9 +90,7 @@ fun EventsTab(
                 }
             }
         }
-        val shiftWorkInDaysDistance = remember(jdn) {
-            getShiftWorksInDaysDistance(jdn, context.resources)
-        }
+        val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn)
         AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance ?: "",

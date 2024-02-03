@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.utils
 
-import android.content.res.Resources
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.shiftWorkPeriod
@@ -30,22 +32,21 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean = false): String? {
     if (shiftWorkRecurs && abbreviated && (type == "r" || type == shiftWorkTitles["r"])) return null
 
     val title = shiftWorkTitles[type] ?: type
-    return if (abbreviated && title.isNotEmpty())
-        title.split("/").map { it.trim() }.filter { it.isNotEmpty() }
-            .joinToString("/") { it.substring(0, 1) }
+    return if (abbreviated && title.isNotEmpty()) title.split("/").map { it.trim() }
+        .filter { it.isNotEmpty() }.joinToString("/") { it.substring(0, 1) }
     else title
 }
 
-fun getShiftWorksInDaysDistance(jdn: Jdn, resources: Resources): String? {
+@Composable
+fun getShiftWorksInDaysDistance(jdn: Jdn): String? {
     if (shiftWorks.isEmpty()) return null
     val today = Jdn.today()
     if ((jdn - today) !in 1..365) return null
     val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::getShiftWorkTitle)
     if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
-    return resources.getString(R.string.days_distance) + spacedColon +
-            shiftWorksInDaysDistance.entries.joinToString(spacedComma) { (title, days) ->
-                resources.getQuantityString(
-                    R.plurals.n_days, days.size, formatNumber(days.size)
-                ) + " " + title
-            }
+    return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
+        pluralStringResource(
+            R.plurals.n_days, days.size, formatNumber(days.size)
+        ) + " " + title
+    }.joinToString(spacedComma)
 }
