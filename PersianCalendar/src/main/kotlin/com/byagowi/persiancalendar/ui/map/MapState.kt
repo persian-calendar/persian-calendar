@@ -8,5 +8,6 @@ data class MapState(
     val displayLocation: Boolean = true,
     val displayGrid: Boolean = false,
     val isDirectPathMode: Boolean = false,
+    val coordinates: Coordinates? = null,
     val directPathDestination: Coordinates? = null
 )

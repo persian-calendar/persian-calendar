@@ -93,20 +93,17 @@ import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import java.util.Date
 import kotlin.math.abs
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
+fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewModel) {
     val state by viewModel.state.collectAsState()
-    val coord by coordinates.collectAsState()
     val context = LocalContext.current
     val mapDraw = remember { MapDraw(context.resources) }
 
-    LaunchedEffect(Unit) { coordinates.collectLatest { viewModel.turnOnDisplayLocation() } }
+    LaunchedEffect(Unit) { coordinates.collect(viewModel::changeCurrentCoordinates) }
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -120,9 +117,13 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
 
     var clickedCoordinates by remember { mutableStateOf<Coordinates?>(null) }
     var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
+    var saveCoordinates by remember { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
         inputCoordinates = clickedCoordinates,
         onDismissRequest = { showCoordinatesDialog = false },
+        saveCoordinates = saveCoordinates,
+        toggleSaveCoordinates = { saveCoordinates = !saveCoordinates },
+        notifyChange = viewModel::changeCurrentCoordinates,
     )
 
     var showMapTypesDialog by rememberSaveable { mutableStateOf(false) }
@@ -130,8 +131,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             MapType.entries.drop(1) // Hide "None" option
                 // Hide moon visibilities for now unless is a development build
-                .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
-                .forEach {
+                .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }.forEach {
                     Text(
                         stringResource(it.title),
                         modifier = Modifier
@@ -156,20 +156,21 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
             val matrix = Matrix()
             matrix.setScale(
                 textureSize.toFloat() / mapDraw.mapWidth,
-                textureSize.toFloat() / mapDraw.mapHeight
+                textureSize.toFloat() / mapDraw.mapHeight,
             )
             mapDraw.draw(
-                Canvas(bitmap),
-                matrix,
-                state.displayLocation,
-                state.directPathDestination,
-                state.displayGrid
+                canvas = Canvas(bitmap),
+                matrix = matrix,
+                displayLocation = state.displayLocation,
+                coordinates = state.coordinates,
+                directPathDestination = state.directPathDestination,
+                displayGrid = state.displayGrid
             )
             showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
             // DO NOT use bitmap after this
         },
         Triple(Icons.Default.SocialDistance, R.string.show_direct_path_label) {
-            if (coordinates.value == null) showGpsDialog = true
+            if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDirectPathMode()
         },
         Triple(Icons.Default.Grid3x3, R.string.show_grid_label) {
@@ -177,7 +178,7 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
         },
         Triple(Icons.Default.MyLocation, R.string.show_my_location_label) { showGpsDialog = true },
         Triple(Icons.Default.LocationOn, R.string.show_location_label) {
-            if (coordinates.value == null) showGpsDialog = true
+            if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDisplayLocation()
         },
         Triple(Icons.Default.NightlightRound, R.string.show_night_mask_label) {
@@ -229,14 +230,15 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
             update = {
                 it.onDraw = { canvas, matrix ->
                     mapDraw.draw(
-                        canvas,
-                        matrix,
-                        state.displayLocation,
-                        state.directPathDestination,
-                        state.displayGrid
+                        canvas = canvas,
+                        matrix = matrix,
+                        displayLocation = state.displayLocation,
+                        coordinates = state.coordinates,
+                        directPathDestination = state.directPathDestination,
+                        displayGrid = state.displayGrid
                     )
                 }
-                mapDraw.drawKaaba = coord != null && state.displayLocation && showKaaba
+                mapDraw.drawKaaba = state.coordinates != null && state.displayLocation && showKaaba
                 mapDraw.updateMap(state.time, state.mapType)
                 formattedTime = mapDraw.maskFormattedTime
                 it.invalidate()
@@ -280,12 +282,11 @@ fun MapScreen(navigateUp: () -> Unit, viewModel: MapViewModel) {
                             state = rememberTooltipState()
                         ) {
                             Icon(
-                                icon,
-                                contentDescription = stringResource(title),
+                                icon, contentDescription = stringResource(title),
                                 // We need more than Triple or defining a new class, oh well
                                 tint = if (when (title) {
                                         R.string.show_grid_label -> state.displayGrid
-                                        R.string.show_location_label -> coord != null && state.displayLocation
+                                        R.string.show_location_label -> state.coordinates != null && state.displayLocation
                                         R.string.show_direct_path_label -> state.isDirectPathMode
                                         R.string.show_night_mask_label -> state.mapType != MapType.None
                                         else -> false
@@ -359,7 +360,7 @@ private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boo
         else Icons.AutoMirrored.Default.KeyboardArrowRight,
         contentDescription = stringResource(
             if (isPrevious) R.string.previous_x else R.string.next_x,
-            stringResource(R.string.day)
+            stringResource(R.string.day),
         ),
         Modifier.combinedClickable(
             indication = rememberRipple(bounded = false),

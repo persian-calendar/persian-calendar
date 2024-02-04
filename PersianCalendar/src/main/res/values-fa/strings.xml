@@ -410,4 +410,5 @@
     <string name="year_view">نمای سال</string>
     <string name="exempt_app_battery_optimization">مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست استثنا از بهینه‌سازی باتری بیافزایید؟</string>
     <string name="widget_background_transparency">شفافیت پس‌زمینهٔ ویجت</string>
+    <string name="save">ذخیره</string>
 </resources>

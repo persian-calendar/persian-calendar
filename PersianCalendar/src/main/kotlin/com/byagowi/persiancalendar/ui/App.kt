@@ -282,7 +282,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             composable(mapRoute) {
                 val viewModel = viewModel<MapViewModel>()
                 val previousEntry = navController.previousBackStackEntry
-                if (previousEntry?.destination?.route == astronomyRoute) {
+                val previousRoute = previousEntry?.destination?.route
+                if (previousRoute == astronomyRoute) {
                     val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
                     LaunchedEffect(Unit) {
                         viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
@@ -291,6 +292,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
                 MapScreen(
                     navigateUp = { navigateUp(mapRoute) },
+                    fromSettings = previousRoute == settingsRoute,
                     viewModel = viewModel,
                 )
             }

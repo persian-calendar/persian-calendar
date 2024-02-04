@@ -7,7 +7,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -38,7 +37,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -86,6 +84,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -113,8 +112,9 @@ fun AstronomyScreen(
 ) {
     LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
-        if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
-            viewModel.animateToAbsoluteMinutesOffset(0)
+        if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME) viewModel.animateToAbsoluteMinutesOffset(
+            0
+        )
 
         while (true) {
             delay(TEN_SECONDS_IN_MILLIS)
@@ -127,8 +127,7 @@ fun AstronomyScreen(
     // Bad practice, for now
     var slider by remember { mutableStateOf<SliderView?>(null) }
 
-    val isLandscape =
-        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -151,17 +150,12 @@ fun AstronomyScreen(
                         viewModel.animateToAbsoluteMinutesOffset(0)
                     }
                     AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
-                        Row(
-                            Modifier.clickable(
-                                indication = rememberRipple(bounded = false),
-                                interactionSource = remember { MutableInteractionSource() },
-                            ) { viewModel.toggleIsTropical() },
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(stringResource(R.string.tropical))
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Switch(isTropical, onCheckedChange = { viewModel.toggleIsTropical() })
-                        }
+                        SwitchWithLabel(
+                            label = stringResource(R.string.tropical),
+                            checked = isTropical,
+                            labelBeforeSwitch = true,
+                            toggle = viewModel::toggleIsTropical,
+                        )
                     }
                     ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuItem(
@@ -187,7 +181,7 @@ fun AstronomyScreen(
                 .padding(bottom = 16.dp)
                 .safeDrawingPadding()
             if (!isLandscape) SliderBar(modifier, slider, viewModel) { slider = it }
-        }
+        },
     ) { paddingValues ->
         Surface(
             shape = materialCornerExtraLargeTop(),
@@ -430,7 +424,7 @@ private fun SolarDisplay(
             icon = {
                 Text(
                     if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
-                    modifier = Modifier.semantics { this.contentDescription = map }
+                    modifier = Modifier.semantics { this.contentDescription = map },
                 )
             },
         )
@@ -460,7 +454,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
             Text(
                 headerCache[jdn],
                 style = MaterialTheme.typography.bodyMedium,
-                maxLines = 3
+                maxLines = 3,
             )
         }
         Seasons(jdn)

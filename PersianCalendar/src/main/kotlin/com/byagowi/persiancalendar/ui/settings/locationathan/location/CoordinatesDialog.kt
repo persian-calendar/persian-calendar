@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.friendlyName
@@ -51,6 +52,9 @@ import kotlin.math.abs
 fun CoordinatesDialog(
     navigateToMap: (() -> Unit)? = null,
     inputCoordinates: Coordinates? = null,
+    notifyChange: (Coordinates) -> Unit = {},
+    saveCoordinates: Boolean = true,
+    toggleSaveCoordinates: () -> Unit = {},
     onDismissRequest: () -> Unit,
 ) {
     val coordinates = inputCoordinates ?: coordinates.collectAsState().value
@@ -59,8 +63,8 @@ fun CoordinatesDialog(
         R.string.longitude to PREF_LONGITUDE,
         R.string.altitude to PREF_ALTITUDE,
     )
-    val state = (coordinates?.run { listOf(latitude, longitude, elevation) } ?: List(3) { .0 })
-        .map { rememberSaveable { mutableStateOf(it.toString()) } }
+    val state = (coordinates?.run { listOf(latitude, longitude, elevation) }
+        ?: List(3) { .0 }).map { rememberSaveable { mutableStateOf(it.toString()) } }
     var cityName by rememberSaveable { mutableStateOf<String?>(null) }
     var countryCode by rememberSaveable { mutableStateOf<String?>(null) }
     // Whenever text field change this signals geocoder rerun
@@ -74,6 +78,8 @@ fun CoordinatesDialog(
                     onDismissRequest()
                     navigateToMap()
                 }) { Text(stringResource(R.string.map)) }
+            } ?: SwitchWithLabel(stringResource(R.string.save), checked = saveCoordinates) {
+                toggleSaveCoordinates()
             }
         },
         dismissButton = {
@@ -97,11 +103,13 @@ fun CoordinatesDialog(
                     }
                 }
                 if (parts.size == 3) {
-                    context.appPrefs.saveLocation(
-                        Coordinates(parts[0], parts[1], parts[2]),
-                        cityName ?: "",
-                        countryCode ?: ""
+                    val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
+                    if (saveCoordinates) context.appPrefs.saveLocation(
+                        coordinates = newCoordinates,
+                        cityName = cityName ?: "",
+                        countryCode = countryCode ?: ""
                     )
+                    notifyChange(newCoordinates)
                 } else context.appPrefs.edit { fields.map { it.second }.forEach(::remove) }
             }) { Text(stringResource(R.string.accept)) }
         },
@@ -118,7 +126,7 @@ fun CoordinatesDialog(
                         CompositionLocalProvider(LocalLayoutDirection provides uiDirection) {
                             Text(
                                 stringResource(stringId),
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier.fillMaxWidth(),
                             )
                         }
                     },
@@ -156,8 +164,10 @@ fun CoordinatesDialog(
                 runCatching {
                     val latitude = state[0].value.toDoubleOrNull() ?: 0.0
                     val longitude = state[1].value.toDoubleOrNull() ?: 0.0
-                    val geocoder = Geocoder(context, language.value.asSystemLocale())
-                        .getFromLocation(latitude, longitude, 20)
+                    val geocoder =
+                        Geocoder(context, language.value.asSystemLocale()).getFromLocation(
+                            latitude, longitude, 20
+                        )
                     // TODO: Is it needed to change the state in the main thread in Compose?
                     withContext(Dispatchers.Main.immediate) {
                         val result = geocoder?.getOrNull(0)

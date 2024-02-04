@@ -504,7 +504,14 @@ private fun createMapRemoteViews(
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
     val bitmap = createBitmap(size * 2, size).applyCanvas {
         withClip(createRoundPath(size * 2, size, roundPixelSize)) {
-            mapDraw.draw(this, matrix, true, null, false)
+            mapDraw.draw(
+                canvas = this,
+                matrix = matrix,
+                coordinates = coordinates.value,
+                displayLocation = true,
+                directPathDestination = null,
+                displayGrid = false
+            )
         }
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)

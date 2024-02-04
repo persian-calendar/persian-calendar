@@ -43,10 +43,6 @@ class MapViewModel : ViewModel() {
         _state.update { it.copy(displayLocation = !it.displayLocation) }
     }
 
-    fun turnOnDisplayLocation() {
-        _state.update { it.copy(displayLocation = true) }
-    }
-
     fun toggleDisplayGrid() {
         _state.update { it.copy(displayGrid = !it.displayGrid) }
     }
@@ -56,6 +52,15 @@ class MapViewModel : ViewModel() {
             it.copy(
                 isDirectPathMode = !it.isDirectPathMode,
                 directPathDestination = it.directPathDestination.takeIf { _ -> !it.isDirectPathMode }
+            )
+        }
+    }
+
+    fun changeCurrentCoordinates(coordinates: Coordinates?) {
+        _state.update {
+            it.copy(
+                coordinates = coordinates,
+                displayLocation = coordinates != null || it.displayLocation,
             )
         }
     }

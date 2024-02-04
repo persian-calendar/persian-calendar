@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -386,8 +385,12 @@ class MapDraw(
     private val argbEvaluator = ArgbEvaluator()
 
     fun draw(
-        canvas: Canvas, matrix: Matrix,
-        displayLocation: Boolean, directPathDestination: Coordinates?, displayGrid: Boolean
+        canvas: Canvas,
+        matrix: Matrix,
+        displayLocation: Boolean,
+        coordinates: Coordinates?,
+        directPathDestination: Coordinates?,
+        displayGrid: Boolean,
     ) {
         matrix.getValues(matrixProperties)
         // prevents sun/moon/pin unnecessary scale
@@ -411,7 +414,6 @@ class MapDraw(
                 val userY = (90 - -27.116f) * mapScaleFactor
                 drawText("🗿", userX - 1f, userY + 2.5f, moaiPaint)
             }
-            val coordinates = coordinates.value
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
