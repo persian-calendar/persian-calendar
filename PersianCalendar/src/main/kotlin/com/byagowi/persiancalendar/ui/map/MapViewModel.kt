@@ -57,12 +57,7 @@ class MapViewModel : ViewModel() {
     }
 
     fun changeCurrentCoordinates(coordinates: Coordinates?) {
-        _state.update {
-            it.copy(
-                coordinates = coordinates,
-                displayLocation = coordinates != null || it.displayLocation,
-            )
-        }
+        _state.update { it.copy(coordinates = coordinates, displayLocation = coordinates != null) }
     }
 
     fun changeDirectPathDestination(coordinates: Coordinates?) {
