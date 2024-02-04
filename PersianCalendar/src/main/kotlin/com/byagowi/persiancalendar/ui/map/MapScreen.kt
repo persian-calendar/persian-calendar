@@ -117,7 +117,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
 
     var clickedCoordinates by remember { mutableStateOf<Coordinates?>(null) }
     var showCoordinatesDialog by rememberSaveable { mutableStateOf(false) }
-    var saveCoordinates by remember { mutableStateOf(fromSettings) }
+    var saveCoordinates by rememberSaveable { mutableStateOf(fromSettings) }
     if (showCoordinatesDialog) CoordinatesDialog(
         inputCoordinates = clickedCoordinates,
         onDismissRequest = { showCoordinatesDialog = false },
