@@ -16,26 +16,26 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun SelectionIndicator(color: Color, radius: Float, center: Offset?) {
     val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
-    val animatedRadiusFraction = remember { Animatable(0f) }
+    val animatedRadius = remember { Animatable(0f) }
 
     LaunchedEffect(key1 = center != null) {
         if (center != null) animatedCenter.snapTo(center)
         val target = if (center != null) 1f else 0f
-        if (animatedRadiusFraction.value != target) animatedRadiusFraction.animateTo(
+        if (animatedRadius.value != target || animatedRadius.isRunning) animatedRadius.animateTo(
             targetValue = target,
             animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
         )
     }
 
     LaunchedEffect(key1 = center) {
-        if (center != null && animatedCenter.value != center) animatedCenter.animateTo(
+        if (center != null) animatedCenter.animateTo(
             targetValue = center,
             animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
         )
     }
 
     Canvas(Modifier.fillMaxSize()) {
-        val radiusFraction = animatedRadiusFraction.value
+        val radiusFraction = animatedRadius.value
         if (radiusFraction > 0f) drawCircle(
             color = color,
             center = animatedCenter.value,
