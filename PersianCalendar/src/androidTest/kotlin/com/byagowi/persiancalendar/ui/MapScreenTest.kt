@@ -21,7 +21,7 @@ class MapScreenTest {
         var navigateUpString = ""
         composeTestRule.setContent {
             navigateUpString = stringResource(R.string.navigate_up)
-            MapScreen({ navigateUpIsCalled = true }, viewModel())
+            MapScreen({ navigateUpIsCalled = true }, false, viewModel())
         }
         composeTestRule.onNodeWithContentDescription(navigateUpString)
             .assertHasClickAction()
