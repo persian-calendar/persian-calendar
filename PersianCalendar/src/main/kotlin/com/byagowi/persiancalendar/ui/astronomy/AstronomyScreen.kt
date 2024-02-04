@@ -124,7 +124,7 @@ fun AstronomyScreen(
         }
     }
 
-    // Bad practice, for now
+    // Port SliderView to Compose maybe sometime
     var slider by remember { mutableStateOf<SliderView?>(null) }
 
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
