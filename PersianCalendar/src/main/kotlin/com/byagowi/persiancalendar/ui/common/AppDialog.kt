@@ -62,7 +62,7 @@ fun AppDialog(
 
                     val topAlpha by animateFloatAsState(
                         if (scrollState.value == 0) 0f else 1f,
-                        label = "topAlpha",
+                        label = "top alpha",
                     )
                     HorizontalDivider(Modifier.alpha(topAlpha))
                 }
@@ -81,7 +81,7 @@ fun AppDialog(
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
                     val bottomAlpha by animateFloatAsState(
                         if (scrollState.value == scrollState.maxValue) 0f else 1f,
-                        label = "topAlpha",
+                        label = "top alpha",
                     )
                     HorizontalDivider(Modifier.alpha(bottomAlpha))
                     Spacer(modifier = Modifier.height(8.dp))

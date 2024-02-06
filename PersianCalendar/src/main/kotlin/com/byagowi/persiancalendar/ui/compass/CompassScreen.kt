@@ -110,7 +110,7 @@ fun CompassScreen(
     val timeShiftAnimate by animateFloatAsState(
         if (isTimeShiftAnimate) 24f else 0f,
         animationSpec = tween(durationMillis = if (isTimeShiftAnimate) TEN_SECONDS_IN_MILLIS.toInt() else 0),
-        label = "timeShift",
+        label = "time shift",
     ) {
         if (isTimeShiftAnimate) {
             timeShift = 0f

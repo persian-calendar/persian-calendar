@@ -145,7 +145,7 @@ fun EventsTab(
                     event.isHoliday -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.surfaceVariant
                 },
-                label = "backgroundColor",
+                label = "background color",
             )
 
             val eventTime =
@@ -193,7 +193,7 @@ fun EventsTab(
                 ) {
                     val contentColor by animateColorAsState(
                         if (backgroundColor.isLight) Color.Black else Color.White,
-                        label = "contentColor"
+                        label = "content color"
                     )
 
                     SelectionContainer {

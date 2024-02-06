@@ -254,7 +254,7 @@ fun CalendarsOverview(
                                 dampingRatio = Spring.DampingRatioMediumBouncy,
                                 stiffness = Spring.StiffnessLow,
                             ),
-                            label = "label"
+                            label = "progress"
                         )
                         CircularProgressIndicator(
                             progress = { progress },
