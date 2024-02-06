@@ -60,11 +60,11 @@ fun AppDialog(
                         ) { title() }
                     }
 
-                    val topAlpha by animateFloatAsState(
+                    val topDividerAlpha by animateFloatAsState(
                         if (scrollState.value == 0) 0f else 1f,
-                        label = "top alpha",
+                        label = "top divider alpha",
                     )
-                    HorizontalDivider(Modifier.alpha(topAlpha))
+                    HorizontalDivider(Modifier.alpha(topDividerAlpha))
                 }
 
                 CompositionLocalProvider(
@@ -79,11 +79,11 @@ fun AppDialog(
                 }
 
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
-                    val bottomAlpha by animateFloatAsState(
+                    val bottomDividerAlpha by animateFloatAsState(
                         if (scrollState.value == scrollState.maxValue) 0f else 1f,
-                        label = "bottom alpha",
+                        label = "bottom divider alpha",
                     )
-                    HorizontalDivider(Modifier.alpha(bottomAlpha))
+                    HorizontalDivider(Modifier.alpha(bottomDividerAlpha))
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
