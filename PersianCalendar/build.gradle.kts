@@ -144,7 +144,6 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
     implementation(libs.compose.activity)
-    implementation(libs.compose.accompanist.flowlayout)
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
     implementation(libs.compose.navigation)

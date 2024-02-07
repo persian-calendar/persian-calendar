@@ -9,7 +9,6 @@ androidx-test-ext-junit = "1.1.5"
 astronomy = "61dc07020aaa6885d2c7f688a4d82beaf6edb9ef" # is equal to v2.1.19
 browser = "1.7.0"
 compose-bom = "2024.01.00"
-compose-accompanist = "0.34.0"
 compose-compiler = "1.5.8" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 compose-material3 = "1.2.0-rc01"
 coroutines = "1.7.3"
@@ -38,7 +37,6 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
-compose-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "compose-accompanist" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android" }
