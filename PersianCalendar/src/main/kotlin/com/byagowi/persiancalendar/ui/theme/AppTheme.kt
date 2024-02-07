@@ -18,12 +18,10 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Shapes
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.dynamicDarkColorScheme
@@ -43,9 +41,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
 import androidx.core.text.layoutDirection
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
@@ -57,7 +53,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = appColorScheme(), shapes = appShapes()) {
+    MaterialTheme(colorScheme = appColorScheme()) {
         val contentColor by animateColorAsState(
             MaterialTheme.colorScheme.onBackground,
             animationSpec = appColorAnimationSpec,
@@ -130,19 +126,6 @@ fun appTopAppBarColors(): TopAppBarColors {
         actionIconContentColor = LocalContentColor.current,
         titleContentColor = LocalContentColor.current,
     )
-}
-
-@Composable
-private fun appShapes(): Shapes {
-    if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
-    val isCyberpunk by isCyberpunk.collectAsState()
-    return if (isCyberpunk) Shapes(
-        extraSmall = CutCornerShape(MaterialTheme.shapes.extraSmall.topStart),
-        small = CutCornerShape(MaterialTheme.shapes.small.topStart),
-        medium = CutCornerShape(MaterialTheme.shapes.medium.topStart),
-        large = CutCornerShape(MaterialTheme.shapes.large.topStart),
-        extraLarge = CutCornerShape(MaterialTheme.shapes.extraLarge.topStart),
-    ) else MaterialTheme.shapes
 }
 
 val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)

@@ -63,8 +63,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
-import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
@@ -377,19 +375,6 @@ private fun MenuItems(closeMenu: () -> Unit) {
                     )
                 )
             }.onFailure(logException).getOrNull().debugAssertNotNull
-        },
-    )
-    AppDropdownMenuItem(
-        text = { Text("Cyberpunk") },
-        onClick = {
-            val appPrefs = context.appPrefs
-            appPrefs.edit {
-                putBoolean(
-                    PREF_THEME_CYBERPUNK,
-                    !appPrefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
-                )
-            }
-            closeMenu()
         },
     )
 }

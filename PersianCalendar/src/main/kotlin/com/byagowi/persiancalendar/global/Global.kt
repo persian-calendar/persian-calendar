@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
-import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
@@ -62,7 +61,6 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_THEME
-import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
@@ -165,9 +163,6 @@ val language: StateFlow<Language> get() = language_
 
 private val theme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
 val theme: StateFlow<Theme> get() = theme_
-
-private val isCyberpunk_ = MutableStateFlow(DEFAULT_THEME_CYBERPUNK)
-val isCyberpunk: StateFlow<Boolean> get() = isCyberpunk_
 
 private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
 val isGradient: StateFlow<Boolean> get() = isGradient_
@@ -306,7 +301,6 @@ fun updateStoredPreference(context: Context) {
         val key = prefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
         Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
     }
-    isCyberpunk_.value = prefs.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     isGradient_.value = prefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     alternativeGregorianMonths = when {
         language.isPersian -> prefs.getBoolean(
