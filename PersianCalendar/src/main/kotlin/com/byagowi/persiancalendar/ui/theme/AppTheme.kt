@@ -74,7 +74,7 @@ fun AppTheme(content: @Composable () -> Unit) {
                 Modifier
                     .windowInsetsPadding(sidesInsets)
                     .clipToBounds()
-                    // Don't move this upper to top of the chain so clip to bound can be applied to it
+                    // Don't move this upper to top of the chain so .clipToBounds can be applied to it
                     .background(appBackground()),
             ) { content() }
         }
