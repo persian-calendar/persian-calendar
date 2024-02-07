@@ -61,10 +61,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 
 @Composable
-fun EventsTab(
-    navigateToHolidaysSettings: () -> Unit,
-    viewModel: CalendarViewModel,
-) {
+fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewModel) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
         val context = LocalContext.current
