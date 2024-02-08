@@ -24,6 +24,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -121,34 +122,33 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     val lazyListState = rememberLazyListState(halfPages + yearOffsetInMonths)
     val yearViewCommand by viewModel.yearViewCommand.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
-    yearViewCommand?.let { command ->
-        coroutineScope.launch {
-            viewModel.clearYearViewCommand()
-            when (command) {
-                YearViewCommand.ToggleYearSelection -> scale = if (scale > .5f) 0.01f else 1f
+    LaunchedEffect(key1 = yearViewCommand) {
+        when (yearViewCommand ?: return@LaunchedEffect) {
+            YearViewCommand.ToggleYearSelection -> scale = if (scale > .5f) 0.01f else 1f
 
-                YearViewCommand.PreviousMonth -> {
-                    lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex - 1)
-                }
+            YearViewCommand.PreviousMonth -> {
+                lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex - 1)
+            }
 
-                YearViewCommand.NextMonth -> {
-                    lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex + 1)
-                }
+            YearViewCommand.NextMonth -> {
+                lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex + 1)
+            }
 
-                YearViewCommand.TodayMonth -> {
-                    scale = 1f
-                    if (abs(lazyListState.firstVisibleItemIndex - halfPages) > 2) {
-                        lazyListState.scrollToItem(halfPages)
-                    } else lazyListState.animateScrollToItem(halfPages)
-                }
+            YearViewCommand.TodayMonth -> {
+                scale = 1f
+                if (abs(lazyListState.firstVisibleItemIndex - halfPages) > 2) {
+                    lazyListState.scrollToItem(halfPages)
+                } else lazyListState.animateScrollToItem(halfPages)
             }
         }
+        viewModel.clearYearViewCommand()
     }
 
     viewModel.notifyYearViewOffset(
         remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }.value
     )
+
+    val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(state = lazyListState, modifier = Modifier.transformable(transformableState)) {
         items(halfPages * 2) {
