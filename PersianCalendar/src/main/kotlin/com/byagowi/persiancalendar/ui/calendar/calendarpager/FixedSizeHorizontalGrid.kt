@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.util.fastForEachIndexed
 import kotlin.math.roundToInt
 
 @Composable
@@ -15,7 +16,7 @@ fun FixedSizeHorizontalGrid(columnsCount: Int, rowsCount: Int, content: @Composa
         val cellsConstraints =
             Constraints.fixed(cellWidthPx.roundToInt(), cellHeightPx.roundToInt())
         layout(widthPx, heightPx) {
-            measurables.forEachIndexed { cellIndex, measurable ->
+            measurables.fastForEachIndexed { cellIndex, measurable ->
                 val row = cellIndex / columnsCount
                 val column = cellIndex % columnsCount
                 measurable.measure(cellsConstraints).placeRelative(
