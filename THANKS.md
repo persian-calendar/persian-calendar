@@ -74,8 +74,9 @@ http://praytimes.org/
   be useful, but WITHOUT ANY WARRANTY.
 
 ----
-Starcal's Holidays - GPLv3
+Starcal's Holidays - AGPLv3
 https://github.com/ilius/starcal
+Only events data copied when the license was GPLv3
 
   * Saeed Rasooli <saeed.gnu@gmail.com>
   * Mola Pahnadayan <mola.mp@gmail.com>
