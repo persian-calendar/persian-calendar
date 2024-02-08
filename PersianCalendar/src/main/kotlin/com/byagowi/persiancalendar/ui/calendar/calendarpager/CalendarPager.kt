@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -46,20 +47,19 @@ fun CalendarPager(
     width: Dp,
     height: Dp,
 ) {
-    val scope = rememberCoroutineScope()
-
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
-    selectedMonthOffsetCommand?.let {
-        scope.launch {
-            pagerState.animateScrollToPage(applyOffset(-it))
-            viewModel.changeSelectedMonthOffsetCommand(null)
-        }
+    LaunchedEffect(key1 = selectedMonthOffsetCommand) {
+        val offset = selectedMonthOffsetCommand ?: return@LaunchedEffect
+        pagerState.animateScrollToPage(applyOffset(-offset))
+        viewModel.changeSelectedMonthOffsetCommand(null)
     }
 
     val language by language.collectAsState()
     val monthColors = appMonthColors()
 
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
+
+    val scope = rememberCoroutineScope()
 
     HorizontalPager(state = pagerState) { page ->
         Box(modifier = Modifier.height(height)) {
