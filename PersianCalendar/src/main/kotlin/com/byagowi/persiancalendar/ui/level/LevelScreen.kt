@@ -59,7 +59,6 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.variants.debugLog
-import java.util.UUID
 
 @Composable
 fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
@@ -67,8 +66,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
     var cmInchFlip by remember { mutableStateOf(false) }
-    var fullscreenToken by remember { mutableStateOf<UUID?>(null) }
-    val isFullscreen = fullscreenToken != null
+    var isFullscreen by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -100,7 +98,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    if (fullscreenToken != null) DisposableEffect(fullscreenToken) {
+    if (isFullscreen) DisposableEffect(Unit) {
         val lock = context.getSystemService<PowerManager>()
             ?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "persiancalendar:level")
         lock?.acquire(FIFTEEN_MINUTES_IN_MILLIS)
@@ -132,7 +130,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                     AppIconButton(
                         icon = Icons.Default.Fullscreen,
                         title = stringResource(R.string.full_screen),
-                    ) { fullscreenToken = UUID.randomUUID() }
+                    ) { isFullscreen = true }
                 },
             )
         }
@@ -215,7 +213,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                         .safeGesturesPadding()
                         .padding(top = 32.dp),
                     isVisible = isFullscreen,
-                    action = { fullscreenToken = null },
+                    action = { isFullscreen = false },
                     icon = Icons.Default.FullscreenExit,
                     title = stringResource(R.string.exit_full_screen),
                 )
