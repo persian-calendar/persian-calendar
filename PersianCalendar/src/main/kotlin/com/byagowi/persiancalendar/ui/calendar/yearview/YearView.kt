@@ -144,9 +144,8 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         viewModel.clearYearViewCommand()
     }
 
-    viewModel.notifyYearViewOffset(
-        remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }.value
-    )
+    val current by remember { derivedStateOf { lazyListState.firstVisibleItemIndex - halfPages } }
+    LaunchedEffect(key1 = current) { viewModel.notifyYearViewOffset(current) }
 
     val coroutineScope = rememberCoroutineScope()
 
