@@ -206,7 +206,7 @@ fun CalendarScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             val searchBoxIsOpen by viewModel.isSearchOpen.collectAsState()
-            BackHandler(enabled = searchBoxIsOpen) { viewModel.closeSearch() }
+            BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
 
             Crossfade(searchBoxIsOpen, label = "toolbar") {
                 if (it) Search(viewModel) else Toolbar(addEvent, openDrawer, viewModel)
