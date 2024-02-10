@@ -153,70 +153,72 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         items(halfPages * 2) {
             val yearOffset = it - halfPages
 
-            val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
-                remember(yearOffset, today) {
-                    val yearStartJdn = Jdn(
-                        mainCalendar.createDate(
-                            today.toCalendar(mainCalendar).year + yearOffset, 1, 1
-                        )
-                    )
-                    if (isShowDeviceCalendarEvents.value) context.readYearDeviceEvents(yearStartJdn)
-                    else EventsStore.empty()
-                }
-
             Column(Modifier.fillMaxWidth()) {
-                if (scale > yearSelectionModeMaxScale) @OptIn(ExperimentalLayoutApi::class) FlowRow(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    repeat(if (isLandscape) 3 else 4) { row ->
-                        repeat(if (isLandscape) 4 else 3) { column ->
-                            val month = 1 + column + row * if (isLandscape) 4 else 3
-                            val offset = yearOffset * 12 + month - todayDate.month
-                            val title = language.value.my.format(
-                                monthNames[month - 1],
-                                formatNumber(yearOffset + todayDate.year),
-                            )
-                            Column(
-                                Modifier
-                                    .size(width, height)
-                                    .padding(padding)
-                                    .clip(shape)
-                                    .clickable(onClickLabel = stringResource(R.string.select_month)) {
-                                        viewModel.closeYearView()
-                                        viewModel.changeSelectedMonthOffsetCommand(offset)
-                                    }
-                                    .background(LocalContentColor.current.copy(alpha = .1f))
-                                    .then(
-                                        if (offset != selectedMonthOffset) Modifier else Modifier.border(
-                                            width = 2.dp,
-                                            color = LocalContentColor.current.copy(alpha = .15f),
-                                            shape = shape
-                                        )
-                                    ),
-                            ) {
-                                Text(
-                                    title,
-                                    Modifier.fillMaxWidth(),
-                                    fontSize = titleHeight,
-                                    textAlign = TextAlign.Center,
-                                    lineHeight = titleLineHeight,
+                if (scale > yearSelectionModeMaxScale) {
+                    val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+                        remember(yearOffset, today) {
+                            val yearStartJdn = Jdn(
+                                mainCalendar.createDate(
+                                    today.toCalendar(mainCalendar).year + yearOffset, 1, 1
                                 )
-                                Canvas(Modifier.fillMaxSize()) {
-                                    drawIntoCanvas { canvas ->
-                                        renderMonthWidget(
-                                            dayPainter = dayPainter[this.size.height],
-                                            width = size.width,
-                                            canvas = canvas.nativeCanvas,
-                                            today = today,
-                                            baseDate = mainCalendar.getMonthStartFromMonthsDistance(
-                                                today, offset
-                                            ),
-                                            deviceEvents = yearDeviceEvents,
-                                            isRtl = isRtl,
-                                            isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-                                            selectedDay = viewModel.selectedDay.value,
-                                        )
+                            )
+                            if (isShowDeviceCalendarEvents.value) {
+                                context.readYearDeviceEvents(yearStartJdn)
+                            } else EventsStore.empty()
+                        }
+                    @OptIn(ExperimentalLayoutApi::class) FlowRow(
+                        horizontalArrangement = Arrangement.SpaceAround,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        repeat(if (isLandscape) 3 else 4) { row ->
+                            repeat(if (isLandscape) 4 else 3) { column ->
+                                val month = 1 + column + row * if (isLandscape) 4 else 3
+                                val offset = yearOffset * 12 + month - todayDate.month
+                                val title = language.value.my.format(
+                                    monthNames[month - 1],
+                                    formatNumber(yearOffset + todayDate.year),
+                                )
+                                Column(
+                                    Modifier
+                                        .size(width, height)
+                                        .padding(padding)
+                                        .clip(shape)
+                                        .clickable(onClickLabel = stringResource(R.string.select_month)) {
+                                            viewModel.closeYearView()
+                                            viewModel.changeSelectedMonthOffsetCommand(offset)
+                                        }
+                                        .background(LocalContentColor.current.copy(alpha = .1f))
+                                        .then(
+                                            if (offset != selectedMonthOffset) Modifier else Modifier.border(
+                                                width = 2.dp,
+                                                color = LocalContentColor.current.copy(alpha = .15f),
+                                                shape = shape
+                                            )
+                                        ),
+                                ) {
+                                    Text(
+                                        title,
+                                        Modifier.fillMaxWidth(),
+                                        fontSize = titleHeight,
+                                        textAlign = TextAlign.Center,
+                                        lineHeight = titleLineHeight,
+                                    )
+                                    Canvas(Modifier.fillMaxSize()) {
+                                        drawIntoCanvas { canvas ->
+                                            renderMonthWidget(
+                                                dayPainter = dayPainter[this.size.height],
+                                                width = size.width,
+                                                canvas = canvas.nativeCanvas,
+                                                today = today,
+                                                baseDate = mainCalendar.getMonthStartFromMonthsDistance(
+                                                    today, offset
+                                                ),
+                                                deviceEvents = yearDeviceEvents,
+                                                isRtl = isRtl,
+                                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                                selectedDay = viewModel.selectedDay.value,
+                                            )
+                                        }
                                     }
                                 }
                             }
