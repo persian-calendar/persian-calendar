@@ -71,7 +71,8 @@ fun getA11yDaySummary(
     deviceCalendarEvents: DeviceCalendarEventsStore,
     withZodiac: Boolean,
     withOtherCalendars: Boolean,
-    withTitle: Boolean
+    withTitle: Boolean,
+    withWeekOfYear: Boolean = isShowWeekOfYearEnabled,
 ): String = buildString {
     // It has some expensive calculations, lets not do that when not needed
     if (!isTalkBackEnabled) return@buildString
@@ -112,7 +113,7 @@ fun getA11yDaySummary(
             .append(nonHolidays)
     }
 
-    if (isShowWeekOfYearEnabled) {
+    if (withWeekOfYear) {
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
         appendLine().appendLine()

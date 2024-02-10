@@ -54,6 +54,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -91,7 +92,7 @@ fun CalendarsOverview(
                 onClick = toggleExpansion,
             )
             .semantics {
-                this.contentDescription = getA11yDaySummary(
+                if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
                     context.resources,
                     jdn,
                     isToday,

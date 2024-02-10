@@ -190,7 +190,8 @@ fun Month(
                             EventsStore.empty(),
                             withZodiac = isToday,
                             withOtherCalendars = false,
-                            withTitle = true
+                            withTitle = true,
+                            withWeekOfYear = false,
                         ) else (dayOffset + 1).toString()
                     },
             ) {
