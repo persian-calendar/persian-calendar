@@ -21,7 +21,7 @@ abstract class GitInfoValueSource : ValueSource<String, ValueSourceParameters.No
             commandLine(cmd.split(" "))
             standardOutput = output
         }
-        output.toByteArray().decodeToString().trim().takeIf { it.isNotEmpty() }
-            .let { if (i == 3 && it != null) "dirty" else it }
+        output.toString().trim().takeIf { it.isNotEmpty() }
+            ?.let { if (i == 3) "dirty" else it }
     }.joinToString("-")
 }
