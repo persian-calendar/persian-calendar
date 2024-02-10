@@ -159,6 +159,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _yearViewCommand.value = command
     }
 
+    fun onYearViewBackPressed() {
+        if (yearViewIsInYearSelection.value) commandYearView(YearViewCommand.ToggleYearSelection)
+        else closeYearView()
+    }
+
     fun clearYearViewCommand() {
         _yearViewCommand.value = null
     }

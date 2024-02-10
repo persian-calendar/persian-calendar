@@ -196,7 +196,6 @@ fun CalendarScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val isYearView by viewModel.isYearView.collectAsState()
-    BackHandler(enabled = isYearView) { viewModel.closeYearView() }
 
     val context = LocalContext.current
 
@@ -590,6 +589,8 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
     val yearViewOffset by viewModel.yearViewOffset.collectAsState()
     val yearViewIsInYearSelection by viewModel.yearViewIsInYearSelection.collectAsState()
 
+    BackHandler(enabled = isYearView, onBack = viewModel::onYearViewBackPressed)
+
     @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
         title = {
             val refreshToken by viewModel.refreshToken.collectAsState()
@@ -678,11 +679,8 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                 if (state) AppIconButton(
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
-                ) {
-                    if (viewModel.yearViewIsInYearSelection.value) {
-                        viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
-                    } else viewModel.closeYearView()
-                } else NavigationOpenDrawerIcon(openDrawer)
+                    onClick = viewModel::onYearViewBackPressed,
+                ) else NavigationOpenDrawerIcon(openDrawer)
             }
         },
         actions = {
