@@ -687,17 +687,17 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
         },
         actions = {
             AnimatedVisibility(isYearView) {
-                TodayActionButton(yearViewOffset != 0 || yearViewIsInYearSelection) {
+                TodayActionButton(yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
-            AnimatedVisibility(isYearView) {
+            AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.NextMonth) }
             }
-            AnimatedVisibility(isYearView) {
+            AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
