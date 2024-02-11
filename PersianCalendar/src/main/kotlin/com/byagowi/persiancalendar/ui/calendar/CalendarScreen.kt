@@ -395,7 +395,9 @@ private fun detailsPagerState(
         initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
         pageCount = tabs::size,
     )
-    viewModel.changeSelectedTabIndex(pagerState.currentPage)
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        viewModel.changeSelectedTabIndex(pagerState.currentPage)
+    }
     return pagerState
 }
 
