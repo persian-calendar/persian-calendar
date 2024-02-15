@@ -15,6 +15,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -96,7 +97,7 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
-import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED
+import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -113,7 +114,6 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
-import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -480,29 +480,33 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
-        } else if (PREF_BATTERY_OPTIMIZATION_IGNORED !in context.appPrefs && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val isNotifyDate by isNotifyDate.collectAsState()
-            if (!isIgnoringBatteryOptimizations(context) && isNotifyDate) {
-                EncourageActionLayout(
-                    header = stringResource(R.string.exempt_app_battery_optimization),
-                    acceptButton = stringResource(R.string.yes),
-                    discardAction = {
-                        context.appPrefs.edit {
-                            putBoolean(PREF_BATTERY_OPTIMIZATION_IGNORED, true)
-                        }
-                    },
-                ) {
-                    runCatching {
-                        context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-                    }.onFailure(logException).onFailure {
-                        context.appPrefs.edit {
-                            putBoolean(PREF_BATTERY_OPTIMIZATION_IGNORED, true)
-                        }
-                    }.getOrNull().debugAssertNotNull
+        } else if (showEncourageToBatteryOptimizationException(context)) {
+            fun ignore() {
+                val prefs = context.appPrefs
+                prefs.edit {
+                    val current = prefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
+                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current)
                 }
+            }
+
+            EncourageActionLayout(
+                header = stringResource(R.string.exempt_app_battery_optimization),
+                acceptButton = stringResource(R.string.yes),
+                discardAction = ::ignore,
+            ) {
+                runCatching {
+                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
             }
         }
     }
+}
+
+@ChecksSdkIntAtLeast(Build.VERSION_CODES.M)
+@Composable
+private fun showEncourageToBatteryOptimizationException(context: Context): Boolean {
+    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 3) return false
+    return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
