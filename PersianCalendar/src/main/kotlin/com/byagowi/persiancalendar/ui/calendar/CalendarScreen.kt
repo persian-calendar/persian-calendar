@@ -487,13 +487,17 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     header = stringResource(R.string.exempt_app_battery_optimization),
                     acceptButton = stringResource(R.string.yes),
                     discardAction = {
-                        context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                        context.appPrefs.edit {
+                            putBoolean(PREF_BATTERY_OPTIMIZATION_IGNORED, true)
+                        }
                     },
                 ) {
                     runCatching {
                         context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
                     }.onFailure(logException).onFailure {
-                        context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                        context.appPrefs.edit {
+                            putBoolean(PREF_BATTERY_OPTIMIZATION_IGNORED, true)
+                        }
                     }.getOrNull().debugAssertNotNull
                 }
             }
