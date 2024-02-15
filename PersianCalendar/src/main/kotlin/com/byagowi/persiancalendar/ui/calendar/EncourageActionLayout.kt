@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 
 @Composable
-fun EncourageActionLayout(
+fun ColumnScope.EncourageActionLayout(
     modifier: Modifier = Modifier,
     header: String,
     acceptButton: String = stringResource(R.string.settings),

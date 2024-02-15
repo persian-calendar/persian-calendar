@@ -58,15 +58,17 @@ fun TimesTab(
 ) {
     val context = LocalContext.current
     val cityName by cityName.collectAsState()
-    val coordinates = coordinates.collectAsState().value ?: return EncourageActionLayout(
-        modifier = Modifier.padding(top = 24.dp),
-        header = stringResource(R.string.ask_user_to_set_location),
-        discardAction = {
-            context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-            viewModel.removeThirdTab()
-        },
-        acceptAction = navigateToSettingsLocationTab,
-    )
+    val coordinates = coordinates.collectAsState().value ?: return Column(Modifier.fillMaxWidth()) {
+        EncourageActionLayout(
+            modifier = Modifier.padding(top = 24.dp),
+            header = stringResource(R.string.ask_user_to_set_location),
+            discardAction = {
+                context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+                viewModel.removeThirdTab()
+            },
+            acceptAction = navigateToSettingsLocationTab,
+        )
+    }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
     val jdn by viewModel.selectedDay.collectAsState()
