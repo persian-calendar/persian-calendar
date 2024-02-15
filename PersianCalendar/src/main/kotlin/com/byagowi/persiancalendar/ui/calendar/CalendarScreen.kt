@@ -485,7 +485,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 val prefs = context.appPrefs
                 prefs.edit {
                     val current = prefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
-                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current)
+                    putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
                 }
             }
 
