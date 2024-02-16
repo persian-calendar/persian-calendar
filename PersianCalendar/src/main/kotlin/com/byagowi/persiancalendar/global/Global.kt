@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_DIGITS
-import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
@@ -137,7 +136,7 @@ var isWidgetClock = DEFAULT_WIDGET_CLOCK
 private val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
 val isNotifyDate: StateFlow<Boolean> get() = isNotifyDate_
 
-private val notificationAthan_ = MutableStateFlow(DEFAULT_NOTIFICATION_ATHAN)
+private val notificationAthan_ = MutableStateFlow(isNotifyDate.value)
 val notificationAthan: StateFlow<Boolean> get() = notificationAthan_
 private val ascendingAthan_ = MutableStateFlow(DEFAULT_ASCENDING_ATHAN_VOLUME)
 val ascendingAthan: StateFlow<Boolean> get() = ascendingAthan_
@@ -332,7 +331,7 @@ fun updateStoredPreference(context: Context) {
     )
     isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
-    notificationAthan_.value = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+    notificationAthan_.value = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
     ascendingAthan_.value =
         prefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
     isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
