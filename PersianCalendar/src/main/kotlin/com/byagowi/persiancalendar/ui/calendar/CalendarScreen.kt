@@ -114,6 +114,7 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
+import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -505,7 +506,9 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 @ChecksSdkIntAtLeast(Build.VERSION_CODES.M)
 @Composable
 private fun showEncourageToBatteryOptimizationException(context: Context): Boolean {
-    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 3) return false
+    val isNotifyDate by isNotifyDate.collectAsState()
+    if (!isNotifyDate) return false
+    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
 
