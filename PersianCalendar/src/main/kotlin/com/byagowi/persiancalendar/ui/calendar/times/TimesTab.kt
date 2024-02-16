@@ -35,11 +35,14 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
+import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -100,16 +103,22 @@ fun TimesTab(
             }
         }
 
-//        val language by language.collectAsState()
-//        if ((language.isPersian || language.isDari) && PREF_ATHAN_ALARM !in context.appPrefs && PREF_NOTIFICATION_ATHAN !in context.appPrefs) {
-//            EncourageActionLayout(
-//                modifier = Modifier.padding(top = 16.dp),
-//                header = "مایلید برنامه اذان پخش کند؟",
-//                discardAction = { context.appPrefs.edit { putString(PREF_ATHAN_ALARM, "") } },
-//                acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
-//            )
-//        }
+        if (showEnableAthanForPersianUsers()) EncourageActionLayout(
+            modifier = Modifier.padding(top = 16.dp),
+            header = "مایلید برنامه اذان پخش کند؟",
+            discardAction = { context.appPrefs.edit { putString(PREF_ATHAN_ALARM, "") } },
+            acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
+        )
     }
+}
+
+@Composable
+private fun showEnableAthanForPersianUsers(): Boolean {
+    val language by language.collectAsState()
+    // As the message is only translated in Persian
+    if (!(language.isPersian || language.isDari)) return false
+    val context = LocalContext.current
+    return PREF_ATHAN_ALARM !in context.appPrefs && PREF_NOTIFICATION_ATHAN !in context.appPrefs
 }
 
 @Composable

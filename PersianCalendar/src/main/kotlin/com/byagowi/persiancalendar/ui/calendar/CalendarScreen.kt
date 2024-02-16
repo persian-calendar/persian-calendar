@@ -481,7 +481,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
-        } else if (showEncourageToBatteryOptimizationException(context)) {
+        } else if (showEncourageToBatteryOptimizationException()) {
             fun ignore() {
                 val prefs = context.appPrefs
                 prefs.edit {
@@ -505,9 +505,10 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 
 @ChecksSdkIntAtLeast(Build.VERSION_CODES.M)
 @Composable
-private fun showEncourageToBatteryOptimizationException(context: Context): Boolean {
+private fun showEncourageToBatteryOptimizationException(): Boolean {
     val isNotifyDate by isNotifyDate.collectAsState()
     if (!isNotifyDate) return false
+    val context = LocalContext.current
     if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
