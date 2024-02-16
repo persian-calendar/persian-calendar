@@ -168,7 +168,6 @@ fun CoordinatesDialog(
                         Geocoder(context, language.value.asSystemLocale()).getFromLocation(
                             latitude, longitude, 20
                         )
-                    // TODO: Is it needed to change the state in the main thread in Compose?
                     withContext(Dispatchers.Main.immediate) {
                         val result = geocoder?.getOrNull(0)
                         cityName = result?.friendlyName
