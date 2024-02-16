@@ -10,7 +10,6 @@ astronomy = "61dc07020aaa6885d2c7f688a4d82beaf6edb9ef" # is equal to v2.1.19
 browser = "1.7.0"
 compose-bom = "2024.02.00"
 compose-compiler = "1.5.9" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-compose-material3 = "1.2.0"
 coroutines = "1.8.0"
 dynamicanimation = "1.0.0"
 junit = "4.13.2"
@@ -42,7 +41,7 @@ compose-activity = { group = "androidx.activity", name = "activity-compose", ver
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 compose-ui = { group = "androidx.compose.ui", name = "ui" }
