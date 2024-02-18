@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -10,6 +9,7 @@ import androidx.compose.ui.test.performClick
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.CountryEvents
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.HolidaysTypesDialog
+import com.byagowi.persiancalendar.ui.utils.stringResource
 import junit.framework.TestCase.assertEquals
 import org.junit.Rule
 import org.junit.Test

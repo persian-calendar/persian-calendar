@@ -4,8 +4,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.utils.stringResource
 
 @Composable
 fun NavigationOpenDrawerIcon(openDrawer: () -> Unit) {

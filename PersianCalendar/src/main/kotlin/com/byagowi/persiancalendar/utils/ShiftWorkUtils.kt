@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.pluralStringResource
-import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.shiftWorkPeriod
@@ -12,6 +11,7 @@ import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.shiftWorks
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.utils.stringResource
 
 fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean = false): String? {
     val shiftWorkStartingJdn = shiftWorkStartingJdn ?: return null

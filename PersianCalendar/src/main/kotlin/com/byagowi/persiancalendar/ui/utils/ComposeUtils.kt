@@ -1,12 +1,16 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.colorspace.ColorSpaces
+import com.byagowi.persiancalendar.entities.LocalLanguage
+import androidx.compose.ui.res.stringResource as cStringResource
 
 /**
  * Determines if a color should be considered light or dark.
@@ -36,6 +40,35 @@ fun materialCornerExtraLargeTop(): CornerBasedShape {
 fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
 }
+
+
+/**
+ * Load a string resource.
+ *
+ * @param id the resource identifier
+ * @return the string data associated with the resource
+ */
+@Composable
+@ReadOnlyComposable
+fun stringResource(@StringRes id: Int): String {
+    LocalLanguage.current
+    return cStringResource(id)
+}
+
+/**
+ * Load a string resource with formatting.
+ *
+ * @param id the resource identifier
+ * @param formatArgs the format arguments
+ * @return the string data associated with the resource
+ */
+@Composable
+@ReadOnlyComposable
+fun stringResource(@StringRes id: Int, vararg formatArgs: Any): String {
+    LocalLanguage.current
+    return cStringResource(id, formatArgs)
+}
+
 
 // When something needs to match with Material default theme corner sizes
 const val ExtraLargeShapeCornerSize = 28f

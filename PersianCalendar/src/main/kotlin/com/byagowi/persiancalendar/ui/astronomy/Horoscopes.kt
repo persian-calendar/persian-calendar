@@ -3,9 +3,9 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
+import com.byagowi.persiancalendar.ui.utils.stringResource
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body

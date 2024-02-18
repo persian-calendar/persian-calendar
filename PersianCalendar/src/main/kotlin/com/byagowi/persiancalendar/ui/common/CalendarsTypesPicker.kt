@@ -10,11 +10,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.ui.utils.stringResource
 
 @Composable
 fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Unit) {

@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
@@ -51,6 +50,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
+import com.byagowi.persiancalendar.ui.utils.stringResource
 import com.byagowi.persiancalendar.utils.QUARTER_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.FlowPreview

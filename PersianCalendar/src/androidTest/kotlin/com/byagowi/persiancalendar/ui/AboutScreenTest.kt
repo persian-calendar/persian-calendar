@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -11,6 +10,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
+import com.byagowi.persiancalendar.ui.utils.stringResource
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
