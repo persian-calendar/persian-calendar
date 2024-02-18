@@ -10,9 +10,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.compose.ui.platform.LocalView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.language
@@ -25,7 +23,6 @@ import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +49,14 @@ class MainActivity : ComponentActivity() {
                     applyEdgeToEdge(isBackgroundColorLight, isSurfaceColorLight)
                 }
 
+                val view = LocalView.current
+                LaunchedEffect(Unit) {
+                    language.collect {
+                        onConfigurationChanged(resources.configuration)
+                        view.dispatchConfigurationChanged(resources.configuration)
+                    }
+                }
+
                 App(intent?.action, ::finish)
             }
         }
@@ -62,12 +67,6 @@ class MainActivity : ComponentActivity() {
         // isn't as effective in dark themes.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                language.collect { applyAppLanguage(this@MainActivity) }
-            }
         }
     }
 
