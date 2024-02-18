@@ -21,8 +21,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -41,8 +39,8 @@ import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsRepository
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.generated.EventType
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -53,7 +51,7 @@ import org.jetbrains.annotations.VisibleForTesting
 @Composable
 fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val language by language.collectAsState()
+    val language = LocalLanguage.current
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }

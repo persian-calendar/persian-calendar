@@ -52,10 +52,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -117,7 +117,7 @@ fun CalendarsOverview(
                 )
             }
             val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
-            val language by language.collectAsState()
+            val language = LocalLanguage.current
             AnimatedContent(
                 if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
                     jdn.dayOfWeekName, stringResource(R.string.iran_time)

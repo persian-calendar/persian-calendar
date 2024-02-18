@@ -40,9 +40,9 @@ import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -114,7 +114,7 @@ fun TimesTab(
 
 @Composable
 private fun showEnableAthanForPersianUsers(): Boolean {
-    val language by language.collectAsState()
+    val language = LocalLanguage.current
     // As the message is only translated in Persian
     if (!(language.isPersian || language.isDari)) return false
     val context = LocalContext.current

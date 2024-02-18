@@ -10,7 +10,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,8 +24,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.generated.citiesStore
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -40,7 +39,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     var showProvincesDialog by rememberSaveable { mutableStateOf(false) }
     if (showProvincesDialog) return ProvincesDialog(onDismissRequest)
     val cities = remember { citiesStore.values.sortCityNames }
-    val language by language.collectAsState()
+    val language = LocalLanguage.current
     AppDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.location)) },

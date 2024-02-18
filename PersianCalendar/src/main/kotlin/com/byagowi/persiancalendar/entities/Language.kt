@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -534,4 +535,8 @@ enum class Language(val code: String, val nativeName: String) {
         // CJK digits: charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
         // but they weren't looking nice in the UI
     }
+}
+
+val LocalLanguage = staticCompositionLocalOf<Language> {
+    error("LocalLanguage hasn't provided!")
 }

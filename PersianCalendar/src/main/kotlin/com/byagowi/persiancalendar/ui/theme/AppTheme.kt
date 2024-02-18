@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
@@ -66,6 +67,7 @@ fun AppTheme(content: @Composable () -> Unit) {
         CompositionLocalProvider(
             LocalContentColor provides contentColor,
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
+            LocalLanguage provides language,
         ) {
             // Don't draw behind sides insets in landscape, we don't have any plan for using that space
             val sidesInsets =

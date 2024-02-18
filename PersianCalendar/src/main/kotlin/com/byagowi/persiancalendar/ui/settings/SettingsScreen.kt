@@ -45,7 +45,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,7 +63,6 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
@@ -102,8 +100,6 @@ fun SettingsScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    val language by language.collectAsState()
-                    language.run {}
                     AnimatedContent(
                         targetState = stringResource(R.string.settings),
                         label = "title",
@@ -214,8 +210,6 @@ private data class TabItem(
 ) {
     @Composable
     fun Title() {
-        val language by language.collectAsState()
-        language.run {}
         Text(
             stringResource(firstTitle) + stringResource(R.string.spaced_and) + stringResource(
                 secondTitle

@@ -50,8 +50,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
@@ -205,7 +205,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                             }
                         }
                     )
-                    val language by language.collectAsState()
+                    val language = LocalLanguage.current
                     AppDropdownMenu(
                         expanded = selectedTypeDropdownIndex == position,
                         onDismissRequest = { selectedTypeDropdownIndex = -1 },

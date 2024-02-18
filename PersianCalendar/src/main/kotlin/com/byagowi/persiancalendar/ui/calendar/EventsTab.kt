@@ -48,6 +48,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
@@ -212,7 +213,7 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
             }
         }
 
-        val language by language.collectAsState()
+        val language = LocalLanguage.current
         if (PREF_HOLIDAY_TYPES !in context.appPrefs && language.isIranExclusive) {
             Spacer(modifier = Modifier.height(16.dp))
             EncourageActionLayout(

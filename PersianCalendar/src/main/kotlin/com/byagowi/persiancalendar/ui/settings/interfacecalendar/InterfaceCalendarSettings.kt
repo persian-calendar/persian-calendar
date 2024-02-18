@@ -29,8 +29,8 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
@@ -59,7 +59,7 @@ fun InterfaceCalendarSettings(destination: String? = null) {
             title = stringResource(R.string.select_skin), summary = themeDisplayName
         ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
     }
-    val language by language.collectAsState()
+    val language = LocalLanguage.current
     SettingsClickable(
         title = stringResource(R.string.language),
         summary = language.nativeName,

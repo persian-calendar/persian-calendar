@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
@@ -54,7 +54,7 @@ fun CalendarPager(
         viewModel.changeSelectedMonthOffsetCommand(null)
     }
 
-    val language by language.collectAsState()
+    val language = LocalLanguage.current
     val monthColors = appMonthColors()
 
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))

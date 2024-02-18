@@ -109,6 +109,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.LocalLanguage
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -625,7 +626,7 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
             } else {
-                val language by language.collectAsState()
+                val language = LocalLanguage.current
                 title = language.my.format(
                     selectedMonth.monthName, formatNumber(selectedMonth.year)
                 )
