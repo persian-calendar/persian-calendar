@@ -3,7 +3,11 @@ name: Android CI
 permissions:
   contents: read
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   build-and-test-jvm:
