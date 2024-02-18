@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
+import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -188,7 +189,7 @@ class CalendarLibraryTests {
 
     @Test
     fun test_it_different_date_object_equal() {
-        assertFalse(CivilDate(2000, 1, 1) == PersianDate(2000, 1, 1))
+        assertFalse(CivilDate(2000, 1, 1) as AbstractDate == PersianDate(2000, 1, 1) as AbstractDate)
         assertEquals(CivilDate(2000, 1, 1), CivilDate(2000, 1, 1))
         assertNotEquals(CivilDate(2000, 1, 1), CivilDate(2000, 2, 1))
     }
