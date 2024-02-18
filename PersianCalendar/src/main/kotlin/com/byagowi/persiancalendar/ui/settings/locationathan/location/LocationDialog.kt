@@ -28,7 +28,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -84,4 +83,4 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
 
 @Preview
 @Composable
-private fun LocationPreferenceDialogPreview() = AppTheme { LocationDialog {} }
+private fun LocationPreferenceDialogPreview() = LocationDialog {}
