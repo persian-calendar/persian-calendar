@@ -27,7 +27,7 @@ persiancalendar-calculator = "13a660cb0e5a5943ec7c496f4ff4c2c4631f9fcf"
 persiancalendar-calendar = "24a2c24684884d4ef49c948d18e2eb608bbbfd66"
 persiancalendar-praytimes = "0e619dfd2683acc0c6f0b53568ed78336a17057a"
 persiancalendar-qr = "4ef9d44178046f8704edbc8964fca968f75b08d5"
-truth = "1.4.0"
+truth = "1.4.1"
 work-manager = "2.9.0"
 
 [libraries]
