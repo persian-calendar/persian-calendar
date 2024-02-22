@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.app.AlertDialog
 import android.app.StatusBarManager
 import android.app.WallpaperManager
 import android.content.ComponentName
@@ -8,6 +9,11 @@ import android.content.res.Configuration
 import android.graphics.drawable.Icon
 import android.os.Build
 import android.provider.Settings
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
@@ -32,6 +38,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Widgets
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -62,6 +69,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
@@ -82,9 +90,11 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
+import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
 
 @Composable
@@ -95,23 +105,20 @@ fun SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
-    Scaffold(
-        containerColor = Color.Transparent,
-        topBar = {
-            TopAppBar(
-                title = {
-                    AnimatedContent(
-                        targetState = stringResource(R.string.settings),
-                        label = "title",
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state -> Text(state) }
-                },
-                colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
-                actions = { ThreeDotsDropdownMenu { closeMenu -> MenuItems(closeMenu) } },
-            )
-        }
-    ) { paddingValues ->
+    Scaffold(containerColor = Color.Transparent, topBar = {
+        TopAppBar(
+            title = {
+                AnimatedContent(
+                    targetState = stringResource(R.string.settings),
+                    label = "title",
+                    transitionSpec = appCrossfadeSpec,
+                ) { state -> Text(state) }
+            },
+            colors = appTopAppBarColors(),
+            navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+            actions = { ThreeDotsDropdownMenu { closeMenu -> MenuItems(closeMenu) } },
+        )
+    }) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val tabs = listOf(
                 TabItem(
@@ -324,40 +331,49 @@ private fun MenuItems(closeMenu: () -> Unit) {
         )
         if (showDialog) ScheduleAlarm { showDialog = false }
     }
-//    fun viewCommandResult(command: String) {
-//        val dialogBuilder = AlertDialog.Builder(activity)
-//        val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
-//        val button = ImageButton(activity).also { button ->
-//            button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
-//            button.setOnClickListener {
-//                activity.shareTextFile(result, "log.txt", "text/plain")
-//            }
-//        }
-//        dialogBuilder.setCustomTitle(LinearLayout(activity).also {
-//            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
-//            it.addView(button)
-//        })
-//        dialogBuilder.setView(ScrollView(activity).also { scrollView ->
-//            scrollView.addView(TextView(activity).also {
-//                it.text = result
-//                it.textDirection = View.TEXT_DIRECTION_LTR
-//            })
-//            // Scroll to bottom, https://stackoverflow.com/a/3080483
-//            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-//        })
-//        dialogBuilder.show()
-//    }
-//    toolbar.menu.addSubMenu("Log Viewer").also {
-//        it.add("Filtered").onClick {
-//            viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
-//        }
-//        it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
-//    }
-//    toolbar.menu.addSubMenu("Log").also {
-//        it.add("Log 'Hello'").onClick { debugLog("Hello!") }
-//        it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
-//        it.add("Crash!").onClick { error("Unhandled Crash!") }
-//    }
+
+    HorizontalDivider()
+
+    fun viewCommandResult(command: String) {
+        val dialogBuilder = AlertDialog.Builder(context)
+        val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
+        val button = Button(context).also { button ->
+            button.text = "Share"
+            button.setOnClickListener {
+                context.shareTextFile(result, "log.txt", "text/plain")
+            }
+        }
+        dialogBuilder.setCustomTitle(LinearLayout(context).also {
+            it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            it.addView(button)
+        })
+        dialogBuilder.setView(ScrollView(context).also { scrollView ->
+            scrollView.addView(TextView(context).also {
+                it.text = result
+                it.textDirection = View.TEXT_DIRECTION_LTR
+            })
+            // Scroll to bottom, https://stackoverflow.com/a/3080483
+            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+        })
+        dialogBuilder.show()
+    }
+    listOf(
+        "Filtered Log Viewer" to "logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E",
+        "Unfiltered Log Viewer" to "logcat -v raw -t 500",
+    ).forEach { (title, command) ->
+        AppDropdownMenuItem(text = { Text(title) }, onClick = { viewCommandResult(command) })
+    }
+
+    HorizontalDivider()
+
+    listOf(
+        "Log 'Hello'" to { debugLog("Hello!") },
+        "Handled Crash" to { logException(Exception("Logged Crash!")) },
+        // "Log 'Hello'" to { error("Unhandled Crash!") }
+    ).forEach { (text, action) -> AppDropdownMenuItem(text = { Text(text) }, onClick = action) }
+
+    HorizontalDivider()
+
     AppDropdownMenuItem(
         text = { Text("Start Dream") },
         onClick = {
