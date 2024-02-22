@@ -41,9 +41,8 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val launcher = rememberLauncherForActivityResult(PickRingtoneContract()) callback@{ uri ->
         onDismissRequest()
         uri ?: return@callback
-        val ringtone = RingtoneManager.getRingtone(context, uri.toUri())
         // If no ringtone has been found better to skip touching preferences store
-        ringtone ?: return@callback
+        val ringtone = RingtoneManager.getRingtone(context, uri.toUri()) ?: return@callback
         val ringtoneTitle = ringtone.getTitle(context) ?: ""
         context.appPrefs.edit {
             putString(PREF_ATHAN_NAME, ringtoneTitle)

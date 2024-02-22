@@ -145,8 +145,8 @@ private val calculationMethod_ =
     MutableStateFlow(CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD))
 val calculationMethod: StateFlow<CalculationMethod> get() = calculationMethod_
 
-private val athanSoundName_ = MutableStateFlow("")
-val athanSoundName: StateFlow<String> get() = athanSoundName_
+private val athanSoundName_ = MutableStateFlow<String?>(null)
+val athanSoundName: StateFlow<String?> get() = athanSoundName_
 
 var midnightMethod = calculationMethod.value.defaultMidnight
     private set
@@ -287,6 +287,36 @@ fun loadLanguageResources(resources: Resources) {
     nepaliMonths = language.getNepaliMonths()
     weekDays = language.getWeekDays(resources)
     weekDaysInitials = language.getWeekDaysInitials(resources)
+    shiftWorkTitles = mapOf(
+        "d" to resources.getString(R.string.shift_work_morning), // d -> day work, legacy key
+        "r" to resources.getString(R.string.shift_work_off), // r -> rest, legacy key
+        "e" to resources.getString(R.string.shift_work_evening),
+        "n" to resources.getString(R.string.shift_work_night)
+    )
+    calendarTypesTitleAbbr = CalendarType.entries.map { resources.getString(it.shortTitle) }
+    when {
+        // This is mostly pointless except we want to make sure even on broken language resources state
+        // which might happen in widgets updates we don't have wrong values for these important two
+        language.isPersian -> {
+            amString = DEFAULT_AM
+            pmString = DEFAULT_PM
+        }
+
+        else -> {
+            amString = resources.getString(R.string.am)
+            pmString = resources.getString(R.string.pm)
+        }
+    }
+    holidayString = when {
+        language.isPersian -> DEFAULT_HOLIDAY
+        language.isDari -> "رخصتی"
+        else -> resources.getString(R.string.holiday)
+    }
+    spacedOr = resources.getString(R.string.spaced_or)
+    spacedAndInDates = if (language.languagePrefersHalfSpaceAndInDates) " "
+    else resources.getString(R.string.spaced_and)
+    spacedColon = resources.getString(R.string.spaced_colon)
+    spacedComma = resources.getString(R.string.spaced_comma)
 }
 
 fun updateStoredPreference(context: Context) {
@@ -353,8 +383,7 @@ fun updateStoredPreference(context: Context) {
         if (coordinates.value?.enableHighLatitudesConfiguration != true) DEFAULT_HIGH_LATITUDES_METHOD
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
     )
-    athanSoundName_.value =
-        prefs.getString(PREF_ATHAN_NAME, null) ?: context.getString(R.string.default_athan)
+    athanSoundName_.value = prefs.getString(PREF_ATHAN_NAME, null)
 
     dreamNoise_.value = prefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE)
     wallpaperDark_.value = prefs.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
@@ -399,7 +428,6 @@ fun updateStoredPreference(context: Context) {
 
     isShowDeviceCalendarEvents_.value =
         prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
-    val resources = context.resources
     whatToShowOnWidgets =
         prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
@@ -407,9 +435,7 @@ fun updateStoredPreference(context: Context) {
     numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?
-    if (language.language != resources.getString(R.string.code)) applyAppLanguage(context)
-
-    calendarTypesTitleAbbr = CalendarType.entries.map { context.getString(it.shortTitle) }
+    if (language.language != context.getString(R.string.code)) applyAppLanguage(context)
 
     shiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "").splitFilterNotEmpty(",")
         .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
@@ -417,36 +443,6 @@ fun updateStoredPreference(context: Context) {
     shiftWorkPeriod = shiftWorks.sumOf { it.length }
     shiftWorkStartingJdn = prefs.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
     shiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
-    shiftWorkTitles = mapOf(
-        "d" to context.getString(R.string.shift_work_morning), // d -> day work, legacy key
-        "r" to context.getString(R.string.shift_work_off), // r -> rest, legacy key
-        "e" to context.getString(R.string.shift_work_evening),
-        "n" to context.getString(R.string.shift_work_night)
-    )
-
-    when {
-        // This is mostly pointless except we want to make sure even on broken language resources state
-        // which might happen in widgets updates we don't have wrong values for these important two
-        language.isPersian -> {
-            amString = DEFAULT_AM
-            pmString = DEFAULT_PM
-        }
-
-        else -> {
-            amString = context.getString(R.string.am)
-            pmString = context.getString(R.string.pm)
-        }
-    }
-    holidayString = when {
-        language.isPersian -> DEFAULT_HOLIDAY
-        language.isDari -> "رخصتی"
-        else -> context.getString(R.string.holiday)
-    }
-    spacedOr = context.getString(R.string.spaced_or)
-    spacedAndInDates = if (language.languagePrefersHalfSpaceAndInDates) " "
-    else context.getString(R.string.spaced_and)
-    spacedColon = context.getString(R.string.spaced_colon)
-    spacedComma = context.getString(R.string.spaced_comma)
 
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
         it.isEnabled && it.isTouchExplorationEnabled

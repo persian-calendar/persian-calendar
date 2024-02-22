@@ -148,7 +148,7 @@ fun LocationAthanSettings(navigateToMap: () -> Unit, destination: String) {
         val athanSoundName by athanSoundName.collectAsState()
         SettingsClickable(
             stringResource(R.string.custom_athan),
-            athanSoundName,
+            athanSoundName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.default_athan),
         ) { onDismissRequest -> AthanSelectDialog(onDismissRequest) }
     }
     AnimatedVisibility(isLocationSet) {
