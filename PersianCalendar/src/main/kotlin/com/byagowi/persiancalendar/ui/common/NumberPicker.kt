@@ -122,7 +122,7 @@ fun NumberPicker(
                                 range,
                                 value,
                                 endValue,
-                                halfNumbersColumnHeightPx
+                                halfNumbersColumnHeightPx,
                             )
                         )
                         animatedOffset.snapTo(0f)
@@ -135,7 +135,7 @@ fun NumberPicker(
             Box(
                 modifier = Modifier
                     .padding(vertical = verticalMargin)
-                    .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) }
+                    .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) },
             ) {
                 if (indexOfElement > 0) Label(
                     text = label(range.first + indexOfElement - 1),
@@ -202,17 +202,17 @@ fun NumberPicker(
                         modifier = Modifier
                             .height(numbersColumnHeight / 3)
                             .alpha(
-                                (maxOf(
+                                maxOf(
                                     minimumAlpha,
                                     1 - abs(coercedAnimatedOffset) / halfNumbersColumnHeightPx
-                                ))
+                                )
                             )
                             .then(
                                 if (disableEdit) Modifier else Modifier.clickable(
                                     indication = null,
                                     interactionSource = remember { MutableInteractionSource() },
                                     onClickLabel = onClickLabel,
-                                ) { showTextEdit = true }
+                                ) { showTextEdit = true },
                             ),
                     )
                 }
@@ -230,7 +230,7 @@ fun NumberPicker(
                 )
             }
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-        }
+        },
     ) { measurables, constraints ->
         val placeables = measurables.map { measurable -> measurable.measure(constraints) }
         layout(constraints.maxWidth, placeables.sumOf { it.height }) {
@@ -246,7 +246,7 @@ private fun getItemIndexForOffset(
     range: IntRange,
     value: Int,
     offset: Float,
-    halfNumbersColumnHeightPx: Float
+    halfNumbersColumnHeightPx: Float,
 ): Int {
     val indexOf = value - range.first - (offset / halfNumbersColumnHeightPx).toInt()
     return indexOf.coerceIn(0, range.last - range.first)
@@ -271,7 +271,7 @@ private suspend fun Animatable<Float, AnimationVector1D>.fling(
         animateTo(
             targetValue = adjustedTarget,
             initialVelocity = initialVelocity,
-            block = block
+            block = block,
         )
     } else {
         animateDecay(
