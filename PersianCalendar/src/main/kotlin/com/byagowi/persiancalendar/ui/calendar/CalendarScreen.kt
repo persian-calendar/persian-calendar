@@ -155,6 +155,7 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
+import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.logException
@@ -481,7 +482,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
-        } else if (showEncourageToBatteryOptimizationException()) {
+        } else if (showEncourageToBatteryOptimizationExemption()) {
             fun ignore() {
                 val prefs = context.appPrefs
                 prefs.edit {
@@ -505,10 +506,16 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 
 @ChecksSdkIntAtLeast(Build.VERSION_CODES.M)
 @Composable
-private fun showEncourageToBatteryOptimizationException(): Boolean {
+private fun showEncourageToBatteryOptimizationExemption(): Boolean {
     val isNotifyDate by isNotifyDate.collectAsState()
-    if (!isNotifyDate) return false
     val context = LocalContext.current
+    val isTiramisuAndHasPostNotificationGranted =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                ActivityCompat.checkSelfPermission(
+                    context, Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+    val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
+    if (!isNotifyDate && !isTiramisuAndHasPostNotificationGranted && !isAnyAthanSet) return false
     if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
