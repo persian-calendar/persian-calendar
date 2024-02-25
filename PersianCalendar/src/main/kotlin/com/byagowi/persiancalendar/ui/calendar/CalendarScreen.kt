@@ -160,7 +160,6 @@ import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
-import com.byagowi.persiancalendar.utils.latestAnyWidgetUpdate
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
