@@ -148,6 +148,7 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -158,6 +159,8 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getTimeNames
+import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
+import com.byagowi.persiancalendar.utils.latestAnyWidgetUpdate
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
@@ -509,13 +512,8 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 private fun showEncourageToBatteryOptimizationExemption(): Boolean {
     val isNotifyDate by isNotifyDate.collectAsState()
     val context = LocalContext.current
-    val isTiramisuAndHasPostNotificationGranted =
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                ActivityCompat.checkSelfPermission(
-                    context, Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
-    if (!isNotifyDate && !isTiramisuAndHasPostNotificationGranted && !isAnyAthanSet) return false
+    if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
     if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }

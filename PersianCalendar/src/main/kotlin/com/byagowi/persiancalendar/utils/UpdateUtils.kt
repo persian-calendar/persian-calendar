@@ -136,6 +136,10 @@ fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
 }
 
 private var latestFiredUpdate = 0L
+private var latestAnyWidgetUpdate = 0L
+
+fun hasAnyWidgetUpdateRecently(): Boolean =
+    (System.currentTimeMillis() - latestAnyWidgetUpdate) < FIFTEEN_MINUTES_IN_MILLIS
 
 // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
 // Apply a round corner which is the default in Android 12
@@ -202,31 +206,31 @@ fun update(context: Context, updateDate: Boolean) {
 
     // Widgets
     AppWidgetManager.getInstance(context).run {
-        updateFromRemoteViews<AgeWidget>(context) { width, height, widgetId ->
+        updateFromRemoteViews<AgeWidget>(context, now) { width, height, widgetId ->
             createAgeRemoteViews(context, width, height, widgetId)
         }
-        updateFromRemoteViews<Widget1x1>(context) { width, height, _ ->
+        updateFromRemoteViews<Widget1x1>(context, now) { width, height, _ ->
             create1x1RemoteViews(context, width, height, date)
         }
-        updateFromRemoteViews<Widget4x1>(context) { width, height, _ ->
+        updateFromRemoteViews<Widget4x1>(context, now) { width, height, _ ->
             create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle)
         }
-        updateFromRemoteViews<Widget2x2>(context) { width, height, _ ->
+        updateFromRemoteViews<Widget2x2>(context, now) { width, height, _ ->
             create2x2RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, owghat)
         }
-        updateFromRemoteViews<Widget4x2>(context) { width, height, _ ->
+        updateFromRemoteViews<Widget4x2>(context, now) { width, height, _ ->
             create4x2RemoteViews(context, width, height, jdn, date, nowClock, prayTimes)
         }
-        updateFromRemoteViews<WidgetSunView>(context) { width, height, _ ->
+        updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _ ->
             createSunViewRemoteViews(context, width, height, prayTimes)
         }
-        updateFromRemoteViews<WidgetMonthView>(context) { width, height, _ ->
+        updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, _ ->
             createMonthViewRemoteViews(context, width, height)
         }
-        updateFromRemoteViews<WidgetMap>(context) { width, height, _ ->
+        updateFromRemoteViews<WidgetMap>(context, now) { width, height, _ ->
             createMapRemoteViews(context, width, height, now)
         }
-        updateFromRemoteViews<WidgetMoon>(context) { width, height, _ ->
+        updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _ ->
             createMoonRemoteViews(context, width, height)
         }
     }
@@ -270,10 +274,12 @@ fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): Pair<In
 }
 
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
-    context: Context, widgetUpdateAction: (width: Int, height: Int, widgetId: Int) -> RemoteViews
+    context: Context, now: Long,
+    widgetUpdateAction: (width: Int, height: Int, widgetId: Int) -> RemoteViews
 ) {
     runCatching {
         getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
+            latestAnyWidgetUpdate = now
             val (width, height) = getWidgetSize(context.resources, widgetId)
             updateAppWidget(widgetId, widgetUpdateAction(width, height, widgetId))
         }
