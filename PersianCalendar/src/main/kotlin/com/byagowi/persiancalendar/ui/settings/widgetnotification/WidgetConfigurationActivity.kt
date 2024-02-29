@@ -6,7 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -52,19 +52,15 @@ class WidgetConfigurationActivity : ComponentActivity() {
         finish()
     }
 
-    private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = finishAndSuccess()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         applyAppLanguage(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-
-        onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
-
-        setContent { SystemTheme { WidgetConfigurationContent(::finishAndSuccess) } }
+        setContent {
+            BackHandler { finishAndSuccess() }
+            SystemTheme { WidgetConfigurationContent(::finishAndSuccess) }
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.wallpaper
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -33,19 +33,13 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 
 class DreamSettingsActivity : ComponentActivity() {
-    private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = finish()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         applyAppLanguage(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-
-        onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
-
         setContent {
+            BackHandler { finish() }
             SystemTheme {
                 Column(modifier = Modifier.safeDrawingPadding()) {
                     Column(

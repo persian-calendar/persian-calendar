@@ -13,8 +13,8 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.SystemBarStyle
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.getSystemService
@@ -71,10 +71,6 @@ class AthanActivity : ComponentActivity() {
             ?.setStreamVolume(AudioManager.STREAM_ALARM, originalVolume, 0)
     }
 
-    private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = stop()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
             SystemBarStyle.dark(Color.TRANSPARENT),
@@ -88,8 +84,6 @@ class AthanActivity : ComponentActivity() {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
         }
-
-        onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: ""
         val isFajr = prayerKey == FAJR_KEY
@@ -141,7 +135,10 @@ class AthanActivity : ComponentActivity() {
             )
         }
 
-        setContent { SystemTheme { AthanActivityContent(prayerKey, ::stop) } }
+        setContent {
+            BackHandler { stop() }
+            SystemTheme { AthanActivityContent(prayerKey, ::stop) }
+        }
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 
