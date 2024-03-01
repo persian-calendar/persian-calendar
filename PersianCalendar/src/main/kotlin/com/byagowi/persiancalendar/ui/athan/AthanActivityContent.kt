@@ -54,11 +54,7 @@ fun AthanActivityContent(prayerKey: String, onClick: () -> Unit) {
     val darkBaseColor = isSystemInDarkTheme()
     val patternDrawable = remember {
         // We like to reuse our drawable for now but can reconsider in future
-        PatternDrawable(
-            prayerKey,
-            darkBaseColor = darkBaseColor,
-            dp = dpAsPx,
-        )
+        PatternDrawable(prayerKey, darkBaseColor = darkBaseColor, dp = dpAsPx)
     }
     Box(
         modifier = Modifier
