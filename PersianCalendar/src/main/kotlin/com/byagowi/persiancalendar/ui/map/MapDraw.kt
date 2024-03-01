@@ -311,7 +311,7 @@ class MapDraw(
                     val q = (ARCV - (11.8371 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
                             - .1018 * W_topo.pow(3))) / 10
                     maskMapCrescentVisibility[x, y] = when {
-                        q > +.216 -> 0x7F3EFF00 // Crescent easily visible
+                        q > .216 -> 0x7F3EFF00 // Crescent easily visible
                         q > -.014 -> 0x7F3EFF6D // Crescent visible under perfect conditions
                         q > -.160 -> 0x7F00FF9E // May need optical aid to find crescent
                         q > -.232 -> 0x7F00FFFA // Will need optical aid to find crescent

@@ -268,9 +268,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 )
             }
 
-            composable(astronomyRoute) {
+            composable(astronomyRoute) { backStackEntry ->
                 val viewModel = viewModel<AstronomyViewModel>()
-                it.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
+                backStackEntry.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
                     viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
                 }
                 AstronomyScreen(
@@ -298,12 +298,12 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 )
             }
 
-            composable(settingsRoute) {
+            composable(settingsRoute) { backStackEntry ->
                 SettingsScreen(
                     openDrawer = { coroutineScope.launch { drawerState.open() } },
                     navigateToMap = { navController.navigate(mapRoute) },
-                    initialPage = it.arguments?.getInt(tabKey, 0) ?: 0,
-                    destination = it.arguments?.getString(settingsKey) ?: ""
+                    initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
+                    destination = backStackEntry.arguments?.getString(settingsKey) ?: ""
                 )
             }
 
