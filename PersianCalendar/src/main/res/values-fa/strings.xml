@@ -75,8 +75,6 @@
     <string name="in_city_time">به افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد.</string>
     <string name="stop">توقف</string>
-    <string name="date_picker">انتخابگر تاریخ</string>
-    <string name="go">برو</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند.</string>

@@ -66,8 +66,6 @@
     <string name="in_city_time">در %1$s</string>
     <string name="date_copied_clipboard">«%1$s» به کلیپ بودر کپی شد</string>
     <string name="stop">توقف</string>
-    <string name="date_picker">انتخابگر تاریخ</string>
-    <string name="go">برو</string>
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>

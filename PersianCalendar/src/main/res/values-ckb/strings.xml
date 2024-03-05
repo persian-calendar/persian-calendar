@@ -75,8 +75,6 @@
     <string name="in_city_time">بە ئاسۆی %1$s</string>
     <string name="date_copied_clipboard">«%1$s» لە کلیپبۆرددا کۆپی کرا.</string>
     <string name="stop">ڕاگرتن</string>
-    <string name="date_picker">بڕۆ بۆ ڕێککەوت</string>
-    <string name="go">بڕۆ</string>
     <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا.</string>

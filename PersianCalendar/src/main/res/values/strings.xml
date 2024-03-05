@@ -29,8 +29,6 @@
     <string name="device_does_not_support">"The device doesn't support this action"</string>
     <string name="today">Today</string>
     <string name="return_to_today">Return to today</string>
-    <string name="date_picker">Date picker</string>
-    <string name="go">Go</string>
     <string name="search_in_events">Search in events</string>
     <string name="days_distance">Distance</string>
     <string name="start_of_year_diff">%1$s days (~%2$s weeks or %3$s months) from start of the year</string>

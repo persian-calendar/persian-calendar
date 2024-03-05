@@ -28,8 +28,6 @@
     <string name="device_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
     <string name="today">اليوم</string>
     <string name="return_to_today">الرجوع إلى اليوم</string>
-    <string name="date_picker">الذهاب إلى تاريخٍ معين</string>
-    <string name="go">إذهب</string>
     <string name="search_in_events">البحث في المناسبات</string>
     <string name="days_distance">الفرق</string>
     <string name="start_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) من بداية السنة</string>

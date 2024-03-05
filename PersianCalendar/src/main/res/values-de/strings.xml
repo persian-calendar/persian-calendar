@@ -44,7 +44,6 @@
     <string name="animal_year_name_dragon">Drachen</string>
     <string name="animal_year_name_dog">Hund</string>
     <string name="exit">Verlassen</string>
-    <string name="date_picker">Gehen Sie zum Datum</string>
     <string name="animal_year_name_tiger">Tiger</string>
     <string name="animal_year_name_rabbit">Kaninchen</string>
     <string name="about">Über</string>
@@ -57,7 +56,6 @@
     <string name="end_of_year_diff">%1$s Tage (~%2$s Wochen oder %3$s Monate) ab Jahresbeginn</string>
     <string name="animal_year_name_goat">Die Schafe</string>
     <string name="settings">Einstellungen</string>
-    <string name="go">Gehen</string>
     <string name="continue_button">Weiter</string>
     <string name="accept">OKAY</string>
     <string name="add">Hinzufügen</string>

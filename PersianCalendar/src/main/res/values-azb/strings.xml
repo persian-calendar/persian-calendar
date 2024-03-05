@@ -75,8 +75,6 @@
     <string name="in_city_time">افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» حافیظه‌یه یازیلدی</string>
     <string name="stop">ساخلاندی</string>
-    <string name="date_picker">بو تاریخه گئت</string>
-    <string name="go">گئت</string>
     <string name="pleasewaitgps">بیرآز دایانین... بیر دقیقه سونرا نتیجه اولمازسا، جی‌پی‌اس‌ین آچیق اولماسین‌دان مطمئن اولون. اونو آچماق دا یارارسیز اولسا، گمان‌کی باشقا سئچنئک‌لری تست ائتملی‌سینیز.</string>
     <string name="notify_date_lock_screen">اعلان‌لاری کلیدلی صفحه‌ده گؤستر</string>
     <string name="notify_date_lock_screen_summary">سیستم‌ده تنظیم اولسا ایشلیئر</string>

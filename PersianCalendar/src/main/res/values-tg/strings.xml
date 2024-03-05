@@ -47,8 +47,6 @@
     <string name="device_does_not_support">Тақвими дастгоҳ ин амалро дастгирӣ намекунад</string>
     <string name="today">Имрӯз</string>
     <string name="return_to_today">Бозгашт ба имрӯз</string>
-    <string name="date_picker">Ба сана равед</string>
-    <string name="go">Бирав</string>
     <string name="search_in_events">Ҷустуҷӯ дар рӯйдодҳо</string>
     <string name="add_event">Илова кардани рӯйдод</string>
     <string name="days_distance">масофа</string>
