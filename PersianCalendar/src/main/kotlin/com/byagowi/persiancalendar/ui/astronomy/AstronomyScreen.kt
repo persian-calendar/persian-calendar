@@ -251,7 +251,6 @@ fun AstronomyScreen(
         val astronomyState by viewModel.astronomyState.collectAsState()
         DatePickerDialog(
             initialJdn = Jdn(astronomyState.date.toCivilDate()),
-            positiveButtonTitle = R.string.accept,
             onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) },
             onDismissRequest = viewModel::dismissDatePickerDialog,
         )

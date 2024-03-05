@@ -182,7 +182,6 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                     val jdn = context.appPrefs.getJdnOrNull(key) ?: Jdn.today()
                     DatePickerDialog(
                         initialJdn = jdn,
-                        positiveButtonTitle = R.string.accept,
                         onSuccess = { context.appPrefs.edit { putJdn(key, it) } },
                         onDismissRequest = onDismissRequest,
                     )

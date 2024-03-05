@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -42,7 +41,6 @@ import kotlinx.coroutines.delay
 @Composable
 fun DatePickerDialog(
     initialJdn: Jdn,
-    @StringRes positiveButtonTitle: Int,
     onSuccess: (jdn: Jdn) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -62,7 +60,7 @@ fun DatePickerDialog(
             TextButton(onClick = {
                 onDismissRequest()
                 onSuccess(jdn)
-            }) { Text(stringResource(positiveButtonTitle)) }
+            }) { Text(stringResource(R.string.accept)) }
         },
         neutralButton = {
             AnimatedVisibility(visible = jdn != today, enter = fadeIn(), exit = fadeOut()) {

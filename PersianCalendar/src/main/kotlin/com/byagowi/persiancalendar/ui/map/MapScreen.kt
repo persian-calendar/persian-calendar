@@ -303,9 +303,9 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val currentJdn = Jdn(Date(state.time).toGregorianCalendar().toCivilDate())
-        DatePickerDialog(currentJdn, R.string.accept, { jdn ->
-            viewModel.addDays(jdn - currentJdn)
-        }) { showDatePickerDialog = false }
+        DatePickerDialog(currentJdn, { viewModel.addDays(it - currentJdn) }) {
+            showDatePickerDialog = false
+        }
     }
 
     Box(Modifier.fillMaxSize()) {
