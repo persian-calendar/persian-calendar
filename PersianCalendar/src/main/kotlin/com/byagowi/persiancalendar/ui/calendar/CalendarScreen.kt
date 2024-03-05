@@ -768,7 +768,7 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
 
     ThreeDotsDropdownMenu { closeMenu ->
         AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.date_picker)) },
+            text = { Text(stringResource(R.string.select_date)) },
             onClick = {
                 closeMenu()
                 showDatePickerDialog = true
