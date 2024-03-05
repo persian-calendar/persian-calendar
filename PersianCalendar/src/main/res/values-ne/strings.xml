@@ -185,15 +185,15 @@
         <item quantity="one">%1$s %2$s दिन</item>
         <item quantity="other">%1$s %2$s दिनहरु</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s घन्टा</item>
         <item quantity="other">%1$s घन्टाहरु</item>
     </plurals>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s दिन</item>
         <item quantity="other">%1$s दिनहरु</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s वर्ष</item>
         <item quantity="other">%1$s वर्षहर्</item>
     </plurals>
@@ -222,11 +222,11 @@
     <string name="high_latitudes_one_seventh">एक सातौं</string>
     <string name="high_latitudes_night_middle">मध्यरात</string>
     <string name="are_you_sure">के तपाई ढुक्क हुनुहुन्छ् \?</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s मिनेट</item>
         <item quantity="other">%1$s मिनेटहरु</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s महिना</item>
         <item quantity="other">%1$s महिनाहरु</item>
     </plurals>

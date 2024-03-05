@@ -208,11 +208,11 @@
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
     <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
     <string name="shift_work_reset_button">Deshabilitar o reprogramar</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s minuto</item>
         <item quantity="other">%1$s minutos</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s hora</item>
         <item quantity="other">%1$s horas</item>
     </plurals>
@@ -243,15 +243,15 @@
     <string name="enable_location_services">servicios de ubicación están deshabilitados, por favor actívelos para usar la función en el futuro.</string>
     <string name="select_date">Elegir fecha</string>
     <string name="age_widget_title">Título del widget</string>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s día</item>
         <item quantity="other">%1$s días</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s mes</item>
         <item quantity="other">%1$s meses</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s año</item>
         <item quantity="other">%1$s años</item>
     </plurals>
@@ -392,19 +392,19 @@
     <string name="exit_full_screen">Salir de la pantalla completa</string>
     <string name="full_screen">Pantalla completa</string>
     <string name="color_gradient">Gradiente del color</string>
-    <plurals name="n_seconds">
+    <plurals name="seconds">
         <item quantity="one">%1$s segundo</item>
         <item quantity="many">%1$s segundos</item>
         <item quantity="other">%1$s segundos</item>
     </plurals>
-    <plurals name="n_weeks">
+    <plurals name="weeks">
         <item quantity="one">%1$s semana</item>
         <item quantity="many">%1$s semanas</item>
         <item quantity="other">%1$s semanas</item>
     </plurals>
     <string name="time_zones">Husos horarios</string>
     <string name="qr_code">Código QR</string>
-    <plurals name="n_work_days">
+    <plurals name="work_days">
         <item quantity="one">%1$s día laborable</item>
         <item quantity="many">%1$s días laborables</item>
         <item quantity="other">%1$s días laborables</item>

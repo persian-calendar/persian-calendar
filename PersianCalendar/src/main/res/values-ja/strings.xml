@@ -129,10 +129,10 @@
     <string name="west">西</string>
     <string name="qibla">キブラ</string>
     <string name="remove">消す</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="other">%1$s 分</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="other">%1$s 時間</item>
     </plurals>
     <string name="spaced_and">と</string>

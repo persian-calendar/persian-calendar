@@ -342,7 +342,7 @@
     <string name="high_latitudes_one_seventh">سُبٌع</string>
     <string name="none">لا شيء</string>
     <string name="country_emoji">🇸🇦🇮🇶🇦🇪</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="zero">لا دقائق</item>
         <item quantity="one">دقيقة واحدة</item>
         <item quantity="two">دقيقتان</item>
@@ -350,7 +350,7 @@
         <item quantity="many">%1$s دقيقة</item>
         <item quantity="other">%1$s دقيقة</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="zero">لا ساعة</item>
         <item quantity="one">ساعة واحدة</item>
         <item quantity="two">ساعتان</item>
@@ -358,7 +358,7 @@
         <item quantity="many">%1$s ساعة</item>
         <item quantity="other">%1$s ساعة</item>
     </plurals>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="zero">لا يوم</item>
         <item quantity="one">يوم واحد</item>
         <item quantity="two">يومان</item>
@@ -366,7 +366,7 @@
         <item quantity="many">%1$s يوما</item>
         <item quantity="other">%1$s يوم</item>
     </plurals>
-    <plurals name="n_weeks">
+    <plurals name="weeks">
         <item quantity="zero">لا أسبوع</item>
         <item quantity="one">أسبوع واحد</item>
         <item quantity="two">إسبوعين</item>
@@ -374,7 +374,7 @@
         <item quantity="many">%1$s أسبوعا</item>
         <item quantity="other">%1$s أسبوعا</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="zero">لا شهر</item>
         <item quantity="one">شهر واحد</item>
         <item quantity="two">شهرين</item>
@@ -383,7 +383,7 @@
         <item quantity="other">%1$s شهر</item>
     </plurals>
     <!-- e.g. zero years, one year, two years, 6 years, 14 years, 200 years, en->ar in Google Traslate -->
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="zero">لا سنة</item>
         <item quantity="one">سنة واحدة</item>
         <item quantity="two">سنتان</item>
@@ -438,7 +438,7 @@
     <string name="color_gradient">تدرج اللون</string>
     <string name="qr_code">كيو آر كد</string>
     <string name="time_zones">منطقة زمنية</string>
-    <plurals name="n_work_days">
+    <plurals name="work_days">
         <item quantity="zero">لا يوم العمل</item>
         <item quantity="one">العمل يوم واحد</item>
         <item quantity="two">يومان العمل</item>
@@ -447,7 +447,7 @@
         <item quantity="other">%1$s يوم العمل</item>
     </plurals>
     <string name="navigate_up">انتقال للأعلى</string>
-    <plurals name="n_seconds">
+    <plurals name="seconds">
         <item quantity="zero">%1$s ثانية</item>
         <item quantity="one">%1$s ثانية</item>
         <item quantity="two">%1$s ثانيتين</item>

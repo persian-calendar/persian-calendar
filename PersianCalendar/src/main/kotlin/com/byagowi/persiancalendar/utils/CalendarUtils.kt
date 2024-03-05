@@ -283,27 +283,27 @@ fun calculateDaysDifference(
         if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendarType
     )
     val days = abs(baseJdn - jdn)
-    val daysString = resources.getQuantityString(R.plurals.n_days, days, formatNumber(days))
+    val daysString = resources.getQuantityString(R.plurals.days, days, formatNumber(days))
     val weeks = if (isInWidget || days < 7) 0 else (days / 7.0).roundToInt()
     val result = listOfNotNull(
         if (months == 0 && years == 0) null
         else listOf(
-            R.plurals.n_years to years,
-            R.plurals.n_months to months,
-            R.plurals.n_days to daysOfMonth
+            R.plurals.years to years,
+            R.plurals.months to months,
+            R.plurals.days to daysOfMonth
         ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
             resources.getQuantityString(pluralId, n, formatNumber(n))
         },
         if (weeks == 0) null
         else (if (days % 7 == 0) "" else "~")
-                + resources.getQuantityString(R.plurals.n_weeks, weeks, formatNumber(weeks)),
+                + resources.getQuantityString(R.plurals.weeks, weeks, formatNumber(weeks)),
         run {
             if (years != 0 || isInWidget) return@run null
             val workDays = eventsRepository?.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn, if (baseJdn > jdn) baseJdn else jdn
             ) ?: 0
             if (workDays == days || workDays == 0) return@run null
-            resources.getQuantityString(R.plurals.n_work_days, workDays, formatNumber(workDays))
+            resources.getQuantityString(R.plurals.work_days, workDays, formatNumber(workDays))
         }
     )
     if (result.isEmpty()) return daysString

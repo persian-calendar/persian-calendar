@@ -248,19 +248,19 @@
     <string name="spring">春分</string>
     <string name="widget_prefer_device_colors">小部件跟随系统配色</string>
     <string name="none">不使用</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="other">%1$s 分</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="other">%1$s 时</item>
     </plurals>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="other">%1$s 天</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="other">%1$s 年</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="other">%1$s 个月</item>
     </plurals>
     <string name="widget_age_name">波斯历（年龄）</string>

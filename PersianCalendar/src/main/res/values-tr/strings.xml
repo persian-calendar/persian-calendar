@@ -95,15 +95,15 @@
     <string name="theme_default">Sistem Varsayılanı</string>
     <string name="ignore">Yok say, göz ardı et</string>
     <string name="preview">Ön izleme</string>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s gün</item>
         <item quantity="other">%1$s gün</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s ay</item>
         <item quantity="other">%1$s ay</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s yıl</item>
         <item quantity="other">%1$s yıl</item>
     </plurals>
@@ -134,11 +134,11 @@
     <string name="spaced_comma">", "</string>
     <string name="spaced_and">" ve "</string>
     <string name="spaced_or">" veya "</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s dakika</item>
         <item quantity="other">%1$s dakika</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s saat</item>
         <item quantity="other">%1$s saat</item>
     </plurals>
@@ -378,11 +378,11 @@
     <string name="screensaver_settings">Ekran koruyucu ayarları</string>
     <string name="true_north">Gerçek kuzey</string>
     <string name="lock">Kilitle</string>
-    <plurals name="n_weeks">
+    <plurals name="weeks">
         <item quantity="one">%1$s hafta</item>
         <item quantity="other">%1$s hafta</item>
     </plurals>
-    <plurals name="n_seconds">
+    <plurals name="seconds">
         <item quantity="one">%1$s saniye</item>
         <item quantity="other">%1$s saniye</item>
     </plurals>
@@ -391,7 +391,7 @@
     <string name="time_zones">Saat Dilimi</string>
     <string name="exit_full_screen">Tam Ekrandan Çık</string>
     <string name="full_screen">Tam Ekran</string>
-    <plurals name="n_work_days">
+    <plurals name="work_days">
         <item quantity="one">%1$s iş günü</item>
         <item quantity="other">%1$s iş günü</item>
     </plurals>

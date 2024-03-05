@@ -348,43 +348,43 @@
         <item quantity="many">%1$s %2$s дней</item>
         <item quantity="other">%1$s %2$s дней</item>
     </plurals>
-    <plurals name="n_seconds">
+    <plurals name="seconds">
         <item quantity="one">%1$s секунда</item>
         <item quantity="few">%1$s секунды</item>
         <item quantity="many">%1$s секунд</item>
         <item quantity="other">%1$s секунд</item>
     </plurals>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s минута</item>
         <item quantity="few">%1$s минуты</item>
         <item quantity="many">%1$s минут</item>
         <item quantity="other">%1$s минут</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s час</item>
         <item quantity="few">%1$s часа</item>
         <item quantity="many">%1$s часов</item>
         <item quantity="other">%1$s часов</item>
     </plurals>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s день</item>
         <item quantity="few">%1$s дня</item>
         <item quantity="many">%1$s дней</item>
         <item quantity="other">%1$s дней</item>
     </plurals>
-    <plurals name="n_weeks">
+    <plurals name="weeks">
         <item quantity="one">%1$s неделя</item>
         <item quantity="few">%1$s недели</item>
         <item quantity="many">%1$s недель</item>
         <item quantity="other">%1$s недели</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s месяц</item>
         <item quantity="few">%1$s месяца</item>
         <item quantity="many">%1$s месяцев</item>
         <item quantity="other">%1$s месяцев</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s год</item>
         <item quantity="few">%1$s года</item>
         <item quantity="many">%1$s лет</item>
@@ -410,7 +410,7 @@
     <string name="exit_full_screen">Выйти из полноэкранного режима</string>
     <string name="full_screen">Полноэкранный режим</string>
     <string name="open_drawer">Открыть панель навигации</string>
-    <plurals name="n_work_days">
+    <plurals name="work_days">
         <item quantity="one">%1$s рабочий день</item>
         <item quantity="few">%1$s рабочих дня</item>
         <item quantity="many">%1$s рабочих дней</item>

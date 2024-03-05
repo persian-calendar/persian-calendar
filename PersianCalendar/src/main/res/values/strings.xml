@@ -404,35 +404,35 @@ The app needs this only once, however, if you move to a new location, accessing 
         <item quantity="one">%1$s %2$s day</item>
         <item quantity="other">%1$s %2$s days</item>
     </plurals>
-    <plurals name="n_work_days">
+    <plurals name="work_days">
         <item quantity="one">%1$s work day</item>
         <item quantity="other">%1$s work days</item>
     </plurals>
-    <plurals name="n_seconds">
+    <plurals name="seconds">
         <item quantity="one">%1$s second</item>
         <item quantity="other">%1$s seconds</item>
     </plurals>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s minute</item>
         <item quantity="other">%1$s minutes</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s hour</item>
         <item quantity="other">%1$s hours</item>
     </plurals>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s day</item>
         <item quantity="other">%1$s days</item>
     </plurals>
-    <plurals name="n_weeks">
+    <plurals name="weeks">
         <item quantity="one">%1$s week</item>
         <item quantity="other">%1$s weeks</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s month</item>
         <item quantity="other">%1$s months</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s year</item>
         <item quantity="other">%1$s years</item>
     </plurals>

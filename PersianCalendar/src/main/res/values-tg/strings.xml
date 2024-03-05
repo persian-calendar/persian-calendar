@@ -112,11 +112,11 @@
     <string name="about_sendMail">Почтаи электронӣ</string>
     <string name="about_email_sum">Ба муаллифони барнома паёми шахсӣ фиристед</string>
     <string name="about_noClient">Ягон барнома барои фиристодани почтаи электронӣ вуҷуд надорад</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s дақиқа</item>
         <item quantity="other">%1$s дақиқа</item>
     </plurals>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s соат</item>
         <item quantity="other">%1$s соат</item>
     </plurals>
@@ -200,15 +200,15 @@
     <string name="prefer_linear_date">Шакли рақамии санаҳоро интихоб кунед</string>
     <string name="select_widgets_background_color">Барои заминаи виджетҳо ранги фармоиширо интихоб кунед</string>
     <string name="shamsi_calendar_short">форсӣ</string>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s pӯз</item>
         <item quantity="other">%1$s pӯз</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s моҳ</item>
         <item quantity="other">%1$s моҳ</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s сол</item>
         <item quantity="other">%1$s сол</item>
     </plurals>

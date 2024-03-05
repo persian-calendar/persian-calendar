@@ -54,15 +54,15 @@
     <string name="date_converter">Guhervana Dîrokê</string>
     <string name="converter">Guhervana</string>
     <string name="compass">Rûgehnas</string>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s sal</item>
         <item quantity="other">%1$s sal</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s meh</item>
         <item quantity="other">%1$s meh</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s roj</item>
         <item quantity="other">%1$s roj</item>
     </plurals>

@@ -46,7 +46,7 @@ fun getShiftWorksInDaysDistance(jdn: Jdn): String? {
     if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
     return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
         pluralStringResource(
-            R.plurals.n_days, days.size, formatNumber(days.size)
+            R.plurals.days, days.size, formatNumber(days.size)
         ) + " " + title
     }.joinToString(spacedComma)
 }

@@ -18,7 +18,7 @@
     <string name="nth_week_of_year">%1$s semaine de l’année</string>
     <string name="holiday_reason">Férié à cause de %1$s</string>
     <string name="remove">Retirer</string>
-    <plurals name="n_minutes">
+    <plurals name="minutes">
         <item quantity="one">%1$s minute</item>
         <item quantity="many">%1$s minutes</item>
         <item quantity="other">%1$s minutes</item>
@@ -28,7 +28,7 @@
     <string name="spaced_or">" ou "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
-    <plurals name="n_hours">
+    <plurals name="hours">
         <item quantity="one">%1$s heure</item>
         <item quantity="many">%1$s heures</item>
         <item quantity="other">%1$s heures</item>
@@ -46,17 +46,17 @@
     <string name="map">Carte</string>
     <string name="month_overview">Évènements du mois</string>
     <string name="prefer_linear_date">Préférer la forme numérique des dates</string>
-    <plurals name="n_days">
+    <plurals name="days">
         <item quantity="one">%1$s jour</item>
         <item quantity="many">%1$s jours</item>
         <item quantity="other">%1$s jours</item>
     </plurals>
-    <plurals name="n_months">
+    <plurals name="months">
         <item quantity="one">%1$s moi</item>
         <item quantity="many">%1$s mois</item>
         <item quantity="other">%1$s mois</item>
     </plurals>
-    <plurals name="n_years">
+    <plurals name="years">
         <item quantity="one">%1$s année</item>
         <item quantity="many">%1$s années</item>
         <item quantity="other">%1$s années</item>
@@ -388,13 +388,13 @@
     <string name="exit_full_screen">Quitter le plein écran</string>
     <string name="color_gradient">Dégradé de couleurs</string>
     <string name="qr_code">Code QR</string>
-    <plurals name="n_seconds">
+    <plurals name="seconds">
         <item quantity="one">%1$s seconde</item>
         <item quantity="many">%1$s secondes</item>
         <item quantity="other">%1$s secondes</item>
     </plurals>
     <string name="time_zones">Fuseaux horaires</string>
-    <plurals name="n_weeks">
+    <plurals name="weeks">
         <item quantity="one">%1$s semaine</item>
         <item quantity="many">%1$s semaines</item>
         <item quantity="other">%1$s semaines</item>
