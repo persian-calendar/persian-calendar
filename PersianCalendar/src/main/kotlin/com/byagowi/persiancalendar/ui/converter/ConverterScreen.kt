@@ -73,7 +73,7 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
-import com.byagowi.persiancalendar.ui.common.DayPicker
+import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
@@ -425,7 +425,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
-            DayPicker(
+            DatePicker(
                 calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
             )
         }
@@ -449,7 +449,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         }
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
-        DayPicker(
+        DatePicker(
             calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
         )
         AnimatedVisibility(
@@ -488,7 +488,7 @@ private fun DaysDistanceSecondPart(
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
         DaysDistance(jdn, secondJdn, calendar)
-        DayPicker(
+        DatePicker(
             calendarType = calendar,
             jdn = secondJdn,
             setJdn = viewModel::changeSecondSelectedDate,

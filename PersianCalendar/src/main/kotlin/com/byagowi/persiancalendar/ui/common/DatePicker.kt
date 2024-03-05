@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
-fun DayPicker(
+fun DatePicker(
     calendarType: CalendarType,
     jdn: Jdn,
     setJdn: (Jdn) -> Unit,

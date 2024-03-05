@@ -123,7 +123,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
-import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
@@ -740,14 +740,14 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
 private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
     val context = LocalContext.current
 
-    var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDayPickerDialog) {
+    var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDatePickerDialog) {
         val selectedDay by viewModel.selectedDay.collectAsState()
-        DayPickerDialog(
+        DatePickerDialog(
             selectedDay,
             R.string.go,
             { bringDate(viewModel, it, context) },
-        ) { showDayPickerDialog = false }
+        ) { showDatePickerDialog = false }
     }
 
     val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
@@ -773,7 +773,7 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
             text = { Text(stringResource(R.string.date_picker)) },
             onClick = {
                 closeMenu()
-                showDayPickerDialog = true
+                showDatePickerDialog = true
             },
         )
 

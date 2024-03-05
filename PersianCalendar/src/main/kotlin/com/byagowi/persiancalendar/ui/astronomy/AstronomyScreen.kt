@@ -80,7 +80,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.theme
-import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -162,7 +162,7 @@ fun AstronomyScreen(
                             text = { Text(stringResource(R.string.date_picker)) },
                             onClick = {
                                 closeMenu()
-                                viewModel.showDayPickerDialog()
+                                viewModel.showDatePickerDialog()
                             },
                         )
                         AppDropdownMenuItem(
@@ -246,14 +246,14 @@ fun AstronomyScreen(
         }
     }
 
-    val isDayPickerDialogShown by viewModel.isDayPickerDialogShown.collectAsState()
-    if (isDayPickerDialogShown) {
+    val isDatePickerDialogShown by viewModel.isDatePickerDialogShown.collectAsState()
+    if (isDatePickerDialogShown) {
         val astronomyState by viewModel.astronomyState.collectAsState()
-        DayPickerDialog(
+        DatePickerDialog(
             initialJdn = Jdn(astronomyState.date.toCivilDate()),
             positiveButtonTitle = R.string.accept,
             onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) },
-            onDismissRequest = viewModel::dismissDayPickerDialog,
+            onDismissRequest = viewModel::dismissDatePickerDialog,
         )
     }
 }
@@ -281,7 +281,7 @@ private fun SliderBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .combinedClickable(
-                    onClick = { viewModel.showDayPickerDialog() },
+                    onClick = { viewModel.showDatePickerDialog() },
                     onClickLabel = stringResource(R.string.date_picker),
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),

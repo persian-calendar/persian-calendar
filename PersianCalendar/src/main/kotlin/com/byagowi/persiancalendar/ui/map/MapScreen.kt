@@ -79,7 +79,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
@@ -300,12 +300,12 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
         }
     }
 
-    var showDayPickerDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDayPickerDialog) {
+    var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
+    if (showDatePickerDialog) {
         val currentJdn = Jdn(Date(state.time).toGregorianCalendar().toCivilDate())
-        DayPickerDialog(currentJdn, R.string.accept, { jdn ->
+        DatePickerDialog(currentJdn, R.string.accept, { jdn ->
             viewModel.addDays(jdn - currentJdn)
-        }) { showDayPickerDialog = false }
+        }) { showDatePickerDialog = false }
     }
 
     Box(Modifier.fillMaxSize()) {
@@ -337,7 +337,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                         modifier = Modifier
                             .fillMaxWidth()
                             .combinedClickable(
-                                onClick = { showDayPickerDialog = true },
+                                onClick = { showDatePickerDialog = true },
                                 onClickLabel = stringResource(R.string.date_picker),
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),

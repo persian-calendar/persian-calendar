@@ -34,13 +34,13 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
-import com.byagowi.persiancalendar.ui.common.DayPicker
+import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import kotlinx.coroutines.delay
 
 @Composable
-fun DayPickerDialog(
+fun DatePickerDialog(
     initialJdn: Jdn,
     @StringRes positiveButtonTitle: Int,
     onSuccess: (jdn: Jdn) -> Unit,
@@ -73,7 +73,7 @@ fun DayPickerDialog(
         var calendarType by rememberSaveable { mutableStateOf(mainCalendar) }
         CalendarsTypesPicker(current = calendarType) { calendarType = it }
 
-        DayPicker(calendarType, jdn) { jdn = it }
+        DatePicker(calendarType, jdn) { jdn = it }
         AnimatedContent(
             targetState = if (jdn == today) null else listOf(
                 stringResource(R.string.days_distance), spacedColon,

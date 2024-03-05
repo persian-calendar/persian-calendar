@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
-import com.byagowi.persiancalendar.ui.calendar.dialogs.DayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
@@ -180,7 +180,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                 SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
                     val jdn = context.appPrefs.getJdnOrNull(key) ?: Jdn.today()
-                    DayPickerDialog(
+                    DatePickerDialog(
                         initialJdn = jdn,
                         positiveButtonTitle = R.string.accept,
                         onSuccess = { context.appPrefs.edit { putJdn(key, it) } },
