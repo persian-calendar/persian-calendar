@@ -42,7 +42,7 @@
     <string name="start_of_year_diff">%1$s roj (~%2$s heftî yan ~%3$s heyv) ji destpêka salê</string>
     <string name="search_in_events">Lêgerîn di nav bûyeran de</string>
     <string name="go">Here</string>
-    <string name="goto_date">Here Dîrokê</string>
+    <string name="date_picker">Here Dîrokê</string>
     <string name="today">Îro</string>
     <string name="device_does_not_support">Rojhejmêra amûrê vî karî piştevanî nake</string>
     <string name="add_event">Zêdekirina bûyerê</string>

@@ -148,7 +148,6 @@ import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -771,7 +770,7 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
 
     ThreeDotsDropdownMenu { closeMenu ->
         AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.goto_date)) },
+            text = { Text(stringResource(R.string.date_picker)) },
             onClick = {
                 closeMenu()
                 showDayPickerDialog = true

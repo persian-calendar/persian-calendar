@@ -159,7 +159,7 @@ fun AstronomyScreen(
                     }
                     ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.goto_date)) },
+                            text = { Text(stringResource(R.string.date_picker)) },
                             onClick = {
                                 closeMenu()
                                 viewModel.showDayPickerDialog()
@@ -282,7 +282,7 @@ private fun SliderBar(
                 .fillMaxWidth()
                 .combinedClickable(
                     onClick = { viewModel.showDayPickerDialog() },
-                    onClickLabel = stringResource(R.string.goto_date),
+                    onClickLabel = stringResource(R.string.date_picker),
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
                 ),

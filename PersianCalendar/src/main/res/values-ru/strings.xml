@@ -20,7 +20,7 @@
     <string name="exit">Выйти</string>
     <string name="add_event">Добавить событие</string>
     <string name="return_to_today">Вернуться к сегодняшнему</string>
-    <string name="goto_date">Перейти на дату</string>
+    <string name="date_picker">Перейти на дату</string>
     <string name="go">Идти</string>
     <string name="search_in_events">Поиск в событиях</string>
     <string name="app_name">Персидский календарь</string>

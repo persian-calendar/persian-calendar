@@ -44,7 +44,7 @@
     <string name="animal_year_name_dragon">Drachen</string>
     <string name="animal_year_name_dog">Hund</string>
     <string name="exit">Verlassen</string>
-    <string name="goto_date">Gehen Sie zum Datum</string>
+    <string name="date_picker">Gehen Sie zum Datum</string>
     <string name="animal_year_name_tiger">Tiger</string>
     <string name="animal_year_name_rabbit">Kaninchen</string>
     <string name="about">Über</string>

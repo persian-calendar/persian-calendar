@@ -75,7 +75,7 @@
     <string name="in_city_time">現地時間%1$s</string>
     <string name="date_copied_clipboard">%1$s をクリップボードにコピーしました。</string>
     <string name="stop">ストップ</string>
-    <string name="goto_date">日付を選択して移動</string>
+    <string name="date_picker">日付を選択して移動</string>
     <string name="go">移動</string>
     <string name="pleasewaitgps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります。</string>
     <string name="notify_date_lock_screen">画面ロックで通知を表示</string>

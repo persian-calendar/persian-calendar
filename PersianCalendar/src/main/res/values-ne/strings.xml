@@ -30,7 +30,7 @@
     <string name="device_does_not_support">मोबाइलको क्यालेन्डरले कार्यलाई समर्थन गर्दैन</string>
     <string name="today">आज</string>
     <string name="return_to_today">आज मा फर्कनुहोस्</string>
-    <string name="goto_date">मिति मा जानुहोस्</string>
+    <string name="date_picker">मिति मा जानुहोस्</string>
     <string name="go">जानुहोस्</string>
     <string name="search_in_events">घटनाहरूमा खोज्नुहोस्</string>
     <string name="days_distance">दूरी</string>

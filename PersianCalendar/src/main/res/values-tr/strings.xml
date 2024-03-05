@@ -309,7 +309,7 @@
     <string name="days_distance">Yaklaşan Etkinliğe Kalan Gün</string>
     <string name="search_in_events">Etkinliklerde Ara</string>
     <string name="go">Git</string>
-    <string name="goto_date">Belirli Bir Tarihe Git</string>
+    <string name="date_picker">Belirli Bir Tarihe Git</string>
     <string name="return_to_today">Bugüne Geri Dön</string>
     <string name="today">Bugün</string>
     <string name="device_does_not_support">Aygıt Takvimi Bu Eylemi Desteklemiyor</string>

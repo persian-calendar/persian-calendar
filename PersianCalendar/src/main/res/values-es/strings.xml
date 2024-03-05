@@ -29,7 +29,7 @@
     <string name="device_does_not_support">El calendario del dispositivo no admite está acción</string>
     <string name="today">Hoy</string>
     <string name="return_to_today">Volver a Hoy</string>
-    <string name="goto_date">Ir a fecha</string>
+    <string name="date_picker">Ir a fecha</string>
     <string name="go">Ir</string>
     <string name="search_in_events">Buscar en los eventos</string>
     <string name="days_distance">Distancia</string>

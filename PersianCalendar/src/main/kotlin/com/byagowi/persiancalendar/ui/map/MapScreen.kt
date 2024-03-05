@@ -338,7 +338,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                             .fillMaxWidth()
                             .combinedClickable(
                                 onClick = { showDayPickerDialog = true },
-                                onClickLabel = stringResource(R.string.goto_date),
+                                onClickLabel = stringResource(R.string.date_picker),
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),
                             ),

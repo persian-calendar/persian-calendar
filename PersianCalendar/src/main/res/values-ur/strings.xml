@@ -74,7 +74,7 @@
     <string name="in_city_time">به افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» کلپ بورڈ پر نقل کر دیا گیا</string>
     <string name="stop">توقف کریں</string>
-    <string name="goto_date">اس تاریخ پر جائیں</string>
+    <string name="date_picker">اس تاریخ پر جائیں</string>
     <string name="go">جائیں</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
