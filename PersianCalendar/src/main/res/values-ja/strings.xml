@@ -75,7 +75,7 @@
     <string name="in_city_time">現地時間%1$s</string>
     <string name="date_copied_clipboard">%1$s をクリップボードにコピーしました。</string>
     <string name="stop">ストップ</string>
-    <string name="pleasewaitgps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります。</string>
+    <string name="wait_for_gps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります。</string>
     <string name="notify_date_lock_screen">画面ロックで通知を表示</string>
     <string name="accept">確認</string>
     <string name="calendar">カレンダー</string>
@@ -85,11 +85,11 @@
     <string name="add">追加</string>
     <string name="help">ヘルプ</string>
     <string name="about_report_bug">問題を報告します</string>
-    <string name="about_sendMail">電子メール</string>
+    <string name="about_send_mail">電子メール</string>
     <string name="about_developers">開発者</string>
-    <string name="sunriseSunView">日の出</string>
-    <string name="middaySunView">正午</string>
-    <string name="sunsetSunView">日の入</string>
+    <string name="sunrise_sun_view">日の出</string>
+    <string name="midday_sun_view">正午</string>
+    <string name="sunset_sun_view">日の入</string>
     <string name="zodiac">星座</string>
     <string name="capricorn">やぎ座</string>
     <string name="aquarius">みずがめ座</string>
@@ -244,6 +244,6 @@
     <string name="warn_if_events_not_set">設定から、お好みの祝日や予定を表示するように変更できます</string>
     <string name="more">詳細</string>
     <string name="end_of_year_diff">今年はあと %1$s 日 (%2$s 週 / %3$s か月)</string>
-    <string name="moonInScorpio">月星座はさそり座です</string>
+    <string name="moon_in_scorpio">月星座はさそり座です</string>
     <string name="device_does_not_support">お使いの端末はこのアクションに対応していません</string>
 </resources>

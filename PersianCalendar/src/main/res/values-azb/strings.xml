@@ -75,7 +75,7 @@
     <string name="in_city_time">افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» حافیظه‌یه یازیلدی</string>
     <string name="stop">ساخلاندی</string>
-    <string name="pleasewaitgps">بیرآز دایانین... بیر دقیقه سونرا نتیجه اولمازسا، جی‌پی‌اس‌ین آچیق اولماسین‌دان مطمئن اولون. اونو آچماق دا یارارسیز اولسا، گمان‌کی باشقا سئچنئک‌لری تست ائتملی‌سینیز.</string>
+    <string name="wait_for_gps">بیرآز دایانین... بیر دقیقه سونرا نتیجه اولمازسا، جی‌پی‌اس‌ین آچیق اولماسین‌دان مطمئن اولون. اونو آچماق دا یارارسیز اولسا، گمان‌کی باشقا سئچنئک‌لری تست ائتملی‌سینیز.</string>
     <string name="notify_date_lock_screen">اعلان‌لاری کلیدلی صفحه‌ده گؤستر</string>
     <string name="notify_date_lock_screen_summary">سیستم‌ده تنظیم اولسا ایشلیئر</string>
     <string name="warn_if_events_not_set">موناسیبت‌لری فعال ائتمک اۆچون تنظیماتا گئدین</string>
@@ -113,8 +113,8 @@
     <string name="help">یاردیم</string>
     <string name="about_report_bug">خطالاری بیلدیرین</string>
     <string name="about_report_bug_sum">خطالاری بیلدیرمک اوچون بوردا یازین</string>
-    <string name="about_sendMail">ایمیل</string>
-    <string name="about_noClient">!ایمیله گوره برنامه یوخدور</string>
+    <string name="about_send_mail">ایمیل</string>
+    <string name="about_no_client">!ایمیله گوره برنامه یوخدور</string>
     <string name="about_developers">گلیشتیر‌ن‌لر حاقیندا</string>
     <string name="about_support_developers">گلیشتیر‌ن‌لری دستک‌لئین</string>
     <string name="about_email_sum">شخصی ایمیل برنامه صاحیب‌ینه گؤندرمک</string>
@@ -122,9 +122,9 @@
     <string name="start_of_year_diff">%1$s گۆن (~%2$s هفته یا %3$s آی) ایل‌ین باشیندان</string>
     <string name="end_of_year_diff">%1$s گۆن (~%2$s هفته یا %3$s آی) ایل‌ین سونونا</string>
     <!-- Sun Info -->
-    <string name="sunriseSunView">گۆن چیخان</string>
-    <string name="middaySunView">گۆن اورتا</string>
-    <string name="sunsetSunView">گۆن باتان</string>
+    <string name="sunrise_sun_view">گۆن چیخان</string>
+    <string name="midday_sun_view">گۆن اورتا</string>
+    <string name="sunset_sun_view">گۆن باتان</string>
     <string name="no_event">موناسیبت یوخدور</string>
     <string name="length_of_day">گۆن سۆره‌سی</string>
     <string name="remaining_daylight">قالان</string>
@@ -159,7 +159,7 @@
     <string name="level">تاراز</string>
     <string name="calibrate_compass_summary">وسیله‌نین دوز عملکردینه‌گوره مغناطیس سنسورلاردان اوزاق توتون و بیر کئز دولانین</string>
     <string name="set_location">آی و گۆنو گؤسترمک اۆچون موقعیت تنظیم ائلین.</string>
-    <string name="moonInScorpio">عقربه‌دکی آی گون‌لری</string>
+    <string name="moon_in_scorpio">عقربه‌دکی آی گون‌لری</string>
     <string name="astronomy">آسترونومیا</string>
     <string name="astronomical_info_summary">آسترونومیا ایطلاعات‌ین گؤسترمک</string>
     <string name="islamic_offset">ایسلامی تقویم‌ین تنظیم ائتمک</string>

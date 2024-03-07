@@ -57,9 +57,9 @@ class SunView(context: Context) : View(context) {
     private var current = 0f
     private var dayLengthString = ""
     private var remainingString = ""
-    private val sunriseString = context.getString(R.string.sunriseSunView)
-    private val middayString = context.getString(R.string.middaySunView)
-    private val sunsetString = context.getString(R.string.sunsetSunView)
+    private val sunriseString = context.getString(R.string.sunrise_sun_view)
+    private val middayString = context.getString(R.string.midday_sun_view)
+    private val sunsetString = context.getString(R.string.sunset_sun_view)
     private var segmentByPixel = .0
     var prayTimes: PrayTimes? = null
         set(value) {

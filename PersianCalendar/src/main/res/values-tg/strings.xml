@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sunriseSunView">тулӯи офтоб</string>
-    <string name="middaySunView">Нимрӯз</string>
+    <string name="sunrise_sun_view">тулӯи офтоб</string>
+    <string name="midday_sun_view">Нимрӯз</string>
     <string name="length_of_day">Рӯзи равшан</string>
     <string name="remaining_daylight">Боқимонда</string>
     <string name="times">Вақтҳои</string>
@@ -11,7 +11,7 @@
     <string name="dhuhr">Зӯҳр</string>
     <string name="asr">Аср</string>
     <string name="sunset">Ғуруби офтоб</string>
-    <string name="sunsetSunView">Ғуруби офтоб</string>
+    <string name="sunset_sun_view">Ғуруби офтоб</string>
     <string name="maghrib">Мағриб</string>
     <string name="isha">Иша</string>
     <string name="select_type_date">Навъи таърихро интихоб кунед</string>
@@ -26,7 +26,7 @@
     <string name="libra">Мизон</string>
     <string name="scorpio">Ақраб</string>
     <string name="sagittarius">Қавс</string>
-    <string name="moonInScorpio">Моҳ дар aқраб аст</string>
+    <string name="moon_in_scorpio">Моҳ дар aқраб аст</string>
     <string name="code">en</string>
     <string name="app_name">Тақвими форсӣ</string>
     <string name="widget_name">Тақвими форсӣ</string>
@@ -109,9 +109,9 @@
     <string name="licenses">Иҷозатнома</string>
     <string name="about_support_developers">Дастгирии таҳиягарон</string>
     <string name="about_report_bug">Гузориш дар бораи хато дар GitHub</string>
-    <string name="about_sendMail">Почтаи электронӣ</string>
+    <string name="about_send_mail">Почтаи электронӣ</string>
     <string name="about_email_sum">Ба муаллифони барнома паёми шахсӣ фиристед</string>
-    <string name="about_noClient">Ягон барнома барои фиристодани почтаи электронӣ вуҷуд надорад</string>
+    <string name="about_no_client">Ягон барнома барои фиристодани почтаи электронӣ вуҷуд надорад</string>
     <plurals name="minutes">
         <item quantity="one">%1$s дақиқа</item>
         <item quantity="other">%1$s дақиқа</item>
@@ -301,7 +301,7 @@
     <string name="gps_internet_desc">Лутфан GPS ва интернетро фаъол кунед, то самти қибла ё самти ҷуғрофиро ёбед.
 \n
 \nИн барнома барои ҷойгиршавӣ танҳо як маротиба ба ин иҷозатҳо ниёз дорад, аммо дар сурати тағир ёфтани макони шумо бояд аз нав барқарор карда шавад.</string>
-    <string name="pleasewaitgps">Мунтазир бошед… Агар пас аз як дақиқа ягон натиҷа ба даст наояд, боварӣ ҳосил кунед, ки дастгоҳи GPS аз танзимот фаъол аст. Агар фаъолсозии он кор накунад, ба шумо лозим меояд, ки имконоти дигарро санҷед</string>
+    <string name="wait_for_gps">Мунтазир бошед… Агар пас аз як дақиқа ягон натиҷа ба даст наояд, боварӣ ҳосил кунед, ки дастгоҳи GPS аз танзимот фаъол аст. Агар фаъолсозии он кор накунад, ба шумо лозим меояд, ки имконоти дигарро санҷед</string>
     <string name="athan_gap_summary">Чанд дақиқа пеш аз азон, ҳушдор бояд садо диҳад</string>
     <string name="athan_alarm">азонҳо</string>
     <string name="athan_alarm_summary">Барои ин Намозҳо азон гуфта шавад</string>

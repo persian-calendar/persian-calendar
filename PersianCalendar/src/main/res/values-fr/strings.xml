@@ -8,9 +8,9 @@
     <string name="licenses">Licence</string>
     <string name="about_report_bug_sum">Préférable pour signaler les erreurs ou demander une nouvelle fonctionnalité, ce qui nécessite un compte GitHub</string>
     <string name="about_report_bug">Signaler un erreur sur GitHub</string>
-    <string name="about_noClient">Aucun client de messagerie n’est installé</string>
+    <string name="about_no_client">Aucun client de messagerie n’est installé</string>
     <string name="about_email_sum">Envoyer un courriel personnel aux auteurs de l’application</string>
-    <string name="about_sendMail">Courriel</string>
+    <string name="about_send_mail">Courriel</string>
     <string name="about_developers">Développeurs (ordonnés au hasard)</string>
     <string name="equivalent_to">Équivalent à</string>
     <string name="previous_x">%1$s précédent</string>
@@ -74,7 +74,7 @@
     <string name="latitude">Latitude</string>
     <string name="location_help">Si aucun d’entre eux, précisez-le ci-dessous</string>
     <string name="location">Localisation</string>
-    <string name="pleasewaitgps">Veuillez patienter… Si rien n’apparaît après une minute, vous devriez probablement essayer d’autres options</string>
+    <string name="wait_for_gps">Veuillez patienter… Si rien n’apparaît après une minute, vous devriez probablement essayer d’autres options</string>
     <string name="gps_internet_desc">Veuillez activer le GPS de l’appareil et la connexion Internet pour trouver votre position.
 \n
 \nL’application n’en a besoin qu’une seule fois, mais si vous changez de lieu, l’accès au GPS et à Internet est à nouveau nécessaire.</string>
@@ -148,13 +148,13 @@
     <string name="remaining_daylight">Restant</string>
     <string name="length_of_day">En journée</string>
     <string name="n_hours_minutes">%1$s h %2$s min</string>
-    <string name="sunsetSunView">Coucher du soleil</string>
-    <string name="middaySunView">Midi</string>
-    <string name="sunriseSunView">Lever du soleil</string>
+    <string name="sunset_sun_view">Coucher du soleil</string>
+    <string name="midday_sun_view">Midi</string>
+    <string name="sunrise_sun_view">Lever du soleil</string>
     <string name="warn_if_events_not_set">Pour sélectionner et afficher les jours fériés et les évènements préférés, rendez-vous dans les Paramètres</string>
     <string name="no_event">Aucun évènement ou rendez-vous pour ce jour</string>
     <string name="events">Évènements</string>
-    <string name="moonInScorpio">La Lune est en Scorpion</string>
+    <string name="moon_in_scorpio">La Lune est en Scorpion</string>
     <string name="sagittarius">Sagittaire</string>
     <string name="scorpio">Scorpion</string>
     <string name="libra">Balance</string>

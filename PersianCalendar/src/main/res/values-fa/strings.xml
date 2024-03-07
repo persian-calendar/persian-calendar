@@ -75,7 +75,7 @@
     <string name="in_city_time">به افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد.</string>
     <string name="stop">توقف</string>
-    <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
+    <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند.</string>
     <string name="warn_if_events_not_set">جهت فعال‌کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
@@ -114,8 +114,8 @@
     <string name="help">راهنما</string>
     <string name="about_report_bug">گزارش اشکال</string>
     <string name="about_report_bug_sum">راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب</string>
-    <string name="about_sendMail">رایانامه</string>
-    <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست</string>
+    <string name="about_send_mail">رایانامه</string>
+    <string name="about_no_client">برنامه‌ای جهت ارسال رایانامه نصب نیست</string>
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
@@ -125,9 +125,9 @@
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
-    <string name="sunriseSunView">طلوع</string>
-    <string name="middaySunView">ظهر</string>
-    <string name="sunsetSunView">غروب</string>
+    <string name="sunrise_sun_view">طلوع</string>
+    <string name="midday_sun_view">ظهر</string>
+    <string name="sunset_sun_view">غروب</string>
     <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد</string>
     <string name="length_of_day">طول روز</string>
     <string name="remaining_daylight">باقی‌مانده</string>
@@ -162,7 +162,7 @@
     <string name="level">تراز</string>
     <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی سه محور به جلو و عقب بچرخانید.</string>
     <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
-    <string name="moonInScorpio">ایام قمر در عقرب</string>
+    <string name="moon_in_scorpio">ایام قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>

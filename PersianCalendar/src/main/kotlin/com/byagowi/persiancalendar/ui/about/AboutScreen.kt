@@ -299,7 +299,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             AboutScreenButton(
                 icon = Icons.Default.Email,
                 action = { showDialog = true },
-                title = R.string.about_sendMail,
+                title = R.string.about_send_mail,
                 summary = R.string.about_email_sum
             )
             if (showDialog) EmailDialog { showDialog = false }

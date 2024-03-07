@@ -96,7 +96,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         else onDismissRequest()
     }
 
-    var message by remember { mutableStateOf(context.getString(R.string.pleasewaitgps)) }
+    var message by remember { mutableStateOf(context.getString(R.string.wait_for_gps)) }
     var coordinates by remember { mutableStateOf<Coordinates?>(null) }
     var cityName by remember { mutableStateOf<String?>(null) }
     var countryCode by remember { mutableStateOf<String?>(null) }
@@ -144,7 +144,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
 
             override fun onProviderEnabled(provider: String) {
                 isOneProviderEnabled = true
-                message = context.getString(R.string.pleasewaitgps)
+                message = context.getString(R.string.wait_for_gps)
             }
 
             override fun onProviderDisabled(provider: String) {

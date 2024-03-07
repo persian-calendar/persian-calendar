@@ -75,7 +75,7 @@
     <string name="in_city_time">به اؤفؤقˇ %1$s</string>
     <string name="date_copied_clipboard">«%1$s»حافظه دۊرۊنم ذخيره بؤبؤ</string>
     <string name="stop">بئس</string>
-    <string name="pleasewaitgps">ايپچه بئسيد… اگر ئي دقه پسي نتيجه نيگيفتيد شيمي دزگا جي پي اسˇجأ خاطرجم بيبيد کي تنظيماتˇجأ فعاله. اگر اۊنˇفعال‌سازی کارساز نۊبۊ، احتمالن وا باقي گۊزينهانأ ايمتحان بۊکۊنيد</string>
+    <string name="wait_for_gps">ايپچه بئسيد… اگر ئي دقه پسي نتيجه نيگيفتيد شيمي دزگا جي پي اسˇجأ خاطرجم بيبيد کي تنظيماتˇجأ فعاله. اگر اۊنˇفعال‌سازی کارساز نۊبۊ، احتمالن وا باقي گۊزينهانأ ايمتحان بۊکۊنيد</string>
     <string name="notify_date_lock_screen">صفه کي قؤفلˈبؤسته أ اعلانانيشان بده</string>
     <string name="notify_date_lock_screen_summary">فقد اۊ وخته کي مؤحافظتˇگۊشي ره تنظيم ببه کار کۊنه</string>
     <string name="warn_if_events_not_set">رۊيدادان ؤ مۊناسبتانˇفعالˈکۊدنˇوأسي ؤ هتؤ شيمي مۊهيمˇمۊناسبتانˇره بيشيد تنظيماتˇسروخت</string>
@@ -113,8 +113,8 @@
     <string name="help">راهنما</string>
     <string name="about_report_bug">گۊزارشˇايشکال</string>
     <string name="about_report_bug_sum">"أيايم تأنيد باگˇگۊزارش ؤ تازه قابليتانˇدرخاستˇره, گیت‌هابˇدۊرۊن حيساب واکۊنيد "</string>
-    <string name="about_sendMail">رایانامه</string>
-    <string name="about_noClient">رایانامه اۊسه کۊدنˇره برنامه-ئي نصب ني-يه!</string>
+    <string name="about_send_mail">رایانامه</string>
+    <string name="about_no_client">رایانامه اۊسه کۊدنˇره برنامه-ئي نصب ني-يه!</string>
     <string name="about_developers">تؤسعه‌دهندهان</string>
     <string name="about_support_developers">تؤسعه‌دهنده پۊشتين</string>
     <string name="about_email_sum">شخصي رايانامهˈ برنامه نيويسˇره اۊسه کۊدن</string>
@@ -122,9 +122,9 @@
     <string name="start_of_year_diff">%1$s رۊز (~%2$s هفته یا %3$s ماه) اولˇسال</string>
     <string name="end_of_year_diff">%1$s رۊز (~%2$s هفته یا %3$s ما) تا آخرˇسال</string>
     <!-- Sun Info -->
-    <string name="sunriseSunView">دتاوستن</string>
-    <string name="middaySunView">ظؤهر</string>
-    <string name="sunsetSunView">غروب</string>
+    <string name="sunrise_sun_view">دتاوستن</string>
+    <string name="midday_sun_view">ظؤهر</string>
+    <string name="sunset_sun_view">غروب</string>
     <string name="no_event">أ رۊزˇره مۊناسبت يا رۊيدادي پئدا نؤبؤ</string>
     <string name="length_of_day">رۊزˇدۊرۊن</string>
     <string name="remaining_daylight">باقي بمانسته</string>
@@ -159,7 +159,7 @@
     <string name="level">تراز</string>
     <string name="calibrate_compass_summary">أنˇوأستي کي قؤطب-نما سنسؤر بهتر کار بۊکۊنه, مغناطيسي چيزانˇجأ دۊرˈبيد, دزگايأ وأگردانيد ؤ اۊنˈبه سه طرف جۊلؤب ؤ عقب بچرخأنيد.</string>
     <string name="set_location">أنˇوأستي کي خؤرشيد ؤ ما ؤ قبله مؤقعيتˈ بداريد, تأنيدي شيمي مؤقعيتˈتنظيماتˇدۊرۊن وارد بۊکۊنيد.</string>
-    <string name="moonInScorpio">قمر در عقربˇرۊزان</string>
+    <string name="moon_in_scorpio">قمر در عقربˇرۊزان</string>
     <string name="astronomy">اخترشناسي</string>
     <string name="astronomical_info_summary">ايطلاعاتˇنيشان دأن صورتˇفلکی، سالˇنام ؤ قمر در عقربˇمانستن</string>
     <string name="islamic_offset">ايسلامي تقويمˇتنظيم</string>

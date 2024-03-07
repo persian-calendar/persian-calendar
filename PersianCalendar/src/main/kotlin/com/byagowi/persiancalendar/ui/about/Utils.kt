@@ -67,9 +67,9 @@ App Version Code: ${context.packageName} ${BuildConfig.VERSION_CODE} $bucket"""
     }
     runCatching {
         context.startActivity(
-            Intent.createChooser(emailIntent, context.getString(R.string.about_sendMail))
+            Intent.createChooser(emailIntent, context.getString(R.string.about_send_mail))
         )
     }.onFailure(logException).onFailure {
-        Toast.makeText(context, R.string.about_noClient, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, R.string.about_no_client, Toast.LENGTH_SHORT).show()
     }
 }

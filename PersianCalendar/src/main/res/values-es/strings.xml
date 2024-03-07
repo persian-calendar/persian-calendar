@@ -60,13 +60,13 @@
     <string name="libra">Libra</string>
     <string name="scorpio">Escorpio</string>
     <string name="sagittarius">Sagitario</string>
-    <string name="moonInScorpio">Luna en Escorpio</string>
+    <string name="moon_in_scorpio">Luna en Escorpio</string>
     <string name="events">Eventos</string>
     <string name="no_event">No hay evento ni cita para este día</string>
     <string name="warn_if_events_not_set">Para seleccionar y mostrar los días festivos y eventos preferidos, visite los ajustes</string>
-    <string name="sunriseSunView">Amanecer</string>
-    <string name="middaySunView">Mediodía</string>
-    <string name="sunsetSunView">Atardecer</string>
+    <string name="sunrise_sun_view">Amanecer</string>
+    <string name="midday_sun_view">Mediodía</string>
+    <string name="sunset_sun_view">Atardecer</string>
     <string name="length_of_day">Duración del día</string>
     <string name="remaining_daylight">Restante</string>
     <string name="n_hours_minutes">%1$sh %2$sm</string>
@@ -150,7 +150,7 @@
     <string name="gps_internet_desc">Habilite el GPS del dispositivo y la conexión a Internet para encontrar su ubicación, por favor.
 \n
 \n La aplicación necesita esto solo una vez, sin embargo, si se va a una nueva ubicación, se necesita acceder nuevamente al GPS e Internet.</string>
-    <string name="pleasewaitgps">Espere … Si no aparece nada después de un minuto, quizá debería probar otras opciones</string>
+    <string name="wait_for_gps">Espere … Si no aparece nada después de un minuto, quizá debería probar otras opciones</string>
     <string name="location">Ubicación</string>
     <string name="location_help">Si ninguno de ellos, especifíquelo abajo</string>
     <string name="latitude">Latitud</string>
@@ -193,9 +193,9 @@
     <string name="about_support_developers">Soporte para desarrolladores</string>
     <string name="about_report_bug">Informar error en Github</string>
     <string name="about_report_bug_sum">Para informe de errores preferencia o solicitud de una nueva característica, necesita una cuenta de GitHub</string>
-    <string name="about_sendMail">Correo electrónico</string>
+    <string name="about_send_mail">Correo electrónico</string>
     <string name="about_email_sum">Enviar un correo electrónico personal a los autores de la aplicación</string>
-    <string name="about_noClient">No hay ningún cliente de correo electrónico instalado</string>
+    <string name="about_no_client">No hay ningún cliente de correo electrónico instalado</string>
     <string name="about_developers">Desarrolladores (aleatoriamente)</string>
     <string name="previous_x">%1$s anterior</string>
     <string name="next_x">Siguiente %1$s</string>

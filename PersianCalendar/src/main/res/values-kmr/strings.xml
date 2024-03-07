@@ -9,11 +9,11 @@
     <string name="n_hours_minutes">%1$ss %2$sd</string>
     <string name="remaining_daylight">Mayî</string>
     <string name="length_of_day">Rojgar</string>
-    <string name="sunsetSunView">Rojavabûn</string>
-    <string name="middaySunView">Nîvro</string>
-    <string name="sunriseSunView">Rojderketin</string>
+    <string name="sunset_sun_view">Rojavabûn</string>
+    <string name="midday_sun_view">Nîvro</string>
+    <string name="sunrise_sun_view">Rojderketin</string>
     <string name="events">Bûyer</string>
-    <string name="moonInScorpio">Heyv di dûpişk</string>
+    <string name="moon_in_scorpio">Heyv di dûpişk</string>
     <string name="sagittarius">Kevan</string>
     <string name="scorpio">Dûpişk</string>
     <string name="libra">Terazû</string>

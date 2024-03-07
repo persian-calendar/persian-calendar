@@ -50,9 +50,9 @@
     <string name="scorpio">天蝎座</string>
     <string name="events">日程</string>
     <string name="no_event">选定的日期没有日程安排</string>
-    <string name="sunriseSunView">日出</string>
-    <string name="middaySunView">正午</string>
-    <string name="sunsetSunView">日落</string>
+    <string name="sunrise_sun_view">日出</string>
+    <string name="midday_sun_view">正午</string>
+    <string name="sunset_sun_view">日落</string>
     <string name="length_of_day">白昼时长</string>
     <string name="remaining_daylight">剩余</string>
     <string name="n_hours_minutes">%1$s 时 %2$s 分</string>
@@ -85,7 +85,7 @@
     <string name="sunset">日落</string>
     <string name="isha">宵礼</string>
     <string name="dhuhr">晌礼</string>
-    <string name="moonInScorpio">月亮处在天蝎座</string>
+    <string name="moon_in_scorpio">月亮处在天蝎座</string>
     <string name="level">水平仪</string>
     <string name="stop">停止</string>
     <string name="resume">恢复</string>
@@ -149,7 +149,7 @@
     <string name="notify_date_lock_screen_summary">此选项仅在使用锁屏时生效</string>
     <string name="gps_location_help">使用此选项以自动设定位置</string>
     <string name="gps_location">通过 GPS 或网络获取位置</string>
-    <string name="pleasewaitgps">请稍候……
+    <string name="wait_for_gps">请稍候……
 \n如果在一分钟内未能成功定位，请尝试其他选项。</string>
     <string name="longitude">经度</string>
     <string name="location_access">位置信息权限</string>
@@ -168,11 +168,11 @@
     <string name="nth_week_of_year">第 %1$s 周</string>
     <string name="shift_work_settings">倒班设置</string>
     <string name="shift_work_starting_date_edit">先前选择的日期（%1$s）将作为倒班的起始日。</string>
-    <string name="about_sendMail">电子邮件</string>
+    <string name="about_send_mail">电子邮件</string>
     <string name="phone_location_required">此功能需要位置信息权限，如您拒绝授权，则需要手动输入经纬度。</string>
     <string name="about_license_sum">查阅波斯历的 GPLv3 许可证和其他许可条款</string>
     <string name="version">版本号 %1$s</string>
-    <string name="about_noClient">未安装任何邮件应用</string>
+    <string name="about_no_client">未安装任何邮件应用</string>
     <string name="shift_work_starting_date">当前日历上选择的日期（%1$s）将作为倒班的起始日。</string>
     <string name="spaced_and">和</string>
     <string name="spaced_or"> 周或 </string>

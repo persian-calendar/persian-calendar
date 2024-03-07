@@ -60,14 +60,14 @@
     <string name="libra">Libra</string>
     <string name="scorpio">Scorpio</string>
     <string name="sagittarius">Sagittarius</string>
-    <string name="moonInScorpio">Moon is in Scorpio</string>
+    <string name="moon_in_scorpio">Moon is in Scorpio</string>
     <string name="events">Events</string>
     <string name="no_event">No event or appointment for this day</string>
     <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
     <string name="ask_for_calendar_permission">"Would you like to enable your personal events from your device's calendar?"</string>
-    <string name="sunriseSunView">Sunrise</string>
-    <string name="middaySunView">Midday</string>
-    <string name="sunsetSunView">Sunset</string>
+    <string name="sunrise_sun_view">Sunrise</string>
+    <string name="midday_sun_view">Midday</string>
+    <string name="sunset_sun_view">Sunset</string>
     <string name="length_of_day">Daytime</string>
     <string name="remaining_daylight">Remaining</string>
     <string name="n_hours_minutes">%1$sh %2$sm</string>
@@ -151,7 +151,7 @@
     <string name="gps_internet_desc">"Enable device's GPS and Internet connection to find your location, please.
 
 The app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again."</string>
-    <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
+    <string name="wait_for_gps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="location">Location</string>
     <string name="location_help">If none of them, specify it below</string>
     <string name="latitude">Latitude</string>
@@ -194,9 +194,9 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="about_support_developers">Developer Support</string>
     <string name="about_report_bug">Report bug on GitHub</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
-    <string name="about_sendMail">E-Mail</string>
+    <string name="about_send_mail">E-Mail</string>
     <string name="about_email_sum">Send personal email to the authors of the app</string>
-    <string name="about_noClient">No email client is installed</string>
+    <string name="about_no_client">No email client is installed</string>
     <string name="about_developers">Developers (randomly ordered)</string>
     <!-- Used in accessibility, previous day or month or year -->
     <string name="previous_x">Previous %1$s</string>

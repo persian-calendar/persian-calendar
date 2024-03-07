@@ -75,7 +75,7 @@
     <string name="in_city_time">بە ئاسۆی %1$s</string>
     <string name="date_copied_clipboard">«%1$s» لە کلیپبۆرددا کۆپی کرا.</string>
     <string name="stop">ڕاگرتن</string>
-    <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە</string>
+    <string name="wait_for_gps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا.</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن</string>
@@ -112,8 +112,8 @@
     <string name="about_license_sum">تاوتوێکردنی مۆڵەتی GPLv3 و مەرجەکانی تری بەکارھێنراو لە ڕۆژژمێری فارسیدا.</string>
     <string name="help">یارمەتی</string>
     <string name="about_report_bug">ڕاپۆرتی ھەڵە</string>
-    <string name="about_sendMail">ئیمەیل</string>
-    <string name="about_noClient">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە</string>
+    <string name="about_send_mail">ئیمەیل</string>
+    <string name="about_no_client">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە</string>
     <string name="about_developers">پەرەپێدەران (بە شێوەیەکی هەڕەمەکی ریزکراون)</string>
     <string name="about_support_developers">پشتیوانی لە پەرەپێدەر</string>
     <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەرانی بەرنامە</string>
@@ -124,9 +124,9 @@
     <string name="start_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) لە سەرەتای ساڵەوە</string>
     <string name="end_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
-    <string name="sunriseSunView">ڕۆژھەڵات</string>
-    <string name="middaySunView">نیوەڕۆ</string>
-    <string name="sunsetSunView">ڕۆژاوا</string>
+    <string name="sunrise_sun_view">ڕۆژھەڵات</string>
+    <string name="midday_sun_view">نیوەڕۆ</string>
+    <string name="sunset_sun_view">ڕۆژاوا</string>
     <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە</string>
     <string name="length_of_day">ڕۆژگار</string>
     <string name="remaining_daylight">ماوەوە</string>
@@ -161,7 +161,7 @@
     <string name="level">تەراز</string>
     <string name="calibrate_compass_summary">بۆ باشترکردنی دیقەتی ڕووگەنوێن، لە شتی موگناتیسی دوور بنەوە، سەر و خوار بە ئامرازکە بکەن و لە گشت تەوەرەکاندا بیھێنن و بیبەن.</string>
     <string name="set_location">بۆ نیشاندانی شوێنی خۆر، مانگ و ئاراستەی ڕووگە لە بەشی ڕێکخستندا شوێنەکەتان ڕێک بخەن.</string>
-    <string name="moonInScorpio">ڕۆژانی مانگ لە دووپشکدا</string>
+    <string name="moon_in_scorpio">ڕۆژانی مانگ لە دووپشکدا</string>
     <string name="astronomy">ئەستێرەناسی</string>
     <string name="astronomical_info_summary">نیشاندانی زانیاریگەلێک وەک کەلوو، ناوی ساڵ و مانگ لە دووپشکدا</string>
     <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>

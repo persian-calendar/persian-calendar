@@ -57,13 +57,13 @@
     <string name="libra">Весы</string>
     <string name="scorpio">Скорпион</string>
     <string name="sagittarius">Стрелец</string>
-    <string name="moonInScorpio">Луна в Скорпионе</string>
+    <string name="moon_in_scorpio">Луна в Скорпионе</string>
     <string name="events">События</string>
     <string name="no_event">Нет событий или встреч на этот день</string>
     <string name="warn_if_events_not_set">Чтобы выбрать и отобразить предпочтительные праздники и события, посетите Настройки</string>
-    <string name="sunriseSunView">Восход</string>
-    <string name="middaySunView">Полдень</string>
-    <string name="sunsetSunView">Закат</string>
+    <string name="sunrise_sun_view">Восход</string>
+    <string name="midday_sun_view">Полдень</string>
+    <string name="sunset_sun_view">Закат</string>
     <string name="length_of_day">Дневное время</string>
     <string name="remaining_daylight">оставшиеся</string>
     <string name="imsak">Имсак</string>
@@ -141,7 +141,7 @@
     <string name="gps_internet_desc">Пожалуйста, включите GPS устройства и подключение к Интернету, чтобы определить ваше местоположение.
 \n
 \nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
-    <string name="pleasewaitgps">Пожалуйста, подождите… Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
+    <string name="wait_for_gps">Пожалуйста, подождите… Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <string name="center_align_widgets_summary">Выравнивание по центру виджетов 4x1 и 2x2</string>
@@ -271,9 +271,9 @@
     <string name="about_support_developers">Поддержка разработчиков</string>
     <string name="about_report_bug">Сообщить об ошибке на GitHub</string>
     <string name="about_report_bug_sum">Для предпочтительного сообщения об ошибках или запроса новой функции требуется учетная запись GitHub</string>
-    <string name="about_sendMail">Электронная почта</string>
+    <string name="about_send_mail">Электронная почта</string>
     <string name="about_email_sum">Отправить личную электронную почту авторам приложения</string>
-    <string name="about_noClient">Почтовый клиент не установлен</string>
+    <string name="about_no_client">Почтовый клиент не установлен</string>
     <string name="about_developers">Разработчики (в случайном порядке)</string>
     <string name="previous_x">Прежняя %1$s</string>
     <string name="next_x">Следующий %1$s</string>

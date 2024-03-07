@@ -19,7 +19,7 @@
     <string name="converter">मीती परिवर्तन</string>
     <string name="code">ne</string>
     <string name="no_event">यस दिनको लागि कुनै कार्यक्रम वा अपोइन्टमेन्ट छैन।</string>
-    <string name="moonInScorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
+    <string name="moon_in_scorpio">चन्द्रमा वृश्चिक राशिमा छ</string>
     <string name="warn_if_events_not_set">मनपर्ने बिदा र घटनाहरू चयन गर्न र देखाउन, सेटिङहरूमा जानुहोस्</string>
     <string name="spring_equinox">वर्षको वसन्त रितु समय %1$s: %2$s</string>
     <string name="compass">कम्पास</string>
@@ -62,9 +62,9 @@
     <string name="scorpio">वृश्चिक</string>
     <string name="sagittarius">धनु</string>
     <string name="events">चाडपर्व</string>
-    <string name="sunriseSunView">सूर्योदय</string>
-    <string name="middaySunView">मध्याह्न</string>
-    <string name="sunsetSunView">सूर्यास्त</string>
+    <string name="sunrise_sun_view">सूर्योदय</string>
+    <string name="midday_sun_view">मध्याह्न</string>
+    <string name="sunset_sun_view">सूर्यास्त</string>
     <string name="length_of_day">दिवा समय</string>
     <string name="remaining_daylight">बाँकी</string>
     <string name="n_hours_minutes">%1$sघन्टा %2$sमिनेट</string>
@@ -93,7 +93,7 @@
     <string name="gps_internet_desc">कृपया आफ्नो स्थान पत्ता लगाउन उपकरणको GPS र इन्टरनेट जडान सक्षम गर्नुहोस्।
 \n
 \nएपलाई यो एक पटक मात्र चाहिन्छ, यद्यपि, यदि तपाइँ नयाँ स्थानमा जानुभयो भने, GPS र इन्टरनेटमा पहुँच गर्न फेरि आवश्यक छ।</string>
-    <string name="pleasewaitgps">कृपया प्रतीक्षा गर्नुहोस्... यदि एक मिनेट पछि केहि पनि देखा परेन भने तपाईले अन्य विकल्पहरू प्रयास गर्नुपर्छ</string>
+    <string name="wait_for_gps">कृपया प्रतीक्षा गर्नुहोस्... यदि एक मिनेट पछि केहि पनि देखा परेन भने तपाईले अन्य विकल्पहरू प्रयास गर्नुपर्छ</string>
     <string name="athan_gap_summary">Athan भन्दा कति समय अगाडि अलार्म ट्रिगर गर्नुपर्छ (मिनेटमा)</string>
     <string name="enable_notification_athan">एक सूचना र उपकरण कम्पन रूपमा Athan देखाउनुहोस्</string>
     <string name="athan_alarm">एथन अलार्म</string>
@@ -198,7 +198,7 @@
         <item quantity="other">%1$s वर्षहर्</item>
     </plurals>
     <string name="show_secondary_calendar">अन्य पात्रो देखाउनुहोस्</string>
-    <string name="about_sendMail">इमेल</string>
+    <string name="about_send_mail">इमेल</string>
     <string name="shift_work_starting_date_edit">%1$s, पहिले चयन गरिएको, रोजिएको शिफ्ट काम सुरु हुने दिन हो।</string>
     <string name="islamic_calendar">इस्लामिक क्यालेन्डर</string>
     <string name="method_tehran">जियोफिजिक्स संस्थान, तेहरान विश्वविद्यालय</string>
@@ -211,7 +211,7 @@
     <string name="preview">पूर्वावलोकन</string>
     <string name="method_mwl">मुस्लिम विश्व लीग</string>
     <string name="method_egypt">इजिप्टियन सामान्य प्राधिकरण सर्वेक्षण</string>
-    <string name="about_noClient">कुनै इमेल क्लाइन्ट स्थापना गरिएको छैन</string>
+    <string name="about_no_client">कुनै इमेल क्लाइन्ट स्थापना गरिएको छैन</string>
     <string name="shift_work_reset_button">असक्षम वा पुन: प्रोग्राम गर्नुहोस्</string>
     <string name="method_karachi">इस्लामिक विज्ञान विश्वविद्यालय, कराची</string>
     <string name="equivalent_to">को बराबर</string>
