@@ -183,7 +183,7 @@ fun CalendarsOverview(
         AnimatedVisibility(showIsMoonInScorpio) {
             SelectionContainer {
                 Text(
-                    stringResource(R.string.moonInScorpio),
+                    stringResource(R.string.moon_in_scorpio),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
