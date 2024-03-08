@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
- * The follow table is copied from https://en.wikipedia.org/wiki/Chinese_zodiac
+ * The following table is copied from https://en.wikipedia.org/wiki/Chinese_zodiac
  *
  * | Number |  Animal | Yin/Yang | Trine | Fixed Element |
  * |:------:|:-------:|:--------:|:-----:|:-------------:|
@@ -26,7 +26,7 @@ import io.github.persiancalendar.calendar.PersianDate
  * | 11     | Dog     | Yang     | 3rd   | Earth         |
  * | 12     | Pig     | Yin      | 4th   | Water         |
  *
- * The follow poem is copied from https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
+ * The following poem is copied from https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
  *
  * موش و بقر و پلنگ و خرگوش شمار - زان چار چو بگذری نهنگ آید و مار
  *آنگاه به اسب و گوسفند است حساب - حمدونه و مرغ و سگ و خوک آخر کار
