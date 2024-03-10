@@ -77,7 +77,9 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
                 "last weekday of month" -> {
                     val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
                     val weekDay = event["weekday"]?.toIntOrNull() ?: return@mapNotNull null
-                    type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay))
+                    val offset = event["offset"]?.toIntOrNull() ?: 0
+                    val day = type.getLastWeekDayOfMonth(year, month, weekDay) + offset
+                    type.createDate(year, month, day)
                 }
 
                 else -> return@mapNotNull null
