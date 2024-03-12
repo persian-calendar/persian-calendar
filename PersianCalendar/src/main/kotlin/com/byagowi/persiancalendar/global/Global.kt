@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
+import com.byagowi.persiancalendar.DEFAULT_RED_HOLIDAYS
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
@@ -52,6 +53,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
+import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -165,6 +167,10 @@ val theme: StateFlow<Theme> get() = theme_
 
 private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
 val isGradient: StateFlow<Boolean> get() = isGradient_
+
+
+private val isRedHolidays_ = MutableStateFlow(DEFAULT_RED_HOLIDAYS)
+val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
 
 private var alternativeGregorianMonths = false
 
@@ -331,6 +337,7 @@ fun updateStoredPreference(context: Context) {
         Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
     }
     isGradient_.value = prefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+    isRedHolidays_.value = prefs.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     alternativeGregorianMonths = when {
         language.isPersian -> prefs.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS

@@ -399,6 +399,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="exempt_app_battery_optimization">Would you like to add the app to battery optimization exception for correct functionality of the notification?</string>
     <string name="widget_background_transparency">Widget background transparency</string>
     <string name="save">Save</string>
+    <string name="holidays_in_red">Holidays in red color</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

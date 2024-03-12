@@ -43,6 +43,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isGradient
+import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
@@ -196,6 +197,7 @@ private fun appBackground(): Brush {
 fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme by theme.collectAsState()
+    val isRedHolidays by isRedHolidays.collectAsState()
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val context = LocalContext.current
@@ -211,7 +213,7 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color(0xFF376E9F)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorHolidays = if (theme.isDynamicColors) when (resolvedTheme) {
+    val colorHolidays = if (theme.isDynamicColors && !isRedHolidays) when (resolvedTheme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
