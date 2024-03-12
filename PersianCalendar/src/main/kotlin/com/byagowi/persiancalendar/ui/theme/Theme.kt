@@ -22,6 +22,6 @@ enum class Theme(
     ),
     MODERN("ClassicTheme",/*legacy*/R.string.theme_modern, hasDynamicColors = true);
 
-    @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-    fun isDynamicColors() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && hasDynamicColors
+    val isDynamicColors
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S) get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && hasDynamicColors
 }

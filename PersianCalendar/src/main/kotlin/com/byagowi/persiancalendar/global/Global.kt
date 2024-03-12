@@ -343,7 +343,7 @@ fun updateStoredPreference(context: Context) {
         else -> false
     }
 
-    prefersWidgetsDynamicColors_.value = theme.value.isDynamicColors() &&
+    prefersWidgetsDynamicColors_.value = theme.value.isDynamicColors &&
             prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
 
     preferredDigits = if (!prefs.getBoolean(

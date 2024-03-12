@@ -546,7 +546,7 @@ private fun Cell(modifier: Modifier, @ColorInt color: Int, label: String, value:
     ) {
         val context = LocalContext.current
         val isDynamicGrayscale = remember(LocalConfiguration.current) {
-            theme.value.isDynamicColors() && context.resources.isDynamicGrayscale
+            theme.value.isDynamicColors && context.resources.isDynamicGrayscale
         }
         Text(
             label,

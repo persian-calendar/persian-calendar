@@ -180,7 +180,7 @@ fun WidgetConfiguration() {
 @Composable
 fun WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
     val theme by theme.collectAsState()
-    if (theme.isDynamicColors()) {
+    if (theme.isDynamicColors) {
         SettingsSwitch(
             key = PREF_WIDGETS_PREFER_SYSTEM_COLORS,
             value = prefersWidgetsDynamicColors,
