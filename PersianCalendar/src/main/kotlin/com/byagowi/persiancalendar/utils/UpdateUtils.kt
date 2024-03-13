@@ -236,7 +236,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date, owghat)
+    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes)
 }
 
 @StringRes
@@ -792,7 +792,7 @@ private fun setEventsInWidget(
 private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String, prayTimes: PrayTimes?
 ) {
     if (!isNotifyDate.value) {
         val notificationManager = context.getSystemService<NotificationManager>()
@@ -802,7 +802,7 @@ private fun updateNotification(
     }
 
     val notificationData = NotificationData(
-        title = title, subtitle = subtitle, jdn = jdn, date = date, owghat = owghat,
+        title = title, subtitle = subtitle, jdn = jdn, date = date, owghat = owghat, prayTimes = prayTimes,
         isRtl = context.resources.isRtl,
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
         isTalkBackEnabled = isTalkBackEnabled,
@@ -829,6 +829,7 @@ private data class NotificationData(
     private val jdn: Jdn,
     private val date: AbstractDate,
     private val owghat: String,
+    private val prayTimes: PrayTimes?,
     private val isRtl: Boolean,
     private val events: List<CalendarEvent<*>>,
     private val isTalkBackEnabled: Boolean,
@@ -930,9 +931,17 @@ private data class NotificationData(
                     it.setDirection(R.id.custom_notification_root, context.resources)
                     it.setTextViewText(R.id.title, title)
                     it.setTextViewText(R.id.body, subtitle)
+                    it.setImageViewResource(R.id.dayNumberImage, getDayIconResource(date.dayOfMonth))
+
+                    if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        val icon = createStatusIcon(date.dayOfMonth)
+                        it.setImageViewBitmap(R.id.dayNumberImage, icon)
+                    } else {
+                        it.setImageViewResource(R.id.dayNumberImage, getDayIconResource(date.dayOfMonth))
+                    }
                 })
 
-                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
+//                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
                     builder.setCustomBigContentView(RemoteViews(
                         context.packageName, R.layout.custom_notification_big
                     ).also {
@@ -941,7 +950,23 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
-                        it.setTextViewTextOrHideIfEmpty(R.id.owghat, notificationOwghat)
+
+                        it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
+                        it.setTextViewText(R.id.dhuhrText, context.getString(R.string.dhuhr))
+                        it.setTextViewText(R.id.maghribText, context.getString(R.string.maghrib))
+                        it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
+
+                        it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
+                        it.setTextViewText(R.id.dhuhrTime, prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString())
+                        it.setTextViewText(R.id.maghribTime, prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString())
+                        it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+
+                        if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val icon = createStatusIcon(date.dayOfMonth)
+                            it.setImageViewBitmap(R.id.dayNumberImage, icon)
+                        } else {
+                            it.setImageViewResource(R.id.dayNumberImage, getDayIconResource(date.dayOfMonth))
+                        }
                     })
 
                 builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())

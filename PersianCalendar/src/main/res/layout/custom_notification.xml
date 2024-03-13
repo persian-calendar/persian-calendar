@@ -4,22 +4,41 @@
     android:id="@+id/custom_notification_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.Compat.Notification.Title"
+    <ImageView
+        android:id="@+id/dayNumberImage"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:layout_margin="10dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/day1" /> <!-- set template -->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        tools:text="Title" />
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/body"
-        style="@style/TextAppearance.Compat.Notification"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="viewStart"
-        tools:text="Body" />
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.Compat.Notification.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/body"
+            style="@style/TextAppearance.Compat.Notification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="viewStart"
+            tools:text="Body" />
+
+    </LinearLayout>
 
 </LinearLayout>
