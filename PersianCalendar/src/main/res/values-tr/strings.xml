@@ -405,4 +405,5 @@
     <string name="year_view">Yıl görünümü</string>
     <string name="exempt_app_battery_optimization">Bildirimin doğru çalışması için uygulamayı pil iyileştirmesi istisnasına eklemek ister misiniz?</string>
     <string name="save">Kaydet</string>
+    <string name="holidays_in_red">Tatiller kırmızı renkte</string>
 </resources>
