@@ -419,4 +419,5 @@
     <string name="exempt_app_battery_optimization">¿Te gustaría añadir la aplicación a la excepción de optimización de la batería para el correcto funcionamiento de la notificación?</string>
     <string name="widget_background_transparency">Transparencia de fondo del widget</string>
     <string name="save">Guardar</string>
+    <string name="holidays_in_red">Vacaciones en rojo</string>
 </resources>
