@@ -3,7 +3,7 @@
     android:configure="com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity"
     android:initialKeyguardLayout="@layout/widget_age"
     android:initialLayout="@layout/widget_age"
-    android:minWidth="250dp"
+    android:minWidth="110dp"
     android:minHeight="40dp"
     android:previewImage="@drawable/widget_age_preview"
     android:resizeMode="horizontal|vertical"
