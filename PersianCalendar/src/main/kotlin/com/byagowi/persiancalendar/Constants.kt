@@ -27,6 +27,7 @@ const val PREF_LOCAL_DIGITS = "PersianDigits"
 const val PREF_ATHAN_URI = "AthanURI"
 const val PREF_ATHAN_NAME = "AthanName"
 const val PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents"
+const val PREF_WHAT_TO_SHOW_NOTIFICATION = "what_to_show_notification"
 const val PREF_WIDGET_CLOCK = "WidgetClock"
 const val PREF_CENTER_ALIGN_WIDGETS = "CenterAlignWidgets"
 const val PREF_WHAT_TO_SHOW_WIDGETS = "what_to_show"
@@ -117,9 +118,18 @@ const val NON_HOLIDAYS_EVENTS_KEY = "non_holiday_events"
 const val OWGHAT_KEY = "owghat"
 const val OWGHAT_LOCATION_KEY = "owghat_location"
 
+const val NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION = "non_holiday_events_notification"
+const val OWGHAT_KEY_NOTIFICATION = "owghat_notification"
+const val OWGHAT_LOCATION_KEY_NOTIFICATION = "owghat_location_notification"
+
 // A new one can't be added and should be default off unfortunately as users might have set it already
 val DEFAULT_WIDGET_CUSTOMIZATIONS = setOf(
     OTHER_CALENDARS_KEY, NON_HOLIDAYS_EVENTS_KEY, OWGHAT_KEY, OWGHAT_LOCATION_KEY
+)
+val DEFAULT_NOTIFICATION_CUSTOMIZATIONS = setOf(
+    NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION,
+    OWGHAT_KEY_NOTIFICATION,
+    OWGHAT_LOCATION_KEY_NOTIFICATION
 )
 
 const val FAJR_KEY = "FAJR"

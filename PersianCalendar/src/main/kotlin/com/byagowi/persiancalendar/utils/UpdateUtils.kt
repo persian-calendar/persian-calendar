@@ -45,9 +45,12 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
+import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
+import com.byagowi.persiancalendar.OWGHAT_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
+import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
@@ -87,6 +90,7 @@ import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.whatToShowOnNotification
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -236,7 +240,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes)
+    updateNotification(context, title, subtitle, jdn, date)
 }
 
 @StringRes
@@ -792,7 +796,7 @@ private fun setEventsInWidget(
 private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String, prayTimes: PrayTimes?
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate
 ) {
     if (!isNotifyDate.value) {
         val notificationManager = context.getSystemService<NotificationManager>()
@@ -802,14 +806,14 @@ private fun updateNotification(
     }
 
     val notificationData = NotificationData(
-        title = title, subtitle = subtitle, jdn = jdn, date = date, owghat = owghat, prayTimes = prayTimes,
+        title = title, subtitle = subtitle, jdn = jdn, date = date,
         isRtl = context.resources.isRtl,
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
         isTalkBackEnabled = isTalkBackEnabled,
         isHighTextContrastEnabled = isHighTextContrastEnabled,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
-        whatToShowOnWidgets = whatToShowOnWidgets,
+        whatToShowOnNotification = whatToShowOnNotification,
         spacedComma = spacedComma,
         language = language.value,
         notificationId =
@@ -828,15 +832,13 @@ private data class NotificationData(
     private val subtitle: String,
     private val jdn: Jdn,
     private val date: AbstractDate,
-    private val owghat: String,
-    private val prayTimes: PrayTimes?,
     private val isRtl: Boolean,
     private val events: List<CalendarEvent<*>>,
     private val isTalkBackEnabled: Boolean,
     private val isHighTextContrastEnabled: Boolean,
     private val isNotifyDateOnLockScreen: Boolean,
     private val deviceCalendarEventsList: List<CalendarEvent.DeviceCalendarEvent>,
-    private val whatToShowOnWidgets: Set<String>,
+    private val whatToShowOnNotification: Set<String>,
     private val spacedComma: String,
     private val language: Language,
     private val notificationId: Int,
@@ -863,6 +865,20 @@ private data class NotificationData(
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
         val toPrepend = if (isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) RLM else ""
+
+        // region owghat calculations
+        val nowClock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
+        val prayTimes = coordinates.value?.calculatePrayTimes()
+
+        @StringRes
+        val nextOwghatId = prayTimes?.getNextOwghatTimeId(nowClock)
+        val owghat = if (nextOwghatId == null) "" else buildString {
+            append(context.getString(nextOwghatId))
+            append(": ")
+            append(prayTimes.getFromStringId(nextOwghatId).toFormattedString())
+            if (OWGHAT_LOCATION_KEY_NOTIFICATION in whatToShowOnNotification) cityName.value?.also { append(" ($it)") }
+        }
+        // endregion
 
         val builder = NotificationCompat.Builder(context, notificationId.toString())
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -912,13 +928,13 @@ private data class NotificationData(
                 addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
             )
 
-            val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
+            val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION in whatToShowOnNotification) getEventsTitle(
                 events, holiday = false,
                 compact = true, showDeviceCalendarEvents = true, insertRLM = isRtl,
                 addIsHoliday = false
             ) else ""
 
-            val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
+            val notificationOwghat = if (OWGHAT_KEY_NOTIFICATION in whatToShowOnNotification) owghat else ""
 
             if (shouldDisableCustomNotification) {
                 val content = listOf(subtitle, holidays.trim(), nonHolidays, notificationOwghat)
@@ -941,7 +957,7 @@ private data class NotificationData(
                     }
                 })
 
-//                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
+                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
                     builder.setCustomBigContentView(RemoteViews(
                         context.packageName, R.layout.custom_notification_big
                     ).also {
@@ -951,19 +967,23 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
 
-                        it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
-                        it.setTextViewText(R.id.sunriseText, context.getString(R.string.sunrise))
-                        it.setTextViewText(R.id.dhuhrText, context.getString(R.string.dhuhr))
-                        it.setTextViewText(R.id.sunsetText, context.getString(R.string.sunset))
-                        it.setTextViewText(R.id.maghribText, context.getString(R.string.maghrib))
-                        it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
+                        if (OWGHAT_KEY_NOTIFICATION in whatToShowOnNotification) {
+                            it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
+                            it.setTextViewText(R.id.sunriseText, context.getString(R.string.sunrise))
+                            it.setTextViewText(R.id.dhuhrText, context.getString(R.string.dhuhr))
+                            it.setTextViewText(R.id.sunsetText, context.getString(R.string.sunset))
+                            it.setTextViewText(R.id.maghribText, context.getString(R.string.maghrib))
+                            it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
 
-                        it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
-                        it.setTextViewText(R.id.sunriseTime, prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString())
-                        it.setTextViewText(R.id.dhuhrTime, prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString())
-                        it.setTextViewText(R.id.sunsetTime, prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString())
-                        it.setTextViewText(R.id.maghribTime, prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString())
-                        it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+                            it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
+                            it.setTextViewText(R.id.sunriseTime, prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString())
+                            it.setTextViewText(R.id.dhuhrTime, prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString())
+                            it.setTextViewText(R.id.sunsetTime, prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString())
+                            it.setTextViewText(R.id.maghribTime, prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString())
+                            it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+                        } else {
+                            it.setViewVisibility(R.id.owghatLayout, View.GONE)
+                        }
 
                         if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             val icon = createStatusIcon(date.dayOfMonth)

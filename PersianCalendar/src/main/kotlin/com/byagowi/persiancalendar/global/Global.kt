@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_DIGITS
+import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
@@ -64,6 +65,7 @@ import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
+import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
@@ -213,6 +215,8 @@ val wallpaperDark: StateFlow<Boolean> get() = wallpaperDark_
 private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
 val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarEvents_
 
+var whatToShowOnNotification = emptySet<String>()
+    private set
 var whatToShowOnWidgets = emptySet<String>()
     private set
 var isAstronomicalExtraFeaturesEnabled = false
@@ -428,6 +432,8 @@ fun updateStoredPreference(context: Context) {
 
     isShowDeviceCalendarEvents_.value =
         prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
+    whatToShowOnNotification =
+        prefs.getStringSet(PREF_WHAT_TO_SHOW_NOTIFICATION, null) ?: DEFAULT_NOTIFICATION_CUSTOMIZATIONS
     whatToShowOnWidgets =
         prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
