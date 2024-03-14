@@ -952,12 +952,16 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
 
                         it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
+                        it.setTextViewText(R.id.sunriseText, context.getString(R.string.sunrise))
                         it.setTextViewText(R.id.dhuhrText, context.getString(R.string.dhuhr))
+                        it.setTextViewText(R.id.sunsetText, context.getString(R.string.sunset))
                         it.setTextViewText(R.id.maghribText, context.getString(R.string.maghrib))
                         it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
 
                         it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
+                        it.setTextViewText(R.id.sunriseTime, prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString())
                         it.setTextViewText(R.id.dhuhrTime, prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString())
+                        it.setTextViewText(R.id.sunsetTime, prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString())
                         it.setTextViewText(R.id.maghribTime, prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString())
                         it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
 
