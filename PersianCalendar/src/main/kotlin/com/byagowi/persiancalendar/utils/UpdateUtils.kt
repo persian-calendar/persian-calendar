@@ -240,7 +240,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date)
+    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes)
 }
 
 @StringRes
@@ -796,7 +796,7 @@ private fun setEventsInWidget(
 private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String, prayTimes: PrayTimes?
 ) {
     if (!isNotifyDate.value) {
         val notificationManager = context.getSystemService<NotificationManager>()
@@ -806,7 +806,7 @@ private fun updateNotification(
     }
 
     val notificationData = NotificationData(
-        title = title, subtitle = subtitle, jdn = jdn, date = date,
+        title = title, subtitle = subtitle, jdn = jdn, date = date, owghat = owghat, prayTimes = prayTimes,
         isRtl = context.resources.isRtl,
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
         isTalkBackEnabled = isTalkBackEnabled,
@@ -832,6 +832,8 @@ private data class NotificationData(
     private val subtitle: String,
     private val jdn: Jdn,
     private val date: AbstractDate,
+    private val owghat: String,
+    private val prayTimes: PrayTimes?,
     private val isRtl: Boolean,
     private val events: List<CalendarEvent<*>>,
     private val isTalkBackEnabled: Boolean,
@@ -865,20 +867,6 @@ private data class NotificationData(
         // to resolve a bug seems some Samsung devices have with characters with weak direction,
         // digits being at the first of string on
         val toPrepend = if (isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) RLM else ""
-
-        // region owghat calculations
-        val nowClock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
-        val prayTimes = coordinates.value?.calculatePrayTimes()
-
-        @StringRes
-        val nextOwghatId = prayTimes?.getNextOwghatTimeId(nowClock)
-        val owghat = if (nextOwghatId == null) "" else buildString {
-            append(context.getString(nextOwghatId))
-            append(": ")
-            append(prayTimes.getFromStringId(nextOwghatId).toFormattedString())
-            if (OWGHAT_LOCATION_KEY_NOTIFICATION in whatToShowOnNotification) cityName.value?.also { append(" ($it)") }
-        }
-        // endregion
 
         val builder = NotificationCompat.Builder(context, notificationId.toString())
             .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -968,19 +956,62 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
 
                         if (OWGHAT_KEY_NOTIFICATION in whatToShowOnNotification) {
-                            it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
-                            it.setTextViewText(R.id.sunriseText, context.getString(R.string.sunrise))
-                            it.setTextViewText(R.id.dhuhrText, context.getString(R.string.dhuhr))
-                            it.setTextViewText(R.id.sunsetText, context.getString(R.string.sunset))
-                            it.setTextViewText(R.id.maghribText, context.getString(R.string.maghrib))
-                            it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
+                            val isJafari = calculationMethod.value.isJafari
 
+                            it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
                             it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
-                            it.setTextViewText(R.id.sunriseTime, prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString())
-                            it.setTextViewText(R.id.dhuhrTime, prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString())
-                            it.setTextViewText(R.id.sunsetTime, prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString())
-                            it.setTextViewText(R.id.maghribTime, prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString())
-                            it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+
+                            it.setTextViewText(
+                                R.id.sunriseOrDhuhrText,
+                                if (isJafari) context.getString(R.string.sunrise)
+                                else context.getString(R.string.dhuhr)
+                            )
+                            it.setTextViewText(
+                                R.id.sunriseOrDhuhrTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString()
+                            )
+
+                            it.setTextViewText(
+                                R.id.dhuhrOrAsrText,
+                                if (isJafari) context.getString(R.string.dhuhr)
+                                else context.getString(R.string.asr)
+                            )
+                            it.setTextViewText(
+                                R.id.dhuhrOrAsrTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.asr)?.toFormattedString()
+                            )
+
+                            it.setTextViewText(
+                                R.id.sunsetOrMaghribText,
+                                if (isJafari) context.getString(R.string.sunset)
+                                else context.getString(R.string.maghrib)
+                            )
+                            it.setTextViewText(
+                                R.id.sunsetOrMaghribTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString()
+                            )
+
+                            it.setTextViewText(
+                                R.id.maghribOrIshaText,
+                                if (isJafari) context.getString(R.string.maghrib)
+                                else context.getString(R.string.isha)
+                            )
+                            it.setTextViewText(
+                                R.id.maghribOrIshaTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.isha)?.toFormattedString()
+                            )
+
+                            if (isJafari) {
+                                it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
+                                it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+                            } else {
+                                it.setViewVisibility(R.id.midnightLayout, View.GONE)
+                                it.setViewVisibility(R.id.midnightLine, View.GONE)
+                            }
                         } else {
                             it.setViewVisibility(R.id.owghatLayout, View.GONE)
                         }
