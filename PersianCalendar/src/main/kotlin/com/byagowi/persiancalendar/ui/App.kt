@@ -182,10 +182,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             }
         },
     ) {
-        NavHost(
-            navController = navController,
-            startDestination = startDestination,
-        ) {
+        NavHost(navController = navController, startDestination = startDestination) {
             val tabKey = "TAB"
             val settingsKey = "SETTINGS"
             val daysOffsetKey = "DAYS_OFFSET"
