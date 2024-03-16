@@ -8,7 +8,7 @@
 
     <TextView
         android:id="@+id/title"
-        style="@style/TextAppearance.Compat.Notification.Title"
+        style="@android:style/TextAppearance.Material.Notification.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/body"
-        style="@style/TextAppearance.Compat.Notification"
+        style="@android:style/TextAppearance.Material.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/holidays"
-        style="@style/TextAppearance.Compat.Notification"
+        style="@android:style/TextAppearance.Material.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/nonholidays"
-        style="@style/TextAppearance.Compat.Notification"
+        style="@android:style/TextAppearance.Material.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
@@ -41,7 +41,7 @@
 
     <TextView
         android:id="@+id/owghat"
-        style="@style/TextAppearance.Compat.Notification"
+        style="@android:style/TextAppearance.Material.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
