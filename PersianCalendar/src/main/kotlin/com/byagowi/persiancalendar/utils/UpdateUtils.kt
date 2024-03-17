@@ -1018,7 +1018,7 @@ private fun RemoteViews.setRoundBackground(
     when {
         prefersWidgetsDynamicColors -> {
             setImageViewResource(viewId, R.drawable.widget_background)
-            setFloat(viewId, "setAlpha", 1 - widgetTransparency.value)
+            setAlpha(viewId, 1 - widgetTransparency.value)
         }
 
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
