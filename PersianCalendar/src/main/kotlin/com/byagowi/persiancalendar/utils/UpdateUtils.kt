@@ -405,7 +405,7 @@ private fun createSunViewRemoteViews(
     // view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, outStream)
     // copyToClipboard(Base64.encodeToString(outStream.toByteArray(), Base64.DEFAULT)) {}
     // $ convert -scale 50% a.png b.png
-    // $ zopflipng --iterations=15 --filters=01234mepb --lossy_8bit --lossy_transparent b.png c.png
+    // $ cwebp b.png -o c.webp
     remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
     remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
     remoteViews.setOnClickPendingIntent(
