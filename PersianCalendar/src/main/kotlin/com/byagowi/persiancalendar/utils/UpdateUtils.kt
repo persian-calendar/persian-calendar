@@ -960,7 +960,7 @@ private data class NotificationData(
                     it.setTextViewText(R.id.body, subtitle)
                 })
 
-                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
+                if (holidays.isNotBlank() || nonHolidays.isNotBlank() || timesToShow != null)
                     builder.setCustomBigContentView(RemoteViews(
                         context.packageName, R.layout.custom_notification_big
                     ).also {
