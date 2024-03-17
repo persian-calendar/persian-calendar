@@ -45,9 +45,12 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
+import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
+import com.byagowi.persiancalendar.OWGHAT_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
+import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
@@ -87,6 +90,7 @@ import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.whatToShowOnNotification
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -809,7 +813,7 @@ private fun updateNotification(
         isHighTextContrastEnabled = isHighTextContrastEnabled,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
-        whatToShowOnWidgets = whatToShowOnWidgets,
+        whatToShowOnNotification = whatToShowOnNotification,
         spacedComma = spacedComma,
         language = language.value,
         notificationId =
@@ -836,7 +840,7 @@ private data class NotificationData(
     private val isHighTextContrastEnabled: Boolean,
     private val isNotifyDateOnLockScreen: Boolean,
     private val deviceCalendarEventsList: List<CalendarEvent.DeviceCalendarEvent>,
-    private val whatToShowOnWidgets: Set<String>,
+    private val whatToShowOnNotification: Set<String>,
     private val spacedComma: String,
     private val language: Language,
     private val notificationId: Int,
@@ -912,13 +916,13 @@ private data class NotificationData(
                 addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
             )
 
-            val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
+            val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION in whatToShowOnNotification) getEventsTitle(
                 events, holiday = false,
                 compact = true, showDeviceCalendarEvents = true, insertRLM = isRtl,
                 addIsHoliday = false
             ) else ""
 
-            val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
+            val notificationOwghat = if (OWGHAT_KEY_NOTIFICATION in whatToShowOnNotification) owghat else ""
 
             if (shouldDisableCustomNotification) {
                 val content = listOf(subtitle, holidays.trim(), nonHolidays, notificationOwghat)
@@ -941,7 +945,7 @@ private data class NotificationData(
                     }
                 })
 
-//                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
+                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
                     builder.setCustomBigContentView(RemoteViews(
                         context.packageName, R.layout.custom_notification_big
                     ).also {
@@ -951,19 +955,66 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
 
-                        it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
-                        it.setTextViewText(R.id.sunriseText, context.getString(R.string.sunrise))
-                        it.setTextViewText(R.id.dhuhrText, context.getString(R.string.dhuhr))
-                        it.setTextViewText(R.id.sunsetText, context.getString(R.string.sunset))
-                        it.setTextViewText(R.id.maghribText, context.getString(R.string.maghrib))
-                        it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
+                        if (OWGHAT_KEY_NOTIFICATION in whatToShowOnNotification) {
+                            val isJafari = calculationMethod.value.isJafari
 
-                        it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
-                        it.setTextViewText(R.id.sunriseTime, prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString())
-                        it.setTextViewText(R.id.dhuhrTime, prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString())
-                        it.setTextViewText(R.id.sunsetTime, prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString())
-                        it.setTextViewText(R.id.maghribTime, prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString())
-                        it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+                            it.setTextViewText(R.id.fajrText, context.getString(R.string.fajr))
+                            it.setTextViewText(R.id.fajrTime, prayTimes?.getFromStringId(R.string.fajr)?.toFormattedString())
+
+                            it.setTextViewText(
+                                R.id.sunriseOrDhuhrText,
+                                if (isJafari) context.getString(R.string.sunrise)
+                                else context.getString(R.string.dhuhr)
+                            )
+                            it.setTextViewText(
+                                R.id.sunriseOrDhuhrTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.sunrise)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString()
+                            )
+
+                            it.setTextViewText(
+                                R.id.dhuhrOrAsrText,
+                                if (isJafari) context.getString(R.string.dhuhr)
+                                else context.getString(R.string.asr)
+                            )
+                            it.setTextViewText(
+                                R.id.dhuhrOrAsrTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.dhuhr)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.asr)?.toFormattedString()
+                            )
+
+                            it.setTextViewText(
+                                R.id.sunsetOrMaghribText,
+                                if (isJafari) context.getString(R.string.sunset)
+                                else context.getString(R.string.maghrib)
+                            )
+                            it.setTextViewText(
+                                R.id.sunsetOrMaghribTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.sunset)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString()
+                            )
+
+                            it.setTextViewText(
+                                R.id.maghribOrIshaText,
+                                if (isJafari) context.getString(R.string.maghrib)
+                                else context.getString(R.string.isha)
+                            )
+                            it.setTextViewText(
+                                R.id.maghribOrIshaTime,
+                                if (isJafari) prayTimes?.getFromStringId(R.string.maghrib)?.toFormattedString()
+                                else prayTimes?.getFromStringId(R.string.isha)?.toFormattedString()
+                            )
+
+                            if (isJafari) {
+                                it.setTextViewText(R.id.midnightText, context.getString(R.string.midnight))
+                                it.setTextViewText(R.id.midnightTime, prayTimes?.getFromStringId(R.string.midnight)?.toFormattedString())
+                            } else {
+                                it.setViewVisibility(R.id.midnightLayout, View.GONE)
+                                it.setViewVisibility(R.id.midnightLine, View.GONE)
+                            }
+                        } else {
+                            it.setViewVisibility(R.id.owghatLayout, View.GONE)
+                        }
 
                         if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             val icon = createStatusIcon(date.dayOfMonth)

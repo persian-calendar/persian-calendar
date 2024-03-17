@@ -15,12 +15,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
+import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
+import com.byagowi.persiancalendar.OWGHAT_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
+import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -28,6 +32,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
@@ -98,6 +103,23 @@ fun NotificationSettings() {
             value = isNotifyDateOnLockScreen,
             title = stringResource(R.string.notify_date_lock_screen),
             summary = stringResource(R.string.notify_date_lock_screen_summary)
+        )
+    }
+    AnimatedVisibility(isNotifyDate) {
+        val widgetCustomizations = remember {
+            mapOf(
+                NON_HOLIDAYS_EVENTS_KEY_NOTIFICATION to R.string.notification_customization_non_holiday_events,
+                OWGHAT_KEY_NOTIFICATION to R.string.notification_customization_owghat,
+                OWGHAT_LOCATION_KEY_NOTIFICATION to R.string.notification_customization_owghat_location
+            )
+        }
+        SettingsMultiSelect(
+            PREF_WHAT_TO_SHOW_NOTIFICATION,
+            widgetCustomizations.values.map { stringResource(it) },
+            widgetCustomizations.keys.toList(),
+            DEFAULT_NOTIFICATION_CUSTOMIZATIONS, R.string.which_one_to_show,
+            stringResource(R.string.customize_notification),
+            stringResource(R.string.customize_notification_summary),
         )
     }
 }

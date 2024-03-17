@@ -66,6 +66,7 @@
         tools:text="Events" />
 
     <LinearLayout
+        android:id="@+id/owghatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -113,7 +114,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/sunriseText"
+                android:id="@+id/sunriseOrDhuhrText"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -122,7 +123,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/sunriseTime"
+                android:id="@+id/sunriseOrDhuhrTime"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -144,7 +145,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/dhuhrText"
+                android:id="@+id/dhuhrOrAsrText"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -153,7 +154,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/dhuhrTime"
+                android:id="@+id/dhuhrOrAsrTime"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -175,7 +176,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/sunsetText"
+                android:id="@+id/sunsetOrMaghribText"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -184,7 +185,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/sunsetTime"
+                android:id="@+id/sunsetOrMaghribTime"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -206,7 +207,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/maghribText"
+                android:id="@+id/maghribOrIshaText"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -215,7 +216,7 @@
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/maghribTime"
+                android:id="@+id/maghribOrIshaTime"
                 style="@style/TextAppearance.Compat.Notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -226,11 +227,13 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/midnightLine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:background="@color/black_reflect" />
 
         <LinearLayout
+            android:id="@+id/midnightLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="6dp"
