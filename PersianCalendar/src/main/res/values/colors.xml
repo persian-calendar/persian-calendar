@@ -14,6 +14,8 @@
     <color name="widget_divider">#46ffffff</color>
     <color name="widget_refresh_icon_color">#ddd</color>
 
+    <color name="notification_divider">#40C0C0C0</color>
+
     <!-- override of these exist in values-v31/colors.xml -->
     <color name="remote_view_holiday_color">#ff8a65</color>
 

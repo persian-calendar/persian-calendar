@@ -236,7 +236,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date, owghat)
+    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, nowClock)
 }
 
 @StringRes
@@ -693,26 +693,7 @@ private fun create4x2RemoteViews(
             R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
-        ).zip(
-            if (calculationMethod.value.isJafari) {
-                if (
-                    nowMinutes < prayTimes.getFromStringId(R.string.dhuhr).toMinutes() ||
-                    nowMinutes > prayTimes.getFromStringId(R.string.isha).toMinutes()
-                ) listOf(
-                    R.string.fajr, R.string.sunrise,
-                    R.string.dhuhr, R.string.maghrib,
-                    R.string.midnight
-                ) else listOf(
-                    R.string.fajr, R.string.dhuhr,
-                    R.string.sunset, R.string.maghrib,
-                    R.string.midnight
-                )
-            } else listOf(
-                R.string.fajr, R.string.dhuhr,
-                R.string.asr, R.string.maghrib,
-                R.string.isha
-            )
-        ) { textHolderViewId, owghatStringId ->
+        ).zip(timesToShow(nowMinutes, prayTimes)) { textHolderViewId, owghatStringId ->
             val timeClock = prayTimes.getFromStringId(owghatStringId)
             remoteViews.setTextViewText(
                 textHolderViewId, context.getString(owghatStringId) + "\n" +
@@ -764,6 +745,28 @@ private fun create4x2RemoteViews(
     return remoteViews
 }
 
+private val timesToShowNotBetweenDhuhrAndIshaForJafari = listOf(
+    R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.maghrib, R.string.midnight
+)
+
+private val timesToShowBetweenDhuhrAndIshaForJafari = listOf(
+    R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight
+)
+
+private val timesToShowNotJafari = listOf(
+    R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha
+)
+
+@StringRes
+private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<Int> {
+    return if (calculationMethod.value.isJafari) {
+        if (
+            nowMinutes < prayTimes.getFromStringId(R.string.dhuhr).toMinutes() ||
+            nowMinutes > prayTimes.getFromStringId(R.string.isha).toMinutes()
+        ) timesToShowNotBetweenDhuhrAndIshaForJafari else timesToShowBetweenDhuhrAndIshaForJafari
+    } else timesToShowNotJafari
+}
+
 private fun setEventsInWidget(
     resources: Resources, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
 ) {
@@ -792,7 +795,8 @@ private fun setEventsInWidget(
 private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String,
+    prayTimes: PrayTimes?, nowClock: Clock,
 ) {
     if (!isNotifyDate.value) {
         val notificationManager = context.getSystemService<NotificationManager>()
@@ -801,8 +805,20 @@ private fun updateNotification(
         return
     }
 
+    val nowMinutes = nowClock.toMinutes()
+    val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
+        timesToShow(nowMinutes, prayTimes)
+    } else null
+
+    val nextTimeId = if (prayTimes == null || timesToShow == null) null else timesToShow
+        .map { it to prayTimes.getFromStringId(it) }
+        .firstOrNull { (_, timeClock) -> timeClock.toMinutes() > nowMinutes }
+        ?.first ?: timesToShow[0]
+
     val notificationData = NotificationData(
-        title = title, subtitle = subtitle, jdn = jdn, date = date, owghat = owghat,
+        title = title, subtitle = subtitle, jdn = jdn, date = date,
+        owghat = owghat, prayTimes = prayTimes, nextTimeId = nextTimeId,
+        timesToShow = timesToShow,
         isRtl = context.resources.isRtl,
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
         isTalkBackEnabled = isTalkBackEnabled,
@@ -829,6 +845,9 @@ private data class NotificationData(
     private val jdn: Jdn,
     private val date: AbstractDate,
     private val owghat: String,
+    private val prayTimes: PrayTimes?,
+    @StringRes private val nextTimeId: Int?,
+    @StringRes private val timesToShow: List<Int>?,
     private val isRtl: Boolean,
     private val events: List<CalendarEvent<*>>,
     private val isTalkBackEnabled: Boolean,
@@ -941,7 +960,22 @@ private data class NotificationData(
                         it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
                         it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                         it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
-                        it.setTextViewTextOrHideIfEmpty(R.id.owghat, notificationOwghat)
+                        it.setViewVisibility(
+                            R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
+                        )
+                        if (timesToShow != null && prayTimes != null) listOf(
+                            R.id.time1, R.id.time2, R.id.time3, R.id.time4, R.id.time5
+                        ).zip(timesToShow) { textViewId, timeId ->
+                            it.setTextViewText(
+                                textViewId, context.getString(timeId) + "\n" +
+                                        prayTimes.getFromStringId(timeId)
+                                            .toFormattedString(printAmPm = false)
+                            )
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) it.setFloat(
+                                textViewId, "setAlpha",
+                                if (timeId == nextTimeId) 1f else .6f
+                            )
+                        }
                     })
 
                 builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
