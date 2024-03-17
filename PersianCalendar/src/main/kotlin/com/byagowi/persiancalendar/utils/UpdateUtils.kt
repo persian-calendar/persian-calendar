@@ -656,6 +656,12 @@ private fun create2x2RemoteViews(
     return remoteViews
 }
 
+private val widget4x2TimesViewsIds = listOf(
+    R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
+    R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
+    R.id.textPlaceholder4owghat_5_4x2
+)
+
 private fun create4x2RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, nowClock: Clock,
     prayTimes: PrayTimes?
@@ -689,11 +695,9 @@ private fun create4x2RemoteViews(
     if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
         val nowMinutes = nowClock.toMinutes()
-        val owghats = listOf(
-            R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
-            R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
-            R.id.textPlaceholder4owghat_5_4x2
-        ).zip(timesToShow(nowMinutes, prayTimes)) { textHolderViewId, owghatStringId ->
+        val owghats = widget4x2TimesViewsIds.zip(
+            timesToShow(nowMinutes, prayTimes)
+        ) { textHolderViewId, owghatStringId ->
             val timeClock = prayTimes.getFromStringId(owghatStringId)
             remoteViews.setTextViewText(
                 textHolderViewId, context.getString(owghatStringId) + "\n" +
@@ -839,6 +843,9 @@ private fun updateNotification(
     }
 }
 
+private val notificationTimesViewsIds =
+    listOf(R.id.time1, R.id.time2, R.id.time3, R.id.time4, R.id.time5)
+
 private data class NotificationData(
     private val title: String,
     private val subtitle: String,
@@ -963,9 +970,9 @@ private data class NotificationData(
                         it.setViewVisibility(
                             R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
                         )
-                        if (timesToShow != null && prayTimes != null) listOf(
-                            R.id.time1, R.id.time2, R.id.time3, R.id.time4, R.id.time5
-                        ).zip(timesToShow) { textViewId, timeId ->
+                        if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
+                            timesToShow
+                        ) { textViewId, timeId ->
                             it.setTextViewText(
                                 textViewId, context.getString(timeId) + "\n" +
                                         prayTimes.getFromStringId(timeId)
