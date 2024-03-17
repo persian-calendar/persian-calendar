@@ -656,6 +656,7 @@ private fun create2x2RemoteViews(
     return remoteViews
 }
 
+@IdRes
 private val widget4x2TimesViewsIds = listOf(
     R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
     R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
@@ -712,10 +713,10 @@ private fun create4x2RemoteViews(
 
         owghats.forEach { (viewId) ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                remoteViews.setFloat(viewId, "setAlpha", 1f)
+                remoteViews.setAlpha(viewId, 1f)
             if (viewId != nextViewId) {
                 if (prefersWidgetsDynamicColors) {
-                    remoteViews.setFloat(viewId, "setAlpha", .6f)
+                    remoteViews.setAlpha(viewId, .6f)
                     remoteViews.setDynamicTextColor(viewId)
                 } else remoteViews.setTextColor(
                     viewId, ColorUtils.setAlphaComponent(selectedWidgetTextColor, 180)
@@ -843,6 +844,7 @@ private fun updateNotification(
     }
 }
 
+@IdRes
 private val notificationTimesViewsIds =
     listOf(R.id.time1, R.id.time2, R.id.time3, R.id.time4, R.id.time5)
 
@@ -978,10 +980,8 @@ private data class NotificationData(
                                         prayTimes.getFromStringId(timeId)
                                             .toFormattedString(printAmPm = false)
                             )
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) it.setFloat(
-                                textViewId, "setAlpha",
-                                if (timeId == nextTimeId) 1f else .6f
-                            )
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+                                it.setAlpha(textViewId, if (timeId == nextTimeId) 1f else .6f)
                         }
                     })
 
@@ -1048,9 +1048,11 @@ private fun RemoteViews.configureClock(@IdRes viewId: Int) {
 @RequiresApi(Build.VERSION_CODES.S)
 private fun RemoteViews.setDynamicTextColor(
     @IdRes id: Int, @AttrRes attr: Int = android.R.attr.colorForeground
-) {
-    setColorAttr(id, "setTextColor", attr)
-}
+): Unit = setColorAttr(id, "setTextColor", attr)
+
+@RequiresApi(Build.VERSION_CODES.S)
+private fun RemoteViews.setAlpha(@IdRes viewId: Int, value: Float): Unit =
+    setFloat(viewId, "setAlpha", value)
 
 private fun RemoteViews.setupForegroundTextColors(@IdRes vararg ids: Int) {
     ids.forEach {
