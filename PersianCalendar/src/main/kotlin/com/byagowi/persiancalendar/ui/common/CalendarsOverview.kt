@@ -339,10 +339,7 @@ private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
                     Text(date.monthName, modifier = Modifier.animateContentSize())
                 }
                 SelectionContainer {
-                    Text(
-                        date.toLinearDate(),
-                        modifier = Modifier.animateContentSize(),
-                    )
+                    Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
                 }
             }
         }
