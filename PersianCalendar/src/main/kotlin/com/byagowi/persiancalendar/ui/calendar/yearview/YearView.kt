@@ -150,6 +150,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val coroutineScope = rememberCoroutineScope()
 
     val detectZoom = Modifier.pointerInput(Unit) {
+        /** This is a reduced version of [androidx.compose.foundation.gestures.detectTransformGestures] */
         awaitEachGesture {
             awaitFirstDown(requireUnconsumed = false)
             do {
