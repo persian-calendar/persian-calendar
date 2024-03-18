@@ -250,6 +250,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                         .clip(MaterialTheme.shapes.medium)
                         .background(LocalContentColor.current.copy(alpha = alpha))
                         .padding((32 * alpha).dp)
+                        .then(detectZoom)
                         .clickable(onClickLabel = stringResource(R.string.select_year)) {
                             coroutineScope.launch {
                                 if (scale < yearSelectionModeMaxScale) scale = 1f
