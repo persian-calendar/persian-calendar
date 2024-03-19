@@ -84,7 +84,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val monthNames = mainCalendar.monthsNames
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-    var scale = remember { Animatable(1f) }
+    val scale = remember { Animatable(1f) }
     val horizontalDivisions = if (isLandscape) 4 else 3
     viewModel.yearViewIsInYearSelection(scale.value < yearSelectionModeMaxScale)
 
