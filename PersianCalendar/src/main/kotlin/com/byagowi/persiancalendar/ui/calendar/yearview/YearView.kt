@@ -155,8 +155,8 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
             awaitFirstDown(requireUnconsumed = false)
             do {
                 val event = awaitPointerEvent()
-                scale =
-                    (scale * event.calculateZoom()).coerceAtMost(horizontalDivisions.toFloat())
+                scale = (scale * event.calculateZoom())
+                    .coerceIn(yearSelectionModeMaxScale, horizontalDivisions.toFloat())
             } while (event.changes.fastAny { it.pressed })
         }
     }
