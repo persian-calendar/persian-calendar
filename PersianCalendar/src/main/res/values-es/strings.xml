@@ -210,10 +210,12 @@
     <string name="shift_work_reset_button">Deshabilitar o reprogramar</string>
     <plurals name="minutes">
         <item quantity="one">%1$s minuto</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s minutos</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">%1$s hora</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s horas</item>
     </plurals>
     <string name="spaced_and">" y "</string>
@@ -245,14 +247,17 @@
     <string name="age_widget_title">Título del widget</string>
     <plurals name="days">
         <item quantity="one">%1$s día</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s días</item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s mes</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s meses</item>
     </plurals>
     <plurals name="years">
         <item quantity="one">%1$s año</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s años</item>
     </plurals>
     <string name="preview">Previsualización</string>
