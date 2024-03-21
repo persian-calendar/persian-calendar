@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.language
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
@@ -31,21 +32,27 @@ import io.github.persiancalendar.calendar.PersianDate
  * موش و بقر و پلنگ و خرگوش شمار - زان چار چو بگذری نهنگ آید و مار
  *آنگاه به اسب و گوسفند است حساب - حمدونه و مرغ و سگ و خوک آخر کار
  */
-enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: String) {
+enum class ChineseZodiac(
+    @StringRes private val title: Int, private val emoji: String,
+    private val persianReplacement: String? = null,
+) {
     RAT(R.string.animal_year_name_rat, "🐀"),
     OX(R.string.animal_year_name_ox, "🐂"),
-    TIGER(R.string.animal_year_name_tiger, "🐅"),
+    TIGER(R.string.animal_year_name_tiger, "🐅", persianReplacement = "🐆 پلنگ"),
     RABBIT(R.string.animal_year_name_rabbit, "🐇"),
-    DRAGON(R.string.animal_year_name_dragon, "🐲"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲", persianReplacement = "🐳 نهنگ"),
     SNAKE(R.string.animal_year_name_snake, "🐍"),
     HORSE(R.string.animal_year_name_horse, "🐎"),
-    GOAT(R.string.animal_year_name_goat, "🐐"),
+    GOAT(R.string.animal_year_name_goat, "🐐", persianReplacement = "🐑 گوسفند"),
     MONKEY(R.string.animal_year_name_monkey, "🐒"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐔"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐔", persianReplacement = "🐔 مرغ"),
     DOG(R.string.animal_year_name_dog, "🐕"),
     PIG(R.string.animal_year_name_pig, "🐖");
 
-    fun format(resources: Resources, withEmoji: Boolean) = buildString {
+    fun format(resources: Resources, withEmoji: Boolean, preferPersian: Boolean) = buildString {
+        if (preferPersian && language.value.isPersian && persianReplacement != null) {
+            return if (withEmoji) persianReplacement else persianReplacement.split(" ")[1]
+        }
         if (withEmoji) append("$emoji ")
         append(resources.getString(title))
     }
