@@ -376,7 +376,7 @@
         <item quantity="one">%1$s неделя</item>
         <item quantity="few">%1$s недели</item>
         <item quantity="many">%1$s недель</item>
-        <item quantity="other">%1$s недели</item>
+        <item quantity="other">%1$s недель</item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s месяц</item>
@@ -423,4 +423,5 @@
     <string name="exempt_app_battery_optimization">Хотите исключить приложение из оптимизации батареи для нормального функционирования уведомлений?</string>
     <string name="widget_background_transparency">Прозрачность фона виджета</string>
     <string name="save">Сохранить</string>
+    <string name="holidays_in_red"></string>
 </resources>
