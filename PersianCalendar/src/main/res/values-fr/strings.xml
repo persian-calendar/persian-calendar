@@ -399,4 +399,20 @@
         <item quantity="many">%1$s semaines</item>
         <item quantity="other">%1$s semaines</item>
     </plurals>
+    <string name="open_drawer"></string>
+    <plurals name="work_days">
+        <item quantity="one"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="yes"></string>
+    <string name="ask_for_calendar_permission"></string>
+    <string name="holidays_in_red"></string>
+    <string name="exempt_app_battery_optimization"></string>
+    <string name="sample_inputs"></string>
+    <string name="more_options"></string>
+    <string name="save"></string>
+    <string name="widget_background_transparency"></string>
+    <string name="navigate_up"></string>
+    <string name="year_view"></string>
 </resources>
