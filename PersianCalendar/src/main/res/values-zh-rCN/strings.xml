@@ -175,7 +175,7 @@
     <string name="about_no_client">未安装任何邮件应用</string>
     <string name="shift_work_starting_date">当前日历上选择的日期（%1$s）将作为倒班的起始日。</string>
     <string name="spaced_and">和</string>
-    <string name="spaced_or"> 周或 </string>
+    <string name="spaced_or">周或</string>
     <string name="islamic_calendar">伊斯兰历</string>
     <string name="theme_black">黑色</string>
     <string name="iran_official_events">伊朗官方（波斯语）</string>
@@ -368,4 +368,34 @@
     <string name="high_latitudes_one_seventh">七等分</string>
     <string name="high_latitudes_angle_based">基于高度角</string>
     <string name="true_north">真北</string>
+    <string name="qr_code"></string>
+    <string name="exit_full_screen"></string>
+    <string name="color_gradient"></string>
+    <string name="enable_notification"></string>
+    <string name="add_quick_settings_tile"></string>
+    <plurals name="weeks">
+        <item quantity="other"></item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="other"></item>
+    </plurals>
+    <string name="holidays_in_red"></string>
+    <string name="widget_background_transparency"></string>
+    <string name="ask_for_calendar_permission"></string>
+    <string name="method_egypt"></string>
+    <string name="lock"></string>
+    <string name="navigate_up"></string>
+    <string name="open_drawer"></string>
+    <string name="full_screen"></string>
+    <string name="time_zones"></string>
+    <string name="year_view"></string>
+    <string name="save"></string>
+    <string name="sample_inputs"></string>
+    <string name="yes"></string>
+    <string name="method_jafari"></string>
+    <string name="exempt_app_battery_optimization"></string>
+    <string name="more_options"></string>
+    <plurals name="work_days">
+        <item quantity="other"></item>
+    </plurals>
 </resources>
