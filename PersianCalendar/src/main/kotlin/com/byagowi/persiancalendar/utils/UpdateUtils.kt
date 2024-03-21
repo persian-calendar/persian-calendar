@@ -994,10 +994,12 @@ private data class NotificationData(
         val notification = builder.build()
 
         // https://stackoverflow.com/a/40708431
+        // But this hasn't fixed the issue for the user who has reported it or perhaps anyone :/
         val deviceBrand = Build.BRAND.lowercase()
         @SuppressLint("PrivateApi") if (deviceBrand == "redmi" || deviceBrand == "xiaomi") runCatching {
-            val miuiNotification = Class.forName("android.app.MiuiNotification").newInstance()
-            val customizedIconField = miuiNotification.javaClass.getDeclaredField("customizedIcon")
+            val miuiNotification =
+                Class.forName("android.app.MiuiNotification").getDeclaredConstructor().newInstance()
+            val customizedIconField = miuiNotification::class.java.getDeclaredField("customizedIcon")
             customizedIconField.isAccessible = true
             customizedIconField.set(miuiNotification, true)
 
