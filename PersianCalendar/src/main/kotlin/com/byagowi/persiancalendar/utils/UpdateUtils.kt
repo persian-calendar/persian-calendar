@@ -469,11 +469,11 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         selectedDay = null,
     )
     canvas.also {
-        val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.textAlign = Paint.Align.CENTER
-            it.textSize = min(width, height) / 7f * 20 / 40
-            it.color = colors.contentColor.toArgb()
-            it.alpha = 90
+        val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
+            paint.textAlign = Paint.Align.CENTER
+            paint.textSize = min(width, height) / 7f * 20 / 40
+            paint.color = colors.contentColor.toArgb()
+            paint.alpha = 90
         }
         it.drawText(contentDescription, width / 2f, height * .95f, footerPaint)
     }
