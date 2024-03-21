@@ -114,11 +114,11 @@
     <string name="about_no_client">Ягон барнома барои фиристодани почтаи электронӣ вуҷуд надорад</string>
     <plurals name="minutes">
         <item quantity="one">%1$s дақиқа</item>
-        <item quantity="other">%1$s дақиқа</item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">%1$s соат</item>
-        <item quantity="other">%1$s соат</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="spaced_and">" ва "</string>
     <string name="spaced_or">" ё "</string>
@@ -202,15 +202,15 @@
     <string name="shamsi_calendar_short">форсӣ</string>
     <plurals name="days">
         <item quantity="one">%1$s pӯз</item>
-        <item quantity="other">%1$s pӯз</item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s моҳ</item>
-        <item quantity="other">%1$s моҳ</item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="years">
         <item quantity="one">%1$s сол</item>
-        <item quantity="other">%1$s сол</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="islamic_calendar_short">исломӣ</string>
     <string name="shift_work_off">Хомӯш</string>
@@ -336,4 +336,74 @@
     <string name="country_emoji">🇹🇯</string>
     <string name="nepal">Непал</string>
     <string name="calculator">Калкулятор</string>
+    <string name="lunar_eclipse"></string>
+    <string name="neptune"></string>
+    <string name="saturn"></string>
+    <string name="moon"></string>
+    <string name="add_quick_settings_tile"></string>
+    <string name="nepali_calendar_short"></string>
+    <string name="holiday_reason"></string>
+    <string name="shift_work_starting_date_edit"></string>
+    <string name="high_latitudes_angle_based"></string>
+    <string name="lock"></string>
+    <string name="save"></string>
+    <string name="widget_prefer_device_colors"></string>
+    <string name="high_latitudes_one_seventh"></string>
+    <string name="season"></string>
+    <string name="spring"></string>
+    <string name="chinese_calendar"></string>
+    <string name="venus"></string>
+    <string name="summer"></string>
+    <string name="pluto"></string>
+    <string name="mercury"></string>
+    <string name="earth"></string>
+    <plurals name="weeks">
+        <item quantity="one"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="chinese"></string>
+    <string name="tropical"></string>
+    <plurals name="seconds">
+        <item quantity="one"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="uranus"></string>
+    <string name="none"></string>
+    <string name="mars"></string>
+    <string name="nepali_calendar"></string>
+    <string name="exit_full_screen"></string>
+    <string name="jupiter"></string>
+    <string name="full_screen"></string>
+    <string name="sun"></string>
+    <string name="month_pray_times"></string>
+    <string name="show_secondary_calendar"></string>
+    <string name="qr_code"></string>
+    <string name="ask_for_calendar_permission"></string>
+    <string name="show_sun_and_moon_path_in_24_hours"></string>
+    <string name="week_ends_summary"></string>
+    <string name="winter"></string>
+    <string name="solar_eclipse"></string>
+    <string name="autumn"></string>
+    <string name="live_wallpaper_settings"></string>
+    <string name="enable_notification"></string>
+    <string name="screensaver_settings"></string>
+    <string name="true_north"></string>
+    <string name="time_zones"></string>
+    <string name="open_drawer"></string>
+    <string name="color_gradient"></string>
+    <string name="yes"></string>
+    <string name="more_options"></string>
+    <string name="year_view"></string>
+    <string name="widget_background_transparency"></string>
+    <plurals name="work_days">
+        <item quantity="one"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="sample_inputs"></string>
+    <string name="astronomical_info_summary"></string>
+    <string name="high_latitudes_night_middle"></string>
+    <string name="high_latitudes_method"></string>
+    <string name="exempt_app_battery_optimization"></string>
+    <string name="navigate_up"></string>
+    <string name="holidays_in_red"></string>
 </resources>
