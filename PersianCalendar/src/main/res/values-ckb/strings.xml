@@ -402,4 +402,10 @@
     <string name="full_screen">پڕ بە شاشە</string>
     <string name="open_drawer">کردنەوەی لیستی ڕێنیشاندەر</string>
     <string name="more_options">هەڵبژاردەی زیاتر</string>
+    <string name="year_view"></string>
+    <string name="exempt_app_battery_optimization"></string>
+    <string name="holidays_in_red"></string>
+    <string name="widget_background_transparency"></string>
+    <string name="save"></string>
+    <string name="ask_for_calendar_permission"></string>
 </resources>
