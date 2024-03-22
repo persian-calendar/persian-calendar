@@ -49,12 +49,15 @@ enum class ChineseZodiac(
     DOG(R.string.animal_year_name_dog, "🐕"),
     PIG(R.string.animal_year_name_pig, "🐖");
 
-    fun format(resources: Resources, withEmoji: Boolean, preferPersian: Boolean) = buildString {
+    fun format(resources: Resources, withEmoji: Boolean, preferPersian: Boolean): String {
         if (preferPersian && language.value.isPersian && persianReplacement != null) {
-            return if (withEmoji) persianReplacement else persianReplacement.split(" ")[1]
+            return if (withEmoji) persianReplacement
+            else persianReplacement.split(" ").getOrNull(1) ?: ""
         }
-        if (withEmoji) append("$emoji ")
-        append(resources.getString(title))
+        return buildString {
+            if (withEmoji) append("$emoji ")
+            append(resources.getString(title))
+        }
     }
 
     val bestMatches get() = bestMatchesRaw[ordinal]
