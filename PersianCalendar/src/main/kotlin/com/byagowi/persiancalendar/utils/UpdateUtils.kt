@@ -999,7 +999,8 @@ private data class NotificationData(
         @SuppressLint("PrivateApi") if (deviceBrand == "redmi" || deviceBrand == "xiaomi") runCatching {
             val miuiNotification =
                 Class.forName("android.app.MiuiNotification").getDeclaredConstructor().newInstance()
-            val customizedIconField = miuiNotification::class.java.getDeclaredField("customizedIcon")
+            val customizedIconField =
+                miuiNotification::class.java.getDeclaredField("customizedIcon")
             customizedIconField.isAccessible = true
             customizedIconField.set(miuiNotification, true)
 

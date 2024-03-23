@@ -189,7 +189,9 @@ class CalendarLibraryTests {
 
     @Test
     fun test_it_different_date_object_equal() {
-        assertFalse(CivilDate(2000, 1, 1) as AbstractDate == PersianDate(2000, 1, 1) as AbstractDate)
+        assertFalse(
+            CivilDate(2000, 1, 1) as AbstractDate == PersianDate(2000, 1, 1) as AbstractDate
+        )
         assertEquals(CivilDate(2000, 1, 1), CivilDate(2000, 1, 1))
         assertNotEquals(CivilDate(2000, 1, 1), CivilDate(2000, 2, 1))
     }
