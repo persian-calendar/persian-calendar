@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity"
+    android:initialLayout="@layout/widget_map"
     android:minWidth="250dp"
     android:minHeight="110dp"
-    android:initialLayout="@layout/widget_map"
     android:minResizeWidth="110dp"
     android:minResizeHeight="40dp"
     android:previewImage="@drawable/widget_map"
