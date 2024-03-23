@@ -45,7 +45,7 @@ enum class ChineseZodiac(
     HORSE(R.string.animal_year_name_horse, "🐎"),
     GOAT(R.string.animal_year_name_goat, "🐐", persianReplacement = "🐑 گوسفند"),
     MONKEY(R.string.animal_year_name_monkey, "🐒"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐔", persianReplacement = "🐔 مرغ"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐓", persianReplacement = "🐔 مرغ"),
     DOG(R.string.animal_year_name_dog, "🐕"),
     PIG(R.string.animal_year_name_pig, "🐖");
 
