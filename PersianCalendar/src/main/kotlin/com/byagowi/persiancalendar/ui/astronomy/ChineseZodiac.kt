@@ -50,11 +50,10 @@ enum class ChineseZodiac(
     PIG(R.string.animal_year_name_pig, "🐖");
 
     fun format(resources: Resources, withEmoji: Boolean, isForPersian: Boolean): String {
-        if (isForPersian && language.value.isPersian && persianAlternative != null) {
-            return if (withEmoji) persianAlternative
+        return if (isForPersian && language.value.isPersian && persianAlternative != null) {
+            if (withEmoji) persianAlternative
             else persianAlternative.split(" ").getOrNull(1) ?: ""
-        }
-        return buildString {
+        } else buildString {
             if (withEmoji) append("$emoji ")
             append(resources.getString(title))
         }
