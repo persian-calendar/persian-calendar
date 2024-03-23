@@ -34,25 +34,25 @@ import io.github.persiancalendar.calendar.PersianDate
  */
 enum class ChineseZodiac(
     @StringRes private val title: Int, private val emoji: String,
-    private val persianReplacement: String? = null,
+    private val persianAlternative: String? = null,
 ) {
     RAT(R.string.animal_year_name_rat, "🐀"),
     OX(R.string.animal_year_name_ox, "🐂"),
-    TIGER(R.string.animal_year_name_tiger, "🐅", persianReplacement = "🐆 پلنگ"),
+    TIGER(R.string.animal_year_name_tiger, "🐅", persianAlternative = "🐆 پلنگ"),
     RABBIT(R.string.animal_year_name_rabbit, "🐇"),
-    DRAGON(R.string.animal_year_name_dragon, "🐲", persianReplacement = "🐳 نهنگ"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲", persianAlternative = "🐳 نهنگ"),
     SNAKE(R.string.animal_year_name_snake, "🐍"),
     HORSE(R.string.animal_year_name_horse, "🐎"),
-    GOAT(R.string.animal_year_name_goat, "🐐", persianReplacement = "🐑 گوسفند"),
+    GOAT(R.string.animal_year_name_goat, "🐐", persianAlternative = "🐑 گوسفند"),
     MONKEY(R.string.animal_year_name_monkey, "🐒"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐓", persianReplacement = "🐔 مرغ"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐓", persianAlternative = "🐔 مرغ"),
     DOG(R.string.animal_year_name_dog, "🐕"),
     PIG(R.string.animal_year_name_pig, "🐖");
 
-    fun format(resources: Resources, withEmoji: Boolean, preferPersian: Boolean): String {
-        if (preferPersian && language.value.isPersian && persianReplacement != null) {
-            return if (withEmoji) persianReplacement
-            else persianReplacement.split(" ").getOrNull(1) ?: ""
+    fun format(resources: Resources, withEmoji: Boolean, isForPersian: Boolean): String {
+        if (isForPersian && language.value.isPersian && persianAlternative != null) {
+            return if (withEmoji) persianAlternative
+            else persianAlternative.split(" ").getOrNull(1) ?: ""
         }
         return buildString {
             if (withEmoji) append("$emoji ")
