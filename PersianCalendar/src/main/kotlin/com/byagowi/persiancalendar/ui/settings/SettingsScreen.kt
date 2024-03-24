@@ -286,7 +286,7 @@ private fun MenuItems(closeMenu: () -> Unit, openAddWidgetDialog: () -> Unit) {
         )
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-        AppWidgetManager.getInstance(context).isRequestPinAppWidgetSupported
+        runCatching { AppWidgetManager.getInstance(context).isRequestPinAppWidgetSupported }.getOrNull() == true
     ) {
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.add_widget)) },
