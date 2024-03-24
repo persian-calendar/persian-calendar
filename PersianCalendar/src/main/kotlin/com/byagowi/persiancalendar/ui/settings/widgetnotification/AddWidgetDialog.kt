@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AddWidgetDialog(closeDialog: () -> Unit) {
@@ -27,11 +28,15 @@ fun AddWidgetDialog(closeDialog: () -> Unit) {
     AppDialog(onDismissRequest = closeDialog) {
         val context = LocalContext.current
         val widgetManager = AppWidgetManager.getInstance(context)
-        val widgets = widgetManager.getInstalledProvidersForPackage(context.packageName, null)
+        val widgets = runCatching {
+            widgetManager.getInstalledProvidersForPackage(context.packageName, null)
+        }.debugAssertNotNull.getOrNull() ?: emptyList()
         widgets.forEach { widget ->
             fun addWidget() {
                 closeDialog()
-                widgetManager.requestPinAppWidget(widget.provider, null, null)
+                runCatching {
+                    widgetManager.requestPinAppWidget(widget.provider, null, null)
+                }.getOrNull().debugAssertNotNull
             }
             Spacer(Modifier.height(16.dp))
             val description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
