@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings
 import android.app.AlertDialog
 import android.app.StatusBarManager
 import android.app.WallpaperManager
+import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
 import android.content.res.Configuration
@@ -284,7 +285,9 @@ private fun MenuItems(closeMenu: () -> Unit, openAddWidgetDialog: () -> Unit) {
             },
         )
     }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+        AppWidgetManager.getInstance(context).isRequestPinAppWidgetSupported
+    ) {
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.add_widget)) },
             onClick = openAddWidgetDialog,
