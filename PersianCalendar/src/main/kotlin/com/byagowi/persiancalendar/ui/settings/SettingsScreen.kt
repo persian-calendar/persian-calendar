@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -116,7 +117,16 @@ fun SettingsScreen(
             },
             colors = appTopAppBarColors(),
             navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
-            actions = { ThreeDotsDropdownMenu { closeMenu -> MenuItems(closeMenu) } },
+            actions = {
+                var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
+                ThreeDotsDropdownMenu { closeMenu ->
+                    MenuItems(closeMenu) {
+                        closeMenu()
+                        showAddWidgetDialog = true
+                    }
+                }
+                if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
+            },
         )
     }) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
@@ -237,7 +247,7 @@ const val WIDGET_NOTIFICATION_TAB = 1
 const val LOCATION_ATHAN_TAB = 2
 
 @Composable
-private fun MenuItems(closeMenu: () -> Unit) {
+private fun MenuItems(closeMenu: () -> Unit, openAddWidgetDialog: () -> Unit) {
     val context = LocalContext.current
     AppDropdownMenuItem(
         text = { Text(stringResource(R.string.live_wallpaper_settings)) },
@@ -272,6 +282,12 @@ private fun MenuItems(closeMenu: () -> Unit) {
                     {},
                 )
             },
+        )
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        AppDropdownMenuItem(
+            text = { Text(stringResource(R.string.add_widget)) },
+            onClick = openAddWidgetDialog,
         )
     }
 

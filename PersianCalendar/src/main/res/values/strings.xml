@@ -400,6 +400,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_background_transparency">Widget background transparency</string>
     <string name="save">Save</string>
     <string name="holidays_in_red">Holidays in red color</string>
+    <string name="add_widget">Add widget</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

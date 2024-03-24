@@ -410,4 +410,5 @@
     <string name="widget_background_transparency">شفافیت پس‌زمینهٔ ویجت</string>
     <string name="save">ذخیره</string>
     <string name="holidays_in_red">تعطیلات به رنگ قرمز</string>
+    <string name="add_widget">افزودن ویجت</string>
 </resources>
