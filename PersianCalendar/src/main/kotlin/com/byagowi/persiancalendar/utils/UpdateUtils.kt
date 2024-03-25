@@ -766,8 +766,8 @@ private val timesToShowNotJafari = listOf(
 private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<Int> {
     return if (calculationMethod.value.isJafari) {
         if (
-            nowMinutes < prayTimes.getFromStringId(R.string.dhuhr).toMinutes() ||
-            nowMinutes > prayTimes.getFromStringId(R.string.isha).toMinutes()
+            nowMinutes < Clock.fromHoursFraction(prayTimes.dhuhr).toMinutes() ||
+            nowMinutes > Clock.fromHoursFraction(prayTimes.isha).toMinutes()
         ) timesToShowNotBetweenDhuhrAndIshaForJafari else timesToShowBetweenDhuhrAndIshaForJafari
     } else timesToShowNotJafari
 }
