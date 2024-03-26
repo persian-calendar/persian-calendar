@@ -406,4 +406,5 @@
     <string name="exempt_app_battery_optimization">Bildirimin doğru çalışması için uygulamayı pil iyileştirmesi istisnasına eklemek ister misiniz?</string>
     <string name="save">Kaydet</string>
     <string name="holidays_in_red">Tatiller kırmızı renkte</string>
+    <string name="add_widget">Widget ekle</string>
 </resources>
