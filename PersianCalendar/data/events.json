@@ -1354,6 +1354,8 @@
       "title": "چهارشنبه‌سوری (آخرین سه‌شنبهٔ سال)", "holiday": false },
     { "calendar": "Gregorian", "rule": "nth weekday of month", "nth": 3, "weekday": 6, "month": 11, "type": "International",
       "title": "روز جهانی فلسفه (سومین پنج‌شنبهٔ نوامبر)", "holiday": false },
+    { "calendar": "Gregorian", "rule": "last weekday of month", "weekday": 2, "month": 1, "type": "International",
+      "title": "روز جهانی کمک به جذامیان (آخرین یکشنبهٔٔ ژانویه)", "holiday": false },
     { "calendar": "Gregorian", "rule": "last weekday of month", "weekday": 7, "month": 11, "type": "International",
       "title": "جمعهٔ سیاه یا بلک فرایدی (آخرین جمعهٔ ماه نوامبر)", "holiday": false },
     { "calendar": "Gregorian", "rule": "nth day from", "nth": 256, "month": 1, "day": 1, "type": "International",
