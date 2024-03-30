@@ -493,7 +493,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 }
             }
 
-            fun exempt() {
+            fun requestExemption() {
                 runCatching {
                     context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
                 }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
@@ -501,7 +501,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
-            ) { isGranted -> exempt() }
+            ) { requestExemption() }
 
             EncourageActionLayout(
                 header = stringResource(R.string.exempt_app_battery_optimization),
@@ -511,7 +511,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 val alarmManager = context.getSystemService<AlarmManager>()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
                     runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
-                ) launcher.launch(Manifest.permission.SCHEDULE_EXACT_ALARM) else exempt()
+                ) launcher.launch(Manifest.permission.SCHEDULE_EXACT_ALARM) else requestExemption()
             }
         }
     }
