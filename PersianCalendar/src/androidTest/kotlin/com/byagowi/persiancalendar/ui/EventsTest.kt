@@ -82,7 +82,7 @@ class EventsTest {
         repository.irregularCalendarEventsStore
             .getEventsList<CalendarEvent.GregorianCalendarEvent>(2021, CalendarType.GREGORIAN)
             .let {
-                assertEquals(2, it.size)
+                assertEquals(4, it.size)
                 assertEquals(false, it[0].isHoliday)
                 assertEquals(false, it[1].isHoliday)
             }
