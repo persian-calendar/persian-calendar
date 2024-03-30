@@ -524,7 +524,7 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
-    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 3) return false
+    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     val alarmManager = context.getSystemService<AlarmManager>()
     if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
         runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
