@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
+import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -483,7 +484,7 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                     context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
-        } else if (showEncourageToBatteryOptimizationExemption()) {
+        } else if (showEncourageToExemptFromBatteryOptimizations()) {
             fun ignore() {
                 val prefs = context.appPrefs
                 prefs.edit {
@@ -492,14 +493,25 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 }
             }
 
+            fun exempt() {
+                runCatching {
+                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
+            }
+
+            val launcher = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted -> exempt() }
+
             EncourageActionLayout(
                 header = stringResource(R.string.exempt_app_battery_optimization),
                 acceptButton = stringResource(R.string.yes),
                 discardAction = ::ignore,
             ) {
-                runCatching {
-                    context.startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
-                }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
+                val alarmManager = context.getSystemService<AlarmManager>()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
+                ) launcher.launch(Manifest.permission.SCHEDULE_EXACT_ALARM) else exempt()
             }
         }
     }
@@ -507,12 +519,16 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
 
 @ChecksSdkIntAtLeast(Build.VERSION_CODES.M)
 @Composable
-private fun showEncourageToBatteryOptimizationExemption(): Boolean {
+private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val isNotifyDate by isNotifyDate.collectAsState()
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
-    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
+    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 3) return false
+    val alarmManager = context.getSystemService<AlarmManager>()
+    if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+        runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
+    ) return true
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
 
