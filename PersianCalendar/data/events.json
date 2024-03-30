@@ -1253,6 +1253,7 @@
 
     { "holiday": false, "month": 1, "day": 4, "title": "روز جهانی بریل", "type": "International" },
     { "holiday": false, "month": 1, "day": 24, "title": "روز جهانی آموزش", "type": "International" },
+    { "holiday": false, "month": 2, "day": 2, "title": "روز جهانی تالاب‌ها", "type": "International"},
     { "holiday": false, "month": 2, "day": 4, "title": "روز جهانی سرطان", "type": "International"},
     { "holiday": false, "month": 2, "day": 6, "title": "روز جهانی مبارزه با ناقص‌سازی زنان", "type": "International" },
     { "holiday": false, "month": 2, "day": 10, "title": "روز جهانی حبوبات", "type": "International" },
