@@ -397,6 +397,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="sample_inputs">Sample inputs</string>
     <string name="year_view">Year view</string>
     <string name="exempt_app_battery_optimization">Would you like to add the app to battery optimization exception for correct functionality of the notification?</string>
+    <string name="alarm_permission">Would you like to make alarms more reliable by granting a permission?</string>
     <string name="widget_background_transparency">Widget background transparency</string>
     <string name="save">Save</string>
     <string name="holidays_in_red">Holidays in red color</string>

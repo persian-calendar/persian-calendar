@@ -407,6 +407,7 @@
     <string name="sample_inputs">ورودی‌های نمونه</string>
     <string name="year_view">نمای سال</string>
     <string name="exempt_app_battery_optimization">مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست استثنا از بهینه‌سازی باتری بیافزایید؟</string>
+    <string name="alarm_permission">مایلید عملکرد اذان را در دستگاه با اعطای یک دسترسی بهبود دهید؟</string>
     <string name="widget_background_transparency">شفافیت پس‌زمینهٔ ویجت</string>
     <string name="save">ذخیره</string>
     <string name="holidays_in_red">تعطیلات به رنگ قرمز</string>
