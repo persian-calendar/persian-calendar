@@ -82,6 +82,16 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
                     type.createDate(year, month, day)
                 }
 
+                "nth weekday of month" -> {
+                    val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
+                    val weekDay = event["weekday"]?.toIntOrNull() ?: return@mapNotNull null
+                    val nth = event["nth"]?.toIntOrNull() ?: return@mapNotNull null
+                    val monthStartWeekDay = Jdn(type, year, month, 1).dayOfWeek
+                    val day =
+                        weekDay - monthStartWeekDay + (nth - if (monthStartWeekDay < weekDay) 1 else 0) * 7
+                    type.createDate(year, month, day)
+                }
+
                 else -> return@mapNotNull null
             }
             val title = "${event["title"] ?: return@mapNotNull null} (${formatNumber(year)})"
