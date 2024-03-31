@@ -39,7 +39,7 @@ enum class CalendarType(
     // 1 means Saturday on it and 7 means Friday
     fun getNthWeekDayOfMonth(year: Int, month: Int, weekDay: Int, nth: Int): Int {
         val monthStartWeekDay = Jdn(this, year, month, 1).weekDay
-        return weekDay - monthStartWeekDay + (nth - if (monthStartWeekDay < weekDay) 1 else 0) * 7
+        return weekDay - monthStartWeekDay + nth * 7 - if (monthStartWeekDay < weekDay) 7 else 0
     }
 
     fun getLastWeekDayOfMonth(year: Int, month: Int, weekDay: Int): Int {
