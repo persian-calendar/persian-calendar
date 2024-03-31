@@ -73,35 +73,35 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
 fun getDateInstance(event: Map<String, String>, year: Int, type: CalendarType): AbstractDate? {
     return when (event["rule"]) {
         "single event" -> {
-            if (event["year"]?.toIntOrNull() != year) return null
-            val month = event["month"]?.toIntOrNull() ?: return null
-            val day = event["day"]?.toIntOrNull() ?: return null
+            if (event["year"]?.toIntOrNull().debugAssertNotNull != year) return null
+            val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val day = event["day"]?.toIntOrNull().debugAssertNotNull ?: return null
             type.createDate(year, month, day)
         }
 
         "nth day from" -> {
-            val nth = event["nth"]?.toIntOrNull() ?: return null
-            val day = event["day"]?.toIntOrNull() ?: return null
-            val month = event["month"]?.toIntOrNull() ?: return null
+            val nth = event["nth"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val day = event["day"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
             (Jdn(type, year, month, day) + nth - 1).toCalendar(type)
         }
 
         "end of month" -> {
-            val month = event["month"]?.toIntOrNull() ?: return null
+            val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
             type.createDate(year, month, type.getMonthLength(year, month))
         }
 
         "last weekday of month" -> {
-            val month = event["month"]?.toIntOrNull() ?: return null
-            val weekDay = event["weekday"]?.toIntOrNull() ?: return null
+            val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val weekDay = event["weekday"]?.toIntOrNull().debugAssertNotNull ?: return null
             val offset = event["offset"]?.toIntOrNull() ?: 0
             type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay) + offset)
         }
 
         "nth weekday of month" -> {
-            val month = event["month"]?.toIntOrNull() ?: return null
-            val weekDay = event["weekday"]?.toIntOrNull() ?: return null
-            val nth = event["nth"]?.toIntOrNull() ?: return null
+            val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val weekDay = event["weekday"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val nth = event["nth"]?.toIntOrNull().debugAssertNotNull ?: return null
             type.createDate(year, month, type.getNthWeekDayOfMonth(year, month, weekDay, nth))
         }
 
