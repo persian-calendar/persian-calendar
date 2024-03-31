@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.getDateInstance
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
@@ -82,8 +83,13 @@ class EventsTests {
         "1390, 12, 26, 7",
     )
     fun `getLastDayOfWeekOfMonth calculations correctness`(
-        year: Int, month: Int, day: Int, dayOfWeek: Int
+        year: Int, month: Int, day: Int, weekDay: Int
     ) {
-        assertEquals(day, CalendarType.SHAMSI.getLastWeekDayOfMonth(year, month, dayOfWeek))
+        val calendar = CalendarType.SHAMSI
+        assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, weekDay))
+        val event = mapOf(
+            "rule" to "last weekday of month", "weekday" to "$weekDay", "month" to "$month",
+        )
+        assertEquals(getDateInstance(event, year, calendar), PersianDate(year, month, day))
     }
 }
