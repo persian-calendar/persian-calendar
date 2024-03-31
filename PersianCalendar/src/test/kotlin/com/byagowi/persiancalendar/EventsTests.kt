@@ -59,4 +59,31 @@ class EventsTests {
         )
         assertEquals(getDateInstance(event, year, calendar), CivilDate(year, month, day))
     }
+
+    @ParameterizedTest
+    @CsvSource(
+        "1400, 12, 29, 2",
+        "1400, 12, 28, 1",
+        "1400, 12, 27, 7",
+        "1400, 12, 26, 6",
+        "1400, 12, 25, 5",
+        "1400, 12, 24, 4",
+        "1400, 12, 23, 3",
+        "1400, 12, 27, 7",
+        "1399, 12, 29, 7",
+        "1398, 12, 23, 7",
+        "1397, 12, 24, 7",
+        "1396, 12, 25, 7",
+        "1395, 12, 27, 7",
+        "1394, 12, 28, 7",
+        "1393, 12, 29, 7",
+        "1392, 12, 23, 7",
+        "1391, 12, 25, 7",
+        "1390, 12, 26, 7",
+    )
+    fun `getLastDayOfWeekOfMonth calculations correctness`(
+        year: Int, month: Int, day: Int, dayOfWeek: Int
+    ) {
+        assertEquals(day, CalendarType.SHAMSI.getLastWeekDayOfMonth(year, month, dayOfWeek))
+    }
 }
