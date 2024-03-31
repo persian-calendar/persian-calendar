@@ -120,8 +120,8 @@ fun CalendarsOverview(
             val language by language.collectAsState()
             AnimatedContent(
                 if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
-                    jdn.dayOfWeekName, stringResource(R.string.iran_time)
-                ) else jdn.dayOfWeekName,
+                    jdn.weekDayName, stringResource(R.string.iran_time)
+                ) else jdn.weekDayName,
                 transitionSpec = appCrossfadeSpec,
                 label = "weekday name",
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }

@@ -29,7 +29,7 @@ fun renderMonthWidget(
     selectedDay: Jdn?,
 ): String {
     val monthStartJdn = Jdn(baseDate)
-    val startingDayOfWeek = monthStartJdn.dayOfWeek
+    val startingWeekDay = monthStartJdn.weekDay
     val monthLength = mainCalendar.getMonthLength(baseDate.year, baseDate.month)
 
     val cellWidth = dayPainter.width
@@ -56,7 +56,7 @@ fun renderMonthWidget(
         (0..<rowsCount - 1).forEach { row ->
             (0..<7).forEach cell@{ column ->
                 val dayOffset = (column + row * 7) -
-                        applyWeekStartOffsetToWeekDay(startingDayOfWeek)
+                        applyWeekStartOffsetToWeekDay(startingWeekDay)
                 if (dayOffset !in monthRange) return@cell
                 val day = monthStartJdn + dayOffset
                 val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()

@@ -23,9 +23,9 @@ value class Jdn(val value: Long) {
             this(calendar.createDate(year, month, day))
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
-    val dayOfWeek: Int get() = ((value + 2L) % 7L).toInt()
+    val weekDay: Int get() = ((value + 2L) % 7L).toInt()
 
-    fun isWeekEnd() = weekEnds[this.dayOfWeek]
+    fun isWeekEnd() = weekEnds[this.weekDay]
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
         CalendarType.ISLAMIC -> toIslamicDate()
@@ -53,10 +53,10 @@ value class Jdn(val value: Long) {
 
     fun getWeekOfYear(startOfYear: Jdn): Int {
         val dayOfYear = this - startOfYear
-        return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.dayOfWeek)) / 7.0).toInt()
+        return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.weekDay)) / 7.0).toInt()
     }
 
-    val dayOfWeekName: String get() = weekDays[this.dayOfWeek]
+    val weekDayName: String get() = weekDays[this.weekDay]
 
     fun calculatePersianSeasonPassedDaysAndCount(): Pair<Int, Int> {
         val persianDate = this.toPersianDate()

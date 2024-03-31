@@ -50,14 +50,14 @@ import kotlin.math.roundToInt
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
-fun applyWeekStartOffsetToWeekDay(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
+fun applyWeekStartOffsetToWeekDay(weekDay: Int): Int = (weekDay + 7 - weekStartOffset) % 7
 
-fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
+fun revertWeekStartOffsetFromWeekDay(weekDay: Int): Int = (weekDay + weekStartOffset) % 7
 
 fun getWeekDayName(position: Int) = weekDays[position % 7]
 
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
-    jdn.dayOfWeekName + spacedComma + formatDate(date, calendarNameInLinear)
+    jdn.weekDayName + spacedComma + formatDate(date, calendarNameInLinear)
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 

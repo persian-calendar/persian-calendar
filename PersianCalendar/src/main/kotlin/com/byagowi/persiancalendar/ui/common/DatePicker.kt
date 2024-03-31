@@ -40,7 +40,7 @@ fun DatePicker(
             val date = remember(jdn.value, calendar) { jdn.toCalendar(calendar) }
             val daysFormat = remember(calendar, date.year, date.month) {
                 val monthStart = Jdn(calendar, date.year, date.month, 1);
-                { item: Int -> (monthStart + item - 1).dayOfWeekName + " / " + formatNumber(item) }
+                { item: Int -> (monthStart + item - 1).weekDayName + " / " + formatNumber(item) }
             }
             val monthsLength = remember(calendar, date.year, date.month) {
                 calendar.getMonthLength(date.year, date.month)

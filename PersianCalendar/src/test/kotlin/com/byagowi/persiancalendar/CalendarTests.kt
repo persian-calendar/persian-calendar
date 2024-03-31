@@ -67,10 +67,10 @@ class CalendarTests {
         "5, 1398, 9, 21",
         "6, 1398, 9, 22",
     )
-    fun `dayOfWeek calculations correctness`(
-        dayOfWeek: Int, year: Int, month: Int, dayOfMonth: Int
+    fun `weekDay calculations correctness`(
+        weekDay: Int, year: Int, month: Int, dayOfMonth: Int
     ) {
-        assertEquals(dayOfWeek, Jdn(PersianDate(year, month, dayOfMonth)).dayOfWeek)
+        assertEquals(weekDay, Jdn(PersianDate(year, month, dayOfMonth)).weekDay)
     }
 
     @ParameterizedTest

@@ -582,7 +582,7 @@ private fun create4x1RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, widgetTitle: String,
     subtitle: String
 ): RemoteViews {
-    val weekDayName = jdn.dayOfWeekName
+    val weekDayName = jdn.weekDayName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
@@ -618,7 +618,7 @@ private fun create2x2RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, widgetTitle: String,
     subtitle: String, owghat: String
 ): RemoteViews {
-    val weekDayName = jdn.dayOfWeekName
+    val weekDayName = jdn.weekDayName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
@@ -667,7 +667,7 @@ private fun create4x2RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, nowClock: Clock,
     prayTimes: PrayTimes?
 ): RemoteViews {
-    val weekDayName = jdn.dayOfWeekName
+    val weekDayName = jdn.weekDayName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
@@ -688,7 +688,7 @@ private fun create4x2RemoteViews(
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
-        if (isWidgetClock) append(jdn.dayOfWeekName + "\n")
+        if (isWidgetClock) append(jdn.weekDayName + "\n")
         append(formatDate(date, calendarNameInLinear = showOtherCalendars))
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })

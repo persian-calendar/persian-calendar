@@ -82,7 +82,7 @@ class EventsTests {
         "1391, 12, 25, 7",
         "1390, 12, 26, 7",
     )
-    fun `getLastDayOfWeekOfMonth calculations correctness`(
+    fun `getLastWeekDayOfMonth calculations correctness`(
         year: Int, month: Int, day: Int, weekDay: Int
     ) {
         val calendar = CalendarType.SHAMSI

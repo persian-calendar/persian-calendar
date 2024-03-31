@@ -71,7 +71,7 @@ fun Month(
 
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
 
-    val startingDayOfWeek = applyWeekStartOffsetToWeekDay(monthStartJdn.dayOfWeek)
+    val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
@@ -91,7 +91,7 @@ fun Month(
 
     run {
         val highlightedDayOfMonth = selectedDay - monthStartJdn
-        val cellIndex = highlightedDayOfMonth + startingDayOfWeek
+        val cellIndex = highlightedDayOfMonth + startingWeekDay
         val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
             x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
@@ -152,10 +152,10 @@ fun Month(
         }
         val daysInteractionSource = remember { MutableInteractionSource() }
         repeat(monthLength) { dayOffset ->
-            if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingDayOfWeek) % 7 == 0)) {
+            if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingWeekDay) % 7 == 0)) {
                 Box(contentAlignment = Alignment.Center) {
                     val weekNumber =
-                        formatNumber(weekOfYearStart + (dayOffset + startingDayOfWeek) / 7)
+                        formatNumber(weekOfYearStart + (dayOffset + startingWeekDay) / 7)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
                         weekNumber,
@@ -166,7 +166,7 @@ fun Month(
                     )
                 }
             }
-            if (dayOffset == 0) repeat(startingDayOfWeek) { Spacer(Modifier) }
+            if (dayOffset == 0) repeat(startingWeekDay) { Spacer(Modifier) }
             val day = monthStartJdn + dayOffset
             val isToday = day == today
             Canvas(
