@@ -95,18 +95,14 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: CalendarType): 
             val month = event["month"]?.toIntOrNull() ?: return null
             val weekDay = event["weekday"]?.toIntOrNull() ?: return null
             val offset = event["offset"]?.toIntOrNull() ?: 0
-            val day = type.getLastWeekDayOfMonth(year, month, weekDay) + offset
-            type.createDate(year, month, day)
+            type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay) + offset)
         }
 
         "nth weekday of month" -> {
             val month = event["month"]?.toIntOrNull() ?: return null
             val weekDay = event["weekday"]?.toIntOrNull() ?: return null
             val nth = event["nth"]?.toIntOrNull() ?: return null
-            val monthStartWeekDay = Jdn(type, year, month, 1).dayOfWeek
-            val day =
-                weekDay - monthStartWeekDay + (nth - if (monthStartWeekDay < weekDay) 1 else 0) * 7
-            type.createDate(year, month, day)
+            type.createDate(year, month, type.getNthWeekDayOfMonth(year, month, weekDay, nth))
         }
 
         else -> return null

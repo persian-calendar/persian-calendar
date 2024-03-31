@@ -8,6 +8,8 @@ import com.byagowi.persiancalendar.entities.getDateInstance
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
 
 class EventsTests {
@@ -34,22 +36,27 @@ class EventsTests {
             .also { assertEquals(372, it.size) }
     }
 
-    @Test
-    fun `test createDateFromSpecification`() {
+    @ParameterizedTest
+    @CsvSource(
+        "2024, 11, 21",
+        "2025, 11, 20",
+        "2026, 11, 19",
+        "2027, 11, 18",
+        "2028, 11, 16",
+        "2029, 11, 15",
+        "2030, 11, 21",
+        "2031, 11, 20",
+        "2032, 11, 18",
+        "2033, 11, 17",
+    )
+    fun `test World Philosophy Day instances`(year: Int, month: Int, day: Int) {
+        val calendar = CalendarType.GREGORIAN
+        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 6, 3))
         val title = "روز جهانی فلسفه (سومین پنج‌شنبهٔ نوامبر)"
         val event = mapOf(
             "rule" to "nth weekday of month", "nth" to "3", "weekday" to "6", "month" to "11",
             "type" to "International", "title" to title, "holiday" to "false",
         )
-        assertEquals(getDateInstance(event, 2024, CalendarType.GREGORIAN), CivilDate(2024, 11, 21))
-        assertEquals(getDateInstance(event, 2025, CalendarType.GREGORIAN), CivilDate(2025, 11, 20))
-        assertEquals(getDateInstance(event, 2026, CalendarType.GREGORIAN), CivilDate(2026, 11, 19))
-        assertEquals(getDateInstance(event, 2027, CalendarType.GREGORIAN), CivilDate(2027, 11, 18))
-        assertEquals(getDateInstance(event, 2028, CalendarType.GREGORIAN), CivilDate(2028, 11, 16))
-        assertEquals(getDateInstance(event, 2029, CalendarType.GREGORIAN), CivilDate(2029, 11, 15))
-        assertEquals(getDateInstance(event, 2030, CalendarType.GREGORIAN), CivilDate(2030, 11, 21))
-        assertEquals(getDateInstance(event, 2031, CalendarType.GREGORIAN), CivilDate(2031, 11, 20))
-        assertEquals(getDateInstance(event, 2032, CalendarType.GREGORIAN), CivilDate(2032, 11, 18))
-        assertEquals(getDateInstance(event, 2033, CalendarType.GREGORIAN), CivilDate(2033, 11, 17))
+        assertEquals(getDateInstance(event, year, calendar), CivilDate(year, month, day))
     }
 }
