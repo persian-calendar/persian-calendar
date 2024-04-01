@@ -424,4 +424,5 @@
     <string name="widget_background_transparency">Прозрачность фона виджета</string>
     <string name="save">Сохранить</string>
     <string name="holidays_in_red">Отмечать праздники красным</string>
+    <string name="add_widget">Добавить виджет</string>
 </resources>
