@@ -14,7 +14,7 @@ import org.jetbrains.annotations.VisibleForTesting
 
 class IrregularCalendarEventsStore(private val eventsRepository: EventsRepository) {
     private fun createCache(type: CalendarType) =
-        lruCache(1024, create = { year: Int -> generateEntry(year, type) })
+        lruCache(32, create = { year: Int -> generateEntry(year, type) })
 
     private val persianEvents = createCache(CalendarType.SHAMSI)
     private val islamicEvents = createCache(CalendarType.ISLAMIC)
