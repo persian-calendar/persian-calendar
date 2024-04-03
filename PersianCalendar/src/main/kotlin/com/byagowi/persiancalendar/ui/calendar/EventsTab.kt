@@ -135,7 +135,7 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
                     event is CalendarEvent.DeviceCalendarEvent -> {
                         runCatching {
                             // should be turned to long then int otherwise gets stupid alpha
-                            if (event.color.isEmpty()) null else Color(event.color.toLong().toInt())
+                            if (event.color.isEmpty()) null else Color(event.color.toLong())
                         }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
                     }
 

@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Configuration
 import android.os.Build
-import androidx.annotation.ColorInt
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -462,7 +461,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                 Box(Modifier.weight(1f)) {
                     Cell(
                         Modifier.align(Alignment.Center),
-                        0xcceaaa00.toInt(),
+                        Color(0xcceaaa00),
                         stringResource(R.string.sun),
                         sunZodiac.format(context.resources, true) // ☉☀️
                     )
@@ -470,7 +469,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                 Box(Modifier.weight(1f)) {
                     Cell(
                         Modifier.align(Alignment.Center),
-                        0xcc606060.toInt(),
+                        Color(0xcc606060),
                         stringResource(R.string.moon),
                         moonZodiac.format(context.resources, true) // ☽it.moonPhaseEmoji
                     )
@@ -539,7 +538,7 @@ private fun MoonIcon(astronomyState: AstronomyState) {
 
 @Stable
 @Composable
-private fun Cell(modifier: Modifier, @ColorInt color: Int, label: String, value: String) {
+private fun Cell(modifier: Modifier, color: Color, label: String, value: String) {
     Row(
         modifier.animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
@@ -552,7 +551,7 @@ private fun Cell(modifier: Modifier, @ColorInt color: Int, label: String, value:
             label,
             modifier = Modifier
                 .background(
-                    Color(if (isDynamicGrayscale) 0xcc808080.toInt() else color),
+                    if (isDynamicGrayscale) Color(0xcc808080) else color,
                     MaterialTheme.shapes.small,
                 )
                 .align(alignment = Alignment.CenterVertically)
