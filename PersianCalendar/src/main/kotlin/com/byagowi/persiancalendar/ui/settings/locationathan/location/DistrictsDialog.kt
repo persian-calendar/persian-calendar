@@ -55,10 +55,7 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
             countyDetails.drop(1).map { it.split(":") to countyDetails[0] }
         }.sortedBy { (district, _) -> language.value.prepareForSort(district[0/*district name*/]) }
     }
-    AppDialog(
-        title = { Text(province) },
-        onDismissRequest = onDismissRequest,
-    ) {
+    AppDialog(title = { Text(province) }, onDismissRequest = onDismissRequest) {
         val context = LocalContext.current
         districts.forEachIndexed { index, (district, county) ->
             Box(
