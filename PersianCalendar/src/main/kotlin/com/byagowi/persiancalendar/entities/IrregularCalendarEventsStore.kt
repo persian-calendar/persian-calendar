@@ -49,6 +49,8 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
                 event["type"] == "International" && eventsRepository.international -> true
                 event["type"] == "Iran" && eventsRepository.iranHolidays && event["holiday"] == "true" -> true
                 event["type"] == "Iran" && eventsRepository.iranOthers -> true
+                event["type"] == "Afghanistan" && eventsRepository.afghanistanHolidays && event["holiday"] == "true" -> true
+                event["type"] == "Afghanistan" && eventsRepository.afghanistanOthers -> true
                 event["type"] == "Nepal" && eventsRepository.nepalHolidays && event["holiday"] == "true" -> true
                 event["type"] == "Nepal" && eventsRepository.nepalOthers -> true
                 event["type"] == "AncientIran" && eventsRepository.iranAncient -> true
@@ -105,6 +107,6 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: CalendarType): 
             type.createDate(year, month, type.getNthWeekDayOfMonth(year, month, weekDay, nth))
         }
 
-        else -> return null
+        else -> null
     }
 }
