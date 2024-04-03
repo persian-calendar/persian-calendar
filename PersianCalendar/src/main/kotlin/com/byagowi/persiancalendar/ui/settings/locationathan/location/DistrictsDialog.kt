@@ -33,10 +33,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 fun ProvincesDialog(onDismissRequest: () -> Unit) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
     if (province != null) return DistrictsDialog(province ?: "", onDismissRequest)
-    AppDialog(
-        title = { Text("انتخاب استان برای مشاهدهٔ بخش‌ها") },
-        onDismissRequest = onDismissRequest,
-    ) {
+    AppDialog(title = { Text("انتخاب استان") }, onDismissRequest = onDismissRequest) {
         districtsStore.forEach { (provinceName, _) ->
             Box(
                 contentAlignment = Alignment.CenterStart,
