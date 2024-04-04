@@ -148,7 +148,7 @@ fun AstronomyScreen(
                     TodayActionButton(visible = minutesOffset != 0) {
                         viewModel.animateToAbsoluteMinutesOffset(0)
                     }
-                    AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
+                    AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
                         SwitchWithLabel(
                             label = stringResource(R.string.tropical),
                             checked = isTropical,
@@ -375,7 +375,7 @@ private fun SolarDisplay(
                     selected = mode == it,
                     onClick = { viewModel.setMode(it) },
                     icon = {
-                        if (it == AstronomyMode.Moon) MoonIcon(state) else Icon(
+                        if (it == AstronomyMode.MOON) MoonIcon(state) else Icon(
                             ImageVector.vectorResource(it.icon),
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
@@ -456,7 +456,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
             )
         }
         Seasons(jdn)
-        AnimatedVisibility(visible = mode == AstronomyMode.Earth) {
+        AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
             Row(Modifier.padding(top = 8.dp)) {
                 Box(Modifier.weight(1f)) {
                     Cell(

@@ -117,8 +117,8 @@ class MapDraw(
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         when (currentMapType) {
-            MapType.None -> Unit
-            MapType.DayNight, MapType.MoonVisibility -> {
+            MapType.NONE -> Unit
+            MapType.DAY_NIGHT, MapType.MOON_VISIBILITY -> {
                 canvas.drawBitmap(maskMap, null, mapRect, null)
                 val scale = mapWidth / maskMap.width
                 solarDraw.simpleMoon(
@@ -135,22 +135,22 @@ class MapDraw(
                 )
             }
 
-            MapType.MagneticInclination, MapType.MagneticDeclination, MapType.MagneticFieldStrength ->
+            MapType.MAGNETIC_INCLINATION, MapType.MAGNETIC_DECLINATION, MapType.MAGNETIC_FIELD_STRENGTH ->
                 canvas.drawBitmap(maskMap, null, mapRect, null)
 
-            MapType.TimeZones -> canvas.drawPath(timezones, miscPaint)
-            MapType.TectonicPlates -> canvas.drawPath(tectonicPlates, miscPaint)
-            MapType.Yallop, MapType.Odeh ->
+            MapType.TIME_ZONES -> canvas.drawPath(timezones, miscPaint)
+            MapType.TECTONIC_PLATES -> canvas.drawPath(tectonicPlates, miscPaint)
+            MapType.YALLOP, MapType.ODEH ->
                 canvas.drawBitmap(maskMapCrescentVisibility, null, mapRect, null)
         }
     }
 
     private val maskDateSink = GregorianCalendar().also { --it.timeInMillis }
-    var currentMapType = MapType.None
+    var currentMapType = MapType.NONE
         private set
 
     fun updateMap(timeInMillis: Long, mapType: MapType) {
-        if (mapType == MapType.None) {
+        if (mapType == MapType.NONE) {
             currentMapType = mapType
             maskFormattedTime = ""
             return
@@ -159,21 +159,19 @@ class MapDraw(
         maskDateSink.timeInMillis = timeInMillis
         currentMapType = mapType
         when (mapType) {
-            MapType.DayNight, MapType.MoonVisibility -> {
+            MapType.DAY_NIGHT, MapType.MOON_VISIBILITY -> {
                 maskFormattedTime = maskDateSink.formatDateAndTime()
                 maskMap.eraseColor(Color.TRANSPARENT)
                 writeDayNightMask(timeInMillis)
             }
 
-            MapType.MagneticFieldStrength,
-            MapType.MagneticDeclination,
-            MapType.MagneticInclination -> {
+            MapType.MAGNETIC_FIELD_STRENGTH, MapType.MAGNETIC_DECLINATION, MapType.MAGNETIC_INCLINATION -> {
                 maskFormattedTime = maskDateSink.formatDateAndTime()
                 maskMap.eraseColor(Color.TRANSPARENT)
                 writeMagneticMap(timeInMillis, mapType)
             }
 
-            MapType.Yallop, MapType.Odeh -> {
+            MapType.YALLOP, MapType.ODEH -> {
                 maskFormattedTime = formatDate(
                     Jdn(maskDateSink.toCivilDate()).inCalendar(mainCalendar),
                     forceNonNumerical = true
@@ -192,10 +190,10 @@ class MapDraw(
                 val latitude = 180 / 2f - y
                 val longitude = x - 360 / 2f
                 val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
-                maskMap[x, y] = if (mapType != MapType.MagneticFieldStrength) {
+                maskMap[x, y] = if (mapType != MapType.MAGNETIC_FIELD_STRENGTH) {
                     val value = when (mapType) {
-                        MapType.MagneticDeclination -> field.declination
-                        MapType.MagneticInclination -> field.inclination
+                        MapType.MAGNETIC_DECLINATION -> field.declination
+                        MapType.MAGNETIC_INCLINATION -> field.inclination
                         else -> 0f
                     }
                     when {
@@ -219,7 +217,7 @@ class MapDraw(
         val geoSunEqd = rot.rotate(geoSunEqj)
         val geoMoonEqd = rot.rotate(geoMoonEqj)
 
-        val isMoonVisibility = currentMapType == MapType.MoonVisibility
+        val isMoonVisibility = currentMapType == MapType.MOON_VISIBILITY
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
         (0..<360).forEach { x ->
@@ -261,7 +259,7 @@ class MapDraw(
         rot.rotate(bVec - oVec).let { it.z / it.length() }
 
     private fun writeCrescentVisibilityMap(date: GregorianCalendar, mapType: MapType) {
-        val isYallop = mapType == MapType.Yallop
+        val isYallop = mapType == MapType.YALLOP
         val baseTime = Time(
             date[GregorianCalendar.YEAR], date[GregorianCalendar.MONTH] + 1,
             date[GregorianCalendar.DAY_OF_MONTH] + 1, 0, 0, .0

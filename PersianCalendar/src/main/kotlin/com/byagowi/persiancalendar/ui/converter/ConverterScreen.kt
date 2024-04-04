@@ -177,7 +177,7 @@ fun ConverterScreen(openDrawer: () -> Unit, viewModel: ConverterViewModel) {
                     LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
                 // Timezones
-                AnimatedVisibility(screenMode == ConverterScreenMode.TimeZones) {
+                AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
                     val zones = remember {
                         TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
                             .sortedBy { it.rawOffset }
@@ -198,20 +198,20 @@ fun ConverterScreen(openDrawer: () -> Unit, viewModel: ConverterViewModel) {
                 }
 
                 AnimatedVisibility(
-                    screenMode == ConverterScreenMode.Converter || screenMode == ConverterScreenMode.Distance
+                    screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
                 ) {
                     Column(Modifier.padding(horizontal = 24.dp)) {
                         ConverterAndDistance(viewModel)
                     }
                 }
 
-                AnimatedVisibility(screenMode == ConverterScreenMode.Calculator) {
+                AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                         Calculator(viewModel)
                     }
                 }
 
-                AnimatedVisibility(screenMode == ConverterScreenMode.QrCode) {
+                AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
                     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                         QrCode(viewModel) { qrShareAction = it }
                     }
@@ -230,7 +230,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
     AppIconButton(icon = Icons.Default.Share, title = stringResource(R.string.share)) {
         val chooserTitle = context.getString(screenMode.title)
         when (screenMode) {
-            ConverterScreenMode.Converter -> {
+            ConverterScreenMode.CONVERTER -> {
                 val jdn = viewModel.selectedDate.value
                 context.shareText(
                     listOf(
@@ -242,7 +242,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                 )
             }
 
-            ConverterScreenMode.Distance -> {
+            ConverterScreenMode.DISTANCE -> {
                 val jdn = viewModel.selectedDate.value
                 val secondJdn = viewModel.secondSelectedDate.value
                 context.shareText(
@@ -260,7 +260,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                 )
             }
 
-            ConverterScreenMode.Calculator -> {
+            ConverterScreenMode.CALCULATOR -> {
                 context.shareText(
                     runCatching {
                         // running this inside a runCatching block is absolutely important
@@ -270,7 +270,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                 )
             }
 
-            ConverterScreenMode.TimeZones -> {
+            ConverterScreenMode.TIME_ZONES -> {
                 context.shareText(
                     listOf(
                         viewModel.firstTimeZone.value,
@@ -284,7 +284,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                 )
             }
 
-            ConverterScreenMode.QrCode -> qrShareAction()
+            ConverterScreenMode.QR_CODE -> qrShareAction()
         }
     }
 }
@@ -428,7 +428,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         }
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
-            AnimatedVisibility(visible = screenMode == ConverterScreenMode.Converter) {
+            AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
                 Column {
                     Spacer(Modifier.height(12.dp))
                     CalendarsOverview(
@@ -440,7 +440,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                     ) { isExpanded = !isExpanded }
                 }
             }
-            AnimatedVisibility(visible = screenMode == ConverterScreenMode.Distance) {
+            AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart(viewModel, jdn, calendar)
             }
         }
@@ -450,7 +450,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
             calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
         )
         AnimatedVisibility(
-            visible = screenMode == ConverterScreenMode.Converter,
+            visible = screenMode == ConverterScreenMode.CONVERTER,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Card(
@@ -470,7 +470,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
             }
         }
         AnimatedVisibility(
-            visible = screenMode == ConverterScreenMode.Distance,
+            visible = screenMode == ConverterScreenMode.DISTANCE,
             modifier = Modifier.fillMaxWidth(),
         ) { DaysDistanceSecondPart(viewModel, jdn, calendar) }
     }

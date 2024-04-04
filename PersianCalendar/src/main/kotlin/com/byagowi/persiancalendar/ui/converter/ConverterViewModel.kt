@@ -56,15 +56,15 @@ class ConverterViewModel : ViewModel() {
                 clock, firstTimeZone, secondTimeZone,
             ).collectLatest {
                 _todayButtonVisibility.value = when (screenMode.value) {
-                    ConverterScreenMode.Calculator, ConverterScreenMode.QrCode -> false
+                    ConverterScreenMode.CALCULATOR, ConverterScreenMode.QR_CODE -> false
 
-                    ConverterScreenMode.Converter -> selectedDate.value != today.value
+                    ConverterScreenMode.CONVERTER -> selectedDate.value != today.value
 
-                    ConverterScreenMode.Distance -> {
+                    ConverterScreenMode.DISTANCE -> {
                         selectedDate.value != today.value || secondSelectedDate.value != today.value
                     }
 
-                    ConverterScreenMode.TimeZones -> {
+                    ConverterScreenMode.TIME_ZONES -> {
                         !haveSameClock(
                             clock.value,
                             GregorianCalendar(clock.value.timeZone),

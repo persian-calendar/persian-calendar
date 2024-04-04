@@ -4,14 +4,14 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 
 enum class MapType(@StringRes val title: Int, val isCrescentVisibility: Boolean = false) {
-    None(R.string.none),
-    DayNight(R.string.show_night_mask_label),
-    MoonVisibility(R.string.moon_visibility),
-    MagneticFieldStrength(R.string.magnetic_field_strength),
-    MagneticDeclination(R.string.magnetic_declination),
-    MagneticInclination(R.string.magnetic_inclination),
-    TimeZones(R.string.time_zones_en),
-    TectonicPlates(R.string.tectonic_plates),
-    Yallop(R.string.crescent_visibility_yallop, isCrescentVisibility = true),
-    Odeh(R.string.crescent_visibility_odeh, isCrescentVisibility = true)
+    NONE(R.string.none),
+    DAY_NIGHT(R.string.show_night_mask_label),
+    MOON_VISIBILITY(R.string.moon_visibility),
+    MAGNETIC_FIELD_STRENGTH(R.string.magnetic_field_strength),
+    MAGNETIC_DECLINATION(R.string.magnetic_declination),
+    MAGNETIC_INCLINATION(R.string.magnetic_inclination),
+    TIME_ZONES(R.string.time_zones_en),
+    TECTONIC_PLATES(R.string.tectonic_plates),
+    YALLOP(R.string.crescent_visibility_yallop, isCrescentVisibility = true),
+    ODEH(R.string.crescent_visibility_odeh, isCrescentVisibility = true)
 }

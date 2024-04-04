@@ -82,12 +82,12 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         onDraw = { canvas, matrix ->
             canvas.withMatrix(matrix) {
                 when (mode) {
-                    AstronomyMode.Moon -> drawMoonOnlyView(this)
-                    AstronomyMode.Earth -> drawEarthCentricView(this)
-                    AstronomyMode.Sun -> drawSolarSystemPlanetsView(this)
+                    AstronomyMode.MOON -> drawMoonOnlyView(this)
+                    AstronomyMode.EARTH -> drawEarthCentricView(this)
+                    AstronomyMode.SUN -> drawSolarSystemPlanetsView(this)
                 }
             }
-            if (mode == AstronomyMode.Moon) {
+            if (mode == AstronomyMode.MOON) {
                 val radius = min(width, height) / 2f
                 canvas.drawText(
                     "%,d km".format(Locale.ENGLISH, (state.moon.dist * AU_IN_KM).roundToLong()),
@@ -115,7 +115,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         parent?.requestDisallowInterceptTouchEvent(true)
         super.dispatchTouchEvent(event)
-        if (mode != AstronomyMode.Earth || currentScale != 1f) return true
+        if (mode != AstronomyMode.EARTH || currentScale != 1f) return true
         val r = width / 2
         flingDetector.onTouchEvent(event)
         when (event.action) {

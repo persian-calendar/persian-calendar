@@ -182,8 +182,8 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
             else viewModel.toggleDisplayLocation()
         },
         Triple(Icons.Default.NightlightRound, R.string.show_night_mask_label) {
-            if (viewModel.state.value.mapType == MapType.None) showMapTypesDialog = true
-            else viewModel.changeMapType(MapType.None)
+            if (viewModel.state.value.mapType == MapType.NONE) showMapTypesDialog = true
+            else viewModel.changeMapType(MapType.NONE)
         },
     )
     val showKaaba = remember { context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true) }
@@ -288,7 +288,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                                         R.string.show_grid_label -> state.displayGrid
                                         R.string.show_location_label -> state.coordinates != null && state.displayLocation
                                         R.string.show_direct_path_label -> state.isDirectPathMode
-                                        R.string.show_night_mask_label -> state.mapType != MapType.None
+                                        R.string.show_night_mask_label -> state.mapType != MapType.NONE
                                         else -> false
                                     }
                                 ) MaterialTheme.colorScheme.inversePrimary else LocalContentColor.current

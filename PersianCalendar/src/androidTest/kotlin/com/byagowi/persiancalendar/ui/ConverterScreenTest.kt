@@ -27,7 +27,7 @@ class ConverterScreenTest {
     fun converterScreenConverterSmokeTest() {
         composeTestRule.setContent {
             val viewModel = viewModel<ConverterViewModel>()
-            viewModel.changeScreenMode(ConverterScreenMode.Converter)
+            viewModel.changeScreenMode(ConverterScreenMode.CONVERTER)
             ConverterScreen({}, viewModel)
         }
     }
@@ -36,7 +36,7 @@ class ConverterScreenTest {
     fun converterScreenDistanceSmokeTest() {
         composeTestRule.setContent {
             val viewModel = viewModel<ConverterViewModel>()
-            viewModel.changeScreenMode(ConverterScreenMode.Distance)
+            viewModel.changeScreenMode(ConverterScreenMode.DISTANCE)
             ConverterScreen({}, viewModel)
         }
     }
@@ -45,7 +45,7 @@ class ConverterScreenTest {
     fun converterScreenCalculatorSmokeTest() {
         composeTestRule.setContent {
             val viewModel = viewModel<ConverterViewModel>()
-            viewModel.changeScreenMode(ConverterScreenMode.Calculator)
+            viewModel.changeScreenMode(ConverterScreenMode.CALCULATOR)
             ConverterScreen({}, viewModel)
         }
     }
@@ -54,7 +54,7 @@ class ConverterScreenTest {
     fun converterScreenQrCodeSmokeTest() {
         composeTestRule.setContent {
             val viewModel = viewModel<ConverterViewModel>()
-            viewModel.changeScreenMode(ConverterScreenMode.QrCode)
+            viewModel.changeScreenMode(ConverterScreenMode.QR_CODE)
             ConverterScreen({}, viewModel)
         }
     }
@@ -63,7 +63,7 @@ class ConverterScreenTest {
     fun converterScreenTimeZonesSmokeTest() {
         composeTestRule.setContent {
             val viewModel = viewModel<ConverterViewModel>()
-            viewModel.changeScreenMode(ConverterScreenMode.TimeZones)
+            viewModel.changeScreenMode(ConverterScreenMode.TIME_ZONES)
             ConverterScreen({}, viewModel)
         }
     }
@@ -90,15 +90,15 @@ class ConverterScreenTest {
             LaunchedEffect(Unit) { viewModel.todayButtonVisibility.collect(values::add) }
         }
         listOf(
-            { viewModel.changeScreenMode(ConverterScreenMode.Distance) },
+            { viewModel.changeScreenMode(ConverterScreenMode.DISTANCE) },
             { viewModel.changeSecondSelectedDate(Jdn.today() + 1) },
             { viewModel.changeSecondSelectedDate(Jdn.today()) },
             { viewModel.changeSecondSelectedDate(Jdn.today() + 1) },
-            { viewModel.changeScreenMode(ConverterScreenMode.Converter) },
+            { viewModel.changeScreenMode(ConverterScreenMode.CONVERTER) },
             { viewModel.changeSecondSelectedDate(Jdn.today()) },
-            { viewModel.changeScreenMode(ConverterScreenMode.Calculator) },
+            { viewModel.changeScreenMode(ConverterScreenMode.CALCULATOR) },
             { viewModel.changeSecondSelectedDate(Jdn.today()) },
-            { viewModel.changeScreenMode(ConverterScreenMode.QrCode) },
+            { viewModel.changeScreenMode(ConverterScreenMode.QR_CODE) },
             { viewModel.changeSecondSelectedDate(Jdn.today()) },
         ).forEach { it(); composeTestRule.waitForIdle() }
         assertEquals(listOf(false, true, false, true, false), values)
