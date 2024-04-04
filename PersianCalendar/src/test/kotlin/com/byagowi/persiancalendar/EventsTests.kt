@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Language
@@ -51,7 +51,7 @@ class EventsTests {
         "2033, 11, 17",
     )
     fun `test World Philosophy Day instances`(year: Int, month: Int, day: Int) {
-        val calendar = CalendarType.GREGORIAN
+        val calendar = Calendar.GREGORIAN
         assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 6, 3))
         val title = "روز جهانی فلسفه (سومین پنج‌شنبهٔ نوامبر)"
         val event = mapOf(
@@ -111,7 +111,7 @@ class EventsTests {
     fun `getNthWeekDayOfMonth calculations correctness`(
         year: Int, month: Int, day: Int, weekDay: Int, nth: Int,
     ) {
-        val calendar = CalendarType.SHAMSI
+        val calendar = Calendar.SHAMSI
         assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, weekDay, nth))
         val event = mapOf(
             "rule" to "nth weekday of month", "nth" to "$nth",
@@ -144,7 +144,7 @@ class EventsTests {
     fun `getLastWeekDayOfMonth calculations correctness`(
         year: Int, month: Int, day: Int, weekDay: Int
     ) {
-        val calendar = CalendarType.SHAMSI
+        val calendar = Calendar.SHAMSI
         assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, weekDay))
         val event = mapOf(
             "rule" to "last weekday of month", "weekday" to "$weekDay", "month" to "$month",

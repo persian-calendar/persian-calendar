@@ -34,7 +34,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
@@ -148,7 +148,7 @@ fun WidgetConfiguration() {
         summary = stringResource(R.string.center_align_widgets_summary)
     )
     val isInIranTimeVisible = remember {
-        (language.value.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+        (language.value.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
     if (isInIranTimeVisible) {
         val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()

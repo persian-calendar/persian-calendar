@@ -74,7 +74,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -185,9 +185,9 @@ val cityName: StateFlow<String?> get() = cityName_
 private val widgetTransparency_ = MutableStateFlow(.0f)
 val widgetTransparency: StateFlow<Float> get() = widgetTransparency_
 
-var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
     private set
-val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
+val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
 val mainCalendarDigits
     get() = when {
         secondaryCalendar == null -> preferredDigits
@@ -260,7 +260,7 @@ var holidayString = DEFAULT_HOLIDAY
     private set
 var numericalDatePreferred = false
     private set
-var calendarTypesTitleAbbr = emptyList<String>()
+var calendarsTitlesAbbr = emptyList<String>()
     private set
 var eventsRepository: EventsRepository? = null
     private set
@@ -304,7 +304,7 @@ fun loadLanguageResources(resources: Resources) {
         "e" to resources.getString(R.string.shift_work_evening),
         "n" to resources.getString(R.string.shift_work_night)
     )
-    calendarTypesTitleAbbr = CalendarType.entries.map { resources.getString(it.shortTitle) }
+    calendarsTitlesAbbr = Calendar.entries.map { resources.getString(it.shortTitle) }
     when {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two
@@ -417,18 +417,18 @@ fun updateStoredPreference(context: Context) {
         prefs.getFloat(PREF_WIDGET_TRANSPARENCY, DEFAULT_WIDGET_TRANSPARENCY)
 
     runCatching {
-        val mainCalendar = CalendarType.valueOf(
+        val mainCalendar = Calendar.valueOf(
             prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar
         )
         val otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null)
-            ?: language.defaultOtherCalendars).splitFilterNotEmpty(",").map(CalendarType::valueOf)
+            ?: language.defaultOtherCalendars).splitFilterNotEmpty(",").map(Calendar::valueOf)
         enabledCalendars = (listOf(mainCalendar) + otherCalendars).distinct()
         secondaryCalendarEnabled = prefs.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
         )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
-        enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+        enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
         secondaryCalendarEnabled = false
     }.getOrNull().debugAssertNotNull
 

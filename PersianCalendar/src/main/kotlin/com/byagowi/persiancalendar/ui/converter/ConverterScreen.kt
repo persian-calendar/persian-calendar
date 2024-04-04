@@ -62,7 +62,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -94,10 +94,7 @@ import java.util.TimeZone
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConverterScreen(
-    openDrawer: () -> Unit,
-    viewModel: ConverterViewModel,
-) {
+fun ConverterScreen(openDrawer: () -> Unit, viewModel: ConverterViewModel) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
     Scaffold(
@@ -237,7 +234,7 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                 val jdn = viewModel.selectedDate.value
                 context.shareText(
                     listOf(
-                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                        dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
                         context.getString(R.string.equivalent_to),
                         dateStringOfOtherCalendars(jdn, spacedComma)
                     ).joinToString(" "),
@@ -254,10 +251,10 @@ private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -
                             context.resources,
                             jdn,
                             secondJdn,
-                            calendarType = viewModel.calendar.value,
+                            calendar = viewModel.calendar.value,
                         ),
-                        formatDate(jdn.toCalendar(viewModel.calendar.value)),
-                        formatDate(secondJdn.toCalendar(viewModel.calendar.value)),
+                        formatDate(jdn.inCalendar(viewModel.calendar.value)),
+                        formatDate(secondJdn.inCalendar(viewModel.calendar.value)),
                     ).joinToString("\n"),
                     chooserTitle,
                 )
@@ -426,7 +423,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
             DatePicker(
-                calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+                calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
             )
         }
         Spacer(Modifier.width(8.dp))
@@ -450,7 +447,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
         DatePicker(
-            calendarType = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+            calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
         )
         AnimatedVisibility(
             visible = screenMode == ConverterScreenMode.Converter,
@@ -480,16 +477,12 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
 }
 
 @Composable
-private fun DaysDistanceSecondPart(
-    viewModel: ConverterViewModel,
-    jdn: Jdn,
-    calendar: CalendarType,
-) {
+private fun DaysDistanceSecondPart(viewModel: ConverterViewModel, jdn: Jdn, calendar: Calendar) {
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
         DaysDistance(jdn, secondJdn, calendar)
         DatePicker(
-            calendarType = calendar,
+            calendar = calendar,
             jdn = secondJdn,
             setJdn = viewModel::changeSecondSelectedDate,
         )
@@ -497,7 +490,7 @@ private fun DaysDistanceSecondPart(
 }
 
 @Composable
-private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: CalendarType) {
+private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: Calendar) {
     val context = LocalContext.current
     AnimatedContent(
         calculateDaysDifference(context.resources, jdn, baseJdn, calendar),

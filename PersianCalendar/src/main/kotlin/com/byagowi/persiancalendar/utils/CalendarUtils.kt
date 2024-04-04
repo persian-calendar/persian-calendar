@@ -12,12 +12,12 @@ import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.calendarTypesTitleAbbr
+import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
@@ -61,7 +61,7 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-val AbstractDate.monthName get() = this.calendarType.monthsNames.getOrNull(month - 1) ?: ""
+val AbstractDate.monthName get() = this.calendar.monthsNames.getOrNull(month - 1) ?: ""
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
@@ -79,7 +79,7 @@ fun getA11yDaySummary(
 
     if (isToday) appendLine(resources.getString(R.string.today))
 
-    val mainDate = jdn.toCalendar(mainCalendar)
+    val mainDate = jdn.inCalendar(mainCalendar)
 
     if (withTitle) appendLine().append(dayTitleSummary(jdn, mainDate))
 
@@ -146,7 +146,7 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
 fun GregorianCalendar.formatDateAndTime(): String {
     return language.value.timeAndDateFormat.format(
         Clock(this).toFormattedString(forcedIn12 = true),
-        formatDate(Jdn(this.toCivilDate()).toCalendar(mainCalendar), forceNonNumerical = true)
+        formatDate(Jdn(this.toCivilDate()).inCalendar(mainCalendar), forceNonNumerical = true)
     )
 }
 
@@ -245,16 +245,16 @@ fun getEventsTitle(
     }
     .joinToString("\n") { if (insertRLM) RLM + it else it }
 
-val AbstractDate.calendarType: CalendarType
+val AbstractDate.calendar: Calendar
     get() = when (this) {
-        is IslamicDate -> CalendarType.ISLAMIC
-        is CivilDate -> CalendarType.GREGORIAN
-        is NepaliDate -> CalendarType.NEPALI
-        else -> CalendarType.SHAMSI
+        is IslamicDate -> Calendar.ISLAMIC
+        is CivilDate -> Calendar.GREGORIAN
+        is NepaliDate -> Calendar.NEPALI
+        else -> Calendar.SHAMSI
     }
 
 fun calculateDatePartsDifference(
-    fromDate: AbstractDate, toDate: AbstractDate, calendar: CalendarType
+    fromDate: AbstractDate, toDate: AbstractDate, calendar: Calendar
 ): Triple<Int, Int, Int> {
     var y = toDate.year - fromDate.year
     var m = toDate.month - fromDate.month
@@ -274,13 +274,13 @@ fun calculateDaysDifference(
     resources: Resources,
     jdn: Jdn,
     baseJdn: Jdn,
-    calendarType: CalendarType = mainCalendar,
+    calendar: Calendar = mainCalendar,
     isInWidget: Boolean = false
 ): String {
-    val baseDate = baseJdn.toCalendar(calendarType)
-    val date = jdn.toCalendar(calendarType)
+    val baseDate = baseJdn.inCalendar(calendar)
+    val date = jdn.inCalendar(calendar)
     val (years, months, daysOfMonth) = calculateDatePartsDifference(
-        if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendarType
+        if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendar
     )
     val days = abs(baseJdn - jdn)
     val daysString = resources.getQuantityString(R.plurals.days, days, formatNumber(days))
@@ -324,17 +324,17 @@ fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) = "%s/%s/%s".
     formatNumber(year, digits), formatNumber(month, digits), formatNumber(dayOfMonth, digits)
 )
 
-fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: CalendarType): String {
-    val mainCalendar = date.calendarType
+fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calendar): String {
+    val mainCalendar = date.calendar
     val from = Jdn(
         mainCalendar.createDate(date.year, date.month, 1)
-    ).toCalendar(secondaryCalendar)
+    ).inCalendar(secondaryCalendar)
     val to = Jdn(
         mainCalendar.createDate(
             date.year, date.month,
-            date.calendarType.getMonthLength(date.year, date.month)
+            date.calendar.getMonthLength(date.year, date.month)
         )
-    ).toCalendar(secondaryCalendar)
+    ).inCalendar(secondaryCalendar)
     return when {
         from.month == to.month -> language.value.my.format(from.monthName, formatNumber(from.year))
         from.year != to.year -> listOf(
@@ -342,13 +342,13 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
             to.year to 1..to.month
         ).joinToString(EN_DASH) { (year, months) ->
             language.value.my.format(months.joinToString(EN_DASH) {
-                from.calendarType.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
+                from.calendar.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
             }, formatNumber(year))
         }
 
         else -> language.value.my.format(
             (from.month..to.month).joinToString(EN_DASH) {
-                from.calendarType.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
+                from.calendar.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
             },
             formatNumber(from.year)
         )
@@ -356,8 +356,8 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
 }
 
 private fun getCalendarNameAbbr(date: AbstractDate) =
-    calendarTypesTitleAbbr.getOrNull(date.calendarType.ordinal) ?: ""
+    calendarsTitlesAbbr.getOrNull(date.calendar.ordinal) ?: ""
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
-    enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.toCalendar(it)) }
+    enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.inCalendar(it)) }
 

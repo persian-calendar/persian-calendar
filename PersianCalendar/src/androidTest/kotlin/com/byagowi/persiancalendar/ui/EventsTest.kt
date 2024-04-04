@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -30,7 +30,7 @@ class EventsTest {
         }
 
         repository.irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
-            1400, CalendarType.SHAMSI
+            1400, Calendar.SHAMSI
         ).let { assertEquals(0, it.size) }
     }
 
@@ -47,7 +47,7 @@ class EventsTest {
         assertEquals(
             1,
             repository.irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
-                1400, CalendarType.SHAMSI
+                1400, Calendar.SHAMSI
             ).size
         )
 
@@ -80,7 +80,7 @@ class EventsTest {
         val repository = EventsRepository(setOf(EventsRepository.internationalKey), Language.UR)
         assertEquals(IslamicDate.useUmmAlQura, true)
         repository.irregularCalendarEventsStore
-            .getEventsList<CalendarEvent.GregorianCalendarEvent>(2021, CalendarType.GREGORIAN)
+            .getEventsList<CalendarEvent.GregorianCalendarEvent>(2021, Calendar.GREGORIAN)
             .let {
                 assertEquals(4, it.size)
                 assertEquals(false, it[0].isHoliday)

@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.entities
 
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
-import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
@@ -13,35 +13,35 @@ import io.github.persiancalendar.calendar.PersianDate
 import org.jetbrains.annotations.VisibleForTesting
 
 class IrregularCalendarEventsStore(private val eventsRepository: EventsRepository) {
-    private fun createCache(type: CalendarType) =
+    private fun createCache(type: Calendar) =
         lruCache(32, create = { year: Int -> generateEntry(year, type) })
 
-    private val persianEvents = createCache(CalendarType.SHAMSI)
-    private val islamicEvents = createCache(CalendarType.ISLAMIC)
-    private val gregorianEvents = createCache(CalendarType.GREGORIAN)
-    private val nepaliEvents = createCache(CalendarType.NEPALI)
+    private val persianEvents = createCache(Calendar.SHAMSI)
+    private val islamicEvents = createCache(Calendar.ISLAMIC)
+    private val gregorianEvents = createCache(Calendar.GREGORIAN)
+    private val nepaliEvents = createCache(Calendar.NEPALI)
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : CalendarEvent<*>> getEventsList(year: Int, type: CalendarType): List<T> {
+    fun <T : CalendarEvent<*>> getEventsList(year: Int, type: Calendar): List<T> {
         return when (type) {
-            CalendarType.SHAMSI -> persianEvents[year]
-            CalendarType.ISLAMIC -> islamicEvents[year]
-            CalendarType.GREGORIAN -> gregorianEvents[year]
-            CalendarType.NEPALI -> nepaliEvents[year]
+            Calendar.SHAMSI -> persianEvents[year]
+            Calendar.ISLAMIC -> islamicEvents[year]
+            Calendar.GREGORIAN -> gregorianEvents[year]
+            Calendar.NEPALI -> nepaliEvents[year]
         } as? List<T> ?: emptyList()
     }
 
     fun <T : CalendarEvent<out AbstractDate>> getEvents(date: AbstractDate): List<T> =
-        getEventsList<T>(date.year, date.calendarType).filter { it.date == date }
+        getEventsList<T>(date.year, date.calendar).filter { it.date == date }
 
     // Create actually usable irregular event of a year based on defined rules and enabled holidays
-    private fun generateEntry(year: Int, type: CalendarType): List<CalendarEvent<*>> {
+    private fun generateEntry(year: Int, type: Calendar): List<CalendarEvent<*>> {
         return irregularRecurringEvents.filter { event ->
             if (type != when (event["calendar"]) {
-                    "Gregorian" -> CalendarType.GREGORIAN
-                    "Persian" -> CalendarType.SHAMSI
-                    "Hijri" -> CalendarType.ISLAMIC
-                    "Nepali" -> CalendarType.NEPALI
+                    "Gregorian" -> Calendar.GREGORIAN
+                    "Persian" -> Calendar.SHAMSI
+                    "Hijri" -> Calendar.ISLAMIC
+                    "Nepali" -> Calendar.NEPALI
                     else -> return@filter false
                 }
             ) return@filter false
@@ -72,7 +72,7 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
 }
 
 @VisibleForTesting
-fun getDateInstance(event: Map<String, String>, year: Int, type: CalendarType): AbstractDate? {
+fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): AbstractDate? {
     return when (event["rule"]) {
         "single event" -> {
             if (event["year"]?.toIntOrNull().debugAssertNotNull != year) return null
@@ -85,7 +85,7 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: CalendarType): 
             val nth = event["nth"]?.toIntOrNull().debugAssertNotNull ?: return null
             val day = event["day"]?.toIntOrNull().debugAssertNotNull ?: return null
             val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
-            (Jdn(type, year, month, day) + nth - 1).toCalendar(type)
+            (Jdn(type, year, month, day) + nth - 1).inCalendar(type)
         }
 
         "end of month" -> {

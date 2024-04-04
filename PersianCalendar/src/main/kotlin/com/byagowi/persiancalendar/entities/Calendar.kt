@@ -12,7 +12,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 
-enum class CalendarType(
+enum class Calendar(
     @StringRes val title: Int, @StringRes val shortTitle: Int, val preferredDigits: CharArray
 ) {
     // So vital, don't ever change names of these
@@ -48,7 +48,7 @@ enum class CalendarType(
     }
 
     fun getYearMonths(year: Int): Int =
-        (Jdn(this, year + 1, 1, 1) - 1).toCalendar(this).month
+        (Jdn(this, year + 1, 1, 1) - 1).inCalendar(this).month
 
     fun getMonthLength(year: Int, month: Int): Int =
         Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - Jdn(this, year, month, 1)
@@ -70,7 +70,7 @@ enum class CalendarType(
     }
 
     fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
-        val date = baseJdn.toCalendar(this)
+        val date = baseJdn.inCalendar(this)
         return getMonthStartFromMonthsDistance(date.year, date.month, monthsDistance)
     }
 

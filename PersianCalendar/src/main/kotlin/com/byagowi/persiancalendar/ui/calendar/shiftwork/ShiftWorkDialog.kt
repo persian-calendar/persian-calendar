@@ -111,7 +111,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         stringResource(
             if (isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit,
-            formatDate(startingDate.toCalendar(mainCalendar))
+            formatDate(startingDate.inCalendar(mainCalendar))
         ),
         modifier = Modifier.padding(horizontal = 24.dp),
     )

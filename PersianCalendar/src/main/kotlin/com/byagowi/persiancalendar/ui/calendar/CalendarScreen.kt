@@ -106,8 +106,8 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
@@ -152,7 +152,7 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -309,7 +309,7 @@ fun CalendarScreen(
     }
 
     LaunchedEffect(Unit) {
-        if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled && Jdn.today()
+        if (mainCalendar == Calendar.SHAMSI && isIranHolidaysEnabled && Jdn.today()
                 .toPersianDate().year > supportedYearOfIranCalendar
         ) {
             if (snackbarHostState.showSnackbar(
@@ -598,8 +598,8 @@ private fun Search(viewModel: CalendarViewModel) {
 
 private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, context: Context) {
     val date = event.date
-    val type = date.calendarType
-    val today = Jdn.today().toCalendar(type)
+    val type = date.calendar
+    val today = Jdn.today().inCalendar(type)
     bringDate(
         viewModel,
         Jdn(
@@ -616,7 +616,7 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val today by viewModel.today.collectAsState()
-    val todayDate = remember(today, mainCalendar) { today.toCalendar(mainCalendar) }
+    val todayDate = remember(today, mainCalendar) { today.inCalendar(mainCalendar) }
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
     val yearViewOffset by viewModel.yearViewOffset.collectAsState()
@@ -947,7 +947,7 @@ private class AddEventContract : ActivityResultContract<Jdn, Void?>() {
         val time = input.toGregorianCalendar().timeInMillis
         return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).putExtra(
             CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                input, input.toCalendar(mainCalendar)
+                input, input.inCalendar(mainCalendar)
             )
         ).putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)

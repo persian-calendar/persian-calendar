@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import io.github.persiancalendar.calendar.PersianDate
@@ -26,7 +26,7 @@ class CalendarTests {
         "1397, 12, 29",
     )
     fun `getMonthLength calculating correctness`(year: Int, month: Int, day: Int) {
-        assertEquals(day, CalendarType.SHAMSI.getMonthLength(year, month))
+        assertEquals(day, Calendar.SHAMSI.getMonthLength(year, month))
     }
 
     @Test
@@ -44,7 +44,7 @@ class CalendarTests {
         (1206..1498).forEach {
             assertEquals(
                 if (it in leapYears) 30 else 29,
-                CalendarType.SHAMSI.getMonthLength(it, 12),
+                Calendar.SHAMSI.getMonthLength(it, 12),
                 it.toString()
             )
         }
@@ -97,7 +97,7 @@ class CalendarTests {
     ) {
         val lower = PersianDate(fromYear, fromMonth, fromDay)
         val higher = PersianDate(toYear, toMonth, toDay)
-        val (y, m, d) = calculateDatePartsDifference(lower, higher, CalendarType.SHAMSI)
+        val (y, m, d) = calculateDatePartsDifference(lower, higher, Calendar.SHAMSI)
         assertEquals(day, d)
         assertEquals(month, m)
         assertEquals(year, y)
@@ -117,7 +117,7 @@ class CalendarTests {
         "1399, 3, 31, 93, 93",
     )
     fun `season passed days`(year: Int, month: Int, day: Int, passedDays: Int, daysCount: Int) {
-        val jdn = Jdn(CalendarType.SHAMSI, year, month, day)
+        val jdn = Jdn(Calendar.SHAMSI, year, month, day)
         val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
         assertEquals(passedDays, seasonPassedDays)
         assertEquals(daysCount, seasonDaysCount)

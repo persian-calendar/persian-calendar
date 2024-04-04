@@ -19,7 +19,7 @@ import kotlin.math.ceil
 @JvmInline
 value class Jdn(val value: Long) {
     constructor(value: AbstractDate) : this(value.toJdn())
-    constructor(calendar: CalendarType, year: Int, month: Int, day: Int) :
+    constructor(calendar: Calendar, year: Int, month: Int, day: Int) :
             this(calendar.createDate(year, month, day))
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
@@ -27,11 +27,11 @@ value class Jdn(val value: Long) {
 
     fun isWeekEnd() = weekEnds[this.weekDay]
 
-    fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
-        CalendarType.ISLAMIC -> toIslamicDate()
-        CalendarType.GREGORIAN -> toCivilDate()
-        CalendarType.SHAMSI -> toPersianDate()
-        CalendarType.NEPALI -> toNepaliDate()
+    fun inCalendar(calendar: Calendar): AbstractDate = when (calendar) {
+        Calendar.ISLAMIC -> toIslamicDate()
+        Calendar.GREGORIAN -> toCivilDate()
+        Calendar.SHAMSI -> toPersianDate()
+        Calendar.NEPALI -> toNepaliDate()
     }
 
     fun toIslamicDate() = IslamicDate(value)

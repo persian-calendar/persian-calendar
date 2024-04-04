@@ -11,13 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
 @Composable
-fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Unit) {
+fun CalendarsTypesPicker(current: Calendar, setCurrent: (Calendar) -> Unit) {
     val selectedTabIndex = enabledCalendars.indexOf(current)
         // If user returned from disabling one of the calendar, do a fallback
         .coerceAtLeast(0)
@@ -31,18 +31,18 @@ fun CalendarsTypesPicker(current: CalendarType, setCurrent: (CalendarType) -> Un
             }
         },
     ) {
-        enabledCalendars.forEach { calendarType ->
+        enabledCalendars.forEach { calendar ->
             val title = stringResource(
-                if (language.value.betterToUseShortCalendarName) calendarType.shortTitle
-                else calendarType.title
+                if (language.value.betterToUseShortCalendarName) calendar.shortTitle
+                else calendar.title
             )
             val view = LocalView.current
             Tab(
                 text = { Text(title) },
-                selected = current == calendarType,
+                selected = current == calendar,
                 unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                 onClick = {
-                    setCurrent(calendarType)
+                    setCurrent(calendar)
                     view.performHapticFeedbackVirtualKey()
                 },
             )

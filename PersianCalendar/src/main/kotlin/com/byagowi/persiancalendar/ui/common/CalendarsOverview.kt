@@ -49,7 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
@@ -76,8 +76,8 @@ import java.util.Date
 fun CalendarsOverview(
     jdn: Jdn,
     today: Jdn,
-    selectedCalendar: CalendarType,
-    shownCalendars: List<CalendarType>,
+    selectedCalendar: Calendar,
+    shownCalendars: List<Calendar>,
     isExpanded: Boolean,
     toggleExpansion: () -> Unit
 ) {
@@ -130,7 +130,7 @@ fun CalendarsOverview(
         CalendarsFlow(shownCalendars, jdn)
         Spacer(Modifier.height(4.dp))
 
-        val date = jdn.toCalendar(selectedCalendar)
+        val date = jdn.inCalendar(selectedCalendar)
         val equinox = remember(selectedCalendar, jdn) {
             if (date !is PersianDate) return@remember null
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) {
@@ -307,14 +307,14 @@ fun CalendarsOverview(
 }
 
 @Composable
-private fun CalendarsFlow(calendarsToShow: List<CalendarType>, jdn: Jdn) {
+private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
     @OptIn(ExperimentalLayoutApi::class) FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         calendarsToShow.forEach { calendar ->
-            val date = jdn.toCalendar(calendar)
+            val date = jdn.inCalendar(calendar)
             Column(
                 modifier = Modifier.defaultMinSize(
                     minWidth = dimensionResource(R.dimen.calendar_item_size),

@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.global.islamicMonths
 import com.byagowi.persiancalendar.global.nepaliMonths
 import com.byagowi.persiancalendar.global.persianMonths
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
@@ -44,7 +44,7 @@ class EventsRepository(
     val onlyIranHolidaysIsEnabled get() = enabledTypes.size == 1 && iranHolidays
     val onlyAfghanistanHolidaysIsEnabled get() = enabledTypes.size == 1 && afghanistanHolidays
 
-    private fun skipEvent(record: CalendarRecord, calendarType: CalendarType): Boolean {
+    private fun skipEvent(record: CalendarRecord, calendar: Calendar): Boolean {
         return when {
             record.type == EventType.Iran && record.isHoliday && iranHolidays -> false
             record.type == EventType.Iran && iranOthers -> false
@@ -55,7 +55,7 @@ class EventsRepository(
             record.type == EventType.AncientIran && iranAncient -> false
             record.type == EventType.International && international -> false
             // Enable Iranian events of Gregorian calendar even if itself isn't enabled
-            record.type == EventType.Iran && international && calendarType == CalendarType.GREGORIAN ->
+            record.type == EventType.Iran && international && calendar == Calendar.GREGORIAN ->
                 false
 
             else -> true
@@ -89,16 +89,16 @@ class EventsRepository(
     @VisibleForTesting
     val irregularCalendarEventsStore = IrregularCalendarEventsStore(this)
     private val persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull {
-        createEvent(it, CalendarType.SHAMSI)
+        createEvent(it, Calendar.SHAMSI)
     })
     private val islamicCalendarEvents = IslamicCalendarEventsStore(islamicEvents.mapNotNull {
-        createEvent(it, CalendarType.ISLAMIC)
+        createEvent(it, Calendar.ISLAMIC)
     })
     private val gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull {
-        createEvent(it, CalendarType.GREGORIAN)
+        createEvent(it, Calendar.GREGORIAN)
     })
     private val nepaliCalendarEvents = NepaliCalendarEventsStore(nepaliEvents.mapNotNull {
-        createEvent(it, CalendarType.NEPALI)
+        createEvent(it, Calendar.NEPALI)
     })
 
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
@@ -122,52 +122,52 @@ class EventsRepository(
             jdn.toNepaliDate()
         ).flatMap {
             val store = irregularCalendarEventsStore
-            val thisYear = store.getEventsList<CalendarEvent<*>>(it.year, it.calendarType)
+            val thisYear = store.getEventsList<CalendarEvent<*>>(it.year, it.calendar)
                 .filter { event -> event.date.month >= it.month }
-            val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendarType)
+            val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendar)
                 .filter { event -> event.date.month < it.month }
             thisYear + nextYear
         }
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
-        record: CalendarRecord, calendarType: CalendarType
+        record: CalendarRecord, calendar: Calendar
     ): T? {
-        if (skipEvent(record, calendarType)) return null
+        if (skipEvent(record, calendar)) return null
         val multiCountryComment = multiCountryComment(record)
-        val dayAndMonth = formatDayAndMonth(calendarType, record.day, record.month)
+        val dayAndMonth = formatDayAndMonth(calendar, record.day, record.month)
         val title = "${record.title} ($multiCountryComment$dayAndMonth)"
 
         val holiday = determineIsHoliday(record)
-        return (when (calendarType) {
-            CalendarType.SHAMSI -> {
+        return (when (calendar) {
+            Calendar.SHAMSI -> {
                 val date = PersianDate(-1, record.month, record.day)
                 CalendarEvent.PersianCalendarEvent(title, holiday, date)
             }
 
-            CalendarType.GREGORIAN -> {
+            Calendar.GREGORIAN -> {
                 val date = CivilDate(-1, record.month, record.day)
                 CalendarEvent.GregorianCalendarEvent(title, holiday, date)
             }
 
-            CalendarType.ISLAMIC -> {
+            Calendar.ISLAMIC -> {
                 val date = IslamicDate(-1, record.month, record.day)
                 CalendarEvent.IslamicCalendarEvent(title, holiday, date)
             }
 
-            CalendarType.NEPALI -> {
+            Calendar.NEPALI -> {
                 val date = NepaliDate(-1, record.month, record.day)
                 CalendarEvent.NepaliCalendarEvent(title, holiday, date)
             }
         } as? T).debugAssertNotNull
     }
 
-    private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int): String {
-        val monthName = when (calendarType) {
-            CalendarType.SHAMSI -> persianMonths
-            CalendarType.GREGORIAN -> gregorianMonths
-            CalendarType.ISLAMIC -> islamicMonths
-            CalendarType.NEPALI -> nepaliMonths
+    private fun formatDayAndMonth(calendar: Calendar, day: Int, month: Int): String {
+        val monthName = when (calendar) {
+            Calendar.SHAMSI -> persianMonths
+            Calendar.GREGORIAN -> gregorianMonths
+            Calendar.ISLAMIC -> islamicMonths
+            Calendar.NEPALI -> nepaliMonths
         }.getOrNull(month - 1).debugAssertNotNull ?: ""
         return language.dm.format(formatNumber(day), monthName)
     }

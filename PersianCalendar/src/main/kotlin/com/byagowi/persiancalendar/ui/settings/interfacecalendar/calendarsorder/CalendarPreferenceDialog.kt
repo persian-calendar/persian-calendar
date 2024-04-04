@@ -37,7 +37,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -53,12 +53,10 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     // TODO: Make it remember during rotation by using rememberSavable
     var list by remember {
-        val enabledCalendarTypes = enabledCalendars
-        val orderedCalendarTypes =
-            enabledCalendars + (CalendarType.entries - enabledCalendars.toSet()) -
-                    // Don't show Nepali on default locales, at least for now.
-                    if (language.value.showNepaliCalendar) emptySet() else setOf(CalendarType.NEPALI)
-        mutableStateOf(orderedCalendarTypes.map { it to (it in enabledCalendarTypes) })
+        val orderedCalendars = enabledCalendars + (Calendar.entries - enabledCalendars.toSet()) -
+                // Don't show Nepali on default locales, at least for now.
+                if (language.value.showNepaliCalendar) emptySet() else setOf(Calendar.NEPALI)
+        mutableStateOf(orderedCalendars.map { it to (it in enabledCalendars) })
     }
 
     AppDialog(
@@ -96,10 +94,10 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     view.performHapticFeedback(HapticFeedbackConstants.SEGMENT_FREQUENT_TICK)
                 }
             },
-        ) { _, (calendarType, enabled), isDragging ->
-            key(calendarType) {
+        ) { _, (calendar, enabled), isDragging ->
+            key(calendar) {
                 val blur by animateDpAsState(if (dragStarted) 2.dp else 0.dp, label = "blur")
-                val interactionSource = remember(calendarType) { MutableInteractionSource() }
+                val interactionSource = remember(calendar) { MutableInteractionSource() }
                 Row(
                     modifier = Modifier
                         .blur(if (dragStarted && !isDragging) blur else 0.dp)
@@ -108,7 +106,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                             indication = rememberRipple(),
                             onClick = {
                                 list = list.map {
-                                    it.first to (if (it.first == calendarType) !it.second else it.second)
+                                    it.first to (if (it.first == calendar) !it.second else it.second)
                                 }
                             },
                         )
@@ -136,7 +134,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                 ) {
                     Checkbox(checked = enabled, onCheckedChange = null)
                     Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
-                    Text(stringResource(calendarType.title))
+                    Text(stringResource(calendar.title))
                     Spacer(Modifier.weight(1f))
                     Icon(Icons.Rounded.DragHandle, contentDescription = null)
                 }

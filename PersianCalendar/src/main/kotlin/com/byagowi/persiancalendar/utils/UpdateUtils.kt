@@ -162,7 +162,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     val jdn = Jdn.today()
-    val date = jdn.toCalendar(mainCalendar)
+    val date = jdn.inCalendar(mainCalendar)
 
     if (pastDate != date || updateDate) {
         debugLog("UpdateUtils: date has changed")

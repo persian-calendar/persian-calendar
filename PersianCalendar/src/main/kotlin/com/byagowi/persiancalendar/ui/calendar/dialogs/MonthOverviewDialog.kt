@@ -46,7 +46,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
-import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEventsTitle
@@ -139,7 +139,7 @@ fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
                         .padding(top = 16.dp, start = 16.dp, end = 16.dp),
                 ) {
                     Text(
-                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                        dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
                     )
@@ -259,7 +259,7 @@ private fun createEventsReport(
     }
     body {
         (if (wholeYear) {
-            val calendar = date.calendarType
+            val calendar = date.calendar
             (1..calendar.getYearMonths(date.year)).map { calendar.createDate(date.year, it, 1) }
         } else listOf(date)).forEach { div("page") { generateMonthPage(context, it) } }
         script { unsafe { +"print()" } }
@@ -285,11 +285,11 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
             if (isShowWeekOfYearEnabled) th {}
             repeat(7) { th { +getWeekDayName(revertWeekStartOffsetFromWeekDay(it)) } }
         }
-        val monthLength = date.calendarType.getMonthLength(date.year, date.month)
+        val monthLength = date.calendar.getMonthLength(date.year, date.month)
         val monthStartJdn = Jdn(date)
         val startingWeekDay = monthStartJdn.weekDay
         val fixedStartingWeekDay = applyWeekStartOffsetToWeekDay(startingWeekDay)
-        val startOfYearJdn = Jdn(date.calendarType, date.year, 1, 1)
+        val startOfYearJdn = Jdn(date.calendar, date.year, 1, 1)
         (0..<6 * 7).map {
             val index = it - fixedStartingWeekDay
             if (index !in (0..<monthLength)) return@map null
@@ -309,7 +309,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                         }
                         listOfNotNull(
                             secondaryCalendar?.let {
-                                val secondaryDateDay = jdn.toCalendar(it).dayOfMonth
+                                val secondaryDateDay = jdn.inCalendar(it).dayOfMonth
                                 val digits = secondaryCalendarDigits
                                 formatNumber(secondaryDateDay, digits)
                             }, getShiftWorkTitle(jdn)
@@ -332,7 +332,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                     it.forEach { (jdn, title) ->
                         div {
                             span(generateDayClasses(jdn, false)) {
-                                +formatNumber(jdn.toCalendar(mainCalendar).dayOfMonth)
+                                +formatNumber(jdn.inCalendar(mainCalendar).dayOfMonth)
                             }
                             +spacedColon
                             +title.toString()

@@ -68,10 +68,10 @@ fun DatePickerDialog(
             }
         },
     ) {
-        var calendarType by rememberSaveable { mutableStateOf(mainCalendar) }
-        CalendarsTypesPicker(current = calendarType) { calendarType = it }
+        var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
+        CalendarsTypesPicker(current = calendar) { calendar = it }
 
-        DatePicker(calendarType, jdn) { jdn = it }
+        DatePicker(calendar, jdn) { jdn = it }
         AnimatedContent(
             targetState = if (jdn == today) null else listOf(
                 stringResource(R.string.days_distance), spacedColon,
@@ -79,7 +79,7 @@ fun DatePickerDialog(
                     LocalContext.current.resources,
                     jdn,
                     today,
-                    calendarType = calendarType,
+                    calendar = calendar,
                 ),
             ).joinToString(""),
             transitionSpec = {
