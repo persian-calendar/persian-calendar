@@ -45,6 +45,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.systemDarkTheme
+import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
@@ -82,11 +84,22 @@ fun AppTheme(content: @Composable () -> Unit) {
     }
 }
 
+// The app's theme after custom dark/light theme is applied
+@Composable
+private fun effectiveTheme(): Theme {
+    val systemInDarkTheme = isSystemInDarkTheme()
+    val theme by theme.collectAsState()
+    return if (theme == Theme.SYSTEM_DEFAULT) {
+        if (systemInDarkTheme) systemDarkTheme.collectAsState().value
+        else systemLightTheme.collectAsState().value
+    } else theme
+}
+
 @Composable
 private fun appColorScheme(): ColorScheme {
-    val theme by theme.collectAsState()
-    val context = LocalContext.current
     val systemInDarkTheme = isSystemInDarkTheme()
+    val theme = effectiveTheme()
+    val context = LocalContext.current
     val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
     var colorScheme = if (theme.isDynamicColors) {
         if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -141,7 +154,7 @@ val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
 @Composable
 private fun appBackground(): Brush {
     val backgroundColor = MaterialTheme.colorScheme.background
-    val theme by theme.collectAsState()
+    val theme = effectiveTheme()
     val context = LocalContext.current
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
@@ -196,7 +209,7 @@ private fun appBackground(): Brush {
 @Composable
 fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
-    val theme by theme.collectAsState()
+    val theme = effectiveTheme()
     val isRedHolidays by isRedHolidays.collectAsState()
     val resolvedTheme =
         if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
@@ -287,7 +300,7 @@ fun appMonthColors(): MonthColors {
 
 @Composable
 fun appSunViewColors(): SunViewColors {
-    val theme by theme.collectAsState()
+    val theme = effectiveTheme()
     val context = LocalContext.current
     var nightColor = ContextCompat.getColor(
         context,

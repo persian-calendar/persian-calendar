@@ -62,6 +62,8 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
+import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
+import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WALLPAPER_AUTOMATIC
@@ -166,6 +168,12 @@ val language: StateFlow<Language> get() = language_
 
 private val theme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
 val theme: StateFlow<Theme> get() = theme_
+
+private val systemDarkTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
+val systemDarkTheme: StateFlow<Theme> get() = systemDarkTheme_
+
+private val systemLightTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
+val systemLightTheme: StateFlow<Theme> get() = systemLightTheme_
 
 private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
 val isGradient: StateFlow<Boolean> get() = isGradient_
@@ -339,6 +347,14 @@ fun updateStoredPreference(context: Context) {
         ?: Language.getPreferredDefaultLanguage(context)
     theme_.value = run {
         val key = prefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
+        Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
+    }
+    systemDarkTheme_.value = run {
+        val key = prefs.getString(PREF_SYSTEM_DARK_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
+        Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
+    }
+    systemLightTheme_.value = run {
+        val key = prefs.getString(PREF_SYSTEM_LIGHT_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
         Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
     }
     isGradient_.value = prefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
