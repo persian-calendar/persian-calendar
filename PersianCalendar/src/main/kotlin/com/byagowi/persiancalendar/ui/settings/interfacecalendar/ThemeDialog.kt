@@ -66,10 +66,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         },
     ) {
         AnimatedVisibility(visible = showMore && theme == Theme.SYSTEM_DEFAULT) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                 RadioOrLabel(R.string.theme_dark)
                 RadioOrLabel(R.string.theme_light)
                 Spacer(Modifier.width(8.dp))
