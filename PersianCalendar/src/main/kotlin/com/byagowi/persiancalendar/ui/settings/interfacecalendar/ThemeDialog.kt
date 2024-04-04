@@ -93,12 +93,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(stringResource(entry.title))
                 AnimatedVisibility(visible = showMore && theme == Theme.SYSTEM_DEFAULT) {
-                    Spacer(
-                        Modifier
-                            .weight(1f)
-                            .fillMaxWidth(),
-                    )
-                    Row {
+                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         RadioOrLabel(R.string.theme_dark, selectedDarkTheme == entry) {
                             context.appPrefs.edit { putString(PREF_SYSTEM_DARK_THEME, entry.key) }
                         }
