@@ -65,6 +65,10 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             }
         },
     ) {
+        val invisible = Modifier
+            .alpha(0f)
+            .height(8.dp)
+            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
         Theme.entries.forEach { entry ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -89,25 +93,17 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                             Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)
                         ).forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
-                            Box {
-                                val invisible = Modifier
-                                    .alpha(0f)
-                                    .height(8.dp)
-                                    .align(Alignment.Center)
-                                    .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
-                                val center = Modifier.align(Alignment.Center)
+                            Box(contentAlignment = Alignment.Center) {
                                 RadioButton(
                                     selected = selectedTheme == entry,
                                     onClick = {
-                                        context.appPrefs.edit {
-                                            putString(preferenceKey, entry.key)
-                                        }
+                                        context.appPrefs.edit { putString(preferenceKey, entry.key) }
                                     },
-                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) invisible else center,
+                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) invisible else Modifier,
                                 )
                                 Text(
                                     stringResource(label),
-                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) center else invisible
+                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) Modifier else invisible
                                 )
                             }
                         }
