@@ -105,11 +105,11 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                                 )
                                 Text(
                                     stringResource(label),
-                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) Modifier else invisible
+                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) Modifier else invisible,
                                 )
                             }
                         }
-                        Spacer(Modifier.width(8.dp))
+                        Spacer(Modifier.width(16.dp))
                     }
                 }
             }
