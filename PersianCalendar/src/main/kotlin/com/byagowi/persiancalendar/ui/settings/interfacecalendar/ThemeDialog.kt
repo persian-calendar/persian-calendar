@@ -94,7 +94,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
-                            Box(contentAlignment = Alignment.Center) {
+                            Box(contentAlignment = Alignment.TopCenter) {
                                 RadioButton(
                                     selected = selectedTheme == entry,
                                     onClick = {
