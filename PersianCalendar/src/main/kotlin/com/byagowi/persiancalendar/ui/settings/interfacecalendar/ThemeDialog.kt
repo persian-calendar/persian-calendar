@@ -96,6 +96,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                             // To make sure the label and radio button will take the same size
                             Box(contentAlignment = Alignment.TopCenter) {
                                 RadioButton(
+                                    enabled = entry.isDark.xor(preferenceKey == PREF_SYSTEM_LIGHT_THEME),
                                     selected = selectedTheme == entry,
                                     onClick = {
                                         context.appPrefs.edit { putString(preferenceKey, entry.key) }
