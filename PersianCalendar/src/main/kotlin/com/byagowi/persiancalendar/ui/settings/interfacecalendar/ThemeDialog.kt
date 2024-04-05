@@ -69,6 +69,12 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             .alpha(0f)
             .height(8.dp)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+        val systemLightTheme by systemLightTheme.collectAsState()
+        val systemDarkTheme by systemDarkTheme.collectAsState()
+        val systemThemeOptions = listOf(
+            Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
+            Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)
+        )
         Theme.entries.forEach { entry ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -86,12 +92,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 Text(stringResource(entry.title))
                 AnimatedVisibility(visible = showMore && theme == Theme.SYSTEM_DEFAULT) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                        val systemLightTheme by systemLightTheme.collectAsState()
-                        val systemDarkTheme by systemDarkTheme.collectAsState()
-                        listOf(
-                            Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
-                            Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)
-                        ).forEach { (label, preferenceKey, selectedTheme) ->
+                        systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
                             Box(contentAlignment = Alignment.Center) {
                                 RadioButton(
