@@ -43,7 +43,6 @@ import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.theme.effectiveTheme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -53,6 +52,14 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val theme by theme.collectAsState()
     var showMore by rememberSaveable { mutableStateOf(false) }
+    val systemLightTheme by systemLightTheme.collectAsState()
+    val systemDarkTheme by systemDarkTheme.collectAsState()
+    val themeToCheck = run {
+        if (theme == Theme.SYSTEM_DEFAULT) listOf(systemLightTheme, systemDarkTheme)
+        else listOf(theme)
+    }
+    val anyThemeHasGradient = themeToCheck.any { it.hasGradient }
+    val anyThemeIsDynamicColors = themeToCheck.any { it.isDynamicColors }
     AppDialog(
         title = { Text(stringResource(R.string.select_skin)) },
         onDismissRequest = onDismissRequest,
@@ -60,7 +67,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
         neutralButton = {
-            AnimatedVisibility(visible = !showMore && (theme.hasGradient || theme.isDynamicColors)) {
+            AnimatedVisibility(visible = !showMore && (anyThemeHasGradient || anyThemeIsDynamicColors)) {
                 TextButton(onClick = { showMore = true }) { Text(stringResource(R.string.more)) }
             }
         },
@@ -69,8 +76,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             .alpha(0f)
             .height(8.dp)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
-        val systemLightTheme by systemLightTheme.collectAsState()
-        val systemDarkTheme by systemDarkTheme.collectAsState()
         val systemThemeOptions = listOf(
             Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
             Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)
@@ -114,9 +119,8 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
-        val effectiveTheme = effectiveTheme()
         AnimatedVisibility(
-            visible = showMore && effectiveTheme.hasGradient,
+            visible = showMore && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             val isGradient by isGradient.collectAsState()
@@ -126,7 +130,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) } }
         }
         AnimatedVisibility(
-            visible = showMore && effectiveTheme.isDynamicColors,
+            visible = showMore && anyThemeIsDynamicColors,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             val isRedHolidays by isRedHolidays.collectAsState()

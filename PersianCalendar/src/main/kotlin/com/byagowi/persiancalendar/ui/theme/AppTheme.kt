@@ -86,7 +86,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 
 // The app's theme after custom dark/light theme is applied
 @Composable
-fun effectiveTheme(): Theme {
+private fun effectiveTheme(): Theme {
     return theme.collectAsState().value.takeIf { it != Theme.SYSTEM_DEFAULT } ?: run {
         if (isSystemInDarkTheme()) systemDarkTheme.collectAsState().value
         else systemLightTheme.collectAsState().value
