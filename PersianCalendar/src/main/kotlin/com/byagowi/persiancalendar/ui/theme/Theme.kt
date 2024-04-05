@@ -9,19 +9,17 @@ enum class Theme(
     val key: String,
     @StringRes val title: Int,
     val hasGradient: Boolean = true,
-    private val hasDynamicColors: Boolean = false,
+    private val lackDynamicColors: Boolean = false,
     val isDark: Boolean = false,
 ) {
-    SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, hasDynamicColors = true),
+    SYSTEM_DEFAULT("SystemDefault", R.string.theme_default),
     LIGHT("LightTheme", R.string.theme_light),
-    AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua),
+    MODERN("ClassicTheme"/*legacy*/, R.string.theme_modern),
+    AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua, lackDynamicColors = true),
     DARK("DarkTheme", R.string.theme_dark, isDark = true),
-    BLACK(
-        "BlackTheme", R.string.theme_black,
-        hasGradient = false, hasDynamicColors = true, isDark = true
-    ),
-    MODERN("ClassicTheme",/*legacy*/R.string.theme_modern, hasDynamicColors = true);
+    BLACK("BlackTheme", R.string.theme_black, hasGradient = false, isDark = true);
 
     val isDynamicColors
-        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S) get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && hasDynamicColors
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S) get() =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !lackDynamicColors
 }

@@ -86,36 +86,30 @@ fun AppTheme(content: @Composable () -> Unit) {
 
 // The app's theme after custom dark/light theme is applied
 @Composable
-private fun effectiveTheme(): Theme {
-    val systemInDarkTheme = isSystemInDarkTheme()
-    val theme by theme.collectAsState()
-    return if (theme == Theme.SYSTEM_DEFAULT) {
-        if (systemInDarkTheme) systemDarkTheme.collectAsState().value
+fun effectiveTheme(): Theme {
+    return theme.collectAsState().value.takeIf { it != Theme.SYSTEM_DEFAULT } ?: run {
+        if (isSystemInDarkTheme()) systemDarkTheme.collectAsState().value
         else systemLightTheme.collectAsState().value
-    } else theme
+    }
 }
 
 @Composable
 private fun appColorScheme(): ColorScheme {
-    val systemInDarkTheme = isSystemInDarkTheme()
     val theme = effectiveTheme()
     val context = LocalContext.current
-    val darkTheme = theme.isDark || (theme == Theme.SYSTEM_DEFAULT && systemInDarkTheme)
     var colorScheme = if (theme.isDynamicColors) {
-        if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else if (darkTheme) DefaultDarkColorScheme else DefaultLightColorScheme
+        if (theme.isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else if (theme.isDark) DefaultDarkColorScheme else DefaultLightColorScheme
     // Handle black theme which is useful for OLED screens
     if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
 
-    val resolvedTheme =
-        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
-    val backgroundColor = if (theme.isDynamicColors) when (resolvedTheme) {
+    val backgroundColor = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
         Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_800))
         Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
         Theme.MODERN -> colorScheme.surface
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFF00695c)
         Theme.DARK -> Color(0xFF2F3133)
         Theme.BLACK -> Color.Black
@@ -156,18 +150,16 @@ private fun appBackground(): Brush {
     val backgroundColor = MaterialTheme.colorScheme.background
     val theme = effectiveTheme()
     val context = LocalContext.current
-    val resolvedTheme =
-        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val isGradient by isGradient.collectAsState()
     val backgroundGradientStart by animateColorAsState(
         if (!isGradient) backgroundColor
-        else if (theme.isDynamicColors) when (resolvedTheme) {
+        else if (theme.isDynamicColors) when (theme) {
             Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_500))
             Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_700))
             Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
             Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_0))
             else -> null.debugAssertNotNull ?: Color.Transparent
-        } else when (resolvedTheme) {
+        } else when (theme) {
             Theme.LIGHT -> Color(0xFF00796B)
             Theme.DARK -> Color(0xFF3E4042)
             Theme.BLACK -> Color.Black
@@ -180,13 +172,13 @@ private fun appBackground(): Brush {
     )
     val backgroundGradientEnd by animateColorAsState(
         if (!isGradient) backgroundColor
-        else if (theme.isDynamicColors) when (resolvedTheme) {
+        else if (theme.isDynamicColors) when (theme) {
             Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_900))
             Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_900))
             Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_1000))
             Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_100))
             else -> null.debugAssertNotNull ?: Color.Transparent
-        } else when (resolvedTheme) {
+        } else when (theme) {
             Theme.LIGHT -> Color(0xFF004D40)
             Theme.DARK -> Color(0xFF191C1E)
             Theme.BLACK -> Color.Black
@@ -211,63 +203,61 @@ fun appMonthColors(): MonthColors {
     val contentColor = LocalContentColor.current
     val theme = effectiveTheme()
     val isRedHolidays by isRedHolidays.collectAsState()
-    val resolvedTheme =
-        if (theme != Theme.SYSTEM_DEFAULT) theme else if (isSystemInDarkTheme()) Theme.DARK else Theme.LIGHT
     val context = LocalContext.current
-    val colorAppointments = if (theme.isDynamicColors) when (resolvedTheme) {
+    val colorAppointments = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFF74BBEF)
         Theme.DARK, Theme.BLACK -> Color(0xFF74BBEF)
         Theme.AQUA -> Color(0xFF74BBEF)
         Theme.MODERN -> Color(0xFF376E9F)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorHolidays = if (theme.isDynamicColors && !isRedHolidays) when (resolvedTheme) {
+    val colorHolidays = if (theme.isDynamicColors && !isRedHolidays) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_400))
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFFFF8A65)
         Theme.DARK, Theme.BLACK -> Color(0xFFE65100)
         Theme.AQUA -> Color(0xFFFF8A65)
         Theme.MODERN -> Color(0xFFE51C23)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorCurrentDay = if (theme.isDynamicColors) when (resolvedTheme) {
+    val colorCurrentDay = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_400))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_600))
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFFFF7043)
         Theme.DARK, Theme.BLACK -> Color(0xFF82B1FF)
         Theme.AQUA -> Color(0xFFFF7043)
         Theme.MODERN -> Color(0xFF42AFBF)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorEventIndicator = if (theme.isDynamicColors) when (resolvedTheme) {
+    val colorEventIndicator = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_0))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_100))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_neutral1_1000))
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFFEFF2F1)
         Theme.DARK, Theme.BLACK -> Color(0xFFE0E0E0)
         Theme.AQUA -> Color(0xFFEFF2F1)
         Theme.MODERN -> Color(0xFF000000)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val colorTextDaySelected = if (theme.isDynamicColors) when (resolvedTheme) {
+    val colorTextDaySelected = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent2_0))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent2_0))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_900))
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFF2F3133)
         Theme.DARK -> Color(0xFF2F3133)
         Theme.BLACK -> Color.Black
@@ -275,12 +265,12 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val indicator = if (theme.isDynamicColors) when (resolvedTheme) {
+    val indicator = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_800))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_600))
         Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_100))
         else -> null.debugAssertNotNull ?: Color.Transparent
-    } else when (resolvedTheme) {
+    } else when (theme) {
         Theme.LIGHT -> Color(0xFFEFF2F1)
         Theme.DARK, Theme.BLACK -> Color(0xFFE0E0E0)
         Theme.AQUA -> Color(0xFFF5F5F5)

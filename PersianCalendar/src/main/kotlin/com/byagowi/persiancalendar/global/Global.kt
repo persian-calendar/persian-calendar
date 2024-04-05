@@ -346,17 +346,17 @@ fun updateStoredPreference(context: Context) {
     language_.value = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.getPreferredDefaultLanguage(context)
     theme_.value = run {
-        val key = prefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
-        Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
-    }
+        val key = prefs.getString(PREF_THEME, null)
+        Theme.entries.find { it.key == key }
+    } ?: Theme.SYSTEM_DEFAULT
     systemDarkTheme_.value = run {
-        val key = prefs.getString(PREF_SYSTEM_DARK_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
-        Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
-    }
+        val key = prefs.getString(PREF_SYSTEM_DARK_THEME, null)
+        Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
+    } ?: Theme.DARK
     systemLightTheme_.value = run {
-        val key = prefs.getString(PREF_SYSTEM_LIGHT_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
-        Theme.entries.find { it.key == key } ?: Theme.SYSTEM_DEFAULT
-    }
+        val key = prefs.getString(PREF_SYSTEM_LIGHT_THEME, null)
+        Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
+    } ?: Theme.LIGHT
     isGradient_.value = prefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isRedHolidays_.value = prefs.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     alternativeGregorianMonths = when {

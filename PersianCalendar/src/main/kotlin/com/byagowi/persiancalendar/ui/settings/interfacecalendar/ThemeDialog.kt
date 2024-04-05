@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -44,6 +43,7 @@ import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
+import com.byagowi.persiancalendar.ui.theme.effectiveTheme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -65,15 +65,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             }
         },
     ) {
-        AnimatedVisibility(visible = showMore && theme == Theme.SYSTEM_DEFAULT) {
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                RadioOrLabel(R.string.theme_dark)
-                RadioOrLabel(R.string.theme_light)
-                Spacer(Modifier.width(8.dp))
-            }
-        }
-        val selectedDarkTheme by systemDarkTheme.collectAsState()
-        val selectedLightTheme by systemLightTheme.collectAsState()
         Theme.entries.forEach { entry ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -91,19 +82,43 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 Text(stringResource(entry.title))
                 AnimatedVisibility(visible = showMore && theme == Theme.SYSTEM_DEFAULT) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                        RadioOrLabel(R.string.theme_dark, selectedDarkTheme == entry) {
-                            context.appPrefs.edit { putString(PREF_SYSTEM_DARK_THEME, entry.key) }
-                        }
-                        RadioOrLabel(R.string.theme_light, selectedLightTheme == entry) {
-                            context.appPrefs.edit { putString(PREF_SYSTEM_LIGHT_THEME, entry.key) }
+                        val systemLightTheme by systemLightTheme.collectAsState()
+                        val systemDarkTheme by systemDarkTheme.collectAsState()
+                        listOf(
+                            Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
+                            Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)
+                        ).forEach { (label, preferenceKey, selectedTheme) ->
+                            // To make sure the label and radio button will take the same size
+                            Box {
+                                val invisible = Modifier
+                                    .alpha(0f)
+                                    .height(8.dp)
+                                    .align(Alignment.Center)
+                                    .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+                                val center = Modifier.align(Alignment.Center)
+                                RadioButton(
+                                    selected = selectedTheme == entry,
+                                    onClick = {
+                                        context.appPrefs.edit {
+                                            putString(preferenceKey, entry.key)
+                                        }
+                                    },
+                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) invisible else center,
+                                )
+                                Text(
+                                    stringResource(label),
+                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) center else invisible
+                                )
+                            }
                         }
                         Spacer(Modifier.width(8.dp))
                     }
                 }
             }
         }
+        val effectiveTheme = effectiveTheme()
         AnimatedVisibility(
-            visible = showMore && theme.hasGradient,
+            visible = showMore && effectiveTheme.hasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             val isGradient by isGradient.collectAsState()
@@ -113,7 +128,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) } }
         }
         AnimatedVisibility(
-            visible = showMore && theme.isDynamicColors,
+            visible = showMore && effectiveTheme.isDynamicColors,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             val isRedHolidays by isRedHolidays.collectAsState()
@@ -122,28 +137,5 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 checked = isRedHolidays,
             ) { context.appPrefs.edit { putBoolean(PREF_RED_HOLIDAYS, !isRedHolidays) } }
         }
-    }
-}
-
-@Composable
-private fun RadioOrLabel(
-    @StringRes label: Int,
-    selected: Boolean? = null,
-    onClick: () -> Unit = {},
-) {
-    Box {
-        val invisible = Modifier
-            .alpha(0f)
-            .height(8.dp)
-            .align(Alignment.Center)
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
-        val center = Modifier.align(Alignment.Center)
-
-        RadioButton(
-            selected = selected ?: false,
-            onClick = onClick,
-            modifier = if (selected == null) invisible else center,
-        )
-        Text(stringResource(label), modifier = if (selected == null) center else invisible)
     }
 }
