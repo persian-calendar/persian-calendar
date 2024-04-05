@@ -100,13 +100,14 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
                             Box(contentAlignment = Alignment.TopCenter) {
+                                val invisibleRadio =
+                                    !entry.isDark.xor(preferenceKey == PREF_SYSTEM_LIGHT_THEME)
                                 RadioButton(
-                                    enabled = entry.isDark.xor(preferenceKey == PREF_SYSTEM_LIGHT_THEME),
                                     selected = selectedTheme == entry,
                                     onClick = {
                                         context.appPrefs.edit { putString(preferenceKey, entry.key) }
                                     },
-                                    modifier = if (entry == Theme.SYSTEM_DEFAULT) invisible else Modifier,
+                                    modifier = if (invisibleRadio || entry == Theme.SYSTEM_DEFAULT) invisible else Modifier,
                                 )
                                 Text(
                                     stringResource(label),
