@@ -482,16 +482,21 @@ private fun BoxScope.DrawerDarkModeToggle(
             .align(Alignment.BottomEnd)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) {
+        val iconTint by animateColorAsState(
+            MaterialTheme.colorScheme.onSurface,
+            label = "icon tint",
+        )
         AnimatedVisibility(visible = showThemeSettings) {
             Icon(
                 Icons.Default.Palette, null,
-                modifier = Modifier
+                Modifier
                     .padding(end = 8.dp)
                     .clickable {
                         showThemeSettings = false
                         navigateToThemeSettings()
                     }
                     .then(iconsModifier),
+                iconTint,
             )
         }
         var lastClickId by remember { mutableIntStateOf(0) }
@@ -509,6 +514,6 @@ private fun BoxScope.DrawerDarkModeToggle(
                 val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
                 context.appPrefs.edit { putString(PREF_THEME, key) }
             },
-        ) { Icon(it, null, modifier = iconsModifier) }
+        ) { Icon(it, null, iconsModifier, iconTint) }
     }
 }
