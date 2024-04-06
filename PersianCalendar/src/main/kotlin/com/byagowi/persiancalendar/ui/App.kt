@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,6 +46,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -149,7 +151,17 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            ModalDrawerSheet(windowInsets = WindowInsets(0, 0, 0, 0)) {
+            val surfaceColor by animateColorAsState(
+                MaterialTheme.colorScheme.surface,
+                label = "surface color",
+            )
+            val secondaryContainer by animateColorAsState(
+                MaterialTheme.colorScheme.secondaryContainer, label = "secondary container"
+            )
+            ModalDrawerSheet(
+                windowInsets = WindowInsets(0, 0, 0, 0),
+                drawerContainerColor = surfaceColor,
+            ) {
                 run {
                     val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
                     val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
@@ -172,7 +184,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Box {
                         DrawerSeasonsPager(drawerState)
-                        DrawerDarkModeToggle {
+                        DrawerDarkModeToggle(surfaceColor) {
                             coroutineScope.launch { drawerState.close() }
                             navController.graph.findNode(settingsRoute)?.let { destination ->
                                 navController.navigate(
@@ -184,10 +196,15 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             }
                         }
                     }
+                    val navItemColors = NavigationDrawerItemDefaults.colors(
+                        unselectedContainerColor = Color.Transparent,
+                        selectedContainerColor = secondaryContainer,
+                    )
                     navItems.forEach { (id, icon, title) ->
                         NavigationDrawerItem(
                             modifier = Modifier.padding(horizontal = 16.dp),
                             icon = { Icon(icon, contentDescription = null) },
+                            colors = navItemColors,
                             label = {
                                 // Apparently language strings isn't applied immediately in drawer
                                 // items titles but only when drawer opens so let's animate it!
@@ -443,7 +460,10 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 }
 
 @Composable
-private fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
+private fun BoxScope.DrawerDarkModeToggle(
+    surfaceColor: Color,
+    navigateToThemeSettings: () -> Unit,
+) {
     val theme by theme.collectAsState()
     val context = LocalContext.current
     val isDark = if (theme == Theme.SYSTEM_DEFAULT) isSystemInDarkTheme() else theme.isDark
@@ -451,7 +471,7 @@ private fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val iconsModifier = Modifier
         .background(
-            MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha),
+            surfaceColor.copy(alpha = AppBlendAlpha),
             shape = MaterialTheme.shapes.extraLarge,
         )
         .padding(8.dp)
