@@ -9,6 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -39,6 +40,7 @@ import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -491,10 +493,14 @@ private fun BoxScope.DrawerDarkModeToggle(
                 Icons.Default.Palette, null,
                 Modifier
                     .padding(end = 8.dp)
-                    .clickable {
-                        showThemeSettings = false
-                        navigateToThemeSettings()
-                    }
+                    .clickable(
+                        indication = rememberRipple(bounded = false),
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = {
+                            showThemeSettings = false
+                            navigateToThemeSettings()
+                        },
+                    )
                     .then(iconsModifier),
                 iconTint,
             )
@@ -503,17 +509,21 @@ private fun BoxScope.DrawerDarkModeToggle(
         Crossfade(
             label = "dark mode toggle",
             targetState = if (isDark) Icons.Default.LightMode else Icons.Default.ModeNight,
-            modifier = Modifier.clickable {
-                showThemeSettings = true
-                lastClickId++
-                val clickId = lastClickId
-                coroutineScope.launch {
-                    delay(TWO_SECONDS_IN_MILLIS)
-                    if (lastClickId == clickId) showThemeSettings = false
-                }
-                val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
-                context.appPrefs.edit { putString(PREF_THEME, key) }
-            },
+            modifier = Modifier.clickable(
+                indication = rememberRipple(bounded = false),
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {
+                    showThemeSettings = true
+                    lastClickId++
+                    val clickId = lastClickId
+                    coroutineScope.launch {
+                        delay(TWO_SECONDS_IN_MILLIS)
+                        if (lastClickId == clickId) showThemeSettings = false
+                    }
+                    val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
+                    context.appPrefs.edit { putString(PREF_THEME, key) }
+                },
+            ),
         ) { Icon(it, null, iconsModifier, iconTint) }
     }
 }
