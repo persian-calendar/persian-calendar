@@ -462,4 +462,8 @@
     <string name="year_view">عرض السنوي</string>
     <string name="ask_for_calendar_permission">هل ترغب في تمكين الأحداث الشخصية من تقويم جهازك؟</string>
     <string name="exempt_app_battery_optimization">هل ترغب في إضافة التطبيق إلى قائمة استثناءات تحسين البطارية لضمان وظائف الإشعار بشكل صحيح؟</string>
+    <string name="widget_background_transparency">شفافية خلفية المصغر</string>
+    <string name="save">حفظ</string>
+    <string name="holidays_in_red">العطل باللون الأحمر</string>
+    <string name="add_widget">إضافة المصغر</string>
 </resources>
