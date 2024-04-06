@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.ModeNight
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material3.DrawerState
@@ -468,7 +469,7 @@ private fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
                     showThemeSettings = false
                     navigateToThemeSettings()
                 },
-        ) { Icon(Icons.Default.Settings, null, modifier = iconsModifier) }
+        ) { Icon(Icons.Default.Palette, null, modifier = iconsModifier) }
         var lastClickId by remember { mutableIntStateOf(0) }
         Crossfade(
             label = "dark mode toggle",
