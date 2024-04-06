@@ -442,7 +442,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 }
 
 @Composable
-fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
+private fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
     val theme by theme.collectAsState()
     val context = LocalContext.current
     val isDark = if (theme == Theme.SYSTEM_DEFAULT) isSystemInDarkTheme() else theme.isDark
