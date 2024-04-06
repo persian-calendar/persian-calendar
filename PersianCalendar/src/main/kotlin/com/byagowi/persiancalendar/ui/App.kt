@@ -35,11 +35,12 @@ import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
+import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -118,7 +119,6 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -474,7 +474,7 @@ private fun BoxScope.DrawerDarkModeToggle(
     val coroutineScope = rememberCoroutineScope()
     val iconsModifier = Modifier
         .background(
-            surfaceColor.copy(alpha = AppBlendAlpha),
+            surfaceColor.copy(alpha = .5f),
             shape = MaterialTheme.shapes.extraLarge,
         )
         .padding(8.dp)
@@ -485,30 +485,32 @@ private fun BoxScope.DrawerDarkModeToggle(
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) {
         val iconTint by animateColorAsState(
-            MaterialTheme.colorScheme.onSurface,
+            MaterialTheme.colorScheme.onSurface.copy(if (isDark) 1f else .5f),
             label = "icon tint",
         )
         AnimatedVisibility(visible = showThemeSettings) {
-            Icon(
-                Icons.Default.Palette, null,
-                Modifier
-                    .padding(end = 8.dp)
-                    .clickable(
-                        indication = rememberRipple(bounded = false),
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = {
-                            showThemeSettings = false
-                            navigateToThemeSettings()
-                        },
-                    )
-                    .then(iconsModifier),
-                iconTint,
-            )
+            Crossfade(targetState = isDark, label = "palette") { isDark ->
+                Icon(
+                    if (isDark) Icons.Outlined.Palette else Icons.Default.Palette, null,
+                    Modifier
+                        .padding(end = 8.dp)
+                        .clickable(
+                            indication = rememberRipple(bounded = false),
+                            interactionSource = remember { MutableInteractionSource() },
+                            onClick = {
+                                showThemeSettings = false
+                                navigateToThemeSettings()
+                            },
+                        )
+                        .then(iconsModifier),
+                    iconTint,
+                )
+            }
         }
         var lastClickId by remember { mutableIntStateOf(0) }
         Crossfade(
             label = "dark mode toggle",
-            targetState = if (isDark) Icons.Default.LightMode else Icons.Default.ModeNight,
+            targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
             modifier = Modifier.clickable(
                 indication = rememberRipple(bounded = false),
                 interactionSource = remember { MutableInteractionSource() },
