@@ -481,15 +481,18 @@ private fun BoxScope.DrawerDarkModeToggle(
             .align(Alignment.BottomEnd)
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) {
-        AnimatedVisibility(
-            visible = showThemeSettings,
-            Modifier
-                .padding(end = 8.dp)
-                .clickable {
-                    showThemeSettings = false
-                    navigateToThemeSettings()
-                },
-        ) { Icon(Icons.Default.Palette, null, modifier = iconsModifier) }
+        AnimatedVisibility(visible = showThemeSettings) {
+            Icon(
+                Icons.Default.Palette, null,
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .clickable {
+                        showThemeSettings = false
+                        navigateToThemeSettings()
+                    }
+                    .then(iconsModifier),
+            )
+        }
         var lastClickId by remember { mutableIntStateOf(0) }
         Crossfade(
             label = "dark mode toggle",
