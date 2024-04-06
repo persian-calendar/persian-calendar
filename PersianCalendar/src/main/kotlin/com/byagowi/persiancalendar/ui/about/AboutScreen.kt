@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -141,9 +142,10 @@ fun AboutScreen(
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
-                Surface(shape = materialCornerExtraLargeTop()) {
-                    AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
-                }
+                Surface(
+                    shape = materialCornerExtraLargeTop(),
+                    color = animatedSurfaceColor(),
+                ) { AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding()) }
             }
         }
     }

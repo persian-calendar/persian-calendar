@@ -142,6 +142,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -268,6 +269,7 @@ fun CalendarScreen(
                         }
                         Surface(
                             shape = materialCornerExtraLargeNoBottomEnd(),
+                            color = animatedSurfaceColor(),
                             modifier = Modifier.fillMaxHeight(),
                         ) {
                             Details(
@@ -292,6 +294,7 @@ fun CalendarScreen(
                             Surface(
                                 modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
                                 shape = materialCornerExtraLargeTop(),
+                                color = animatedSurfaceColor(),
                             ) {
                                 Details(
                                     viewModel = viewModel,
@@ -422,6 +425,7 @@ private fun Details(
         TabRow(
             selectedTabIndex = selectedTabIndex,
             divider = {},
+            containerColor = animatedSurfaceColor(),
             indicator = @Composable { tabPositions ->
                 if (selectedTabIndex < tabPositions.size) {
                     PrimaryIndicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))

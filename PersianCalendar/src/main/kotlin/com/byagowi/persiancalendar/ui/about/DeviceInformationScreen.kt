@@ -68,6 +68,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -136,7 +137,7 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
                 }
             },
         )
-        Surface(shape = materialCornerExtraLargeTop()) {
+        Surface(shape = materialCornerExtraLargeTop(), color = animatedSurfaceColor()) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 LazyColumn {
                     item { Spacer(Modifier.height(16.dp)) }

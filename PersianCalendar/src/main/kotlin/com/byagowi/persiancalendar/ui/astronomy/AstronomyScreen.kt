@@ -86,6 +86,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -184,6 +185,7 @@ fun AstronomyScreen(
     ) { paddingValues ->
         Surface(
             shape = materialCornerExtraLargeTop(),
+            color = animatedSurfaceColor(),
             modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {

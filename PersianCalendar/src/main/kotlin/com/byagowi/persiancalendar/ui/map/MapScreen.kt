@@ -84,6 +84,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -194,7 +195,11 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
             Column {
                 Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
                 Spacer(Modifier.height((16 + menuHeight + 16).dp))
-                Surface(Modifier.fillMaxSize(), shape = materialCornerExtraLargeTop()) {}
+                Surface(
+                    Modifier.fillMaxSize(),
+                    shape = materialCornerExtraLargeTop(),
+                    color = animatedSurfaceColor(),
+                ) {}
             }
         }
         AndroidView(

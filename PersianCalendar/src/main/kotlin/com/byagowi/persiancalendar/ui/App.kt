@@ -113,6 +113,8 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.Theme
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
+import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
@@ -151,12 +153,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            val surfaceColor by animateColorAsState(
-                MaterialTheme.colorScheme.surface,
-                label = "surface color",
-            )
+            val surfaceColor = animatedSurfaceColor()
             val secondaryContainer by animateColorAsState(
-                MaterialTheme.colorScheme.secondaryContainer, label = "secondary container"
+                MaterialTheme.colorScheme.secondaryContainer,
+                appColorAnimationSpec,
+                label = "secondary container"
             )
             ModalDrawerSheet(
                 windowInsets = WindowInsets(0, 0, 0, 0),

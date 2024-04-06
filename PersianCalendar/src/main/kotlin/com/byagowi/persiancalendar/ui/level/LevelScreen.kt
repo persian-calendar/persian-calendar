@@ -53,6 +53,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -146,7 +147,8 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                 topEnd = CornerSize(topCornersRoundness),
                 bottomStart = ZeroCornerSize,
                 bottomEnd = ZeroCornerSize,
-            )
+            ),
+            color = animatedSurfaceColor(),
         ) {
             Box {
                 Crossfade(targetState = cmInchFlip, label = "ruler") { state ->

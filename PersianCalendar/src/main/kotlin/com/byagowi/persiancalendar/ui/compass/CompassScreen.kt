@@ -69,6 +69,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -267,6 +268,7 @@ fun CompassScreen(
     ) { paddingValues ->
         Surface(
             shape = materialCornerExtraLargeTop(),
+            color = animatedSurfaceColor(),
             modifier = Modifier.padding(paddingValues),
         ) {
             val surfaceColor = MaterialTheme.colorScheme.surface

@@ -86,6 +86,7 @@ import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalend
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -193,18 +194,13 @@ fun SettingsScreen(
                 state = pagerState,
                 modifier = Modifier.clip(materialCornerExtraLargeTop()),
             ) { index ->
-                val surfaceColor by animateColorAsState(
-                    MaterialTheme.colorScheme.surface,
-                    animationSpec = appColorAnimationSpec,
-                    label = "surface color"
-                )
                 val onSurfaceColor by animateColorAsState(
                     MaterialTheme.colorScheme.onSurface,
                     animationSpec = appColorAnimationSpec,
                     label = "onSurface color"
                 )
                 Surface(
-                    color = surfaceColor,
+                    color = animatedSurfaceColor(),
                     contentColor = onSurfaceColor,
                     modifier = Modifier.fillMaxSize(),
                 ) {
