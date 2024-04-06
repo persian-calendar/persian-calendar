@@ -2,10 +2,17 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -26,6 +33,8 @@ import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material.icons.filled.ModeNight
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material3.DrawerState
@@ -43,9 +52,11 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,6 +74,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -71,11 +83,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.systemDarkTheme
+import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
@@ -94,10 +109,14 @@ import com.byagowi.persiancalendar.ui.map.MapViewModel
 import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
+import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -121,6 +140,10 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     BackHandler(enabled = drawerState.isOpen) { coroutineScope.launch { drawerState.close() } }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val tabKey = "TAB"
+    val settingsKey = "SETTINGS"
+    val daysOffsetKey = "DAYS_OFFSET"
 
     ModalNavigationDrawer(
         drawerState = drawerState,
@@ -146,7 +169,20 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
 
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    DrawerSeasonsPager(drawerState)
+                    Box {
+                        DrawerSeasonsPager(drawerState)
+                        DrawerDarkModeToggle {
+                            coroutineScope.launch { drawerState.close() }
+                            navController.graph.findNode(settingsRoute)?.let { destination ->
+                                navController.navigate(
+                                    destination.id, bundleOf(
+                                        tabKey to INTERFACE_CALENDAR_TAB,
+                                        settingsKey to PREF_THEME,
+                                    )
+                                )
+                            }
+                        }
+                    }
                     navItems.forEach { (id, icon, title) ->
                         NavigationDrawerItem(
                             modifier = Modifier.padding(horizontal = 16.dp),
@@ -183,9 +219,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         },
     ) {
         NavHost(navController = navController, startDestination = startDestination) {
-            val tabKey = "TAB"
-            val settingsKey = "SETTINGS"
-            val daysOffsetKey = "DAYS_OFFSET"
 
             fun navigateToSettingsLocationTab() {
                 navController.graph.findNode(settingsRoute)?.let { destination ->
@@ -405,5 +438,54 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
                 .fillMaxSize()
                 .clip(MaterialTheme.shapes.extraLarge),
         )
+    }
+}
+
+@Composable
+fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
+    val theme by theme.collectAsState()
+    val context = LocalContext.current
+    val isDark = if (theme == Theme.SYSTEM_DEFAULT) isSystemInDarkTheme() else theme.isDark
+    var showThemeSettings by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+    val iconsModifier = Modifier
+        .background(
+            MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha),
+            shape = MaterialTheme.shapes.extraLarge,
+        )
+        .padding(8.dp)
+    Row(
+        Modifier
+            .padding(32.dp)
+            .align(Alignment.BottomEnd)
+            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
+    ) {
+        AnimatedVisibility(
+            visible = showThemeSettings,
+            Modifier
+                .padding(end = 8.dp)
+                .clickable {
+                    showThemeSettings = false
+                    navigateToThemeSettings()
+                }
+        ) {
+            Icon(Icons.Default.Settings, "", modifier = iconsModifier)
+        }
+        var lastClickId by remember { mutableIntStateOf(0) }
+        Crossfade(
+            label = "dark mode toggle",
+            targetState = if (isDark) Icons.Default.LightMode else Icons.Default.ModeNight,
+            modifier = Modifier.clickable {
+                showThemeSettings = true
+                lastClickId++
+                val clickId = lastClickId
+                coroutineScope.launch {
+                    delay(TWO_SECONDS_IN_MILLIS)
+                    if (lastClickId == clickId) showThemeSettings = false
+                }
+                val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
+                context.appPrefs.edit { putString(PREF_THEME, key) }
+            },
+        ) { Icon(it, "", modifier = iconsModifier) }
     }
 }

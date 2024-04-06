@@ -56,7 +56,9 @@ fun InterfaceCalendarSettings(destination: String? = null) {
             Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
         }.title)
         SettingsClickable(
-            title = stringResource(R.string.select_skin), summary = themeDisplayName
+            title = stringResource(R.string.select_skin),
+            summary = themeDisplayName,
+            defaultOpen = destination == PREF_THEME,
         ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
     }
     val language by language.collectAsState()
