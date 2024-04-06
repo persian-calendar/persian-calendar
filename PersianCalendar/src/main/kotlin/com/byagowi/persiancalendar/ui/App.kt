@@ -467,10 +467,8 @@ private fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
                 .clickable {
                     showThemeSettings = false
                     navigateToThemeSettings()
-                }
-        ) {
-            Icon(Icons.Default.Settings, "", modifier = iconsModifier)
-        }
+                },
+        ) { Icon(Icons.Default.Settings, null, modifier = iconsModifier) }
         var lastClickId by remember { mutableIntStateOf(0) }
         Crossfade(
             label = "dark mode toggle",
@@ -486,6 +484,6 @@ private fun BoxScope.DrawerDarkModeToggle(navigateToThemeSettings: () -> Unit) {
                 val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
                 context.appPrefs.edit { putString(PREF_THEME, key) }
             },
-        ) { Icon(it, "", modifier = iconsModifier) }
+        ) { Icon(it, null, modifier = iconsModifier) }
     }
 }
