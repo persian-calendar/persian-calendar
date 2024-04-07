@@ -61,6 +61,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -122,7 +123,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -187,7 +188,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Box {
                         DrawerSeasonsPager(drawerState)
-                        DrawerDarkModeToggle(surfaceColor) {
+                        DrawerDarkModeToggle(drawerState, surfaceColor) {
                             coroutineScope.launch { drawerState.close() }
                             navController.graph.findNode(settingsRoute)?.let { destination ->
                                 navController.navigate(
@@ -464,6 +465,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 
 @Composable
 private fun BoxScope.DrawerDarkModeToggle(
+    drawerState: DrawerState,
     surfaceColor: Color,
     navigateToThemeSettings: () -> Unit,
 ) {
@@ -471,10 +473,18 @@ private fun BoxScope.DrawerDarkModeToggle(
     val context = LocalContext.current
     val isDark = if (theme == Theme.SYSTEM_DEFAULT) isSystemInDarkTheme() else theme.isDark
     var showThemeSettings by remember { mutableStateOf(false) }
+    var isExpired by rememberSaveable { mutableStateOf<Boolean?>(null) }
+    if (drawerState.isClosed) isExpired = null
+    if (isExpired == null && drawerState.isOpen) isExpired = false
+    LaunchedEffect(key1 = drawerState.isOpen) {
+        if (drawerState.isClosed) return@LaunchedEffect
+        delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
+        isExpired = true
+    }
     val coroutineScope = rememberCoroutineScope()
     val iconsModifier = Modifier
         .background(
-            surfaceColor.copy(alpha = .25f),
+            surfaceColor.copy(alpha = .5f),
             shape = MaterialTheme.shapes.extraLarge,
         )
         .padding(8.dp)
@@ -485,7 +495,7 @@ private fun BoxScope.DrawerDarkModeToggle(
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) {
         val iconTint by animateColorAsState(
-            MaterialTheme.colorScheme.onSurface.copy(if (isDark) .9f else .4f),
+            MaterialTheme.colorScheme.onSurface.copy(if (isDark) .9f else .6f),
             label = "icon tint",
         )
         AnimatedVisibility(visible = showThemeSettings) {
@@ -508,24 +518,26 @@ private fun BoxScope.DrawerDarkModeToggle(
             }
         }
         var lastClickId by remember { mutableIntStateOf(0) }
-        Crossfade(
-            label = "dark mode toggle",
-            targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
-            modifier = Modifier.clickable(
-                indication = rememberRipple(bounded = false),
-                interactionSource = remember { MutableInteractionSource() },
-                onClick = {
-                    showThemeSettings = true
-                    lastClickId++
-                    val clickId = lastClickId
-                    coroutineScope.launch {
-                        delay(TWO_SECONDS_IN_MILLIS)
-                        if (lastClickId == clickId) showThemeSettings = false
-                    }
-                    val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
-                    context.appPrefs.edit { putString(PREF_THEME, key) }
-                },
-            ),
-        ) { Icon(it, null, iconsModifier, iconTint) }
+        AnimatedVisibility(visible = isExpired != true || showThemeSettings) {
+            Crossfade(
+                label = "dark mode toggle",
+                targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+                modifier = Modifier.clickable(
+                    indication = rememberRipple(bounded = false),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = {
+                        showThemeSettings = true
+                        ++lastClickId
+                        val clickId = lastClickId
+                        coroutineScope.launch {
+                            delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
+                            if (lastClickId == clickId) showThemeSettings = false
+                        }
+                        val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
+                        context.appPrefs.edit { putString(PREF_THEME, key) }
+                    },
+                ),
+            ) { Icon(it, null, iconsModifier, iconTint) }
+        }
     }
 }
