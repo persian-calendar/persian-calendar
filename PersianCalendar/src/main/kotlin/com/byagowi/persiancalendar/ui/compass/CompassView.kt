@@ -12,7 +12,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.QIBLA_LATITUDE
@@ -49,7 +48,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
 
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = ContextCompat.getColor(context, R.color.north_arrow)
+        it.color = 0xFFFF0000.toInt()
         it.style = Paint.Style.FILL
     }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
