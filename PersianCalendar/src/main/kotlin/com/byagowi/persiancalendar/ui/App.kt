@@ -474,7 +474,7 @@ private fun BoxScope.DrawerDarkModeToggle(
     val coroutineScope = rememberCoroutineScope()
     val iconsModifier = Modifier
         .background(
-            surfaceColor.copy(alpha = .5f),
+            surfaceColor.copy(alpha = .25f),
             shape = MaterialTheme.shapes.extraLarge,
         )
         .padding(8.dp)
@@ -485,11 +485,11 @@ private fun BoxScope.DrawerDarkModeToggle(
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) {
         val iconTint by animateColorAsState(
-            MaterialTheme.colorScheme.onSurface.copy(if (isDark) 1f else .5f),
+            MaterialTheme.colorScheme.onSurface.copy(if (isDark) .9f else .4f),
             label = "icon tint",
         )
         AnimatedVisibility(visible = showThemeSettings) {
-            Crossfade(targetState = isDark, label = "palette") { isDark ->
+            Crossfade(targetState = isDark, label = "theme settings") { isDark ->
                 Icon(
                     if (isDark) Icons.Outlined.Palette else Icons.Default.Palette, null,
                     Modifier
