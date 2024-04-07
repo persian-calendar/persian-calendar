@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -13,7 +12,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -35,11 +33,9 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ModeNight
-import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material.icons.outlined.LightMode
-import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -57,10 +53,8 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -187,17 +181,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Box {
                         DrawerSeasonsPager(drawerState)
-                        DrawerDarkModeToggle(drawerState, surfaceColor) {
-                            coroutineScope.launch { drawerState.close() }
-                            navController.graph.findNode(settingsRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(
-                                        tabKey to INTERFACE_CALENDAR_TAB,
-                                        settingsKey to PREF_THEME,
-                                    )
-                                )
-                            }
-                        }
+                        DrawerDarkModeToggle(surfaceColor)
                     }
                     val navItemColors = NavigationDrawerItemDefaults.colors(
                         unselectedContainerColor = Color.Transparent,
@@ -463,80 +447,39 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 }
 
 @Composable
-private fun BoxScope.DrawerDarkModeToggle(
-    drawerState: DrawerState,
-    surfaceColor: Color,
-    navigateToThemeSettings: () -> Unit,
-) {
+private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
     val theme by theme.collectAsState()
     if (theme == Theme.SYSTEM_DEFAULT) return
     val context = LocalContext.current
-    var showThemeSettings by remember { mutableStateOf(false) }
-    var isExpired by rememberSaveable { mutableStateOf<Boolean?>(null) }
-    if (drawerState.isClosed) isExpired = null
-    if (isExpired == null && drawerState.isOpen) isExpired = false
-    LaunchedEffect(key1 = drawerState.isOpen) {
-        if (drawerState.isClosed) return@LaunchedEffect
-        delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
-        isExpired = true
-    }
     val coroutineScope = rememberCoroutineScope()
-    val iconsModifier = Modifier
-        .background(
-            surfaceColor.copy(alpha = .5f),
-            shape = MaterialTheme.shapes.extraLarge,
-        )
-        .padding(8.dp)
-    Row(
-        Modifier
+    Crossfade(
+        label = "dark mode toggle",
+        targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+        modifier = Modifier
+            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
             .padding(32.dp)
             .align(Alignment.BottomEnd)
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
+            .clickable(
+                indication = rememberRipple(bounded = false),
+                interactionSource = remember { MutableInteractionSource() },
+                onClick = {
+                    coroutineScope.launch { delay(THREE_SECONDS_AND_HALF_IN_MILLIS) }
+                    val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme
+                    context.appPrefs.edit { putString(PREF_THEME, systemTheme.value.key) }
+                },
+            )
+            .background(
+                surfaceColor.copy(alpha = .5f),
+                shape = MaterialTheme.shapes.extraLarge,
+            )
+            .padding(8.dp),
     ) {
-        val iconTint by animateColorAsState(
-            MaterialTheme.colorScheme.onSurface.copy(if (theme.isDark) .9f else .6f),
-            label = "icon tint",
+        Icon(
+            it, contentDescription = null,
+            tint = animateColorAsState(
+                MaterialTheme.colorScheme.onSurface.copy(if (theme.isDark) .9f else .6f),
+                label = "icon tint",
+            ).value,
         )
-        AnimatedVisibility(visible = showThemeSettings) {
-            Crossfade(targetState = theme.isDark, label = "theme settings") { isDark ->
-                Icon(
-                    if (isDark) Icons.Outlined.Palette else Icons.Default.Palette, null,
-                    Modifier
-                        .padding(end = 8.dp)
-                        .clickable(
-                            indication = rememberRipple(bounded = false),
-                            interactionSource = remember { MutableInteractionSource() },
-                            onClick = {
-                                showThemeSettings = false
-                                navigateToThemeSettings()
-                            },
-                        )
-                        .then(iconsModifier),
-                    iconTint,
-                )
-            }
-        }
-        var lastClickId by remember { mutableIntStateOf(0) }
-        AnimatedVisibility(visible = isExpired != true || showThemeSettings) {
-            Crossfade(
-                label = "dark mode toggle",
-                targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
-                modifier = Modifier.clickable(
-                    indication = rememberRipple(bounded = false),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = {
-                        showThemeSettings = true
-                        ++lastClickId
-                        val clickId = lastClickId
-                        coroutineScope.launch {
-                            delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
-                            if (lastClickId == clickId) showThemeSettings = false
-                        }
-                        val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme
-                        context.appPrefs.edit { putString(PREF_THEME, systemTheme.value.key) }
-                    },
-                ),
-            ) { Icon(it, null, iconsModifier, iconTint) }
-        }
     }
 }
