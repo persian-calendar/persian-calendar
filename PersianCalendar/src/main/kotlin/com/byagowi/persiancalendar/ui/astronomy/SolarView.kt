@@ -12,7 +12,6 @@ import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.compose.ui.util.lerp
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
@@ -20,7 +19,6 @@ import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import com.byagowi.persiancalendar.AU_IN_KM
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
@@ -192,7 +190,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.style = Paint.Style.FILL
         it.textAlign = Paint.Align.CENTER
         it.textSize = 14 * dp
-        it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
+        it.color = Color.GRAY
     }
 
     private fun drawEarthCentricView(canvas: Canvas) {
