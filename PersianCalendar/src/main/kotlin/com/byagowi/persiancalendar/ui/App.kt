@@ -83,6 +83,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
+import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
@@ -465,7 +467,13 @@ private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
                 onClick = {
                     coroutineScope.launch { delay(THREE_SECONDS_AND_HALF_IN_MILLIS) }
                     val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme
-                    context.appPrefs.edit { putString(PREF_THEME, systemTheme.value.key) }
+                    context.appPrefs.edit {
+                        putString(PREF_THEME, systemTheme.value.key)
+                        putString(
+                            if (theme.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
+                            theme.key
+                        )
+                    }
                 },
             )
             .background(
