@@ -54,12 +54,12 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
     var showMore by rememberSaveable { mutableStateOf(false) }
     val systemLightTheme by systemLightTheme.collectAsState()
     val systemDarkTheme by systemDarkTheme.collectAsState()
-    val themeToCheck = run {
+    val themesToCheck = run {
         if (theme == Theme.SYSTEM_DEFAULT) listOf(systemLightTheme, systemDarkTheme)
         else listOf(theme)
     }
-    val anyThemeHasGradient = themeToCheck.any { it.hasGradient }
-    val anyThemeIsDynamicColors = themeToCheck.any { it.isDynamicColors }
+    val anyThemeHasGradient = themesToCheck.any { it.hasGradient }
+    val anyThemeIsDynamicColors = themesToCheck.any { it.isDynamicColors }
     AppDialog(
         title = { Text(stringResource(R.string.select_skin)) },
         onDismissRequest = onDismissRequest,
