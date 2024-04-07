@@ -88,7 +88,13 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     .height(SettingsItemHeight.dp)
                     .clickable {
                         onDismissRequest()
-                        context.appPrefs.edit { putString(PREF_THEME, entry.key) }
+                        context.appPrefs.edit {
+                            putString(PREF_THEME, entry.key)
+                            putString(
+                                if (entry.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
+                                entry.key
+                            )
+                        }
                     }
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             ) {
