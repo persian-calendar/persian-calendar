@@ -457,8 +457,7 @@ private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
     Crossfade(
         label = "dark mode toggle",
         targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
-        modifier = Modifier
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+        modifier = Modifier.semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
             .padding(32.dp)
             .align(Alignment.BottomEnd)
             .clickable(
@@ -476,14 +475,11 @@ private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
                     }
                 },
             )
-            .background(
-                surfaceColor.copy(alpha = .5f),
-                shape = MaterialTheme.shapes.extraLarge,
-            )
+            .background(surfaceColor.copy(alpha = .5f), MaterialTheme.shapes.extraLarge)
             .padding(8.dp),
     ) {
         Icon(
-            it, contentDescription = null,
+            it, stringResource(if (theme.isDark) R.string.theme_dark else R.string.theme_light),
             tint = animateColorAsState(
                 MaterialTheme.colorScheme.onSurface.copy(if (theme.isDark) .9f else .6f),
                 label = "icon tint",
