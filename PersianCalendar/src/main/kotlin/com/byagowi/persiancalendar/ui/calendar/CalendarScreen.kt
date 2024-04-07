@@ -425,7 +425,7 @@ private fun Details(
         TabRow(
             selectedTabIndex = selectedTabIndex,
             divider = {},
-            containerColor = animatedSurfaceColor(),
+            containerColor = Color.Transparent,
             indicator = @Composable { tabPositions ->
                 if (selectedTabIndex < tabPositions.size) {
                     PrimaryIndicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
