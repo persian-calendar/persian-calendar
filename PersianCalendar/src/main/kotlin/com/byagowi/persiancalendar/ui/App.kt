@@ -10,7 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -470,8 +469,8 @@ private fun BoxScope.DrawerDarkModeToggle(
     navigateToThemeSettings: () -> Unit,
 ) {
     val theme by theme.collectAsState()
+    if (theme == Theme.SYSTEM_DEFAULT) return
     val context = LocalContext.current
-    val isDark = if (theme == Theme.SYSTEM_DEFAULT) isSystemInDarkTheme() else theme.isDark
     var showThemeSettings by remember { mutableStateOf(false) }
     var isExpired by rememberSaveable { mutableStateOf<Boolean?>(null) }
     if (drawerState.isClosed) isExpired = null
@@ -495,11 +494,11 @@ private fun BoxScope.DrawerDarkModeToggle(
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
     ) {
         val iconTint by animateColorAsState(
-            MaterialTheme.colorScheme.onSurface.copy(if (isDark) .9f else .6f),
+            MaterialTheme.colorScheme.onSurface.copy(if (theme.isDark) .9f else .6f),
             label = "icon tint",
         )
         AnimatedVisibility(visible = showThemeSettings) {
-            Crossfade(targetState = isDark, label = "theme settings") { isDark ->
+            Crossfade(targetState = theme.isDark, label = "theme settings") { isDark ->
                 Icon(
                     if (isDark) Icons.Outlined.Palette else Icons.Default.Palette, null,
                     Modifier
@@ -521,7 +520,7 @@ private fun BoxScope.DrawerDarkModeToggle(
         AnimatedVisibility(visible = isExpired != true || showThemeSettings) {
             Crossfade(
                 label = "dark mode toggle",
-                targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+                targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
                 modifier = Modifier.clickable(
                     indication = rememberRipple(bounded = false),
                     interactionSource = remember { MutableInteractionSource() },
@@ -533,8 +532,8 @@ private fun BoxScope.DrawerDarkModeToggle(
                             delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
                             if (lastClickId == clickId) showThemeSettings = false
                         }
-                        val key = (if (isDark) systemLightTheme else systemDarkTheme).value.key
-                        context.appPrefs.edit { putString(PREF_THEME, key) }
+                        val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme
+                        context.appPrefs.edit { putString(PREF_THEME, systemTheme.value.key) }
                     },
                 ),
             ) { Icon(it, null, iconsModifier, iconTint) }
