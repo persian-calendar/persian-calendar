@@ -58,7 +58,8 @@ value class Jdn(val value: Long) {
 
     val weekDayName: String get() = weekDays[this.weekDay]
 
-    fun calculatePersianSeasonPassedDaysAndCount(): Pair<Int, Int> {
+    // Days passed in a season and total days available in the season
+    fun seasonPassedDaysAndDaysCount(): Pair<Int, Int> {
         val persianDate = this.toPersianDate()
         val season = (persianDate.month - 1) / 3
         val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
