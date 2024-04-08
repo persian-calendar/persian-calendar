@@ -225,7 +225,7 @@ fun Month(
                     textLayoutResult,
                     color = when {
                         isSelected -> monthColors.textDaySelected
-                        isHoliday || day.isWeekEnd() -> monthColors.holidays
+                        isHoliday || day.isWeekEnd -> monthColors.holidays
                         else -> contentColor
                     },
                     topLeft = Offset(

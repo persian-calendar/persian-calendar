@@ -271,7 +271,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(
-            "holiday" to ((jdn.isWeekEnd() && weekEndsAsHoliday) || dayEvents.any { it.isHoliday }),
+            "holiday" to ((jdn.isWeekEnd && weekEndsAsHoliday) || dayEvents.any { it.isHoliday }),
             "hasEvents" to dayEvents.isNotEmpty()
         ).filter { it.second }.joinToString(" ") { it.first }
     }

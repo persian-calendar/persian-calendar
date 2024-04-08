@@ -148,7 +148,7 @@ class DayPainter(
     ) = setAll(
         text = dayOfMonth, isToday = isToday,
         isSelected = isSelected, hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
-        header = header, isHoliday = isHoliday || jdn.isWeekEnd()
+        header = header, isHoliday = isHoliday || jdn.isWeekEnd
     )
 
     fun setInitialOfWeekDay(text: String) = setAll(text)

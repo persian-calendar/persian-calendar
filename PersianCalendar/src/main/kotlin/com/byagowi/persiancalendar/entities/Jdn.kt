@@ -25,7 +25,7 @@ value class Jdn(val value: Long) {
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
     val weekDay: Int get() = ((value + 2L) % 7L).toInt()
 
-    fun isWeekEnd() = weekEnds[this.weekDay]
+    val isWeekEnd get() = weekEnds[this.weekDay]
 
     fun inCalendar(calendar: Calendar): AbstractDate = when (calendar) {
         Calendar.ISLAMIC -> toIslamicDate()

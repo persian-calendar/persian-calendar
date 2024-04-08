@@ -175,7 +175,7 @@ class EventsRepository(
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {
         val emptyDeviceCalendar: DeviceCalendarEventsStore = EventsStore.empty()
         return (fromJdn + 1..toJdn).count {
-            !it.isWeekEnd() && getEvents(it, emptyDeviceCalendar).none(CalendarEvent<*>::isHoliday)
+            !it.isWeekEnd && getEvents(it, emptyDeviceCalendar).none(CalendarEvent<*>::isHoliday)
         }
     }
 
