@@ -118,8 +118,8 @@ class CalendarTests {
     )
     fun `season passed days`(year: Int, month: Int, day: Int, passedDays: Int, daysCount: Int) {
         val jdn = Jdn(Calendar.SHAMSI, year, month, day)
-        val (seasonPassedDays, seasonDaysCount) = jdn.seasonPassedDaysAndDaysCount()
-        assertEquals(passedDays, seasonPassedDays)
-        assertEquals(daysCount, seasonDaysCount)
+        val (passedDaysInSeason, totalSeasonDays) = jdn.positionInSeason
+        assertEquals(passedDays, passedDaysInSeason)
+        assertEquals(daysCount, totalSeasonDays)
     }
 }

@@ -217,11 +217,11 @@ fun CalendarsOverview(
         val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
         val progresses = remember(jdn, selectedCalendar) {
-            val (seasonPassedDays, seasonDaysCount) = jdn.seasonPassedDaysAndDaysCount()
+            val (passedDaysInSeason, totalSeasonDays) = jdn.positionInSeason
             val monthLength = selectedCalendar.getMonthLength(date.year, date.month)
             listOfNotNull(
                 Triple(R.string.month, date.dayOfMonth, monthLength),
-                Triple(R.string.season, seasonPassedDays, seasonDaysCount),
+                Triple(R.string.season, passedDaysInSeason, totalSeasonDays),
                 Triple(R.string.year, jdn - startOfYearJdn, endOfYearJdn - startOfYearJdn),
             )
         }

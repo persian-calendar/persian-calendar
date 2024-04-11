@@ -25,7 +25,7 @@ value class Jdn(val value: Long) {
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
     val weekDay: Int get() = ((value + 2L) % 7L).toInt()
 
-    val isWeekEnd get() = weekEnds[this.weekDay]
+    val isWeekEnd: Boolean get() = weekEnds[this.weekDay]
 
     fun inCalendar(calendar: Calendar): AbstractDate = when (calendar) {
         Calendar.ISLAMIC -> toIslamicDate()
@@ -59,14 +59,14 @@ value class Jdn(val value: Long) {
     val weekDayName: String get() = weekDays[this.weekDay]
 
     // Days passed in a season and total days available in the season
-    fun seasonPassedDaysAndDaysCount(): Pair<Int, Int> {
-        val persianDate = this.toPersianDate()
-        val season = (persianDate.month - 1) / 3
-        val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
-        val seasonBeginningJdn = Jdn(seasonBeginning)
-        return this - seasonBeginningJdn + 1 to
-                Jdn(seasonBeginning.monthStartOfMonthsDistance(3)) - seasonBeginningJdn
-    }
+    val positionInSeason: Pair<Int, Int>
+        get() {
+            val persianDate = this.toPersianDate()
+            val season = (persianDate.month - 1) / 3
+            val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
+            val seasonBeginningJdn = Jdn(seasonBeginning)
+            return this - seasonBeginningJdn + 1 to Jdn(seasonBeginning.monthStartOfMonthsDistance(3)) - seasonBeginningJdn
+        }
 
     operator fun rangeTo(toJdn: Jdn): Sequence<Jdn> =
         (this.value..toJdn.value).asSequence().map(::Jdn)
