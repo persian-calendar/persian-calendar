@@ -60,14 +60,13 @@ value class Jdn(val value: Long) {
 
     // Days passed in a season and total days available in the season
     // The result is a (passedDaysInSeason, totalSeasonDays)
-    val seasonProgress: Pair<Int, Int>
-        get() {
-            val persianDate = this.toPersianDate()
-            val season = (persianDate.month - 1) / 3
-            val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
-            val seasonBeginningJdn = Jdn(seasonBeginning)
-            return this - seasonBeginningJdn + 1 to Jdn(seasonBeginning.monthStartOfMonthsDistance(3)) - seasonBeginningJdn
-        }
+    fun getPositionInSeason(): Pair<Int, Int> {
+        val persianDate = this.toPersianDate()
+        val season = (persianDate.month - 1) / 3
+        val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
+        val seasonBeginningJdn = Jdn(seasonBeginning)
+        return this - seasonBeginningJdn + 1 to Jdn(seasonBeginning.monthStartOfMonthsDistance(3)) - seasonBeginningJdn
+    }
 
     operator fun rangeTo(toJdn: Jdn): Sequence<Jdn> =
         (this.value..toJdn.value).asSequence().map(::Jdn)
