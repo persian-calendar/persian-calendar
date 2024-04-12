@@ -328,8 +328,8 @@ enum class Language(val code: String, val nativeName: String) {
         else -> text
     }
 
-    // Too hard to translate and don't want to disappoint translators thus
-    // not moved yet to our common i18n system
+    // Too hard to translate and don't want to disappoint translators thus not in the common
+    // i18n system yet
     fun tryTranslateEclipseType(isSolar: Boolean, type: EclipseKind) = when (this) {
         EN_US, EN_IR -> {
             when {

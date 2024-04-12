@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
@@ -52,7 +53,7 @@ enum class ChineseZodiac(
     fun format(resources: Resources, withEmoji: Boolean, isForPersian: Boolean): String {
         return if (isForPersian && language.value.isPersian && persianAlternative != null) {
             if (withEmoji) persianAlternative
-            else persianAlternative.split(" ").getOrNull(1) ?: ""
+            else persianAlternative.split(" ").getOrNull(1).debugAssertNotNull ?: ""
         } else buildString {
             if (withEmoji) append("$emoji ")
             append(resources.getString(title))
