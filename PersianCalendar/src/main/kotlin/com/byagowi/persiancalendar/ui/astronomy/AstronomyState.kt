@@ -55,12 +55,11 @@ class AstronomyState(val date: GregorianCalendar) {
 
     fun generateHeader(resources: Resources, jdn: Jdn): List<String> {
         val observer = coordinates.value?.toObserver()
-        return listOf(if (observer != null) searchLocalSolarEclipse(
-            time,
-            observer,
-        ).let { it.kind to it.peak.time }
-        else searchGlobalSolarEclipse(time).let { it.kind to it.peak },
-            searchLunarEclipse(time).let { it.kind to it.peak }).mapIndexed { i, (kind, peak) ->
+        return listOf(
+            if (observer != null) searchLocalSolarEclipse(time, observer).run { kind to peak.time }
+            else searchGlobalSolarEclipse(time).run { kind to peak },
+            searchLunarEclipse(time).run { kind to peak },
+        ).mapIndexed { i, (kind, peak) ->
             val formattedDate =
                 Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
             val isSolar = i == 0
