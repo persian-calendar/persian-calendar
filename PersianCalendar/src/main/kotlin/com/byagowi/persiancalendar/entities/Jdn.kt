@@ -67,8 +67,8 @@ value class Jdn(val value: Long) {
         return this - seasonBeginningJdn + 1 to Jdn(seasonBeginning.monthStartOfMonthsDistance(3)) - seasonBeginningJdn
     }
 
-    operator fun rangeTo(toJdn: Jdn): Sequence<Jdn> =
-        (this.value..toJdn.value).asSequence().map(::Jdn)
+    operator fun rangeTo(that: Jdn): Sequence<Jdn> =
+        (this.value..that.value).asSequence().map(::Jdn)
 
     companion object {
         fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
