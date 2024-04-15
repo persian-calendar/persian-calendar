@@ -11,8 +11,11 @@ import androidx.compose.ui.graphics.luminance
 /**
  * Determines if a color should be considered light or dark.
  *
- * See also: https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
+ * See also:
+ * * https://github.com/material-components/material-components-android/blob/dfa474fd/lib/java/com/google/android/material/color/MaterialColors.java#L252
+ * * https://github.com/androidx/androidx/blob/95394634/core/core/src/main/java/androidx/core/graphics/ColorUtils.java#L159
  */
+@Stable
 val Color.isLight: Boolean get() = this.luminance() > .5
 
 /**
