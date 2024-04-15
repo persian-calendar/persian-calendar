@@ -122,10 +122,10 @@ fun SettingsScreen(
             actions = {
                 var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
                 ThreeDotsDropdownMenu { closeMenu ->
-                    MenuItems(closeMenu) {
-                        closeMenu()
-                        showAddWidgetDialog = true
-                    }
+                    MenuItems(
+                        openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
+                        closeMenu = closeMenu,
+                    )
                 }
                 if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
             },
@@ -244,7 +244,7 @@ const val WIDGET_NOTIFICATION_TAB = 1
 const val LOCATION_ATHAN_TAB = 2
 
 @Composable
-private fun MenuItems(closeMenu: () -> Unit, openAddWidgetDialog: () -> Unit) {
+private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     val context = LocalContext.current
     AppDropdownMenuItem(
         text = { Text(stringResource(R.string.live_wallpaper_settings)) },
