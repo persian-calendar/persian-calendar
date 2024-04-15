@@ -90,10 +90,13 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         onDismissRequest()
                         context.appPrefs.edit {
                             putString(PREF_THEME, entry.key)
-                            putString(
-                                if (entry.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
-                                entry.key
-                            )
+                            // Consider returning to system default as some sort of theme reset
+                            if (entry == Theme.SYSTEM_DEFAULT) {
+                                remove(PREF_SYSTEM_LIGHT_THEME)
+                                remove(PREF_SYSTEM_DARK_THEME)
+                                remove(PREF_RED_HOLIDAYS)
+                                remove(PREF_THEME_GRADIENT)
+                            }
                         }
                     }
                     .padding(start = SettingsHorizontalPaddingItem.dp),
