@@ -90,9 +90,12 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         onDismissRequest()
                         context.appPrefs.edit {
                             putString(PREF_THEME, entry.key)
-                            if (entry == Theme.SYSTEM_DEFAULT) {
+                            // Consider returning to system default as some sort of theme reset
+                            if (theme != Theme.SYSTEM_DEFAULT && entry == Theme.SYSTEM_DEFAULT) {
                                 remove(PREF_SYSTEM_LIGHT_THEME)
                                 remove(PREF_SYSTEM_DARK_THEME)
+                                remove(PREF_RED_HOLIDAYS)
+                                remove(PREF_THEME_GRADIENT)
                             }
                         }
                     }
