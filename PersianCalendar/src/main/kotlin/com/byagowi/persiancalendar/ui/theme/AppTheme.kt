@@ -258,7 +258,7 @@ fun appMonthColors(): MonthColors {
         Theme.LIGHT -> Color(0xFFEFF2F1)
         Theme.DARK, Theme.BLACK -> Color(0xFFE0E0E0)
         Theme.AQUA -> Color(0xFFEFF2F1)
-        Theme.MODERN -> Color(0xFF000000)
+        Theme.MODERN -> Color.Black
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
     val colorTextDaySelected = if (theme.isDynamicColors) when (theme) {
