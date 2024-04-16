@@ -1,7 +1,17 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -10,7 +20,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -63,19 +76,6 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
             factory = { context ->
                 val view = ColorPickerView(context)
                 colorPickerView = view
-                val colors = if (isBackgroundPick) listOf(
-                    Color.Transparent,
-                    Color(0x20000000L),
-                    Color(0x50000000L),
-                    Color.Black,
-                ) else listOf(
-                    Color.White,
-                    Color(0xFFE65100L),
-                    Color(0xFF00796bL),
-                    Color(0xFFFEF200L),
-                    Color(0xFF202020L)
-                )
-                view.setColorsToPick(colors.map { it.toArgb().toLong() })
                 if (!isBackgroundPick) view.hideAlphaSeekBar()
                 view.setPickedColor(initialColor)
                 view
@@ -84,5 +84,37 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
         )
+        Spacer(Modifier.height(16.dp))
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+            (if (isBackgroundPick) listOf(
+                Color.Transparent,
+                Color(0x20000000),
+                Color(0x50000000),
+                Color.Black,
+            ) else listOf(
+                Color.White,
+                Color(0xFFE65100),
+                Color(0xFF00796B),
+                Color(0xFFFEF200),
+                Color(0xFF202020),
+            )).forEach {
+                Box(
+                    Modifier
+                        .padding(horizontal = 4.dp)
+                        .clickable { colorPickerView?.setPickedColor(it.toArgb()) }
+                        .border(BorderStroke(1.dp, Color(0x80808080)))
+                        .background(Color.White)
+                        .clipToBounds()
+                        .drawWithCache {
+                            val size = 4.dp.roundToPx()
+                            onDrawBehind {
+                                drawContext.canvas.nativeCanvas.drawPaint(createCheckerBoard(size))
+                            }
+                        }
+                        .background(it)
+                        .size(40.dp),
+                )
+            }
+        }
     }
 }
