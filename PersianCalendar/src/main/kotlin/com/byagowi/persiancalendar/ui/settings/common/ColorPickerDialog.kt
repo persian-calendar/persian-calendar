@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
-import android.graphics.Color
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -11,6 +10,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,7 +28,7 @@ import java.util.Locale
 fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val initialColor = remember {
-        context.appPrefs.getString(key, null)?.let(Color::parseColor)
+        context.appPrefs.getString(key, null)?.let(android.graphics.Color::parseColor)
             ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
             else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     }
@@ -60,18 +61,24 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     ) {
         AndroidView(
             factory = { context ->
-                ColorPickerView(context).also {
-                    colorPickerView = it
-                    it.setColorsToPick(
-                        if (isBackgroundPick) listOf(
-                            0x00000000L, 0x20000000L, 0x50000000L, 0xFF000000L
-                        ) else listOf(
-                            0xFFFFFFFFL, 0xFFE65100L, 0xFF00796bL, 0xFFFEF200L, 0xFF202020L
-                        )
-                    )
-                    if (!isBackgroundPick) it.hideAlphaSeekBar()
-                    it.setPickedColor(initialColor)
-                }
+                val view = ColorPickerView(context)
+                colorPickerView = view
+                val colors = if (isBackgroundPick) listOf(
+                    Color.Transparent,
+                    Color(0x20000000L),
+                    Color(0x50000000L),
+                    Color.Black,
+                ) else listOf(
+                    Color.White,
+                    Color(0xFFE65100L),
+                    Color(0xFF00796bL),
+                    Color(0xFFFEF200L),
+                    Color(0xFF202020L)
+                )
+                view.setColorsToPick(colors.map { it.toArgb().toLong() })
+                if (!isBackgroundPick) view.hideAlphaSeekBar()
+                view.setPickedColor(initialColor)
+                view
             },
             modifier = Modifier
                 .fillMaxWidth()
