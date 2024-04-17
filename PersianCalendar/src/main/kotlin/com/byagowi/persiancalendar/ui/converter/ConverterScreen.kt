@@ -413,7 +413,7 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
 }
 
 @Composable
-private fun ConverterAndDistance(viewModel: ConverterViewModel) {
+private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendar by viewModel.calendar.collectAsState()
@@ -451,10 +451,7 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
         DatePicker(
             calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
         )
-        AnimatedVisibility(
-            visible = screenMode == ConverterScreenMode.CONVERTER,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
+        AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -471,10 +468,9 @@ private fun ConverterAndDistance(viewModel: ConverterViewModel) {
                 ) { isExpanded = !isExpanded }
             }
         }
-        AnimatedVisibility(
-            visible = screenMode == ConverterScreenMode.DISTANCE,
-            modifier = Modifier.fillMaxWidth(),
-        ) { DaysDistanceSecondPart(viewModel, jdn, calendar) }
+        AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
+            DaysDistanceSecondPart(viewModel, jdn, calendar)
+        }
     }
 }
 
