@@ -1,12 +1,12 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Parcelable
 import android.provider.Settings
 import android.widget.Toast
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.foundation.clickable
@@ -100,7 +100,7 @@ private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
             )
 
     override fun parseResult(resultCode: Int, intent: Intent?): String? =
-        if (resultCode == ComponentActivity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
+        if (resultCode == Activity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
             RingtoneManager.EXTRA_RINGTONE_PICKED_URI
         )?.toString()
         else null
