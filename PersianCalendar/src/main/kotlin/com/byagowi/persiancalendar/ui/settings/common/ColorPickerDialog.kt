@@ -33,6 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
@@ -40,7 +41,6 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -49,7 +49,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import androidx.core.graphics.applyCanvas
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
@@ -188,13 +187,12 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
 
 private fun createCheckerBoard(tileSize: Float): ShaderBrush {
     val image = ImageBitmap(tileSize.roundToInt() * 2, tileSize.roundToInt() * 2)
-    image.asAndroidBitmap().applyCanvas {
-        val fill = Paint().also {
-            it.style = PaintingStyle.Fill
-            it.color = Color(0x22000000)
-        }.asFrameworkPaint()
-        drawRect(0f, 0f, tileSize, tileSize, fill)
-        drawRect(tileSize, tileSize, tileSize * 2, tileSize * 2, fill)
+    val canvas = Canvas(image)
+    val fill = Paint().also {
+        it.style = PaintingStyle.Fill
+        it.color = Color(0x22000000)
     }
+    canvas.drawRect(0f, 0f, tileSize, tileSize, fill)
+    canvas.drawRect(tileSize, tileSize, tileSize * 2, tileSize * 2, fill)
     return ShaderBrush(ImageShader(image, TileMode.Repeated, TileMode.Repeated))
 }
