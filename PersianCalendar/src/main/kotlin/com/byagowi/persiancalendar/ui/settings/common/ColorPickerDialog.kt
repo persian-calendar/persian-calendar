@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
+import android.content.res.Configuration
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.SelectionContainer
@@ -40,6 +42,7 @@ import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -92,9 +95,11 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     ) {
         val checkerBoard = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
         var showEditor by rememberSaveable { mutableStateOf(false) }
+        val isLandscape =
+            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         Box(
             Modifier
-                .padding(vertical = 16.dp)
+                .padding(vertical = if (isLandscape) 0.dp else 16.dp)
                 .align(Alignment.CenterHorizontally)
                 .shadow(16.dp)
                 .clip(MaterialTheme.shapes.large)
@@ -103,7 +108,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 .background(Color.White)
                 .background(checkerBoard)
                 .background(color.value)
-                .size(120.dp),
+                .size(if (isLandscape) 40.dp else 120.dp),
         ) {
             if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
@@ -150,14 +155,15 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp),
+                    .padding(horizontal = 32.dp)
+                    .then(if (isLandscape) Modifier.height(36.dp) else Modifier),
             )
         }
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             (if (isBackgroundPick) backgroundColors else foregroundColors).forEach { entry ->
                 Box(
                     Modifier
-                        .padding(vertical = 16.dp, horizontal = 4.dp)
+                        .padding(vertical = if (isLandscape) 0.dp else 16.dp, horizontal = 4.dp)
                         .shadow(4.dp)
                         .clip(MaterialTheme.shapes.small)
                         .clickable {
@@ -169,7 +175,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                         .background(Color.White)
                         .background(checkerBoard)
                         .background(entry)
-                        .size(40.dp),
+                        .size(if (isLandscape) 24.dp else 40.dp),
                 )
             }
         }
