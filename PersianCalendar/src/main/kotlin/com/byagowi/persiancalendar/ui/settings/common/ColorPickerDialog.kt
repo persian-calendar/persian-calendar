@@ -114,11 +114,11 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                             coroutineScope.launch { color.snapTo(newColor) }
                         },
                         colors = when (it) {
-                            0 -> 0xffff1744
-                            1 -> 0xff00c853
-                            2 -> 0xff448aff
-                            else -> 0xffa0a0a0
-                        }.run(::Color).let { tint ->
+                            0 -> Color(0xFFFF1744)
+                            1 -> Color(0xFF00C853)
+                            2 -> Color(0xFF448AFF)
+                            else -> Color(0xFFA0A0A0)
+                        }.let { tint ->
                             SliderDefaults.colors().copy(
                                 activeTrackColor = tint, thumbColor = tint,
                                 inactiveTrackColor = tint.copy(alpha = .2f),
@@ -153,18 +153,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         }
         Spacer(Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
-            (if (isBackgroundPick) listOf(
-                Color.Transparent,
-                Color(0x20000000),
-                Color(0x50000000),
-                Color.Black,
-            ) else listOf(
-                Color.White,
-                Color(0xFFE65100),
-                Color(0xFF00796B),
-                Color(0xFFFEF200),
-                Color(0xFF202020),
-            )).forEach { entry ->
+            (if (isBackgroundPick) backgroundColors else foregroundColors).forEach { entry ->
                 Box(
                     Modifier
                         .padding(horizontal = 4.dp)
@@ -184,6 +173,21 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         }
     }
 }
+
+private val backgroundColors = listOf(
+    Color.Transparent,
+    Color(0x20000000),
+    Color(0x50000000),
+    Color.Black,
+)
+
+private val foregroundColors = listOf(
+    Color.White,
+    Color(0xFFE65100),
+    Color(0xFF00796B),
+    Color(0xFFFEF200),
+    Color(0xFF202020),
+)
 
 // https://stackoverflow.com/a/58471997
 private fun createCheckerBoard(tileSize: Float): ShaderBrush {
