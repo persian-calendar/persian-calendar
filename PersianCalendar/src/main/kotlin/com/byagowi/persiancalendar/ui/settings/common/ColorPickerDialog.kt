@@ -185,13 +185,11 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     }
 }
 
+// https://stackoverflow.com/a/58471997
 private fun createCheckerBoard(tileSize: Float): ShaderBrush {
     val image = ImageBitmap(tileSize.roundToInt() * 2, tileSize.roundToInt() * 2)
     val canvas = Canvas(image)
-    val fill = Paint().also {
-        it.style = PaintingStyle.Fill
-        it.color = Color(0x22000000)
-    }
+    val fill = Paint().also { it.style = PaintingStyle.Fill; it.color = Color(0x22000000) }
     canvas.drawRect(0f, 0f, tileSize, tileSize, fill)
     canvas.drawRect(tileSize, tileSize, tileSize * 2, tileSize * 2, fill)
     return ShaderBrush(ImageShader(image, TileMode.Repeated, TileMode.Repeated))
