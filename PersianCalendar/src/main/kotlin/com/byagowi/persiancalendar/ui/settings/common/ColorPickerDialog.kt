@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -65,14 +64,15 @@ import kotlin.math.roundToInt
 @Composable
 fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val initialColor = remember {
-        context.appPrefs.getString(key, null)?.let(android.graphics.Color::parseColor)
-            ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-            else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-    }
     val color = rememberSaveable(
         saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
-    ) { Animatable(Color(initialColor)) }
+    ) {
+        val initialColor =
+            context.appPrefs.getString(key, null)?.let(android.graphics.Color::parseColor)
+                ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+                else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+        Animatable(Color(initialColor))
+    }
     AppDialog(
         title = {
             val title =
