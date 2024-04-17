@@ -49,6 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.core.graphics.toColorInt
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
@@ -66,8 +67,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     val color = rememberSaveable(
         saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
     ) {
-        val initialColor =
-            context.appPrefs.getString(key, null)?.let(android.graphics.Color::parseColor)
+        val initialColor = context.appPrefs.getString(key, null)?.toColorInt()
                 ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
                 else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
         Animatable(Color(initialColor))
