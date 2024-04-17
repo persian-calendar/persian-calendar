@@ -54,6 +54,7 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.appPrefs
 import kotlinx.coroutines.launch
@@ -94,7 +95,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     ) {
         val checkerBoard = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
         val coroutineScope = rememberCoroutineScope()
-        Row(Modifier.padding(16.dp)) {
+        Row(Modifier.padding(horizontal = 16.dp)) {
             Column(Modifier.weight(.6f)) {
                 (0..if (isBackgroundPick) 3 else 2).forEach {
                     Slider(
@@ -167,7 +168,11 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 Box(
                     Modifier
                         .padding(horizontal = 4.dp)
-                        .clickable { coroutineScope.launch { color.animateTo(entry) } }
+                        .clickable {
+                            coroutineScope.launch {
+                                color.animateTo(entry, appColorAnimationSpec)
+                            }
+                        }
                         .border(BorderStroke(1.dp, Color(0x80808080)))
                         .background(Color.White)
                         .clipToBounds()
