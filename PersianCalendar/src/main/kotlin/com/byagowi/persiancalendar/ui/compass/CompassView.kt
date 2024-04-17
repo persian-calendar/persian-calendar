@@ -11,6 +11,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.annotation.ColorInt
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
@@ -24,7 +25,6 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
@@ -161,7 +161,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     init {
         val matrixProperties = FloatArray(9)
         maxScale = 2f
-        val textSize = resources.sp(12f)
+        val textSize =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 12f, resources.displayMetrics)
         val dashSize = 1 * dp
         onDraw = fun(canvas: Canvas, matrix: Matrix) {
             matrix.getValues(matrixProperties)
