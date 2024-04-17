@@ -28,6 +28,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,7 +70,9 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
             ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
             else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     }
-    val color = remember { Animatable(Color(initialColor)) }
+    val color = rememberSaveable(
+        saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
+    ) { Animatable(Color(initialColor)) }
     AppDialog(
         title = {
             val title =
@@ -125,7 +129,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 }
             }
             Spacer(Modifier.width(16.dp))
-            var showEditor by remember { mutableStateOf(false) }
+            var showEditor by rememberSaveable { mutableStateOf(false) }
             Box(
                 Modifier
                     .align(Alignment.CenterVertically)
