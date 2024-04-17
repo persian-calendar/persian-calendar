@@ -132,10 +132,10 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
             Box(
                 Modifier
                     .align(Alignment.CenterVertically)
+                    .clip(MaterialTheme.shapes.large)
                     .clickable { showEditor = !showEditor }
                     .weight(.4f)
                     .aspectRatio(1f)
-                    .clip(MaterialTheme.shapes.large)
                     .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.large)
                     .background(Color.White)
                     .background(checkerBoard)
@@ -168,12 +168,12 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 Box(
                     Modifier
                         .padding(horizontal = 4.dp)
+                        .clip(MaterialTheme.shapes.small)
                         .clickable {
                             coroutineScope.launch {
                                 color.animateTo(entry, appColorAnimationSpec)
                             }
                         }
-                        .clip(MaterialTheme.shapes.small)
                         .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.small)
                         .background(Color.White)
                         .background(checkerBoard)
