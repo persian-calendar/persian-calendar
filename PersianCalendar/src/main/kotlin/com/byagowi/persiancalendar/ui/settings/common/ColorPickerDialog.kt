@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
@@ -91,6 +92,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         },
         onDismissRequest = onDismissRequest,
     ) {
+        val checkerBoard = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
         val coroutineScope = rememberCoroutineScope()
         Row(Modifier.padding(16.dp)) {
             Column(Modifier.weight(.6f)) {
@@ -110,11 +112,11 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                     colors = colors[0],
                 )
                 Slider(
-                    colors = colors[1],
+                    value = color.value.green,
                     onValueChange = {
                         coroutineScope.launch { color.snapTo(color.value.copy(green = it)) }
                     },
-                    value = color.value.green,
+                    colors = colors[1],
                 )
                 Slider(
                     value = color.value.blue,
@@ -141,9 +143,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 .border(BorderStroke(1.dp, Color(0x80808080)))
                 .background(Color.White)
                 .clipToBounds()
-                .drawBehind {
-                    drawIntoCanvas { it.nativeCanvas.drawPaint(createCheckerBoard(4.dp.toPx())) }
-                }
+                .drawBehind { drawIntoCanvas { it.nativeCanvas.drawPaint(checkerBoard) } }
                 .background(color.value)
             ) {
                 if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -177,9 +177,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                         .border(BorderStroke(1.dp, Color(0x80808080)))
                         .background(Color.White)
                         .clipToBounds()
-                        .drawBehind {
-                            drawIntoCanvas { it.nativeCanvas.drawPaint(createCheckerBoard(4.dp.toPx())) }
-                        }
+                        .drawBehind { drawIntoCanvas { it.nativeCanvas.drawPaint(checkerBoard) } }
                         .background(entry)
                         .size(40.dp),
                 )
