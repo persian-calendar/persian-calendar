@@ -96,42 +96,36 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         val coroutineScope = rememberCoroutineScope()
         Row(Modifier.padding(16.dp)) {
             Column(Modifier.weight(.6f)) {
-                val colors = listOf(0xffff1744, 0xff00c853, 0xff448aff, 0xffa0a0a0).map {
-                    val tint = Color(it)
-                    SliderDefaults.colors().copy(
-                        activeTrackColor = tint,
-                        thumbColor = tint,
-                        inactiveTrackColor = tint.copy(alpha = .2f),
+                (0..if (isBackgroundPick) 3 else 2).forEach {
+                    Slider(
+                        value = when (it) {
+                            0 -> color.value.red
+                            1 -> color.value.green
+                            2 -> color.value.blue
+                            else -> color.value.alpha
+                        },
+                        onValueChange = { value ->
+                            val newColor = when (it) {
+                                0 -> color.value.copy(red = value)
+                                1 -> color.value.copy(green = value)
+                                2 -> color.value.copy(blue = value)
+                                else -> color.value.copy(alpha = value)
+                            }
+                            coroutineScope.launch { color.snapTo(newColor) }
+                        },
+                        colors = when (it) {
+                            0 -> 0xffff1744
+                            1 -> 0xff00c853
+                            2 -> 0xff448aff
+                            else -> 0xffa0a0a0
+                        }.run(::Color).let { tint ->
+                            SliderDefaults.colors().copy(
+                                activeTrackColor = tint, thumbColor = tint,
+                                inactiveTrackColor = tint.copy(alpha = .2f),
+                            )
+                        },
                     )
                 }
-                Slider(
-                    value = color.value.red,
-                    onValueChange = {
-                        coroutineScope.launch { color.snapTo(color.value.copy(red = it)) }
-                    },
-                    colors = colors[0],
-                )
-                Slider(
-                    value = color.value.green,
-                    onValueChange = {
-                        coroutineScope.launch { color.snapTo(color.value.copy(green = it)) }
-                    },
-                    colors = colors[1],
-                )
-                Slider(
-                    value = color.value.blue,
-                    onValueChange = {
-                        coroutineScope.launch { color.snapTo(color.value.copy(blue = it)) }
-                    },
-                    colors = colors[2]
-                )
-                if (isBackgroundPick) Slider(
-                    value = color.value.alpha,
-                    onValueChange = {
-                        coroutineScope.launch { color.snapTo(color.value.copy(alpha = it)) }
-                    },
-                    colors = colors[3],
-                )
             }
             Spacer(Modifier.width(16.dp))
             var showEditor by remember { mutableStateOf(false) }
