@@ -73,8 +73,10 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
         Animatable(Color(initialColor))
     }
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     AppDialog(
         title = {
+            if (isLandscape) return@AppDialog
             val title =
                 if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color
             Text(stringResource(title))
@@ -95,20 +97,18 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     ) {
         val checkerBoard = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
         var showEditor by rememberSaveable { mutableStateOf(false) }
-        val isLandscape =
-            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         Box(
             Modifier
                 .padding(vertical = if (isLandscape) 0.dp else 16.dp)
                 .align(Alignment.CenterHorizontally)
-                .shadow(16.dp)
+                .shadow(if (isLandscape) 0.dp else 16.dp)
                 .clip(MaterialTheme.shapes.large)
                 .clickable { showEditor = !showEditor }
                 .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.large)
                 .background(Color.White)
                 .background(checkerBoard)
                 .background(color.value)
-                .size(if (isLandscape) 40.dp else 120.dp),
+                .size(if (isLandscape) 64.dp else 120.dp),
         ) {
             if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
@@ -164,7 +164,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 Box(
                     Modifier
                         .padding(vertical = if (isLandscape) 0.dp else 16.dp, horizontal = 4.dp)
-                        .shadow(4.dp)
+                        .shadow(if (isLandscape) 0.dp else 4.dp)
                         .clip(MaterialTheme.shapes.small)
                         .clickable {
                             coroutineScope.launch {
@@ -175,7 +175,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                         .background(Color.White)
                         .background(checkerBoard)
                         .background(entry)
-                        .size(if (isLandscape) 24.dp else 40.dp),
+                        .size(if (isLandscape) 32.dp else 40.dp),
                 )
             }
         }
