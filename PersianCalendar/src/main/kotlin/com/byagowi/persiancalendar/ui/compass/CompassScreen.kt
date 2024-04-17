@@ -10,6 +10,10 @@ import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -281,7 +285,11 @@ fun CompassScreen(
                 },
                 update = { it.setTime(time) },
             )
-            AnimatedVisibility(visible = isSliderShown) {
+            AnimatedVisibility(
+                visible = isSliderShown,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically(),
+            ) {
                 Slider(
                     valueRange = 0f..24f,
                     value = sliderValue,
