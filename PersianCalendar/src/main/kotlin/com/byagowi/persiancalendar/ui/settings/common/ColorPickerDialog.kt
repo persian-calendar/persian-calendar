@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.common
 
 import androidx.compose.animation.Animatable
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -146,8 +147,12 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                     SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
                         Text(
                             "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
-                            color = if (color.value.compositeOver(Color.White).isLight) Color.Black
-                            else Color.White,
+                            color = animateColorAsState(
+                                if (color.value.compositeOver(Color.White).isLight) Color.Black
+                                else Color.White,
+                                animationSpec = appColorAnimationSpec,
+                                label = "text color",
+                            ).value
                         )
                     }
                 }
