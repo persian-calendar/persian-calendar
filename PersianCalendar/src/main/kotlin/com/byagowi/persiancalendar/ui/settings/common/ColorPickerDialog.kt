@@ -130,16 +130,17 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
             }
             Spacer(Modifier.width(16.dp))
             var showEditor by remember { mutableStateOf(false) }
-            Box(Modifier
-                .align(Alignment.CenterVertically)
-                .clickable { showEditor = !showEditor }
-                .weight(.4f)
-                .aspectRatio(1f)
-                .border(BorderStroke(1.dp, Color(0x80808080)))
-                .background(Color.White)
-                .clipToBounds()
-                .drawBehind { drawIntoCanvas { it.nativeCanvas.drawPaint(checkerBoard) } }
-                .background(color.value)
+            Box(
+                Modifier
+                    .align(Alignment.CenterVertically)
+                    .clickable { showEditor = !showEditor }
+                    .weight(.4f)
+                    .aspectRatio(1f)
+                    .border(BorderStroke(1.dp, Color(0x80808080)))
+                    .background(Color.White)
+                    .clipToBounds()
+                    .drawBehind { drawIntoCanvas { it.nativeCanvas.drawPaint(checkerBoard) } }
+                    .background(color.value),
             ) {
                 if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                     SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
