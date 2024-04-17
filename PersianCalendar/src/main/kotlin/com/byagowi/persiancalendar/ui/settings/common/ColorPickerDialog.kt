@@ -30,17 +30,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -135,8 +132,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                     .aspectRatio(1f)
                     .border(BorderStroke(1.dp, Color(0x80808080)))
                     .background(Color.White)
-                    .clipToBounds()
-                    .drawBehind { drawIntoCanvas { it.nativeCanvas.drawPaint(checkerBoard) } }
+                    .background(checkerBoard)
                     .background(color.value),
             ) {
                 if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -173,8 +169,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                         }
                         .border(BorderStroke(1.dp, Color(0x80808080)))
                         .background(Color.White)
-                        .clipToBounds()
-                        .drawBehind { drawIntoCanvas { it.nativeCanvas.drawPaint(checkerBoard) } }
+                        .background(checkerBoard)
                         .background(entry)
                         .size(40.dp),
                 )
@@ -183,8 +178,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     }
 }
 
-private fun createCheckerBoard(tileSize: Float): android.graphics.Paint {
-    val paint = Paint()
+private fun createCheckerBoard(tileSize: Float): ShaderBrush {
     val image = ImageBitmap(tileSize.roundToInt() * 2, tileSize.roundToInt() * 2)
     image.asAndroidBitmap().applyCanvas {
         val fill = Paint().also {
@@ -194,6 +188,5 @@ private fun createCheckerBoard(tileSize: Float): android.graphics.Paint {
         drawRect(0f, 0f, tileSize, tileSize, fill)
         drawRect(tileSize, tileSize, tileSize * 2, tileSize * 2, fill)
     }
-    paint.shader = ImageShader(image, TileMode.Repeated, TileMode.Repeated)
-    return paint.asFrameworkPaint()
+    return ShaderBrush(ImageShader(image, TileMode.Repeated, TileMode.Repeated))
 }
