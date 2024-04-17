@@ -72,12 +72,9 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     val color = remember { Animatable(Color(initialColor)) }
     AppDialog(
         title = {
-            Text(
-                stringResource(
-                    if (isBackgroundPick) R.string.widget_background_color
-                    else R.string.widget_text_color
-                )
-            )
+            val title =
+                if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color
+            Text(stringResource(title))
         },
         confirmButton = {
             TextButton(onClick = {
