@@ -21,6 +21,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -205,7 +206,7 @@ fun SettingsScreen(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        tabs[index].content()
+                        tabs[index].content(this)
                         Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
                     }
                 }
@@ -220,7 +221,7 @@ private data class TabItem(
     private val filledIcon: ImageVector,
     @StringRes private val firstTitle: Int,
     @StringRes private val secondTitle: Int,
-    val content: @Composable () -> Unit,
+    val content: @Composable ColumnScope.() -> Unit,
 ) {
     @Composable
     fun Title() {

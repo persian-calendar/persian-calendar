@@ -9,6 +9,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -76,7 +77,7 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 
 @Composable
-fun LocationAthanSettings(navigateToMap: () -> Unit, destination: String) {
+fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: String) {
     SettingsSection(stringResource(R.string.location))
     SettingsClickable(
         title = stringResource(R.string.gps_location),

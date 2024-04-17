@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,7 +60,7 @@ import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
 
 @Composable
-fun WidgetNotificationSettings() {
+fun ColumnScope.WidgetNotificationSettings() {
     SettingsSection(stringResource(R.string.pref_notification))
     NotificationSettings()
     SettingsHorizontalDivider()
@@ -68,7 +69,7 @@ fun WidgetNotificationSettings() {
 }
 
 @Composable
-fun NotificationSettings() {
+fun ColumnScope.NotificationSettings() {
     val context = LocalContext.current
     val isNotifyDate by isNotifyDate.collectAsState()
     run {
@@ -104,7 +105,7 @@ fun NotificationSettings() {
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 @Composable
-fun WidgetConfiguration() {
+fun ColumnScope.WidgetConfiguration() {
     val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     AnimatedVisibility(!prefersWidgetsDynamicColors) {
@@ -178,7 +179,7 @@ fun WidgetConfiguration() {
 }
 
 @Composable
-fun WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
+fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
     val theme by theme.collectAsState()
     if (theme.isDynamicColors) {
         SettingsSwitch(

@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 import android.Manifest
 import android.content.pm.PackageManager
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,7 +48,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 
 @Composable
-fun InterfaceCalendarSettings(destination: String? = null) {
+fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     SettingsSection(stringResource(R.string.pref_interface))
     val context = LocalContext.current
     run {
