@@ -48,6 +48,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
@@ -119,7 +120,9 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                             else Color.White,
                             animationSpec = appColorAnimationSpec,
                             label = "text color",
-                        ).value
+                        ).value,
+                        fontSize = if (isLandscape) MaterialTheme.typography.labelSmall.fontSize
+                        else TextUnit.Unspecified,
                     )
                 }
             }
