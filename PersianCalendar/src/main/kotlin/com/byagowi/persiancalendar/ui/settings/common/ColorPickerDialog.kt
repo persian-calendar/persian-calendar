@@ -8,15 +8,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
@@ -34,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -95,75 +91,74 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         onDismissRequest = onDismissRequest,
     ) {
         val checkerBoard = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
-        val coroutineScope = rememberCoroutineScope()
-        Row(Modifier.padding(horizontal = 16.dp)) {
-            Column(Modifier.weight(.6f)) {
-                (0..if (isBackgroundPick) 3 else 2).forEach {
-                    Slider(
-                        value = when (it) {
-                            0 -> color.value.red
-                            1 -> color.value.green
-                            2 -> color.value.blue
-                            else -> color.value.alpha
-                        },
-                        onValueChange = { value ->
-                            val newColor = when (it) {
-                                0 -> color.value.copy(red = value)
-                                1 -> color.value.copy(green = value)
-                                2 -> color.value.copy(blue = value)
-                                else -> color.value.copy(alpha = value)
-                            }
-                            coroutineScope.launch { color.snapTo(newColor) }
-                        },
-                        colors = when (it) {
-                            0 -> Color(0xFFFF1744)
-                            1 -> Color(0xFF00C853)
-                            2 -> Color(0xFF448AFF)
-                            else -> Color(0xFFA0A0A0)
-                        }.let { tint ->
-                            SliderDefaults.colors().copy(
-                                activeTrackColor = tint, thumbColor = tint,
-                                inactiveTrackColor = tint.copy(alpha = .2f),
-                            )
-                        },
+        var showEditor by rememberSaveable { mutableStateOf(false) }
+        Box(
+            Modifier
+                .padding(vertical = 16.dp)
+                .align(Alignment.CenterHorizontally)
+                .shadow(16.dp)
+                .clip(MaterialTheme.shapes.large)
+                .clickable { showEditor = !showEditor }
+                .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.large)
+                .background(Color.White)
+                .background(checkerBoard)
+                .background(color.value)
+                .size(120.dp),
+        ) {
+            if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
+                    Text(
+                        "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
+                        color = animateColorAsState(
+                            if (color.value.compositeOver(Color.White).isLight) Color.Black
+                            else Color.White,
+                            animationSpec = appColorAnimationSpec,
+                            label = "text color",
+                        ).value
                     )
                 }
             }
-            Spacer(Modifier.width(16.dp))
-            var showEditor by rememberSaveable { mutableStateOf(false) }
-            Box(
-                Modifier
-                    .align(Alignment.CenterVertically)
-                    .clip(MaterialTheme.shapes.large)
-                    .clickable { showEditor = !showEditor }
-                    .weight(.4f)
-                    .aspectRatio(1f)
-                    .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.large)
-                    .background(Color.White)
-                    .background(checkerBoard)
-                    .background(color.value),
-            ) {
-                if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                    SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
-                        Text(
-                            "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
-                            color = animateColorAsState(
-                                if (color.value.compositeOver(Color.White).isLight) Color.Black
-                                else Color.White,
-                                animationSpec = appColorAnimationSpec,
-                                label = "text color",
-                            ).value
-                        )
-                    }
-                }
-            }
         }
-        Spacer(Modifier.height(16.dp))
+        val coroutineScope = rememberCoroutineScope()
+        (0..if (isBackgroundPick) 3 else 2).forEach {
+            Slider(
+                value = when (it) {
+                    0 -> color.value.red
+                    1 -> color.value.green
+                    2 -> color.value.blue
+                    else -> color.value.alpha
+                },
+                onValueChange = { value ->
+                    val newColor = when (it) {
+                        0 -> color.value.copy(red = value)
+                        1 -> color.value.copy(green = value)
+                        2 -> color.value.copy(blue = value)
+                        else -> color.value.copy(alpha = value)
+                    }
+                    coroutineScope.launch { color.snapTo(newColor) }
+                },
+                colors = when (it) {
+                    0 -> Color(0xFFFF1744)
+                    1 -> Color(0xFF00C853)
+                    2 -> Color(0xFF448AFF)
+                    else -> Color(0xFFA0A0A0)
+                }.let { tint ->
+                    SliderDefaults.colors().copy(
+                        activeTrackColor = tint, thumbColor = tint,
+                        inactiveTrackColor = tint.copy(alpha = .2f),
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 32.dp),
+            )
+        }
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             (if (isBackgroundPick) backgroundColors else foregroundColors).forEach { entry ->
                 Box(
                     Modifier
-                        .padding(horizontal = 4.dp)
+                        .padding(vertical = 16.dp, horizontal = 4.dp)
+                        .shadow(4.dp)
                         .clip(MaterialTheme.shapes.small)
                         .clickable {
                             coroutineScope.launch {
