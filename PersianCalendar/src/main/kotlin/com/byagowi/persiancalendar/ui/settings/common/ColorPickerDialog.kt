@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -145,7 +146,8 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                     SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
                         Text(
                             "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
-                            color = if (color.value.isLight) Color.Black else Color.White,
+                            color = if (color.value.compositeOver(Color.White).isLight) Color.Black
+                            else Color.White,
                         )
                     }
                 }
