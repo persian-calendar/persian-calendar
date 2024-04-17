@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
@@ -30,6 +31,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
@@ -130,7 +132,8 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                     .clickable { showEditor = !showEditor }
                     .weight(.4f)
                     .aspectRatio(1f)
-                    .border(BorderStroke(1.dp, Color(0x80808080)))
+                    .clip(MaterialTheme.shapes.large)
+                    .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.large)
                     .background(Color.White)
                     .background(checkerBoard)
                     .background(color.value),
@@ -167,7 +170,8 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                                 color.animateTo(entry, appColorAnimationSpec)
                             }
                         }
-                        .border(BorderStroke(1.dp, Color(0x80808080)))
+                        .clip(MaterialTheme.shapes.small)
+                        .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.small)
                         .background(Color.White)
                         .background(checkerBoard)
                         .background(entry)
