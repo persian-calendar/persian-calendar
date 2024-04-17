@@ -400,6 +400,21 @@ private fun createItemsList(activity: Activity) = listOf(
         } else "None"
     ),
     Item(
+        "Display Features", run {
+            val configuration = activity.resources.configuration
+            listOfNotNull(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                    "Is Screen Round" to configuration.isScreenRound else null,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    "Is Screen HDR" to configuration.isScreenHdr else null,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                    "Is Screen Wide Color Gamut" to configuration.isScreenWideColorGamut else null,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+                    "Is Night Mode Active" to configuration.isNightModeActive else null,
+            ).joinToString("\n") { (title, value) -> "$title: $value" }
+        }
+    ),
+    Item(
         "Install Source of ${activity.packageName}", runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 activity.packageManager?.getInstallSourceInfo(activity.packageName)?.run {
