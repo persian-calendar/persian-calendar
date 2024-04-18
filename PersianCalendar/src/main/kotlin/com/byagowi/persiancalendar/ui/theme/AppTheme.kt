@@ -70,11 +70,10 @@ fun AppTheme(content: @Composable () -> Unit) {
             LocalContentColor provides contentColor,
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
         ) {
-            // Don't draw behind sides insets in landscape, we don't have any plan for using that space
-            val sidesInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)
             Box(
                 Modifier
-                    .windowInsetsPadding(sidesInsets)
+                    // Don't draw behind sides insets in landscape, we don't have any plan for using that space
+                    .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
                     .clipToBounds()
                     // Don't move this upper to top of the chain so .clipToBounds can be applied to it
                     .background(appBackground()),
