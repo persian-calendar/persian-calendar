@@ -72,7 +72,7 @@ fun AppTheme(content: @Composable () -> Unit) {
         ) {
             Box(
                 Modifier
-                    // Don't draw behind sides insets in landscape, we don't have any plan for using that space
+                    // Don't draw behind sides insets in landscape, we don't have any plan to use it
                     .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
                     .clipToBounds()
                     // Don't move this upper to top of the chain so .clipToBounds can be applied to it
