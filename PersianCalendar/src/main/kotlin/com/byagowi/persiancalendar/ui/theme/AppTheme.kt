@@ -71,8 +71,7 @@ fun AppTheme(content: @Composable () -> Unit) {
             LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
         ) {
             // Don't draw behind sides insets in landscape, we don't have any plan for using that space
-            val sidesInsets =
-                WindowInsets.systemBars.only(WindowInsetsSides.Start + WindowInsetsSides.End)
+            val sidesInsets = WindowInsets.systemBars.only(WindowInsetsSides.Horizontal)
             Box(
                 Modifier
                     .windowInsetsPadding(sidesInsets)
