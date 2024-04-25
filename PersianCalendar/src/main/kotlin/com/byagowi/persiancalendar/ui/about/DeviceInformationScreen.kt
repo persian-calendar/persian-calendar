@@ -414,6 +414,7 @@ private fun createItemsList(activity: Activity) = listOf(
             ).joinToString("\n") { (title, value) -> "$title: $value" }
         }
     ),
+    Item("Resources Configuration", activity.resources.configuration.toString()),
     Item(
         "Install Source of ${activity.packageName}", runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
