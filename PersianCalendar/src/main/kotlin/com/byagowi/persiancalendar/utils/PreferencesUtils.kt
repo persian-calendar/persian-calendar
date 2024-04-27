@@ -33,13 +33,6 @@ import java.util.Locale
 val Context.appPrefs: SharedPreferences
     get() = getSharedPreferences("${packageName}_preferences", Context.MODE_PRIVATE)
 
-//val Context.dataStore by preferencesDataStore(
-//    name = "preferences",
-//    produceMigrations = { context ->
-//        listOf(SharedPreferencesMigration(context, "${context.packageName}_preferences"))
-//    }
-//)
-
 fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) {
     putLong(key, jdn.value)
 }
