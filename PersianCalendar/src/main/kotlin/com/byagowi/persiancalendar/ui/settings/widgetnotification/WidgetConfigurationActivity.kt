@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
@@ -25,9 +26,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -117,6 +124,15 @@ fun WidgetPreview(widgetFactory: (Context, Int, Int) -> RemoteViews) {
     ) {
         val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
         val height = with(LocalDensity.current) { (this@BoxWithConstraints).maxHeight.roundToPx() }
+        val prefs = LocalContext.current.appPrefs
+        var updateCallback by remember { mutableStateOf({}) }
+        DisposableEffect(prefs) {
+            val callback = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+                updateCallback()
+            }
+            prefs.registerOnSharedPreferenceChangeListener(callback)
+            onDispose { prefs.unregisterOnSharedPreferenceChangeListener(callback) }
+        }
         AndroidView(
             factory = { context ->
                 val preview = FrameLayout(context)
@@ -125,9 +141,7 @@ fun WidgetPreview(widgetFactory: (Context, Int, Int) -> RemoteViews) {
                     preview.addView(remoteViews.apply(context.applicationContext, preview))
                 }
                 updateWidget()
-
-                context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
-                    // TODO: Investigate why sometimes gets out of sync
+                updateCallback = {
                     preview.post {
                         preview.removeAllViews()
                         updateWidget()
