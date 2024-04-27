@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -34,7 +33,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -47,6 +45,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -55,7 +54,6 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
-import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
 
@@ -105,39 +103,18 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
 
 @Composable
 private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
-    Column(modifier = Modifier.safeDrawingPadding()) {
-        AndroidView(
-            factory = { context ->
-                val preview = FrameLayout(context)
-
-                val widgetManager = AppWidgetManager.getInstance(context)
-                val (width, height) = widgetManager.getWidgetSize(context.resources, appWidgetId)
-                fun updateWidget() {
-                    preview.addView(
-                        createAgeRemoteViews(context, width, height, appWidgetId)
-                            .apply(context.applicationContext, preview)
-                    )
-                }
-                updateWidget()
-
-                context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
-                    // TODO: Investigate why sometimes gets out of sync
-                    preview.post {
-                        preview.removeAllViews()
-                        updateWidget()
-                    }
-                }
-                preview
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(all = 16.dp),
-        )
+    Column(
+        Modifier
+            .safeDrawingPadding()
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+    ) {
+        WidgetPreview { context, width, height ->
+            createAgeRemoteViews(context, width, height, appWidgetId)
+        }
         Column(
             Modifier
                 .fillMaxSize()
                 .alpha(AppBlendAlpha)
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                 .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
         ) {
             Column(

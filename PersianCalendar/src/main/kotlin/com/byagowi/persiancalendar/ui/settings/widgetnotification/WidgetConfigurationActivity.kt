@@ -1,18 +1,22 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.appwidget.AppWidgetManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.FrameLayout
+import android.widget.RemoteViews
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.rememberScrollState
@@ -71,68 +75,69 @@ class WidgetConfigurationActivity : ComponentActivity() {
 
 @Composable
 private fun WidgetConfigurationContent(finishAndSuccess: () -> Unit) {
-    Column(Modifier.safeDrawingPadding()) {
-        run {
-            val width = with(LocalDensity.current) { 200.dp.roundToPx() }
-            val height = with(LocalDensity.current) { 60.dp.roundToPx() }
-            AndroidView(
-                factory = { context ->
-                    val preview = FrameLayout(context)
-                    fun updateWidget() {
-                        preview.addView(
-                            createSampleRemoteViews(
-                                context, width, height
-                            ).apply(context.applicationContext, preview)
-                        )
-                    }
-                    updateWidget()
-
-                    context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
-                        // TODO: Investigate why sometimes gets out of sync
-                        preview.post {
-                            preview.removeAllViews()
-                            updateWidget()
-                        }
-                    }
-                    preview
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 16.dp),
-            )
-        }
+    Column(
+        Modifier
+            .safeDrawingPadding()
+            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+    ) {
+        WidgetPreview(::createSampleRemoteViews)
         Column(
             Modifier
+                .fillMaxSize()
                 .alpha(AppBlendAlpha)
-                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                .background(MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge),
         ) {
             Column(
                 Modifier
-                    .fillMaxSize()
-                    .background(
-                        MaterialTheme.colorScheme.surface, MaterialTheme.shapes.extraLarge
-                    )
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 16.dp)
             ) {
-                Column(
-                    Modifier
-                        .verticalScroll(rememberScrollState())
-                        .padding(vertical = 16.dp)
+                Button(
+                    onClick = finishAndSuccess,
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterHorizontally)
+                        .padding(bottom = 8.dp)
                 ) {
-                    Button(
-                        onClick = finishAndSuccess,
-                        modifier = Modifier
-                            .align(alignment = Alignment.CenterHorizontally)
-                            .padding(bottom = 8.dp)
-                    ) {
-                        Text(
-                            stringResource(R.string.accept),
-                            modifier = Modifier.padding(horizontal = 8.dp),
-                        )
-                    }
-
-                    WidgetConfiguration()
+                    Text(
+                        stringResource(R.string.accept),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                    )
                 }
+
+                WidgetConfiguration()
             }
         }
+    }
+}
+
+@Composable
+fun WidgetPreview(widgetFactory: (Context, Int, Int) -> RemoteViews) {
+    BoxWithConstraints(
+        Modifier
+            .padding(vertical = 16.dp)
+            .height(68.dp),
+    ) {
+        val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
+        val height = with(LocalDensity.current) { (this@BoxWithConstraints).maxHeight.roundToPx() }
+        AndroidView(
+            factory = { context ->
+                val preview = FrameLayout(context)
+                fun updateWidget() {
+                    val remoteViews = widgetFactory(context, width, height)
+                    preview.addView(remoteViews.apply(context.applicationContext, preview))
+                }
+                updateWidget()
+
+                context.appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
+                    // TODO: Investigate why sometimes gets out of sync
+                    preview.post {
+                        preview.removeAllViews()
+                        updateWidget()
+                    }
+                }
+                preview
+            },
+            modifier = Modifier.fillMaxWidth(),
+        )
     }
 }
