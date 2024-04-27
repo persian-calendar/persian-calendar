@@ -112,6 +112,7 @@
         <activity
             android:name=".ui.settings.widgetnotification.WidgetConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -122,6 +123,7 @@
             android:name=".ui.settings.agewidget.AgeWidgetConfigureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -132,12 +134,14 @@
             android:name=".ui.settings.wallpaper.WallpaperSettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
             android:launchMode="singleTop" />
 
         <activity
             android:name=".ui.settings.wallpaper.DreamSettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
             android:launchMode="singleTop" />
 
         <receiver

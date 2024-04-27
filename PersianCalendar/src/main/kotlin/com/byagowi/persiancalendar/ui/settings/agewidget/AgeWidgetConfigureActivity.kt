@@ -48,7 +48,6 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicC
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
@@ -62,7 +61,6 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
         applyAppLanguage(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        window?.makeWallpaperTransparency()
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.

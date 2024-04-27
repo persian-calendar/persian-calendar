@@ -31,7 +31,6 @@ import com.byagowi.persiancalendar.global.wallpaperDark
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 
@@ -40,7 +39,6 @@ class WallpaperSettingsActivity : ComponentActivity() {
         applyAppLanguage(this)
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        window?.makeWallpaperTransparency()
         setContent {
             BackHandler { finish() }
             SystemTheme {
