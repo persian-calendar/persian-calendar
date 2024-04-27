@@ -32,8 +32,8 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 21
         targetSdk = 34
-        versionCode = 912
-        versionName = "9.1.2"
+        versionCode = 915
+        versionName = "9.1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // It lowers the APK size and prevents crash in AboutScreen in API 21-23
         vectorDrawables.useSupportLibrary = true
