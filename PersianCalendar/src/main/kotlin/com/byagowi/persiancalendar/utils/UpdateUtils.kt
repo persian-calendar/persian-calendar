@@ -179,7 +179,7 @@ fun update(context: Context, updateDate: Boolean) {
     ) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
-    val prefs = context.appPrefs
+    val preferences = context.preferences
 
     // region owghat calculations
     val nowClock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
@@ -195,8 +195,8 @@ fun update(context: Context, updateDate: Boolean) {
     }
     // endregion
 
-    selectedWidgetTextColor = getWidgetTextColor(prefs)
-    selectedWidgetBackgroundColor = getWidgetBackgroundColor(prefs)
+    selectedWidgetTextColor = getWidgetTextColor(preferences)
+    selectedWidgetBackgroundColor = getWidgetBackgroundColor(preferences)
 
     roundPixelSize =
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16 * context.resources.dp
@@ -312,24 +312,24 @@ private fun createRoundedBitmap(
 }
 
 private fun getWidgetBackgroundColor(
-    prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
-) = prefs.getString(key, null)?.let(Color::parseColor)
+    preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
+) = preferences.getString(key, null)?.let(Color::parseColor)
     ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 private fun getWidgetTextColor(
-    prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
-) = prefs.getString(key, null)?.let(Color::parseColor)
+    preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
+) = preferences.getString(key, null)?.let(Color::parseColor)
     ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: Int): RemoteViews {
-    val appPrefs = context.appPrefs
-    val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today()
-    val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
+    val preferences = context.preferences
+    val baseJdn = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today()
+    val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
     val subtitle =
         calculateDaysDifference(context.resources, baseJdn, Jdn.today(), isInWidget = true)
-    val textColor = getWidgetTextColor(appPrefs, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
+    val textColor = getWidgetTextColor(preferences, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(
-        appPrefs, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
+        preferences, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
     )
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
     remoteViews.setRoundBackground(R.id.age_widget_background, width, height, backgroundColor)

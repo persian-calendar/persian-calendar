@@ -25,7 +25,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
 
@@ -69,7 +69,7 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
                             districts[index].first[2/*longitude*/].toDoubleOrNull() ?: 0.0,
                             0.0,
                         )
-                        context.appPrefs.saveLocation(coordinates, districts[index].first[0])
+                        context.preferences.saveLocation(coordinates, districts[index].first[0])
                     }
                     .height(SettingsItemHeight.dp)
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)

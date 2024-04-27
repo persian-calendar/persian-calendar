@@ -68,8 +68,8 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocatio
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -161,7 +161,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
-            context.appPrefs.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
+            context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
             updateStoredPreference(context)
         }
         SettingsSwitch(
@@ -206,7 +206,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
                 },
             ) {
                 val currentSelectionKey =
-                    context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
+                    context.preferences.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
                 (listOf(midnightDefaultTitle(context.resources) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
                     .map {
                         midnightMethodToString(context.resources, it) to it.name
@@ -218,7 +218,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
                             .height(SettingsItemHeight.dp)
                             .clickable {
                                 onDismissRequest()
-                                context.appPrefs.edit {
+                                context.preferences.edit {
                                     if (key == "DEFAULT") remove(PREF_MIDNIGHT_METHOD)
                                     else putString(PREF_MIDNIGHT_METHOD, key)
                                 }
@@ -243,7 +243,7 @@ private fun midnightDefaultTitle(resources: Resources): String {
 }
 
 private fun getMidnightMethodPreferenceSummary(context: Context): String {
-    return context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
+    return context.preferences.getString(PREF_MIDNIGHT_METHOD, null)
         ?.let { midnightMethodToString(context.resources, MidnightMethod.valueOf(it)) }
         ?: midnightDefaultTitle(context.resources)
 }

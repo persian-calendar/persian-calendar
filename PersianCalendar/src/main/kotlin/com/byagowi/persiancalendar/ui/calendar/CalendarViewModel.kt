@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -174,9 +174,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     init {
         viewModelScope.launch {
-            val prefs = application.appPrefs
-            changeSelectedTabIndex(prefs.getInt(LAST_CHOSEN_TAB_KEY, 0))
-            selectedTabIndex.collectLatest { prefs.edit { putInt(LAST_CHOSEN_TAB_KEY, it) } }
+            val preferences = application.preferences
+            changeSelectedTabIndex(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
+            selectedTabIndex.collectLatest { preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it) } }
         }
         viewModelScope.launch {
             selectedTabIndex.combine(selectedDay) { tabIndex, day ->

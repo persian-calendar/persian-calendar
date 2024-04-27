@@ -46,8 +46,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import org.jetbrains.annotations.VisibleForTesting
 
 @Composable
@@ -56,7 +56,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val language by language.collectAsState()
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
-    ) { EventsRepository.getEnabledTypes(context.appPrefs, language).toMutableStateList() }
+    ) { EventsRepository.getEnabledTypes(context.preferences, language).toMutableStateList() }
     AppDialog(title = { Text(stringResource(R.string.events)) }, dismissButton = {
         TextButton(onClick = onDismissRequest) {
             Text(stringResource(R.string.cancel))
@@ -64,7 +64,7 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     }, confirmButton = {
         TextButton(onClick = {
             onDismissRequest()
-            context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
+            context.preferences.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
         }) { Text(stringResource(R.string.accept)) }
     }, onDismissRequest = onDismissRequest
     ) {

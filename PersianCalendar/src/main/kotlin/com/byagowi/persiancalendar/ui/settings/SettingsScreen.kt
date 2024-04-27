@@ -95,8 +95,8 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
@@ -335,7 +335,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     AppDropdownMenuItem(
         text = { Text("Clear preferences store and exit") },
         onClick = {
-            context.appPrefs.edit { clear() }
+            context.preferences.edit { clear() }
             context.getActivity()?.finish()
         },
     )

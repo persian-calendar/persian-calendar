@@ -42,10 +42,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.update
 
 class WidgetConfigurationActivity : ComponentActivity() {
@@ -123,14 +123,14 @@ fun WidgetPreview(widgetFactory: (Context, Int, Int) -> RemoteViews) {
     ) {
         val width = with(LocalDensity.current) { (this@BoxWithConstraints).maxWidth.roundToPx() }
         val height = with(LocalDensity.current) { (this@BoxWithConstraints).maxHeight.roundToPx() }
-        val prefs = LocalContext.current.appPrefs
+        val preferences = LocalContext.current.preferences
         var updateCallback by remember { mutableStateOf({}) }
-        DisposableEffect(prefs) {
+        DisposableEffect(preferences) {
             val callback = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
                 updateCallback()
             }
-            prefs.registerOnSharedPreferenceChangeListener(callback)
-            onDispose { prefs.unregisterOnSharedPreferenceChangeListener(callback) }
+            preferences.registerOnSharedPreferenceChangeListener(callback)
+            onDispose { preferences.unregisterOnSharedPreferenceChangeListener(callback) }
         }
         AndroidView(
             factory = { context ->

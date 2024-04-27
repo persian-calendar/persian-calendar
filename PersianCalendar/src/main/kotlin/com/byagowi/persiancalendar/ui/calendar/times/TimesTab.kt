@@ -48,8 +48,8 @@ import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
+import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.praytimes.PrayTimes
 
 @Composable
@@ -66,7 +66,7 @@ fun TimesTab(
             modifier = Modifier.padding(top = 24.dp),
             header = stringResource(R.string.ask_user_to_set_location),
             discardAction = {
-                context.appPrefs.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+                context.preferences.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
                 viewModel.removeThirdTab()
             },
             acceptAction = navigateToSettingsLocationTab,
@@ -106,7 +106,7 @@ fun TimesTab(
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
             modifier = Modifier.padding(top = 16.dp),
             header = "مایلید برنامه اذان پخش کند؟",
-            discardAction = { context.appPrefs.edit { putString(PREF_ATHAN_ALARM, "") } },
+            discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
             acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
         )
     }
@@ -118,7 +118,7 @@ private fun showEnableAthanForPersianUsers(): Boolean {
     // As the message is only translated in Persian
     if (!(language.isPersian || language.isDari)) return false
     val context = LocalContext.current
-    return PREF_ATHAN_ALARM !in context.appPrefs && PREF_NOTIFICATION_ATHAN !in context.appPrefs
+    return PREF_ATHAN_ALARM !in context.preferences && PREF_NOTIFICATION_ATHAN !in context.preferences
 }
 
 @Composable

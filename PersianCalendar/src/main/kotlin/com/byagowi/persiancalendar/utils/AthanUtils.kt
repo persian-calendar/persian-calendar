@@ -26,7 +26,6 @@ import com.byagowi.persiancalendar.ALARMS_BASE_ID
 import com.byagowi.persiancalendar.ALARM_TAG
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.BROADCAST_ALARM
-import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.ISHA_KEY
@@ -36,7 +35,6 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
-import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -59,10 +57,8 @@ fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
     this.getResourceTypeName(rawRes), this.getResourceEntryName(rawRes)
 )
 
-val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
-
 fun getAthanUri(context: Context): Uri =
-    (context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }
+    (context.preferences.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }
         ?: context.resources.getRawUri(R.raw.special)).toUri()
 
 private var lastAthanKey = ""
@@ -115,7 +111,7 @@ fun startAthanActivity(context: Context, prayerKey: String?) {
 
 fun getEnabledAlarms(context: Context): Set<String> {
     if (coordinates.value == null) return emptySet()
-    return (context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
+    return (context.preferences.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
         .splitFilterNotEmpty(",")
         .toSet()
 }
@@ -123,7 +119,7 @@ fun getEnabledAlarms(context: Context): Set<String> {
 fun scheduleAlarms(context: Context) {
     val enabledAlarms = getEnabledAlarms(context).takeIf { it.isNotEmpty() } ?: return
     val athanGap =
-        ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
+        ((context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
             ?: .0) * 60.0 * 1000.0).toLong()
 
     val prayTimes = coordinates.value?.calculatePrayTimes() ?: return

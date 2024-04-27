@@ -79,8 +79,8 @@ import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -122,7 +122,7 @@ fun CompassScreen(
             isTimeShiftAnimate = false
         }
     }
-    val prefs = remember { context.appPrefs }
+    val preferences = remember { context.preferences }
     val cityName by cityName.collectAsState()
     val coordinates by coordinates.collectAsState()
     val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
@@ -198,10 +198,10 @@ fun CompassScreen(
                         } else isTimeShiftAnimate = true
                     }
                     var showTrueNorth by rememberSaveable {
-                        mutableStateOf(prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
+                        mutableStateOf(preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
                     }
                     var showQibla by rememberSaveable {
-                        mutableStateOf(prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
+                        mutableStateOf(preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
                     }
                     if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
@@ -216,7 +216,7 @@ fun CompassScreen(
                             showQibla = it
                             closeMenu()
                             compassView?.isShowQibla = it
-                            prefs.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
+                            preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
                         if (BuildConfig.DEVELOPMENT) {
                             AppDropdownMenuItem(

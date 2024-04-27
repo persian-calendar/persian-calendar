@@ -58,7 +58,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -69,7 +69,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
     val color = rememberSaveable(
         saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
     ) {
-        val initialColor = context.appPrefs.getString(key, null)?.toColorInt()
+        val initialColor = context.preferences.getString(key, null)?.toColorInt()
                 ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
                 else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
         Animatable(Color(initialColor))
@@ -88,7 +88,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
                 val colorResult = if (isBackgroundPick) "#%08X".format(
                     Locale.ENGLISH, 0xFFFFFFFF and color.value.toArgb().toLong()
                 ) else "#%06X".format(Locale.ENGLISH, 0xFFFFFF and color.value.toArgb())
-                context.appPrefs.edit { putString(key, colorResult) }
+                context.preferences.edit { putString(key, colorResult) }
             }) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {

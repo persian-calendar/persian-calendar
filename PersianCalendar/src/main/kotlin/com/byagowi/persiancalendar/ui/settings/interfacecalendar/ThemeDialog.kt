@@ -45,7 +45,7 @@ import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
@@ -88,7 +88,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     .height(SettingsItemHeight.dp)
                     .clickable {
                         onDismissRequest()
-                        context.appPrefs.edit {
+                        context.preferences.edit {
                             putString(PREF_THEME, entry.key)
                             // Consider returning to system default as some sort of theme reset
                             if (theme != Theme.SYSTEM_DEFAULT && entry == Theme.SYSTEM_DEFAULT) {
@@ -115,7 +115,9 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                                     selected = selectedTheme == entry,
                                     enabled = !disabledRadio,
                                     onClick = {
-                                        context.appPrefs.edit { putString(preferenceKey, entry.key) }
+                                        context.preferences.edit {
+                                            putString(preferenceKey, entry.key)
+                                        }
                                     },
                                     modifier = if (disabledRadio || entry == Theme.SYSTEM_DEFAULT) invisible else Modifier,
                                 )
@@ -138,7 +140,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             SwitchWithLabel(
                 label = stringResource(R.string.color_gradient),
                 checked = isGradient,
-            ) { context.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) } }
+            ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) } }
         }
         AnimatedVisibility(
             visible = showMore && anyThemeIsDynamicColors,
@@ -148,7 +150,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             SwitchWithLabel(
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
-            ) { context.appPrefs.edit { putBoolean(PREF_RED_HOLIDAYS, !isRedHolidays) } }
+            ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, !isRedHolidays) } }
         }
     }
 }

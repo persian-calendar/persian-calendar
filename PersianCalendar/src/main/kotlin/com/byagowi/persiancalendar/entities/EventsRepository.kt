@@ -28,8 +28,8 @@ class EventsRepository(
     private val language: Language
 ) {
     constructor(
-        prefs: SharedPreferences, language: Language,
-        enabledTypes: Set<String> = getEnabledTypes(prefs, language)
+        preferences: SharedPreferences, language: Language,
+        enabledTypes: Set<String> = getEnabledTypes(preferences, language)
     ) : this(enabledTypes, language)
 
     val afghanistanHolidays = afghanistanHolidaysKey in enabledTypes
@@ -192,8 +192,8 @@ class EventsRepository(
         val afghanistanDefault = setOf(afghanistanHolidaysKey)
         val nepalDefault = setOf(nepalHolidaysKey)
 
-        fun getEnabledTypes(prefs: SharedPreferences, language: Language): Set<String> {
-            return prefs.getStringSet(PREF_HOLIDAY_TYPES, null)
+        fun getEnabledTypes(preferences: SharedPreferences, language: Language): Set<String> {
+            return preferences.getStringSet(PREF_HOLIDAY_TYPES, null)
                 ?: if (language.isIranExclusive) iranDefault else emptySet()
         }
     }

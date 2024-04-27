@@ -20,7 +20,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
 fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
@@ -31,14 +31,14 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
             context, Manifest.permission.READ_CALENDAR
         ) == PackageManager.PERMISSION_GRANTED
     ) {
-        context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) }
+        context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) }
         return setGranted(true)
     }
 
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
+        context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
         updateStoredPreference(context)
         setGranted(isGranted)
     }
@@ -57,7 +57,7 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
         },
         dismissButton = {
             TextButton(onClick = {
-                context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
                 setGranted(false)
             }) { Text(stringResource(R.string.cancel)) }
         },

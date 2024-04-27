@@ -48,11 +48,11 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicC
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
 import com.byagowi.persiancalendar.utils.getJdnOrNull
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
 
@@ -83,10 +83,13 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
             finish()
         }
 
-        val appPrefs = appPrefs
+        val preferences = preferences
         // Put today's jdn if it wasn't set by the dialog, maybe a day counter is meant
-        if (appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId) == null)
-            appPrefs.edit { putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today()) }
+        if (preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId) == null) {
+            preferences.edit {
+                putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today())
+            }
+        }
 
         setContent {
             SystemTheme { AgeWidgetConfigureContent(appWidgetId, ::confirm) }
@@ -132,7 +135,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
 
                 val context = LocalContext.current
                 val initialTitle = remember {
-                    context.appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
+                    context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
                 }
                 var text by rememberSaveable { mutableStateOf(initialTitle) }
                 OutlinedTextField(
@@ -142,7 +145,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                     value = text,
                     onValueChange = {
                         text = it
-                        context.appPrefs.edit {
+                        context.preferences.edit {
                             putString(
                                 PREF_TITLE_AGE_WIDGET + appWidgetId,
                                 text
@@ -154,10 +157,10 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
 
                 SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    val jdn = context.appPrefs.getJdnOrNull(key) ?: Jdn.today()
+                    val jdn = context.preferences.getJdnOrNull(key) ?: Jdn.today()
                     DatePickerDialog(
                         initialJdn = jdn,
-                        onSuccess = { context.appPrefs.edit { putJdn(key, it) } },
+                        onSuccess = { context.preferences.edit { putJdn(key, it) } },
                         onDismissRequest = onDismissRequest,
                     )
                 }

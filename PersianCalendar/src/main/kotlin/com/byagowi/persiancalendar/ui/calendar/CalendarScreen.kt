@@ -151,7 +151,6 @@ import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -164,6 +163,7 @@ import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.update
@@ -231,7 +231,12 @@ fun CalendarScreen(
         // Refresh the calendar on resume
         LaunchedEffect(Unit) {
             viewModel.refreshCalendar()
-            context.appPrefs.edit { putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE) }
+            context.preferences.edit {
+                putInt(
+                    PREF_LAST_APP_VISIT_VERSION,
+                    BuildConfig.VERSION_CODE
+                )
+            }
         }
         val isLandscape =
             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -331,13 +336,13 @@ const val EVENTS_TAB = 1
 const val TIMES_TAB = 2
 
 private fun enableTimesTab(context: Context): Boolean {
-    val appPrefs = context.appPrefs
+    val preferences = context.preferences
     return coordinates.value != null || // if coordinates is set, should be shown
             (language.value.isPersian && // The placeholder isn't translated to other languages
                     // The user is already dismissed the third tab
-                    !appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) &&
+                    !preferences.getBoolean(PREF_DISABLE_OWGHAT, false) &&
                     // Try to not show the placeholder to established users
-                    PREF_APP_LANGUAGE !in appPrefs)
+                    PREF_APP_LANGUAGE !in preferences)
 }
 
 private fun bringDate(
@@ -472,12 +477,12 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
         val context = LocalContext.current
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.appPrefs
+            ) != PackageManager.PERMISSION_GRANTED && PREF_NOTIFY_IGNORED !in context.preferences
         ) {
             val launcher = rememberLauncherForActivityResult(
                 ActivityResultContracts.RequestPermission()
             ) { isGranted ->
-                context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+                context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
                 updateStoredPreference(context)
                 if (isGranted) update(context, updateDate = true)
             }
@@ -485,14 +490,14 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 header = stringResource(R.string.enable_notification),
                 acceptButton = stringResource(R.string.yes),
                 discardAction = {
-                    context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
+                    context.preferences.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
                 },
             ) { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }
         } else if (showEncourageToExemptFromBatteryOptimizations()) {
             fun ignore() {
-                val prefs = context.appPrefs
-                prefs.edit {
-                    val current = prefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
+                val preferences = context.preferences
+                preferences.edit {
+                    val current = preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0)
                     putInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, current + 1)
                 }
             }
@@ -528,7 +533,7 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val context = LocalContext.current
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
-    if (context.appPrefs.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
+    if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     val alarmManager = context.getSystemService<AlarmManager>()
     if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
         runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
@@ -861,7 +866,7 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
                 AppDropdownMenuRadioItem(
                     stringResource(it?.title ?: R.string.none), it == secondaryCalendar
                 ) { _ ->
-                    context.appPrefs.edit {
+                    context.preferences.edit {
                         if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
                         else {
                             putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)

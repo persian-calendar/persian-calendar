@@ -42,7 +42,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
@@ -133,7 +133,7 @@ fun SettingsSingleSelect(
     var summary by remember {
         mutableStateOf(
             if (summaryResId == null) entries[entryValues.indexOf(
-                context.appPrefs.getString(key, null) ?: defaultValue
+                context.preferences.getString(key, null) ?: defaultValue
             )] else context.getString(summaryResId)
         )
     }
@@ -146,7 +146,7 @@ fun SettingsSingleSelect(
             onDismissRequest = onDismissRequest,
         ) {
             val currentValue = remember {
-                context.appPrefs.getString(key, null) ?: defaultValue
+                context.preferences.getString(key, null) ?: defaultValue
             }
             entries.zip(entryValues) { entry, entryValue ->
                 Row(
@@ -156,7 +156,7 @@ fun SettingsSingleSelect(
                         .height(SettingsItemHeight.dp)
                         .clickable {
                             onDismissRequest()
-                            context.appPrefs.edit { putString(key, entryValue) }
+                            context.preferences.edit { putString(key, entryValue) }
                             if (summaryResId == null) summary = entry
                         }
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp),
@@ -185,7 +185,7 @@ fun SettingsMultiSelect(
         val result = rememberSaveable(
             saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
         ) {
-            (context.appPrefs.getStringSet(key, null) ?: defaultValue).toList()
+            (context.preferences.getStringSet(key, null) ?: defaultValue).toList()
                 .toMutableStateList()
         }
         AppDialog(
@@ -197,7 +197,7 @@ fun SettingsMultiSelect(
             confirmButton = {
                 TextButton(onClick = {
                     onDismissRequest()
-                    context.appPrefs.edit { putStringSet(key, result.toSet()) }
+                    context.preferences.edit { putStringSet(key, result.toSet()) }
                 }) { Text(stringResource(R.string.accept)) }
             },
         ) {
@@ -230,10 +230,17 @@ fun SettingsSwitchWithInnerState(
     summary: String? = null,
 ) {
     val context = LocalContext.current
-    var currentValue by remember { mutableStateOf(context.appPrefs.getBoolean(key, defaultValue)) }
+    var currentValue by remember {
+        mutableStateOf(
+            context.preferences.getBoolean(
+                key,
+                defaultValue
+            )
+        )
+    }
     val toggle = {
         currentValue = !currentValue
-        context.appPrefs.edit { putBoolean(key, currentValue) }
+        context.preferences.edit { putBoolean(key, currentValue) }
     }
     SettingsSwitchLayout(toggle, title, summary, currentValue)
 }
@@ -249,7 +256,7 @@ fun SettingsSwitch(
     val context = LocalContext.current
     val toggle = {
         val newValue = onBeforeToggle(!value)
-        if (value != newValue) context.appPrefs.edit { putBoolean(key, newValue) }
+        if (value != newValue) context.preferences.edit { putBoolean(key, newValue) }
     }
     SettingsSwitchLayout(toggle, title, summary, value)
 }

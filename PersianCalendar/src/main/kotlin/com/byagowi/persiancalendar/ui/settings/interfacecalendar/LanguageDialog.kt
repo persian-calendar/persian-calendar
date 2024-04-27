@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveLanguage
 import java.util.TimeZone
 
@@ -57,7 +57,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
                     .fillMaxWidth()
                     .height(SettingsItemHeight.dp)
                     .clickable {
-                        if (item != currentLanguage) context.appPrefs.saveLanguage(item)
+                        if (item != currentLanguage) context.preferences.saveLanguage(item)
                         onDismissRequest()
                     }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)

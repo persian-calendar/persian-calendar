@@ -41,10 +41,10 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveLocation
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinates
@@ -190,7 +190,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         LaunchedEffect(coord.latitude, coord.longitude) {
             // Don't set elevation/altitude even from GPS, See #1011
             val coordinate = Coordinates(coord.latitude, coord.longitude, .0)
-            context.appPrefs.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
+            context.preferences.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
         }
     }
 

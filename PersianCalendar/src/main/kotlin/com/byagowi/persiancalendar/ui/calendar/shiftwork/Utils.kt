@@ -8,7 +8,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 
 fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
@@ -16,7 +16,7 @@ fun saveShiftWorkState(context: Context, viewModel: ShiftWorkViewModel) {
         "${it.type.replace("=", "").replace(",", "")}=${it.length}"
     }
 
-    context.appPrefs.edit {
+    context.preferences.edit {
         if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
         else putJdn(PREF_SHIFT_WORK_STARTING_JDN, viewModel.startingDate.value)
         putString(PREF_SHIFT_WORK_SETTING, result)

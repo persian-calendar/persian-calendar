@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import java.util.concurrent.TimeUnit
 
@@ -91,6 +92,7 @@ class AthanActivity : ComponentActivity() {
 
         getSystemService<AudioManager>()?.let { audioManager ->
             originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+            val athanVolume = preferences.athanVolume
             if (athanVolume != DEFAULT_ATHAN_VOLUME) // Don't change alarm volume if isn't set in-app
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanVolume, 0)
             // Mute if system alarm is set to lowest, ringer mode is silent/vibration and it isn't Fajr

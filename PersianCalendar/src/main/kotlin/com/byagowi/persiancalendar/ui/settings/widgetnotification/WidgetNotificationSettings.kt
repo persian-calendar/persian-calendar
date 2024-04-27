@@ -53,7 +53,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.utils.QUARTER_SECOND_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
@@ -75,7 +75,7 @@ fun ColumnScope.NotificationSettings() {
     run {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted -> context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
+        ) { isGranted -> context.preferences.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) } }
         SettingsSwitch(
             key = PREF_NOTIFY_DATE,
             value = isNotifyDate,
@@ -194,10 +194,10 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
         @OptIn(FlowPreview::class)
         LaunchedEffect(Unit) {
             widgetTransparencyFlow
-                // Debounce to not spam prefs much but specially is needed for
+                // Debounce to not spam preferences much but specially is needed for
                 // map widget as its expensive calculations
                 .debounce(QUARTER_SECOND_IN_MILLIS)
-                .collect { context.appPrefs.edit { putFloat(PREF_WIDGET_TRANSPARENCY, it) } }
+                .collect { context.preferences.edit { putFloat(PREF_WIDGET_TRANSPARENCY, it) } }
         }
         val widgetTransparency by widgetTransparencyFlow.collectAsState()
         SettingsSlider(

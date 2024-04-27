@@ -10,8 +10,8 @@ import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
@@ -20,21 +20,21 @@ class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChang
     override fun onCreate() {
         super.onCreate()
         initGlobal(applicationContext) // mostly used for things should be provided in locale level
-        appPrefs.registerOnSharedPreferenceChangeListener(this)
+        preferences.registerOnSharedPreferenceChangeListener(this)
         update(this, true)
     }
 
-    override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
         when (key) {
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET -> {
-                appPrefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
+                this.preferences.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
             }
 
-            PREF_PRAY_TIME_METHOD -> appPrefs.edit { remove(PREF_MIDNIGHT_METHOD) }
+            PREF_PRAY_TIME_METHOD -> this.preferences.edit { remove(PREF_MIDNIGHT_METHOD) }
             PREF_NOTIFY_DATE -> {
-                if (!appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
+                if (!this.preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
                     stopService(Intent(this, ApplicationService::class.java))
                     startWorker(applicationContext)
                 }

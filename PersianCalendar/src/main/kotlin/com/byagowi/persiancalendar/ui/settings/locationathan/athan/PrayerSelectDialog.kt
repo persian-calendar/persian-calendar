@@ -27,8 +27,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getPrayTimeName
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.utils.startAthan
 
@@ -38,7 +38,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
     val alarms = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) {
-        (context.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
+        (context.preferences.getString(PREF_ATHAN_ALARM, null) ?: "")
             .splitFilterNotEmpty(",").toMutableStateList()
     }
     AppDialog(
@@ -47,7 +47,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
         confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
-                context.appPrefs.edit { putString(PREF_ATHAN_ALARM, alarms.joinToString(",")) }
+                context.preferences.edit { putString(PREF_ATHAN_ALARM, alarms.joinToString(",")) }
             }) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {

@@ -83,12 +83,12 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -287,13 +287,12 @@ fun initGlobal(context: Context) {
 
 fun configureCalendarsAndLoadEvents(context: Context) {
     debugLog("Utils: configureCalendarsAndLoadEvents is called")
-    val appPrefs = context.appPrefs
+    val preferences = context.preferences
 
-    IslamicDate.islamicOffset = if (appPrefs.isIslamicOffsetExpired) 0 else appPrefs.getString(
-        PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET
-    )?.toIntOrNull() ?: 0
+    IslamicDate.islamicOffset = if (preferences.isIslamicOffsetExpired) 0
+    else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
-    eventsRepository = EventsRepository(appPrefs, language.value)
+    eventsRepository = EventsRepository(preferences, language.value)
     isIranHolidaysEnabled = eventsRepository?.iranHolidays ?: false
 }
 
@@ -340,106 +339,110 @@ fun loadLanguageResources(resources: Resources) {
 
 fun updateStoredPreference(context: Context) {
     debugLog("Utils: updateStoredPreference is called")
-    val prefs = context.appPrefs
+    val preferences = context.preferences
     val language = language.value
 
-    language_.value = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
-        ?: Language.getPreferredDefaultLanguage(context)
+    language_.value = preferences.getString(PREF_APP_LANGUAGE, null)
+        ?.let(Language::valueOfLanguageCode) ?: Language.getPreferredDefaultLanguage(context)
     theme_.value = run {
-        val key = prefs.getString(PREF_THEME, null)
+        val key = preferences.getString(PREF_THEME, null)
         Theme.entries.find { it.key == key }
     } ?: Theme.SYSTEM_DEFAULT
     systemDarkTheme_.value = run {
-        val key = prefs.getString(PREF_SYSTEM_DARK_THEME, null)
+        val key = preferences.getString(PREF_SYSTEM_DARK_THEME, null)
         Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
     } ?: Theme.DARK
     systemLightTheme_.value = run {
-        val key = prefs.getString(PREF_SYSTEM_LIGHT_THEME, null)
+        val key = preferences.getString(PREF_SYSTEM_LIGHT_THEME, null)
         Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
     } ?: Theme.LIGHT
-    isGradient_.value = prefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
-    isRedHolidays_.value = prefs.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
+    isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+    isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     alternativeGregorianMonths = when {
-        language.isPersian -> prefs.getBoolean(
+        language.isPersian -> preferences.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
         )
 
-        language.isArabic -> prefs.getBoolean(
+        language.isArabic -> preferences.getBoolean(
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
         )
 
         else -> false
     }
 
-    prefersWidgetsDynamicColors_.value = theme.value.isDynamicColors &&
-            prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
+    prefersWidgetsDynamicColors_.value = theme.value.isDynamicColors && preferences.getBoolean(
+        PREF_WIDGETS_PREFER_SYSTEM_COLORS,
+        true
+    )
 
-    preferredDigits = if (!prefs.getBoolean(
+    preferredDigits = if (!preferences.getBoolean(
             PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS
         ) || !language.canHaveLocalDigits
     ) Language.ARABIC_DIGITS
     else language.preferredDigits
 
-    clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
-    isForcedIranTimeEnabled_.value = language.showIranTimeOption && prefs.getBoolean(
+    clockIn24 = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
+    isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
-    isNotifyDateOnLockScreen_.value = prefs.getBoolean(
+    isNotifyDateOnLockScreen_.value = preferences.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     )
-    isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
-    isNotifyDate_.value = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
-    notificationAthan_.value = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
+    isWidgetClock = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
+    isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+    notificationAthan_.value = preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
     ascendingAthan_.value =
-        prefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
-    isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
+        preferences.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
+    isCenterAlignWidgets = preferences.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
     calculationMethod_.value = CalculationMethod.valueOf(
-        prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
+        preferences.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
     )
-    asrMethod_.value = if (calculationMethod.value.isJafari || !prefs.getBoolean(
+    asrMethod_.value = if (calculationMethod.value.isJafari || !preferences.getBoolean(
             PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
-    midnightMethod =
-        prefs.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
+    midnightMethod = preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
             ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
             ?: calculationMethod.value.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
         if (coordinates.value?.enableHighLatitudesConfiguration != true) DEFAULT_HIGH_LATITUDES_METHOD
-        else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
+        else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)
+            ?: DEFAULT_HIGH_LATITUDES_METHOD
     )
-    athanSoundName_.value = prefs.getString(PREF_ATHAN_NAME, null)
+    athanSoundName_.value = preferences.getString(PREF_ATHAN_NAME, null)
 
-    dreamNoise_.value = prefs.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE)
-    wallpaperDark_.value = prefs.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
+    dreamNoise_.value = preferences.getBoolean(PREF_DREAM_NOISE, DEFAULT_DREAM_NOISE)
+    wallpaperDark_.value = preferences.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
     wallpaperAutomatic_.value =
-        prefs.getBoolean(PREF_WALLPAPER_AUTOMATIC, DEFAULT_WALLPAPER_AUTOMATIC)
+        preferences.getBoolean(PREF_WALLPAPER_AUTOMATIC, DEFAULT_WALLPAPER_AUTOMATIC)
 
-    val storedCity = prefs.getString(PREF_SELECTED_LOCATION, null)
+    val storedCity = preferences.getString(PREF_SELECTED_LOCATION, null)
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
     coordinates_.value = storedCity?.coordinates ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).map {
-            prefs.getString(it, null)?.toDoubleOrNull() ?: .0
+            preferences.getString(it, null)?.toDoubleOrNull() ?: .0
         }.takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
             ?.let { (lat, lng, alt) -> Coordinates(lat, lng, alt) }
     }
-    cityName_.value = storedCity?.let(language::getCityName)
-        ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
+    cityName_.value = storedCity?.let(language::getCityName) ?: preferences.getString(
+        PREF_GEOCODED_CITYNAME,
+        null
+    )?.takeIf { it.isNotEmpty() }
 
     widgetTransparency_.value =
-        prefs.getFloat(PREF_WIDGET_TRANSPARENCY, DEFAULT_WIDGET_TRANSPARENCY)
+        preferences.getFloat(PREF_WIDGET_TRANSPARENCY, DEFAULT_WIDGET_TRANSPARENCY)
 
     runCatching {
         val mainCalendar = Calendar.valueOf(
-            prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar
+            preferences.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar
         )
-        val otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null)
+        val otherCalendars = (preferences.getString(PREF_OTHER_CALENDARS_KEY, null)
             ?: language.defaultOtherCalendars).splitFilterNotEmpty(",").map(Calendar::valueOf)
         enabledCalendars = (listOf(mainCalendar) + otherCalendars).distinct()
-        secondaryCalendarEnabled = prefs.getBoolean(
+        secondaryCalendarEnabled = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
         )
     }.onFailure(logException).onFailure {
@@ -448,31 +451,33 @@ fun updateStoredPreference(context: Context) {
         secondaryCalendarEnabled = false
     }.getOrNull().debugAssertNotNull
 
-    isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
+    isShowWeekOfYearEnabled = preferences.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
-        (prefs.getString(PREF_WEEK_START, null) ?: language.defaultWeekStart).toIntOrNull() ?: 0
+        (preferences.getString(PREF_WEEK_START, null) ?: language.defaultWeekStart).toIntOrNull()
+            ?: 0
 
     weekEnds = BooleanArray(7)
-    (prefs.getStringSet(PREF_WEEK_ENDS, null)
+    (preferences.getStringSet(PREF_WEEK_ENDS, null)
         ?: language.defaultWeekEnds).mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
 
     isShowDeviceCalendarEvents_.value =
-        prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
+        preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     whatToShowOnWidgets =
-        prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
+        preferences.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
-    isAstronomicalExtraFeaturesEnabled = prefs.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
-    numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
+    isAstronomicalExtraFeaturesEnabled = preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
+    numericalDatePreferred = preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)
 
-    shiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "").splitFilterNotEmpty(",")
+    shiftWorks =
+        (preferences.getString(PREF_SHIFT_WORK_SETTING, null) ?: "").splitFilterNotEmpty(",")
         .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
         .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
     shiftWorkPeriod = shiftWorks.sumOf { it.length }
-    shiftWorkStartingJdn = prefs.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
-    shiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
+    shiftWorkStartingJdn = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
+    shiftWorkRecurs = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
 
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
         it.isEnabled && it.isTouchExplorationEnabled

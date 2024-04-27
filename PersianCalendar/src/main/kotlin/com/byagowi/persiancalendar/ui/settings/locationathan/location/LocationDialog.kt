@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.saveCity
 import com.byagowi.persiancalendar.utils.sortCityNames
 
@@ -61,7 +61,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
                     .fillMaxWidth()
                     .clickable {
                         onDismissRequest()
-                        context.appPrefs.saveCity(city)
+                        context.preferences.saveCity(city)
                     }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp),
             ) {

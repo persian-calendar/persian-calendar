@@ -119,7 +119,7 @@ import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -457,7 +457,8 @@ private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
     Crossfade(
         label = "dark mode toggle",
         targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
-        modifier = Modifier.semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+        modifier = Modifier
+            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
             .padding(32.dp)
             .align(Alignment.BottomEnd)
             .clickable(
@@ -466,7 +467,7 @@ private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
                 onClick = {
                     coroutineScope.launch { delay(THREE_SECONDS_AND_HALF_IN_MILLIS) }
                     val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme
-                    context.appPrefs.edit {
+                    context.preferences.edit {
                         putString(PREF_THEME, systemTheme.value.key)
                         putString(
                             if (theme.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,

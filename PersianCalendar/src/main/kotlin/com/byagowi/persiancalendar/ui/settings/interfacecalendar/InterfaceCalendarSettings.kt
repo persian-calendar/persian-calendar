@@ -43,9 +43,9 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
+import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
 fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
@@ -53,7 +53,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     val context = LocalContext.current
     run {
         val themeDisplayName = stringResource(run {
-            val currentKey = context.appPrefs.getString(PREF_THEME, null)
+            val currentKey = context.preferences.getString(PREF_THEME, null)
             Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
         }.title)
         SettingsClickable(
@@ -136,8 +136,8 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     )
     run {
         LaunchedEffect(Unit) {
-            val appPrefs = context.appPrefs
-            if (PREF_ISLAMIC_OFFSET in appPrefs && appPrefs.isIslamicOffsetExpired) appPrefs.edit {
+            val preferences = context.preferences
+            if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
                 putString(
                     PREF_ISLAMIC_OFFSET,
                     DEFAULT_ISLAMIC_OFFSET

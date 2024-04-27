@@ -44,7 +44,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.preferences
 import kotlin.random.Random
 
 @Composable
@@ -74,7 +74,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     animator.interpolator = AccelerateDecelerateInterpolator()
                     animator.addUpdateListener { view.rotation = it.animatedFraction * 360f }
                     if (Random.nextBoolean()) animator.start() else animator.reverse()
-                } else context.appPrefs.edit {
+                } else context.preferences.edit {
                     putString(PREF_MAIN_CALENDAR_KEY, result.first())
                     putString(PREF_OTHER_CALENDARS_KEY, result.drop(1).joinToString(","))
                 }

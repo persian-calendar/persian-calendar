@@ -54,10 +54,10 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 
 @Composable
@@ -213,18 +213,18 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
         }
 
         val language by language.collectAsState()
-        if (PREF_HOLIDAY_TYPES !in context.appPrefs && language.isIranExclusive) {
+        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
             Spacer(modifier = Modifier.height(16.dp))
             EncourageActionLayout(
                 header = stringResource(R.string.warn_if_events_not_set),
                 discardAction = {
-                    context.appPrefs.edit {
+                    context.preferences.edit {
                         putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
                     }
                 },
                 acceptAction = navigateToHolidaysSettings,
             )
-        } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.appPrefs) {
+        } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
             var showDialog by remember { mutableStateOf(false) }
             if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
@@ -232,7 +232,7 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
             EncourageActionLayout(
                 header = stringResource(R.string.ask_for_calendar_permission),
                 discardAction = {
-                    context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                    context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
                 },
                 acceptButton = stringResource(R.string.yes),
                 acceptAction = { showDialog = true },

@@ -20,16 +20,16 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    var volume by rememberSaveable { mutableIntStateOf(context.athanVolume) }
+    var volume by rememberSaveable { mutableIntStateOf(context.preferences.athanVolume) }
 
     val audioManager =
         remember { context.getSystemService<AudioManager>() } ?: return onDismissRequest()
@@ -59,7 +59,7 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
         confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
-                context.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
+                context.preferences.edit { putInt(PREF_ATHAN_VOLUME, volume) }
             }) { Text(stringResource(R.string.accept)) }
         },
         text = {
