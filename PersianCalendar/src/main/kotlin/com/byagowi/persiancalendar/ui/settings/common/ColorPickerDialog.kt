@@ -70,8 +70,8 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
     ) {
         val initialColor = context.preferences.getString(key, null)?.toColorInt()
-                ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-                else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+            ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+            else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
         Animatable(Color(initialColor))
     }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

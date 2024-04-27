@@ -405,8 +405,8 @@ fun updateStoredPreference(context: Context) {
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
     midnightMethod = preferences.getString(PREF_MIDNIGHT_METHOD, null)?.let(MidnightMethod::valueOf)
-            ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
-            ?: calculationMethod.value.defaultMidnight
+        ?.takeIf { !it.isJafariOnly || calculationMethod.value.isJafari }
+        ?: calculationMethod.value.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
         if (coordinates.value?.enableHighLatitudesConfiguration != true) DEFAULT_HIGH_LATITUDES_METHOD
         else preferences.getString(PREF_HIGH_LATITUDES_METHOD, null)
@@ -473,8 +473,8 @@ fun updateStoredPreference(context: Context) {
 
     shiftWorks =
         (preferences.getString(PREF_SHIFT_WORK_SETTING, null) ?: "").splitFilterNotEmpty(",")
-        .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
-        .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
+            .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
+            .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
     shiftWorkPeriod = shiftWorks.sumOf { it.length }
     shiftWorkStartingJdn = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
     shiftWorkRecurs = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
