@@ -40,20 +40,11 @@ android {
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitInfo")
     }
 
-    signingConfigs {
-        create("nightly") {
-            storeFile = rootProject.file("nightly.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-        }
-    }
-
     testOptions.unitTests.all { it.useJUnitPlatform() }
 
     buildTypes {
         create("nightly") {
-            signingConfig = signingConfigs.getByName("nightly")
+            signingConfig = signingConfigs["debug"]
             versionNameSuffix = "-${defaultConfig.versionName}-$gitInfo-nightly"
             applicationIdSuffix = ".nightly"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
