@@ -1,8 +1,4 @@
-import org.codehaus.groovy.runtime.ProcessGroovyMethods
-
 operator fun File.div(child: String): File = File(this, child)
-fun String.execute(): Process = ProcessGroovyMethods.execute(this)
-val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
 plugins {
     alias(libs.plugins.com.android.application)
@@ -175,15 +171,3 @@ dependencies {
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
-
-// Can be called like: ./gradlew mergeWeblate
-tasks.register("mergeWeblate") {
-    doLast {
-        val weblateRepository = "https://hosted.weblate.org/git/persian-calendar/persian-calendar/"
-        listOf(
-            "git remote add weblate $weblateRepository",
-            "git remote update weblate",
-            "git merge weblate/main",
-        ).forEach { println(it.execute().text) }
-    }
-}
