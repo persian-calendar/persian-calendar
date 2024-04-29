@@ -139,7 +139,6 @@ fun CompassScreen(
         it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
     }
     var isStopped by remember { mutableStateOf(false) }
-    // Ugly, for now
     var compassView by remember { mutableStateOf<CompassView?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -277,13 +276,11 @@ fun CompassScreen(
         ) {
             val surfaceColor = MaterialTheme.colorScheme.surface
             AndroidView(
-                factory = {
-                    val root = CompassView(it)
-                    root.setSurfaceColor(surfaceColor.toArgb())
-                    compassView = root
-                    root
+                factory = { CompassView(it).also { view -> compassView = view } },
+                update = {
+                    it.setSurfaceColor(surfaceColor.toArgb())
+                    it.setTime(time)
                 },
-                update = { it.setTime(time) },
             )
             AnimatedVisibility(
                 visible = isSliderShown,
