@@ -77,7 +77,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 fun SettingsHorizontalDivider() {
     val color by animateColorAsState(
         MaterialTheme.colorScheme.outlineVariant,
-        appColorAnimationSpec,
+        animationSpec = appColorAnimationSpec,
         label = "divider color"
     )
     HorizontalDivider(Modifier.padding(horizontal = 8.dp), color = color)

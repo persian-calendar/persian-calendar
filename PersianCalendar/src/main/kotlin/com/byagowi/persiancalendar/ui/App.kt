@@ -153,7 +153,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         drawerContent = {
             val secondaryContainer by animateColorAsState(
                 MaterialTheme.colorScheme.secondaryContainer,
-                appColorAnimationSpec,
+                animationSpec = appColorAnimationSpec,
                 label = "secondary container"
             )
             ModalDrawerSheet(
@@ -482,6 +482,7 @@ private fun BoxScope.DrawerDarkModeToggle() {
             it, stringResource(if (theme.isDark) R.string.theme_dark else R.string.theme_light),
             tint = animateColorAsState(
                 MaterialTheme.colorScheme.onSurface.copy(if (theme.isDark) .9f else .6f),
+                animationSpec = appColorAnimationSpec,
                 label = "icon tint",
             ).value,
         )
