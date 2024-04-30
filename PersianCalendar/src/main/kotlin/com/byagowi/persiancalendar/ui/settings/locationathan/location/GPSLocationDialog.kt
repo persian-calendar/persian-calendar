@@ -206,14 +206,16 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         },
     ) {
         val textModifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-        val coord =
-            coordinates ?: return@AppDialog Text(
-                message,
-                textModifier,
-                textAlign = TextAlign.Center
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp,
+                bottom = (if (coordinates == null) 16 else 0).dp,
             )
+            .fillMaxWidth()
+        val coord = coordinates ?: return@AppDialog Text(
+            message, textModifier, textAlign = TextAlign.Center,
+        )
         val text = buildAnnotatedString {
             appendLine(
                 "%s$spacedColon%.2f%s%s$spacedColon%.7f".format(
