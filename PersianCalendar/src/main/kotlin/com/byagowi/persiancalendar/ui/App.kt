@@ -151,7 +151,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
-            val surfaceColor = animatedSurfaceColor()
             val secondaryContainer by animateColorAsState(
                 MaterialTheme.colorScheme.secondaryContainer,
                 appColorAnimationSpec,
@@ -159,7 +158,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             )
             ModalDrawerSheet(
                 windowInsets = WindowInsets(0, 0, 0, 0),
-                drawerContainerColor = surfaceColor,
+                drawerContainerColor = animatedSurfaceColor(),
             ) {
                 run {
                     val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
@@ -183,7 +182,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                     Box {
                         DrawerSeasonsPager(drawerState)
-                        DrawerDarkModeToggle(surfaceColor)
+                        DrawerDarkModeToggle()
                     }
                     val navItemColors = NavigationDrawerItemDefaults.colors(
                         unselectedContainerColor = Color.Transparent,
@@ -449,7 +448,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 }
 
 @Composable
-private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
+private fun BoxScope.DrawerDarkModeToggle() {
     val theme by theme.collectAsState()
     if (theme == Theme.SYSTEM_DEFAULT) return
     val context = LocalContext.current
@@ -476,7 +475,7 @@ private fun BoxScope.DrawerDarkModeToggle(surfaceColor: Color) {
                     }
                 },
             )
-            .background(surfaceColor.copy(alpha = .5f), MaterialTheme.shapes.extraLarge)
+            .background(animatedSurfaceColor().copy(alpha = .5f), MaterialTheme.shapes.extraLarge)
             .padding(8.dp),
     ) {
         Icon(
