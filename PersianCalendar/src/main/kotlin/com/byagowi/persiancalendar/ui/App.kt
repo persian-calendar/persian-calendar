@@ -315,6 +315,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
                     }
                     AstronomyScreen(
+                        animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToMap = { navController.navigate(mapRoute) },
                         viewModel = viewModel,
@@ -333,6 +334,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         }
                     }
                     MapScreen(
+                        animatedContentScope = this,
                         navigateUp = { navigateUp(mapRoute) },
                         fromSettings = previousRoute == settingsRoute,
                         viewModel = viewModel,
@@ -350,6 +352,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 composable(aboutRoute) {
                     AboutScreen(
+                        animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToLicenses = { navController.navigate(licensesRoute) },
                         navigateToDeviceInformation = {
@@ -359,7 +362,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
 
                 composable(licensesRoute) {
-                    LicensesScreen { navigateUp(licensesRoute) }
+                    LicensesScreen(animatedContentScope = this) { navigateUp(licensesRoute) }
                 }
 
                 composable(deviceInformationRoute) {

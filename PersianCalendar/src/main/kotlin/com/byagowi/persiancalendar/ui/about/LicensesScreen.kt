@@ -62,10 +62,12 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
-context(AnimatedContentScope, SharedTransitionScope)
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun LicensesScreen(navigateUp: () -> Unit) {
+fun SharedTransitionScope.LicensesScreen(
+    animatedContentScope: AnimatedContentScope,
+    navigateUp: () -> Unit,
+) {
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -76,7 +78,7 @@ fun LicensesScreen(navigateUp: () -> Unit) {
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 modifier = Modifier.sharedBounds(
                     rememberSharedContentState(key = "licenses"),
-                    animatedVisibilityScope = this@AnimatedContentScope,
+                    animatedVisibilityScope = animatedContentScope,
                 ),
             )
         }

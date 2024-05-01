@@ -109,7 +109,6 @@ android {
 
     kotlinOptions {
         jvmTarget = javaVersion.majorVersion
-        freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
     }
 
     lint { disable += listOf("MissingTranslation") }

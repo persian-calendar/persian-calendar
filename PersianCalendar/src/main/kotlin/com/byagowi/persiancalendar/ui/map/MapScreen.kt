@@ -100,10 +100,14 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
-context(AnimatedContentScope, SharedTransitionScope)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewModel) {
+fun SharedTransitionScope.MapScreen(
+    animatedContentScope: AnimatedContentScope,
+    navigateUp: () -> Unit,
+    fromSettings: Boolean,
+    viewModel: MapViewModel,
+) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val mapDraw = remember { MapDraw(context.resources) }
@@ -155,7 +159,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
     val menu = listOf<Triple<ImageVector, @StringRes Int, () -> Unit>>(
         Triple(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
             val textureSize = 2048
-            val bitmap = kotlin.runCatching { createBitmap(textureSize, textureSize) }
+            val bitmap = runCatching { createBitmap(textureSize, textureSize) }
                 .onFailure(logException).getOrNull() ?: return@onClick
             val matrix = Matrix()
             matrix.setScale(
@@ -352,7 +356,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                             )
                             .sharedBounds(
                                 rememberSharedContentState(key = "time"),
-                                animatedVisibilityScope = this@AnimatedContentScope,
+                                animatedVisibilityScope = animatedContentScope,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,
                     )

@@ -106,10 +106,10 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
-context(AnimatedContentScope, SharedTransitionScope)
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun AstronomyScreen(
+fun SharedTransitionScope.AstronomyScreen(
+    animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
@@ -184,7 +184,12 @@ fun AstronomyScreen(
             val modifier = Modifier
                 .padding(bottom = 16.dp)
                 .safeDrawingPadding()
-            if (!isLandscape) SliderBar(modifier, slider, viewModel) { slider = it }
+            if (!isLandscape) SliderBar(
+                modifier,
+                animatedContentScope,
+                slider,
+                viewModel
+            ) { slider = it }
         },
     ) { paddingValues ->
         Surface(
@@ -205,7 +210,7 @@ fun AstronomyScreen(
                     ) {
                         Header(Modifier, viewModel)
                         Spacer(Modifier.weight(1f))
-                        SliderBar(Modifier, slider, viewModel) { slider = it }
+                        SliderBar(Modifier, animatedContentScope, slider, viewModel) { slider = it }
                     }
                     SolarDisplay(
                         Modifier
@@ -262,11 +267,11 @@ fun AstronomyScreen(
     }
 }
 
-context(AnimatedContentScope, SharedTransitionScope)
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SliderBar(
+private fun SharedTransitionScope.SliderBar(
     modifier: Modifier,
+    animatedContentScope: AnimatedContentScope,
     slider: SliderView?,
     viewModel: AstronomyViewModel,
     setSlider: (SliderView) -> Unit,
@@ -294,7 +299,7 @@ private fun SliderBar(
                 )
                 .sharedBounds(
                     rememberSharedContentState(key = "time"),
-                    animatedVisibilityScope = this@AnimatedContentScope,
+                    animatedVisibilityScope = animatedContentScope,
                 ),
             color = MaterialTheme.colorScheme.onSurface,
         )

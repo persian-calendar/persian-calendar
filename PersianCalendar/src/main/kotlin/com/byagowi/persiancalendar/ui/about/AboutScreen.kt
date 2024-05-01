@@ -103,10 +103,10 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 
-context(AnimatedContentScope, SharedTransitionScope)
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun AboutScreen(
+fun SharedTransitionScope.AboutScreen(
+    animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
     navigateToDeviceInformation: () -> Unit,
     navigateToLicenses: () -> Unit,
@@ -145,7 +145,13 @@ fun AboutScreen(
                 Surface(
                     shape = materialCornerExtraLargeTop(),
                     color = animatedSurfaceColor(),
-                ) { AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding()) }
+                ) {
+                    AboutScreenContent(
+                        animatedContentScope,
+                        navigateToLicenses,
+                        paddingValues.calculateBottomPadding()
+                    )
+                }
             }
         }
     }
@@ -249,10 +255,12 @@ https://github.com/persian-calendar/persian-calendar"""
     }.onFailure(logException).onFailure { context.bringMarketPage() }
 }
 
-context(AnimatedContentScope, SharedTransitionScope)
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
+private fun SharedTransitionScope.AboutScreenContent(
+    animatedContentScope: AnimatedContentScope,
+    navigateToLicenses: () -> Unit, bottomPadding: Dp,
+) {
     Column {
         // Licenses
         Text(
@@ -266,7 +274,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             summary = R.string.about_license_sum,
             modifier = Modifier.sharedBounds(
                 rememberSharedContentState(key = "licenses"),
-                animatedVisibilityScope = this@AnimatedContentScope,
+                animatedVisibilityScope = animatedContentScope,
             ),
         )
 
