@@ -63,7 +63,7 @@ fun generateYearName(
             )
         } else null
     ).let { if (language.value.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")
-    return "%s$spacedColon%s".format(resources.getString(R.string.year_name), yearNames)
+    return "${resources.getString(R.string.year_name)}$spacedColon${yearNames}"
 }
 
 // https://github.com/cosinekitty/astronomy/blob/0547aaf/demo/csharp/camera/camera.cs#L98
