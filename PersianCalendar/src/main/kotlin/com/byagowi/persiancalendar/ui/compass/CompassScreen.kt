@@ -301,7 +301,7 @@ fun CompassScreen(
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(Unit) {
+    DisposableEffect(lifecycleOwner) {
         val sensorManager =
             context.getSystemService<SensorManager>() ?: return@DisposableEffect onDispose {}
         val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)

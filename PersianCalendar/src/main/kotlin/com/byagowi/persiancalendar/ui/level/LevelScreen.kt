@@ -71,7 +71,7 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
     val context = LocalContext.current
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(Unit) {
+    DisposableEffect(lifecycleOwner) {
         val activity = context.getActivity() ?: return@DisposableEffect onDispose {}
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
