@@ -6,7 +6,10 @@ import android.graphics.Matrix
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -97,7 +100,8 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
-@OptIn(ExperimentalMaterial3Api::class)
+context(AnimatedContentScope, SharedTransitionScope)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewModel) {
     val state by viewModel.state.collectAsState()
@@ -151,9 +155,8 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
     val menu = listOf<Triple<ImageVector, @StringRes Int, () -> Unit>>(
         Triple(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
             val textureSize = 2048
-            val bitmap =
-                runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
-                    .getOrNull() ?: return@onClick
+            val bitmap = kotlin.runCatching { createBitmap(textureSize, textureSize) }
+                .onFailure(logException).getOrNull() ?: return@onClick
             val matrix = Matrix()
             matrix.setScale(
                 textureSize.toFloat() / mapDraw.mapWidth,
@@ -346,6 +349,10 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                                 onClickLabel = stringResource(R.string.select_date),
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),
+                            )
+                            .sharedBounds(
+                                rememberSharedContentState(key = "time"),
+                                animatedVisibilityScope = this@AnimatedContentScope,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,
                     )

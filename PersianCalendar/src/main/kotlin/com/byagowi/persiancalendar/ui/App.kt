@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.ui
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -125,6 +127,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun App(intentStartDestination: String?, finish: () -> Unit) {
     // See xml/shortcuts.xml
@@ -148,217 +151,220 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     val settingsKey = "SETTINGS"
     val daysOffsetKey = "DAYS_OFFSET"
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            val secondaryContainer by animateColorAsState(
-                MaterialTheme.colorScheme.secondaryContainer,
-                animationSpec = appColorAnimationSpec,
-                label = "secondary container"
-            )
-            ModalDrawerSheet(
-                windowInsets = WindowInsets(0, 0, 0, 0),
-                drawerContainerColor = animatedSurfaceColor(),
-            ) {
-                run {
-                    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-                    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-                    val needsVisibleStatusBarPlaceHolder =
-                        !isBackgroundColorLight && isSurfaceColorLight
-                    Spacer(
-                        Modifier
-                            .fillMaxWidth()
-                            .then(
-                                if (needsVisibleStatusBarPlaceHolder) Modifier.background(
-                                    Brush.verticalGradient(
-                                        0f to Color(0x70000000), 1f to Color.Transparent
-                                    )
-                                ) else Modifier
-                            )
-                            .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
-                    )
-                }
-
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    Box {
-                        DrawerSeasonsPager(drawerState)
-                        DrawerDarkModeToggle()
-                    }
-                    val navItemColors = NavigationDrawerItemDefaults.colors(
-                        unselectedContainerColor = Color.Transparent,
-                        selectedContainerColor = secondaryContainer,
-                    )
-                    navItems.forEach { (id, icon, title) ->
-                        NavigationDrawerItem(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            icon = { Icon(icon, contentDescription = null) },
-                            colors = navItemColors,
-                            label = {
-                                // Apparently language strings isn't applied immediately in drawer
-                                // items titles but only when drawer opens so let's animate it!
-                                AnimatedContent(
-                                    targetState = stringResource(title),
-                                    label = "title",
-                                    transitionSpec = appCrossfadeSpec,
-                                ) { state -> Text(state) }
-                            },
-                            selected = when (val route = navBackStackEntry?.destination?.route) {
-                                levelRoute -> compassRoute
-                                mapRoute -> astronomyRoute
-                                deviceInformationRoute, licensesRoute -> aboutRoute
-                                else -> route ?: calendarRoute
-                            } == id,
-                            onClick = {
-                                if (id == null) return@NavigationDrawerItem finish()
-                                coroutineScope.launch {
-                                    drawerState.close()
-                                    if (navBackStackEntry?.destination?.route != id) {
-                                        navController.navigate(id)
-                                    }
-                                }
-                            },
+    SharedTransitionLayout {
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                val secondaryContainer by animateColorAsState(
+                    MaterialTheme.colorScheme.secondaryContainer,
+                    animationSpec = appColorAnimationSpec,
+                    label = "secondary container"
+                )
+                ModalDrawerSheet(
+                    windowInsets = WindowInsets(0, 0, 0, 0),
+                    drawerContainerColor = animatedSurfaceColor(),
+                ) {
+                    run {
+                        val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+                        val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+                        val needsVisibleStatusBarPlaceHolder =
+                            !isBackgroundColorLight && isSurfaceColorLight
+                        Spacer(
+                            Modifier
+                                .fillMaxWidth()
+                                .then(
+                                    if (needsVisibleStatusBarPlaceHolder) Modifier.background(
+                                        Brush.verticalGradient(
+                                            0f to Color(0x70000000), 1f to Color.Transparent
+                                        )
+                                    ) else Modifier
+                                )
+                                .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
                         )
                     }
-                    Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
-                }
-            }
-        },
-    ) {
-        NavHost(navController = navController, startDestination = startDestination) {
 
-            fun navigateToSettingsLocationTab() {
-                navController.graph.findNode(settingsRoute)?.let { destination ->
-                    navController.navigate(
-                        destination.id, bundleOf(tabKey to LOCATION_ATHAN_TAB)
-                    )
-                }
-            }
-
-            fun navigateUp(currentRoute: String) {
-                // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
-                if (navController.currentDestination?.route != currentRoute) return
-                // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
-                if (!navController.popBackStack()) finish()
-            }
-
-            composable(calendarRoute) {
-                CalendarScreen(
-                    openDrawer = { coroutineScope.launch { drawerState.open() } },
-                    navigateToHolidaysSettings = {
-                        navController.graph.findNode(settingsRoute)?.let { destination ->
-                            navController.navigate(
-                                destination.id, bundleOf(
-                                    tabKey to INTERFACE_CALENDAR_TAB,
-                                    settingsKey to PREF_HOLIDAY_TYPES,
-                                )
+                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+                        Box {
+                            DrawerSeasonsPager(drawerState)
+                            DrawerDarkModeToggle()
+                        }
+                        val navItemColors = NavigationDrawerItemDefaults.colors(
+                            unselectedContainerColor = Color.Transparent,
+                            selectedContainerColor = secondaryContainer,
+                        )
+                        navItems.forEach { (id, icon, title) ->
+                            NavigationDrawerItem(
+                                modifier = Modifier.padding(horizontal = 16.dp),
+                                icon = { Icon(icon, contentDescription = null) },
+                                colors = navItemColors,
+                                label = {
+                                    // Apparently language strings isn't applied immediately in drawer
+                                    // items titles but only when drawer opens so let's animate it!
+                                    AnimatedContent(
+                                        targetState = stringResource(title),
+                                        label = "title",
+                                        transitionSpec = appCrossfadeSpec,
+                                    ) { state -> Text(state) }
+                                },
+                                selected = when (val route =
+                                    navBackStackEntry?.destination?.route) {
+                                    levelRoute -> compassRoute
+                                    mapRoute -> astronomyRoute
+                                    deviceInformationRoute, licensesRoute -> aboutRoute
+                                    else -> route ?: calendarRoute
+                                } == id,
+                                onClick = {
+                                    if (id == null) return@NavigationDrawerItem finish()
+                                    coroutineScope.launch {
+                                        drawerState.close()
+                                        if (navBackStackEntry?.destination?.route != id) {
+                                            navController.navigate(id)
+                                        }
+                                    }
+                                },
                             )
                         }
-                    },
-                    navigateToSettingsLocationTabSetAthanAlarm = {
-                        navController.graph.findNode(settingsRoute)?.let { destination ->
-                            navController.navigate(
-                                destination.id, bundleOf(
-                                    tabKey to LOCATION_ATHAN_TAB,
-                                    settingsKey to PREF_ATHAN_ALARM,
-                                )
-                            )
-                        }
-                    },
-                    navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                    navigateToAstronomy = { daysOffset ->
-                        navController.graph.findNode(astronomyRoute)?.let { destination ->
-                            navController.navigate(
-                                destination.id, bundleOf(daysOffsetKey to daysOffset)
-                            )
-                        }
-                    },
-                    viewModel = viewModel<CalendarViewModel>(),
-                )
-            }
-
-            composable(converterRoute) {
-                ConverterScreen(
-                    openDrawer = { coroutineScope.launch { drawerState.open() } },
-                    viewModel = viewModel<ConverterViewModel>()
-                )
-            }
-
-            composable(compassRoute) {
-                CompassScreen(
-                    openDrawer = { coroutineScope.launch { drawerState.open() } },
-                    navigateToLevel = { navController.navigate(levelRoute) },
-                    navigateToMap = { navController.navigate(mapRoute) },
-                    navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                )
-            }
-
-            composable(levelRoute) {
-                LevelScreen(
-                    navigateUp = { navigateUp(levelRoute) },
-                    navigateToCompass = {
-                        // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                        if (!navController.popBackStack(compassRoute, false)) {
-                            navController.navigate(levelRoute)
-                        }
-                    },
-                )
-            }
-
-            composable(astronomyRoute) { backStackEntry ->
-                val viewModel = viewModel<AstronomyViewModel>()
-                backStackEntry.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
-                    viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
-                }
-                AstronomyScreen(
-                    openDrawer = { coroutineScope.launch { drawerState.open() } },
-                    navigateToMap = { navController.navigate(mapRoute) },
-                    viewModel = viewModel,
-                )
-            }
-
-            composable(mapRoute) {
-                val viewModel = viewModel<MapViewModel>()
-                val previousEntry = navController.previousBackStackEntry
-                val previousRoute = previousEntry?.destination?.route
-                if (previousRoute == astronomyRoute) {
-                    val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
-                    LaunchedEffect(Unit) {
-                        viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-                        viewModel.state.collectLatest { astronomyViewModel.changeToTime(it.time) }
+                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
                     }
                 }
-                MapScreen(
-                    navigateUp = { navigateUp(mapRoute) },
-                    fromSettings = previousRoute == settingsRoute,
-                    viewModel = viewModel,
-                )
-            }
+            },
+        ) {
+            NavHost(navController = navController, startDestination = startDestination) {
 
-            composable(settingsRoute) { backStackEntry ->
-                SettingsScreen(
-                    openDrawer = { coroutineScope.launch { drawerState.open() } },
-                    navigateToMap = { navController.navigate(mapRoute) },
-                    initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
-                    destination = backStackEntry.arguments?.getString(settingsKey) ?: ""
-                )
-            }
+                fun navigateToSettingsLocationTab() {
+                    navController.graph.findNode(settingsRoute)?.let { destination ->
+                        navController.navigate(
+                            destination.id, bundleOf(tabKey to LOCATION_ATHAN_TAB)
+                        )
+                    }
+                }
 
-            composable(aboutRoute) {
-                AboutScreen(
-                    openDrawer = { coroutineScope.launch { drawerState.open() } },
-                    navigateToLicenses = { navController.navigate(licensesRoute) },
-                    navigateToDeviceInformation = {
-                        navController.navigate(deviceInformationRoute)
-                    },
-                )
-            }
+                fun navigateUp(currentRoute: String) {
+                    // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
+                    if (navController.currentDestination?.route != currentRoute) return
+                    // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
+                    if (!navController.popBackStack()) finish()
+                }
 
-            composable(licensesRoute) {
-                LicensesScreen { navigateUp(licensesRoute) }
-            }
+                composable(calendarRoute) {
+                    CalendarScreen(
+                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        navigateToHolidaysSettings = {
+                            navController.graph.findNode(settingsRoute)?.let { destination ->
+                                navController.navigate(
+                                    destination.id, bundleOf(
+                                        tabKey to INTERFACE_CALENDAR_TAB,
+                                        settingsKey to PREF_HOLIDAY_TYPES,
+                                    )
+                                )
+                            }
+                        },
+                        navigateToSettingsLocationTabSetAthanAlarm = {
+                            navController.graph.findNode(settingsRoute)?.let { destination ->
+                                navController.navigate(
+                                    destination.id, bundleOf(
+                                        tabKey to LOCATION_ATHAN_TAB,
+                                        settingsKey to PREF_ATHAN_ALARM,
+                                    )
+                                )
+                            }
+                        },
+                        navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                        navigateToAstronomy = { daysOffset ->
+                            navController.graph.findNode(astronomyRoute)?.let { destination ->
+                                navController.navigate(
+                                    destination.id, bundleOf(daysOffsetKey to daysOffset)
+                                )
+                            }
+                        },
+                        viewModel = viewModel<CalendarViewModel>(),
+                    )
+                }
 
-            composable(deviceInformationRoute) {
-                DeviceInformationScreen { navigateUp(deviceInformationRoute) }
+                composable(converterRoute) {
+                    ConverterScreen(
+                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        viewModel = viewModel<ConverterViewModel>()
+                    )
+                }
+
+                composable(compassRoute) {
+                    CompassScreen(
+                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        navigateToLevel = { navController.navigate(levelRoute) },
+                        navigateToMap = { navController.navigate(mapRoute) },
+                        navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                    )
+                }
+
+                composable(levelRoute) {
+                    LevelScreen(
+                        navigateUp = { navigateUp(levelRoute) },
+                        navigateToCompass = {
+                            // If compass wasn't in backstack (level is brought from shortcut), navigate to it
+                            if (!navController.popBackStack(compassRoute, false)) {
+                                navController.navigate(levelRoute)
+                            }
+                        },
+                    )
+                }
+
+                composable(astronomyRoute) { backStackEntry ->
+                    val viewModel = viewModel<AstronomyViewModel>()
+                    backStackEntry.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
+                        viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
+                    }
+                    AstronomyScreen(
+                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        navigateToMap = { navController.navigate(mapRoute) },
+                        viewModel = viewModel,
+                    )
+                }
+
+                composable(mapRoute) {
+                    val viewModel = viewModel<MapViewModel>()
+                    val previousEntry = navController.previousBackStackEntry
+                    val previousRoute = previousEntry?.destination?.route
+                    if (previousRoute == astronomyRoute) {
+                        val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
+                        LaunchedEffect(Unit) {
+                            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
+                            viewModel.state.collectLatest { astronomyViewModel.changeToTime(it.time) }
+                        }
+                    }
+                    MapScreen(
+                        navigateUp = { navigateUp(mapRoute) },
+                        fromSettings = previousRoute == settingsRoute,
+                        viewModel = viewModel,
+                    )
+                }
+
+                composable(settingsRoute) { backStackEntry ->
+                    SettingsScreen(
+                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        navigateToMap = { navController.navigate(mapRoute) },
+                        initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
+                        destination = backStackEntry.arguments?.getString(settingsKey) ?: ""
+                    )
+                }
+
+                composable(aboutRoute) {
+                    AboutScreen(
+                        openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        navigateToLicenses = { navController.navigate(licensesRoute) },
+                        navigateToDeviceInformation = {
+                            navController.navigate(deviceInformationRoute)
+                        },
+                    )
+                }
+
+                composable(licensesRoute) {
+                    LicensesScreen { navigateUp(licensesRoute) }
+                }
+
+                composable(deviceInformationRoute) {
+                    DeviceInformationScreen { navigateUp(deviceInformationRoute) }
+                }
             }
         }
     }

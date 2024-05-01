@@ -5,7 +5,10 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
@@ -77,7 +80,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
@@ -101,10 +103,8 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 
-@Preview
-@Composable
-private fun AboutScreenPreview() = AboutScreen({}, {}, {})
-
+context(AnimatedContentScope, SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun AboutScreen(
     openDrawer: () -> Unit,
@@ -249,6 +249,8 @@ https://github.com/persian-calendar/persian-calendar"""
     }.onFailure(logException).onFailure { context.bringMarketPage() }
 }
 
+context(AnimatedContentScope, SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
     Column {
@@ -261,7 +263,11 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
             icon = Icons.Default.Folder,
             action = { navigateToLicenses() },
             title = R.string.about_license_title,
-            summary = R.string.about_license_sum
+            summary = R.string.about_license_sum,
+            modifier = Modifier.sharedBounds(
+                rememberSharedContentState(key = "licenses"),
+                animatedVisibilityScope = this@AnimatedContentScope,
+            ),
         )
 
         // Help
@@ -369,12 +375,14 @@ private fun AboutScreenButton(
     action: (context: Context) -> Unit,
     @StringRes title: Int,
     @StringRes summary: Int,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Box(
         modifier = Modifier
             .clickable { action(context) }
-            .padding(start = 20.dp, end = 16.dp, top = 4.dp, bottom = 4.dp),
+            .padding(start = 20.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+            .then(modifier),
     ) {
         Row {
             Icon(

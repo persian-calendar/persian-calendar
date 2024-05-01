@@ -2,7 +2,10 @@ package com.byagowi.persiancalendar.ui.about
 
 import android.os.Build
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -48,7 +51,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -60,10 +62,8 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
-@Preview
-@Composable
-private fun LicensesScreenPreview() = LicensesScreen {}
-
+context(AnimatedContentScope, SharedTransitionScope)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun LicensesScreen(navigateUp: () -> Unit) {
     Scaffold(
@@ -71,9 +71,13 @@ fun LicensesScreen(navigateUp: () -> Unit) {
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
-                title = { Text(stringResource(R.string.licenses)) },
+                title = { Text(stringResource(R.string.about_license_title)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
+                modifier = Modifier.sharedBounds(
+                    rememberSharedContentState(key = "licenses"),
+                    animatedVisibilityScope = this@AnimatedContentScope,
+                ),
             )
         }
     ) { paddingValues ->
