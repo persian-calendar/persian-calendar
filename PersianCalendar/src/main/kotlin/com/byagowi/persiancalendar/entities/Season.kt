@@ -17,7 +17,7 @@ enum class Season(
 ) {
     SPRING(R.string.spring, R.drawable.spring, Color(0xcc80aa15)),
     SUMMER(R.string.summer, R.drawable.summer, Color(0xccfab000)),
-    AUTUMN(R.string.autumn, R.drawable.fall, Color(0xccbf8015)),
+    AUTUMN(R.string.autumn, R.drawable.autumn, Color(0xccbf8015)),
     WINTER(R.string.winter, R.drawable.winter, Color(0xcc5580aa));
 
     companion object {

@@ -360,7 +360,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="solar_eclipse">Solar eclipse</string>
     <string name="lunar_eclipse">Lunar eclipse</string>
     <string name="summer">Summer</string>
-    <string name="autumn">Fall</string>
+    <string name="autumn">Autumn</string>
     <string name="winter">Winter</string>
     <string name="spring">Spring</string>
     <string name="mercury">Mercury</string>
