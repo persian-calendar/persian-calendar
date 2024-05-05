@@ -155,7 +155,7 @@ val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
 @Composable
 fun isDynamicGrayscale(): Boolean {
     val context = LocalContext.current
-    val theme by theme.collectAsState()
+    val theme = effectiveTheme()
     // Also track configuration changes
     LocalConfiguration.current.run {}
     return theme.isDynamicColors && context.resources.isDynamicGrayscale
