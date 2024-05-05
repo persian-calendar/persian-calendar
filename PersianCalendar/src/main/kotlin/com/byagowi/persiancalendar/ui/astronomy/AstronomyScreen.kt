@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.Configuration
 import android.os.Build
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -72,6 +73,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
@@ -86,6 +88,7 @@ import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -442,19 +445,21 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 
     val context = LocalContext.current
     val headerCache = remember {
-        lruCache(1024, create = { jdn: Jdn ->
-            state.generateHeader(context.resources, jdn).joinToString("\n")
-        })
+        lruCache(1024, create = { jdn: Jdn -> state.generateHeader(context.resources, jdn) })
     }
 
     Column(modifier) {
         val jdn by remember { derivedStateOf { Jdn(state.date.toCivilDate()) } }
-        SelectionContainer {
-            Text(
-                headerCache[jdn],
-                style = MaterialTheme.typography.bodyMedium,
-                maxLines = 3,
-            )
+        headerCache[jdn].fastForEach { line ->
+            AnimatedContent(targetState = line, label = "line", transitionSpec = appCrossfadeSpec) {
+                SelectionContainer {
+                    Text(
+                        it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                    )
+                }
+            }
         }
         Seasons(jdn)
         AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
