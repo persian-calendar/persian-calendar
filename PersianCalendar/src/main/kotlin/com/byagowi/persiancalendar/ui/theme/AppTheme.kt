@@ -36,6 +36,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
@@ -51,6 +52,7 @@ import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
@@ -149,6 +151,15 @@ private val crossfadeSpec = fadeIn(tween()).togetherWith(fadeOut(tween()))
 // Our own cross fade spec where AnimatedContent() has nicer effect
 // than Crossfade() (usually on non binary changes) but we need a crossfade effect also
 val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { crossfadeSpec }
+
+@Composable
+fun isDynamicGrayscale(): Boolean {
+    val context = LocalContext.current
+    val theme by theme.collectAsState()
+    // Also track configuration changes
+    LocalConfiguration.current.run {}
+    return theme.isDynamicColors && context.resources.isDynamicGrayscale
+}
 
 @Composable
 private fun appBackground(): Brush {

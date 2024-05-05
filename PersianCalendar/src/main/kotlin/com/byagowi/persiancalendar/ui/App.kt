@@ -67,7 +67,6 @@ import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
@@ -115,7 +114,7 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
@@ -412,14 +411,12 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
         }
     }
 
-    val context = LocalContext.current
-    val theme by theme.collectAsState()
-    val imageFilter = remember(LocalConfiguration.current, theme) {
+    val isDynamicGrayscale = isDynamicGrayscale()
+    val imageFilter = remember(isDynamicGrayscale) {
+        if (!isDynamicGrayscale) null
         // Consider gray scale themes of Android 14
         // And apply a gray scale filter https://stackoverflow.com/a/75698731
-        if (theme.isDynamicColors && context.resources.isDynamicGrayscale) {
-            ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
-        } else null
+        else ColorFilter.colorMatrix(ColorMatrix().also { it.setToSaturation(0f) })
     }
 
     HorizontalPager(

@@ -78,7 +78,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
@@ -88,7 +87,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
@@ -545,15 +544,11 @@ private fun Cell(modifier: Modifier, color: Color, label: String, value: String)
         modifier.animateContentSize(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val context = LocalContext.current
-        val isDynamicGrayscale = remember(LocalConfiguration.current) {
-            theme.value.isDynamicColors && context.resources.isDynamicGrayscale
-        }
         Text(
             label,
             modifier = Modifier
                 .background(
-                    if (isDynamicGrayscale) Color(0xcc808080) else color,
+                    if (isDynamicGrayscale()) Color(0xcc808080) else color,
                     MaterialTheme.shapes.small,
                 )
                 .align(alignment = Alignment.CenterVertically)
