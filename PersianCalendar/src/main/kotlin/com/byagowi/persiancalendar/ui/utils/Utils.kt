@@ -113,7 +113,7 @@ fun createFlingDetector(
 fun isSystemInDarkTheme(configuration: Configuration): Boolean =
     configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-// Android 14 will have a grayscale dynamic colors mode and this is somehow a hack to check for that
+// Android 14 has a grayscale dynamic colors mode and this is somehow a hack to check for that
 // I guess there will be better ways to check for that in the future I guess but this does the trick
 // Android 13, at least in Extension 5 emulator image, also provides such theme.
 // https://stackoverflow.com/a/76272434
