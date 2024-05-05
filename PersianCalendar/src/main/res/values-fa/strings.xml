@@ -11,18 +11,18 @@
     <string name="exit">خروج</string>
     <string name="enable_native_digits">نمایش رقم‌ها به فارسی</string>
     <string name="native_digits">رقم‌های فارسی</string>
-    <string name="showing_clock_on_widget">نمایش ساعت در ویجت‌ها</string>
-    <string name="clock_on_widget">ساعت در ویجت</string>
+    <string name="showing_clock_on_widget">نمایش ساعت در ابزارک‌ها</string>
+    <string name="clock_on_widget">ساعت در ابزارک</string>
     <string name="showing_clock_in_24">نمایش ساعت به‌صورت ۲۴تایی</string>
     <string name="clock_in_24">۲۴ ساعته</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">نشان پروانهٔ جامع همگانی گنو</string>
     <string name="date_converter">تبدیل تاریخ</string>
     <string name="converter">مبدل</string>
-    <string name="widget_text_color">رنگ نوشته‌های ویجت</string>
-    <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ویجت</string>
-    <string name="notify_date">فعال‌کردن اعلان</string>
-    <string name="enable_notify">اعلان همیشگی برای تاریخ‌ها</string>
+    <string name="widget_text_color">رنگ نوشته‌های ابزارک</string>
+    <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ابزارک</string>
+    <string name="notify_date">روشن‌کردن آگاه‌ساز</string>
+    <string name="enable_notify">آگاه‌ساز همیشگی برای تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>
@@ -34,10 +34,10 @@
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را در زیر وارد کنید</string>
-    <string name="showing_iran_time">نمایش ویجت، نوار اعلان و برنامه به‌وقت ایران در همه‌جا، مناسب ایرانیان خارج از ایران</string>
+    <string name="showing_iran_time">نمایش ابزارک و آگاه‌ساز برنامه به‌وقت ایران در همه‌جا، مناسب ایرانیان خارج از ایران</string>
     <string name="iran_time">وقت ایران</string>
     <string name="compass">قطب‌نما</string>
-    <string name="compass_not_found">ظاهراً دستگاه شما دارای سنسور قطب‌نما نیست</string>
+    <string name="compass_not_found">گویا دستگاه شما دارای حسگر قطب‌نما نیست</string>
     <string name="language">زبان</string>
     <string name="version">نگارش %1$s</string>
     <string name="athan">اذان</string>
@@ -45,7 +45,7 @@
     <string name="athan_alarm">اذان‌ها</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
     <string name="athan_volume">حجم صدا</string>
-    <string name="athan_disabled_summary">برای فعال‌کردن تنظیمات اذان ابتدا مکان را تنظیم کنید</string>
+    <string name="athan_disabled_summary">برای روشن‌کردن تنظیمات اذان ابتدا مکان را تنظیم کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا درآورده شود</string>
     <string name="close">بستن</string>
@@ -75,10 +75,10 @@
     <string name="in_city_time">به افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد.</string>
     <string name="stop">توقف</string>
-    <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
-    <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
+    <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که مکان‌یاب دستگاه از تنظیمات روشن است. اگر روشن‌کردن آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
+    <string name="notify_date_lock_screen">نمایش آگاه‌ساز در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند.</string>
-    <string name="warn_if_events_not_set">جهت فعال‌کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="warn_if_events_not_set">جهت روشن‌کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="ask_for_calendar_permission">مایلید رویدادهای شخصی‌تان از تقویم دستگاه نمایش داده شود؟</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
@@ -96,12 +96,12 @@
     <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">افزودن رویداد</string>
     <string name="device_does_not_support">دستگاه از این کنش پشتیبانی نمی‌کند</string>
-    <string name="customize_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
-    <string name="customize_widget">شخصی‌سازی ویجت‌ها و اعلان</string>
+    <string name="customize_widget_summary">چه چیزهایی در ابزارک و آگاه‌ساز نمایش داده شوند</string>
+    <string name="customize_widget">شخصی‌سازی ابزارک و آگاه‌ساز</string>
     <string name="add">افزودن</string>
     <string name="which_one_to_show">کدام یک نمایش داده شود</string>
-    <string name="notification_athan">اذان به صورت اعلان</string>
-    <string name="enable_notification_athan">نمایش اذان به‌عنوان یک اعلان و لرزش دستگاه</string>
+    <string name="notification_athan">اذان به صورت آگاه‌ساز</string>
+    <string name="enable_notification_athan">نمایش اذان به‌عنوان یک آگاه‌ساز و لرزش دستگاه</string>
     <string name="returned_to_default">به پیش‌فرض برگردانده شد</string>
     <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
     <string name="custom_athan">انتخاب اذان</string>
@@ -119,7 +119,7 @@
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
-    <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
+    <string name="gps_internet_desc">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
 \n
 \nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
@@ -160,15 +160,15 @@
     <string name="animal_year_name_horse">اسب</string>
     <string name="animal_year_name_goat">بز</string>
     <string name="level">تراز</string>
-    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی سه محور به جلو و عقب بچرخانید.</string>
+    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر حسگر قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی سه محور به جلو و عقب بچرخانید.</string>
     <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
     <string name="moon_in_scorpio">ایام قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">بازگشت برای اصلاح تقویم</string>
-    <string name="pref_widget">ویجت</string>
-    <string name="pref_notification">اعلان</string>
+    <string name="pref_widget">ابزارک</string>
+    <string name="pref_notification">آگاه‌ساز</string>
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
     <string name="continue_button">ادامه</string>
@@ -196,7 +196,7 @@
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
-    <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
+    <string name="shift_work_reset_button">خاموش‌سازی یا برنامه‌ریزی مجدد</string>
     <plurals name="seconds">
         <item quantity="one">%1$s ثانیه</item>
         <item quantity="other">%1$s ثانیه</item>
@@ -214,8 +214,8 @@
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_information">اطلاعات دستگاه</string>
-    <string name="center_align_widgets_summary">وسط‌چین‌کردن ویجت‌های ۲×۲ و ۴×۱</string>
-    <string name="center_align_widgets">وسط‌چین‌کردن ویجت</string>
+    <string name="center_align_widgets_summary">وسط‌چین‌کردن ابزارک‌های ۲×۲ و ۴×۱</string>
+    <string name="center_align_widgets">وسط‌چین‌کردن ابزارک</string>
     <string name="n_till">%1$s تا %2$s</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">یک روز %2$s</item>
@@ -226,19 +226,19 @@
     <string name="pm">ب.ظ</string>
     <string name="holiday">تعطیل</string>
     <string name="shift_work_days_head">طول</string>
-    <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به‌جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان</string>
+    <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به‌جای ۱ فرودین ۱۳۹۰ در ابزارک ‌و آگاه‌ساز</string>
     <string name="prefer_linear_date">نمایش تاریخ به‌صورت عددی</string>
     <string name="month_overview">مناسبت‌های ماه</string>
     <string name="map">نقشه</string>
     <string name="ascending_athan_volume">صدای افزایشی اذان</string>
     <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
-    <string name="widget_background_color">رنگ پس‌زمینهٔ ویجت</string>
-    <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
+    <string name="widget_background_color">رنگ پس‌زمینهٔ ابزارک</string>
+    <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ابزارک</string>
     <string name="share">هم‌رسانی</string>
-    <string name="enable_location_services">خدمات موقعیت غیرفعال است، برای استفاده از این ویژگی لطفاً آن را فعال سازید.</string>
+    <string name="enable_location_services">مکان‌یاب خاموش است، برای بهره‌وری از این ویژگی لطفاً آن را روشن سازید.</string>
     <string name="widget_age_name">تقویم فارسی (سن)</string>
     <string name="select_date">انتخاب تاریخ</string>
-    <string name="age_widget_title">عنوان ویجت</string>
+    <string name="age_widget_title">عنوان ابزارک</string>
     <plurals name="days">
         <item quantity="one">%1$s روز</item>
         <item quantity="other">%1$s روز</item>
@@ -294,10 +294,10 @@
     <string name="afghanistan_events">افغانستان</string>
     <string name="other_holidays">سایر</string>
     <string name="view_source">مشاهدهٔ منبع</string>
-    <string name="widget_customization_other_calendars">سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</string>
-    <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
-    <string name="widget_customization_owghat">اوقات شرعی در ویجت و اعلان (در صورت تنظیم بودن)</string>
-    <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
+    <string name="widget_customization_other_calendars">دیگر تقویم‌ها در ابزارک ۴×۱ و ۲×۲</string>
+    <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ابزارک ۲×۲ و آگاه‌ساز</string>
+    <string name="widget_customization_owghat">اوقات شرعی در ابزارک و آگاه‌ساز (در صورت تنظیم بودن)</string>
+    <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ابزارک ۲×۲ و آکاه‌ساز (در صورت تنظیم بودن)</string>
     <string name="farvardin">فروردین</string>
     <string name="ordibehesht">اردیبهشت</string>
     <string name="khordad">خرداد</string>
@@ -353,7 +353,7 @@
     <string name="friday_short">ج</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
-    <string name="enable_new_interface">فعال‌سازی ظاهر جدید</string>
+    <string name="enable_new_interface">بهره‌وری از نما جدید</string>
     <string name="are_you_sure">آیا اطمینان دارید؟</string>
     <string name="month_pray_times">اوقات شرعی ماه</string>
     <string name="high_latitudes_method">شیوهٔ عرض‌های جغرافیایی بالا</string>
@@ -362,7 +362,7 @@
     <string name="high_latitudes_one_seventh">یک‌هفتم</string>
     <string name="none">هیچ‌کدام</string>
     <string name="show_sun_and_moon_path_in_24_hours">نمایش مسیر ماه و خورشید در ۲۴ ساعت آینده</string>
-    <string name="widget_prefer_device_colors">پیروی از رنگ‌بندی دستگاه در ویجت‌ها</string>
+    <string name="widget_prefer_device_colors">پیروی از رنگ‌بندی دستگاه در ابزارک‌ها</string>
     <string name="country_emoji">🇮🇷</string>
     <string name="nepali_calendar">نپالی</string>
     <string name="nepali_calendar_short">نپالی</string>
@@ -392,7 +392,7 @@
     <string name="chinese">چینی</string>
     <string name="live_wallpaper_settings">تنظیمات کاغذ دیواری زنده</string>
     <string name="screensaver_settings">تنظیمات محافظ صفحهٔ نمایش</string>
-    <string name="enable_notification">مایلید اعلان تاریخ برنامه فعال شود؟</string>
+    <string name="enable_notification">مایلید آگاه‌ساز تاریخ برنامه روشن شود؟</string>
     <string name="add_quick_settings_tile">افزودن کاشی تنظیمات سریع</string>
     <string name="true_north">شمال حقیقی</string>
     <string name="lock">قفل</string>
@@ -407,9 +407,9 @@
     <string name="yes">بله</string>
     <string name="sample_inputs">ورودی‌های نمونه</string>
     <string name="year_view">نمای سال</string>
-    <string name="exempt_app_battery_optimization">مایلید جهت عملکرد صحیح اعلان تاریخ، برنامه را به فهرست استثنا از بهینه‌سازی باتری بیافزایید؟</string>
-    <string name="widget_background_transparency">شفافیت پس‌زمینهٔ ویجت</string>
+    <string name="exempt_app_battery_optimization">مایلید جهت عملکرد صحیح آگاه‌ساز تاریخ، برنامه را به فهرست نادیده‌گیری از بهینه‌سازی باتری بیافزایید؟</string>
+    <string name="widget_background_transparency">شفافیت پس‌زمینهٔ ابزارک</string>
     <string name="save">ذخیره</string>
     <string name="holidays_in_red">تعطیلات به رنگ قرمز</string>
-    <string name="add_widget">افزودن ویجت</string>
+    <string name="add_widget">افزودن ابزارک</string>
 </resources>
