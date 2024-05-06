@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
+import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetDynamicColorsGlobalSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetPreview
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
@@ -146,10 +146,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                     onValueChange = {
                         text = it
                         context.preferences.edit {
-                            putString(
-                                PREF_TITLE_AGE_WIDGET + appWidgetId,
-                                text
-                            )
+                            putString(PREF_TITLE_AGE_WIDGET + appWidgetId, text)
                         }
                     },
                     label = { Text(stringResource(R.string.age_widget_title)) },
@@ -167,28 +164,20 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
                 WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
                 AnimatedVisibility(!prefersWidgetsDynamicColors) {
-                    SettingsClickable(
-                        stringResource(R.string.widget_text_color),
-                        stringResource(R.string.select_widgets_text_color)
-                    ) { onDismissRequest ->
-                        ColorPickerDialog(
-                            false,
-                            PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
-                            onDismissRequest = onDismissRequest,
-                        )
-                    }
+                    SettingsColor(
+                        title = stringResource(R.string.widget_text_color),
+                        summary = stringResource(R.string.select_widgets_text_color),
+                        isBackgroundPick = false,
+                        key = PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
+                    )
                 }
                 AnimatedVisibility(!prefersWidgetsDynamicColors) {
-                    SettingsClickable(
-                        stringResource(R.string.widget_background_color),
-                        stringResource(R.string.select_widgets_background_color)
-                    ) { onDismissRequest ->
-                        ColorPickerDialog(
-                            true,
-                            PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
-                            onDismissRequest = onDismissRequest,
-                        )
-                    }
+                    SettingsColor(
+                        title = stringResource(R.string.widget_background_color),
+                        summary = stringResource(R.string.select_widgets_background_color),
+                        isBackgroundPick = true,
+                        key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
+                    )
                 }
             }
         }

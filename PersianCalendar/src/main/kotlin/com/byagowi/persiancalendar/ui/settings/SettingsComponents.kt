@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
@@ -32,20 +33,28 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import androidx.core.graphics.toColorInt
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.settings.common.ColorBox
+import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
+import java.util.Locale
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
@@ -94,32 +103,44 @@ fun SettingsClickable(
     dialog: @Composable (onDismissRequest: () -> Unit) -> Unit,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(defaultOpen) }
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .clickable { showDialog = true }
-            .padding(vertical = 16.dp, horizontal = 24.dp),
-    ) {
-        AnimatedContent(
-            title,
-            label = "title",
-            transitionSpec = appCrossfadeSpec,
-        ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
-        AnimatedVisibility(visible = summary != null) {
-            AnimatedContent(
-                summary ?: "",
-                label = "summary",
-                transitionSpec = appCrossfadeSpec,
-            ) { state ->
-                Text(
-                    state,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.alpha(AppBlendAlpha)
-                )
-            }
-        }
-    }
+    SettingsLayout(onClick = { showDialog = true }, title = title, summary = summary)
     if (showDialog) dialog { showDialog = false }
+}
+
+// 52dp is switch's width, widget is what was called in androidx.preference
+private const val widgetSize = 52f
+
+@Composable
+fun SettingsColor(
+    title: String,
+    summary: String? = null,
+    isBackgroundPick: Boolean,
+    key: String,
+) {
+    var showDialog by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
+    var persistedColor by remember {
+        val initialColor = Color(
+            context.preferences.getString(key, null)?.toColorInt()
+                ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+                else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+        )
+        mutableStateOf(initialColor)
+    }
+    SettingsLayout({ showDialog = true }, title, summary) {
+        ColorBox(color = persistedColor, size = widgetSize.dp, shape = MaterialTheme.shapes.medium)
+    }
+    if (showDialog) ColorPickerDialog(
+        isBackgroundPick = isBackgroundPick,
+        initialColor = persistedColor,
+        persistColor = { color ->
+            persistedColor = color
+            val colorResult = if (isBackgroundPick) "#%08X".format(
+                Locale.ENGLISH, 0xFFFFFFFF and color.toArgb().toLong()
+            ) else "#%06X".format(Locale.ENGLISH, 0xFFFFFF and color.toArgb())
+            context.preferences.edit { putString(key, colorResult) }
+        },
+    ) { showDialog = false }
 }
 
 @Composable
@@ -273,23 +294,23 @@ fun SettingsSwitch(
 }
 
 @Composable
-private fun SettingsSwitchLayout(
-    toggle: () -> Unit,
+private fun SettingsLayout(
+    onClick: () -> Unit,
     title: String,
     summary: String?,
-    value: Boolean,
+    widget: (@Composable () -> Unit)? = null,
 ) {
     Box(
         Modifier
             .fillMaxWidth()
-            .clickable(onClick = toggle)
+            .clickable(onClick = onClick)
             .padding(horizontal = 8.dp),
     ) {
+        val endPadding = 16f + if (widget != null) widgetSize + 16 else 0f
         Column(
             Modifier
                 .align(alignment = Alignment.CenterStart)
-                // 68 is brought from androidx.preferences
-                .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = (16 + 68).dp)
+                .padding(top = 16.dp, bottom = 16.dp, start = 16.dp, end = endPadding.dp),
         ) {
             AnimatedContent(
                 title,
@@ -310,15 +331,23 @@ private fun SettingsSwitchLayout(
                 }
             }
         }
-        Switch(
+        Box(
             modifier = Modifier
                 .align(alignment = Alignment.CenterEnd)
-                .padding(end = 16.dp),
-            checked = value,
-            onCheckedChange = null,
-        )
+                .padding(end = 16.dp)
+                .size(widgetSize.dp),
+            contentAlignment = Alignment.Center,
+        ) { if (widget != null) widget() }
     }
 }
+
+@Composable
+private fun SettingsSwitchLayout(
+    toggle: () -> Unit,
+    title: String,
+    summary: String?,
+    value: Boolean,
+) = SettingsLayout(toggle, title, summary) { Switch(checked = value, onCheckedChange = null) }
 
 @Composable
 fun SettingsSlider(

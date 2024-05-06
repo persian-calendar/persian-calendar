@@ -44,14 +44,13 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.theme
 import com.byagowi.persiancalendar.global.widgetTransparency
-import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
-import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
 import com.byagowi.persiancalendar.utils.QUARTER_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
@@ -109,20 +108,20 @@ fun ColumnScope.WidgetConfiguration() {
     val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
     AnimatedVisibility(!prefersWidgetsDynamicColors) {
-        SettingsClickable(
-            stringResource(R.string.widget_text_color),
-            stringResource(R.string.select_widgets_text_color)
-        ) { onDismissRequest ->
-            ColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR, onDismissRequest)
-        }
+        SettingsColor(
+            title = stringResource(R.string.widget_text_color),
+            summary = stringResource(R.string.select_widgets_text_color),
+            isBackgroundPick = false,
+            key = PREF_SELECTED_WIDGET_TEXT_COLOR
+        )
     }
     AnimatedVisibility(!prefersWidgetsDynamicColors) {
-        SettingsClickable(
-            stringResource(R.string.widget_background_color),
-            stringResource(R.string.select_widgets_background_color)
-        ) { onDismissRequest ->
-            ColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR, onDismissRequest)
-        }
+        SettingsColor(
+            title = stringResource(R.string.widget_background_color),
+            summary = stringResource(R.string.select_widgets_background_color),
+            isBackgroundPick = true,
+            key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+        )
     }
     SettingsSwitchWithInnerState(
         key = PREF_NUMERICAL_DATE_PREFERRED,

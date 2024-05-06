@@ -9,6 +9,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -39,41 +41,36 @@ import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
 import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import androidx.core.graphics.toColorInt
-import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
-fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: () -> Unit) {
-    val context = LocalContext.current
+fun ColorPickerDialog(
+    isBackgroundPick: Boolean,
+    initialColor: Color,
+    persistColor: (Color) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
     val color = rememberSaveable(
         saver = Saver(save = { it.value.toArgb() }, restore = { Animatable(Color(it)) })
-    ) {
-        val initialColor = context.preferences.getString(key, null)?.toColorInt()
-            ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-            else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-        Animatable(Color(initialColor))
-    }
+    ) { Animatable(initialColor) }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     AppDialog(
         title = {
@@ -85,10 +82,7 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
-                val colorResult = if (isBackgroundPick) "#%08X".format(
-                    Locale.ENGLISH, 0xFFFFFFFF and color.value.toArgb().toLong()
-                ) else "#%06X".format(Locale.ENGLISH, 0xFFFFFF and color.value.toArgb())
-                context.preferences.edit { putString(key, colorResult) }
+                persistColor(color.value)
             }) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {
@@ -96,22 +90,22 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         },
         onDismissRequest = onDismissRequest,
     ) {
-        val checkerBoard = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
         var showEditor by rememberSaveable { mutableStateOf(false) }
-        Box(
-            Modifier
+        val background = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
+        ColorBox(
+            modifier = Modifier
                 .padding(vertical = if (isLandscape) 0.dp else 16.dp)
                 .align(Alignment.CenterHorizontally)
-                .shadow(if (isLandscape) 0.dp else 16.dp)
-                .clip(MaterialTheme.shapes.large)
-                .clickable { showEditor = !showEditor }
-                .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.large)
-                .background(Color.White)
-                .background(checkerBoard)
-                .background(color.value)
-                .size(if (isLandscape) 64.dp else 120.dp),
+                .shadow(if (isLandscape) 0.dp else 16.dp),
+            color = color.value,
+            size = if (isLandscape) 64.dp else 120.dp,
+            shape = MaterialTheme.shapes.large,
+            background = background,
+            onClick = { showEditor = !showEditor }
         ) {
-            if (showEditor) CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+            if (showEditor) CompositionLocalProvider(
+                LocalLayoutDirection provides LayoutDirection.Ltr
+            ) {
                 SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
                     Text(
                         "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
@@ -164,25 +158,46 @@ fun ColorPickerDialog(isBackgroundPick: Boolean, key: String, onDismissRequest: 
         }
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             (if (isBackgroundPick) backgroundColors else foregroundColors).forEach { entry ->
-                Box(
-                    Modifier
+                ColorBox(
+                    modifier = Modifier
                         .padding(vertical = if (isLandscape) 0.dp else 16.dp, horizontal = 4.dp)
-                        .shadow(if (isLandscape) 0.dp else 4.dp)
-                        .clip(MaterialTheme.shapes.small)
-                        .clickable {
-                            coroutineScope.launch {
-                                color.animateTo(entry, appColorAnimationSpec)
-                            }
-                        }
-                        .border(BorderStroke(1.dp, Color(0x80808080)), MaterialTheme.shapes.small)
-                        .background(Color.White)
-                        .background(checkerBoard)
-                        .background(entry)
-                        .size(if (isLandscape) 32.dp else 40.dp),
+                        .shadow(if (isLandscape) 0.dp else 4.dp),
+                    color = entry,
+                    size = if (isLandscape) 32.dp else 40.dp,
+                    shape = MaterialTheme.shapes.small,
+                    background = background,
+                    onClick = {
+                        coroutineScope.launch { color.animateTo(entry, appColorAnimationSpec) }
+                    },
                 )
             }
         }
     }
+}
+
+@Composable
+fun ColorBox(
+    modifier: Modifier = Modifier,
+    color: Color,
+    size: Dp,
+    shape: Shape,
+    background: Brush = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) },
+    onClick: (() -> Unit)? = null,
+    content: (@Composable BoxScope.() -> Unit)? = null
+) {
+    Box(
+        modifier
+            .then(
+                Modifier
+                    .clip(shape)
+                    .border(BorderStroke(2.dp, Color(0x80808080)), shape)
+                    .background(Color.White)
+                    .background(background)
+                    .background(color)
+                    .size(size)
+            )
+            .then(if (onClick != null) Modifier.clickable { onClick() } else Modifier),
+    ) { if (content != null) content() }
 }
 
 private val backgroundColors = listOf(
