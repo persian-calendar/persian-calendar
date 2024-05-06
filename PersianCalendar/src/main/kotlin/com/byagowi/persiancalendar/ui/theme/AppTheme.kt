@@ -24,6 +24,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
@@ -39,12 +40,16 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
 import androidx.core.text.layoutDirection
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
+import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
@@ -58,14 +63,39 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = appColorScheme()) {
+    val isVazirEnabled by isVazirEnabled.collectAsState()
+    val language by language.collectAsState()
+    val typography = if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
+        val font = FontFamily(Font(R.font.vazirmatn))
+        Typography(
+            displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
+            displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = font),
+            displaySmall = MaterialTheme.typography.displaySmall.copy(fontFamily = font),
+
+            headlineLarge = MaterialTheme.typography.headlineLarge.copy(fontFamily = font),
+            headlineMedium = MaterialTheme.typography.headlineMedium.copy(fontFamily = font),
+            headlineSmall = MaterialTheme.typography.headlineSmall.copy(fontFamily = font),
+
+            titleLarge = MaterialTheme.typography.titleLarge.copy(fontFamily = font),
+            titleMedium = MaterialTheme.typography.titleMedium.copy(fontFamily = font),
+            titleSmall = MaterialTheme.typography.titleSmall.copy(fontFamily = font),
+
+            bodyLarge = MaterialTheme.typography.bodyLarge.copy(fontFamily = font),
+            bodyMedium = MaterialTheme.typography.bodyMedium.copy(fontFamily = font),
+            bodySmall = MaterialTheme.typography.bodySmall.copy(fontFamily = font),
+
+            labelLarge = MaterialTheme.typography.labelLarge.copy(fontFamily = font),
+            labelMedium = MaterialTheme.typography.labelMedium.copy(fontFamily = font),
+            labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = font)
+        )
+    } else MaterialTheme.typography
+    MaterialTheme(colorScheme = appColorScheme(), typography = typography) {
         val contentColor by animateColorAsState(
             MaterialTheme.colorScheme.onBackground,
             animationSpec = appColorAnimationSpec,
             label = "content color"
         )
 
-        val language by language.collectAsState()
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
         CompositionLocalProvider(

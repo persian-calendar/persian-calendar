@@ -29,14 +29,18 @@ import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
+import com.byagowi.persiancalendar.PREF_VAZIR_ENABLED
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
+import com.byagowi.persiancalendar.global.isVazirEnabled
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.theme
@@ -151,6 +155,17 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, !isRedHolidays) } }
+        }
+        val language by language.collectAsState()
+        AnimatedVisibility(
+            visible = showMore && BuildConfig.DEVELOPMENT && language.isArabicScript,
+            modifier = Modifier.padding(horizontal = 24.dp),
+        ) {
+            val isVazirEnabled by isVazirEnabled.collectAsState()
+            SwitchWithLabel(
+                label = "وزیر",
+                checked = isVazirEnabled,
+            ) { context.preferences.edit { putBoolean(PREF_VAZIR_ENABLED, !isVazirEnabled) } }
         }
     }
 }

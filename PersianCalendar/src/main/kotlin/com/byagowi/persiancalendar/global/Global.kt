@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_RED_HOLIDAYS
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
+import com.byagowi.persiancalendar.DEFAULT_VAZIR_ENABLED
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
@@ -66,6 +67,7 @@ import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
+import com.byagowi.persiancalendar.PREF_VAZIR_ENABLED
 import com.byagowi.persiancalendar.PREF_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
@@ -181,6 +183,10 @@ val isGradient: StateFlow<Boolean> get() = isGradient_
 
 private val isRedHolidays_ = MutableStateFlow(DEFAULT_RED_HOLIDAYS)
 val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
+
+
+private val isVazirEnabled_ = MutableStateFlow(DEFAULT_VAZIR_ENABLED)
+val isVazirEnabled: StateFlow<Boolean> get() = isVazirEnabled_
 
 private var alternativeGregorianMonths = false
 
@@ -358,6 +364,7 @@ fun updateStoredPreference(context: Context) {
     } ?: Theme.LIGHT
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
+    isVazirEnabled_.value = preferences.getBoolean(PREF_VAZIR_ENABLED, DEFAULT_VAZIR_ENABLED)
     alternativeGregorianMonths = when {
         language.isPersian -> preferences.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
