@@ -4,7 +4,7 @@ import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Typeface
+import android.os.Build
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -16,18 +16,21 @@ class AngleDisplay(
     resources: Resources, defaultFormat: String = "00.0",
     private val backgroundText: String = "88.8"
 ) {
-    private val lcd = Typeface.createFromAsset(resources.assets, "fonts/lcd.ttf")
+    private val lcd =
+        // ResourcesCompat.getFont could also be used for better compatibility
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) resources.getFont(R.font.lcd)
+        else null
     private val lcdTextSize = 20 * resources.dp
     private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF00FF00.toInt()
         it.textSize = lcdTextSize
-        it.typeface = lcd
+        if (lcd != null) it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
     }
     private val lcdBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x44FFFFFF
         it.textSize = lcdTextSize
-        it.typeface = lcd
+        if (lcd != null) it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
     }
     private val displayRect = Rect().also {
