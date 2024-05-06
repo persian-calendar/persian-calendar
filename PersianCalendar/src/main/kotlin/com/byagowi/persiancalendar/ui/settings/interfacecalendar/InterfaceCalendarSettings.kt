@@ -171,6 +171,6 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         defaultValue = language.defaultWeekEnds,
         dialogTitleResId = R.string.week_ends_summary,
         title = stringResource(R.string.week_ends),
-        summary = stringResource(R.string.week_ends),
+        summary = stringResource(R.string.week_ends_summary),
     )
 }
