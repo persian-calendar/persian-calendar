@@ -274,12 +274,7 @@ fun SettingsSwitchWithInnerState(
 ) {
     val context = LocalContext.current
     var currentValue by remember {
-        mutableStateOf(
-            context.preferences.getBoolean(
-                key,
-                defaultValue
-            )
-        )
+        mutableStateOf(context.preferences.getBoolean(key, defaultValue))
     }
     val toggle = {
         currentValue = !currentValue
