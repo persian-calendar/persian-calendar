@@ -129,7 +129,11 @@ fun SettingsColor(
     }
     SettingsLayout({ showDialog = true }, title, summary) {
         ColorBox(
-            color = persistedColor,
+            color = animateColorAsState(
+                targetValue = persistedColor,
+                animationSpec = appColorAnimationSpec,
+                label = "preview color",
+            ).value,
             size = widgetSize.dp,
             shape = MaterialTheme.shapes.large,
             outlineColor = MaterialTheme.colorScheme.outline,
