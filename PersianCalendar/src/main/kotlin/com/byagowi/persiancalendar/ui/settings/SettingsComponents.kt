@@ -128,7 +128,13 @@ fun SettingsColor(
         mutableStateOf(initialColor)
     }
     SettingsLayout({ showDialog = true }, title, summary) {
-        ColorBox(color = persistedColor, size = widgetSize.dp, shape = MaterialTheme.shapes.medium)
+        ColorBox(
+            color = persistedColor,
+            size = widgetSize.dp,
+            shape = MaterialTheme.shapes.large,
+            outlineColor = MaterialTheme.colorScheme.outline,
+            outlineWidth = 2.dp,
+        )
     }
     if (showDialog) ColorPickerDialog(
         isBackgroundPick = isBackgroundPick,

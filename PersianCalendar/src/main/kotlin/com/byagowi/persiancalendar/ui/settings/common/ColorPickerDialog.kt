@@ -101,6 +101,7 @@ fun ColorPickerDialog(
             size = if (isLandscape) 64.dp else 120.dp,
             shape = MaterialTheme.shapes.large,
             background = background,
+            outlineWidth = 2.dp,
             onClick = { showEditor = !showEditor }
         ) {
             if (showEditor) CompositionLocalProvider(
@@ -166,7 +167,7 @@ fun ColorPickerDialog(
                     size = if (isLandscape) 32.dp else 40.dp,
                     shape = MaterialTheme.shapes.small,
                     background = background,
-                    borderSize = 1.dp,
+                    outlineWidth = 1.dp,
                     onClick = {
                         coroutineScope.launch { color.animateTo(entry, appColorAnimationSpec) }
                     },
@@ -183,7 +184,8 @@ fun ColorBox(
     size: Dp,
     shape: Shape,
     background: Brush = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) },
-    borderSize: Dp = 2.dp,
+    outlineWidth: Dp,
+    outlineColor: Color = MaterialTheme.colorScheme.outline.copy(alpha = .5f),
     onClick: (() -> Unit)? = null,
     content: (@Composable BoxScope.() -> Unit)? = null
 ) {
@@ -192,7 +194,7 @@ fun ColorBox(
             .then(
                 Modifier
                     .clip(shape)
-                    .border(BorderStroke(borderSize, Color(0x80808080)), shape)
+                    .border(BorderStroke(outlineWidth, outlineColor), shape)
                     .background(Color.White)
                     .background(background)
                     .background(color)
