@@ -63,6 +63,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun ColorPickerDialog(
+    title: String,
     isBackgroundPick: Boolean,
     initialColor: Color,
     persistColor: (Color) -> Unit,
@@ -73,12 +74,7 @@ fun ColorPickerDialog(
     ) { Animatable(initialColor) }
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     AppDialog(
-        title = {
-            if (isLandscape) return@AppDialog
-            val title =
-                if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color
-            Text(stringResource(title))
-        },
+        title = { if (!isLandscape) Text(title) },
         confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()

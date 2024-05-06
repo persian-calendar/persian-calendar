@@ -137,6 +137,7 @@ fun SettingsColor(
         )
     }
     if (showDialog) ColorPickerDialog(
+        title = title,
         isBackgroundPick = isBackgroundPick,
         initialColor = persistedColor,
         persistColor = { color ->
