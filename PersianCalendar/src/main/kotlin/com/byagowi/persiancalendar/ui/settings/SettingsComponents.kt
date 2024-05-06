@@ -21,6 +21,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -130,7 +133,7 @@ fun SettingsSingleSelect(
     summaryResId: Int? = null
 ) {
     val context = LocalContext.current
-    var summary by remember {
+    var summary by remember(language.collectAsState().value) {
         mutableStateOf(
             if (summaryResId == null) entries[entryValues.indexOf(
                 context.preferences.getString(key, null) ?: defaultValue
@@ -180,8 +183,15 @@ fun SettingsMultiSelect(
     title: String,
     summary: String? = null,
 ) {
+    fun generateSummary(items: List<String>): String =
+        items.map(entryValues::indexOf).sorted().joinToString(spacedComma) { entries[it] }
     val context = LocalContext.current
-    SettingsClickable(title = title, summary = summary) { onDismissRequest ->
+    var summaryToShow by remember(language.collectAsState().value) {
+        val preferences = context.preferences
+        val items = preferences.getStringSet(key, null) ?: defaultValue
+        mutableStateOf(summary ?: generateSummary(items.toList()))
+    }
+    SettingsClickable(title = title, summary = summaryToShow) { onDismissRequest ->
         val result = rememberSaveable(
             saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
         ) {
@@ -198,6 +208,7 @@ fun SettingsMultiSelect(
                 TextButton(onClick = {
                     onDismissRequest()
                     context.preferences.edit { putStringSet(key, result.toSet()) }
+                    if (summary == null) summaryToShow = generateSummary(result)
                 }) { Text(stringResource(R.string.accept)) }
             },
         ) {
