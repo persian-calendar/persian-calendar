@@ -533,7 +533,7 @@ private fun createMoonRemoteViews(context: Context, width: Int, height: Int): Re
         val state = AstronomyState(GregorianCalendar())
         solarDraw.moon(
             this, state.sun, state.moon, width / 2f, height / 2f, min(width, height) / 2f,
-            state.moonTilt, state.moonAltitude
+            state.moonTilt, null /* make it always fully visible */
         )
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
