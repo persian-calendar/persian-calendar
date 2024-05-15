@@ -151,7 +151,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
 
     class MenuItem(
         val icon: ImageVector, @StringRes val title: Int,
-        val isEnabled: () -> Boolean = { false }, val action: () -> Unit
+        val isEnabled: () -> Boolean = { false }, val onClick: () -> Unit
     )
 
     val menu = listOf(
@@ -295,7 +295,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
             menu.forEach {
                 NavigationRailItem(
                     modifier = Modifier.weight(1f),
-                    onClick = it.action,
+                    onClick = it.onClick,
                     selected = false,
                     icon = {
                         TooltipBox(
