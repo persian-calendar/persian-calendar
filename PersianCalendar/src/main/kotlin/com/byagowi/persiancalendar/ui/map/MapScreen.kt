@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.widget.Toast
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -147,8 +148,14 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val menu = listOf<Triple<ImageVector, Int, () -> Unit>>(
-        Triple(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
+
+    class MenuItem(
+        val icon: ImageVector, @StringRes val title: Int,
+        val isEnabled: () -> Boolean = { false }, val action: () -> Unit
+    )
+
+    val menu = listOf(
+        MenuItem(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
             val textureSize = 2048
             val bitmap =
                 runCatching { createBitmap(textureSize, textureSize) }.onFailure(logException)
@@ -169,19 +176,30 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
             showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
             // DO NOT use bitmap after this
         },
-        Triple(Icons.Default.SocialDistance, R.string.show_direct_path_label) {
+        MenuItem(
+            Icons.Default.SocialDistance, R.string.show_direct_path_label,
+            { state.isDirectPathMode }
+        ) {
             if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDirectPathMode()
         },
-        Triple(Icons.Default.Grid3x3, R.string.show_grid_label) {
+        MenuItem(Icons.Default.Grid3x3, R.string.show_grid_label, { state.displayGrid }) {
             viewModel.toggleDisplayGrid()
         },
-        Triple(Icons.Default.MyLocation, R.string.show_my_location_label) { showGpsDialog = true },
-        Triple(Icons.Default.LocationOn, R.string.show_location_label) {
+        MenuItem(Icons.Default.MyLocation, R.string.show_my_location_label) {
+            showGpsDialog = true
+        },
+        MenuItem(
+            Icons.Default.LocationOn, R.string.show_location_label,
+            { state.coordinates != null && state.displayLocation }
+        ) {
             if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDisplayLocation()
         },
-        Triple(Icons.Default.NightlightRound, R.string.show_night_mask_label) {
+        MenuItem(
+            Icons.Default.NightlightRound, R.string.show_night_mask_label,
+            { state.mapType != MapType.NONE },
+        ) {
             if (viewModel.state.value.mapType == MapType.NONE) showMapTypesDialog = true
             else viewModel.changeMapType(MapType.NONE)
         },
@@ -274,28 +292,21 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                     )
                 },
             )
-            menu.forEach { (icon, title, action) ->
+            menu.forEach {
                 NavigationRailItem(
                     modifier = Modifier.weight(1f),
-                    onClick = action,
+                    onClick = it.action,
                     selected = false,
                     icon = {
                         TooltipBox(
                             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                            tooltip = { PlainTooltip { Text(text = stringResource(title)) } },
+                            tooltip = { PlainTooltip { Text(text = stringResource(it.title)) } },
                             state = rememberTooltipState()
                         ) {
                             Icon(
-                                icon, contentDescription = stringResource(title),
-                                // We need more than Triple or defining a new class, oh well
-                                tint = if (when (title) {
-                                        R.string.show_grid_label -> state.displayGrid
-                                        R.string.show_location_label -> state.coordinates != null && state.displayLocation
-                                        R.string.show_direct_path_label -> state.isDirectPathMode
-                                        R.string.show_night_mask_label -> state.mapType != MapType.NONE
-                                        else -> false
-                                    }
-                                ) MaterialTheme.colorScheme.inversePrimary else LocalContentColor.current
+                                it.icon, contentDescription = stringResource(it.title),
+                                tint = if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
+                                else LocalContentColor.current
                             )
                         }
                     },
