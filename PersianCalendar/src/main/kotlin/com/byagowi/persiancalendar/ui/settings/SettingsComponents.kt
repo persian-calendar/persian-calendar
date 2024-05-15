@@ -217,6 +217,7 @@ fun SettingsMultiSelect(
 ) {
     fun generateSummary(items: List<String>): String =
         items.map(entryValues::indexOf).sorted().joinToString(spacedComma) { entries[it] }
+
     val context = LocalContext.current
     var summaryToShow by remember(language.collectAsState().value) {
         val preferences = context.preferences

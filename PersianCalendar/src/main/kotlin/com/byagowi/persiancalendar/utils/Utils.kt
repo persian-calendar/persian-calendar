@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
 import android.util.Log
-import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R

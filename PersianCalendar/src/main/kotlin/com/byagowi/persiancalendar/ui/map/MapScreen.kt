@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.widget.Toast
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
