@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -85,6 +86,7 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
+import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -305,8 +307,12 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                         ) {
                             Icon(
                                 it.icon, contentDescription = stringResource(it.title),
-                                tint = if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
-                                else LocalContentColor.current
+                                tint = animateColorAsState(
+                                    if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
+                                    else LocalContentColor.current,
+                                    animationSpec = appColorAnimationSpec,
+                                    label = "icon tint"
+                                ).value
                             )
                         }
                     },
