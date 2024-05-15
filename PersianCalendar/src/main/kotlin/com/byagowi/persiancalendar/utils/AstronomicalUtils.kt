@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
+import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
@@ -79,6 +80,7 @@ fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
 }
 
 val Body.titleStringId
+    @StringRes
     get(): Int = when (this) {
         Body.Mercury -> R.string.mercury
         Body.Venus -> R.string.venus

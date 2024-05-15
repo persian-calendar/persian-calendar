@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
 import android.util.Log
+import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
@@ -45,6 +46,7 @@ val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 
 // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
 val CalculationMethod.titleStringId
+    @StringRes
     get(): Int = when (this) {
         CalculationMethod.MWL -> R.string.method_mwl
         CalculationMethod.ISNA -> R.string.method_isna
@@ -60,6 +62,7 @@ val CalculationMethod.titleStringId
 val Coordinates.enableHighLatitudesConfiguration: Boolean get() = abs(latitude) > 50
 
 val HighLatitudesMethod.titleStringId
+    @StringRes
     get(): Int = when (this) {
         HighLatitudesMethod.NightMiddle -> R.string.high_latitudes_night_middle
         HighLatitudesMethod.AngleBased -> R.string.high_latitudes_angle_based
