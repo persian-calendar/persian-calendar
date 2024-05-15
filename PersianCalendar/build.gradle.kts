@@ -99,14 +99,12 @@ android {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
         // isCoreLibraryDesugaringEnabled = true
-        //   Actually could be useful as makes use of java.time.Duration possible instead
+        //   Actually could be useful as makes use of java.time.Duration possible instead of
         //   java.util.concurrent.TimeUnit but needs multidex as it says:
         //     In order to use core library desugaring, please enable multidex.
     }
 
-    kotlinOptions {
-        jvmTarget = javaVersion.majorVersion
-    }
+    kotlinOptions { jvmTarget = javaVersion.majorVersion }
 
     lint { disable += listOf("MissingTranslation") }
 }
