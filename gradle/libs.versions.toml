@@ -9,17 +9,16 @@ androidx-test-ext-junit = "1.1.5"
 astronomy = "61dc07020aaa6885d2c7f688a4d82beaf6edb9ef" # is equal to v2.1.19
 browser = "1.8.0"
 compose-bom = "2024.05.00"
-compose-compiler = "1.5.13" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 coroutines = "1.8.1"
 dynamicanimation = "1.0.0"
 junit = "4.13.2"
 junit-runner = "1.10.2"
 junit5 = "5.10.2"
-kotlin = "1.9.23"
+kotlin = "2.0.0-RC3"
 kotlinpoet = "1.16.0"
 kotlinx-html-jvm = "0.11.0"
 kotlinx-serialization-json = "1.6.3"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0"
 mockito-core = "5.12.0"
 mockito-kotlin = "5.3.1"
 openlocationcode = "1.0.4"
@@ -39,7 +38,6 @@ browser = { group = "androidx.browser", name = "browser", version.ref = "browser
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android" }
-compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
@@ -77,6 +75,7 @@ work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

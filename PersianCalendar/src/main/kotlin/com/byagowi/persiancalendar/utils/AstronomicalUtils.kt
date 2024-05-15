@@ -80,7 +80,7 @@ fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
 }
 
 val Body.titleStringId
-    get(): @StringRes Int = when (this) {
+    get(): Int = when (this) {
         Body.Mercury -> R.string.mercury
         Body.Venus -> R.string.venus
         Body.Earth -> R.string.earth

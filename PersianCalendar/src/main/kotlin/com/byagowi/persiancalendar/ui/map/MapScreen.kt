@@ -148,7 +148,7 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current
-    val menu = listOf<Triple<ImageVector, @StringRes Int, () -> Unit>>(
+    val menu = listOf<Triple<ImageVector, Int, () -> Unit>>(
         Triple(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
             val textureSize = 2048
             val bitmap =

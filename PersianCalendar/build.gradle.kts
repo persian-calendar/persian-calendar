@@ -2,6 +2,7 @@ operator fun File.div(child: String): File = File(this, child)
 
 plugins {
     alias(libs.plugins.com.android.application)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
     id("io.github.persiancalendar.appbuildplugin")
 }
@@ -90,10 +91,6 @@ android {
     bundle {
         // We have in app locale change and don't want Google Play's dependency so better to disable
         language.enableSplit = false
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
     val javaVersion = JavaVersion.VERSION_17
