@@ -1284,6 +1284,7 @@
     { "holiday": false, "month": 5, "day": 3, "title": "روز جهانی آزادی مطبوعات", "type": "International" },
     { "holiday": false, "month": 5, "day": 12, "title": "روز جهانی پرستار", "type": "International" },
     { "holiday": false, "month": 5, "day": 15, "title": "روز جهانی خانواده", "type": "International" },
+    { "holiday": false, "month": 5, "day": 16, "title": "روز جهانی پسران", "type": "International" },
     { "holiday": false, "month": 5, "day": 20, "title": "روز جهانی زنبور", "type": "International" },
     { "holiday": false, "month": 5, "day": 29, "title": "روز جهانی حافظان صلح ملل متحد", "type": "International" },
     { "holiday": false, "month": 6, "day": 4, "title": "روز جهانی حمایت از کودکان قربانی خشونت", "type": "International" },
