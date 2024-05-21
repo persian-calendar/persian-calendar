@@ -2,8 +2,8 @@ operator fun File.div(child: String): File = File(this, child)
 
 plugins {
     alias(libs.plugins.com.android.application)
-    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     id("io.github.persiancalendar.appbuildplugin")
 }
 
