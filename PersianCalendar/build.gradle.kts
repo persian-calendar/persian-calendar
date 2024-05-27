@@ -1,5 +1,3 @@
-operator fun File.div(child: String): File = File(this, child)
-
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.kotlin.android)
@@ -7,10 +5,11 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin")
 }
 
-val generatedAppSrcDir =
-    layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
 android {
     sourceSets {
+        operator fun File.div(child: String): File = File(this, child)
+        val generatedAppSrcDir =
+            layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
