@@ -60,7 +60,6 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
             isMinifyEnabled = true
             isShrinkResources = true
-            multiDexEnabled = false
             buildConfigField("boolean", "DEVELOPMENT", "true")
         }
 
@@ -68,7 +67,6 @@ android {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitInfo"
             buildConfigField("boolean", "DEVELOPMENT", "true")
             applicationIdSuffix = ".debug"
-            multiDexEnabled = true
         }
 
         getByName("release") {
@@ -77,7 +75,6 @@ android {
             )
             isMinifyEnabled = true
             isShrinkResources = true
-            multiDexEnabled = false
             buildConfigField("boolean", "DEVELOPMENT", "false")
         }
     }
@@ -98,10 +95,6 @@ android {
     compileOptions {
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
-        // isCoreLibraryDesugaringEnabled = true
-        //   Actually could be useful as makes use of java.time.Duration possible instead of
-        //   java.util.concurrent.TimeUnit but needs multidex as it says:
-        //     In order to use core library desugaring, please enable multidex.
     }
 
     kotlinOptions { jvmTarget = javaVersion.majorVersion }
