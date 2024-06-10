@@ -1276,6 +1276,7 @@
     { "holiday": false, "month": 4, "day": 7, "title": "روز جهانی کارتونیست‌ها", "type": "International" },
     { "holiday": false, "month": 4, "day": 7, "title": "روز جهانی سلامت", "type": "International" },
     { "holiday": false, "month": 4, "day": 15, "title": "روز جهانی هنر (سالروز تولد داوینچی)", "type": "International" },
+    { "holiday": false, "month": 4, "day": 19, "title": "روز جهانی کبد", "type": "International" },
     { "holiday": false, "month": 4, "day": 22, "title": "روز جهانی زمین پاک", "type": "International" },
     { "holiday": false, "month": 4, "day": 23, "title": "روز جهانی کتاب و حق مؤلف", "type": "International" },
     { "holiday": false, "month": 4, "day": 25, "title": "روز جهانی مالاریا", "type": "International" },
