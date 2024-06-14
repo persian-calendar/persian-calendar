@@ -3,7 +3,10 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.content.res.Configuration
 import android.os.Build
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -105,9 +108,10 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun AstronomyScreen(
+fun SharedTransitionScope.AstronomyScreen(
+    animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
@@ -182,7 +186,9 @@ fun AstronomyScreen(
             val modifier = Modifier
                 .padding(bottom = 16.dp)
                 .safeDrawingPadding()
-            if (!isLandscape) SliderBar(modifier, slider, viewModel) { slider = it }
+            if (!isLandscape) SliderBar(
+                modifier, animatedContentScope, slider, viewModel
+            ) { slider = it }
         },
     ) { paddingValues ->
         Surface(
@@ -203,7 +209,7 @@ fun AstronomyScreen(
                     ) {
                         Header(Modifier, viewModel)
                         Spacer(Modifier.weight(1f))
-                        SliderBar(Modifier, slider, viewModel) { slider = it }
+                        SliderBar(Modifier, animatedContentScope, slider, viewModel) { slider = it }
                     }
                     SolarDisplay(
                         Modifier
@@ -260,9 +266,11 @@ fun AstronomyScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SliderBar(
+private fun SharedTransitionScope.SliderBar(
     modifier: Modifier,
+    animatedContentScope: AnimatedContentScope,
     slider: SliderView?,
     viewModel: AstronomyViewModel,
     setSlider: (SliderView) -> Unit,
@@ -287,6 +295,10 @@ private fun SliderBar(
                     onClickLabel = stringResource(R.string.select_date),
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
+                )
+                .sharedBounds(
+                    rememberSharedContentState(key = "time"),
+                    animatedVisibilityScope = animatedContentScope,
                 ),
             color = MaterialTheme.colorScheme.onSurface,
         )

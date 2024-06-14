@@ -6,7 +6,10 @@ import android.graphics.Matrix
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -99,9 +102,14 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewModel) {
+fun SharedTransitionScope.MapScreen(
+    animatedContentScope: AnimatedContentScope,
+    navigateUp: () -> Unit,
+    fromSettings: Boolean,
+    viewModel: MapViewModel,
+) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
     val mapDraw = remember { MapDraw(context.resources) }
@@ -362,6 +370,10 @@ fun MapScreen(navigateUp: () -> Unit, fromSettings: Boolean, viewModel: MapViewM
                                 onClickLabel = stringResource(R.string.select_date),
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),
+                            )
+                            .sharedBounds(
+                                rememberSharedContentState(key = "time"),
+                                animatedVisibilityScope = animatedContentScope,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,
                     )
