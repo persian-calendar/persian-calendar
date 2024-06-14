@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -16,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 // Have a look at https://developer.android.com/static/images/jetpack/compose/compose-testing-cheatsheet.pdf
+@OptIn(ExperimentalSharedTransitionApi::class)
 @RunWith(AndroidJUnit4::class)
 class AboutScreenTest {
     @get:Rule
@@ -27,11 +29,14 @@ class AboutScreenTest {
         var deviceInformationString = ""
         composeTestRule.setContent {
             deviceInformationString = stringResource(R.string.device_information)
-            AboutScreen(
-                openDrawer = {},
-                navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
-                navigateToLicenses = { assert(false) },
-            )
+            ParentMock { scope ->
+                AboutScreen(
+                    animatedContentScope = scope,
+                    openDrawer = {},
+                    navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
+                    navigateToLicenses = { assert(false) },
+                )
+            }
         }
         composeTestRule.onNodeWithContentDescription(deviceInformationString)
             .assertHasClickAction()
@@ -45,11 +50,14 @@ class AboutScreenTest {
         var licensesString = ""
         composeTestRule.setContent {
             licensesString = stringResource(R.string.about_license_title)
-            AboutScreen(
-                openDrawer = {},
-                navigateToDeviceInformation = { assert(false) },
-                navigateToLicenses = { navigateToLicensesIsCalled = true },
-            )
+            ParentMock { scope ->
+                AboutScreen(
+                    animatedContentScope = scope,
+                    openDrawer = {},
+                    navigateToDeviceInformation = { assert(false) },
+                    navigateToLicenses = { navigateToLicensesIsCalled = true },
+                )
+            }
         }
         composeTestRule.onNodeWithText(licensesString)
             .assertHasClickAction()
@@ -64,6 +72,10 @@ class AboutScreenTest {
 
     @Test
     fun licensesSmokeTest() {
-        composeTestRule.setContent { LicensesScreen {} }
+        composeTestRule.setContent {
+            ParentMock { scope ->
+                LicensesScreen(scope) {}
+            }
+        }
     }
 }
