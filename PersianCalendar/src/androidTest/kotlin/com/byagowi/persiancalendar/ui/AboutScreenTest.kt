@@ -27,16 +27,14 @@ class AboutScreenTest {
     fun aboutScreenNavigateToDeviceInformation() {
         var navigateToDeviceInformationIsCalled = false
         var deviceInformationString = ""
-        composeTestRule.setContent {
+        composeTestRule.setContentWithParent { scope ->
             deviceInformationString = stringResource(R.string.device_information)
-            ParentMock { scope ->
-                AboutScreen(
-                    animatedContentScope = scope,
-                    openDrawer = {},
-                    navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
-                    navigateToLicenses = { assert(false) },
-                )
-            }
+            AboutScreen(
+                animatedContentScope = scope,
+                openDrawer = {},
+                navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
+                navigateToLicenses = { assert(false) },
+            )
         }
         composeTestRule.onNodeWithContentDescription(deviceInformationString)
             .assertHasClickAction()
@@ -48,16 +46,14 @@ class AboutScreenTest {
     fun aboutScreenNavigateToLicenses() {
         var navigateToLicensesIsCalled = false
         var licensesString = ""
-        composeTestRule.setContent {
+        composeTestRule.setContentWithParent { scope ->
             licensesString = stringResource(R.string.about_license_title)
-            ParentMock { scope ->
-                AboutScreen(
-                    animatedContentScope = scope,
-                    openDrawer = {},
-                    navigateToDeviceInformation = { assert(false) },
-                    navigateToLicenses = { navigateToLicensesIsCalled = true },
-                )
-            }
+            AboutScreen(
+                animatedContentScope = scope,
+                openDrawer = {},
+                navigateToDeviceInformation = { assert(false) },
+                navigateToLicenses = { navigateToLicensesIsCalled = true },
+            )
         }
         composeTestRule.onNodeWithText(licensesString)
             .assertHasClickAction()
@@ -72,10 +68,6 @@ class AboutScreenTest {
 
     @Test
     fun licensesSmokeTest() {
-        composeTestRule.setContent {
-            ParentMock { scope ->
-                LicensesScreen(scope) {}
-            }
-        }
+        composeTestRule.setContentWithParent { scope -> LicensesScreen(scope) {} }
     }
 }

@@ -21,11 +21,9 @@ class MapScreenTest {
     fun mapScreenNavigateUp() {
         var navigateUpIsCalled = false
         var navigateUpString = ""
-        composeTestRule.setContent {
+        composeTestRule.setContentWithParent { scope ->
             navigateUpString = stringResource(R.string.navigate_up)
-            ParentMock { scope ->
-                MapScreen(scope, { navigateUpIsCalled = true }, false, viewModel())
-            }
+            MapScreen(scope, { navigateUpIsCalled = true }, false, viewModel())
         }
         composeTestRule.onNodeWithContentDescription(navigateUpString)
             .assertHasClickAction()
