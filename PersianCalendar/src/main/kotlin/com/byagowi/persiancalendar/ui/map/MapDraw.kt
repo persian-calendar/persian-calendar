@@ -348,9 +348,14 @@ class MapDraw(
         it.textSize = gridLinesWidth * 10
         it.textAlign = Paint.Align.CENTER
     }
-    private val moaiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+    private val emojiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = Color.BLACK
         it.textSize = 1.5f
+        it.textAlign = Paint.Align.CENTER
+    }
+    private val biggerEmojiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = Color.BLACK
+        it.textSize = 10f
         it.textAlign = Paint.Align.CENTER
     }
 
@@ -410,7 +415,27 @@ class MapDraw(
             if (scaleBack < .1) {
                 val userX = (-109.366f + 180) * mapScaleFactor
                 val userY = (90 - -27.116f) * mapScaleFactor
-                drawText("🗿", userX - 1f, userY + 2.5f, moaiPaint)
+                drawText("🗿", userX - 1f, userY + 2.5f, emojiPaint) // Moai
+            }
+            if (scaleBack < .1) {
+                val userX = (129.3970f + 180) * mapScaleFactor
+                val userY = (90 - 34.5897f) * mapScaleFactor
+                drawText("⛩", userX, userY + 2.5f, emojiPaint) // Tsushima
+            }
+            if (scaleBack < .1) {
+                val userX = (86.92527f + 180) * mapScaleFactor
+                val userY = (90 - 27.98833f) * mapScaleFactor
+                drawText("🗻", userX, userY + 2.5f, biggerEmojiPaint) // Everest
+            }
+            if (scaleBack < .1) {
+                val userX = (108.22f + 180) * mapScaleFactor
+                val userY = (90 - -79.74f) * mapScaleFactor
+                drawText("🐧", userX, userY + 2.5f, biggerEmojiPaint) // South geomagnetic pole
+            }
+            if (scaleBack < .1) {
+                val userX = (132.16666f + 180) * mapScaleFactor
+                val userY = (90 - -23.03333f) * mapScaleFactor
+                drawText("🦘", userX, userY + 2.5f, biggerEmojiPaint) // Australia pole of inaccessibility
             }
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
