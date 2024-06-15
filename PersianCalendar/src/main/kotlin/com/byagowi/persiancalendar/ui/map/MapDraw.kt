@@ -428,6 +428,11 @@ class MapDraw(
                 drawText("🗻", userX, userY + 2.5f, biggerEmojiPaint) // Everest
             }
             if (scaleBack < .1) {
+                val userX = (-72.62f + 180) * mapScaleFactor
+                val userY = (90 - 80.37f) * mapScaleFactor
+                drawText("🐻‍❄️", userX, userY + 2.5f, biggerEmojiPaint) // North geomagnetic pole
+            }
+            if (scaleBack < .1) {
                 val userX = (108.22f + 180) * mapScaleFactor
                 val userY = (90 - -79.74f) * mapScaleFactor
                 drawText("🐧", userX, userY + 2.5f, biggerEmojiPaint) // South geomagnetic pole
