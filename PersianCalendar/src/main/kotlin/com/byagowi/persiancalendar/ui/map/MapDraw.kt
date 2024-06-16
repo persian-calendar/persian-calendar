@@ -353,6 +353,11 @@ class MapDraw(
         it.textSize = 1.5f
         it.textAlign = Paint.Align.CENTER
     }
+    private val emojiRedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = Color.RED
+        it.textSize = 1.5f
+        it.textAlign = Paint.Align.CENTER
+    }
     private val biggerEmojiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = Color.BLACK
         it.textSize = 10f
@@ -420,7 +425,7 @@ class MapDraw(
             if (scaleBack < .1) {
                 val userX = (129.3970f + 180) * mapScaleFactor
                 val userY = (90 - 34.5897f) * mapScaleFactor
-                drawText("⛩", userX, userY + 2.5f, emojiPaint) // Tsushima
+                drawText("⛩", userX, userY + 2.5f, emojiRedPaint) // Tsushima
             }
             if (scaleBack < .1) {
                 val userX = (86.92527f + 180) * mapScaleFactor
