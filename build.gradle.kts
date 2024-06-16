@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose) apply false
     id("io.github.persiancalendar.appbuildplugin") apply false
 
-    // gradlePlugins plugins
+    // for gradle-plugins
     `kotlin-dsl` apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.plugin.serialization) apply false

@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "persian-calendar"
 include(":PersianCalendar")
-includeBuild("gradlePlugins")
+includeBuild("gradle-plugins")
