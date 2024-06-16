@@ -43,7 +43,9 @@ jobs:
 
       - name: Build and send apks to telegram
         run: |
+          git status
           ./gradlew assembleNightly
+          gii status
           apk_path="$(find . -type f -iname *.apk)"
           curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
             -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
