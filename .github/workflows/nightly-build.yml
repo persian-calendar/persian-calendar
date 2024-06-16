@@ -44,6 +44,8 @@ jobs:
       - name: Build and send apks to telegram
         run: |
           git status
+          ./gradlew compileNightlyKotlin
+          git status
           ./gradlew assembleNightly
           git status
           apk_path="$(find . -type f -iname *.apk)"
