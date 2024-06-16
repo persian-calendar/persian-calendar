@@ -35,8 +35,8 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: PersianCalendar
-          path: PersianCalendar/build/outputs/apk/**/*.apk
+          name: persian-calendar
+          path: persian-calendar/build/outputs/apk/**/*.apk
 
       - name: Archive reports for failed build
         if: ${{ failure() }}

@@ -1,7 +1,7 @@
 plugins {
     // All the plugins used in subprojects and plugins should be listed here with "apply false"
 
-    // PersianCalendar plugins
+    // for persian-calendar project
     alias(libs.plugins.com.android.application) apply false
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.kotlin.compose) apply false

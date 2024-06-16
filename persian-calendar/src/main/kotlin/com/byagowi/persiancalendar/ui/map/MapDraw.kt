@@ -75,7 +75,7 @@ class MapDraw(
     private fun createPathFromResourceText(resources: Resources, @RawRes id: Int): Path {
         val path = resources.openRawResource(id).readBytes().decodeToString()
         // In case Compose addPathNodes became private bring back
-        // https://github.com/persian-calendar/persian-calendar/blob/5a7ff8a/PersianCalendar/src/main/kotlin/com/byagowi/persiancalendar/ui/map/PathParser.kt
+        // https://github.com/persian-calendar/persian-calendar/blob/5a7ff8a/persian-calendar/src/main/kotlin/com/byagowi/persiancalendar/ui/map/PathParser.kt
         return addPathNodes(path).toPath().asAndroidPath()
     }
 
