@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,9 +50,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -88,6 +90,7 @@ fun ColorPickerDialog(
     ) {
         var showEditor by rememberSaveable { mutableStateOf(false) }
         val background = with(LocalDensity.current) { createCheckerBoard(4.dp.toPx()) }
+        val coroutineScope = rememberCoroutineScope()
         ColorBox(
             modifier = Modifier
                 .padding(vertical = if (isLandscape) 0.dp else 16.dp)
@@ -103,9 +106,20 @@ fun ColorPickerDialog(
             if (showEditor) CompositionLocalProvider(
                 LocalLayoutDirection provides LayoutDirection.Ltr
             ) {
-                SelectionContainer(Modifier.align(Alignment.BottomCenter)) {
-                    Text(
-                        "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
+                var transientValue by remember { mutableStateOf<String?>(null) }
+                BasicTextField(
+                    transientValue ?: "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
+                    { newValue ->
+                        if (newValue.length != 9) transientValue = newValue else runCatching {
+                            val newColor = Color(android.graphics.Color.parseColor(newValue))
+                            transientValue = null
+                            coroutineScope.launch { color.snapTo(newColor) }
+                        }.onFailure { transientValue = newValue }
+                    },
+                    singleLine = false,
+                    modifier = Modifier.align(Alignment.BottomCenter),
+                    textStyle = TextStyle.Default.copy(
+                        textAlign = TextAlign.Center,
                         color = animateColorAsState(
                             if (color.value.compositeOver(Color.White).isLight) Color.Black
                             else Color.White,
@@ -113,12 +127,11 @@ fun ColorPickerDialog(
                             label = "text color",
                         ).value,
                         fontSize = if (isLandscape) MaterialTheme.typography.labelSmall.fontSize
-                        else TextUnit.Unspecified,
-                    )
-                }
+                        else TextStyle.Default.fontSize
+                    ),
+                )
             }
         }
-        val coroutineScope = rememberCoroutineScope()
         (0..if (isBackgroundPick) 3 else 2).forEach {
             Slider(
                 value = when (it) {
