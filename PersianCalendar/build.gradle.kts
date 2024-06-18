@@ -50,6 +50,7 @@ kotlin {
         }
         commonMain.dependencies {
         }
+        commonMain.configure { kotlin.srcDirs(generatedAppSrcDir) }
     }
 }
 
@@ -58,11 +59,6 @@ val generatedAppSrcDir =
     layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
 android {
     compileSdk = 34
-
-    sourceSets["main"].kotlin.srcDir(generatedAppSrcDir)
-    sourceSets["main"].manifest.srcFile("src/main/AndroidManifest.xml")
-    sourceSets["main"].res.srcDirs("src/main/res")
-    sourceSets["main"].resources.srcDirs("src/main/resources")
 
     buildFeatures {
         buildConfig = true
