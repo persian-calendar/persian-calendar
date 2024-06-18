@@ -107,6 +107,6 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): Abst
             type.createDate(year, month, type.getNthWeekDayOfMonth(year, month, weekDay, nth))
         }
 
-        else -> null
+        else -> null.debugAssertNotNull
     }
 }
