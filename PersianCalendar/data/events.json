@@ -1336,29 +1336,32 @@
   ],
 
   "Irregular Recurring": [
-    { "calendar": "Persian", "rule": "single event", "year": 1401, "month": 8, "day": 3, "type": "Iran",
-      "title": "خورشیدگرفتگی جزئی قابل مشاهده در ایران", "holiday": false },
     { "calendar": "Persian", "rule": "nth weekday of month", "nth": 2, "weekday": 1, "month": 1, "type": "Afghanistan",
       "title": "هفتهٔ جیولوجست‌های افغانستان (هفتهٔ دوم حمل)", "holiday": false },
     { "calendar": "Persian", "rule": "last weekday of month", "weekday": 1, "month": 2, "type": "Afghanistan",
       "title": "هفتهٔ کتاب‌خوانی (هفتهٔ اخیر ثور)", "holiday": false },
+
+    { "calendar": "Persian", "rule": "single event", "year": 1401, "month": 8, "day": 3, "type": "Iran",
+      "title": "خورشیدگرفتگی جزئی قابل مشاهده در ایران", "holiday": false },
+    { "calendar": "Hijri", "rule": "end of month", "month": 2, "type": "Iran",
+      "title": "شهادت حضرت امام رضا (ع) (۲۰۳ ه‍.ق) (۳۰ صَفَر یا انتهای ماه)", "holiday": true },
+    { "calendar": "Hijri", "rule": "end of month", "month": 11, "type": "Iran",
+      "title": "شهادت حضرت امام محمد تقی (ع) (۲۲۰ ه‍.ق) (۳۰ ذی‌القعده یا انتهای ماه)", "holiday": false },
     { "calendar": "Hijri", "rule": "last weekday of month", "weekday": 7, "month": 9, "type": "Iran",
       "title": "روز جهانی قدس (آخرین جمعهٔ رمضان)", "holiday": false },
     { "calendar": "Persian", "rule": "last weekday of month", "weekday": 5, "offset": -1, "month": 12, "type": "Iran",
       "title": "روز تکریم همسایگان (شب آخرین چهارشنبهٔ سال)", "holiday": false },
+
     { "calendar": "Persian", "rule": "last weekday of month", "weekday": 4, "month": 12, "type": "AncientIran",
       "title": "چهارشنبه‌سوری (آخرین سه‌شنبهٔ سال)", "holiday": false },
     { "calendar": "Gregorian", "rule": "nth weekday of month", "nth": 3, "weekday": 6, "month": 11, "type": "International",
       "title": "روز جهانی فلسفه (سومین پنج‌شنبهٔ نوامبر)", "holiday": false },
+
     { "calendar": "Gregorian", "rule": "last weekday of month", "weekday": 2, "month": 1, "type": "International",
       "title": "روز جهانی کمک به جذامیان (آخرین یکشنبهٔٔ ژانویه)", "holiday": false },
     { "calendar": "Gregorian", "rule": "last weekday of month", "weekday": 7, "month": 11, "type": "International",
       "title": "جمعهٔ سیاه یا بلک فرایدی (آخرین جمعهٔ نوامبر)", "holiday": false },
     { "calendar": "Gregorian", "rule": "nth day from", "nth": 256, "month": 1, "day": 1, "type": "International",
-      "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false },
-    { "calendar": "Hijri", "rule": "end of month", "month": 2, "type": "Iran",
-      "title": "شهادت حضرت امام رضا (ع) (۲۰۳ ه‍.ق) (۳۰ صَفَر یا انتهای ماه)", "holiday": true },
-    { "calendar": "Hijri", "rule": "end of month", "month": 11, "type": "Iran",
-      "title": "شهادت حضرت امام محمد تقی (ع) (۲۲۰ ه‍.ق) (۳۰ ذی‌القعده یا انتهای ماه)", "holiday": false }
+      "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false }
   ]
 }
