@@ -113,7 +113,9 @@ fun ColorPickerDialog(
                         if (newValue.length != 9) transientValue = newValue else runCatching {
                             val newColor = Color(android.graphics.Color.parseColor(newValue))
                             transientValue = null
-                            coroutineScope.launch { color.snapTo(newColor) }
+                            coroutineScope.launch {
+                                color.animateTo(newColor, appColorAnimationSpec)
+                            }
                         }.onFailure { transientValue = newValue }
                     },
                     singleLine = false,
