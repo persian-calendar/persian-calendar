@@ -108,8 +108,8 @@ fun ColorPickerDialog(
             ) {
                 var transientValue by remember { mutableStateOf<String?>(null) }
                 BasicTextField(
-                    transientValue ?: "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
-                    { newValue ->
+                    value = transientValue ?: "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
+                    onValueChange = { newValue ->
                         if (newValue.length != 9) transientValue = newValue else runCatching {
                             val newColor = Color(android.graphics.Color.parseColor(newValue))
                             transientValue = null
