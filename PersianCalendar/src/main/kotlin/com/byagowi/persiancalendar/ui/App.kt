@@ -2,10 +2,12 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -228,7 +230,16 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
             },
         ) {
-            NavHost(navController = navController, startDestination = startDestination) {
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                popExitTransition = {
+                    slideOutOfContainer(
+                        AnimatedContentTransitionScope.SlideDirection.End,
+                        animationSpec = tween(500),
+                    )
+                }
+            ) {
 
                 fun navigateToSettingsLocationTab() {
                     navController.graph.findNode(settingsRoute)?.let { destination ->
