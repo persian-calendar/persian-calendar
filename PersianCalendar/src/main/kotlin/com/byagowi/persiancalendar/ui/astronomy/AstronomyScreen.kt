@@ -81,6 +81,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
@@ -395,7 +396,8 @@ private fun SharedTransitionScope.SolarDisplay(
                     selected = mode == it,
                     onClick = { viewModel.setMode(it) },
                     icon = {
-                        if (it == AstronomyMode.MOON) MoonIcon(state) else Icon(
+                        if (it == AstronomyMode.MOON) MoonIcon(state, animatedContentScope)
+                        else Icon(
                             ImageVector.vectorResource(it.icon),
                             modifier = Modifier.size(24.dp),
                             contentDescription = null,
@@ -543,14 +545,22 @@ private fun Seasons(jdn: Jdn) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Stable
 @Composable
-private fun MoonIcon(astronomyState: AstronomyState) {
+private fun SharedTransitionScope.MoonIcon(
+    astronomyState: AstronomyState,
+    animatedContentScope: AnimatedContentScope
+) {
     val context = LocalContext.current
     val solarDraw = remember { SolarDraw(context.resources) }
     Box(
         modifier = Modifier
             .size(24.dp)
+            .sharedBounds(
+                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                animatedVisibilityScope = animatedContentScope,
+            )
             .drawBehind {
                 drawIntoCanvas {
                     val radius = size.minDimension / 2f

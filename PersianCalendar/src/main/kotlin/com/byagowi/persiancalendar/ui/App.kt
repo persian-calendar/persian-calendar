@@ -287,6 +287,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             }
                         },
                         viewModel = viewModel<CalendarViewModel>(),
+                        animatedContentScope = this,
                     )
                 }
 

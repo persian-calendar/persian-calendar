@@ -152,3 +152,4 @@ const val SHARED_CONTENT_KEY_LICENSES = "licenses" // Turns licenses button into
 const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens
 const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to an level
 const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns level icon to an compass
+const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen to astronomy's

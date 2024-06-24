@@ -1,6 +1,9 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -39,6 +42,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -52,12 +56,14 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.praytimes.PrayTimes
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun TimesTab(
+fun SharedTransitionScope.TimesTab(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
-    viewModel: CalendarViewModel
+    viewModel: CalendarViewModel,
+    animatedContentScope: AnimatedContentScope,
 ) {
     val context = LocalContext.current
     val cityName by cityName.collectAsState()
@@ -87,7 +93,7 @@ fun TimesTab(
             ),
         ) {
             Spacer(Modifier.height(16.dp))
-            AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy)
+            AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy, animatedContentScope)
             Spacer(Modifier.height(16.dp))
             Times(isExpanded, prayTimes)
             Spacer(Modifier.height(8.dp))
@@ -121,11 +127,13 @@ private fun showEnableAthanForPersianUsers(): Boolean {
     return PREF_ATHAN_ALARM !in context.preferences && PREF_NOTIFICATION_ATHAN !in context.preferences
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun AstronomicalOverview(
+private fun SharedTransitionScope.AstronomicalOverview(
     viewModel: CalendarViewModel,
     prayTimes: PrayTimes,
     navigateToAstronomy: (Int) -> Unit,
+    animatedContentScope: AnimatedContentScope,
 ) {
     val today by viewModel.today.collectAsState()
     val jdn by viewModel.selectedDay.collectAsState()
@@ -134,7 +142,7 @@ private fun AstronomicalOverview(
     LaunchedEffect(Unit) { viewModel.astronomicalOverviewLaunched() }
 
     Crossfade(
-        jdn == today,
+        targetState = jdn == today,
         label = "heading",
         modifier = Modifier
             .fillMaxWidth()
@@ -161,6 +169,10 @@ private fun AstronomicalOverview(
                     .size(70.dp)
                     .align(Alignment.Center)
                     .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+                    .sharedBounds(
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                        animatedVisibilityScope = animatedContentScope,
+                    )
                     .clickable(
                         indication = rememberRipple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },

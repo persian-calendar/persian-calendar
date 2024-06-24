@@ -19,8 +19,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -187,14 +190,16 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun CalendarScreen(
+fun SharedTransitionScope.CalendarScreen(
     openDrawer: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel,
+    animatedContentScope: AnimatedContentScope,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -257,6 +262,7 @@ fun CalendarScreen(
                     navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                     navigateToAstronomy = navigateToAstronomy,
+                    animatedContentScope = animatedContentScope,
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
@@ -369,13 +375,15 @@ private fun bringDate(
 
 typealias DetailsTab = Pair<Int, @Composable () -> Unit>
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun detailsTabs(
+private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
+    animatedContentScope: AnimatedContentScope,
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
@@ -388,6 +396,7 @@ private fun detailsTabs(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                 navigateToAstronomy = navigateToAstronomy,
+                animatedContentScope = animatedContentScope,
                 viewModel = viewModel
             )
         } else null,
