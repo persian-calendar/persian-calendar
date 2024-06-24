@@ -81,6 +81,8 @@ import androidx.core.graphics.createBitmap
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
@@ -233,7 +235,7 @@ fun SharedTransitionScope.MapScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .sharedBounds(
-                    rememberSharedContentState(key = "map"),
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = animatedContentScope,
                 ),
             factory = {
@@ -377,7 +379,7 @@ fun SharedTransitionScope.MapScreen(
                                 onLongClickLabel = stringResource(R.string.today),
                             )
                             .sharedBounds(
-                                rememberSharedContentState(key = "time"),
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
                                 animatedVisibilityScope = animatedContentScope,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,

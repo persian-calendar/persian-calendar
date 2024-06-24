@@ -80,6 +80,8 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
@@ -297,7 +299,7 @@ private fun SharedTransitionScope.SliderBar(
                     onLongClickLabel = stringResource(R.string.today),
                 )
                 .sharedBounds(
-                    rememberSharedContentState(key = "time"),
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
                     animatedVisibilityScope = animatedContentScope,
                 ),
             color = MaterialTheme.colorScheme.onSurface,
@@ -436,7 +438,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 .size(56.dp)
                 .align(Alignment.CenterEnd)
                 .sharedBounds(
-                    rememberSharedContentState(key = "map"),
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = animatedContentScope,
                 ),
             selected = false,

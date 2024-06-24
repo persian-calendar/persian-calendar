@@ -146,3 +146,9 @@ const val AU_IN_KM = 149597871L // astronomical unit, ~earth/sun distance
 const val IRAN_TIMEZONE_ID = "Asia/Tehran"
 const val AFGHANISTAN_TIMEZONE_ID = "Asia/Kabul"
 const val NEPAL_TIMEZONE_ID = "Asia/Kathmandu"
+
+const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map
+const val SHARED_CONTENT_KEY_LICENSES = "licenses" // Turns licenses button into title of the screen
+const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens
+const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to an level
+const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns level icon to an compass

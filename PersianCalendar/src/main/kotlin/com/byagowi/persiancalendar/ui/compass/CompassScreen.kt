@@ -67,6 +67,9 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -246,7 +249,7 @@ fun SharedTransitionScope.CompassScreen(
                 Spacer(Modifier.width(8.dp))
                 Box(
                     modifier = Modifier.sharedBounds(
-                        rememberSharedContentState(key = "level"),
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                         animatedVisibilityScope = animatedContentScope,
                     ),
                 ) {
@@ -258,7 +261,7 @@ fun SharedTransitionScope.CompassScreen(
                 }
                 Box(
                     modifier = Modifier.sharedBounds(
-                        rememberSharedContentState(key = "map"),
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                         animatedVisibilityScope = animatedContentScope,
                     ),
                 ) {
@@ -296,7 +299,7 @@ fun SharedTransitionScope.CompassScreen(
             val surfaceColor = MaterialTheme.colorScheme.surface
             AndroidView(
                 modifier = Modifier.sharedBounds(
-                    rememberSharedContentState(key = "compass"),
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                     animatedVisibilityScope = animatedContentScope,
                 ),
                 factory = { CompassView(it).also { view -> compassView = view } },

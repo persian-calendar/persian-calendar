@@ -52,6 +52,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
@@ -164,7 +166,7 @@ fun SharedTransitionScope.LevelScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .sharedBounds(
-                                rememberSharedContentState(key = "level"),
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = animatedContentScope,
                             )
                             .then(
@@ -205,7 +207,7 @@ fun SharedTransitionScope.LevelScreen(
                             AnimatedVisibility(visible = !isFullscreen) {
                                 Box(
                                     modifier = Modifier.sharedBounds(
-                                        rememberSharedContentState(key = "compass"),
+                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                         animatedVisibilityScope = animatedContentScope,
                                     )
                                 ) {
