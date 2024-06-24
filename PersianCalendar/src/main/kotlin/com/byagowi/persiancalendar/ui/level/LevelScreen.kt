@@ -3,8 +3,11 @@ package com.byagowi.persiancalendar.ui.level
 import android.content.pm.ActivityInfo
 import android.os.PowerManager
 import android.view.Surface
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -61,8 +64,13 @@ import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.variants.debugLog
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
+fun SharedTransitionScope.LevelScreen(
+    navigateUp: () -> Unit,
+    navigateToCompass: () -> Unit,
+    animatedContentScope: AnimatedContentScope,
+) {
     var isStopped by remember { mutableStateOf(false) }
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
@@ -155,6 +163,10 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()
+                            .sharedBounds(
+                                rememberSharedContentState(key = "level"),
+                                animatedVisibilityScope = animatedContentScope,
+                            )
                             .then(
                                 if (isFullscreen) Modifier.safeDrawingPadding()
                                 else Modifier.padding(top = topCornersRoundness)
@@ -191,11 +203,18 @@ fun LevelScreen(navigateUp: () -> Unit, navigateToCompass: () -> Unit) {
                         BottomAppBar {
                             Spacer(Modifier.width(8.dp))
                             AnimatedVisibility(visible = !isFullscreen) {
-                                AppIconButton(
-                                    icon = Icons.Default.Explore,
-                                    title = stringResource(R.string.compass),
-                                    onClick = navigateToCompass,
-                                )
+                                Box(
+                                    modifier = Modifier.sharedBounds(
+                                        rememberSharedContentState(key = "compass"),
+                                        animatedVisibilityScope = animatedContentScope,
+                                    )
+                                ) {
+                                    AppIconButton(
+                                        icon = Icons.Default.Explore,
+                                        title = stringResource(R.string.compass),
+                                        onClick = navigateToCompass,
+                                    )
+                                }
                             }
                             Spacer(Modifier.weight(1f, fill = true))
                             StopButton(isStopped) { isStopped = it }

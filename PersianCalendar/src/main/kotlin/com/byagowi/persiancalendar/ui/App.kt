@@ -310,13 +310,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 composable(levelRoute) {
                     LevelScreen(
+                        animatedContentScope = this,
                         navigateUp = { navigateUp(levelRoute) },
-                        navigateToCompass = {
-                            // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                            if (!navController.popBackStack(compassRoute, false)) {
-                                navController.navigate(levelRoute)
-                            }
-                        },
+                        navigateToCompass = { navController.navigate(compassRoute) },
                     )
                 }
 

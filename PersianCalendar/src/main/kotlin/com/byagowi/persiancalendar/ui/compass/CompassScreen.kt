@@ -244,11 +244,18 @@ fun SharedTransitionScope.CompassScreen(
         bottomBar = {
             BottomAppBar {
                 Spacer(Modifier.width(8.dp))
-                AppIconButton(
-                    icon = ImageVector.vectorResource(R.drawable.ic_level),
-                    title = stringResource(R.string.level),
-                    onClick = navigateToLevel,
-                )
+                Box(
+                    modifier = Modifier.sharedBounds(
+                        rememberSharedContentState(key = "level"),
+                        animatedVisibilityScope = animatedContentScope,
+                    ),
+                ) {
+                    AppIconButton(
+                        icon = ImageVector.vectorResource(R.drawable.ic_level),
+                        title = stringResource(R.string.level),
+                        onClick = navigateToLevel,
+                    )
+                }
                 Box(
                     modifier = Modifier.sharedBounds(
                         rememberSharedContentState(key = "map"),
@@ -288,6 +295,10 @@ fun SharedTransitionScope.CompassScreen(
         ) {
             val surfaceColor = MaterialTheme.colorScheme.surface
             AndroidView(
+                modifier = Modifier.sharedBounds(
+                    rememberSharedContentState(key = "compass"),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
                 factory = { CompassView(it).also { view -> compassView = view } },
                 update = {
                     it.setSurfaceColor(surfaceColor.toArgb())
