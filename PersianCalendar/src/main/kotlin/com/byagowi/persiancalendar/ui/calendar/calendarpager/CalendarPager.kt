@@ -38,7 +38,6 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarPager(
     viewModel: CalendarViewModel,
@@ -81,7 +80,6 @@ fun CalendarPager(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun calendarPagerState(): PagerState =
     rememberPagerState(initialPage = applyOffset(0), pageCount = ::monthsLimit)

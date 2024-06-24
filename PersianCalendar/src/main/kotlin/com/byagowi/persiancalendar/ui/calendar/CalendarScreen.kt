@@ -25,7 +25,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -188,7 +187,6 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CalendarScreen(
     openDrawer: () -> Unit,
@@ -396,7 +394,6 @@ private fun detailsTabs(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun detailsPagerState(
     viewModel: CalendarViewModel,
@@ -413,7 +410,6 @@ private fun detailsPagerState(
     return pagerState
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun Details(
     viewModel: CalendarViewModel,

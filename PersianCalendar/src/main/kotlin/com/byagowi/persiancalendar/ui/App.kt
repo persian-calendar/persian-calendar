@@ -8,7 +8,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -403,7 +402,6 @@ private val navItems: List<Triple<String?, ImageVector, Int>> = listOf(
     Triple(null, Icons.Default.Cancel, R.string.exit),
 )
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DrawerSeasonsPager(drawerState: DrawerState) {
     var actualSeason by remember {

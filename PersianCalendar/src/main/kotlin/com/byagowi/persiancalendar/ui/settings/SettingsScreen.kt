@@ -19,7 +19,6 @@ import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -102,7 +101,7 @@ import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 fun SettingsScreen(
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
