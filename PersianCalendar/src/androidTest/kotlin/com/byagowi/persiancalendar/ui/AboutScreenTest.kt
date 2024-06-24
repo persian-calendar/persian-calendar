@@ -63,7 +63,9 @@ class AboutScreenTest {
 
     @Test
     fun deviceInformationSmokeTest() {
-        composeTestRule.setContent { DeviceInformationScreen {} }
+        composeTestRule.setContentWithParent { scope ->
+            DeviceInformationScreen({}, scope)
+        }
     }
 
     @Test

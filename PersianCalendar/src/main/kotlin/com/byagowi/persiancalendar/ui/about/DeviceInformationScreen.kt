@@ -15,6 +15,9 @@ import android.view.InputDevice
 import android.view.RoundedCorner
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -61,11 +64,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
@@ -91,13 +94,12 @@ import kotlinx.html.tr
 import kotlinx.html.unsafe
 import java.util.Locale
 
-@Preview
 @Composable
-private fun DeviceInformationScreenPreview() = DeviceInformationScreen {}
-
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun DeviceInformationScreen(navigateUp: () -> Unit) {
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+fun SharedTransitionScope.DeviceInformationScreen(
+    navigateUp: () -> Unit,
+    animatedContentScope: AnimatedContentScope,
+) {
     val scrollBehavior = exitUntilCollapsedScrollBehavior()
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
@@ -141,7 +143,12 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 LazyColumn {
                     item { Spacer(Modifier.height(16.dp)) }
-                    item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
+                    item {
+                        OverviewTopBar(
+                            Modifier.padding(horizontal = 16.dp),
+                            animatedContentScope = animatedContentScope,
+                        )
+                    }
                     itemsIndexed(items) { i, item ->
                         if (i > 0) HorizontalDivider(
                             Modifier.padding(horizontal = 20.dp),
@@ -167,8 +174,12 @@ fun DeviceInformationScreen(navigateUp: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun OverviewTopBar(modifier: Modifier = Modifier) {
+private fun SharedTransitionScope.OverviewTopBar(
+    modifier: Modifier = Modifier,
+    animatedContentScope: AnimatedContentScope
+) {
     var showScheduleDialog by rememberSaveable { mutableStateOf(false) }
     if (showScheduleDialog) ScheduleAlarm { showScheduleDialog = false }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
@@ -197,6 +208,11 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
                     clickHandler(context.getActivity())
                 },
                 label = { Text(title) },
+                modifier = if (icon != Icons.Default.PermDeviceInformation) Modifier
+                else Modifier.sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
                 icon = {
                     Icon(
                         modifier = Modifier.padding(start = 8.dp, end = 4.dp),

@@ -88,6 +88,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
@@ -126,11 +128,18 @@ fun SharedTransitionScope.AboutScreen(
                         icon = Icons.Default.Share,
                         title = stringResource(R.string.share),
                     ) { shareApplication(context) }
-                    AppIconButton(
-                        icon = Icons.Default.PermDeviceInformation,
-                        title = stringResource(R.string.device_information),
-                        onClick = navigateToDeviceInformation,
-                    )
+                    Box(
+                        modifier = Modifier.sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
+                            animatedVisibilityScope = animatedContentScope,
+                        ),
+                    ) {
+                        AppIconButton(
+                            icon = Icons.Default.PermDeviceInformation,
+                            title = stringResource(R.string.device_information),
+                            onClick = navigateToDeviceInformation,
+                        )
+                    }
                 },
             )
         }

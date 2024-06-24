@@ -373,7 +373,10 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
 
                 composable(deviceInformationRoute) {
-                    DeviceInformationScreen { navigateUp(deviceInformationRoute) }
+                    DeviceInformationScreen(
+                        { navigateUp(deviceInformationRoute) },
+                        animatedContentScope = this,
+                    )
                 }
             }
         }
