@@ -216,7 +216,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             .weight(1f)
                             .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
                             .height(maxHeight - bottomPadding),
-                        viewModel, slider, navigateToMap,
+                        animatedContentScope, viewModel, slider, navigateToMap,
                     )
                 } else Layout(
                     // Puts content in middle of available space after the measured header
@@ -230,7 +230,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             Modifier
                                 .fillMaxWidth()
                                 .height(maxWidth - (56 * 2 + 8).dp),
-                            viewModel, slider, navigateToMap,
+                            animatedContentScope, viewModel, slider, navigateToMap,
                         )
                     },
                 ) { measurables, constraints ->
@@ -371,9 +371,11 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SolarDisplay(
+private fun SharedTransitionScope.SolarDisplay(
     modifier: Modifier,
+    animatedContentScope: AnimatedContentScope,
     viewModel: AstronomyViewModel,
     slider: SliderView?,
     navigateToMap: () -> Unit,
@@ -432,7 +434,11 @@ private fun SolarDisplay(
         NavigationRailItem(
             modifier = Modifier
                 .size(56.dp)
-                .align(Alignment.CenterEnd),
+                .align(Alignment.CenterEnd)
+                .sharedBounds(
+                    rememberSharedContentState(key = "map"),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
             selected = false,
             onClick = navigateToMap,
             icon = {

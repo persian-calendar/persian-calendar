@@ -7,13 +7,17 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -91,13 +95,14 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun CompassScreen(
+fun SharedTransitionScope.CompassScreen(
     openDrawer: () -> Unit,
     navigateToLevel: () -> Unit,
     navigateToMap: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
+    animatedContentScope: AnimatedContentScope,
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
@@ -244,11 +249,18 @@ fun CompassScreen(
                     title = stringResource(R.string.level),
                     onClick = navigateToLevel,
                 )
-                AppIconButton(
-                    icon = Icons.Default.Map,
-                    title = stringResource(R.string.map),
-                    onClick = navigateToMap,
-                )
+                Box(
+                    modifier = Modifier.sharedBounds(
+                        rememberSharedContentState(key = "map"),
+                        animatedVisibilityScope = animatedContentScope,
+                    ),
+                ) {
+                    AppIconButton(
+                        icon = Icons.Default.Map,
+                        title = stringResource(R.string.map),
+                        onClick = navigateToMap,
+                    )
+                }
                 AppIconButton(
                     icon = Icons.Default.Info,
                     title = stringResource(R.string.help),

@@ -300,6 +300,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 composable(compassRoute) {
                     CompassScreen(
+                        animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToLevel = { navController.navigate(levelRoute) },
                         navigateToMap = { navController.navigate(mapRoute) },
