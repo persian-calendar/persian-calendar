@@ -77,10 +77,10 @@ fun SharedTransitionScope.LicensesScreen(
                 title = { Text(stringResource(R.string.about_license_title)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
-//                modifier = Modifier.sharedBounds(
-//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_LICENSES),
-//                    animatedVisibilityScope = animatedContentScope,
-//                ),
+                modifier = Modifier.sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_LICENSES),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
             )
         }
     ) { paddingValues ->

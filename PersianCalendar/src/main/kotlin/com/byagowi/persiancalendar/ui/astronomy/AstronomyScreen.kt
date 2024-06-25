@@ -299,11 +299,10 @@ private fun SharedTransitionScope.SliderBar(
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
                 )
-//                .sharedBounds(
-//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
-//                    animatedVisibilityScope = animatedContentScope,
-//                )
-            ,
+                .sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
             color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(Modifier.height(8.dp))
