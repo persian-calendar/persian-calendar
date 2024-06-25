@@ -234,10 +234,11 @@ fun SharedTransitionScope.MapScreen(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
+//                .sharedBounds(
+//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+//                    animatedVisibilityScope = animatedContentScope,
+//                )
+            ,
             factory = {
                 val root = ZoomableView(it)
                 root.contentWidth = mapDraw.mapWidth.toFloat()
@@ -378,10 +379,11 @@ fun SharedTransitionScope.MapScreen(
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),
                             )
-                            .sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
-                                animatedVisibilityScope = animatedContentScope,
-                            ),
+//                            .sharedBounds(
+//                                rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
+//                                animatedVisibilityScope = animatedContentScope,
+//                            )
+                        ,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
                 }

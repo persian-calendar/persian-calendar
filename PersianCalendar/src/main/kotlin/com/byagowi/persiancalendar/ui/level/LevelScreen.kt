@@ -165,10 +165,10 @@ fun SharedTransitionScope.LevelScreen(
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()
-                            .sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                                animatedVisibilityScope = animatedContentScope,
-                            )
+//                            .sharedBounds(
+//                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+//                                animatedVisibilityScope = animatedContentScope,
+//                            )
                             .then(
                                 if (isFullscreen) Modifier.safeDrawingPadding()
                                 else Modifier.padding(top = topCornersRoundness)
@@ -206,10 +206,10 @@ fun SharedTransitionScope.LevelScreen(
                             Spacer(Modifier.width(8.dp))
                             AnimatedVisibility(visible = !isFullscreen) {
                                 Box(
-                                    modifier = Modifier.sharedBounds(
-                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                        animatedVisibilityScope = animatedContentScope,
-                                    )
+//                                    modifier = Modifier.sharedBounds(
+//                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+//                                        animatedVisibilityScope = animatedContentScope,
+//                                    )
                                 ) {
                                     AppIconButton(
                                         icon = Icons.Default.Explore,

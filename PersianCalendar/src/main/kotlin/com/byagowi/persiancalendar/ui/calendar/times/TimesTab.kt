@@ -169,10 +169,10 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .size(70.dp)
                     .align(Alignment.Center)
                     .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
-                    .sharedBounds(
-                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                        animatedVisibilityScope = animatedContentScope,
-                    )
+//                    .sharedBounds(
+//                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+//                        animatedVisibilityScope = animatedContentScope,
+//                    )
                     .clickable(
                         indication = rememberRipple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },

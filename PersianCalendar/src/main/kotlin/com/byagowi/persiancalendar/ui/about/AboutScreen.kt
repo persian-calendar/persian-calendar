@@ -129,10 +129,10 @@ fun SharedTransitionScope.AboutScreen(
                         title = stringResource(R.string.share),
                     ) { shareApplication(context) }
                     Box(
-                        modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
-                            animatedVisibilityScope = animatedContentScope,
-                        ),
+//                        modifier = Modifier.sharedBounds(
+//                            rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
+//                            animatedVisibilityScope = animatedContentScope,
+//                        ),
                     ) {
                         AppIconButton(
                             icon = Icons.Default.PermDeviceInformation,
@@ -282,10 +282,10 @@ private fun SharedTransitionScope.AboutScreenContent(
             action = { navigateToLicenses() },
             title = R.string.about_license_title,
             summary = R.string.about_license_sum,
-            modifier = Modifier.sharedBounds(
-                rememberSharedContentState(key = SHARED_CONTENT_KEY_LICENSES),
-                animatedVisibilityScope = animatedContentScope,
-            ),
+//            modifier = Modifier.sharedBounds(
+//                rememberSharedContentState(key = SHARED_CONTENT_KEY_LICENSES),
+//                animatedVisibilityScope = animatedContentScope,
+//            ),
         )
 
         // Help

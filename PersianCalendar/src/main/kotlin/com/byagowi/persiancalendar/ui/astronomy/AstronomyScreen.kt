@@ -299,10 +299,11 @@ private fun SharedTransitionScope.SliderBar(
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
                 )
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
+//                .sharedBounds(
+//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
+//                    animatedVisibilityScope = animatedContentScope,
+//                )
+            ,
             color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(Modifier.height(8.dp))
@@ -439,10 +440,11 @@ private fun SharedTransitionScope.SolarDisplay(
             modifier = Modifier
                 .size(56.dp)
                 .align(Alignment.CenterEnd)
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
+//                .sharedBounds(
+//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+//                    animatedVisibilityScope = animatedContentScope,
+//                )
+            ,
             selected = false,
             onClick = navigateToMap,
             icon = {
@@ -557,10 +559,10 @@ private fun SharedTransitionScope.MoonIcon(
     Box(
         modifier = Modifier
             .size(24.dp)
-            .sharedBounds(
-                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-                animatedVisibilityScope = animatedContentScope,
-            )
+//            .sharedBounds(
+//                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+//                animatedVisibilityScope = animatedContentScope,
+//            )
             .drawBehind {
                 drawIntoCanvas {
                     val radius = size.minDimension / 2f
