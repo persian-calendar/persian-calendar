@@ -558,10 +558,10 @@ private fun SharedTransitionScope.MoonIcon(
     Box(
         modifier = Modifier
             .size(24.dp)
-//            .sharedBounds(
-//                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
-//                animatedVisibilityScope = animatedContentScope,
-//            )
+            .sharedBounds(
+                rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                animatedVisibilityScope = animatedContentScope,
+            )
             .drawBehind {
                 drawIntoCanvas {
                     val radius = size.minDimension / 2f
