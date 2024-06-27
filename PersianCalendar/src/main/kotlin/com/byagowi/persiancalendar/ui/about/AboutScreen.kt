@@ -129,10 +129,10 @@ fun SharedTransitionScope.AboutScreen(
                         title = stringResource(R.string.share),
                     ) { shareApplication(context) }
                     Box(
-                        modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
-                            animatedVisibilityScope = animatedContentScope,
-                        ),
+//                        modifier = Modifier.sharedBounds(
+//                            rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
+//                            animatedVisibilityScope = animatedContentScope,
+//                        ),
                     ) {
                         AppIconButton(
                             icon = Icons.Default.PermDeviceInformation,
