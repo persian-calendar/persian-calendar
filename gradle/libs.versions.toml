@@ -37,7 +37,7 @@ astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref 
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
 compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
-compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android" }
+compose-animation = { group = "androidx.compose.animation", name = "animation-graphics-android", version = "1.7.0-beta04" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 compose-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
