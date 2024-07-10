@@ -57,13 +57,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
@@ -157,7 +164,12 @@ fun SharedTransitionScope.DeviceInformationScreen(
                         Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
                             Text(item.title, fontWeight = FontWeight.Bold)
                             Row {
-                                SelectionContainer { Text(item.content.toString()) }
+                                SelectionContainer {
+                                    when (val content = item.content) {
+                                        is AnnotatedString -> Text(content)
+                                        else -> Text(item.content.toString())
+                                    }
+                                }
                                 Spacer(
                                     modifier = Modifier
                                         .weight(1f)
@@ -517,15 +529,20 @@ private fun createItemsList(activity: Activity) = listOf(
                 extensions.forEachIndexed { i, it ->
                     if (i != 0) appendLine()
 
-                    if (!regex.matches(it)) append(it)
-                    else append(it) // TODO: Make this clickable
-                    // runCatching {
-                    //     val pattern =
-                    //         "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
-                    //     CustomTabsIntent.Builder().build().launchUrl(
-                    //         activity, it.replace(regex, pattern).toUri()
-                    //     )
-                    // }.onFailure(logException)
+                    if (!regex.matches(it)) append(it) else withLink(
+                        LinkAnnotation.Url(
+                            url = it.replace(
+                                regex,
+                                "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
+                            ),
+                            styles = TextLinkStyles(
+                                SpanStyle(
+                                    color = Color.Blue,
+                                    textDecoration = TextDecoration.Underline,
+                                )
+                            ),
+                        )
+                    ) { append(it) }
                 }
             }
         )
