@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,8 +31,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
@@ -39,6 +45,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.utils.shareLink
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
@@ -224,11 +231,34 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                     stringResource(R.string.longitude), coord.longitude
                 )
             )
+            val geoLink = "geo:${coord.latitude},${coord.longitude}"
+            withLink(
+                link = LinkAnnotation.Clickable(
+                    tag = "pluscode",
+                    styles = TextLinkStyles(
+                        SpanStyle(
+                            color = MaterialTheme.colorScheme.primary,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    )
+                ) { context.shareLink(geoLink, cityName) }
+            ) { appendLine(geoLink) }
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
             cityName?.also(::appendLine)
             countryCode?.also(::appendLine)
-            append("https://plus.codes/")
-            append(OpenLocationCode.encode(coord.latitude, coord.longitude))
+            val plusLink =
+                "https://plus.codes/" + OpenLocationCode.encode(coord.latitude, coord.longitude)
+            withLink(
+                link = LinkAnnotation.Clickable(
+                    tag = "pluscode",
+                    styles = TextLinkStyles(
+                        SpanStyle(
+                            color = MaterialTheme.colorScheme.primary,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    )
+                ) { context.shareLink(plusLink, cityName) }
+            ) { append(plusLink) }
         }
         SelectionContainer { Text(text, modifier = textModifier, textAlign = TextAlign.Center) }
     }

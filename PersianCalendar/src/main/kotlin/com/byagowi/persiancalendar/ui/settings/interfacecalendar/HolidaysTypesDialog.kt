@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,13 +31,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsRepository
@@ -47,7 +47,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import org.jetbrains.annotations.VisibleForTesting
 
@@ -187,27 +186,22 @@ fun CountryEvents(
         Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
             Text(calendarCenterName, modifier = Modifier.align(Alignment.CenterVertically))
-            val context = LocalContext.current
             if (sourceLink.isNotEmpty()) {
                 Text(spacedComma)
                 Text(
                     buildAnnotatedString {
                         withLink(
-                            link = LinkAnnotation.Clickable(
-                                tag = calendarCenterName,
-                                linkInteractionListener = {
-                                    runCatching {
-                                        CustomTabsIntent.Builder().build()
-                                            .launchUrl(context, sourceLink.toUri())
-                                    }.onFailure(logException)
-                                }
+                            link = LinkAnnotation.Url(
+                                url = sourceLink,
+                                styles = TextLinkStyles(
+                                    SpanStyle(
+                                        color = MaterialTheme.colorScheme.primary,
+                                        textDecoration = TextDecoration.Underline
+                                    )
+                                )
                             ),
                         ) { append(stringResource(R.string.view_source)) }
                     },
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        color = MaterialTheme.colorScheme.primary,
-                        textDecoration = TextDecoration.Underline
-                    ),
                     modifier = Modifier.align(Alignment.CenterVertically),
                 )
             }
