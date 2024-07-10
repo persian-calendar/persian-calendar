@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -32,8 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -189,18 +190,26 @@ fun CountryEvents(
             val context = LocalContext.current
             if (sourceLink.isNotEmpty()) {
                 Text(spacedComma)
-                ClickableText(
-                    AnnotatedString(stringResource(R.string.view_source)),
+                Text(
+                    buildAnnotatedString {
+                        withLink(
+                            link = LinkAnnotation.Clickable(
+                                tag = calendarCenterName,
+                                linkInteractionListener = {
+                                    runCatching {
+                                        CustomTabsIntent.Builder().build()
+                                            .launchUrl(context, sourceLink.toUri())
+                                    }.onFailure(logException)
+                                }
+                            ),
+                        ) { append(stringResource(R.string.view_source)) }
+                    },
                     style = MaterialTheme.typography.bodySmall.copy(
                         color = MaterialTheme.colorScheme.primary,
                         textDecoration = TextDecoration.Underline
                     ),
                     modifier = Modifier.align(Alignment.CenterVertically),
-                ) {
-                    runCatching {
-                        CustomTabsIntent.Builder().build().launchUrl(context, sourceLink.toUri())
-                    }.onFailure(logException)
-                }
+                )
             }
         }
     }
