@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
@@ -186,10 +187,12 @@ fun SharedTransitionScope.CompassScreen(
                                 elevation.takeIf { it != 0.0 },
                             )
                         }
-                        if (subtitle != null) Text(
-                            subtitle,
-                            style = MaterialTheme.typography.titleSmall,
-                        )
+                        if (subtitle != null) SelectionContainer {
+                            Text(
+                                subtitle,
+                                style = MaterialTheme.typography.titleSmall,
+                            )
+                        }
                     }
                 },
                 colors = appTopAppBarColors(),
