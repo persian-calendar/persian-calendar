@@ -221,12 +221,10 @@ private fun SharedTransitionScope.OverviewTopBar(
                 },
                 label = { Text(title) },
                 modifier = if (icon != Icons.Default.PermDeviceInformation) Modifier
-                else Modifier
-//                    .sharedBounds(
-//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
-//                    animatedVisibilityScope = animatedContentScope,
-//                )
-                ,
+                else Modifier.sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
                 icon = {
                     Icon(
                         modifier = Modifier.padding(start = 8.dp, end = 4.dp),
