@@ -1,6 +1,9 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.foundation.clickable
+import androidx.compose.material3.Text
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -59,6 +62,27 @@ class AboutScreenTest {
             .assertHasClickAction()
             .performClick()
         assert(navigateToLicensesIsCalled)
+    }
+
+    @Test
+    fun test() {
+        var called = false
+        val licensesString = "Test"
+        composeTestRule.setContentWithParent { scope ->
+            Text(
+                "Test",
+                modifier = Modifier
+                    .sharedBounds(
+                        rememberSharedContentState(key = "key"),
+                        animatedVisibilityScope = scope,
+                    )
+                    .clickable { called = true }
+            )
+        }
+        composeTestRule.onNodeWithText(licensesString)
+            .assertHasClickAction()
+            .performClick()
+        assert(called)
     }
 
     @Test
