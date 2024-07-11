@@ -110,8 +110,9 @@ fun SharedTransitionScope.DeviceInformationScreen(
     val scrollBehavior = exitUntilCollapsedScrollBehavior()
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
-        val items = remember {
-            createItemsList(context.getActivity() ?: return@remember emptyList())
+        val primaryColor = MaterialTheme.colorScheme.primary
+        val items = remember(primaryColor) {
+            createItemsList(context.getActivity() ?: return@remember emptyList(), primaryColor)
         }
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
@@ -342,7 +343,7 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
 
 private data class Item(val title: String, val content: CharSequence?, val version: String = "")
 
-private fun createItemsList(activity: Activity) = listOf(
+private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
     Item("CPU Instructions Sets", Build.SUPPORTED_ABIS.joinToString(", ")),
     Item(
         "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
@@ -537,7 +538,7 @@ private fun createItemsList(activity: Activity) = listOf(
                             ),
                             styles = TextLinkStyles(
                                 SpanStyle(
-                                    color = Color.Blue,
+                                    color = primaryColor,
                                     textDecoration = TextDecoration.Underline,
                                 )
                             ),
