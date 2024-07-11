@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -9,6 +11,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
@@ -63,9 +66,14 @@ class AboutScreenTest {
 
     @Test
     fun deviceInformationSmokeTest() {
-//        composeTestRule.setContentWithParent { scope ->
-//            DeviceInformationScreen({}, scope)
-//        }
+        composeTestRule.setContentWithParent { scope ->
+            Box(
+                Modifier.sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
+                    animatedVisibilityScope = scope,
+                )
+            )
+        }
     }
 
     @Test
