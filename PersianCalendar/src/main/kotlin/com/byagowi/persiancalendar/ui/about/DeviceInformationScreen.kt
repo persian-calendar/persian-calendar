@@ -168,7 +168,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                                 SelectionContainer {
                                     when (val content = item.content) {
                                         is AnnotatedString -> Text(content)
-                                        else -> Text(item.content.toString())
+                                        else -> Text(content.toString())
                                     }
                                 }
                                 Spacer(
