@@ -497,7 +497,7 @@ private fun BoxScope.DrawerDarkModeToggle() {
         Icon(
             it, stringResource(if (theme.isDark) R.string.theme_dark else R.string.theme_light),
             tint = animateColorAsState(
-                MaterialTheme.colorScheme.onSurface.copy(if (theme.isDark) .9f else .6f),
+                MaterialTheme.colorScheme.onSurface.copy(alpha = if (theme.isDark) .9f else .6f),
                 animationSpec = appColorAnimationSpec,
                 label = "icon tint",
             ).value,
