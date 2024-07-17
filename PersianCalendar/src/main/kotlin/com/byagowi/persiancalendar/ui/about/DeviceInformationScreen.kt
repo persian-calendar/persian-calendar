@@ -476,7 +476,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
         activity.packageManager?.systemAvailableFeatures?.joinToString("\n")
     )
 ) + (runCatching {
-    // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
+    // Quick Kung-fu to create a gl context, https://stackoverflow.com/a/27092070
     val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
     val versions = IntArray(2)
     EGL14.eglInitialize(display, versions, 0, versions, 1)
