@@ -68,7 +68,7 @@
     <string name="stop">توقف</string>
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
-    <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="warn_if_events_not_set">جهت فعال‌سازی رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>

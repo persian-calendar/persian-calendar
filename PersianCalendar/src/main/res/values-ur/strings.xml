@@ -45,7 +45,7 @@
     <string name="athan_alarm">اذانیں</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
     <string name="athan_volume">آواز کا والیوم</string>
-    <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکان را مشخص کنید</string>
+    <string name="athan_disabled_summary">برای فعال‌سازی تنظیمات اذان، مکان را مشخص کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
     <string name="close">بند کریں</string>
@@ -77,7 +77,7 @@
     <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
-    <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="warn_if_events_not_set">جهت فعال‌ساری رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
