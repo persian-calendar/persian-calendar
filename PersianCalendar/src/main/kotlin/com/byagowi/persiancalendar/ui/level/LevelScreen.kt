@@ -206,10 +206,10 @@ fun SharedTransitionScope.LevelScreen(
                             Spacer(Modifier.width(8.dp))
                             AnimatedVisibility(visible = !isFullscreen) {
                                 Box(
-//                                    modifier = Modifier.sharedBounds(
-//                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-//                                        animatedVisibilityScope = animatedContentScope,
-//                                    )
+                                    modifier = Modifier.sharedBounds(
+                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                        animatedVisibilityScope = animatedContentScope,
+                                    )
                                 ) {
                                     AppIconButton(
                                         icon = Icons.Default.Explore,

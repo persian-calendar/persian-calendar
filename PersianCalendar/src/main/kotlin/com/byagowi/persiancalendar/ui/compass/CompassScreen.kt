@@ -301,10 +301,10 @@ fun SharedTransitionScope.CompassScreen(
         ) {
             val surfaceColor = MaterialTheme.colorScheme.surface
             AndroidView(
-//                modifier = Modifier.sharedBounds(
-//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-//                    animatedVisibilityScope = animatedContentScope,
-//                ),
+                modifier = Modifier.sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
                 factory = { CompassView(it).also { view -> compassView = view } },
                 update = {
                     it.setSurfaceColor(surfaceColor.toArgb())
