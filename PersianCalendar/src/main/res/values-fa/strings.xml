@@ -170,7 +170,7 @@
     <string name="pref_widget">ویجت</string>
     <string name="pref_notification">اعلان</string>
     <string name="pref_interface">رابط</string>
-    <string name="resume">ادامه</string>
+    <string name="resume">از سرگیری</string>
     <string name="continue_button">ادامه</string>
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>
@@ -385,7 +385,7 @@
     <string name="neptune">نپتون</string>
     <string name="pluto">پلوتون</string>
     <string name="sun">خورشید</string>
-    <string name="moon">ماه</string>
+    <string name="moon">قمر</string>
     <string name="tropical">اعتدالی</string>
     <string name="calculator">حسابگر</string>
     <string name="chinese_calendar">تقویم چینی</string>
