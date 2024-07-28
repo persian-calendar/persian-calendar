@@ -22,6 +22,7 @@ import android.hardware.SensorManager
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
+import android.media.MediaPlayer
 import android.opengl.GLSurfaceView
 import android.os.Build
 import android.text.Html
@@ -34,6 +35,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -561,6 +563,17 @@ fun showPeriodicTableDialog(activity: ComponentActivity) {
                         .joinToString("\n"))
                 })
                 .show()
+        } else if (index == 144) {
+            val mediaPlayer = MediaPlayer.create(activity, R.raw.avemaria)
+            runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(logException)
+            AlertDialog.Builder(activity).create().apply {
+                setView(Button(context).also {
+                    it.text = "Stop"
+                    it.setOnClickListener { dismiss() }
+                })
+                setOnDismissListener { runCatching { mediaPlayer.stop() }.onFailure(logException) }
+                show()
+            }
         }
     }
 }
