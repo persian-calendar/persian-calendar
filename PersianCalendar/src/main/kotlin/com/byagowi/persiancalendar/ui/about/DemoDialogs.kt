@@ -568,6 +568,7 @@ fun showPeriodicTableDialog(activity: ComponentActivity) {
             runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(logException)
             AlertDialog.Builder(activity).create().apply {
                 setView(Button(context).also {
+                    @SuppressLint("SetTextI18n")
                     it.text = "Stop"
                     it.setOnClickListener { dismiss() }
                 })
