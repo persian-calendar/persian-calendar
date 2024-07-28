@@ -63,6 +63,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
@@ -563,7 +564,7 @@ fun showPeriodicTableDialog(activity: ComponentActivity) {
                         .joinToString("\n"))
                 })
                 .show()
-        } else if (index == 144) {
+        } else if (BuildConfig.DEVELOPMENT && index == 144) {
             // https://commons.wikimedia.org/wiki/File:Ave_Maria_(Bach-Gounod).mid
             val mediaPlayer = MediaPlayer.create(activity, R.raw.avemaria)
             runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(logException)
