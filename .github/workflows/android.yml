@@ -62,7 +62,7 @@ jobs:
           distribution: 'zulu'
           java-version: 21
 
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/setup-gradle@v4
 
       # https://github.blog/changelog/2024-04-02-github-actions-hardware-accelerated-android-virtualization-now-available/
       - name: Enable KVM group perms
