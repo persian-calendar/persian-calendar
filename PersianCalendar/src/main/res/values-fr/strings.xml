@@ -399,4 +399,19 @@
         <item quantity="many">%1$s semaines</item>
         <item quantity="other">%1$s semaines</item>
     </plurals>
+    <string name="open_drawer">Ouvrir le panneau de navigation</string>
+    <string name="more_options">Plus d\'options</string>
+    <string name="yes">Oui</string>
+    <string name="sample_inputs">Exemples d\'entrées</string>
+    <string name="ask_for_calendar_permission">Souhaitez-vous transmettre vos événements personnels à partir du calendrier de votre appareil?</string>
+    <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l\'application à l\'économiseur de la batterie pour un fonctionnement correcte d\'une notification?</string>
+    <string name="holidays_in_red">Vacances en rouge</string>
+    <plurals name="work_days">
+        <item quantity="one">%1$s jour de travail</item>
+        <item quantity="many">%1$s jours de travail</item>
+        <item quantity="other">%1$s jours de travail</item>
+    </plurals>
+    <string name="add_widget">Ajouté un module</string>
+    <string name="widget_background_transparency">Transparence de l’arrière-plan du module</string>
+    <string name="save">Sauvegardé</string>
 </resources>
