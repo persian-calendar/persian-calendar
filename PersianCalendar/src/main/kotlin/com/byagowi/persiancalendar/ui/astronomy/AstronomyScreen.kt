@@ -439,10 +439,11 @@ private fun SharedTransitionScope.SolarDisplay(
             modifier = Modifier
                 .size(56.dp)
                 .align(Alignment.CenterEnd)
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
+//                .sharedBounds(
+//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+//                    animatedVisibilityScope = animatedContentScope,
+//                )
+            ,
             selected = false,
             onClick = navigateToMap,
             icon = {
