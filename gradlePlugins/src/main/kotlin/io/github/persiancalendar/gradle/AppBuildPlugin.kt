@@ -2,7 +2,6 @@ package io.github.persiancalendar.gradle
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
 
 
@@ -25,7 +24,7 @@ class AppBuildPlugin : Plugin<Project> {
             actions.forEach { name ->
                 val input = projectDir / "data" / "$name.json"
                 inputs.file(input)
-                val output = generateDir / "${name.capitalized()}.kt"
+                val output = generateDir / "$name.kt"
                 outputs.file(output)
             }
             inputs.file(project.rootDir / "THANKS.md")

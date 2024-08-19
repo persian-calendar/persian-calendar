@@ -23,7 +23,6 @@ import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
-import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
 import javax.inject.Inject
 
@@ -58,7 +57,7 @@ abstract class CodeGenerators : DefaultTask() {
             "districts" to ::generateDistrictsCode
         ).forEach { (name, generator) ->
             val input = projectDir / "data" / "$name.json"
-            val builder = FileSpec.builder(packageName, name.capitalized())
+            val builder = FileSpec.builder(packageName, name)
             generator(input, builder)
             builder.build().writeTo(generatedAppSrcDir)
         }
