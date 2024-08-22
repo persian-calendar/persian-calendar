@@ -263,10 +263,10 @@ fun SharedTransitionScope.CompassScreen(
                     )
                 }
                 Box(
-//                    modifier = Modifier.sharedBounds(
-//                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-//                        animatedVisibilityScope = animatedContentScope,
-//                    ),
+                    modifier = Modifier.sharedBounds(
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                        animatedVisibilityScope = animatedContentScope,
+                    ),
                 ) {
                     AppIconButton(
                         icon = Icons.Default.Map,
