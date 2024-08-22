@@ -76,7 +76,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          script: ./gradlew PersianCalendar:dependencies && ./gradlew connectedDebugAndroidTest --stacktrace
+          script: ./gradlew PersianCalendar:dependencies && ./gradlew connectedDebugAndroidTest --info --full-stacktrace
 
       - name: Upload results
         if: ${{ always() }}
