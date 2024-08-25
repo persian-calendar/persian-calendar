@@ -251,10 +251,10 @@ fun SharedTransitionScope.CompassScreen(
             BottomAppBar {
                 Spacer(Modifier.width(8.dp))
                 Box(
-//                    modifier = Modifier.sharedBounds(
-//                        rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-//                        animatedVisibilityScope = animatedContentScope,
-//                    ),
+                    modifier = Modifier.sharedBounds(
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                        animatedVisibilityScope = animatedContentScope,
+                    ),
                 ) {
                     AppIconButton(
                         icon = ImageVector.vectorResource(R.drawable.ic_level),
