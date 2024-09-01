@@ -299,7 +299,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     else preferences.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
     eventsRepository = EventsRepository(preferences, language.value)
-    isIranHolidaysEnabled = eventsRepository?.iranHolidays ?: false
+    isIranHolidaysEnabled = eventsRepository?.iranHolidays == true
 }
 
 fun loadLanguageResources(resources: Resources) {
@@ -488,14 +488,14 @@ fun updateStoredPreference(context: Context) {
 
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
         it.isEnabled && it.isTouchExplorationEnabled
-    } ?: false
+    } == true
 
     // https://stackoverflow.com/a/61599809
     isHighTextContrastEnabled = runCatching {
         context.getSystemService<AccessibilityManager>()?.let {
             it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
         }
-    }.onFailure(logException).getOrNull() ?: false
+    }.onFailure(logException).getOrNull() == true
 }
 
 // A very special case to trig coordinates mechanism in saveLocation

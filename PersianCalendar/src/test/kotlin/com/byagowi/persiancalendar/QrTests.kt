@@ -33,8 +33,8 @@ class QrTests {
             expected,
             (0..<ceil(result.size / 2.0).toInt() + 1).joinToString("\n") { row ->
                 "█" + result.indices.joinToString("") {
-                    val first = !(result.getOrNull(row * 2 - 1)?.get(it) ?: false)
-                    val second = !(result.getOrNull(row * 2)?.get(it) ?: false)
+                    val first = result.getOrNull(row * 2 - 1)?.get(it) != true
+                    val second = result.getOrNull(row * 2)?.get(it) != true
                     if (first) (if (second) "█" else "▀") else (if (second) "▄" else " ")
                 } + "█"
             }

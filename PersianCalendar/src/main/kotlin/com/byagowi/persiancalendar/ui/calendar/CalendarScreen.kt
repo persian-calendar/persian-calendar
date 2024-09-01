@@ -552,7 +552,7 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
         context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(
             context.applicationContext.packageName
         )
-    }.onFailure(logException).getOrNull() ?: false
+    }.onFailure(logException).getOrNull() == true
 }
 
 @Composable
