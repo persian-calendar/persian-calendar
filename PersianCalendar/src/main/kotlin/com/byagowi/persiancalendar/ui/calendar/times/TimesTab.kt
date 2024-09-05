@@ -17,9 +17,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -86,7 +86,7 @@ fun SharedTransitionScope.TimesTab(
     Column {
         Column(
             Modifier.clickable(
-                indication = rememberRipple(bounded = false),
+                indication = ripple(bounded = false),
                 interactionSource = remember { MutableInteractionSource() },
                 onClickLabel = stringResource(R.string.more),
                 onClick = { isExpanded = !isExpanded },
@@ -174,7 +174,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                         animatedVisibilityScope = animatedContentScope,
                     )
                     .clickable(
-                        indication = rememberRipple(bounded = false),
+                        indication = ripple(bounded = false),
                         interactionSource = remember { MutableInteractionSource() },
                     ) { navigateToAstronomy(jdn - Jdn.today()) },
             )

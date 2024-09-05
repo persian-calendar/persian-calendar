@@ -41,7 +41,6 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material.icons.filled.SocialDistance
 import androidx.compose.material.icons.filled._3dRotation
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -53,6 +52,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -404,7 +404,7 @@ private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boo
             stringResource(R.string.day),
         ),
         Modifier.combinedClickable(
-            indication = rememberRipple(bounded = false),
+            indication = ripple(bounded = false),
             interactionSource = remember { MutableInteractionSource() },
             onClick = {
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)

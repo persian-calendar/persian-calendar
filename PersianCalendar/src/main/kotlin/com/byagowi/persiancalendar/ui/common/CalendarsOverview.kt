@@ -23,11 +23,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -86,7 +86,7 @@ fun CalendarsOverview(
     Column(
         Modifier
             .clickable(
-                indication = rememberRipple(bounded = false),
+                indication = ripple(bounded = false),
                 interactionSource = remember { MutableInteractionSource() },
                 onClickLabel = stringResource(R.string.more),
                 onClick = toggleExpansion,
@@ -327,7 +327,7 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
                     modifier = Modifier
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication = rememberRipple(bounded = false),
+                            indication = ripple(bounded = false),
                         ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
                         .semantics { this.contentDescription = formatDate(date) },
                 ) {

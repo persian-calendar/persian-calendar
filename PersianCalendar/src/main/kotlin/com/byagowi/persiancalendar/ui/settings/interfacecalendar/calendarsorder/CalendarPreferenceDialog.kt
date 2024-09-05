@@ -15,11 +15,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.DragHandle
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -103,7 +103,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                         .blur(if (dragStarted && !isDragging) blur else 0.dp)
                         .clickable(
                             interactionSource = interactionSource,
-                            indication = rememberRipple(),
+                            indication = ripple(),
                             onClick = {
                                 list = list.map {
                                     it.first to (if (it.first == calendar) !it.second else it.second)

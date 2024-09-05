@@ -5,9 +5,9 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -23,7 +23,7 @@ fun SwitchWithLabel(
 ) {
     Row(
         Modifier.clickable(
-            indication = rememberRipple(bounded = false),
+            indication = ripple(bounded = false),
             interactionSource = remember { MutableInteractionSource() },
             onClick = toggle,
         ),
