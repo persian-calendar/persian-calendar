@@ -60,6 +60,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -567,22 +568,29 @@ private fun Search(viewModel: CalendarViewModel) {
     var query by rememberSaveable { mutableStateOf("") }
     viewModel.searchEvent(query)
     val events by viewModel.eventsFlow.collectAsState()
-    val isActive = query.isNotEmpty()
-    val padding by animateDpAsState(if (isActive) 0.dp else 32.dp, label = "padding")
+    val expanded = query.isNotEmpty()
+    val padding by animateDpAsState(if (expanded) 0.dp else 32.dp, label = "padding")
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) { focusRequester.requestFocus() }
     SearchBar(
-        query = query,
-        placeholder = { Text(stringResource(R.string.search_in_events)) },
-        onQueryChange = { query = it },
-        onSearch = {},
-        active = isActive,
-        onActiveChange = {},
-        trailingIcon = {
-            AppIconButton(icon = Icons.Default.Close, title = stringResource(R.string.close)) {
-                viewModel.closeSearch()
-            }
+        inputField = {
+            SearchBarDefaults.InputField(
+                query = query,
+                onQueryChange = { query = it },
+                onSearch = {},
+                expanded = expanded,
+                onExpandedChange = {},
+                placeholder = { Text(stringResource(R.string.search_in_events)) },
+                trailingIcon = {
+                    AppIconButton(
+                        icon = Icons.Default.Close,
+                        title = stringResource(R.string.close),
+                    ) { viewModel.closeSearch() }
+                },
+            )
         },
+        expanded = expanded,
+        onExpandedChange = {},
         modifier = Modifier
             .padding(horizontal = padding)
             .focusRequester(focusRequester),
