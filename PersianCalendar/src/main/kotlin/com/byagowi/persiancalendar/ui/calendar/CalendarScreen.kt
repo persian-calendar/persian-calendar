@@ -610,8 +610,8 @@ private fun Search(viewModel: CalendarViewModel) {
                 Text(
                     event.formattedTitle,
                     modifier = Modifier.align(Alignment.CenterStart),
-                    style = MaterialTheme.typography.bodyMedium
-                        .copy(color = MaterialTheme.colorScheme.primary),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
         }
