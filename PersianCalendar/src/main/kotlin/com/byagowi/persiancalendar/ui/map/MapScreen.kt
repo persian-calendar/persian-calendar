@@ -234,11 +234,10 @@ fun SharedTransitionScope.MapScreen(
         AndroidView(
             modifier = Modifier
                 .fillMaxSize()
-//                .sharedBounds(
-//                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-//                    animatedVisibilityScope = animatedContentScope,
-//                )
-            ,
+                .sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
             factory = {
                 val root = ZoomableView(it)
                 root.contentWidth = mapDraw.mapWidth.toFloat()
