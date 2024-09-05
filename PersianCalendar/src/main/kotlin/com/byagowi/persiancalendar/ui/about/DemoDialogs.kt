@@ -564,7 +564,7 @@ fun showPeriodicTableDialog(activity: ComponentActivity) {
                         .joinToString("\n"))
                 })
                 .show()
-        } else if (BuildConfig.DEVELOPMENT && index == 144) {
+        } else if (index == 144) {
             // https://commons.wikimedia.org/wiki/File:Ave_Maria_(Bach-Gounod).mid
             val mediaPlayer = MediaPlayer.create(activity, R.raw.avemaria)
             runCatching { if (!mediaPlayer.isPlaying) mediaPlayer.start() }.onFailure(logException)
