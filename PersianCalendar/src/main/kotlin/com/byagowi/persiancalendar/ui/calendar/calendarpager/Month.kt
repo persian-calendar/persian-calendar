@@ -200,12 +200,13 @@ fun Month(
                 val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
                 val shiftWorkTitle = getShiftWorkTitle(day, true)
                 val isSelected = isHighlighted && selectedDay == day
+                val isHoliday = events.any { it.isHoliday }
                 dayPainter.setDayOfMonthItem(
                     isToday = false,
                     isSelected = isSelected,
                     hasEvent = hasEvents,
                     hasAppointment = hasAppointments,
-                    isHoliday = false,
+                    isHoliday = isHoliday,
                     jdn = day,
                     dayOfMonth = "",
                     header = shiftWorkTitle,
@@ -220,7 +221,6 @@ fun Month(
                     text = formatNumber(dayOffset + 1, mainCalendarDigits),
                     style = daysStyle,
                 )
-                val isHoliday = events.any { it.isHoliday }
                 drawText(
                     textLayoutResult,
                     color = when {
