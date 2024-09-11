@@ -15,7 +15,7 @@ junit = "4.13.2"
 junit-runner = "1.11.0"
 junit5 = "5.11.0"
 # Athan animation isn't working correctly in 2.0.20
-kotlin = "2.0.10"
+kotlin = "2.0.20"
 kotlinpoet = "1.18.1"
 kotlinx-html-jvm = "0.11.0"
 kotlinx-serialization-json = "1.7.2"
