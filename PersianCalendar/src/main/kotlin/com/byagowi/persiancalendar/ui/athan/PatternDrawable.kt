@@ -77,7 +77,7 @@ class PatternDrawable(
         centerY = listOf(-.5f, .5f, 1.5f).random() * height
     }
 
-    fun draw(canvas: Canvas) {
+    fun draw(canvas: Canvas, rotationDegree: Float = this.rotationDegree) {
         canvas.drawPaint(backgroundPaint)
         canvas.withRotation(rotationDegree, centerX, centerY) { drawPaint(foregroundPaint) }
     }

@@ -114,9 +114,8 @@ private fun DrawBackground(
     val rotation by infiniteTransition.animateFloat(
         initialValue = 0f, targetValue = 360f, animationSpec = animationSpec, label = "Rotation"
     )
-    patternDrawable.rotationDegree = rotation * direction
     Canvas(modifier = Modifier.fillMaxSize()) {
-        drawIntoCanvas { patternDrawable.draw(it.nativeCanvas) }
+        drawIntoCanvas { patternDrawable.draw(it.nativeCanvas, rotation * direction) }
     }
 }
 
