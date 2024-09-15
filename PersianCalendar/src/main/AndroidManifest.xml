@@ -72,6 +72,16 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
+        <provider
+            android:name=".service.CalendarTarget"
+            android:authorities="${applicationId}.provider"
+            android:permission="com.kieronquinn.app.smartspacer.permission.ACCESS_SMARTSPACER_TARGETS"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.kieronquinn.app.smartspacer.TARGET" />
+            </intent-filter>
+        </provider>
+
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="keyboardHidden|screenSize|screenLayout"
