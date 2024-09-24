@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.graphics.Color
@@ -29,6 +30,8 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.athan.AthanActivity
+import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION_ON_EXIT
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -122,6 +125,17 @@ class AthanNotification : Service() {
             .setContentTitle(title)
             .setContentText(subtitle)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setContentIntent(
+                PendingIntent.getActivity(
+                    this, 0,
+                    Intent(this, AthanActivity::class.java)
+                        .setAction(CANCEL_ATHAN_NOTIFICATION_ON_EXIT)
+                        .putExtra(KEY_EXTRA_PRAYER, athanKey)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                    PendingIntent.FLAG_UPDATE_CURRENT or
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+                )
+            )
 
         if (notificationAthan.value) {
             notificationBuilder.priority = NotificationCompat.PRIORITY_MAX
