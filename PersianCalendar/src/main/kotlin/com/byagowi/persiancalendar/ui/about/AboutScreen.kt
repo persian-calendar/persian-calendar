@@ -427,7 +427,6 @@ private fun launchReportIntent(context: Context) {
     }.onFailure(logException)
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun DevelopersChips() {
     val context = LocalContext.current
