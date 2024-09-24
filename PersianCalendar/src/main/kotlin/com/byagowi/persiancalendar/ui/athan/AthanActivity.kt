@@ -177,6 +177,12 @@ class AthanActivity : ComponentActivity() {
         handler.removeCallbacks(stopTask)
         if (ascendingAthan.value) handler.removeCallbacks(ascendVolume)
 
+        if (intent?.action == CANCEL_ATHAN_NOTIFICATION_ON_EXIT) {
+            runCatching {
+                stopService(Intent(this, AthanNotification::class.java))
+            }.onFailure(logException)
+        }
+
         finish()
     }
 
