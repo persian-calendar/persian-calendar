@@ -49,7 +49,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalMinimumInteractiveComponentEnforcement
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -88,7 +88,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
 import com.byagowi.persiancalendar.generated.faq
@@ -447,7 +446,7 @@ private fun DevelopersChips() {
     }
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Ltr,
-        LocalMinimumInteractiveComponentEnforcement provides false,
+        LocalMinimumInteractiveComponentSize provides Dp.Unspecified,
     ) {
         @OptIn(ExperimentalLayoutApi::class)
         FlowRow(
