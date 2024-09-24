@@ -84,6 +84,14 @@ class AthanActivity : ComponentActivity() {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
 
+        if (intent?.action == CANCEL_ATHAN_NOTIFICATION) {
+            runCatching {
+                stopService(Intent(this, AthanNotification::class.java))
+            }.onFailure(logException)
+            finish()
+            return
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.attributes.layoutInDisplayCutoutMode =
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
@@ -92,12 +100,6 @@ class AthanActivity : ComponentActivity() {
         val prayerKey = intent?.getStringExtra(KEY_EXTRA_PRAYER).debugAssertNotNull ?: ""
         val isFajr = prayerKey == FAJR_KEY
         var goMute = false
-
-        if (intent?.action == CANCEL_ATHAN_NOTIFICATION_ON_EXIT) {
-            // Athan notification has an ongoing sound to play, let's it continue unless
-            // this activity is clicked to go out
-            goMute = true
-        }
 
         getSystemService<AudioManager>()?.let { audioManager ->
             originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
@@ -151,11 +153,7 @@ class AthanActivity : ComponentActivity() {
             SystemTheme { AthanActivityContent(prayerKey, ::stop) }
         }
 
-        handler.postDelayed(
-            stopTask,
-            if (intent?.action == CANCEL_ATHAN_NOTIFICATION_ON_EXIT) THIRTY_SECONDS_IN_MILLIS
-            else TEN_SECONDS_IN_MILLIS
-        )
+        handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 
         if (ascendingAthan.value) handler.post(ascendVolume)
 
@@ -177,16 +175,10 @@ class AthanActivity : ComponentActivity() {
         handler.removeCallbacks(stopTask)
         if (ascendingAthan.value) handler.removeCallbacks(ascendVolume)
 
-        if (intent?.action == CANCEL_ATHAN_NOTIFICATION_ON_EXIT) {
-            runCatching {
-                stopService(Intent(this, AthanNotification::class.java))
-            }.onFailure(logException)
-        }
-
         finish()
     }
 
     companion object {
-        const val CANCEL_ATHAN_NOTIFICATION_ON_EXIT = "CANCEL_ATHAN_NOTIFICATION_ON_EXIT"
+        const val CANCEL_ATHAN_NOTIFICATION = "CANCEL_ATHAN_NOTIFICATION"
     }
 }

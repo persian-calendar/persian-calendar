@@ -31,7 +31,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
-import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION_ON_EXIT
+import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -129,7 +129,7 @@ class AthanNotification : Service() {
                 PendingIntent.getActivity(
                     this, 0,
                     Intent(this, AthanActivity::class.java)
-                        .setAction(CANCEL_ATHAN_NOTIFICATION_ON_EXIT)
+                        .setAction(CANCEL_ATHAN_NOTIFICATION)
                         .putExtra(KEY_EXTRA_PRAYER, athanKey)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                     PendingIntent.FLAG_UPDATE_CURRENT or
