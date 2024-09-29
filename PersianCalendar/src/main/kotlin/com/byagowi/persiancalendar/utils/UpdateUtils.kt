@@ -926,11 +926,12 @@ private data class NotificationData(
             builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
         }
 
-        // Night mode doesn't like our custom notification in Samsung and HTC One UI
+        // Night mode doesn't like our custom notifications in Samsung and HTC One UI,
+        // apparently fixed in newer version of Samsung UI
         val shouldDisableCustomNotification = when (Build.BRAND) {
             "samsung", "htc" -> isSystemInDarkTheme(context.resources.configuration)
             else -> false
-        }
+        } && Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
 
         if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val holidays = getEventsTitle(
