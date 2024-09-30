@@ -844,7 +844,7 @@ private fun updateNotification(
     }
 }
 
-private val notificationTimesViewsIds = listOf<Pair<@IdRes Int, @IdRes Int>>(
+private val notificationTimesViewsIds = listOf(
     R.id.head1 to R.id.time1, R.id.head2 to R.id.time2, R.id.head3 to R.id.time3,
     R.id.head4 to R.id.time4, R.id.head5 to R.id.time5,
 )
