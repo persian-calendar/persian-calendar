@@ -844,9 +844,10 @@ private fun updateNotification(
     }
 }
 
-@IdRes
-private val notificationTimesViewsIds =
-    listOf(R.id.time1, R.id.time2, R.id.time3, R.id.time4, R.id.time5)
+private val notificationTimesViewsIds = listOf<Pair<@IdRes Int, @IdRes Int>>(
+    R.id.head1 to R.id.time1, R.id.head2 to R.id.time2, R.id.head3 to R.id.time3,
+    R.id.head4 to R.id.time4, R.id.head5 to R.id.time5,
+)
 
 private data class NotificationData(
     private val title: String,
@@ -974,15 +975,19 @@ private data class NotificationData(
                             R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
                         )
                         if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
-                            timesToShow
-                        ) { textViewId, timeId ->
+                            timesToShow,
+                        ) { (headViewId, timeViewId), timeId ->
+                            it.setTextViewText(headViewId, context.getString(timeId))
                             it.setTextViewText(
-                                textViewId, context.getString(timeId) + "\n" +
-                                        prayTimes.getFromStringId(timeId)
-                                            .toFormattedString(printAmPm = false)
+                                timeViewId,
+                                prayTimes.getFromStringId(timeId)
+                                    .toFormattedString(printAmPm = false)
                             )
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                                it.setAlpha(textViewId, if (timeId == nextTimeId) 1f else .6f)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                val alpha = if (timeId == nextTimeId) 1f else .6f
+                                it.setAlpha(headViewId, alpha)
+                                it.setAlpha(timeViewId, alpha)
+                            }
                         }
                     })
 
