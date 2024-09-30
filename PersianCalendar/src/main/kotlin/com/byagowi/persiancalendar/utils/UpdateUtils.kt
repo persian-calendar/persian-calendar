@@ -932,7 +932,7 @@ private data class NotificationData(
         val shouldDisableCustomNotification = when (Build.BRAND) {
             "samsung", "htc" -> isSystemInDarkTheme(context.resources.configuration)
             else -> false
-        } && Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM
+        } && Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
 
         if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val holidays = getEventsTitle(
