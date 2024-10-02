@@ -514,20 +514,11 @@ private fun CalendarsTab(viewModel: CalendarViewModel) {
                 }.onFailure(logException).onFailure { ignore() }.getOrNull().debugAssertNotNull
             }
 
-            val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { requestExemption() }
-
             EncourageActionLayout(
                 header = stringResource(R.string.exempt_app_battery_optimization),
                 acceptButton = stringResource(R.string.yes),
                 discardAction = ::ignore,
-            ) {
-                val alarmManager = context.getSystemService<AlarmManager>()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
-                ) launcher.launch(Manifest.permission.SCHEDULE_EXACT_ALARM) else requestExemption()
-            }
+            ) { requestExemption() }
         }
     }
 }
@@ -540,10 +531,6 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     val isAnyAthanSet = getEnabledAlarms(context).isNotEmpty()
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
     if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
-    val alarmManager = context.getSystemService<AlarmManager>()
-    if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-        runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
-    ) return true
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
 

@@ -14,7 +14,6 @@ import android.os.PowerManager
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.core.app.ActivityCompat
-import androidx.core.app.AlarmManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -162,10 +161,8 @@ private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis:
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || am.canScheduleExactAlarms())
-        AlarmManagerCompat.setExactAndAllowWhileIdle(
-            am, AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent
-        )
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
 }
 
 private val prayTimesNames = mapOf(
