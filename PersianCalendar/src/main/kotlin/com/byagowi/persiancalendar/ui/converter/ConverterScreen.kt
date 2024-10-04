@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
@@ -79,7 +80,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
-import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -124,11 +124,7 @@ fun ConverterScreen(openDrawer: () -> Unit, viewModel: ConverterViewModel) {
                                 .onSizeChanged { dropDownWidth = it.width },
                         ) {
                             Spacer(Modifier.width(16.dp))
-                            AnimatedContent(
-                                targetState = stringResource(screenMode.title),
-                                label = "title",
-                                transitionSpec = appCrossfadeSpec,
-                            ) { Text(it) }
+                            Text(stringResource(screenMode.title), Modifier.animateContentSize())
                             ExpandArrow(isExpanded = showMenu)
                             Spacer(Modifier.width(8.dp))
                         }
