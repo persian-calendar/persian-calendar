@@ -19,10 +19,8 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 
-// This is copied from https://issuetracker.google.com/issues/296272625#comment3
+// This is copied from https://issuetracker.google.com/issues/296272625#comment3 (public domain)
 // with modification and simplification till Compose provides a native support.
-// It should be published with Apache license as it's put in Android's opensource
-// bug tracker.
 // It also follows parts of https://source.android.com/docs/core/display/window-blurs
 @Composable
 fun SetupDialogBlur(@Px radius: Int = 20, window: Window? = findWindow()) {
