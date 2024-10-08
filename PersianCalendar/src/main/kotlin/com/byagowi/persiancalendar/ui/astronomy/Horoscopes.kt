@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
+import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -32,6 +33,7 @@ fun HoroscopesDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
         confirmButton = {},
         onDismissRequest = onDismissRequest,
         text = {
+            SetupDialogBlur()
             Text(
                 listOf(
                     Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,

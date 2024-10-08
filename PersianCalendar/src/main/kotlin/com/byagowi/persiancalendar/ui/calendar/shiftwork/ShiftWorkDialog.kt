@@ -62,6 +62,7 @@ import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
+import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import org.jetbrains.annotations.VisibleForTesting
@@ -75,6 +76,7 @@ fun ShiftWorkDialog(
     refreshCalendar: () -> Unit,
 ) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
+        SetupDialogBlur()
         Surface(
             shape = AlertDialogDefaults.shape,
             color = AlertDialogDefaults.containerColor,

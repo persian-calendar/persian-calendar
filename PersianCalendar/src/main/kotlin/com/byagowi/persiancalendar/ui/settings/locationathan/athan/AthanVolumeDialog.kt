@@ -20,6 +20,7 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
@@ -63,6 +64,7 @@ fun AthanVolumeDialog(onDismissRequest: () -> Unit) {
             }) { Text(stringResource(R.string.accept)) }
         },
         text = {
+            SetupDialogBlur()
             Slider(
                 value = volume.toFloat(),
                 steps = maxValue,

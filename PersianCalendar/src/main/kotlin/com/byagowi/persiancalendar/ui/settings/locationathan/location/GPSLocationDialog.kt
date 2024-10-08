@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.ui.utils.shareLink
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
@@ -85,7 +86,10 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
             TextButton(onClick = { setGranted(false) }) { Text(stringResource(R.string.cancel)) }
         },
         onDismissRequest = { setGranted(false) },
-        text = { Text(stringResource(R.string.phone_location_required)) }
+        text = {
+            SetupDialogBlur()
+            Text(stringResource(R.string.phone_location_required))
+        }
     )
 }
 
@@ -124,7 +128,10 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         }
         if (showPhoneSettingsDialog) {
             return AlertDialog(
-                text = { Text(stringResource(R.string.gps_internet_desc)) },
+                text = {
+                    SetupDialogBlur()
+                    Text(stringResource(R.string.gps_internet_desc))
+                },
                 onDismissRequest = onDismissRequest,
                 confirmButton = {
                     TextButton(onClick = {

@@ -473,7 +473,13 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
         "System Features",
         activity.packageManager?.systemAvailableFeatures?.joinToString("\n")
     )
-) + (runCatching {
+) + (
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) listOf(
+            Item(
+                "Is Cross Window Blur Enabled",
+                activity.window?.windowManager?.isCrossWindowBlurEnabled.toString()
+            )
+        ) else emptyList()) + (runCatching {
     // Quick Kung-fu to create a gl context, https://stackoverflow.com/a/27092070
     val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
     val versions = IntArray(2)

@@ -49,6 +49,7 @@ import androidx.work.WorkManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import java.util.concurrent.TimeUnit
@@ -61,6 +62,7 @@ fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
         dismissButton = {},
         title = {},
         text = {
+            SetupDialogBlur()
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 listOf(
                     "primary" to MaterialTheme.colorScheme.primary,
@@ -112,6 +114,7 @@ fun TypographyDemoDialog(onDismissRequest: () -> Unit) {
         dismissButton = {},
         title = {},
         text = {
+            SetupDialogBlur()
             Column {
                 listOf(
                     "DisplayLarge" to MaterialTheme.typography.displayLarge,
@@ -158,6 +161,7 @@ fun ShapesDemoDialog(onDismissRequest: () -> Unit) {
         dismissButton = {},
         title = {},
         text = {
+            SetupDialogBlur()
             Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
                 listOf(
                     "extraLarge" to MaterialTheme.shapes.extraLarge,

@@ -20,6 +20,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
@@ -62,6 +63,9 @@ fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
             }) { Text(stringResource(R.string.cancel)) }
         },
         onDismissRequest = { setGranted(false) },
-        text = { Text(stringResource(R.string.phone_calendar_required)) },
+        text = {
+            SetupDialogBlur()
+            Text(stringResource(R.string.phone_calendar_required))
+        },
     )
 }
