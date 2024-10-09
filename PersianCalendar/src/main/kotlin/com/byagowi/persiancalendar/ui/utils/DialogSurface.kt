@@ -6,7 +6,6 @@ import android.view.ViewParent
 import android.view.Window
 import android.view.WindowManager
 import androidx.annotation.CheckResult
-import androidx.annotation.Px
 import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
@@ -32,16 +31,16 @@ fun DialogSurface(content: @Composable () -> Unit) {
 // It also follows parts of https://source.android.com/docs/core/display/window-blurs
 @CheckResult
 @Composable
-private fun setupDialogBlur(@Px radius: Int = 20): Boolean {
+private fun setupDialogBlur(): Boolean {
     val window = LocalView.current.findWindow()
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
         window?.windowManager?.isCrossWindowBlurEnabled != true
     ) return false
 
-    LaunchedEffect(window, radius) {
+    LaunchedEffect(window) {
         window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        window.setDimAmount(.1f)
-        window.attributes.blurBehindRadius = radius
+        window.setDimAmount(.4f)
+        window.attributes.blurBehindRadius = 30
         window.attributes = window.attributes
     }
     return true
