@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.theme
 
+import android.content.Context
+import android.os.PowerManager
 import android.view.View
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
@@ -44,6 +46,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -117,9 +120,16 @@ fun AppTheme(content: @Composable () -> Unit) {
 // The app's theme after custom dark/light theme is applied
 @Composable
 private fun effectiveTheme(): Theme {
-    return theme.collectAsState().value.takeIf { it != Theme.SYSTEM_DEFAULT }
-        ?: (if (isSystemInDarkTheme()) systemDarkTheme else systemLightTheme).collectAsState().value
+    val explicitlySetTheme = theme.collectAsState().value
+    if (explicitlySetTheme != Theme.SYSTEM_DEFAULT) return explicitlySetTheme
+    return if (isSystemInDarkTheme()) {
+        if (isPowerSaveMode(LocalContext.current)) Theme.BLACK
+        else systemDarkTheme.collectAsState().value
+    } else systemLightTheme.collectAsState().value
 }
+
+private fun isPowerSaveMode(context: Context): Boolean =
+    context.getSystemService<PowerManager>()?.isPowerSaveMode == true
 
 @Composable
 private fun appColorScheme(): ColorScheme {
