@@ -21,7 +21,7 @@ fun DialogSurface(content: @Composable () -> Unit) {
     Surface(
         shape = AlertDialogDefaults.shape,
         color = if (setupDialogBlur()) containerColor.copy(alpha = .9f) else containerColor,
-        contentColor = contentColorFor(AlertDialogDefaults.containerColor),
+        contentColor = contentColorFor(containerColor),
         tonalElevation = AlertDialogDefaults.TonalElevation,
         content = content,
     )
