@@ -34,8 +34,8 @@ fun DialogSurface(content: @Composable () -> Unit) {
 @Composable
 private fun setupDialogBlur(@Px radius: Int = 20): Boolean {
     val window = LocalView.current.findWindow()
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || window == null ||
-        window.windowManager?.isCrossWindowBlurEnabled != true
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
+        window?.windowManager?.isCrossWindowBlurEnabled != true
     ) return false
 
     LaunchedEffect(window, radius) {
