@@ -1,12 +1,15 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
-import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
+import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -29,31 +32,27 @@ private fun formatAngle(value: Double): String {
 @Composable
 fun HoroscopesDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
     val time = Time.fromMillisecondsSince1970(date.time)
-    AlertDialog(
-        confirmButton = {},
-        onDismissRequest = onDismissRequest,
-        text = {
-            SetupDialogBlur()
-            Text(
-                listOf(
-                    Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
-                    Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-                ).map { body ->
-                    val (longitude, distance) = when (body) {
-                        Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
-                        Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
-                        else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
-                            .let { it.elon to it.vec.length() }
-                    }
-                    stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
-                        Locale.ENGLISH,
-                        LRM,
-                        formatAngle(longitude % 30), // Remaining angle
-                        Zodiac.fromTropical(longitude).emoji,
-                        (distance * AU_IN_KM).roundToLong()
-                    )
-                }.joinToString("\n"),
-            )
-        },
-    )
+    AppDialog(onDismissRequest = onDismissRequest) {
+        Text(
+            listOf(
+                Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
+                Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+            ).map { body ->
+                val (longitude, distance) = when (body) {
+                    Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
+                    Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
+                    else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
+                        .let { it.elon to it.vec.length() }
+                }
+                stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
+                    Locale.ENGLISH,
+                    LRM,
+                    formatAngle(longitude % 30), // Remaining angle
+                    Zodiac.fromTropical(longitude).emoji,
+                    (distance * AU_IN_KM).roundToLong()
+                )
+            }.joinToString("\n"),
+            modifier = Modifier.padding(SettingsHorizontalPaddingItem.dp),
+        )
+    }
 }

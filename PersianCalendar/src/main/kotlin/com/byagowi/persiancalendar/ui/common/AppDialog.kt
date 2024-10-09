@@ -12,21 +12,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.utils.DialogSurface
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,12 +37,7 @@ fun AppDialog(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
-        SetupDialogBlur()
-        Surface(
-            shape = AlertDialogDefaults.shape,
-            color = AlertDialogDefaults.containerColor,
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-        ) {
+        DialogSurface {
             Column {
                 val scrollState = rememberScrollState()
 

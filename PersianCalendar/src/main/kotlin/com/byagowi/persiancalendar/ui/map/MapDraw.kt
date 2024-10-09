@@ -445,7 +445,12 @@ class MapDraw(
             if (scaleBack < .1) {
                 val userX = (132.16666f + 180) * mapScaleFactor
                 val userY = (90 - -23.03333f) * mapScaleFactor
-                drawText("🦘", userX, userY + 2.5f, biggerEmojiPaint) // Australia pole of inaccessibility
+                drawText(
+                    "🦘",
+                    userX,
+                    userY + 2.5f,
+                    biggerEmojiPaint
+                ) // Australia pole of inaccessibility
             }
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor

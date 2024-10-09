@@ -16,7 +16,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -45,7 +44,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
+import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.shareLink
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
@@ -69,7 +68,7 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
     ) { setGranted(it.entries.any()) }
 
     var showDialog by rememberSaveable { mutableStateOf(true) }
-    if (showDialog) AlertDialog(
+    if (showDialog) AppDialog(
         title = { Text(stringResource(R.string.location_access)) },
         confirmButton = {
             TextButton(onClick = {
@@ -85,12 +84,13 @@ private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
         dismissButton = {
             TextButton(onClick = { setGranted(false) }) { Text(stringResource(R.string.cancel)) }
         },
-        onDismissRequest = { setGranted(false) },
-        text = {
-            SetupDialogBlur()
-            Text(stringResource(R.string.phone_location_required))
-        }
-    )
+        onDismissRequest = { setGranted(false) }
+    ) {
+        Text(
+            stringResource(R.string.phone_location_required),
+            Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
+        )
+    }
 }
 
 @Composable
@@ -127,11 +127,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
             }.onFailure(logException)
         }
         if (showPhoneSettingsDialog) {
-            return AlertDialog(
-                text = {
-                    SetupDialogBlur()
-                    Text(stringResource(R.string.gps_internet_desc))
-                },
+            return AppDialog(
                 onDismissRequest = onDismissRequest,
                 confirmButton = {
                     TextButton(onClick = {
@@ -141,7 +137,12 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                         }.onFailure(logException)
                     }) { Text(stringResource(R.string.accept)) }
                 }
-            )
+            ) {
+                Text(
+                    stringResource(R.string.gps_internet_desc),
+                    modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                )
+            }
         }
     }
 

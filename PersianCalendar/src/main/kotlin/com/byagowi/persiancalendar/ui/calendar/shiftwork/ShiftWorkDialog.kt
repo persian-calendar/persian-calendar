@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveCircleOutline
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,10 +25,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -42,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
@@ -60,9 +60,9 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.DialogSurface
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import org.jetbrains.annotations.VisibleForTesting
@@ -76,12 +76,7 @@ fun ShiftWorkDialog(
     refreshCalendar: () -> Unit,
 ) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
-        SetupDialogBlur()
-        Surface(
-            shape = AlertDialogDefaults.shape,
-            color = AlertDialogDefaults.containerColor,
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-        ) {
+        DialogSurface {
             Column {
                 Spacer(modifier = Modifier.height(16.dp))
                 CompositionLocalProvider(
@@ -198,6 +193,8 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 value.replace(Regex("[=,]"), "")
                             )
                         },
+                        colors = TextFieldDefaults.colors()
+                            .copy(unfocusedContainerColor = Color.Transparent),
                         trailingIcon = {
                             IconButton(onClick = { selectedTypeDropdownIndex = position }) {
                                 ExpandArrow(
@@ -236,6 +233,8 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 it.toIntOrNull() ?: 0
                             )
                         },
+                        colors = TextFieldDefaults.colors()
+                            .copy(unfocusedContainerColor = Color.Transparent),
                         modifier = Modifier
                             .onFocusChanged {
                                 if (it.hasFocus) selectedLengthDropdownIndex = position

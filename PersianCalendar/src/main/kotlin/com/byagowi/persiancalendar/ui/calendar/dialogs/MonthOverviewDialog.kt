@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.utils.SetupDialogBlur
+import com.byagowi.persiancalendar.ui.utils.DialogSurface
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
@@ -98,7 +98,7 @@ fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
     }
 
     Dialog(onDismissRequest = onDismissRequest) {
-        SetupDialogBlur()
+        DialogSurface {} // It's not supposed to be used this but it works, so
         LazyColumn {
             stickyHeader {
                 Box(
