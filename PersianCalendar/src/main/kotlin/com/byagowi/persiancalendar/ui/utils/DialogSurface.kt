@@ -19,7 +19,7 @@ fun DialogSurface(content: @Composable () -> Unit) {
     val containerColor = AlertDialogDefaults.containerColor
     Surface(
         shape = AlertDialogDefaults.shape,
-        color = if (setupDialogBlur()) containerColor.copy(alpha = .9f) else containerColor,
+        color = if (setupDialogBlur()) containerColor.copy(alpha = 1f) else containerColor,
         contentColor = contentColorFor(containerColor),
         tonalElevation = AlertDialogDefaults.TonalElevation,
         content = content,
