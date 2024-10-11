@@ -28,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -41,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
@@ -193,8 +191,6 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 value.replace(Regex("[=,]"), "")
                             )
                         },
-                        colors = TextFieldDefaults.colors()
-                            .copy(unfocusedContainerColor = Color.Transparent),
                         trailingIcon = {
                             IconButton(onClick = { selectedTypeDropdownIndex = position }) {
                                 ExpandArrow(
@@ -233,8 +229,6 @@ fun ColumnScope.ShiftWorkDialogContent(
                                 it.toIntOrNull() ?: 0
                             )
                         },
-                        colors = TextFieldDefaults.colors()
-                            .copy(unfocusedContainerColor = Color.Transparent),
                         modifier = Modifier
                             .onFocusChanged {
                                 if (it.hasFocus) selectedLengthDropdownIndex = position
