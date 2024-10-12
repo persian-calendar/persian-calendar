@@ -64,6 +64,7 @@ fun SharedTransitionScope.TimesTab(
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
+    interactionSource: MutableInteractionSource,
 ) {
     val context = LocalContext.current
     val cityName by cityName.collectAsState()
@@ -85,12 +86,14 @@ fun SharedTransitionScope.TimesTab(
 
     Column {
         Column(
-            Modifier.clickable(
-                indication = ripple(bounded = false),
-                interactionSource = remember { MutableInteractionSource() },
-                onClickLabel = stringResource(R.string.more),
-                onClick = { isExpanded = !isExpanded },
-            ),
+            Modifier
+                .fillMaxWidth()
+                .clickable(
+                    indication = null,
+                    interactionSource = interactionSource,
+                    onClickLabel = stringResource(R.string.more),
+                    onClick = { isExpanded = !isExpanded },
+                )
         ) {
             Spacer(Modifier.height(16.dp))
             AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy, animatedContentScope)
