@@ -440,7 +440,7 @@ private fun Details(
             .fillMaxHeight()
             .indication(
                 interactionSource = interactionSource,
-                indication = ripple(bounded = true),
+                indication = ripple(),
             )
     ) {
         val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
@@ -483,15 +483,23 @@ private fun Details(
 }
 
 @Composable
-private fun CalendarsTab(viewModel: CalendarViewModel, interactionSource: MutableInteractionSource) {
+private fun CalendarsTab(
+    viewModel: CalendarViewModel,
+    interactionSource: MutableInteractionSource
+) {
     Column {
         val jdn by viewModel.selectedDay.collectAsState()
         val today by viewModel.today.collectAsState()
         var isExpanded by rememberSaveable { mutableStateOf(false) }
         Spacer(Modifier.height(24.dp))
-        CalendarsOverview(jdn, today, mainCalendar, enabledCalendars, isExpanded, interactionSource = interactionSource) {
-            isExpanded = !isExpanded
-        }
+        CalendarsOverview(
+            jdn = jdn,
+            today = today,
+            selectedCalendar = mainCalendar,
+            shownCalendars = enabledCalendars,
+            isExpanded = isExpanded,
+            interactionSource = interactionSource,
+        ) { isExpanded = !isExpanded }
 
         val context = LocalContext.current
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
