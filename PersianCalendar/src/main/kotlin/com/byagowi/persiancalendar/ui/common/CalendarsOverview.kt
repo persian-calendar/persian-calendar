@@ -79,15 +79,16 @@ fun CalendarsOverview(
     selectedCalendar: Calendar,
     shownCalendars: List<Calendar>,
     isExpanded: Boolean,
-    toggleExpansion: () -> Unit
-) {
+    interactionSource: MutableInteractionSource = MutableInteractionSource(),
+    toggleExpansion: () -> Unit,
+    ) {
     val context = LocalContext.current
     val isToday = today == jdn
     Column(
         Modifier
             .clickable(
-                indication = ripple(bounded = false),
-                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                interactionSource = remember { interactionSource },
                 onClickLabel = stringResource(R.string.more),
                 onClick = toggleExpansion,
             )

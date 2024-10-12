@@ -393,7 +393,7 @@ private fun SharedTransitionScope.detailsTabs(
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     return listOfNotNull(
-        R.string.calendar to { CalendarsTab(viewModel) },
+        R.string.calendar to { CalendarsTab(viewModel, interactionSource) },
         R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
         if (enableTimesTab(context) && !removeThirdTab) R.string.times to {
@@ -483,13 +483,13 @@ private fun Details(
 }
 
 @Composable
-private fun CalendarsTab(viewModel: CalendarViewModel) {
+private fun CalendarsTab(viewModel: CalendarViewModel, interactionSource: MutableInteractionSource) {
     Column {
         val jdn by viewModel.selectedDay.collectAsState()
         val today by viewModel.today.collectAsState()
         var isExpanded by rememberSaveable { mutableStateOf(false) }
         Spacer(Modifier.height(24.dp))
-        CalendarsOverview(jdn, today, mainCalendar, enabledCalendars, isExpanded) {
+        CalendarsOverview(jdn, today, mainCalendar, enabledCalendars, isExpanded, interactionSource = interactionSource) {
             isExpanded = !isExpanded
         }
 

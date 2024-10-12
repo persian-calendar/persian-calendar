@@ -460,7 +460,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                     today = today,
                     selectedCalendar = calendar,
                     shownCalendars = enabledCalendars - calendar,
-                    isExpanded = isExpanded
+                    isExpanded = isExpanded,
                 ) { isExpanded = !isExpanded }
             }
         }
