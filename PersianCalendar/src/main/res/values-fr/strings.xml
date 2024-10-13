@@ -404,7 +404,7 @@
     <string name="yes">Oui</string>
     <string name="sample_inputs">Exemples d\'entrées</string>
     <string name="ask_for_calendar_permission">Souhaitez-vous transmettre vos événements personnels à partir du calendrier de votre appareil?</string>
-    <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l\'application à l\'économiseur de la batterie pour un fonctionnement correcte d\'une notification?</string>
+    <string name="exempt_app_battery_optimization">Souhaitez-vous ajouter l\'application à l\'économiseur de la batterie pour un fonctionnement correct des notifications ?</string>
     <string name="holidays_in_red">Vacances en rouge</string>
     <plurals name="work_days">
         <item quantity="one">%1$s jour de travail</item>
@@ -413,5 +413,7 @@
     </plurals>
     <string name="add_widget">Ajouté un module</string>
     <string name="widget_background_transparency">Transparence de l’arrière-plan du module</string>
-    <string name="save">Sauvegardé</string>
+    <string name="save">Enregistrer</string>
+    <string name="navigate_up">Remonter</string>
+    <string name="year_view">Vue annuelle</string>
 </resources>
