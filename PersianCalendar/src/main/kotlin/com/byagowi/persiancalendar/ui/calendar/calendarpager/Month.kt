@@ -41,6 +41,7 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
+import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
@@ -122,7 +123,9 @@ fun Month(
     }
     val textMeasurer = rememberTextMeasurer()
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-    val daysTextSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
+    val isVazirEnabled by isVazirEnabled.collectAsState()
+    val daysTextSize =
+        diameter * (if (mainCalendarDigitsIsArabic || isVazirEnabled) 18 else 25) / 40
     val daysStyle = LocalTextStyle.current.copy(
         fontSize = with(LocalDensity.current) { daysTextSize.toSp() },
     )
