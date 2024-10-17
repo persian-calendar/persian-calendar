@@ -48,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -168,7 +169,6 @@ fun SharedTransitionScope.CompassScreen(
 
     Scaffold(
         containerColor = Color.Transparent,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
@@ -278,6 +278,7 @@ fun SharedTransitionScope.CompassScreen(
                                 it.setTime(time)
                             },
                         )
+                        SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
                     BottomAppBar {
                         Spacer(Modifier.width(8.dp))
