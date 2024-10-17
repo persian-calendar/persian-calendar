@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material3.Surface
@@ -24,6 +25,7 @@ fun SharedTransitionScope.ScreenSurface(
         modifier = Modifier.sharedBounds(
             rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
             animatedVisibilityScope = animatedContentScope,
+            enter = EnterTransition.None,
         ),
         content = content,
     )
