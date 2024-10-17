@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppIconButton
@@ -154,6 +155,10 @@ fun SharedTransitionScope.AboutScreen(
                 Surface(
                     shape = materialCornerExtraLargeTop(),
                     color = animatedSurfaceColor(),
+                    modifier = Modifier.sharedBounds(
+                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                        animatedVisibilityScope = animatedContentScope,
+                    ),
                 ) {
                     AboutScreenContent(
                         animatedContentScope,

@@ -293,6 +293,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 composable(converterRoute) {
                     ConverterScreen(
+                        animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         viewModel = viewModel<ConverterViewModel>()
                     )
@@ -350,6 +351,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 composable(settingsRoute) { backStackEntry ->
                     SettingsScreen(
+                        animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToMap = { navController.navigate(mapRoute) },
                         initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,

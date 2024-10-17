@@ -82,6 +82,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
@@ -225,9 +226,14 @@ fun SharedTransitionScope.MapScreen(
                 Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
                 Spacer(Modifier.height((16 + menuHeight + 16).dp))
                 Surface(
-                    Modifier.fillMaxSize(),
                     shape = materialCornerExtraLargeTop(),
                     color = animatedSurfaceColor(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .sharedBounds(
+                            rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                            animatedVisibilityScope = animatedContentScope,
+                        ),
                 ) {}
             }
         }

@@ -109,6 +109,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -304,7 +305,12 @@ fun SharedTransitionScope.CalendarScreen(
                             Spacer(Modifier.height(4.dp))
                             val detailsMinHeight = maxHeight - calendarHeight
                             Surface(
-                                modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                                modifier = Modifier
+                                    .defaultMinSize(minHeight = detailsMinHeight)
+                                    .sharedBounds(
+                                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                                        animatedVisibilityScope = animatedContentScope,
+                                    ),
                                 shape = materialCornerExtraLargeTop(),
                                 color = animatedSurfaceColor(),
                             ) {

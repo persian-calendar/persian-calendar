@@ -17,7 +17,10 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -60,7 +63,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
@@ -72,6 +74,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
@@ -101,8 +104,9 @@ import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
 
 @Composable
-@OptIn(ExperimentalMaterial3Api::class)
-fun SettingsScreen(
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
+fun SharedTransitionScope.SettingsScreen(
+    animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     initialPage: Int,
@@ -190,23 +194,29 @@ fun SettingsScreen(
                 }
             }
 
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.clip(materialCornerExtraLargeTop()),
-            ) { index ->
-                val onSurfaceColor by animateColorAsState(
-                    MaterialTheme.colorScheme.onSurface,
-                    animationSpec = appColorAnimationSpec,
-                    label = "onSurface color"
+            Surface(
+                shape = materialCornerExtraLargeTop(),
+                color = animatedSurfaceColor(),
+                modifier = Modifier.sharedBounds(
+                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                    animatedVisibilityScope = animatedContentScope,
                 )
-                Surface(
-                    color = animatedSurfaceColor(),
-                    contentColor = onSurfaceColor,
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
-                        tabs[index].content(this)
-                        Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
+            ) {
+                HorizontalPager(state = pagerState) { index ->
+                    val onSurfaceColor by animateColorAsState(
+                        MaterialTheme.colorScheme.onSurface,
+                        animationSpec = appColorAnimationSpec,
+                        label = "onSurface color"
+                    )
+                    Surface(
+                        color = animatedSurfaceColor(),
+                        contentColor = onSurfaceColor,
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        Column(Modifier.verticalScroll(rememberScrollState())) {
+                            tabs[index].content(this)
+                            Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
+                        }
                     }
                 }
             }

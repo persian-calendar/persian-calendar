@@ -82,6 +82,7 @@ import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
@@ -197,7 +198,12 @@ fun SharedTransitionScope.AstronomyScreen(
         Surface(
             shape = materialCornerExtraLargeTop(),
             color = animatedSurfaceColor(),
-            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
+            modifier = Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .sharedBounds(
+                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
         ) {
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val bottomPadding = paddingValues.calculateBottomPadding()

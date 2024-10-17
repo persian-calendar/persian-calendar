@@ -2,8 +2,11 @@ package com.byagowi.persiancalendar.ui.converter
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
@@ -66,6 +69,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -96,9 +100,13 @@ import io.github.persiancalendar.calculator.eval
 import java.util.GregorianCalendar
 import java.util.TimeZone
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun ConverterScreen(openDrawer: () -> Unit, viewModel: ConverterViewModel) {
+fun SharedTransitionScope.ConverterScreen(
+    animatedContentScope: AnimatedContentScope,
+    openDrawer: () -> Unit,
+    viewModel: ConverterViewModel,
+) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
     Scaffold(
@@ -169,7 +177,11 @@ fun ConverterScreen(openDrawer: () -> Unit, viewModel: ConverterViewModel) {
             color = animatedSurfaceColor(),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding()),
+                .padding(top = paddingValues.calculateTopPadding())
+                .sharedBounds(
+                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
+                    animatedVisibilityScope = animatedContentScope,
+                ),
         ) {
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 Spacer(modifier = Modifier.height(24.dp))
