@@ -52,7 +52,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -88,7 +87,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
 import com.byagowi.persiancalendar.generated.faq
@@ -96,8 +94,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -152,14 +150,7 @@ fun SharedTransitionScope.AboutScreen(
             val scrollState = rememberScrollState()
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
-                Surface(
-                    shape = materialCornerExtraLargeTop(),
-                    color = animatedSurfaceColor(),
-                    modifier = Modifier.sharedBounds(
-                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                        animatedVisibilityScope = animatedContentScope,
-                    ),
-                ) {
+                ScreenSurface(animatedContentScope) {
                     AboutScreenContent(
                         animatedContentScope,
                         navigateToLicenses,

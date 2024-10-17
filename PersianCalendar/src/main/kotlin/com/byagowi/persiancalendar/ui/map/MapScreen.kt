@@ -47,7 +47,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.PlainTooltip
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -81,20 +80,18 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -225,16 +222,7 @@ fun SharedTransitionScope.MapScreen(
             Column {
                 Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
                 Spacer(Modifier.height((16 + menuHeight + 16).dp))
-                Surface(
-                    shape = materialCornerExtraLargeTop(),
-                    color = animatedSurfaceColor(),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .sharedBounds(
-                            rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                            animatedVisibilityScope = animatedContentScope,
-                        ),
-                ) {}
+                ScreenSurface(animatedContentScope) { Box(Modifier.fillMaxSize()) }
             }
         }
         AndroidView(

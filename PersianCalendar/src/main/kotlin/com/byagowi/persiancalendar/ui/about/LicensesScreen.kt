@@ -35,7 +35,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -55,14 +54,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -86,21 +83,14 @@ fun SharedTransitionScope.LicensesScreen(
         }
     ) { paddingValues ->
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            Surface(
-                shape = materialCornerExtraLargeTop(),
-                color = animatedSurfaceColor(),
-                modifier = Modifier
-                    .padding(top = paddingValues.calculateTopPadding())
-                    .sharedBounds(
-                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                        animatedVisibilityScope = animatedContentScope,
-                    ),
-            ) {
-                Licenses(paddingValues.calculateBottomPadding())
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.CenterEnd,
-                ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
+            Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+                ScreenSurface(animatedContentScope) {
+                    Licenses(paddingValues.calculateBottomPadding())
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterEnd,
+                    ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
+                }
             }
         }
     }

@@ -36,7 +36,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -69,7 +68,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -85,10 +83,9 @@ import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -172,65 +169,59 @@ fun SharedTransitionScope.ConverterScreen(
             )
         },
     ) { paddingValues ->
-        Surface(
-            shape = materialCornerExtraLargeTop(),
-            color = animatedSurfaceColor(),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = paddingValues.calculateTopPadding())
-                .sharedBounds(
-                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
-        ) {
-            Column(Modifier.verticalScroll(rememberScrollState())) {
-                Spacer(modifier = Modifier.height(24.dp))
+        Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            ScreenSurface(animatedContentScope) {
+                Box(Modifier.fillMaxSize()) {
+                    Column(Modifier.verticalScroll(rememberScrollState())) {
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                val isLandscape =
-                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                        val isLandscape =
+                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
-                // Timezones
-                AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
-                    val zones = remember {
-                        TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
-                            .sortedBy { it.rawOffset }
-                    }
-                    if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
-                        Box(Modifier.weight(1f)) {
-                            TimezoneClock(viewModel, zones, isFirst = true)
+                        // Timezones
+                        AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
+                            val zones = remember {
+                                TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
+                                    .sortedBy { it.rawOffset }
+                            }
+                            if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
+                                Box(Modifier.weight(1f)) {
+                                    TimezoneClock(viewModel, zones, isFirst = true)
+                                }
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Box(Modifier.weight(1f)) {
+                                    TimezoneClock(viewModel, zones, isFirst = false)
+                                }
+                            } else Column(Modifier.padding(horizontal = 24.dp)) {
+                                TimezoneClock(viewModel, zones, isFirst = true)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                TimezoneClock(viewModel, zones, isFirst = false)
+                            }
                         }
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Box(Modifier.weight(1f)) {
-                            TimezoneClock(viewModel, zones, isFirst = false)
+
+                        AnimatedVisibility(
+                            screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
+                        ) {
+                            Column(Modifier.padding(horizontal = 24.dp)) {
+                                ConverterAndDistance(viewModel)
+                            }
                         }
-                    } else Column(Modifier.padding(horizontal = 24.dp)) {
-                        TimezoneClock(viewModel, zones, isFirst = true)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TimezoneClock(viewModel, zones, isFirst = false)
+
+                        AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
+                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                Calculator(viewModel)
+                            }
+                        }
+
+                        AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
+                            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+                                QrCode(viewModel) { qrShareAction = it }
+                            }
+                        }
+
+                        Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
                     }
                 }
-
-                AnimatedVisibility(
-                    screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
-                ) {
-                    Column(Modifier.padding(horizontal = 24.dp)) {
-                        ConverterAndDistance(viewModel)
-                    }
-                }
-
-                AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        Calculator(viewModel)
-                    }
-                }
-
-                AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
-                    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                        QrCode(viewModel) { qrShareAction = it }
-                    }
-                }
-
-                Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
             }
         }
     }

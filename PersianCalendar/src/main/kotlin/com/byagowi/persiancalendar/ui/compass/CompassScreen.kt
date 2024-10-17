@@ -35,7 +35,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -68,7 +67,6 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
@@ -79,13 +77,12 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
@@ -295,42 +292,35 @@ fun SharedTransitionScope.CompassScreen(
             }
         }
     ) { paddingValues ->
-        Surface(
-            shape = materialCornerExtraLargeTop(),
-            color = animatedSurfaceColor(),
-            modifier = Modifier
-                .padding(paddingValues)
-                .sharedBounds(
-                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
-        ) {
-            val surfaceColor = MaterialTheme.colorScheme.surface
-            AndroidView(
-                modifier = Modifier.sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
-                factory = { CompassView(it).also { view -> compassView = view } },
-                update = {
-                    it.setSurfaceColor(surfaceColor.toArgb())
-                    it.setTime(time)
-                },
-            )
-            AnimatedVisibility(
-                visible = isSliderShown,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically(),
-            ) {
-                Slider(
-                    valueRange = 0f..24f,
-                    value = sliderValue,
-                    onValueChange = {
-                        isTimeShiftAnimate = false
-                        timeShift = if (it == 24f) 0f else it
+        Box(Modifier.padding(paddingValues)) {
+            ScreenSurface(animatedContentScope) {
+                val surfaceColor = MaterialTheme.colorScheme.surface
+                AndroidView(
+                    modifier = Modifier.sharedBounds(
+                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                        animatedVisibilityScope = animatedContentScope,
+                    ),
+                    factory = { CompassView(it).also { view -> compassView = view } },
+                    update = {
+                        it.setSurfaceColor(surfaceColor.toArgb())
+                        it.setTime(time)
                     },
-                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
+                AnimatedVisibility(
+                    visible = isSliderShown,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically(),
+                ) {
+                    Slider(
+                        valueRange = 0f..24f,
+                        value = sliderValue,
+                        onValueChange = {
+                            isTimeShiftAnimate = false
+                            timeShift = if (it == 24f) 0f else it
+                        },
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
+                }
             }
         }
     }

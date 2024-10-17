@@ -38,7 +38,6 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
@@ -80,7 +79,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
@@ -90,15 +88,14 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -195,69 +192,68 @@ fun SharedTransitionScope.AstronomyScreen(
             ) { slider = it }
         },
     ) { paddingValues ->
-        Surface(
-            shape = materialCornerExtraLargeTop(),
-            color = animatedSurfaceColor(),
-            modifier = Modifier
-                .padding(top = paddingValues.calculateTopPadding())
-                .sharedBounds(
-                    rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
-        ) {
-            BoxWithConstraints(Modifier.fillMaxSize()) {
-                val bottomPadding = paddingValues.calculateBottomPadding()
-                val maxHeight = maxHeight
-                val maxWidth = maxWidth
-                if (isLandscape) Row(Modifier.fillMaxWidth()) {
-                    Column(
-                        Modifier
-                            .width((maxWidth / 2).coerceAtMost(480.dp))
-                            .fillMaxHeight()
-                            .padding(top = 24.dp, start = 24.dp, bottom = bottomPadding + 16.dp),
-                    ) {
-                        Header(Modifier, viewModel)
-                        Spacer(Modifier.weight(1f))
-                        SliderBar(Modifier, animatedContentScope, slider, viewModel) { slider = it }
-                    }
-                    SolarDisplay(
-                        Modifier
-                            .weight(1f)
-                            .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
-                            .height(maxHeight - bottomPadding),
-                        animatedContentScope, viewModel, slider, navigateToMap,
-                    )
-                } else Layout(
-                    // Puts content in middle of available space after the measured header
-                    modifier = Modifier.verticalScroll(rememberScrollState()),
-                    content = {
-                        Header(
-                            Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
-                            viewModel,
-                        )
+        Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+            ScreenSurface(animatedContentScope) {
+                BoxWithConstraints(Modifier.fillMaxSize()) {
+                    val bottomPadding = paddingValues.calculateBottomPadding()
+                    val maxHeight = maxHeight
+                    val maxWidth = maxWidth
+                    if (isLandscape) Row(Modifier.fillMaxWidth()) {
+                        Column(
+                            Modifier
+                                .width((maxWidth / 2).coerceAtMost(480.dp))
+                                .fillMaxHeight()
+                                .padding(
+                                    top = 24.dp,
+                                    start = 24.dp,
+                                    bottom = bottomPadding + 16.dp
+                                ),
+                        ) {
+                            Header(Modifier, viewModel)
+                            Spacer(Modifier.weight(1f))
+                            SliderBar(Modifier, animatedContentScope, slider, viewModel) {
+                                slider = it
+                            }
+                        }
                         SolarDisplay(
                             Modifier
-                                .fillMaxWidth()
-                                .height(maxWidth - (56 * 2 + 8).dp),
+                                .weight(1f)
+                                .padding(top = 16.dp, bottom = bottomPadding + 16.dp)
+                                .height(maxHeight - bottomPadding),
                             animatedContentScope, viewModel, slider, navigateToMap,
                         )
-                    },
-                ) { measurables, constraints ->
-                    val header = measurables[0].measure(constraints)
-                    val content = measurables[1].measure(constraints)
-                    layout(
-                        width = constraints.maxWidth,
-                        height = header.height + content.height +
-                                // To make solar display can be scrolled above bottom padding in smaller screen
-                                bottomPadding.roundToPx(),
-                    ) {
-                        // Put the header at top
-                        header.placeRelative(0, 0)
+                    } else Layout(
+                        // Puts content in middle of available space after the measured header
+                        modifier = Modifier.verticalScroll(rememberScrollState()),
+                        content = {
+                            Header(
+                                Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                                viewModel,
+                            )
+                            SolarDisplay(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .height(maxWidth - (56 * 2 + 8).dp),
+                                animatedContentScope, viewModel, slider, navigateToMap,
+                            )
+                        },
+                    ) { measurables, constraints ->
+                        val header = measurables[0].measure(constraints)
+                        val content = measurables[1].measure(constraints)
+                        layout(
+                            width = constraints.maxWidth,
+                            height = header.height + content.height +
+                                    // To make solar display can be scrolled above bottom padding in smaller screen
+                                    bottomPadding.roundToPx(),
+                        ) {
+                            // Put the header at top
+                            header.placeRelative(0, 0)
 
-                        val availableHeight =
-                            (maxHeight - bottomPadding).roundToPx() - header.height
-                        val space = availableHeight / 2 - content.height / 2
-                        content.placeRelative(0, header.height + space.coerceAtLeast(0))
+                            val availableHeight =
+                                (maxHeight - bottomPadding).roundToPx() - header.height
+                            val space = availableHeight / 2 - content.height / 2
+                            content.placeRelative(0, header.height + space.coerceAtLeast(0))
+                        }
                     }
                 }
             }

@@ -45,7 +45,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults.exitUntilCollapsedScrollBehavior
 import androidx.compose.runtime.Composable
@@ -75,14 +74,12 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
@@ -148,14 +145,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 }
             },
         )
-        Surface(
-            shape = materialCornerExtraLargeTop(),
-            color = animatedSurfaceColor(),
-            modifier = Modifier.sharedBounds(
-                rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                animatedVisibilityScope = animatedContentScope,
-            ),
-        ) {
+        ScreenSurface(animatedContentScope) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 LazyColumn {
                     item { Spacer(Modifier.height(16.dp)) }

@@ -109,7 +109,6 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -143,6 +142,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
@@ -151,7 +151,6 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
-import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -304,24 +303,17 @@ fun SharedTransitionScope.CalendarScreen(
                             }
                             Spacer(Modifier.height(4.dp))
                             val detailsMinHeight = maxHeight - calendarHeight
-                            Surface(
-                                modifier = Modifier
-                                    .defaultMinSize(minHeight = detailsMinHeight)
-                                    .sharedBounds(
-                                        rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
-                                        animatedVisibilityScope = animatedContentScope,
-                                    ),
-                                shape = materialCornerExtraLargeTop(),
-                                color = animatedSurfaceColor(),
-                            ) {
-                                Details(
-                                    viewModel = viewModel,
-                                    tabs = detailsTabs,
-                                    pagerState = detailsPagerState,
-                                    bottomPadding = bottomPadding,
-                                    contentMinHeight = detailsMinHeight,
-                                    interactionSource = interactionSource
-                                )
+                            ScreenSurface(animatedContentScope) {
+                                Box(Modifier.defaultMinSize(minHeight = detailsMinHeight)) {
+                                    Details(
+                                        viewModel = viewModel,
+                                        tabs = detailsTabs,
+                                        pagerState = detailsPagerState,
+                                        bottomPadding = bottomPadding,
+                                        contentMinHeight = detailsMinHeight,
+                                        interactionSource = interactionSource
+                                    )
+                                }
                             }
                         }
                     }
