@@ -11,7 +11,7 @@ class ComposeAppTest {
     @Test
     fun basicSmokeTest() {
         composeTestRule.setContent {
-//            App(null) {}
+            App(null) {}
         }
     }
 }
