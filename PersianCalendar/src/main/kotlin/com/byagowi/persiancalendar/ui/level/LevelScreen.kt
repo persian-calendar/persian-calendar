@@ -29,7 +29,6 @@ import androidx.compose.material.icons.filled.SyncAlt
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -56,9 +55,9 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
+import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.StopButton
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -151,14 +150,14 @@ fun SharedTransitionScope.LevelScreen(
             animationSpec = tween(durationMillis = 500, easing = LinearEasing),
             label = "corner",
         )
-        Surface(
+        ScreenSurface(
+            animatedContentScope = animatedContentScope,
             shape = MaterialTheme.shapes.large.copy(
                 topStart = CornerSize(topCornersRoundness),
                 topEnd = CornerSize(topCornersRoundness),
                 bottomStart = ZeroCornerSize,
                 bottomEnd = ZeroCornerSize,
             ),
-            color = animatedSurfaceColor(),
         ) {
             Box {
                 Crossfade(targetState = cmInchFlip, label = "ruler") { state ->

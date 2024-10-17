@@ -6,6 +6,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -14,10 +15,11 @@ import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 @Composable
 fun SharedTransitionScope.ScreenSurface(
     animatedContentScope: AnimatedContentScope,
+    shape: Shape = materialCornerExtraLargeTop(),
     content: @Composable () -> Unit,
 ) {
     Surface(
-        shape = materialCornerExtraLargeTop(),
+        shape = shape,
         color = animatedSurfaceColor(),
         modifier = Modifier.sharedBounds(
             rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
