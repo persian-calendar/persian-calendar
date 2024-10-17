@@ -213,8 +213,7 @@ fun SharedTransitionScope.CompassScreen(
                     }
                     if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
                         AppDropdownMenuCheckableItem(
-                            stringResource(R.string.true_north),
-                            showTrueNorth
+                            stringResource(R.string.true_north), showTrueNorth
                         ) {
                             showTrueNorth = it
                             closeMenu()
@@ -245,81 +244,85 @@ fun SharedTransitionScope.CompassScreen(
                 },
             )
         },
-        bottomBar = {
-            BottomAppBar {
-                Spacer(Modifier.width(8.dp))
-                Box(
-                    modifier = Modifier.sharedBounds(
-                        rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                        animatedVisibilityScope = animatedContentScope,
-                    ),
-                ) {
-                    AppIconButton(
-                        icon = ImageVector.vectorResource(R.drawable.ic_level),
-                        title = stringResource(R.string.level),
-                        onClick = navigateToLevel,
-                    )
-                }
-                Box(
-                    modifier = Modifier.sharedBounds(
-                        rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                        animatedVisibilityScope = animatedContentScope,
-                    ),
-                ) {
-                    AppIconButton(
-                        icon = Icons.Default.Map,
-                        title = stringResource(R.string.map),
-                        onClick = navigateToMap,
-                    )
-                }
-                AppIconButton(
-                    icon = Icons.Default.Info,
-                    title = stringResource(R.string.help),
-                ) {
-                    if (coordinates == null) {
-                        showSetLocationMessage()
-                    } else showSnackbarMessage(
-                        context.getString(
-                            if (sensorNotFound) R.string.compass_not_found
-                            else R.string.calibrate_compass_summary
-                        ),
-                        SnackbarDuration.Long,
-                    )
-                }
-                Spacer(Modifier.weight(1f, fill = true))
-                StopButton(isStopped) { isStopped = it }
-                Spacer(Modifier.width(16.dp))
-            }
-        }
     ) { paddingValues ->
-        Box(Modifier.padding(paddingValues)) {
+        Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
-                val surfaceColor = MaterialTheme.colorScheme.surface
-                AndroidView(
-                    modifier = Modifier.sharedBounds(
-                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                        animatedVisibilityScope = animatedContentScope,
-                    ),
-                    factory = { CompassView(it).also { view -> compassView = view } },
-                    update = {
-                        it.setSurfaceColor(surfaceColor.toArgb())
-                        it.setTime(time)
-                    },
-                )
-                AnimatedVisibility(
-                    visible = isSliderShown,
-                    enter = fadeIn() + expandVertically(),
-                    exit = fadeOut() + shrinkVertically(),
-                ) {
-                    Slider(
-                        valueRange = 0f..24f,
-                        value = sliderValue,
-                        onValueChange = {
-                            isTimeShiftAnimate = false
-                            timeShift = if (it == 24f) 0f else it
-                        },
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
+                Column {
+                    Box(Modifier.weight(1f, fill = false)) {
+                        Column {
+                            AnimatedVisibility(
+                                visible = isSliderShown,
+                                enter = fadeIn() + expandVertically(),
+                                exit = fadeOut() + shrinkVertically(),
+                            ) {
+                                Slider(
+                                    valueRange = 0f..24f,
+                                    value = sliderValue,
+                                    onValueChange = {
+                                        isTimeShiftAnimate = false
+                                        timeShift = if (it == 24f) 0f else it
+                                    },
+                                    modifier = Modifier.padding(horizontal = 16.dp),
+                                )
+                            }
+                        }
+                        val surfaceColor = MaterialTheme.colorScheme.surface
+                        AndroidView(
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                animatedVisibilityScope = animatedContentScope,
+                            ),
+                            factory = { CompassView(it).also { view -> compassView = view } },
+                            update = {
+                                it.setSurfaceColor(surfaceColor.toArgb())
+                                it.setTime(time)
+                            },
+                        )
+                    }
+                    BottomAppBar {
+                        Spacer(Modifier.width(8.dp))
+                        Box(
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                                animatedVisibilityScope = animatedContentScope,
+                            ),
+                        ) {
+                            AppIconButton(
+                                icon = ImageVector.vectorResource(R.drawable.ic_level),
+                                title = stringResource(R.string.level),
+                                onClick = navigateToLevel,
+                            )
+                        }
+                        Box(
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                                animatedVisibilityScope = animatedContentScope,
+                            ),
+                        ) {
+                            AppIconButton(
+                                icon = Icons.Default.Map,
+                                title = stringResource(R.string.map),
+                                onClick = navigateToMap,
+                            )
+                        }
+                        AppIconButton(
+                            icon = Icons.Default.Info,
+                            title = stringResource(R.string.help),
+                        ) {
+                            if (coordinates == null) {
+                                showSetLocationMessage()
+                            } else showSnackbarMessage(
+                                context.getString(
+                                    if (sensorNotFound) R.string.compass_not_found
+                                    else R.string.calibrate_compass_summary
+                                ),
+                                SnackbarDuration.Long,
+                            )
+                        }
+                        Spacer(Modifier.weight(1f, fill = true))
+                        StopButton(isStopped) { isStopped = it }
+                        Spacer(Modifier.width(16.dp))
+                    }
                 }
             }
         }
@@ -332,8 +335,8 @@ fun SharedTransitionScope.CompassScreen(
         val accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         val magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
 
-        @Suppress("DEPRECATION")
-        val orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+        @Suppress("DEPRECATION") val orientationSensor =
+            sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
 
         // Accessibility announcing helpers on when the phone is headed on a specific direction
         val checkIfA11yAnnounceIsNeeded = run {
@@ -384,7 +387,8 @@ fun SharedTransitionScope.CompassScreen(
                 } else if (accelerometerSensor != null && magnetometerSensor != null) {
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
-                        accelerometerSensor, SensorManager.SENSOR_DELAY_GAME
+                        accelerometerSensor,
+                        SensorManager.SENSOR_DELAY_GAME
                     )
                     sensorManager.registerListener(
                         accelerometerMagneticSensorListener,
