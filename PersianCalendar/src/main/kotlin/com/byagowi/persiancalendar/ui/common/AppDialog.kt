@@ -23,7 +23,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.ui.utils.DialogSurface
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
 @OptIn(ExperimentalMaterial3Api::class)

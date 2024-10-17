@@ -88,9 +88,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppIconButton

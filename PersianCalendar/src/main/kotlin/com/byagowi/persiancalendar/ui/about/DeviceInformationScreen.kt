@@ -75,8 +75,8 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
