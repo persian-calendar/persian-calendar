@@ -229,16 +229,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
             },
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = startDestination,
-                popExitTransition = {
-                    slideOutOfContainer(
-                        AnimatedContentTransitionScope.SlideDirection.End,
-                        animationSpec = tween(500),
-                    )
-                }
-            ) {
+            NavHost(navController = navController, startDestination = startDestination) {
 
                 fun navigateToSettingsLocationTab() {
                     navController.graph.findNode(settingsRoute)?.let { destination ->
