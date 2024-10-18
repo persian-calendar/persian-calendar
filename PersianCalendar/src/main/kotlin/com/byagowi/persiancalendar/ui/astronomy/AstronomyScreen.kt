@@ -308,7 +308,7 @@ private fun SharedTransitionScope.SliderBar(
                     onLongClick = { viewModel.animateToAbsoluteMinutesOffset(0) },
                     onLongClickLabel = stringResource(R.string.today),
                 )
-                .sharedBounds(
+                .sharedElement(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
                     animatedVisibilityScope = animatedContentScope,
                 ),

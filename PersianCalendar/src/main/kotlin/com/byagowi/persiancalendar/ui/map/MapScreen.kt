@@ -372,7 +372,7 @@ fun SharedTransitionScope.MapScreen(
                                 onLongClick = { viewModel.changeToTime(Date()) },
                                 onLongClickLabel = stringResource(R.string.today),
                             )
-                            .sharedBounds(
+                            .sharedElement(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
                                 animatedVisibilityScope = animatedContentScope,
                             ),
