@@ -21,12 +21,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Map
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -74,6 +72,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
@@ -280,8 +279,7 @@ fun SharedTransitionScope.CompassScreen(
                         )
                         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
-                    BottomAppBar {
-                        Spacer(Modifier.width(8.dp))
+                    AppBottomAppBar {
                         Box(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
@@ -320,9 +318,8 @@ fun SharedTransitionScope.CompassScreen(
                                 SnackbarDuration.Long,
                             )
                         }
-                        Spacer(Modifier.weight(1f, fill = true))
+                        Spacer(Modifier.weight(1f))
                         StopButton(isStopped) { isStopped = it }
-                        Spacer(Modifier.width(16.dp))
                     }
                 }
             }

@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.safeGesturesPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material.icons.Icons
@@ -26,7 +25,6 @@ import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Fullscreen
 import androidx.compose.material.icons.filled.FullscreenExit
 import androidx.compose.material.icons.filled.SyncAlt
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -53,6 +51,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
+import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -201,8 +200,7 @@ fun SharedTransitionScope.LevelScreen(
                         },
                     )
                     AnimatedVisibility(visible = !isFullscreen) {
-                        BottomAppBar {
-                            Spacer(Modifier.width(8.dp))
+                        AppBottomAppBar {
                             AnimatedVisibility(visible = !isFullscreen) {
                                 Box(
                                     modifier = Modifier.sharedBounds(
@@ -217,16 +215,15 @@ fun SharedTransitionScope.LevelScreen(
                                     )
                                 }
                             }
-                            Spacer(Modifier.weight(1f, fill = true))
+                            Spacer(Modifier.weight(1f))
                             StopButton(isStopped) { isStopped = it }
-                            Spacer(Modifier.width(16.dp))
                         }
                     }
                 }
                 if (isFullscreen) Box(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(horizontal = 20.dp, vertical = 32.dp),
+                        .padding(end = 24.dp, bottom = 36.dp),
                 ) { StopButton(isStopped) { isStopped = it } }
 
                 ShrinkingFloatingActionButton(
