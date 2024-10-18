@@ -217,7 +217,8 @@ fun SharedTransitionScope.CalendarScreen(
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
 
             Crossfade(searchBoxIsOpen, label = "toolbar") {
-                if (it) Search(viewModel) else Toolbar(addEvent, openDrawer, viewModel)
+                if (it) Search(viewModel)
+                else Toolbar(animatedContentScope, addEvent, openDrawer, viewModel)
             }
         },
         floatingActionButton = {
@@ -652,8 +653,14 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: CalendarViewModel) {
+private fun SharedTransitionScope.Toolbar(
+    animatedContentScope: AnimatedContentScope,
+    addEvent: () -> Unit,
+    openDrawer: () -> Unit,
+    viewModel: CalendarViewModel,
+) {
     val context = LocalContext.current
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
@@ -747,7 +754,7 @@ private fun Toolbar(addEvent: () -> Unit, openDrawer: () -> Unit, viewModel: Cal
                     icon = Icons.AutoMirrored.Default.ArrowBack,
                     title = stringResource(R.string.close),
                     onClick = viewModel::onYearViewBackPressed,
-                ) else NavigationOpenDrawerIcon(openDrawer)
+                ) else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
             }
         },
         actions = {

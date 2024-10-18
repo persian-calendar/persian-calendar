@@ -121,7 +121,7 @@ fun SharedTransitionScope.SettingsScreen(
                 ) { state -> Text(state) }
             },
             colors = appTopAppBarColors(),
-            navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+            navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
             actions = {
                 var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
                 ThreeDotsDropdownMenu { closeMenu ->

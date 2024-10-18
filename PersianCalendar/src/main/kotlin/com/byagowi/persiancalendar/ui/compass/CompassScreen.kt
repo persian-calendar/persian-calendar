@@ -194,7 +194,7 @@ fun SharedTransitionScope.CompassScreen(
                     }
                 },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
                     if (coordinates != null) AppIconButton(
                         icon = In24HoursIcon,

@@ -155,7 +155,7 @@ fun SharedTransitionScope.ConverterScreen(
                     }
                 },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                     TodayActionButton(visible = todayButtonVisibility) {

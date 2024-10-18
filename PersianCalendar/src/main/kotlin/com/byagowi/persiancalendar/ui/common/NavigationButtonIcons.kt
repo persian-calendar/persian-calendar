@@ -1,19 +1,36 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_OPEN_DRAWER
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun NavigationOpenDrawerIcon(openDrawer: () -> Unit) {
-    AppIconButton(
-        icon = Icons.Default.Menu,
-        title = stringResource(R.string.open_drawer),
-        onClick = openDrawer,
-    )
+fun SharedTransitionScope.NavigationOpenDrawerIcon(
+    animatedContentScope: AnimatedContentScope,
+    openDrawer: () -> Unit,
+) {
+    Box(
+        Modifier.sharedElement(
+            rememberSharedContentState(SHARED_CONTENT_KEY_OPEN_DRAWER),
+            animatedVisibilityScope = animatedContentScope,
+        )
+    ) {
+        AppIconButton(
+            icon = Icons.Default.Menu,
+            title = stringResource(R.string.open_drawer),
+            onClick = openDrawer,
+        )
+    }
 }
 
 @Composable

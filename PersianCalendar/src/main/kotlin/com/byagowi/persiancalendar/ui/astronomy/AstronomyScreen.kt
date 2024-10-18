@@ -148,7 +148,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     )
                 },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()
                     val isTropical by viewModel.isTropical.collectAsState()

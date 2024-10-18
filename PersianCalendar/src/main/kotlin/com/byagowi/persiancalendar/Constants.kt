@@ -148,6 +148,7 @@ const val AFGHANISTAN_TIMEZONE_ID = "Asia/Kabul"
 const val NEPAL_TIMEZONE_ID = "Asia/Kathmandu"
 
 const val SHARED_CONTENT_KEY_CARD = "card" // Common card animation
+const val SHARED_CONTENT_KEY_OPEN_DRAWER = "openDrawer" // Make sure open drawer is stay put
 const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map
 const val SHARED_CONTENT_KEY_LICENSES = "licenses" // Turns licenses button into title of the screen
 const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens

@@ -119,7 +119,7 @@ fun SharedTransitionScope.AboutScreen(
             TopAppBar(
                 title = { Text(stringResource(R.string.about)) },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(openDrawer) },
+                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
                     val context = LocalContext.current
                     AppIconButton(
