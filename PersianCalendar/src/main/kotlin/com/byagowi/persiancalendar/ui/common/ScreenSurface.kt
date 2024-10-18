@@ -24,14 +24,10 @@ fun SharedTransitionScope.ScreenSurface(
     Surface(
         shape = shape,
         color = animatedSurfaceColor(),
-        // Workaround CI not liking shared elements
-        modifier = if (LocalContext.current.animationsEnabled()) Modifier.sharedElement(
+        modifier = Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
             animatedVisibilityScope = animatedContentScope,
-        ) else Modifier,
+        ),
         content = content,
     )
 }
-
-private fun Context.animationsEnabled(): Boolean =
-    Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f) != 0f
