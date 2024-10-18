@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import android.content.Context
+import android.provider.Settings
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +19,9 @@ import androidx.compose.ui.graphics.luminance
  */
 @Stable
 val Color.isLight: Boolean get() = this.luminance() > .5
+
+fun Context.animationsEnabled(): Boolean =
+    Settings.Global.getFloat(contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f) != 0f
 
 /**
  * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently

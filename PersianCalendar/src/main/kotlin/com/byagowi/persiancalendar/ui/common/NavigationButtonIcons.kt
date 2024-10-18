@@ -9,9 +9,11 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_OPEN_DRAWER
+import com.byagowi.persiancalendar.ui.utils.animationsEnabled
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -20,10 +22,11 @@ fun SharedTransitionScope.NavigationOpenDrawerIcon(
     openDrawer: () -> Unit,
 ) {
     Box(
-        Modifier.sharedElement(
+        // Workaround CI not liking shared elements
+        if (LocalContext.current.animationsEnabled()) Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_OPEN_DRAWER),
             animatedVisibilityScope = animatedContentScope,
-        )
+        ) else Modifier
     ) {
         AppIconButton(
             icon = Icons.Default.Menu,
