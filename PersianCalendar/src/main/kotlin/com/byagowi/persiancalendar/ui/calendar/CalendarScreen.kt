@@ -231,7 +231,7 @@ fun SharedTransitionScope.CalendarScreen(
             ) {
                 ShrinkingFloatingActionButton(
                     modifier = Modifier.padding(end = 8.dp),
-                    isVisible = selectedTabIndex == EVENTS_TAB && !isYearView,
+                    isVisible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
                     action = addEvent,
                     icon = Icons.Default.Add,
                     title = stringResource(R.string.add_event),
