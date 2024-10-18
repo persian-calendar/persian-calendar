@@ -163,10 +163,6 @@ fun SharedTransitionScope.LevelScreen(
                     AndroidView(
                         modifier = Modifier
                             .fillMaxSize()
-                            .sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
-                                animatedVisibilityScope = animatedContentScope,
-                            )
                             .then(
                                 if (isFullscreen) Modifier.safeDrawingPadding()
                                 else Modifier.padding(top = topCornersRoundness)
@@ -179,7 +175,11 @@ fun SharedTransitionScope.LevelScreen(
                     AndroidView(
                         modifier = Modifier
                             .weight(1f, fill = false)
-                            .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier),
+                            .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier)
+                            .sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
+                                animatedVisibilityScope = animatedContentScope,
+                            ),
                         factory = {
                             val levelView = LevelView(it)
                             context.getActivity()?.let { activity ->
