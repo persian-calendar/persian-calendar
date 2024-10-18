@@ -237,9 +237,12 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     }
                 }
 
+                fun isCurrentDestination(route: String) =
+                    navController.currentDestination?.route == route
+
                 fun navigateUp(currentRoute: String) {
                     // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
-                    if (navController.currentDestination?.route != currentRoute) return
+                    if (!isCurrentDestination(currentRoute)) return
                     // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
                     if (!navController.popBackStack()) finish()
                 }
@@ -277,6 +280,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         },
                         viewModel = viewModel<CalendarViewModel>(),
                         animatedContentScope = this,
+                        isCurrentDestination = isCurrentDestination(calendarRoute),
                     )
                 }
 
@@ -316,6 +320,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToMap = { navController.navigate(mapRoute) },
                         viewModel = viewModel,
+                        isCurrentDestination = isCurrentDestination(astronomyRoute),
                     )
                 }
 

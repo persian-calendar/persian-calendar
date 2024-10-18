@@ -116,6 +116,7 @@ fun SharedTransitionScope.AstronomyScreen(
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
+    isCurrentDestination: Boolean,
 ) {
     LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
@@ -184,12 +185,18 @@ fun SharedTransitionScope.AstronomyScreen(
             )
         },
         bottomBar = {
-            val modifier = Modifier
-                .padding(bottom = 16.dp)
-                .safeDrawingPadding()
-            if (!isLandscape) SliderBar(
-                modifier, animatedContentScope, slider, viewModel
-            ) { slider = it }
+            Box(
+                Modifier.renderInSharedTransitionScopeOverlay(
+                    renderInOverlay = { isCurrentDestination && isTransitionActive },
+                ),
+            ) {
+                val modifier = Modifier
+                    .padding(bottom = 16.dp)
+                    .safeDrawingPadding()
+                if (!isLandscape) SliderBar(
+                    modifier, animatedContentScope, slider, viewModel
+                ) { slider = it }
+            }
         },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {

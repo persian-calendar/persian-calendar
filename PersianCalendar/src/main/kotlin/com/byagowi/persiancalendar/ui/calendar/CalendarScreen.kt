@@ -200,6 +200,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToAstronomy: (Int) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
+    isCurrentDestination: Boolean,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -223,13 +224,19 @@ fun SharedTransitionScope.CalendarScreen(
         },
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-            ShrinkingFloatingActionButton(
-                modifier = Modifier.padding(end = 8.dp),
-                isVisible = selectedTabIndex == EVENTS_TAB && !isYearView,
-                action = addEvent,
-                icon = Icons.Default.Add,
-                title = stringResource(R.string.add_event),
-            )
+            Box(
+                Modifier.renderInSharedTransitionScopeOverlay(
+                    renderInOverlay = { isCurrentDestination && isTransitionActive },
+                ),
+            ) {
+                ShrinkingFloatingActionButton(
+                    modifier = Modifier.padding(end = 8.dp),
+                    isVisible = selectedTabIndex == EVENTS_TAB && !isYearView,
+                    action = addEvent,
+                    icon = Icons.Default.Add,
+                    title = stringResource(R.string.add_event),
+                )
+            }
         },
     ) { paddingValues ->
         // Refresh the calendar on resume
@@ -237,8 +244,7 @@ fun SharedTransitionScope.CalendarScreen(
             viewModel.refreshCalendar()
             context.preferences.edit {
                 putInt(
-                    PREF_LAST_APP_VISIT_VERSION,
-                    BuildConfig.VERSION_CODE
+                    PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE
                 )
             }
         }
@@ -483,8 +489,7 @@ private fun Details(
 
 @Composable
 private fun CalendarsTab(
-    viewModel: CalendarViewModel,
-    interactionSource: MutableInteractionSource
+    viewModel: CalendarViewModel, interactionSource: MutableInteractionSource
 ) {
     Column {
         val jdn by viewModel.selectedDay.collectAsState()
@@ -544,9 +549,9 @@ private fun CalendarsTab(
                 discardAction = ::ignore,
             ) {
                 val alarmManager = context.getSystemService<AlarmManager>()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
-                ) launcher.launch(Manifest.permission.SCHEDULE_EXACT_ALARM) else requestExemption()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) launcher.launch(
+                    Manifest.permission.SCHEDULE_EXACT_ALARM
+                ) else requestExemption()
             }
         }
     }
@@ -561,9 +566,7 @@ private fun showEncourageToExemptFromBatteryOptimizations(): Boolean {
     if (!isNotifyDate && !isAnyAthanSet && !hasAnyWidgetUpdateRecently()) return false
     if (context.preferences.getInt(PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT, 0) >= 2) return false
     val alarmManager = context.getSystemService<AlarmManager>()
-    if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-        runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false
-    ) return true
+    if (isAnyAthanSet && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && runCatching { alarmManager?.canScheduleExactAlarms() }.getOrNull().debugAssertNotNull == false) return true
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isIgnoringBatteryOptimizations(context)
 }
 
