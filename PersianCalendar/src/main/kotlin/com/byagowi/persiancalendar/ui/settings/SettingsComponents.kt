@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -53,6 +54,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
+import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.preferences
 import java.util.Locale
 
@@ -354,7 +356,12 @@ private fun SettingsSwitchLayout(
     title: String,
     summary: String?,
     value: Boolean,
-) = SettingsLayout(toggle, title, summary) { Switch(checked = value, onCheckedChange = null) }
+) {
+    val hapticFeedback = LocalHapticFeedback.current
+    SettingsLayout({ hapticFeedback.performLongPress(); toggle() }, title, summary) {
+        Switch(checked = value, onCheckedChange = null)
+    }
+}
 
 @Composable
 fun SettingsSlider(

@@ -60,7 +60,6 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -97,6 +96,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
@@ -213,7 +213,7 @@ fun SharedTransitionScope.AstronomyScreen(
                                 .padding(
                                     top = 24.dp,
                                     start = 24.dp,
-                                    bottom = bottomPadding + 16.dp
+                                    bottom = bottomPadding + 16.dp,
                                 ),
                         ) {
                             Header(Modifier, viewModel)
@@ -369,7 +369,7 @@ private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
             indication = ripple(bounded = false),
             interactionSource = remember { MutableInteractionSource() },
             onClick = {
-                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                hapticFeedback.performLongPress()
                 buttonScrollSlider(if (isPrevious) -1 else 1)
             },
             onClickLabel = stringResource(R.string.select_day),
@@ -559,7 +559,7 @@ private fun Seasons(jdn: Jdn) {
 @Composable
 private fun SharedTransitionScope.MoonIcon(
     astronomyState: AstronomyState,
-    animatedContentScope: AnimatedContentScope
+    animatedContentScope: AnimatedContentScope,
 ) {
     val context = LocalContext.current
     val solarDraw = remember { SolarDraw(context.resources) }

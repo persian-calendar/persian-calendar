@@ -15,6 +15,8 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.ui.hapticfeedback.HapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -51,8 +53,7 @@ fun Bitmap.toByteArray(): ByteArray {
 
 private inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
-        applicationContext, "$packageName.provider",
-        File(externalCacheDir, fileName).also(action)
+        applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action)
     )
 }
 
@@ -66,21 +67,15 @@ fun Context.openHtmlInBrowser(html: String) {
 
 fun Context.shareText(text: String, chooserTitle: String) {
     runCatching {
-        ShareCompat.IntentBuilder(this)
-            .setType("text/plain")
-            .setChooserTitle(chooserTitle)
-            .setText(text)
-            .startChooser()
+        ShareCompat.IntentBuilder(this).setType("text/plain").setChooserTitle(chooserTitle)
+            .setText(text).startChooser()
     }.onFailure(logException)
 }
 
 fun Context.shareLink(plusLink: String, chooserTitle: String?) {
     runCatching {
-        ShareCompat.IntentBuilder(this)
-            .setType("text/plain")
-            .setChooserTitle(chooserTitle)
-            .setText(plusLink)
-            .startChooser()
+        ShareCompat.IntentBuilder(this).setType("text/plain").setChooserTitle(chooserTitle)
+            .setText(plusLink).startChooser()
     }.onFailure(logException)
 }
 
@@ -101,8 +96,8 @@ fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
 
 // https://stackoverflow.com/a/58249983
 // Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
-tailrec fun Context.getActivity(): ComponentActivity? = this as? ComponentActivity
-    ?: (this as? ContextWrapper)?.baseContext?.getActivity()
+tailrec fun Context.getActivity(): ComponentActivity? =
+    this as? ComponentActivity ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 fun createFlingDetector(
     context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean
@@ -141,4 +136,9 @@ val Resources.isDynamicGrayscale: Boolean
 fun View.performHapticFeedbackVirtualKey() {
     debugLog("Preformed a haptic feedback virtual key")
     performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+}
+
+fun HapticFeedback.performLongPress() {
+    debugLog("Preformed a haptic feedback long press")
+    performHapticFeedback(HapticFeedbackType.LongPress)
 }

@@ -54,7 +54,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -87,6 +86,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
+import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -119,9 +119,7 @@ fun SharedTransitionScope.ConverterScreen(
                             .background(LocalContentColor.current.copy(alpha = .175f))
                             .clickable {
                                 showMenu = !showMenu
-                                if (showMenu) hapticFeedback.performHapticFeedback(
-                                    HapticFeedbackType.LongPress
-                                )
+                                if (showMenu) hapticFeedback.performLongPress()
                             },
                     ) {
                         var dropDownWidth by remember { mutableIntStateOf(0) }
@@ -146,7 +144,7 @@ fun SharedTransitionScope.ConverterScreen(
                                     text = { Text(stringResource(it.title)) },
                                     onClick = {
                                         showMenu = false
-                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                                        hapticFeedback.performLongPress()
                                         viewModel.changeScreenMode(it)
                                     },
                                 )
