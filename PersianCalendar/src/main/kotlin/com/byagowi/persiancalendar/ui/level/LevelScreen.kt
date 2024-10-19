@@ -223,7 +223,7 @@ fun SharedTransitionScope.LevelScreen(
                 if (isFullscreen) Box(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 24.dp, bottom = 36.dp),
+                        .padding(end = 24.dp, bottom = 40.dp),
                 ) { StopButton(isStopped) { isStopped = it } }
 
                 ShrinkingFloatingActionButton(
