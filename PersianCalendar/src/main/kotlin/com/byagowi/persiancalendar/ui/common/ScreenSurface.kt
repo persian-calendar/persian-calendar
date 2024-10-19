@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
-import com.byagowi.persiancalendar.ui.utils.animationsEnabled
+import com.byagowi.persiancalendar.ui.utils.isOnCI
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -24,10 +24,10 @@ fun SharedTransitionScope.ScreenSurface(
         shape = shape,
         color = animatedSurfaceColor(),
         // Workaround CI not liking shared elements
-        modifier = if (LocalContext.current.animationsEnabled()) Modifier.sharedElement(
+        modifier = if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
             animatedVisibilityScope = animatedContentScope,
-        ) else Modifier,
+        ),
         content = content,
     )
 }
