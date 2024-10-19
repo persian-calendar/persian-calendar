@@ -205,19 +205,17 @@ fun SharedTransitionScope.LevelScreen(
                     )
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
-                            AnimatedVisibility(visible = !isFullscreen) {
-                                Box(
-                                    modifier = Modifier.sharedBounds(
-                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                        animatedVisibilityScope = animatedContentScope,
-                                    )
-                                ) {
-                                    AppIconButton(
-                                        icon = Icons.Default.Explore,
-                                        title = stringResource(R.string.compass),
-                                        onClick = navigateToCompass,
-                                    )
-                                }
+                            Box(
+                                modifier = Modifier.sharedBounds(
+                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                    animatedVisibilityScope = animatedContentScope,
+                                )
+                            ) {
+                                AppIconButton(
+                                    icon = Icons.Default.Explore,
+                                    title = stringResource(R.string.compass),
+                                    onClick = navigateToCompass,
+                                )
                             }
                             Spacer(Modifier.weight(1f))
                             StopButton(isStopped) { isStopped = it }
