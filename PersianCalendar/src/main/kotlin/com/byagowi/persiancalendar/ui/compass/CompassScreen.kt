@@ -248,6 +248,18 @@ fun SharedTransitionScope.CompassScreen(
             ScreenSurface(animatedContentScope) {
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
+                        val surfaceColor = MaterialTheme.colorScheme.surface
+                        AndroidView(
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
+                                animatedVisibilityScope = animatedContentScope,
+                            ),
+                            factory = { CompassView(it).also { view -> compassView = view } },
+                            update = {
+                                it.setSurfaceColor(surfaceColor.toArgb())
+                                it.setTime(time)
+                            },
+                        )
                         Column {
                             AnimatedVisibility(
                                 visible = isSliderShown,
@@ -265,18 +277,6 @@ fun SharedTransitionScope.CompassScreen(
                                 )
                             }
                         }
-                        val surfaceColor = MaterialTheme.colorScheme.surface
-                        AndroidView(
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
-                                animatedVisibilityScope = animatedContentScope,
-                            ),
-                            factory = { CompassView(it).also { view -> compassView = view } },
-                            update = {
-                                it.setSurfaceColor(surfaceColor.toArgb())
-                                it.setTime(time)
-                            },
-                        )
                         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
                     AppBottomAppBar {
