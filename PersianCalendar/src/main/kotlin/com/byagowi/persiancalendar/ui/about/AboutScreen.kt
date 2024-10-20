@@ -141,11 +141,7 @@ fun SharedTransitionScope.AboutScreen(
             Column(modifier = Modifier.verticalScroll(scrollState)) {
                 Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) { Header() }
                 ScreenSurface(animatedContentScope) {
-                    AboutScreenContent(
-                        animatedContentScope,
-                        navigateToLicenses,
-                        paddingValues.calculateBottomPadding()
-                    )
+                    AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
             }
         }
@@ -252,12 +248,8 @@ https://github.com/persian-calendar/persian-calendar"""
     }.onFailure(logException).onFailure { context.bringMarketPage() }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SharedTransitionScope.AboutScreenContent(
-    animatedContentScope: AnimatedContentScope,
-    navigateToLicenses: () -> Unit, bottomPadding: Dp,
-) {
+private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp) {
     Column {
         // Licenses
         Text(
@@ -330,10 +322,7 @@ private fun SharedTransitionScope.AboutScreenContent(
 @Composable
 private fun HelpItems() {
     val sections = remember {
-        faq
-            .split(Regex("^={4}$", RegexOption.MULTILINE))
-            .map { it.trim().lines() }
-            .map { lines ->
+        faq.split(Regex("^={4}$", RegexOption.MULTILINE)).map { it.trim().lines() }.map { lines ->
                 val title = lines.first()
                 val body = lines.drop(1).joinToString("\n").trim()
                 title to body
