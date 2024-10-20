@@ -54,7 +54,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -75,10 +74,6 @@ fun SharedTransitionScope.LicensesScreen(
                 title = { Text(stringResource(R.string.about_license_title)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
-                modifier = Modifier.sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_LICENSES),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
             )
         }
     ) { paddingValues ->

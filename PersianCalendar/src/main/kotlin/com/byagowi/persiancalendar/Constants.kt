@@ -152,7 +152,6 @@ const val SHARED_CONTENT_KEY_OPEN_DRAWER = "openDrawer" // Make sure open drawer
 const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots" // Make sure three dots menu icon is stay put
 const val SHARED_CONTENT_KEY_SHARE_BUTTON = "shareButton" // Animate placement of share button
 const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map
-const val SHARED_CONTENT_KEY_LICENSES = "licenses" // Turns licenses button into title of the screen
 const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens
 const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to a level
 const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns compass icon to a compass
