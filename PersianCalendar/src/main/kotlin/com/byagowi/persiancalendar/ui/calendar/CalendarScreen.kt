@@ -65,7 +65,6 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.PrimaryIndicator
@@ -146,7 +145,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isRtl
@@ -285,11 +283,7 @@ fun SharedTransitionScope.CalendarScreen(
                         Box(Modifier.width(width)) {
                             CalendarPager(viewModel, pagerState, addEvent, width, height)
                         }
-                        Surface(
-                            shape = materialCornerExtraLargeNoBottomEnd(),
-                            color = animatedSurfaceColor(),
-                            modifier = Modifier.fillMaxHeight(),
-                        ) {
+                        ScreenSurface(animatedContentScope, materialCornerExtraLargeNoBottomEnd()) {
                             Details(
                                 viewModel = viewModel,
                                 tabs = detailsTabs,
