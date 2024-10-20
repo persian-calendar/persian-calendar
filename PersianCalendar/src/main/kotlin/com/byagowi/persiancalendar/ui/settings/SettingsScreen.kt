@@ -124,7 +124,7 @@ fun SharedTransitionScope.SettingsScreen(
             navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
             actions = {
                 var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
-                ThreeDotsDropdownMenu { closeMenu ->
+                ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
                     MenuItems(
                         openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
                         closeMenu = closeMenu,

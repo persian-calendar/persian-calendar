@@ -210,7 +210,9 @@ fun SharedTransitionScope.CompassScreen(
                     var showQibla by rememberSaveable {
                         mutableStateOf(preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
                     }
-                    if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu { closeMenu ->
+                    if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu(
+                        animatedContentScope
+                    ) { closeMenu ->
                         AppDropdownMenuCheckableItem(
                             stringResource(R.string.true_north), showTrueNorth
                         ) {

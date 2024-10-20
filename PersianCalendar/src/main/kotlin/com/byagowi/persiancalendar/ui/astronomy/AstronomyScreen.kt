@@ -165,7 +165,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             toggle = viewModel::toggleIsTropical,
                         )
                     }
-                    ThreeDotsDropdownMenu { closeMenu ->
+                    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
                         AppDropdownMenuItem(
                             text = { Text(stringResource(R.string.select_date)) },
                             onClick = {

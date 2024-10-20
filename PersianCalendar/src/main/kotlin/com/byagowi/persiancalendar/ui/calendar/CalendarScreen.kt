@@ -783,13 +783,18 @@ private fun SharedTransitionScope.Toolbar(
                     title = stringResource(R.string.search_in_events),
                 ) { viewModel.openSearch() }
             }
-            AnimatedVisibility(!isYearView) { Menu(addEvent, viewModel) }
+            AnimatedVisibility(!isYearView) { Menu(animatedContentScope, addEvent, viewModel) }
         },
     )
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
+private fun SharedTransitionScope.Menu(
+    animatedContentScope: AnimatedContentScope,
+    addEvent: () -> Unit,
+    viewModel: CalendarViewModel,
+) {
     val context = LocalContext.current
 
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
@@ -818,7 +823,7 @@ private fun Menu(addEvent: () -> Unit, viewModel: CalendarViewModel) {
         MonthOverviewDialog(selectedMonth) { showMonthOverview = false }
     }
 
-    ThreeDotsDropdownMenu { closeMenu ->
+    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.select_date)) },
             onClick = {
