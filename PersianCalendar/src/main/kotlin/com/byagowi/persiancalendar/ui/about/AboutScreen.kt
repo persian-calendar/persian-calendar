@@ -16,6 +16,8 @@ import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
 import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,6 +55,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -114,8 +117,7 @@ fun SharedTransitionScope.AboutScreen(
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
-            @OptIn(ExperimentalMaterial3Api::class)
-            TopAppBar(
+            @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = { Text(stringResource(R.string.about)) },
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
@@ -129,7 +131,7 @@ fun SharedTransitionScope.AboutScreen(
                     )
                 },
             )
-        }
+        },
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -164,10 +166,12 @@ private fun Header() {
         else null
     }
 
+    val interactionSource = remember { MutableInteractionSource() }
     Row(
         Modifier
             .height(250.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .indication(interactionSource = interactionSource, indication = ripple()),
     ) {
         Box(
             Modifier
@@ -210,7 +214,7 @@ private fun Header() {
             Modifier
                 .weight(1f)
                 .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
-                .clickable {
+                .clickable(indication = null, interactionSource = interactionSource) {
                     logoAnimationAtEnd = !logoAnimationAtEnd
                     clickHandlerDialog(context.getActivity())
                     logoEffect = effectsGenerator
@@ -432,8 +436,7 @@ private fun DevelopersChips() {
         LocalLayoutDirection provides LayoutDirection.Ltr,
         LocalMinimumInteractiveComponentSize provides Dp.Unspecified,
     ) {
-        @OptIn(ExperimentalLayoutApi::class)
-        FlowRow(
+        @OptIn(ExperimentalLayoutApi::class) FlowRow(
             Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -457,7 +460,7 @@ private fun DevelopersChips() {
                             contentDescription = displayName,
                             Modifier.size(AssistChipDefaults.IconSize)
                         )
-                    }
+                    },
                 )
             }
         }
