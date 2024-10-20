@@ -222,19 +222,17 @@ fun SharedTransitionScope.CalendarScreen(
         },
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-            Box(
-                Modifier.renderInSharedTransitionScopeOverlay(
-                    renderInOverlay = { isCurrentDestination && isTransitionActive },
-                ),
-            ) {
-                ShrinkingFloatingActionButton(
-                    modifier = Modifier.padding(end = 8.dp),
-                    isVisible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
-                    action = addEvent,
-                    icon = Icons.Default.Add,
-                    title = stringResource(R.string.add_event),
-                )
-            }
+            ShrinkingFloatingActionButton(
+                modifier = Modifier
+                    .padding(end = 8.dp)
+                    .renderInSharedTransitionScopeOverlay(
+                        renderInOverlay = { isCurrentDestination && isTransitionActive },
+                    ),
+                isVisible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
+                action = addEvent,
+                icon = Icons.Default.Add,
+                title = stringResource(R.string.add_event),
+            )
         },
     ) { paddingValues ->
         // Refresh the calendar on resume
