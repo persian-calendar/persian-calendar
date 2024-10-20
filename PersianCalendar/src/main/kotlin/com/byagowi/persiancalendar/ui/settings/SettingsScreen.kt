@@ -111,29 +111,32 @@ fun SharedTransitionScope.SettingsScreen(
     initialPage: Int,
     destination: String,
 ) {
-    Scaffold(containerColor = Color.Transparent, topBar = {
-        TopAppBar(
-            title = {
-                AnimatedContent(
-                    targetState = stringResource(R.string.settings),
-                    label = "title",
-                    transitionSpec = appCrossfadeSpec,
-                ) { state -> Text(state) }
-            },
-            colors = appTopAppBarColors(),
-            navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
-            actions = {
-                var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
-                ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-                    MenuItems(
-                        openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
-                        closeMenu = closeMenu,
-                    )
-                }
-                if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
-            },
-        )
-    }) { paddingValues ->
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
+            TopAppBar(
+                title = {
+                    AnimatedContent(
+                        targetState = stringResource(R.string.settings),
+                        label = "title",
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state -> Text(state) }
+                },
+                colors = appTopAppBarColors(),
+                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
+                actions = {
+                    var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
+                    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                        MenuItems(
+                            openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
+                            closeMenu = closeMenu,
+                        )
+                    }
+                    if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
+                },
+            )
+        },
+    ) { paddingValues ->
         Column(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val tabs = listOf(
                 TabItem(

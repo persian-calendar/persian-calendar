@@ -481,7 +481,8 @@ private fun Details(
 
 @Composable
 private fun CalendarsTab(
-    viewModel: CalendarViewModel, interactionSource: MutableInteractionSource
+    viewModel: CalendarViewModel,
+    interactionSource: MutableInteractionSource,
 ) {
     Column {
         val jdn by viewModel.selectedDay.collectAsState()

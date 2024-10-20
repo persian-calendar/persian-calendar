@@ -149,7 +149,7 @@ const val NEPAL_TIMEZONE_ID = "Asia/Kathmandu"
 
 const val SHARED_CONTENT_KEY_CARD = "card" // Common card animation
 const val SHARED_CONTENT_KEY_OPEN_DRAWER = "openDrawer" // Make sure open drawer icon is stay put
-const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots" // Make sure three dots menu icon is stay put
+const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots" // Make sure menu icon is stay put
 const val SHARED_CONTENT_KEY_SHARE_BUTTON = "shareButton" // Animate placement of share button
 const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map
 const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens
