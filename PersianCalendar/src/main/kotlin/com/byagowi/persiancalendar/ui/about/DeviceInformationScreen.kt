@@ -37,7 +37,6 @@ import androidx.compose.material.icons.filled.Motorcycle
 import androidx.compose.material.icons.filled.PermDeviceInformation
 import androidx.compose.material.icons.filled.Print
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.SportsEsports
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -74,10 +73,10 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
@@ -118,10 +117,9 @@ fun SharedTransitionScope.DeviceInformationScreen(
             colors = appTopAppBarColors(),
             navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
             actions = {
-                AppIconButton(
-                    icon = Icons.Default.Share,
-                    title = stringResource(R.string.share),
-                ) { context.shareTextFile(generateHtmlReport(items), "device.html", "text/html") }
+                ShareActionButton(animatedContentScope) {
+                    context.shareTextFile(generateHtmlReport(items), "device.html", "text/html")
+                }
                 AppIconButton(
                     icon = Icons.Default.Print,
                     title = "Print",
@@ -149,12 +147,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 LazyColumn {
                     item { Spacer(Modifier.height(16.dp)) }
-                    item {
-                        OverviewTopBar(
-                            Modifier.padding(horizontal = 16.dp),
-                            animatedContentScope = animatedContentScope,
-                        )
-                    }
+                    item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
                     itemsIndexed(items) { i, item ->
                         if (i > 0) HorizontalDivider(
                             Modifier.padding(horizontal = 20.dp),
@@ -185,12 +178,8 @@ fun SharedTransitionScope.DeviceInformationScreen(
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SharedTransitionScope.OverviewTopBar(
-    modifier: Modifier = Modifier,
-    animatedContentScope: AnimatedContentScope
-) {
+private fun OverviewTopBar(modifier: Modifier = Modifier) {
     var showScheduleDialog by rememberSaveable { mutableStateOf(false) }
     if (showScheduleDialog) ScheduleAlarm { showScheduleDialog = false }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
@@ -219,11 +208,6 @@ private fun SharedTransitionScope.OverviewTopBar(
                     clickHandler(context.getActivity())
                 },
                 label = { Text(title) },
-                modifier = if (icon != Icons.Default.PermDeviceInformation) Modifier
-                else Modifier.sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
-                    animatedVisibilityScope = animatedContentScope,
-                ),
                 icon = {
                     Icon(
                         modifier = Modifier.padding(start = 8.dp, end = 4.dp),

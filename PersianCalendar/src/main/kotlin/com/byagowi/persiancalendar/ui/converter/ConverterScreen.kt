@@ -27,8 +27,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -75,7 +73,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
-import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
@@ -83,6 +80,7 @@ import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -162,7 +160,7 @@ fun SharedTransitionScope.ConverterScreen(
                         viewModel.changeSecondSelectedDate(todayJdn)
                         viewModel.resetTimeZoneClock()
                     }
-                    ShareActionButton(viewModel, qrShareAction)
+                    ConverterScreenShareActionButton(animatedContentScope, viewModel, qrShareAction)
                 },
             )
         },
@@ -225,11 +223,16 @@ fun SharedTransitionScope.ConverterScreen(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun ShareActionButton(viewModel: ConverterViewModel, qrShareAction: () -> Unit) {
+private fun SharedTransitionScope.ConverterScreenShareActionButton(
+    animatedContentScope: AnimatedContentScope,
+    viewModel: ConverterViewModel,
+    qrShareAction: () -> Unit,
+) {
     val screenMode by viewModel.screenMode.collectAsState()
     val context = LocalContext.current
-    AppIconButton(icon = Icons.Default.Share, title = stringResource(R.string.share)) {
+    ShareActionButton(animatedContentScope) {
         val chooserTitle = context.getString(screenMode.title)
         when (screenMode) {
             ConverterScreenMode.CONVERTER -> {

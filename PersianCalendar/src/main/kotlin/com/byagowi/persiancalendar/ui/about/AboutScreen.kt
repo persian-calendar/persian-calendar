@@ -41,7 +41,6 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.PermDeviceInformation
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Translate
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedFilterChip
@@ -87,7 +86,6 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_INFO
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LICENSES
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
@@ -95,6 +93,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -122,22 +121,12 @@ fun SharedTransitionScope.AboutScreen(
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
                     val context = LocalContext.current
+                    ShareActionButton(animatedContentScope) { shareApplication(context) }
                     AppIconButton(
-                        icon = Icons.Default.Share,
-                        title = stringResource(R.string.share),
-                    ) { shareApplication(context) }
-                    Box(
-                        modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(key = SHARED_CONTENT_KEY_INFO),
-                            animatedVisibilityScope = animatedContentScope,
-                        ),
-                    ) {
-                        AppIconButton(
-                            icon = Icons.Default.PermDeviceInformation,
-                            title = stringResource(R.string.device_information),
-                            onClick = navigateToDeviceInformation,
-                        )
-                    }
+                        icon = Icons.Default.PermDeviceInformation,
+                        title = stringResource(R.string.device_information),
+                        onClick = navigateToDeviceInformation,
+                    )
                 },
             )
         }
