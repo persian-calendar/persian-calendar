@@ -233,10 +233,12 @@ fun SharedTransitionScope.AstronomyScreen(
                         // Puts content in middle of available space after the measured header
                         modifier = Modifier.verticalScroll(rememberScrollState()),
                         content = {
+                            // Header
                             Header(
                                 Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
                                 viewModel,
                             )
+                            // Content
                             SolarDisplay(
                                 Modifier
                                     .fillMaxWidth()
@@ -244,22 +246,24 @@ fun SharedTransitionScope.AstronomyScreen(
                                 animatedContentScope, viewModel, slider, navigateToMap,
                             )
                         },
-                    ) { measurables, constraints ->
-                        val header = measurables[0].measure(constraints)
-                        val content = measurables[1].measure(constraints)
+                    ) { (header, content), constraints ->
+                        val placeableHeader = header.measure(constraints)
+                        val placeableContent = content.measure(constraints)
                         layout(
                             width = constraints.maxWidth,
-                            height = header.height + content.height +
+                            height = placeableHeader.height + placeableContent.height +
                                     // To make solar display can be scrolled above bottom padding in smaller screen
                                     bottomPadding.roundToPx(),
                         ) {
                             // Put the header at top
-                            header.placeRelative(0, 0)
+                            placeableHeader.placeRelative(0, 0)
 
                             val availableHeight =
-                                (maxHeight - bottomPadding).roundToPx() - header.height
-                            val space = availableHeight / 2 - content.height / 2
-                            content.placeRelative(0, header.height + space.coerceAtLeast(0))
+                                (maxHeight - bottomPadding).roundToPx() - placeableHeader.height
+                            val space = availableHeight / 2 - placeableContent.height / 2
+                            placeableContent.placeRelative(
+                                0, placeableHeader.height + space.coerceAtLeast(0)
+                            )
                         }
                     }
                 }

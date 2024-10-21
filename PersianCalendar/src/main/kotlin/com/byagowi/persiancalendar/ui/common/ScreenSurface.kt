@@ -28,6 +28,7 @@ fun SharedTransitionScope.ScreenSurface(
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
+        // Parent
         Surface(
             shape = shape,
             color = animatedSurfaceColor(),
@@ -37,6 +38,7 @@ fun SharedTransitionScope.ScreenSurface(
                 animatedVisibilityScope = animatedContentScope,
             ),
         ) {}
+        // Content
         Surface(
             if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
@@ -50,12 +52,13 @@ fun SharedTransitionScope.ScreenSurface(
             color = Color.Transparent,
             content = content,
         )
-    }) { measurables, constraints ->
-        val child = measurables[1].measure(constraints)
-        val parent = measurables[0].measure(Constraints.fixed(child.width, child.height))
-        layout(child.width, child.height) {
-            parent.placeRelative(0, 0)
-            child.placeRelative(0, 0)
+    }) { (parent, content), constraints ->
+        val placeableContent = content.measure(constraints)
+        val placeableParent =
+            parent.measure(Constraints.fixed(placeableContent.width, placeableContent.height))
+        layout(placeableContent.width, placeableContent.height) {
+            placeableParent.placeRelative(0, 0)
+            placeableContent.placeRelative(0, 0)
         }
     }
 }
