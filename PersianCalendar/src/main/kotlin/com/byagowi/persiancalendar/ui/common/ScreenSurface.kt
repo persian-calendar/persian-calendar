@@ -4,12 +4,15 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalContext
@@ -28,30 +31,32 @@ fun SharedTransitionScope.ScreenSurface(
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
+        // Workaround CI not liking shared elements
+        val isOnCI = LocalContext.current.isOnCI()
         // Parent
         Surface(
             shape = shape,
             color = animatedSurfaceColor(),
-            // Workaround CI not liking shared elements
-            modifier = if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
+            modifier = if (isOnCI) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
             ),
         ) {}
         // Content
-        Surface(
-            if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedBounds(
+        Box(
+            (if (isOnCI) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
-            ),
-            shape = shape,
-            contentColor = animateColorAsState(
-                contentColorFor(MaterialTheme.colorScheme.surface),
-                label = "content color",
-            ).value,
-            color = Color.Transparent,
-            content = content,
-        )
+            )).clip(shape)
+        ) {
+            CompositionLocalProvider(
+                value = LocalContentColor provides animateColorAsState(
+                    contentColorFor(MaterialTheme.colorScheme.surface),
+                    label = "content color",
+                ).value,
+                content = content,
+            )
+        }
     }) { (parent, content), constraints ->
         val placeableContent = content.measure(constraints)
         val placeableParent =
