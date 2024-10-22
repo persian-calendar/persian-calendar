@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -57,6 +59,7 @@ fun AppDialog(
                     val topDividerAlpha by animateFloatAsState(
                         if (scrollState.value == 0) 0f else 1f,
                         label = "top divider alpha",
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                     )
                     HorizontalDivider(Modifier.alpha(topDividerAlpha))
                 }
@@ -76,6 +79,7 @@ fun AppDialog(
                     val bottomDividerAlpha by animateFloatAsState(
                         if (scrollState.value == scrollState.maxValue) 0f else 1f,
                         label = "bottom divider alpha",
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                     )
                     HorizontalDivider(Modifier.alpha(bottomDividerAlpha))
                     Spacer(modifier = Modifier.height(8.dp))
