@@ -55,6 +55,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -218,7 +219,12 @@ fun SharedTransitionScope.LevelScreen(
                                 )
                             }
                             Spacer(Modifier.weight(1f))
-                            StopButton(isStopped) { isStopped = it }
+                            Box(
+                                Modifier.sharedElement(
+                                    rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                                    animatedVisibilityScope = animatedContentScope,
+                                )
+                            ) { StopButton(isStopped) { isStopped = it } }
                         }
                     }
                 }

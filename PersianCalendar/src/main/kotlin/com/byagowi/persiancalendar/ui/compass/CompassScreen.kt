@@ -69,6 +69,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_COMPASS
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -321,7 +322,12 @@ fun SharedTransitionScope.CompassScreen(
                             )
                         }
                         Spacer(Modifier.weight(1f))
-                        StopButton(isStopped) { isStopped = it }
+                        Box(
+                            Modifier.sharedElement(
+                                rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
+                                animatedVisibilityScope = animatedContentScope,
+                            )
+                        ) { StopButton(isStopped) { isStopped = it } }
                     }
                 }
             }
