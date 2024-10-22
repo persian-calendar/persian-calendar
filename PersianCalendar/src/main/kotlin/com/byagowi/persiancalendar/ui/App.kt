@@ -141,7 +141,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    BackHandler(enabled = drawerState.isOpen) { coroutineScope.launch { drawerState.close() } }
+    if (drawerState.isOpen) {
+        BackHandler(enabled = true) { coroutineScope.launch { drawerState.close() } }
+    }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
