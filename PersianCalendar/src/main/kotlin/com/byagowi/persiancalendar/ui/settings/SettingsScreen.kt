@@ -21,7 +21,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -45,7 +44,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -89,8 +87,8 @@ import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalend
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
+import com.byagowi.persiancalendar.ui.theme.animatedContentColor
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
-import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -198,14 +196,9 @@ fun SharedTransitionScope.SettingsScreen(
 
             ScreenSurface(animatedContentScope) {
                 HorizontalPager(state = pagerState) { index ->
-                    val onSurfaceColor by animateColorAsState(
-                        MaterialTheme.colorScheme.onSurface,
-                        animationSpec = appColorAnimationSpec,
-                        label = "onSurface color"
-                    )
                     Surface(
                         color = animatedSurfaceColor(),
-                        contentColor = onSurfaceColor,
+                        contentColor = animatedContentColor(),
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         Column(Modifier.verticalScroll(rememberScrollState())) {

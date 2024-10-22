@@ -172,6 +172,15 @@ fun animatedSurfaceColor(): Color {
 }
 
 @Composable
+fun animatedContentColor(): Color {
+    return animateColorAsState(
+        MaterialTheme.colorScheme.onSurface,
+        animationSpec = appColorAnimationSpec,
+        label = "content color",
+    ).value
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun appTopAppBarColors(): TopAppBarColors {
     return TopAppBarDefaults.topAppBarColors(
