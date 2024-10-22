@@ -611,6 +611,7 @@ private fun Search(viewModel: CalendarViewModel) {
             .padding(horizontal = padding)
             .focusRequester(focusRequester),
     ) {
+        BackHandler(enabled = true) { query = "" }
         if (padding.value != 0f) return@SearchBar
         val context = LocalContext.current
         events.take(10).forEach { event ->
