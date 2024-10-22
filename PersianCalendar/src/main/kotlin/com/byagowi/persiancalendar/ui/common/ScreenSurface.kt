@@ -11,6 +11,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
@@ -49,18 +50,16 @@ fun SharedTransitionScope.ScreenSurface(
                 animatedVisibilityScope = animatedContentScope,
             )).clip(shape)
         ) {
-            CompositionLocalProvider(
-                value = LocalContentColor provides animateColorAsState(
-                    contentColorFor(MaterialTheme.colorScheme.surface),
-                    label = "content color",
-                ).value,
-                content = content,
+            val contentColor by animateColorAsState(
+                targetValue = contentColorFor(MaterialTheme.colorScheme.surface),
+                label = "content color",
             )
+            CompositionLocalProvider(LocalContentColor provides contentColor, content)
         }
     }) { (parent, content), constraints ->
         val placeableContent = content.measure(constraints)
-        val placeableParent =
-            parent.measure(Constraints.fixed(placeableContent.width, placeableContent.height))
+        val childConstraints = Constraints.fixed(placeableContent.width, placeableContent.height)
+        val placeableParent = parent.measure(childConstraints)
         layout(placeableContent.width, placeableContent.height) {
             placeableParent.placeRelative(0, 0)
             placeableContent.placeRelative(0, 0)
