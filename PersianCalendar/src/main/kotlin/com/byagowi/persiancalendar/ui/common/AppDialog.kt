@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.variants.debugLog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,11 +76,12 @@ fun AppDialog(
                 }
 
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
-                    val bottomDividerAlpha by animateFloatAsState(
-                        if (scrollState.value == scrollState.maxValue || scrollState.maxValue == Int.MAX_VALUE) 0f else 1f,
+                    val bottomDividerAlpha = if (scrollState.maxValue == Int.MAX_VALUE) 0f
+                    else animateFloatAsState(
+                        if (scrollState.value == scrollState.maxValue) 0f else 1f,
                         label = "bottom divider alpha",
                         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-                    )
+                    ).value
                     HorizontalDivider(Modifier.alpha(bottomDividerAlpha))
                     Spacer(modifier = Modifier.height(8.dp))
 
