@@ -42,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.getSystemService
@@ -229,7 +228,7 @@ fun SharedTransitionScope.LevelScreen(
                     }
                 }
 
-                var bottomWindowInset by remember { mutableStateOf(Dp.Hairline) }
+                var bottomWindowInset by remember { mutableStateOf(0.dp) }
                 if (!isFullscreen) bottomWindowInset = with(LocalDensity.current) {
                     WindowInsets.systemBars.getBottom(this).toDp()
                 }
