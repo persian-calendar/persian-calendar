@@ -172,7 +172,7 @@ fun animatedSurfaceColor(): Color {
 }
 
 @Composable
-fun animatedContentColor(): Color {
+fun animatedOnSurfaceColor(): Color {
     return animateColorAsState(
         MaterialTheme.colorScheme.onSurface,
         animationSpec = appColorAnimationSpec,

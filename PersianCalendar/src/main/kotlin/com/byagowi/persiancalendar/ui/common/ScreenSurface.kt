@@ -16,7 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Constraints
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
-import com.byagowi.persiancalendar.ui.theme.animatedContentColor
+import com.byagowi.persiancalendar.ui.theme.animatedOnSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.utils.isOnCI
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -46,7 +46,7 @@ fun SharedTransitionScope.ScreenSurface(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
             )).clip(shape)
-        ) { CompositionLocalProvider(LocalContentColor provides animatedContentColor(), content) }
+        ) { CompositionLocalProvider(LocalContentColor provides animatedOnSurfaceColor(), content) }
     }) { (parent, content), constraints ->
         val placeableContent = content.measure(constraints)
         val childConstraints = Constraints.fixed(placeableContent.width, placeableContent.height)

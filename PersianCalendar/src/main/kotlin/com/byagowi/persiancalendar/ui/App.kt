@@ -113,7 +113,7 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.theme.animatedContentColor
+import com.byagowi.persiancalendar.ui.theme.animatedOnSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -160,7 +160,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 ModalDrawerSheet(
                     windowInsets = WindowInsets(0, 0, 0, 0),
                     drawerContainerColor = animatedSurfaceColor(),
-                    drawerContentColor = animatedContentColor(),
+                    drawerContentColor = animatedOnSurfaceColor(),
                 ) {
                     run {
                         val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
@@ -505,7 +505,7 @@ private fun BoxScope.DrawerDarkModeToggle() {
     ) {
         Icon(
             it, stringResource(if (theme.isDark) R.string.theme_dark else R.string.theme_light),
-            tint = animatedContentColor().copy(alpha = if (theme.isDark) .9f else .6f),
+            tint = animatedOnSurfaceColor().copy(alpha = if (theme.isDark) .9f else .6f),
         )
     }
 }

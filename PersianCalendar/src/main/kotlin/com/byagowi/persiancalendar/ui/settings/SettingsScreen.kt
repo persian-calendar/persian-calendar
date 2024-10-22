@@ -87,7 +87,7 @@ import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalend
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
-import com.byagowi.persiancalendar.ui.theme.animatedContentColor
+import com.byagowi.persiancalendar.ui.theme.animatedOnSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -198,7 +198,7 @@ fun SharedTransitionScope.SettingsScreen(
                 HorizontalPager(state = pagerState) { index ->
                     Surface(
                         color = animatedSurfaceColor(),
-                        contentColor = animatedContentColor(),
+                        contentColor = animatedOnSurfaceColor(),
                         modifier = Modifier.fillMaxSize(),
                     ) {
                         Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -279,9 +279,11 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             },
         )
     }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
-        runCatching { AppWidgetManager.getInstance(context).isRequestPinAppWidgetSupported }.getOrNull() == true
-    ) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && runCatching {
+            AppWidgetManager.getInstance(
+                context
+            ).isRequestPinAppWidgetSupported
+        }.getOrNull() == true) {
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.add_widget)) },
             onClick = openAddWidgetDialog,

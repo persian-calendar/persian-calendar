@@ -323,10 +323,10 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
 private fun HelpItems() {
     val sections = remember {
         faq.split(Regex("^={4}$", RegexOption.MULTILINE)).map { it.trim().lines() }.map { lines ->
-                val title = lines.first()
-                val body = lines.drop(1).joinToString("\n").trim()
-                title to body
-            }
+            val title = lines.first()
+            val body = lines.drop(1).joinToString("\n").trim()
+            title to body
+        }
     }
     Column {
         sections.forEach { (title, body) ->
