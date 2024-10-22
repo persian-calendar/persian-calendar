@@ -40,6 +40,7 @@ import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -185,14 +186,22 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             DrawerSeasonsPager(drawerState)
                             DrawerDarkModeToggle()
                         }
-                        val secondaryContainer by animateColorAsState(
-                            MaterialTheme.colorScheme.secondaryContainer,
+                        val onSecondaryContainerColor by animateColorAsState(
+                            MaterialTheme.colorScheme.onSecondaryContainer,
                             animationSpec = appColorAnimationSpec,
                             label = "secondary container"
                         )
                         val navItemColors = NavigationDrawerItemDefaults.colors(
                             unselectedContainerColor = Color.Transparent,
-                            selectedContainerColor = secondaryContainer,
+                            unselectedTextColor = LocalContentColor.current,
+                            unselectedIconColor = LocalContentColor.current,
+                            selectedContainerColor = animateColorAsState(
+                                MaterialTheme.colorScheme.secondaryContainer,
+                                animationSpec = appColorAnimationSpec,
+                                label = "secondary container"
+                            ).value,
+                            selectedTextColor = onSecondaryContainerColor,
+                            selectedIconColor = onSecondaryContainerColor,
                         )
                         navItems.forEach { (id, icon, title) ->
                             NavigationDrawerItem(
