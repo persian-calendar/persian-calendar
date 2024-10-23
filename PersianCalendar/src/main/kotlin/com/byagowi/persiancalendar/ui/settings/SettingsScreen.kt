@@ -21,6 +21,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -45,7 +46,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
@@ -87,8 +87,6 @@ import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalend
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.AddWidgetDialog
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationSettings
-import com.byagowi.persiancalendar.ui.theme.animatedOnSurfaceColor
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -196,11 +194,7 @@ fun SharedTransitionScope.SettingsScreen(
 
             ScreenSurface(animatedContentScope) {
                 HorizontalPager(state = pagerState) { index ->
-                    Surface(
-                        color = animatedSurfaceColor(),
-                        contentColor = animatedOnSurfaceColor(),
-                        modifier = Modifier.fillMaxSize(),
-                    ) {
+                    Box(modifier = Modifier.fillMaxSize()) {
                         Column(Modifier.verticalScroll(rememberScrollState())) {
                             tabs[index].content(this)
                             Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
