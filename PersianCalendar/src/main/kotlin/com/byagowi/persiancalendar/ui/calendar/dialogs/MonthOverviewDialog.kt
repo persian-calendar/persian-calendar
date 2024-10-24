@@ -98,7 +98,7 @@ fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
     }
 
     Dialog(onDismissRequest = onDismissRequest) {
-        DialogSurface {} // It's not supposed to be used this but it works, so
+        DialogSurface {} // It's not supposed to be used like this but it works, so
         LazyColumn {
             stickyHeader {
                 Box(
