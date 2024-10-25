@@ -53,7 +53,7 @@ class EventsTests {
     fun `test World Philosophy Day instances`(year: Int, month: Int, day: Int) {
         val calendar = Calendar.GREGORIAN
         assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 6, 3))
-        val title = "روز جهانی فلسفه (سومین پنج‌شنبهٔ نوامبر)"
+        val title = "روز جهانی فلسفه (سومین پنجشنبهٔ نوامبر)"
         val event = mapOf(
             "rule" to "nth weekday of month", "nth" to "3", "weekday" to "6", "month" to "11",
             "type" to "International", "title" to title, "holiday" to "false",
