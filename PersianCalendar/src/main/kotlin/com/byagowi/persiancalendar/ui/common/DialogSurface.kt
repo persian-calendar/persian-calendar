@@ -30,7 +30,7 @@ fun DialogSurface(content: @Composable () -> Unit) {
 // with modification and simplification till Compose provides a native support.
 // It also follows parts of https://source.android.com/docs/core/display/window-blurs
 @Composable
-private fun SetupDialogBlur() {
+fun SetupDialogBlur() {
     val window = LocalView.current.findWindow()
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S ||
         window?.windowManager?.isCrossWindowBlurEnabled != true
