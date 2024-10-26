@@ -635,7 +635,7 @@ private fun Search(viewModel: CalendarViewModel) {
                     Text(
                         state,
                         modifier = Modifier.align(Alignment.CenterStart),
-                        color = MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.bodyMedium,
                     )
                 }
