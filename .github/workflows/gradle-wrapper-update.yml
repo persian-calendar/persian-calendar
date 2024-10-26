@@ -16,8 +16,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          java-version: 21
+          distribution: temurin
 
       - name: Upgrade gradle wrapper
         run: |
