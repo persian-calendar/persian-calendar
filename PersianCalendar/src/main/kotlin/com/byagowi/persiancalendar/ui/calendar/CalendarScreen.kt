@@ -609,12 +609,11 @@ private fun Search(viewModel: CalendarViewModel) {
             )
         },
         expanded = expanded,
-        onExpandedChange = {},
+        onExpandedChange = { if (!it) query = "" },
         modifier = Modifier
             .padding(horizontal = padding)
             .focusRequester(focusRequester),
     ) {
-        BackHandler(enabled = true) { query = "" }
         if (padding.value != 0f) return@SearchBar
         val context = LocalContext.current
         events.take(10).forEach { event ->
