@@ -9,7 +9,10 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -136,10 +140,18 @@ fun SharedTransitionScope.LevelScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
-                    AppIconButton(
-                        icon = Icons.Default.SyncAlt,
-                        title = "cm / in",
-                    ) { cmInchFlip = !cmInchFlip }
+                    run {
+                        val rotation by animateFloatAsState(
+                            if (cmInchFlip) 180f else 0f, label = "rotation",
+                            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                        )
+                        Box(Modifier.rotate(rotation)) {
+                            AppIconButton(
+                                icon = Icons.Default.SyncAlt,
+                                title = "cm / in",
+                            ) { cmInchFlip = !cmInchFlip }
+                        }
+                    }
                     AppIconButton(
                         icon = Icons.Default.Fullscreen,
                         title = stringResource(R.string.full_screen),
