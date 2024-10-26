@@ -241,9 +241,7 @@ fun SharedTransitionScope.CalendarScreen(
         LaunchedEffect(Unit) {
             viewModel.refreshCalendar()
             context.preferences.edit {
-                putInt(
-                    PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE
-                )
+                putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
             }
         }
         val isLandscape =
