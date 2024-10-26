@@ -350,7 +350,7 @@ private fun enableTimesTab(context: Context): Boolean {
                     PREF_APP_LANGUAGE !in preferences)
 }
 
-private fun bringDate(
+fun bringDate(
     viewModel: CalendarViewModel,
     jdn: Jdn,
     context: Context,
@@ -825,7 +825,7 @@ private fun SharedTransitionScope.Menu(
         val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
         val selectedMonth =
             mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-        MonthOverviewDialog(selectedMonth) { showMonthOverview = false }
+        MonthOverviewDialog(viewModel, selectedMonth) { showMonthOverview = false }
     }
 
     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->

@@ -2,7 +2,10 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.content.Context
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.indication
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +21,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +48,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.calendar.bringDate
 import com.byagowi.persiancalendar.ui.common.SetupDialogBlur
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
@@ -81,7 +88,9 @@ import kotlinx.html.unsafe
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
+fun MonthOverviewDialog(
+    viewModel: CalendarViewModel, date: AbstractDate, onDismissRequest: () -> Unit
+) {
     val context = LocalContext.current
     val events = formatComposeEventsList(
         createEventsList(context, date), MaterialTheme.colorScheme.primary
@@ -134,16 +143,23 @@ fun MonthOverviewDialog(date: AbstractDate, onDismissRequest: () -> Unit) {
                 }
             }
             items(events) { (jdn, text) ->
+                val interactionSource = remember { MutableInteractionSource() }
                 Card(
                     shape = MaterialTheme.shapes.large,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                        .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                        .indication(interactionSource = interactionSource, indication = ripple()),
                 ) {
                     Text(
                         dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
                         style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                            .clickable(indication = null, interactionSource = interactionSource) {
+                                onDismissRequest()
+                                bringDate(viewModel, jdn, context)
+                            },
                     )
                     SelectionContainer(
                         Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
