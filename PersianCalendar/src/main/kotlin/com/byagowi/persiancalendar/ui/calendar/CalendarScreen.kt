@@ -435,10 +435,7 @@ private fun Details(
     Column(
         Modifier
             .fillMaxHeight()
-            .indication(
-                interactionSource = interactionSource,
-                indication = ripple(),
-            )
+            .indication(interactionSource = interactionSource, indication = ripple())
     ) {
         val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
         val coroutineScope = rememberCoroutineScope()

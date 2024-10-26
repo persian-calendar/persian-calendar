@@ -471,10 +471,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                 Column(
                     Modifier
                         .fillMaxWidth()
-                        .indication(
-                            interactionSource = interactionSource,
-                            indication = ripple(),
-                        ),
+                        .indication(interactionSource = interactionSource, indication = ripple()),
                 ) {
                     Spacer(Modifier.height(20.dp))
                     CalendarsOverview(
