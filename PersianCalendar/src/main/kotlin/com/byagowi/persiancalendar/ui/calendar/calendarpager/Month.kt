@@ -100,7 +100,10 @@ fun Month(
             // +1 for weekday names initials row
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
         ) else null
-        SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
+        SelectionIndicator(
+            color = monthColors.indicator, radius = cellRadius, center = center,
+            cellHeightPx = cellHeightPx,
+        )
     }
 
     val refreshToken by viewModel.refreshToken.collectAsState()
