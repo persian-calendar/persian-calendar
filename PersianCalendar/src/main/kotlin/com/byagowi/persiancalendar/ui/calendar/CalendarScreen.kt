@@ -18,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -145,6 +146,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.isRtl
@@ -625,12 +627,18 @@ private fun Search(viewModel: CalendarViewModel) {
                     .fillMaxWidth()
                     .padding(vertical = 20.dp, horizontal = 24.dp),
             ) {
-                Text(
-                    event.formattedTitle,
-                    modifier = Modifier.align(Alignment.CenterStart),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyMedium,
-                )
+                AnimatedContent(
+                    targetState = event.formattedTitle,
+                    label = "title",
+                    transitionSpec = appCrossfadeSpec,
+                ) { state ->
+                    Text(
+                        state,
+                        modifier = Modifier.align(Alignment.CenterStart),
+                        color = MaterialTheme.colorScheme.primary,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
             }
         }
         if (events.size > 10) Text("…", Modifier.padding(vertical = 12.dp, horizontal = 24.dp))
