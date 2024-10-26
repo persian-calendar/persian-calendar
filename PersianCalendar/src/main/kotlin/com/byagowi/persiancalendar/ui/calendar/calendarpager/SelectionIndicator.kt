@@ -14,7 +14,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun SelectionIndicator(color: Color, radius: Float, center: Offset?, cellHeightPx: Float) {
+fun SelectionIndicator(color: Color, radius: Float, center: Offset?) {
     val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
     val animatedRadius = remember { Animatable(0f) }
 
@@ -32,11 +32,6 @@ fun SelectionIndicator(color: Color, radius: Float, center: Offset?, cellHeightP
             targetValue = center,
             animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
         )
-    }
-
-    // When search item is clicked don't animate because of table size changes
-    LaunchedEffect(key1 = cellHeightPx) {
-        if (center != null) animatedCenter.snapTo(targetValue = center)
     }
 
     Canvas(Modifier.fillMaxSize()) {

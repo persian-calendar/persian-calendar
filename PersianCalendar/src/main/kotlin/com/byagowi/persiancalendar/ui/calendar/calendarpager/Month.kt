@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -100,10 +101,10 @@ fun Month(
             // +1 for weekday names initials row
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
         ) else null
-        SelectionIndicator(
-            color = monthColors.indicator, radius = cellRadius, center = center,
-            cellHeightPx = cellHeightPx,
-        )
+        // Invalidate the indicator state on table size changes
+        key(cellHeightPx) {
+            SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
+        }
     }
 
     val refreshToken by viewModel.refreshToken.collectAsState()

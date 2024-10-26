@@ -591,6 +591,7 @@ private fun Search(viewModel: CalendarViewModel) {
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
+                modifier = Modifier.height(56.dp),
                 query = query,
                 onQueryChange = { query = it },
                 onSearch = {},
