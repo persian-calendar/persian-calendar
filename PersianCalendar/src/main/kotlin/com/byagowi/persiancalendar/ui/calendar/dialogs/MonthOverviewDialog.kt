@@ -98,9 +98,7 @@ fun MonthOverviewDialog(
 
     fun showPrintReport(isLongClick: Boolean) {
         runCatching {
-            context.openHtmlInBrowser(
-                createEventsReport(context, date, wholeYear = isLongClick)
-            )
+            context.openHtmlInBrowser(createEventsReport(context, date, wholeYear = isLongClick))
         }.onFailure(logException)
         onDismissRequest()
         createEventsReport(context, date, wholeYear = isLongClick)
