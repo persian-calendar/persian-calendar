@@ -167,15 +167,16 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
                         val needsVisibleStatusBarPlaceHolder =
                             !isBackgroundColorLight && isSurfaceColorLight
+                        val topColor by animateColorAsState(
+                            if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
+                            label = "top color",
+                            animationSpec = appColorAnimationSpec,
+                        )
                         Spacer(
                             Modifier
                                 .fillMaxWidth()
-                                .then(
-                                    if (needsVisibleStatusBarPlaceHolder) Modifier.background(
-                                        Brush.verticalGradient(
-                                            0f to Color(0x70000000), 1f to Color.Transparent
-                                        )
-                                    ) else Modifier
+                                .background(
+                                    Brush.verticalGradient(0f to topColor, 1f to Color.Transparent)
                                 )
                                 .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
                         )
