@@ -91,7 +91,8 @@ fun Month(
         min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5.dp.toPx() }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
-    run {
+    // Invalidate the indicator state on table size changes
+    key(cellHeightPx) {
         val highlightedDayOfMonth = selectedDay - monthStartJdn
         val cellIndex = highlightedDayOfMonth + startingWeekDay
         val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
@@ -101,10 +102,7 @@ fun Month(
             // +1 for weekday names initials row
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
         ) else null
-        // Invalidate the indicator state on table size changes
-        key(cellHeightPx) {
-            SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
-        }
+        SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
     }
 
     val refreshToken by viewModel.refreshToken.collectAsState()
