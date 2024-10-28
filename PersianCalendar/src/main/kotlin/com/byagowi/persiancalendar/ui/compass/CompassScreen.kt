@@ -48,6 +48,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -196,14 +197,16 @@ fun SharedTransitionScope.CompassScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
-                    if (coordinates != null) AppIconButton(
-                        icon = In24HoursIcon,
-                        title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
-                    ) {
-                        if (isTimeShiftAnimate) {
-                            isTimeShiftAnimate = false
-                            timeShift = 0f
-                        } else isTimeShiftAnimate = true
+                    if (coordinates != null) Box(Modifier.rotate(sliderValue / 24f * 360f)) {
+                        AppIconButton(
+                            icon = In24HoursIcon,
+                            title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
+                        ) {
+                            if (isTimeShiftAnimate) {
+                                isTimeShiftAnimate = false
+                                timeShift = 0f
+                            } else isTimeShiftAnimate = true
+                        }
                     }
                     var showTrueNorth by rememberSaveable {
                         mutableStateOf(preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
