@@ -21,15 +21,13 @@ fun AppDropdownMenu(
     minWidth: Dp = 200.dp,
     content: @Composable ColumnScope.(closeMenu: () -> Unit) -> Unit,
 ) {
-    val defaultShapes = MaterialTheme.shapes
-    MaterialTheme(shapes = MaterialTheme.shapes.copy(extraSmall = MaterialTheme.shapes.extraLarge)) {
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = onDismissRequest,
-            modifier = Modifier.defaultMinSize(minWidth = minWidth),
-            content = { MaterialTheme(shapes = defaultShapes) { content(onDismissRequest) } },
-        )
-    }
+    DropdownMenu(
+        expanded = expanded,
+        onDismissRequest = onDismissRequest,
+        modifier = Modifier.defaultMinSize(minWidth = minWidth),
+        shape = MaterialTheme.shapes.extraLarge,
+        content = { content(onDismissRequest) },
+    )
 }
 
 @Composable
