@@ -82,7 +82,7 @@ fun AppDropdownMenuCheckableItem(
 fun AppDropdownMenuExpandableItem(
     text: String,
     isExpanded: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     AppDropdownMenuItem(
         text = { Text(text) },
