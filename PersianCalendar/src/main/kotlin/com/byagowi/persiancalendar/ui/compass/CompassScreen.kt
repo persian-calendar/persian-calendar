@@ -197,16 +197,15 @@ fun SharedTransitionScope.CompassScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
-                    if (coordinates != null) Box(Modifier.rotate(sliderValue / 24f * 360f)) {
-                        AppIconButton(
-                            icon = In24HoursIcon,
-                            title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
-                        ) {
-                            if (isTimeShiftAnimate) {
-                                isTimeShiftAnimate = false
-                                timeShift = 0f
-                            } else isTimeShiftAnimate = true
-                        }
+                    if (coordinates != null) AppIconButton(
+                        icon = In24HoursIcon,
+                        title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
+                        iconModifier = Modifier.rotate(sliderValue / 24f * 360f),
+                    ) {
+                        if (isTimeShiftAnimate) {
+                            isTimeShiftAnimate = false
+                            timeShift = 0f
+                        } else isTimeShiftAnimate = true
                     }
                     var showTrueNorth by rememberSaveable {
                         mutableStateOf(preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))

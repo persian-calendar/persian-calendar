@@ -9,14 +9,20 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun AppIconButton(icon: ImageVector, title: String, onClick: () -> Unit) {
+fun AppIconButton(
+    icon: ImageVector,
+    title: String,
+    iconModifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { PlainTooltip { Text(title) } },
         state = rememberTooltipState()
-    ) { IconButton(onClick = onClick) { Icon(icon, contentDescription = title) } }
+    ) { IconButton(onClick = onClick) { Icon(icon, contentDescription = title, iconModifier) } }
 }

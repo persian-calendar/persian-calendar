@@ -26,6 +26,10 @@ fun SharedTransitionScope.ShareActionButton(
             animatedVisibilityScope = animatedContentScope,
         ),
     ) {
-        AppIconButton(icon = Icons.Default.Share, title = stringResource(R.string.share), action)
+        AppIconButton(
+            icon = Icons.Default.Share,
+            title = stringResource(R.string.share),
+            onClick = action,
+        )
     }
 }
