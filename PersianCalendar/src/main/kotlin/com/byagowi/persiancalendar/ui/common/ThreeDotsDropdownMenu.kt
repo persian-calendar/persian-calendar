@@ -37,7 +37,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
     ) {
         var expanded by rememberSaveable { mutableStateOf(false) }
         run {
-            val rotate by animateFloatAsState(
+            val scaleY by animateFloatAsState(
                 if (expanded) 1.2f else 1f,
                 animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                 label = "scale y",
@@ -45,7 +45,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
             AppIconButton(
                 icon = Icons.Default.MoreVert,
                 title = stringResource(R.string.more_options),
-                iconModifier = Modifier.scale(1f, rotate),
+                iconModifier = Modifier.scale(1f, scaleY),
             ) { expanded = !expanded }
         }
         AppDropdownMenu(
