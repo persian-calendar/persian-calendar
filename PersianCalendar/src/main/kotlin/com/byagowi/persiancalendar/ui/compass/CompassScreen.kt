@@ -285,30 +285,24 @@ fun SharedTransitionScope.CompassScreen(
                         SnackbarHost(snackbarHostState, Modifier.align(Alignment.BottomCenter))
                     }
                     AppBottomAppBar {
-                        Box(
-                            modifier = Modifier.sharedBounds(
+                        AppIconButton(
+                            icon = ImageVector.vectorResource(R.drawable.ic_level),
+                            title = stringResource(R.string.level),
+                            iconModifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = animatedContentScope,
                             ),
-                        ) {
-                            AppIconButton(
-                                icon = ImageVector.vectorResource(R.drawable.ic_level),
-                                title = stringResource(R.string.level),
-                                onClick = navigateToLevel,
-                            )
-                        }
-                        Box(
-                            modifier = Modifier.sharedBounds(
+                            onClick = navigateToLevel,
+                        )
+                        AppIconButton(
+                            icon = Icons.Default.Map,
+                            title = stringResource(R.string.map),
+                            iconModifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                                 animatedVisibilityScope = animatedContentScope,
                             ),
-                        ) {
-                            AppIconButton(
-                                icon = Icons.Default.Map,
-                                title = stringResource(R.string.map),
-                                onClick = navigateToMap,
-                            )
-                        }
+                            onClick = navigateToMap,
+                        )
                         AppIconButton(
                             icon = Icons.Default.Info,
                             title = stringResource(R.string.help),

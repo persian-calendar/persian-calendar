@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
@@ -21,19 +20,16 @@ fun SharedTransitionScope.NavigationOpenDrawerIcon(
     animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
 ) {
-    Box(
+    AppIconButton(
+        icon = Icons.Default.Menu,
+        title = stringResource(R.string.open_drawer),
         // Workaround CI not liking shared elements
-        if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
+        iconModifier = if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_OPEN_DRAWER),
             animatedVisibilityScope = animatedContentScope,
-        )
-    ) {
-        AppIconButton(
-            icon = Icons.Default.Menu,
-            title = stringResource(R.string.open_drawer),
-            onClick = openDrawer,
-        )
-    }
+        ),
+        onClick = openDrawer,
+    )
 }
 
 @Composable

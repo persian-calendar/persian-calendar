@@ -145,12 +145,11 @@ fun SharedTransitionScope.LevelScreen(
                             if (cmInchFlip) 180f else 0f, label = "rotation",
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         )
-                        Box(Modifier.rotate(rotation)) {
-                            AppIconButton(
-                                icon = Icons.Default.SyncAlt,
-                                title = "cm / in",
-                            ) { cmInchFlip = !cmInchFlip }
-                        }
+                        AppIconButton(
+                            icon = Icons.Default.SyncAlt,
+                            title = "cm / in",
+                            iconModifier = Modifier.rotate(rotation),
+                        ) { cmInchFlip = !cmInchFlip }
                     }
                     AppIconButton(
                         icon = Icons.Default.Fullscreen,
@@ -217,18 +216,15 @@ fun SharedTransitionScope.LevelScreen(
                     )
                     AnimatedVisibility(visible = !isFullscreen) {
                         AppBottomAppBar {
-                            Box(
-                                modifier = Modifier.sharedBounds(
+                            AppIconButton(
+                                icon = Icons.Default.Explore,
+                                title = stringResource(R.string.compass),
+                                iconModifier = Modifier.sharedBounds(
                                     rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                     animatedVisibilityScope = animatedContentScope,
-                                )
-                            ) {
-                                AppIconButton(
-                                    icon = Icons.Default.Explore,
-                                    title = stringResource(R.string.compass),
-                                    onClick = navigateToCompass,
-                                )
-                            }
+                                ),
+                                onClick = navigateToCompass,
+                            )
                             Spacer(Modifier.weight(1f))
                             Box(
                                 Modifier.sharedElement(

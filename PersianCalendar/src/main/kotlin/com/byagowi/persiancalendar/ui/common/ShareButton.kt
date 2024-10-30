@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
@@ -20,16 +19,14 @@ fun SharedTransitionScope.ShareActionButton(
     animatedContentScope: AnimatedContentScope,
     action: () -> Unit,
 ) {
-    Box(
-        if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
+    AppIconButton(
+        icon = Icons.Default.Share,
+        title = stringResource(R.string.share),
+        // Workaround CI not liking shared elements
+        iconModifier = if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_SHARE_BUTTON),
             animatedVisibilityScope = animatedContentScope,
         ),
-    ) {
-        AppIconButton(
-            icon = Icons.Default.Share,
-            title = stringResource(R.string.share),
-            onClick = action,
-        )
-    }
+        onClick = action,
+    )
 }
