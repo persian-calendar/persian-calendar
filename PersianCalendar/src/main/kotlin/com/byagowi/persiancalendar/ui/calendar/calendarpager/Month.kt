@@ -102,7 +102,7 @@ fun Month(
             y = (cellIndex / 7 + 1.5f) * cellHeightPx,
         ) else null
         // Invalidate the indicator state on table size changes
-        key(height) {
+        key(width, height) {
             SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
         }
     }
