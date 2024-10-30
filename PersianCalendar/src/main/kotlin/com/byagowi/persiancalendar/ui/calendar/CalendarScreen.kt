@@ -291,7 +291,8 @@ fun SharedTransitionScope.CalendarScreen(
                                 bottomPadding = bottomPadding,
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
-                                interactionSource = interactionSource
+                                modifier = Modifier.fillMaxHeight(),
+                                interactionSource = interactionSource,
                             )
                         }
                     } else {
@@ -305,16 +306,15 @@ fun SharedTransitionScope.CalendarScreen(
                             Spacer(Modifier.height(4.dp))
                             val detailsMinHeight = maxHeight - calendarHeight
                             ScreenSurface(animatedContentScope) {
-                                Box(Modifier.defaultMinSize(minHeight = detailsMinHeight)) {
-                                    Details(
-                                        viewModel = viewModel,
-                                        tabs = detailsTabs,
-                                        pagerState = detailsPagerState,
-                                        bottomPadding = bottomPadding,
-                                        contentMinHeight = detailsMinHeight,
-                                        interactionSource = interactionSource
-                                    )
-                                }
+                                Details(
+                                    viewModel = viewModel,
+                                    tabs = detailsTabs,
+                                    pagerState = detailsPagerState,
+                                    bottomPadding = bottomPadding,
+                                    contentMinHeight = detailsMinHeight,
+                                    modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                                    interactionSource = interactionSource,
+                                )
                             }
                         }
                     }
@@ -376,7 +376,7 @@ fun bringDate(
     ).show()
 }
 
-typealias DetailsTab = Pair<Int, @Composable () -> Unit>
+private typealias DetailsTab = Pair<Int, @Composable () -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -432,13 +432,10 @@ private fun Details(
     bottomPadding: Dp,
     contentMinHeight: Dp,
     interactionSource: MutableInteractionSource,
+    modifier: Modifier,
     scrollableTabs: Boolean = false,
 ) {
-    Column(
-        Modifier
-            .fillMaxHeight()
-            .indication(interactionSource = interactionSource, indication = ripple())
-    ) {
+    Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
         val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
         val coroutineScope = rememberCoroutineScope()
 
