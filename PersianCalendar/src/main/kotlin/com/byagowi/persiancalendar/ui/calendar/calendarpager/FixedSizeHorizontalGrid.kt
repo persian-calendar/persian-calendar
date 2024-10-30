@@ -8,7 +8,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun FixedSizeHorizontalGrid(columnsCount: Int, rowsCount: Int, content: @Composable () -> Unit) {
-    Layout(content) { measurables, constraints ->
+    Layout(content = content) { measurables, constraints ->
         val widthPx = constraints.maxWidth
         val heightPx = constraints.maxHeight
         val cellWidthPx = widthPx / columnsCount.toFloat()
@@ -17,8 +17,8 @@ fun FixedSizeHorizontalGrid(columnsCount: Int, rowsCount: Int, content: @Composa
             Constraints.fixed(cellWidthPx.roundToInt(), cellHeightPx.roundToInt())
         layout(widthPx, heightPx) {
             measurables.fastForEachIndexed { cellIndex, measurable ->
-                val row = cellIndex / columnsCount
                 val column = cellIndex % columnsCount
+                val row = cellIndex / columnsCount
                 measurable.measure(cellsConstraints).placeRelative(
                     (column * cellWidthPx).roundToInt(),
                     (row * cellHeightPx).roundToInt(),
