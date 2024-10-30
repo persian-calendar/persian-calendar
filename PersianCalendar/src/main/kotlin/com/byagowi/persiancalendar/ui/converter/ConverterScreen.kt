@@ -441,7 +441,6 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                         indication = ripple(bounded = false),
                     )
                 ) {
-                    Spacer(Modifier.height(12.dp))
                     CalendarsOverview(
                         jdn = jdn,
                         today = today,
@@ -449,6 +448,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                         shownCalendars = enabledCalendars - calendar,
                         isExpanded = isExpanded,
                         interactionSource = interactionSource,
+                        topPadding = 12.dp,
                     ) { isExpanded = !isExpanded }
                 }
             }
@@ -473,7 +473,6 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                         .fillMaxWidth()
                         .indication(interactionSource = interactionSource, indication = ripple()),
                 ) {
-                    Spacer(Modifier.height(20.dp))
                     CalendarsOverview(
                         jdn = jdn,
                         today = today,
@@ -481,6 +480,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                         shownCalendars = enabledCalendars - calendar,
                         isExpanded = isExpanded,
                         interactionSource = interactionSource,
+                        topPadding = 20.dp,
                     ) { isExpanded = !isExpanded }
                 }
             }

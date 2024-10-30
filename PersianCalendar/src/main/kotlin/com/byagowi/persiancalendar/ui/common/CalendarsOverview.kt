@@ -46,6 +46,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
@@ -80,6 +81,7 @@ fun CalendarsOverview(
     shownCalendars: List<Calendar>,
     isExpanded: Boolean,
     interactionSource: MutableInteractionSource,
+    topPadding: Dp = 0.dp,
     toggleExpansion: () -> Unit,
 ) {
     val context = LocalContext.current
@@ -92,6 +94,7 @@ fun CalendarsOverview(
                 onClickLabel = stringResource(R.string.more),
                 onClick = toggleExpansion,
             )
+            .padding(top = topPadding)
             .semantics {
                 if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
                     context.resources,
