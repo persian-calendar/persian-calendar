@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.global.athanSoundName
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.notificationAthanVibration
 import com.byagowi.persiancalendar.global.spacedComma
@@ -101,6 +102,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     val calculationMethod by calculationMethod.collectAsState()
     val notificationAthan by notificationAthan.collectAsState()
     val ascendingAthan by ascendingAthan.collectAsState()
+    val language by language.collectAsState()
     SettingsHorizontalDivider()
     SettingsSection(
         stringResource(R.string.athan),
@@ -187,6 +189,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             PREF_NOTIFICATION_ATHAN_VIBRATION,
             notificationAthanVibration.collectAsState().value,
             stringResource(R.string.vibration),
+            language.tryTranslateAthanNotificationVibrationSummary()
         )
     }
     AnimatedVisibility(isLocationSet && !notificationAthan) {
