@@ -41,6 +41,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
+import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.ascendingAthan
@@ -50,6 +51,7 @@ import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
+import com.byagowi.persiancalendar.global.notificationAthanVibration
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -178,6 +180,13 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
                     false
                 } else value
             },
+        )
+    }
+    AnimatedVisibility(isLocationSet && notificationAthan) {
+        SettingsSwitch(
+            PREF_NOTIFICATION_ATHAN_VIBRATION,
+            notificationAthanVibration.collectAsState().value,
+            stringResource(R.string.vibration),
         )
     }
     AnimatedVisibility(isLocationSet && !notificationAthan) {

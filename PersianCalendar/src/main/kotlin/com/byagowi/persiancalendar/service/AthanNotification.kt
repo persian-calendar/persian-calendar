@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
+import com.byagowi.persiancalendar.global.notificationAthanVibration
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION
@@ -79,8 +80,10 @@ class AthanNotification : Service() {
                 it.description = getString(R.string.athan)
                 it.enableLights(true)
                 it.lightColor = Color.GREEN
-                it.vibrationPattern = LongArray(2) { 500 }
-                it.enableVibration(true)
+                if (notificationAthanVibration.value) {
+                    it.vibrationPattern = LongArray(2) { 500 }
+                }
+                it.enableVibration(notificationAthanVibration.value)
                 it.setBypassDnd(athanKey == FAJR_KEY)
                 if (soundUri == null) it.setSound(null, null) else it.setSound(
                     soundUri, AudioAttributes.Builder()
