@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -344,8 +344,11 @@ private fun DrawerContent(
     navController: NavHostController,
     finish: () -> Unit,
 ) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+    Column(
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .windowInsetsPadding(WindowInsets.systemBars)
+    ) {
         Box {
             DrawerSeasonsPager(drawerState)
             DrawerDarkModeToggle()
@@ -400,7 +403,6 @@ private fun DrawerContent(
                 },
             )
         }
-        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
 }
 
