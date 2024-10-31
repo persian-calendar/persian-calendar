@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -8,8 +9,10 @@ import androidx.compose.foundation.layout.add
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 
 @Composable
 fun AppBottomAppBar(content: @Composable RowScope.() -> Unit) {
@@ -18,5 +21,10 @@ fun AppBottomAppBar(content: @Composable RowScope.() -> Unit) {
             .add(WindowInsets(bottom = 4.dp)),
         contentPadding = PaddingValues(start = 16.dp, end = 24.dp),
         content = content,
+        containerColor = animateColorAsState(
+            MaterialTheme.colorScheme.surfaceContainer,
+            animationSpec = appColorAnimationSpec,
+            label = "surface container color"
+        ).value
     )
 }
