@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.content.res.Resources
+import androidx.annotation.CheckResult
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
@@ -34,6 +35,7 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
+@CheckResult
 fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
     return createHTML().html {
         val coordinates = coordinates.value ?: return@html

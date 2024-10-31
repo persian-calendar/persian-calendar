@@ -224,6 +224,13 @@ fun Context.readYearDeviceEvents(jdn: Jdn) =
         )
     )
 
+fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<CalendarEvent<*>>> {
+    val baseJdn = Jdn(date)
+    val deviceEvents = context.readMonthDeviceEvents(baseJdn)
+    return (0..<mainCalendar.getMonthLength(date.year, date.month)).map { baseJdn + it }
+        .associateWith { eventsRepository?.getEvents(it, deviceEvents) ?: emptyList() }
+}
+
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
     this, GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
