@@ -27,7 +27,7 @@ persiancalendar-calendar = "d9278c13466a04148e75f74508b4b11d0097bfe6"
 persiancalendar-praytimes = "0e619dfd2683acc0c6f0b53568ed78336a17057a"
 persiancalendar-qr = "4ef9d44178046f8704edbc8964fca968f75b08d5"
 truth = "1.4.4"
-work-manager = "2.9.1"
+work-manager = "2.10.0"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
