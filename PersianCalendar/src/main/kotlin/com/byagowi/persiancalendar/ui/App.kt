@@ -15,15 +15,13 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -78,6 +76,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -147,8 +146,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         BackHandler(enabled = true) { coroutineScope.launch { drawerState.close() } }
     }
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-
     val tabKey = "TAB"
     val settingsKey = "SETTINGS"
     val daysOffsetKey = "DAYS_OFFSET"
@@ -163,81 +160,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     drawerContentColor = animatedOnSurfaceColor(),
                     modifier = Modifier.renderInSharedTransitionScopeOverlay(),
                 ) {
-                    run {
-                        val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
-                        val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
-                        val needsVisibleStatusBarPlaceHolder =
-                            !isBackgroundColorLight && isSurfaceColorLight
-                        val topColor by animateColorAsState(
-                            if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
-                            label = "top color",
-                            animationSpec = appColorAnimationSpec,
-                        )
-                        Spacer(
-                            Modifier
-                                .fillMaxWidth()
-                                .background(
-                                    Brush.verticalGradient(0f to topColor, 1f to Color.Transparent)
-                                )
-                                .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Top)),
-                        )
-                    }
-
-                    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                        Box {
-                            DrawerSeasonsPager(drawerState)
-                            DrawerDarkModeToggle()
-                        }
-                        val onSecondaryContainerColor by animateColorAsState(
-                            MaterialTheme.colorScheme.onSecondaryContainer,
-                            animationSpec = appColorAnimationSpec,
-                            label = "secondary container"
-                        )
-                        val navItemColors = NavigationDrawerItemDefaults.colors(
-                            unselectedContainerColor = Color.Transparent,
-                            unselectedTextColor = LocalContentColor.current,
-                            unselectedIconColor = LocalContentColor.current,
-                            selectedContainerColor = animateColorAsState(
-                                MaterialTheme.colorScheme.secondaryContainer,
-                                animationSpec = appColorAnimationSpec,
-                                label = "secondary container"
-                            ).value,
-                            selectedTextColor = onSecondaryContainerColor,
-                            selectedIconColor = onSecondaryContainerColor,
-                        )
-                        navItems.forEach { (id, icon, title) ->
-                            NavigationDrawerItem(
-                                modifier = Modifier.padding(horizontal = 16.dp),
-                                icon = { Icon(icon, contentDescription = null) },
-                                colors = navItemColors,
-                                label = {
-                                    // Apparently language strings isn't applied immediately in drawer
-                                    // items titles but only when drawer opens so let's animate it!
-                                    AnimatedContent(
-                                        targetState = stringResource(title),
-                                        label = "title",
-                                        transitionSpec = appCrossfadeSpec,
-                                    ) { state -> Text(state) }
-                                },
-                                selected = when (val route =
-                                    navBackStackEntry?.destination?.route) {
-                                    levelRoute -> compassRoute
-                                    mapRoute -> astronomyRoute
-                                    deviceInformationRoute, licensesRoute -> aboutRoute
-                                    else -> route ?: calendarRoute
-                                } == id,
-                                onClick = {
-                                    if (id == null) return@NavigationDrawerItem finish()
-                                    coroutineScope.launch {
-                                        drawerState.close()
-                                        if (navBackStackEntry?.destination?.route != id) {
-                                            navController.navigate(id)
-                                        }
-                                    }
-                                },
-                            )
-                        }
-                        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
+                    Box {
+                        DrawerContent(drawerState, navController, finish)
+                        DrawerTopGradient()
                     }
                 }
             },
@@ -391,6 +316,91 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+// Make system status bar icons visible when surface is light but theme has dark background
+@Composable
+private fun DrawerTopGradient() {
+    val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
+    val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
+    val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
+    val topColor by animateColorAsState(
+        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
+        label = "top color",
+        animationSpec = appColorAnimationSpec,
+    )
+    Spacer(
+        Modifier
+            .fillMaxWidth()
+            .windowInsetsTopHeight(WindowInsets.systemBars)
+            .background(Brush.verticalGradient(0f to topColor, 1f to Color.Transparent)),
+    )
+}
+
+@Composable
+private fun DrawerContent(
+    drawerState: DrawerState,
+    navController: NavHostController,
+    finish: () -> Unit,
+) {
+    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+        Spacer(Modifier.windowInsetsTopHeight(WindowInsets.systemBars))
+        Box {
+            DrawerSeasonsPager(drawerState)
+            DrawerDarkModeToggle()
+        }
+        val onSecondaryContainerColor by animateColorAsState(
+            MaterialTheme.colorScheme.onSecondaryContainer,
+            animationSpec = appColorAnimationSpec,
+            label = "secondary container"
+        )
+        val navItemColors = NavigationDrawerItemDefaults.colors(
+            unselectedContainerColor = Color.Transparent,
+            unselectedTextColor = LocalContentColor.current,
+            unselectedIconColor = LocalContentColor.current,
+            selectedContainerColor = animateColorAsState(
+                MaterialTheme.colorScheme.secondaryContainer,
+                animationSpec = appColorAnimationSpec,
+                label = "secondary container"
+            ).value,
+            selectedTextColor = onSecondaryContainerColor,
+            selectedIconColor = onSecondaryContainerColor,
+        )
+        val coroutineScope = rememberCoroutineScope()
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+        navItems.forEach { (id, icon, title) ->
+            NavigationDrawerItem(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                icon = { Icon(icon, contentDescription = null) },
+                colors = navItemColors,
+                label = {
+                    // Apparently language strings isn't applied immediately in drawer
+                    // items titles but only when drawer opens so let's animate it!
+                    AnimatedContent(
+                        targetState = stringResource(title),
+                        label = "title",
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state -> Text(state) }
+                },
+                selected = when (val route = navBackStackEntry?.destination?.route) {
+                    levelRoute -> compassRoute
+                    mapRoute -> astronomyRoute
+                    deviceInformationRoute, licensesRoute -> aboutRoute
+                    else -> route ?: calendarRoute
+                } == id,
+                onClick = onClick@{
+                    if (id == null) return@onClick finish()
+                    coroutineScope.launch {
+                        drawerState.close()
+                        if (navBackStackEntry?.destination?.route != id) {
+                            navController.navigate(id)
+                        }
+                    }
+                },
+            )
+        }
+        Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars))
     }
 }
 
