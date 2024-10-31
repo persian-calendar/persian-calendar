@@ -774,16 +774,16 @@ private fun SharedTransitionScope.Menu(
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val selectedDay by viewModel.selectedDay.collectAsState()
-        DatePickerDialog(selectedDay, { bringDate(viewModel, it, context) }) {
+        DatePickerDialog(selectedDay, { jdn -> bringDate(viewModel, jdn, context) }) {
             showDatePickerDialog = false
         }
     }
 
     val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
-    shiftWorkViewModel?.let {
+    shiftWorkViewModel?.let { shiftWorkViewModel ->
         val selectedDay by viewModel.selectedDay.collectAsState()
         ShiftWorkDialog(
-            it,
+            shiftWorkViewModel,
             selectedDay,
             onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
         ) { viewModel.refreshCalendar() }
@@ -867,19 +867,21 @@ private fun SharedTransitionScope.Menu(
             onClick = { showSecondaryCalendarSubMenu = !showSecondaryCalendarSubMenu },
         )
 
-        (listOf(null) + enabledCalendars.drop(1)).forEach {
+        (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
             AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
-                    stringResource(it?.title ?: R.string.none), it == secondaryCalendar
+                    stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar
                 ) { _ ->
                     context.preferences.edit {
-                        if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
+                        if (calendar == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
                         else {
                             putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
+                            val newOtherCalendars =
+                                listOf(calendar) + (enabledCalendars.drop(1) - calendar)
                             putString(
                                 PREF_OTHER_CALENDARS_KEY,
                                 // Put the chosen calendars at the first of calendars priorities
-                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
+                                newOtherCalendars.joinToString(",")
                             )
                         }
                     }
