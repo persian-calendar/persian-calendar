@@ -30,7 +30,7 @@ fun SharedTransitionScope.ScreenSurface(
 ) {
     Layout(content = {
         // Workaround CI not liking shared elements
-        val isOnCI = false//LocalContext.current.isOnCI()
+        val isOnCI = LocalContext.current.isOnCI()
         // Parent
         Surface(
             shape = shape,
