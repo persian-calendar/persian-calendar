@@ -80,10 +80,9 @@ class AthanNotification : Service() {
                 it.description = getString(R.string.athan)
                 it.enableLights(true)
                 it.lightColor = Color.GREEN
-                if (notificationAthanVibration.value) {
-                    it.vibrationPattern = LongArray(2) { 500 }
-                }
-                it.enableVibration(notificationAthanVibration.value)
+                val vibration = notificationAthanVibration.value
+                if (vibration) it.vibrationPattern = LongArray(2) { 500 }
+                it.enableVibration(vibration)
                 it.setBypassDnd(athanKey == FAJR_KEY)
                 if (soundUri == null) it.setSound(null, null) else it.setSound(
                     soundUri, AudioAttributes.Builder()
