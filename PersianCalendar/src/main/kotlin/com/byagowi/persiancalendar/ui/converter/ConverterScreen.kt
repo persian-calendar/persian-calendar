@@ -434,23 +434,22 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
         }
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
-            AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
-                Column(
-                    Modifier.indication(
-                        interactionSource = interactionSource,
-                        indication = ripple(bounded = false),
-                    )
-                ) {
-                    CalendarsOverview(
-                        jdn = jdn,
-                        today = today,
-                        selectedCalendar = calendar,
-                        shownCalendars = enabledCalendars - calendar,
-                        isExpanded = isExpanded,
-                        interactionSource = interactionSource,
-                        topPadding = 12.dp,
-                    ) { isExpanded = !isExpanded }
-                }
+            AnimatedVisibility(
+                visible = screenMode == ConverterScreenMode.CONVERTER,
+                modifier = Modifier.indication(
+                    interactionSource = interactionSource,
+                    indication = ripple(bounded = false),
+                )
+            ) {
+                CalendarsOverview(
+                    jdn = jdn,
+                    today = today,
+                    selectedCalendar = calendar,
+                    shownCalendars = enabledCalendars - calendar,
+                    isExpanded = isExpanded,
+                    interactionSource = interactionSource,
+                    topPadding = 12.dp,
+                ) { isExpanded = !isExpanded }
             }
             AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart(viewModel, jdn, calendar)
@@ -468,7 +467,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                 onClick = { isExpanded = !isExpanded },
                 modifier = Modifier.padding(top = 16.dp),
             ) {
-                Column(
+                Box(
                     Modifier
                         .fillMaxWidth()
                         .indication(interactionSource = interactionSource, indication = ripple()),
