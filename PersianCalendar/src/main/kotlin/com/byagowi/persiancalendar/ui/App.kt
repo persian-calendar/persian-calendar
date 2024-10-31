@@ -161,6 +161,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     windowInsets = WindowInsets(0, 0, 0, 0),
                     drawerContainerColor = animatedSurfaceColor(),
                     drawerContentColor = animatedOnSurfaceColor(),
+                    modifier = Modifier.renderInSharedTransitionScopeOverlay(),
                 ) {
                     run {
                         val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
