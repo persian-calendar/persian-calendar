@@ -261,7 +261,6 @@ fun SharedTransitionScope.CalendarScreen(
                 // To preserve pager's state even in year view where calendar isn't in the tree
                 val pagerState = calendarPagerState()
 
-                val interactionSource = remember { MutableInteractionSource() }
                 val detailsTabs = detailsTabs(
                     viewModel = viewModel,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
@@ -269,7 +268,6 @@ fun SharedTransitionScope.CalendarScreen(
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                     navigateToAstronomy = navigateToAstronomy,
                     animatedContentScope = animatedContentScope,
-                    interactionSource = interactionSource,
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
@@ -292,7 +290,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
                                 modifier = Modifier.fillMaxHeight(),
-                                interactionSource = interactionSource,
                             )
                         }
                     } else {
@@ -313,7 +310,6 @@ fun SharedTransitionScope.CalendarScreen(
                                     bottomPadding = bottomPadding,
                                     contentMinHeight = detailsMinHeight,
                                     modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                                    interactionSource = interactionSource,
                                 )
                             }
                         }
@@ -376,7 +372,7 @@ fun bringDate(
     ).show()
 }
 
-private typealias DetailsTab = Pair<Int, @Composable () -> Unit>
+private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -387,15 +383,14 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     animatedContentScope: AnimatedContentScope,
-    interactionSource: MutableInteractionSource,
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     return listOfNotNull(
-        R.string.calendar to { CalendarsTab(viewModel, interactionSource) },
+        R.string.calendar to { interactionSource -> CalendarsTab(viewModel, interactionSource) },
         R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
         // The optional third tab
-        if (enableTimesTab(context) && !removeThirdTab) R.string.times to {
+        if (enableTimesTab(context) && !removeThirdTab) R.string.times to { interactionSource ->
             TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -431,10 +426,10 @@ private fun Details(
     pagerState: PagerState,
     bottomPadding: Dp,
     contentMinHeight: Dp,
-    interactionSource: MutableInteractionSource,
     modifier: Modifier,
     scrollableTabs: Boolean = false,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
     Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
         val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
         val coroutineScope = rememberCoroutineScope()
@@ -468,7 +463,7 @@ private fun Details(
                         else Modifier
                     )
             ) {
-                tabs[index].second()
+                tabs[index].second(interactionSource)
                 Spacer(Modifier.height(bottomPadding))
             }
         }
