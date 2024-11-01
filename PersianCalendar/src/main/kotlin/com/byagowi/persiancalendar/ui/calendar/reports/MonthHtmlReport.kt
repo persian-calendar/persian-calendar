@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar.dialogs
+package com.byagowi.persiancalendar.ui.calendar.reports
 
 import android.content.Context
 import androidx.annotation.CheckResult
