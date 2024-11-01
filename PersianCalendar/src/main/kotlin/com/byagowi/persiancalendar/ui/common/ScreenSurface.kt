@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -26,6 +27,8 @@ import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 fun SharedTransitionScope.ScreenSurface(
     animatedContentScope: AnimatedContentScope,
     shape: Shape = materialCornerExtraLargeTop(),
+    // Remove when https://issuetracker.google.com/issues/376709945 is resolved
+    workaroundClipBug: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
@@ -45,7 +48,7 @@ fun SharedTransitionScope.ScreenSurface(
             (if (isOnCI) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
-            )).clip(shape)
+            )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)
         ) { CompositionLocalProvider(LocalContentColor provides animatedOnSurfaceColor(), content) }
     }) { (parent, content), constraints ->
         val placeableContent = content.measure(constraints)
