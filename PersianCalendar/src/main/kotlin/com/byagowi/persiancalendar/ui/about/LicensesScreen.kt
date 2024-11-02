@@ -119,7 +119,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
             Triple(
                 KotlinVersion.CURRENT.toString(), {
                     Text("Kotlin", style = MaterialTheme.typography.bodySmall)
-                }, ::showPeriodicTableDialog
+                }, ::showSpringDemoDialog
             ),
             Triple(
                 "API ${Build.VERSION.SDK_INT}", {
@@ -127,7 +127,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
                         imageVector = Icons.Default.Motorcycle,
                         contentDescription = "API",
                     )
-                }, ::showSensorTestDialog
+                }, ::showFlingDemoDialog
             ),
         ).forEachIndexed { i, (title, icon, action) ->
             val clickHandler = remember { createEasterEggClickHandler(action) }
