@@ -55,10 +55,6 @@ import androidx.core.graphics.withTranslation
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
-import androidx.dynamicanimation.animation.FlingAnimation
-import androidx.dynamicanimation.animation.FloatValueHolder
-import androidx.dynamicanimation.animation.SpringAnimation
-import androidx.dynamicanimation.animation.SpringForce
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
@@ -314,181 +310,181 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
     }
 }
 
-fun showFlingDemoDialog(activity: ComponentActivity) {
-    val x = FloatValueHolder()
-    val horizontalFling = FlingAnimation(x)
-    val y = FloatValueHolder()
-    val verticalFling = FlingAnimation(y)
-
-    val view = object : View(activity) {
-        private var r = 0f
-        private var previousX = 0f
-        private var previousY = 0f
-
-        private var storedVelocityX = 0f
-        private var storedVelocityY = 0f
-
-        init {
-//            setBackgroundResource(
-//                activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
-//            )
-            horizontalFling.addUpdateListener { _, _, velocity ->
-                storedVelocityX = velocity
-                invalidate()
-            }
-            verticalFling.addUpdateListener { _, _, velocity ->
-                storedVelocityY = velocity
-                invalidate()
-            }
-        }
-
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            super.onSizeChanged(w, h, oldw, oldh)
-            x.value = w / 2f
-            y.value = h / 2f
-            r = w / 20f
-            path.rewind()
-            path.moveTo(x.value, y.value)
-        }
-
-        private var shader: RuntimeShader? = null
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GRAY
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                it.color = context.getColor(android.R.color.system_accent1_500)
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                shader = RuntimeShader(shaderSource).also { shader -> it.shader = shader }
-            }
-        }
-        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GRAY
-            it.style = Paint.Style.STROKE
-        }
-        private val path = Path()
-        override fun onDraw(canvas: Canvas) {
-            path.lineTo(x.value, y.value)
-            canvas.drawPath(path, linesPaint)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                shader?.also {
-                    it.setFloatUniform("center", x.value, y.value)
-                    it.setFloatUniform("bounds", width.toFloat(), height.toFloat())
-                    it.setFloatUniform("radius", r)
-                    it.setColorUniform("color", paint.color)
-                    it.setIntUniform("mode", counter % 3)
-                }
-                canvas.drawPaint(paint)
-            } else {
-                canvas.drawCircle(x.value, y.value, r, paint)
-            }
-            var isWallHit = false
-            if (x.value < r) {
-                x.value = r
-                horizontalFling.cancel()
-                horizontalFling.setStartVelocity(-storedVelocityX).start()
-                isWallHit = true
-            }
-            if (x.value > width - r) {
-                x.value = width - r
-                horizontalFling.cancel()
-                horizontalFling.setStartVelocity(-storedVelocityX).start()
-                isWallHit = true
-            }
-            if (y.value < r) {
-                y.value = r
-                verticalFling.cancel()
-                verticalFling.setStartVelocity(-storedVelocityY).start()
-                isWallHit = true
-            }
-            if (y.value > height - r) {
-                y.value = height - r
-                verticalFling.cancel()
-                verticalFling.setStartVelocity(-storedVelocityY).start()
-                isWallHit = true
-            }
-            if (isWallHit) {
-                performHapticFeedbackVirtualKey()
-                val index = ++counter % diatonicScale.size
-                lifecycle.launch { playSoundTick(diatonicScale[index].toDouble()) }
-
-//                val rippleDrawable = background
-//                if (rippleDrawable is RippleDrawable) {
-//                    isPressed = false
-//                    rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
-//                    rippleDrawable.setHotspot(x.value, y.value)
-//                    isPressed = true
+//fun showFlingDemoDialog(activity: ComponentActivity) {
+//    val x = FloatValueHolder()
+//    val horizontalFling = FlingAnimation(x)
+//    val y = FloatValueHolder()
+//    val verticalFling = FlingAnimation(y)
+//
+//    val view = object : View(activity) {
+//        private var r = 0f
+//        private var previousX = 0f
+//        private var previousY = 0f
+//
+//        private var storedVelocityX = 0f
+//        private var storedVelocityY = 0f
+//
+//        init {
+////            setBackgroundResource(
+////                activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
+////            )
+//            horizontalFling.addUpdateListener { _, _, velocity ->
+//                storedVelocityX = velocity
+//                invalidate()
+//            }
+//            verticalFling.addUpdateListener { _, _, velocity ->
+//                storedVelocityY = velocity
+//                invalidate()
+//            }
+//        }
+//
+//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//            super.onSizeChanged(w, h, oldw, oldh)
+//            x.value = w / 2f
+//            y.value = h / 2f
+//            r = w / 20f
+//            path.rewind()
+//            path.moveTo(x.value, y.value)
+//        }
+//
+//        private var shader: RuntimeShader? = null
+//        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.GRAY
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//                it.color = context.getColor(android.R.color.system_accent1_500)
+//            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                shader = RuntimeShader(shaderSource).also { shader -> it.shader = shader }
+//            }
+//        }
+//        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.GRAY
+//            it.style = Paint.Style.STROKE
+//        }
+//        private val path = Path()
+//        override fun onDraw(canvas: Canvas) {
+//            path.lineTo(x.value, y.value)
+//            canvas.drawPath(path, linesPaint)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//                shader?.also {
+//                    it.setFloatUniform("center", x.value, y.value)
+//                    it.setFloatUniform("bounds", width.toFloat(), height.toFloat())
+//                    it.setFloatUniform("radius", r)
+//                    it.setColorUniform("color", paint.color)
+//                    it.setIntUniform("mode", counter % 3)
 //                }
-            }
-        }
+//                canvas.drawPaint(paint)
+//            } else {
+//                canvas.drawCircle(x.value, y.value, r, paint)
+//            }
+//            var isWallHit = false
+//            if (x.value < r) {
+//                x.value = r
+//                horizontalFling.cancel()
+//                horizontalFling.setStartVelocity(-storedVelocityX).start()
+//                isWallHit = true
+//            }
+//            if (x.value > width - r) {
+//                x.value = width - r
+//                horizontalFling.cancel()
+//                horizontalFling.setStartVelocity(-storedVelocityX).start()
+//                isWallHit = true
+//            }
+//            if (y.value < r) {
+//                y.value = r
+//                verticalFling.cancel()
+//                verticalFling.setStartVelocity(-storedVelocityY).start()
+//                isWallHit = true
+//            }
+//            if (y.value > height - r) {
+//                y.value = height - r
+//                verticalFling.cancel()
+//                verticalFling.setStartVelocity(-storedVelocityY).start()
+//                isWallHit = true
+//            }
+//            if (isWallHit) {
+//                performHapticFeedbackVirtualKey()
+//                val index = ++counter % diatonicScale.size
+//                lifecycle.launch { playSoundTick(diatonicScale[index].toDouble()) }
+//
+////                val rippleDrawable = background
+////                if (rippleDrawable is RippleDrawable) {
+////                    isPressed = false
+////                    rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
+////                    rippleDrawable.setHotspot(x.value, y.value)
+////                    isPressed = true
+////                }
+//            }
+//        }
+//
+//        private var counter = 0
+//
+//        private val diatonicScale = listOf(0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2)
+//
+//        private val lifecycle = activity.lifecycleScope
+//
+//        private val flingDetector = createFlingDetector(context) { velocityX, velocityY ->
+//            horizontalFling.setStartVelocity(velocityX).start()
+//            verticalFling.setStartVelocity(velocityY).start()
+//            true
+//        }
+//
+//        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//            flingDetector.onTouchEvent(event)
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    horizontalFling.cancel()
+//                    verticalFling.cancel()
+//                    previousX = event.x
+//                    previousY = event.y
+//                }
+//
+//                MotionEvent.ACTION_MOVE -> {
+//                    x.value += event.x - previousX
+//                    y.value += event.y - previousY
+//                    previousX = event.x
+//                    previousY = event.y
+//                    invalidate()
+//                }
+//            }
+//            return true
+//        }
+//    }
+//
+//    AlertDialog.Builder(activity)
+//        .setView(view)
+//        .show()
+//}
 
-        private var counter = 0
-
-        private val diatonicScale = listOf(0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2)
-
-        private val lifecycle = activity.lifecycleScope
-
-        private val flingDetector = createFlingDetector(context) { velocityX, velocityY ->
-            horizontalFling.setStartVelocity(velocityX).start()
-            verticalFling.setStartVelocity(velocityY).start()
-            true
-        }
-
-        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-            flingDetector.onTouchEvent(event)
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    horizontalFling.cancel()
-                    verticalFling.cancel()
-                    previousX = event.x
-                    previousY = event.y
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    x.value += event.x - previousX
-                    y.value += event.y - previousY
-                    previousX = event.x
-                    previousY = event.y
-                    invalidate()
-                }
-            }
-            return true
-        }
-    }
-
-    AlertDialog.Builder(activity)
-        .setView(view)
-        .show()
-}
-
-@Language("AGSL")
-val shaderSource = """
-uniform float2 center;
-uniform float2 bounds;
-uniform float radius;
-uniform int mode;
-layout(color) uniform vec4 color;
-
-float smin(float a, float b, float k) { // https://www.mayerowitz.io/blog/a-journey-into-shaders
-    float h = max(k - abs(a - b), 0) / k;
-    return min(a, b) - h * h * k / 4;
-}
-
-float sdBox(vec2 p, vec2 b) { // https://iquilezles.org/articles/distfunctions2d/
-    vec2 d = abs(p) - b;
-    return length(max(d, 0)) + min(max(d.x, d.y), 0);
-}
-
-float4 main(float2 fragCoord) {
-    float d1 = (distance(fragCoord, center) - radius) / min(bounds.x, bounds.y);
-    float d2;
-    if (mode == 0) d2 = (distance(bounds - fragCoord, center) - radius) / min(bounds.x, bounds.y);
-    else if (mode == 1) d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
-    else d2 = 1 - (-sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y));
-    // return vec4(vec3(d2), 1.0);
-    float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
-    return d < 1 ? color : vec4(0);
-}
-"""
+//@Language("AGSL")
+//val shaderSource = """
+//uniform float2 center;
+//uniform float2 bounds;
+//uniform float radius;
+//uniform int mode;
+//layout(color) uniform vec4 color;
+//
+//float smin(float a, float b, float k) { // https://www.mayerowitz.io/blog/a-journey-into-shaders
+//    float h = max(k - abs(a - b), 0) / k;
+//    return min(a, b) - h * h * k / 4;
+//}
+//
+//float sdBox(vec2 p, vec2 b) { // https://iquilezles.org/articles/distfunctions2d/
+//    vec2 d = abs(p) - b;
+//    return length(max(d, 0)) + min(max(d.x, d.y), 0);
+//}
+//
+//float4 main(float2 fragCoord) {
+//    float d1 = (distance(fragCoord, center) - radius) / min(bounds.x, bounds.y);
+//    float d2;
+//    if (mode == 0) d2 = (distance(bounds - fragCoord, center) - radius) / min(bounds.x, bounds.y);
+//    else if (mode == 1) d2 = -sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y);
+//    else d2 = 1 - (-sdBox(fragCoord * 2 * .99 - bounds * .99, bounds) / min(bounds.x, bounds.y));
+//    // return vec4(vec3(d2), 1.0);
+//    float d = smoothstep(0., 0.01, smin(d1, d2, 1 / 3. + 0.001));
+//    return d < 1 ? color : vec4(0);
+//}
+//"""
 
 fun showPeriodicTableDialog(activity: ComponentActivity) {
     val zoomableView = ZoomableView(activity)
@@ -748,296 +744,296 @@ Ubc,Unbipentium,
 Ubh,Unbihexium,[Og] 5g2 6f3 8s2 8p1
 """.trim().split("\n")
 
-fun showRotationalSpringDemoDialog(activity: ComponentActivity) {
-    val radius = FloatValueHolder()
-    val radiusSpring = SpringAnimation(radius)
-    radiusSpring.spring = SpringForce(0f)
-        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
-        .setStiffness(SpringForce.STIFFNESS_LOW)
-    val theta = FloatValueHolder()
-    val rotationalSpring = SpringAnimation(theta)
-    rotationalSpring.spring = SpringForce(0f)
-        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
-        .setStiffness(SpringForce.STIFFNESS_LOW)
-    val view = object : View(activity) {
-        private var circleRadius = 0f
-        private var centerX = 0f
-        private var centerY = 0f
-
-        init {
-            radiusSpring.addUpdateListener { _, _, _ -> invalidate() }
-            rotationalSpring.addUpdateListener { _, _, _ -> invalidate() }
-        }
-
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            super.onSizeChanged(w, h, oldw, oldh)
-            radius.value = 0f
-            theta.value = 0f
-            circleRadius = w / 20f
-            centerX = w / 2f
-            centerY = h / 2f
-            path.rewind()
-            path.moveTo(centerX, centerY)
-        }
-
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.GRAY }
-        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GRAY
-            it.style = Paint.Style.STROKE
-        }
-        private val path = Path()
-        override fun onDraw(canvas: Canvas) {
-            val x = radius.value * cos(theta.value / 180) + centerX
-            val y = radius.value * sin(theta.value / 180) + centerY
-            path.lineTo(x, y)
-            canvas.drawPath(path, linesPaint)
-            canvas.drawCircle(x, y, circleRadius, paint)
-        }
-
-        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    radiusSpring.cancel()
-                    rotationalSpring.cancel()
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    radius.value = hypot(event.x - centerX, event.y - centerY)
-                    theta.value = atan2(event.y - centerY, event.x - centerX) * 180
-                    invalidate()
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    radiusSpring.animateToFinalPosition(0f)
-                    rotationalSpring.animateToFinalPosition(0f)
-                }
-            }
-            return true
-        }
-    }
-
-    AlertDialog.Builder(activity)
-        .setView(view)
-        .show()
-}
-
-const val MIDDLE_A_SEMITONE = 69.0
-const val MIDDLE_A_FREQUENCY = 440.0 // Hz
-fun getStandardFrequency(note: Double): Double {
-    return MIDDLE_A_FREQUENCY * 2.0.pow((note - MIDDLE_A_SEMITONE) / 12)
-}
+//fun showRotationalSpringDemoDialog(activity: ComponentActivity) {
+//    val radius = FloatValueHolder()
+//    val radiusSpring = SpringAnimation(radius)
+//    radiusSpring.spring = SpringForce(0f)
+//        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
+//        .setStiffness(SpringForce.STIFFNESS_LOW)
+//    val theta = FloatValueHolder()
+//    val rotationalSpring = SpringAnimation(theta)
+//    rotationalSpring.spring = SpringForce(0f)
+//        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
+//        .setStiffness(SpringForce.STIFFNESS_LOW)
+//    val view = object : View(activity) {
+//        private var circleRadius = 0f
+//        private var centerX = 0f
+//        private var centerY = 0f
+//
+//        init {
+//            radiusSpring.addUpdateListener { _, _, _ -> invalidate() }
+//            rotationalSpring.addUpdateListener { _, _, _ -> invalidate() }
+//        }
+//
+//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//            super.onSizeChanged(w, h, oldw, oldh)
+//            radius.value = 0f
+//            theta.value = 0f
+//            circleRadius = w / 20f
+//            centerX = w / 2f
+//            centerY = h / 2f
+//            path.rewind()
+//            path.moveTo(centerX, centerY)
+//        }
+//
+//        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.GRAY }
+//        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.GRAY
+//            it.style = Paint.Style.STROKE
+//        }
+//        private val path = Path()
+//        override fun onDraw(canvas: Canvas) {
+//            val x = radius.value * cos(theta.value / 180) + centerX
+//            val y = radius.value * sin(theta.value / 180) + centerY
+//            path.lineTo(x, y)
+//            canvas.drawPath(path, linesPaint)
+//            canvas.drawCircle(x, y, circleRadius, paint)
+//        }
+//
+//        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    radiusSpring.cancel()
+//                    rotationalSpring.cancel()
+//                }
+//
+//                MotionEvent.ACTION_MOVE -> {
+//                    radius.value = hypot(event.x - centerX, event.y - centerY)
+//                    theta.value = atan2(event.y - centerY, event.x - centerX) * 180
+//                    invalidate()
+//                }
+//
+//                MotionEvent.ACTION_UP -> {
+//                    radiusSpring.animateToFinalPosition(0f)
+//                    rotationalSpring.animateToFinalPosition(0f)
+//                }
+//            }
+//            return true
+//        }
+//    }
+//
+//    AlertDialog.Builder(activity)
+//        .setView(view)
+//        .show()
+//}
+//
+//const val MIDDLE_A_SEMITONE = 69.0
+//const val MIDDLE_A_FREQUENCY = 440.0 // Hz
+//fun getStandardFrequency(note: Double): Double {
+//    return MIDDLE_A_FREQUENCY * 2.0.pow((note - MIDDLE_A_SEMITONE) / 12)
+//}
 
 //fun getNote(frequency: Double): Double {
 //    val note = 12 * (ln(frequency / MIDDLE_A_FREQUENCY) / ln(2.0))
 //    return note.roundToInt() + MIDDLE_A_SEMITONE
 //}
 
-val ABC_NOTATION = listOf(
-    "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"
-)
-var SOLFEGE_NOTATION = listOf(
-    "Do", "Do♯", "Re", "Re♯", "Mi", "Fa", "Fa♯", "Sol", "Sol♯", "La", "La♯", "Si"
-)
-
-fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
-fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
-
-fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
-    val currentSemitone = MutableStateFlow(MIDDLE_A_SEMITONE)
-
-    val view = object : BaseSlider(activity) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GREEN
-            it.style = Paint.Style.FILL
-        }
-
-        var r = 1f
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            r = min(w, h) / 2f
-        }
-
-        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-            val width = MeasureSpec.getSize(widthMeasureSpec)
-            super.onMeasure(
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
-                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
-            )
-        }
-
-        private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.BLACK
-            it.textAlign = Paint.Align.CENTER
-            it.textSize = 20 * resources.dp
-        }
-
-        override fun onDraw(canvas: Canvas) {
-            canvas.drawCircle(r, r, r / 1.1f, paint)
-            val text = "%d Hz %s %s".format(
-                Locale.ENGLISH,
-                getStandardFrequency(currentSemitone.value).toInt(),
-                getAbcNoteLabel(currentSemitone.value.roundToInt()),
-                getSolfegeNoteLabel(currentSemitone.value.roundToInt())
-            )
-            canvas.drawText(text, r, r, textPaint)
-        }
-    }
-
-    view.onScrollListener = { dx, _ ->
-        currentSemitone.value = (currentSemitone.value - dx / 1000.0)
-            .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
-    }
-
-    val sampleRate = 44100
-    val buffer = ShortArray(sampleRate * 10)
-    var previousAudioTrack: AudioTrack? = null
-
-    currentSemitone
-        .map { semitone ->
-            val frequency = getStandardFrequency(semitone)
-            buffer.indices.forEach {
-                val phase = 2 * PI * it / (sampleRate / frequency)
-                buffer[it] = (when (0) {
-                    0 -> sin(phase) // Sine
-                    1 -> sign(sin(phase)) // Square
-                    2 -> abs(asin(sin(phase / 2))) // Sawtooth
-                    else -> .0
-                } * Short.MAX_VALUE).toInt().toShort()
-            }
-
-            val audioTrack = AudioTrack(
-                AudioManager.STREAM_MUSIC, sampleRate,
-                AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
-                buffer.size, AudioTrack.MODE_STATIC
-            )
-            audioTrack.write(buffer, 0, buffer.size)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
-            }
-            audioTrack.play()
-            if (previousAudioTrack?.state == AudioTrack.STATE_INITIALIZED) {
-                previousAudioTrack?.stop()
-                previousAudioTrack?.release()
-            }
-            previousAudioTrack = audioTrack
-        }
-        .flowOn(Dispatchers.Unconfined)
-        .launchIn(viewLifecycle.coroutineScope)
-
-    val dialog = AlertDialog.Builder(activity)
-        .setView(view)
-        .setOnCancelListener { previousAudioTrack?.stop() }
-        .show()
-
-    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
-    })
-}
-
-fun showSpringDemoDialog(activity: ComponentActivity) {
-    val x = FloatValueHolder()
-    val horizontalSpring = SpringAnimation(x)
-    horizontalSpring.spring = SpringForce(0f)
-        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
-        .setStiffness(SpringForce.STIFFNESS_LOW)
-    val y = FloatValueHolder()
-    val verticalSpring = SpringAnimation(y)
-    verticalSpring.spring = SpringForce(0f)
-        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
-        .setStiffness(SpringForce.STIFFNESS_LOW)
-    val view = object : View(activity) {
-        private var r = 0f
-        private var previousX = 0f
-        private var previousY = 0f
-
-        init {
-            horizontalSpring.addUpdateListener { _, _, _ -> invalidate() }
-            verticalSpring.addUpdateListener { _, _, _ -> invalidate() }
-        }
-
-        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-            super.onSizeChanged(w, h, oldw, oldh)
-            x.value = w / 2f
-            y.value = h / 2f
-            r = w / 20f
-            path.rewind()
-            path.moveTo(x.value, y.value)
-        }
-
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.GRAY }
-        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.GRAY
-            it.style = Paint.Style.STROKE
-        }
-        private val path = Path()
-        override fun onDraw(canvas: Canvas) {
-            path.lineTo(x.value, y.value)
-            canvas.drawPath(path, linesPaint)
-            canvas.drawCircle(x.value, y.value, r, paint)
-        }
-
-        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    horizontalSpring.cancel()
-                    verticalSpring.cancel()
-                    previousX = event.x
-                    previousY = event.y
-                }
-
-                MotionEvent.ACTION_MOVE -> {
-                    x.value += event.x - previousX
-                    y.value += event.y - previousY
-                    previousX = event.x
-                    previousY = event.y
-                    invalidate()
-                }
-
-                MotionEvent.ACTION_UP -> {
-                    horizontalSpring.animateToFinalPosition(width / 2f)
-                    verticalSpring.animateToFinalPosition(height / 2f)
-
-                    val angle = atan2(y.value - height / 2f, x.value - width / 2f)
-                    performHapticFeedbackVirtualKey()
-                    lifecycle.launch { playSoundTick(angle * 10.0) }
-                }
-            }
-            return true
-        }
-
-        private val lifecycle = activity.lifecycleScope
-    }
-
-    val dialog = AlertDialog.Builder(activity)
-        .setView(view)
-        .show()
-
-//    view.setBackgroundResource(
-//        activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
-//    )
-//    val rippleDrawable = view.background
-//    if (rippleDrawable is RippleDrawable) {
-//        val handler = Handler(Looper.getMainLooper())
-//        fun next() {
-//            val delay = Random.nextLong(10, TWO_SECONDS_IN_MILLIS)
-//            handler.postDelayed(delay) {
-//                if (!dialog.isShowing) return@postDelayed
-//                view.isPressed = false
-//                rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
-//                rippleDrawable.setHotspot(
-//                    view.width * Random.nextFloat(),
-//                    view.height * Random.nextFloat()
-//                )
-//                view.isPressed = true
-//                next()
-//            }
+//val ABC_NOTATION = listOf(
+//    "C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"
+//)
+//var SOLFEGE_NOTATION = listOf(
+//    "Do", "Do♯", "Re", "Re♯", "Mi", "Fa", "Fa♯", "Sol", "Sol♯", "La", "La♯", "Si"
+//)
+//
+//fun getAbcNoteLabel(note: Int) = ABC_NOTATION[note % 12] + ((note / 12) - 1)
+//fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) - 1)
+//
+//fun showSignalGeneratorDialog(activity: ComponentActivity, viewLifecycle: Lifecycle) {
+//    val currentSemitone = MutableStateFlow(MIDDLE_A_SEMITONE)
+//
+//    val view = object : BaseSlider(activity) {
+//        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.GREEN
+//            it.style = Paint.Style.FILL
 //        }
-//        next()
+//
+//        var r = 1f
+//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//            r = min(w, h) / 2f
+//        }
+//
+//        override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+//            val width = MeasureSpec.getSize(widthMeasureSpec)
+//            super.onMeasure(
+//                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY),
+//                MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY)
+//            )
+//        }
+//
+//        private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.BLACK
+//            it.textAlign = Paint.Align.CENTER
+//            it.textSize = 20 * resources.dp
+//        }
+//
+//        override fun onDraw(canvas: Canvas) {
+//            canvas.drawCircle(r, r, r / 1.1f, paint)
+//            val text = "%d Hz %s %s".format(
+//                Locale.ENGLISH,
+//                getStandardFrequency(currentSemitone.value).toInt(),
+//                getAbcNoteLabel(currentSemitone.value.roundToInt()),
+//                getSolfegeNoteLabel(currentSemitone.value.roundToInt())
+//            )
+//            canvas.drawText(text, r, r, textPaint)
+//        }
 //    }
-}
+//
+//    view.onScrollListener = { dx, _ ->
+//        currentSemitone.value = (currentSemitone.value - dx / 1000.0)
+//            .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
+//    }
+//
+//    val sampleRate = 44100
+//    val buffer = ShortArray(sampleRate * 10)
+//    var previousAudioTrack: AudioTrack? = null
+//
+//    currentSemitone
+//        .map { semitone ->
+//            val frequency = getStandardFrequency(semitone)
+//            buffer.indices.forEach {
+//                val phase = 2 * PI * it / (sampleRate / frequency)
+//                buffer[it] = (when (0) {
+//                    0 -> sin(phase) // Sine
+//                    1 -> sign(sin(phase)) // Square
+//                    2 -> abs(asin(sin(phase / 2))) // Sawtooth
+//                    else -> .0
+//                } * Short.MAX_VALUE).toInt().toShort()
+//            }
+//
+//            val audioTrack = AudioTrack(
+//                AudioManager.STREAM_MUSIC, sampleRate,
+//                AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
+//                buffer.size, AudioTrack.MODE_STATIC
+//            )
+//            audioTrack.write(buffer, 0, buffer.size)
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
+//            }
+//            audioTrack.play()
+//            if (previousAudioTrack?.state == AudioTrack.STATE_INITIALIZED) {
+//                previousAudioTrack?.stop()
+//                previousAudioTrack?.release()
+//            }
+//            previousAudioTrack = audioTrack
+//        }
+//        .flowOn(Dispatchers.Unconfined)
+//        .launchIn(viewLifecycle.coroutineScope)
+//
+//    val dialog = AlertDialog.Builder(activity)
+//        .setView(view)
+//        .setOnCancelListener { previousAudioTrack?.stop() }
+//        .show()
+//
+//    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+//        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+//    })
+//}
+//
+//fun showSpringDemoDialog(activity: ComponentActivity) {
+//    val x = FloatValueHolder()
+//    val horizontalSpring = SpringAnimation(x)
+//    horizontalSpring.spring = SpringForce(0f)
+//        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
+//        .setStiffness(SpringForce.STIFFNESS_LOW)
+//    val y = FloatValueHolder()
+//    val verticalSpring = SpringAnimation(y)
+//    verticalSpring.spring = SpringForce(0f)
+//        .setDampingRatio(SpringForce.DAMPING_RATIO_HIGH_BOUNCY)
+//        .setStiffness(SpringForce.STIFFNESS_LOW)
+//    val view = object : View(activity) {
+//        private var r = 0f
+//        private var previousX = 0f
+//        private var previousY = 0f
+//
+//        init {
+//            horizontalSpring.addUpdateListener { _, _, _ -> invalidate() }
+//            verticalSpring.addUpdateListener { _, _, _ -> invalidate() }
+//        }
+//
+//        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+//            super.onSizeChanged(w, h, oldw, oldh)
+//            x.value = w / 2f
+//            y.value = h / 2f
+//            r = w / 20f
+//            path.rewind()
+//            path.moveTo(x.value, y.value)
+//        }
+//
+//        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.GRAY }
+//        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+//            it.color = Color.GRAY
+//            it.style = Paint.Style.STROKE
+//        }
+//        private val path = Path()
+//        override fun onDraw(canvas: Canvas) {
+//            path.lineTo(x.value, y.value)
+//            canvas.drawPath(path, linesPaint)
+//            canvas.drawCircle(x.value, y.value, r, paint)
+//        }
+//
+//        override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> {
+//                    horizontalSpring.cancel()
+//                    verticalSpring.cancel()
+//                    previousX = event.x
+//                    previousY = event.y
+//                }
+//
+//                MotionEvent.ACTION_MOVE -> {
+//                    x.value += event.x - previousX
+//                    y.value += event.y - previousY
+//                    previousX = event.x
+//                    previousY = event.y
+//                    invalidate()
+//                }
+//
+//                MotionEvent.ACTION_UP -> {
+//                    horizontalSpring.animateToFinalPosition(width / 2f)
+//                    verticalSpring.animateToFinalPosition(height / 2f)
+//
+//                    val angle = atan2(y.value - height / 2f, x.value - width / 2f)
+//                    performHapticFeedbackVirtualKey()
+//                    lifecycle.launch { playSoundTick(angle * 10.0) }
+//                }
+//            }
+//            return true
+//        }
+//
+//        private val lifecycle = activity.lifecycleScope
+//    }
+//
+//    val dialog = AlertDialog.Builder(activity)
+//        .setView(view)
+//        .show()
+//
+////    view.setBackgroundResource(
+////        activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
+////    )
+////    val rippleDrawable = view.background
+////    if (rippleDrawable is RippleDrawable) {
+////        val handler = Handler(Looper.getMainLooper())
+////        fun next() {
+////            val delay = Random.nextLong(10, TWO_SECONDS_IN_MILLIS)
+////            handler.postDelayed(delay) {
+////                if (!dialog.isShowing) return@postDelayed
+////                view.isPressed = false
+////                rippleDrawable.setColor(ColorStateList.valueOf(getRandomTransparentColor()))
+////                rippleDrawable.setHotspot(
+////                    view.width * Random.nextFloat(),
+////                    view.height * Random.nextFloat()
+////                )
+////                view.isPressed = true
+////                next()
+////            }
+////        }
+////        next()
+////    }
+//}
 
-private fun getRandomTransparentColor(): Int {
-    return Color.argb(0x10, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-}
+//private fun getRandomTransparentColor(): Int {
+//    return Color.argb(0x10, Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+//}
 
 //fun showViewDragHelperDemoDialog(activity: ComponentActivity) {
 //    // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
@@ -1189,22 +1185,22 @@ private fun guitarString(
     return samples.map { (it / max * Short.MAX_VALUE).roundToInt().toShort() }.toShortArray()
 }
 
-suspend fun playSoundTick(offset: Double) {
-    withContext(Dispatchers.IO) {
-        val sampleRate = 44100
-        val buffer = guitarString(
-            getStandardFrequency(offset + MIDDLE_A_SEMITONE),
-            sampleRate = sampleRate,
-            duration = 4.0
-        )
-        val audioTrack = AudioTrack(
-            AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-            AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
-        )
-        audioTrack.write(buffer, 0, buffer.size)
-        runCatching { audioTrack.play() }.onFailure(logException)
-    }
-}
+//suspend fun playSoundTick(offset: Double) {
+//    withContext(Dispatchers.IO) {
+//        val sampleRate = 44100
+//        val buffer = guitarString(
+//            getStandardFrequency(offset + MIDDLE_A_SEMITONE),
+//            sampleRate = sampleRate,
+//            duration = 4.0
+//        )
+//        val audioTrack = AudioTrack(
+//            AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+//            AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
+//        )
+//        audioTrack.write(buffer, 0, buffer.size)
+//        runCatching { audioTrack.play() }.onFailure(logException)
+//    }
+//}
 
 fun showSensorTestDialog(activity: ComponentActivity) {
     val sensorManager = activity.getSystemService<SensorManager>() ?: return
