@@ -9,7 +9,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -52,7 +51,7 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
-import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -131,7 +130,7 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
             rememberLauncherForActivityResult(ViewEventContract()) { viewModel.refreshCalendar() }
 
         events.forEach { event ->
-            val backgroundColor by animateColorAsState(
+            val backgroundColor by animateColor(
                 when {
                     event is CalendarEvent.DeviceCalendarEvent -> {
                         runCatching {
@@ -142,9 +141,7 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
 
                     event.isHoliday -> MaterialTheme.colorScheme.primary
                     else -> MaterialTheme.colorScheme.surfaceVariant
-                },
-                animationSpec = appColorAnimationSpec,
-                label = "background color",
+                }
             )
 
             val eventTime =
@@ -190,10 +187,8 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
-                    val contentColor by animateColorAsState(
+                    val contentColor by animateColor(
                         if (backgroundColor.isLight) Color.Black else Color.White,
-                        animationSpec = appColorAnimationSpec,
-                        label = "content color"
                     )
 
                     SelectionContainer {

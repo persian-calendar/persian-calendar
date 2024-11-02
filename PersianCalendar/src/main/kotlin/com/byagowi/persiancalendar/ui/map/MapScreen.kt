@@ -10,7 +10,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -89,7 +88,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
-import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
@@ -160,8 +159,10 @@ fun SharedTransitionScope.MapScreen(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     class MenuItem(
-        val icon: ImageVector, @StringRes val title: Int,
-        val isEnabled: () -> Boolean = { false }, val onClick: () -> Unit
+        val icon: ImageVector,
+        @StringRes val title: Int,
+        val isEnabled: () -> Boolean = { false },
+        val onClick: () -> Unit
     )
 
     val menu = listOf(
@@ -186,10 +187,9 @@ fun SharedTransitionScope.MapScreen(
             showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
             // DO NOT use bitmap after this
         },
-        MenuItem(
-            Icons.Default.SocialDistance, R.string.show_direct_path_label,
-            { state.isDirectPathMode }
-        ) {
+        MenuItem(Icons.Default.SocialDistance,
+            R.string.show_direct_path_label,
+            { state.isDirectPathMode }) {
             if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDirectPathMode()
         },
@@ -199,10 +199,9 @@ fun SharedTransitionScope.MapScreen(
         MenuItem(Icons.Default.MyLocation, R.string.show_my_location_label) {
             showGpsDialog = true
         },
-        MenuItem(
-            Icons.Default.LocationOn, R.string.show_location_label,
-            { state.coordinates != null && state.displayLocation }
-        ) {
+        MenuItem(Icons.Default.LocationOn,
+            R.string.show_location_label,
+            { state.coordinates != null && state.displayLocation }) {
             if (state.coordinates == null) showGpsDialog = true
             else viewModel.toggleDisplayLocation()
         },
@@ -314,15 +313,11 @@ fun SharedTransitionScope.MapScreen(
                             tooltip = { PlainTooltip { Text(text = stringResource(it.title)) } },
                             state = rememberTooltipState()
                         ) {
-                            Icon(
-                                it.icon, contentDescription = stringResource(it.title),
-                                tint = animateColorAsState(
-                                    if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
-                                    else LocalContentColor.current,
-                                    animationSpec = appColorAnimationSpec,
-                                    label = "icon tint"
-                                ).value
+                            val tint by animateColor(
+                                if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
+                                else LocalContentColor.current
                             )
+                            Icon(it.icon, stringResource(it.title), tint = tint)
                         }
                     },
                 )

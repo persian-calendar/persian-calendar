@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -112,9 +111,7 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.theme.animatedOnSurfaceColor
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
-import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
@@ -156,8 +153,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
             drawerContent = {
                 ModalDrawerSheet(
                     windowInsets = WindowInsets(0, 0, 0, 0),
-                    drawerContainerColor = animatedSurfaceColor(),
-                    drawerContentColor = animatedOnSurfaceColor(),
+                    drawerContainerColor = animateColor(MaterialTheme.colorScheme.surface).value,
+                    drawerContentColor = animateColor(MaterialTheme.colorScheme.onSurface).value,
                     modifier = Modifier.renderInSharedTransitionScopeOverlay(),
                 ) {
                     Box {
@@ -325,10 +322,8 @@ private fun DrawerTopGradient() {
     val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
     val isSurfaceColorLight = MaterialTheme.colorScheme.surface.isLight
     val needsVisibleStatusBarPlaceHolder = !isBackgroundColorLight && isSurfaceColorLight
-    val topColor by animateColorAsState(
-        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent,
-        label = "top color",
-        animationSpec = appColorAnimationSpec,
+    val topColor by animateColor(
+        if (needsVisibleStatusBarPlaceHolder) Color(0x70000000) else Color.Transparent
     )
     Spacer(
         Modifier
@@ -353,20 +348,12 @@ private fun DrawerContent(
             DrawerSeasonsPager(drawerState)
             DrawerDarkModeToggle()
         }
-        val onSecondaryContainerColor by animateColorAsState(
-            MaterialTheme.colorScheme.onSecondaryContainer,
-            animationSpec = appColorAnimationSpec,
-            label = "secondary container"
-        )
+        val onSecondaryContainerColor by animateColor(MaterialTheme.colorScheme.onSecondaryContainer)
         val navItemColors = NavigationDrawerItemDefaults.colors(
             unselectedContainerColor = Color.Transparent,
             unselectedTextColor = LocalContentColor.current,
             unselectedIconColor = LocalContentColor.current,
-            selectedContainerColor = animateColorAsState(
-                MaterialTheme.colorScheme.secondaryContainer,
-                animationSpec = appColorAnimationSpec,
-                label = "secondary container"
-            ).value,
+            selectedContainerColor = animateColor(MaterialTheme.colorScheme.secondaryContainer).value,
             selectedTextColor = onSecondaryContainerColor,
             selectedIconColor = onSecondaryContainerColor,
         )
@@ -514,12 +501,16 @@ private fun BoxScope.DrawerDarkModeToggle() {
                     }
                 },
             )
-            .background(animatedSurfaceColor().copy(alpha = .5f), MaterialTheme.shapes.extraLarge)
+            .background(
+                animateColor(MaterialTheme.colorScheme.surface.copy(alpha = .5f)).value,
+                MaterialTheme.shapes.extraLarge
+            )
             .padding(8.dp),
     ) {
+        val tint by animateColor(MaterialTheme.colorScheme.onSurface.copy(alpha = if (theme.isDark) .9f else .6f))
         Icon(
             it, stringResource(if (theme.isDark) R.string.theme_dark else R.string.theme_light),
-            tint = animatedOnSurfaceColor().copy(alpha = if (theme.isDark) .9f else .6f),
+            tint = tint,
         )
     }
 }

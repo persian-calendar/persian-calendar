@@ -93,11 +93,7 @@ fun AppTheme(content: @Composable () -> Unit) {
         )
     } else MaterialTheme.typography
     MaterialTheme(colorScheme = appColorScheme(), typography = typography) {
-        val contentColor by animateColorAsState(
-            MaterialTheme.colorScheme.onBackground,
-            animationSpec = appColorAnimationSpec,
-            label = "content color"
-        )
+        val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
 
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
@@ -163,24 +159,6 @@ private fun appColorScheme(): ColorScheme {
 }
 
 @Composable
-fun animatedSurfaceColor(): Color {
-    return animateColorAsState(
-        MaterialTheme.colorScheme.surface,
-        animationSpec = appColorAnimationSpec,
-        label = "surface color"
-    ).value
-}
-
-@Composable
-fun animatedOnSurfaceColor(): Color {
-    return animateColorAsState(
-        MaterialTheme.colorScheme.onSurface,
-        animationSpec = appColorAnimationSpec,
-        label = "content color",
-    ).value
-}
-
-@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun appTopAppBarColors(): TopAppBarColors {
     return TopAppBarDefaults.topAppBarColors(
@@ -193,6 +171,9 @@ fun appTopAppBarColors(): TopAppBarColors {
 }
 
 val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
+
+@Composable
+fun animateColor(color: Color) = animateColorAsState(color, appColorAnimationSpec, "color")
 
 /** This is similar to what [androidx.compose.animation.Crossfade] uses */
 private val crossfadeSpec = fadeIn(tween()).togetherWith(fadeOut(tween()))
@@ -214,7 +195,7 @@ private fun appBackground(): Brush {
     val theme = effectiveTheme()
     val context = LocalContext.current
     val isGradient by isGradient.collectAsState()
-    val backgroundGradientStart by animateColorAsState(
+    val backgroundGradientStart by animateColor(
         if (!isGradient) backgroundColor
         else if (theme.isDynamicColors) when (theme) {
             Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_500))
@@ -229,11 +210,9 @@ private fun appBackground(): Brush {
             Theme.AQUA -> Color(0xFF00838F)
             Theme.MODERN -> Color.White
             else -> null.debugAssertNotNull ?: Color.Transparent
-        },
-        label = "gradient start color",
-        animationSpec = appColorAnimationSpec,
+        }
     )
-    val backgroundGradientEnd by animateColorAsState(
+    val backgroundGradientEnd by animateColor(
         if (!isGradient) backgroundColor
         else if (theme.isDynamicColors) when (theme) {
             Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_900))
@@ -248,9 +227,7 @@ private fun appBackground(): Brush {
             Theme.AQUA -> Color(0xFF1A237E)
             Theme.MODERN -> Color(0xFFE1E3E5)
             else -> null.debugAssertNotNull ?: Color.Transparent
-        },
-        label = "gradient end color",
-        animationSpec = appColorAnimationSpec,
+        }
     )
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     return Brush.linearGradient(

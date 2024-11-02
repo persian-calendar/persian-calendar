@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,7 +48,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.common.ColorBox
 import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog
-import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -89,11 +88,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
 
 @Composable
 fun SettingsHorizontalDivider() {
-    val color by animateColorAsState(
-        MaterialTheme.colorScheme.outlineVariant,
-        animationSpec = appColorAnimationSpec,
-        label = "divider color"
-    )
+    val color by animateColor(MaterialTheme.colorScheme.outlineVariant)
     HorizontalDivider(Modifier.padding(horizontal = 8.dp), color = color)
 }
 
@@ -131,11 +126,7 @@ fun SettingsColor(
     }
     SettingsLayout({ showDialog = true }, title, summary) {
         ColorBox(
-            color = animateColorAsState(
-                targetValue = persistedColor,
-                animationSpec = appColorAnimationSpec,
-                label = "preview color",
-            ).value,
+            color = animateColor(persistedColor).value,
             size = widgetSize.dp,
             shape = MaterialTheme.shapes.large,
             outlineColor = MaterialTheme.colorScheme.outline,

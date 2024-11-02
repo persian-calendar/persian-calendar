@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.common
 
 import android.content.res.Configuration
 import androidx.compose.animation.Animatable
-import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -57,6 +56,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appColorAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import kotlinx.coroutines.launch
@@ -122,11 +122,9 @@ fun ColorPickerDialog(
                     modifier = Modifier.align(Alignment.BottomCenter),
                     textStyle = TextStyle.Default.copy(
                         textAlign = TextAlign.Center,
-                        color = animateColorAsState(
+                        color = animateColor(
                             if (color.value.compositeOver(Color.White).isLight) Color.Black
-                            else Color.White,
-                            animationSpec = appColorAnimationSpec,
-                            label = "text color",
+                            else Color.White
                         ).value,
                         fontSize = if (isLandscape) MaterialTheme.typography.labelSmall.fontSize
                         else TextStyle.Default.fontSize

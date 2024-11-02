@@ -9,6 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
@@ -17,8 +18,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Constraints
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
-import com.byagowi.persiancalendar.ui.theme.animatedOnSurfaceColor
-import com.byagowi.persiancalendar.ui.theme.animatedSurfaceColor
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.utils.isOnCI
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
@@ -37,7 +37,7 @@ fun SharedTransitionScope.ScreenSurface(
         // Parent
         Surface(
             shape = shape,
-            color = animatedSurfaceColor(),
+            color = animateColor(MaterialTheme.colorScheme.surface).value,
             modifier = if (isOnCI) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
@@ -49,7 +49,10 @@ fun SharedTransitionScope.ScreenSurface(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
             )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)
-        ) { CompositionLocalProvider(LocalContentColor provides animatedOnSurfaceColor(), content) }
+        ) {
+            val onSurface by animateColor(MaterialTheme.colorScheme.onSurface)
+            CompositionLocalProvider(LocalContentColor provides onSurface, content)
+        }
     }) { (parent, content), constraints ->
         val placeableContent = content.measure(constraints)
         val childConstraints = Constraints.fixed(placeableContent.width, placeableContent.height)

@@ -403,7 +403,10 @@ fun updateStoredPreference(context: Context) {
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan_.value = preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
     notificationAthanVibration_.value =
-        preferences.getBoolean(PREF_NOTIFICATION_ATHAN_VIBRATION, DEFAULT_ATHAN_NOTIFICATION_VIBRATION)
+        preferences.getBoolean(
+            PREF_NOTIFICATION_ATHAN_VIBRATION,
+            DEFAULT_ATHAN_NOTIFICATION_VIBRATION
+        )
     ascendingAthan_.value =
         preferences.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
     isCenterAlignWidgets = preferences.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
