@@ -328,8 +328,8 @@ fun SharedTransitionScope.MapScreen(
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val currentJdn = Jdn(Date(state.time).toGregorianCalendar().toCivilDate())
-        DatePickerDialog(currentJdn, { viewModel.addDays(it - currentJdn) }) {
-            showDatePickerDialog = false
+        DatePickerDialog(currentJdn, { showDatePickerDialog = false }) { jdn ->
+            viewModel.addDays(jdn - currentJdn)
         }
     }
 

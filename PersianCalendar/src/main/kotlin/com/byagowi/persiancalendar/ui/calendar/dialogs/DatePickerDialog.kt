@@ -41,8 +41,8 @@ import kotlinx.coroutines.delay
 @Composable
 fun DatePickerDialog(
     initialJdn: Jdn,
-    onSuccess: (jdn: Jdn) -> Unit,
     onDismissRequest: () -> Unit,
+    onSuccess: (jdn: Jdn) -> Unit,
 ) {
     var jdn by rememberSaveable(
         saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })

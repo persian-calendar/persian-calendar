@@ -76,8 +76,7 @@ class AgeWidgetConfigureActivity : ComponentActivity() {
         fun confirm() {
             // Make sure we pass back the original appWidgetId
             setResult(
-                RESULT_OK,
-                Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
             )
             update(this, false)
             finish()
@@ -154,12 +153,10 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
 
                 SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    val jdn = context.preferences.getJdnOrNull(key) ?: Jdn.today()
                     DatePickerDialog(
-                        initialJdn = jdn,
-                        onSuccess = { context.preferences.edit { putJdn(key, it) } },
+                        initialJdn = context.preferences.getJdnOrNull(key) ?: Jdn.today(),
                         onDismissRequest = onDismissRequest,
-                    )
+                    ) { jdn -> context.preferences.edit { putJdn(key, jdn) } }
                 }
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
                 WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)

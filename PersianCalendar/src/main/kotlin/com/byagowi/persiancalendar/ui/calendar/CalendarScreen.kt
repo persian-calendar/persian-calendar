@@ -775,8 +775,8 @@ private fun SharedTransitionScope.Menu(
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
         val selectedDay by viewModel.selectedDay.collectAsState()
-        DatePickerDialog(selectedDay, { jdn -> bringDate(viewModel, jdn, context) }) {
-            showDatePickerDialog = false
+        DatePickerDialog(selectedDay, { showDatePickerDialog = false }) { jdn ->
+            bringDate(viewModel, jdn, context)
         }
     }
 

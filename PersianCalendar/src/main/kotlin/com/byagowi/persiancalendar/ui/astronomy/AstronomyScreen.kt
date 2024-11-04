@@ -276,9 +276,8 @@ fun SharedTransitionScope.AstronomyScreen(
         val astronomyState by viewModel.astronomyState.collectAsState()
         DatePickerDialog(
             initialJdn = Jdn(astronomyState.date.toCivilDate()),
-            onSuccess = { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) },
             onDismissRequest = viewModel::dismissDatePickerDialog,
-        )
+        ) { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today()) }
     }
 }
 
