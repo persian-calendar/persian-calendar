@@ -126,8 +126,9 @@ fun SharedTransitionScope.AgendaScreen(
                 val language by language.collectAsState()
                 val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
                 val isVazirEnabled by isVazirEnabled.collectAsState()
-                val circleTextSize =
-                    (if (mainCalendarDigitsIsArabic || isVazirEnabled) 16 else 20).sp
+                val circleTextStyle =
+                    if (mainCalendarDigitsIsArabic || isVazirEnabled) MaterialTheme.typography.titleMedium
+                    else MaterialTheme.typography.titleLarge
                 Box(modifier = Modifier.fillMaxSize()) {
                     val eventsCache = eventsCache(calendarViewModel)
                     LazyColumn(state = state) {
@@ -165,7 +166,7 @@ fun SharedTransitionScope.AgendaScreen(
                                     ) {
                                         Text(
                                             text = formatNumber(date.dayOfMonth),
-                                            fontSize = circleTextSize,
+                                            style = circleTextStyle,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
