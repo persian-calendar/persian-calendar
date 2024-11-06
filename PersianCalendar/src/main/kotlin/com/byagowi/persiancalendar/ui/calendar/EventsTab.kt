@@ -8,10 +8,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,7 +49,6 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
@@ -69,13 +65,11 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.EventsTab(
+fun EventsTab(
     navigateToHolidaysSettings: () -> Unit,
     navigateToAgenda: () -> Unit,
     viewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
 ) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
@@ -131,8 +125,8 @@ fun SharedTransitionScope.EventsTab(
                     textAlign = TextAlign.Center,
                 )
             }
-            DayEvents(animatedContentScope, events, true) {
-                viewModel.refreshCalendar()
+            Box(Modifier.padding(horizontal = 24.dp)) {
+                DayEvents(events) { viewModel.refreshCalendar() }
             }
             if (events.isNotEmpty()) MoreButton(navigateToAgenda)
         }
@@ -189,99 +183,84 @@ fun MoreButton(action: () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.DayEvents(
-    animatedContentScope: AnimatedContentScope,
-    events: List<CalendarEvent<*>>,
-    isCurrent: Boolean,
-    refreshCalendar: () -> Unit,
-) {
-    Column(
-        if (isCurrent) Modifier.sharedElement(
-            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-            animatedVisibilityScope = animatedContentScope,
-        ) else Modifier
-    ) {
-        val context = LocalContext.current
-        val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
-        events.forEach { event ->
-            val backgroundColor by animateColor(
-                when {
-                    event is CalendarEvent.DeviceCalendarEvent -> {
-                        runCatching {
-                            // should be turned to long then int otherwise gets stupid alpha
-                            if (event.color.isEmpty()) null else Color(event.color.toLong())
-                        }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
-                    }
-
-                    event.isHoliday -> MaterialTheme.colorScheme.primary
-                    else -> MaterialTheme.colorScheme.surfaceVariant
+fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
+    events.forEach { event ->
+        val backgroundColor by animateColor(
+            when {
+                event is CalendarEvent.DeviceCalendarEvent -> {
+                    runCatching {
+                        // should be turned to long then int otherwise gets stupid alpha
+                        if (event.color.isEmpty()) null else Color(event.color.toLong())
+                    }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
                 }
-            )
 
-            val eventTime =
-                (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
-            AnimatedContent(
-                (if (event.isHoliday) language.value.inParentheses.format(
-                    event.title, holidayString
-                ) else event.title) + eventTime,
-                label = "event title",
-                transitionSpec = appCrossfadeSpec,
-            ) { title ->
-                Row(
-                    @OptIn(ExperimentalFoundationApi::class) Modifier
-                        .fillMaxWidth()
-                        // TODO: Match it with a better number with page's fab
-                        .padding(horizontal = 24.dp, vertical = 4.dp)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(backgroundColor)
-                        .combinedClickable(
-                            enabled = event is CalendarEvent.DeviceCalendarEvent,
-                            onClick = {
-                                if (event is CalendarEvent.DeviceCalendarEvent) {
-                                    runCatching { launcher.launch(event.id) }
-                                        .onFailure {
-                                            Toast
-                                                .makeText(
-                                                    context,
-                                                    R.string.device_does_not_support,
-                                                    Toast.LENGTH_SHORT
-                                                )
-                                                .show()
-                                        }
-                                        .onFailure(logException)
-                                }
-                            },
-                        )
-                        .padding(8.dp)
-                        .semantics {
-                            this.contentDescription = if (event.isHoliday) context.getString(
-                                R.string.holiday_reason, event.oneLinerTitleWithTime
-                            ) else event.oneLinerTitleWithTime
+                event.isHoliday -> MaterialTheme.colorScheme.primary
+                else -> MaterialTheme.colorScheme.surfaceVariant
+            }
+        )
+
+        val eventTime = (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
+        AnimatedContent(
+            (if (event.isHoliday) language.value.inParentheses.format(
+                event.title, holidayString
+            ) else event.title) + eventTime,
+            label = "event title",
+            transitionSpec = appCrossfadeSpec,
+        ) { title ->
+            Row(
+                @OptIn(ExperimentalFoundationApi::class) Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp)
+                    .clip(MaterialTheme.shapes.medium)
+                    .background(backgroundColor)
+                    .combinedClickable(
+                        enabled = event is CalendarEvent.DeviceCalendarEvent,
+                        onClick = {
+                            if (event is CalendarEvent.DeviceCalendarEvent) {
+                                runCatching { launcher.launch(event.id) }
+                                    .onFailure {
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                R.string.device_does_not_support,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
+                                    .onFailure(logException)
+                            }
                         },
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    val contentColor by animateColor(
-                        if (backgroundColor.isLight) Color.Black else Color.White,
                     )
+                    .padding(8.dp)
+                    .semantics {
+                        this.contentDescription = if (event.isHoliday) context.getString(
+                            R.string.holiday_reason, event.oneLinerTitleWithTime
+                        ) else event.oneLinerTitleWithTime
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                val contentColor by animateColor(
+                    if (backgroundColor.isLight) Color.Black else Color.White,
+                )
 
-                    SelectionContainer {
-                        Text(
-                            title,
-                            color = contentColor,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
-                    }
-                    AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent) {
-                        Icon(
-                            Icons.AutoMirrored.Default.OpenInNew,
-                            contentDescription = null,
-                            tint = contentColor,
-                            modifier = Modifier.padding(start = 8.dp),
-                        )
-                    }
+                SelectionContainer {
+                    Text(
+                        title,
+                        color = contentColor,
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+                AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent) {
+                    Icon(
+                        Icons.AutoMirrored.Default.OpenInNew,
+                        contentDescription = null,
+                        tint = contentColor,
+                        modifier = Modifier.padding(start = 8.dp),
+                    )
                 }
             }
         }
