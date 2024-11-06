@@ -6,6 +6,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Print
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,10 +40,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,8 +49,11 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -119,10 +122,12 @@ fun SharedTransitionScope.AgendaScreen(
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
-                val circleColor = MaterialTheme.colorScheme.surfaceVariant
-                val radius = with(LocalDensity.current) { 16.dp.toPx() }
                 val context = LocalContext.current
                 val language by language.collectAsState()
+                val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
+                val isVazirEnabled by isVazirEnabled.collectAsState()
+                val circleTextSize =
+                    (if (mainCalendarDigitsIsArabic || isVazirEnabled) 16 else 20).sp
                 Box(modifier = Modifier.fillMaxSize()) {
                     val eventsCache = eventsCache(calendarViewModel)
                     LazyColumn(state = state) {
@@ -130,7 +135,7 @@ fun SharedTransitionScope.AgendaScreen(
                             val jdn = indexToJdn(baseJdn, index)
                             if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(
                                 Modifier.padding(
-                                    top = if (index == 0) 24.dp else 16.dp,
+                                    top = if (index == 0) 20.dp else 16.dp,
                                     bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
                                     start = 24.dp,
                                 )
@@ -139,10 +144,11 @@ fun SharedTransitionScope.AgendaScreen(
                             Column {
                                 val date = jdn.inCalendar(mainCalendar)
                                 if (events.isNotEmpty()) Row(
-                                    Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                                    Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
                                 ) {
                                     Box(
                                         Modifier
+                                            .padding(top = 4.dp)
                                             .clickable(
                                                 interactionSource = null,
                                                 indication = ripple(bounded = false),
@@ -150,13 +156,16 @@ fun SharedTransitionScope.AgendaScreen(
                                                 bringDate(calendarViewModel, jdn, context)
                                                 navigateUp()
                                             }
-                                            .width(32.dp)
-                                            .drawBehind { drawCircle(circleColor, radius) },
-                                        contentAlignment = Alignment.Center
+                                            .size(36.dp)
+                                            .background(
+                                                MaterialTheme.colorScheme.surfaceVariant,
+                                                CircleShape,
+                                            ),
+                                        contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
                                             text = formatNumber(date.dayOfMonth),
-                                            style = MaterialTheme.typography.headlineSmall,
+                                            fontSize = circleTextSize,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
