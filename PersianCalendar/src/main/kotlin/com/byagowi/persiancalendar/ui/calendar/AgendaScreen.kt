@@ -101,29 +101,6 @@ fun SharedTransitionScope.AgendaScreen(
                             val events = eventsCache(jdn)
                             Column {
                                 val date = jdn.inCalendar(mainCalendar)
-                                if (date.dayOfMonth == 1) {
-                                    Text(
-                                        language.my.format(
-                                            date.monthName, formatNumber(date.year)
-                                        ),
-                                        fontSize = 32.sp,
-                                        modifier = Modifier
-                                            .padding(
-                                                start = 24.dp, end = 24.dp, top = 24.dp
-                                            )
-                                            .clickable(
-                                                interactionSource = null,
-                                                indication = ripple(bounded = false),
-                                            ) {
-                                                calendarViewModel.changeSelectedMonthOffsetCommand(
-                                                    mainCalendar.getMonthsDistance(
-                                                        Jdn.today(), Jdn(date),
-                                                    )
-                                                )
-                                                navigateUp()
-                                            },
-                                    )
-                                }
                                 if (events.isNotEmpty()) Row(
                                     Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
                                 ) {
@@ -153,6 +130,36 @@ fun SharedTransitionScope.AgendaScreen(
                                             animatedVisibilityScope = animatedContentScope,
                                         ) else Modifier,
                                     ) { DayEvents(events) {} }
+                                }
+                                if (mainCalendar.getMonthLength(
+                                        date.year,
+                                        date.month,
+                                    ) == date.dayOfMonth
+                                ) {
+                                    val nextMonth = mainCalendar.getMonthStartFromMonthsDistance(
+                                        jdn, 1
+                                    )
+                                    Text(
+                                        if (nextMonth.month == 1) language.my.format(
+                                            nextMonth.monthName, formatNumber(nextMonth.year),
+                                        ) else nextMonth.monthName,
+                                        fontSize = 24.sp,
+                                        modifier = Modifier
+                                            .padding(
+                                                start = 24.dp, end = 24.dp, top = 24.dp
+                                            )
+                                            .clickable(
+                                                interactionSource = null,
+                                                indication = ripple(bounded = false),
+                                            ) {
+                                                calendarViewModel.changeSelectedMonthOffsetCommand(
+                                                    mainCalendar.getMonthsDistance(
+                                                        Jdn.today(), Jdn(nextMonth),
+                                                    )
+                                                )
+                                                navigateUp()
+                                            },
+                                    )
                                 }
                             }
                         }
