@@ -242,13 +242,14 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                 val contentColor by animateColor(
                     if (backgroundColor.isLight) Color.Black else Color.White,
                 )
-
-                SelectionContainer {
-                    Text(
-                        title,
-                        color = contentColor,
-                        style = MaterialTheme.typography.bodyMedium,
-                    )
+                Box(modifier = Modifier.weight(1f, fill = false)) {
+                    SelectionContainer {
+                        Text(
+                            title,
+                            color = contentColor,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
                 }
                 AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent) {
                     Icon(
