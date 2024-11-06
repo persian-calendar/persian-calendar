@@ -113,21 +113,17 @@ fun EventsTab(
             }
         }
 
-        Column {
+        Column(Modifier.padding(horizontal = 24.dp)) {
             val events = readEvents(jdn, refreshToken)
             Spacer(Modifier.height(16.dp))
             AnimatedVisibility(events.isEmpty()) {
                 Text(
                     stringResource(R.string.no_event),
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp),
+                    Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                 )
             }
-            Box(Modifier.padding(horizontal = 24.dp)) {
-                DayEvents(events) { viewModel.refreshCalendar() }
-            }
+            DayEvents(events) { viewModel.refreshCalendar() }
             if (events.isNotEmpty()) MoreButton(navigateToAgenda)
         }
 
@@ -168,7 +164,7 @@ fun EventsTab(
 fun MoreButton(action: () -> Unit) {
     Box(
         Modifier
-            .padding(start = 24.dp, top = 2.dp)
+            .padding(top = 2.dp)
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { action() }

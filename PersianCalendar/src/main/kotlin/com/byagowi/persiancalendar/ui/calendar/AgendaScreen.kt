@@ -93,6 +93,7 @@ fun SharedTransitionScope.AgendaScreen(
                                 Modifier.padding(
                                     top = if (index == 0) 24.dp else 8.dp,
                                     bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
+                                    start = 24.dp,
                                 )
                             ) { MoreButton { baseJdn = jdn } }
                             val events = eventsCache(jdn)
