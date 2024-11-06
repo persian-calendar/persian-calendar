@@ -186,7 +186,7 @@ fun MoreButton(action: () -> Unit) {
             Icons.Default.MoreHoriz,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(24.dp),
-            contentDescription = stringResource(R.string.more),
+            contentDescription = stringResource(R.string.agenda),
         )
     }
 }

@@ -127,7 +127,6 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.reports.prayTimeHtmlReport
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
@@ -199,7 +198,13 @@ fun SharedTransitionScope.CalendarScreen(
 
             Crossfade(searchBoxIsOpen, label = "toolbar") {
                 if (it) Search(viewModel)
-                else Toolbar(animatedContentScope, addEvent, openDrawer, viewModel)
+                else Toolbar(
+                    animatedContentScope = animatedContentScope,
+                    addEvent = addEvent,
+                    openDrawer = openDrawer,
+                    navigateToAgenda = navigateToAgenda,
+                    viewModel = viewModel,
+                )
             }
         },
         floatingActionButton = {
@@ -645,6 +650,7 @@ private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
     addEvent: () -> Unit,
     openDrawer: () -> Unit,
+    navigateToAgenda: () -> Unit,
     viewModel: CalendarViewModel,
 ) {
     val context = LocalContext.current
@@ -774,7 +780,9 @@ private fun SharedTransitionScope.Toolbar(
                     title = stringResource(R.string.search_in_events),
                 ) { viewModel.openSearch() }
             }
-            AnimatedVisibility(!isYearView) { Menu(animatedContentScope, addEvent, viewModel) }
+            AnimatedVisibility(!isYearView) {
+                Menu(animatedContentScope, addEvent, navigateToAgenda, viewModel)
+            }
         },
     )
 }
@@ -784,6 +792,7 @@ private fun SharedTransitionScope.Toolbar(
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     addEvent: () -> Unit,
+    navigateToAgenda: () -> Unit,
     viewModel: CalendarViewModel,
 ) {
     val context = LocalContext.current
@@ -797,21 +806,13 @@ private fun SharedTransitionScope.Menu(
     }
 
     val shiftWorkViewModel by viewModel.shiftWorkViewModel.collectAsState()
-    shiftWorkViewModel?.let { shiftWorkViewModel ->
+    shiftWorkViewModel?.let {
         val selectedDay by viewModel.selectedDay.collectAsState()
         ShiftWorkDialog(
-            shiftWorkViewModel,
+            it,
             selectedDay,
             onDismissRequest = { viewModel.setShiftWorkViewModel(null) },
         ) { viewModel.refreshCalendar() }
-    }
-
-    var showMonthOverview by rememberSaveable { mutableStateOf(false) }
-    if (showMonthOverview) {
-        val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
-        val selectedMonth =
-            mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-        MonthOverviewDialog(viewModel, selectedMonth) { showMonthOverview = false }
     }
 
     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
@@ -845,10 +846,18 @@ private fun SharedTransitionScope.Menu(
         HorizontalDivider()
 
         AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.month_overview)) },
+            text = { Text(stringResource(R.string.agenda)) },
             onClick = {
                 closeMenu()
-                showMonthOverview = true
+                navigateToAgenda()
+            },
+        )
+
+        AppDropdownMenuItem(
+            text = { Text(stringResource(R.string.year_view)) },
+            onClick = {
+                closeMenu()
+                viewModel.openYearView()
             },
         )
 
@@ -861,14 +870,6 @@ private fun SharedTransitionScope.Menu(
                 val selectedMonth =
                     mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
                 context.openHtmlInBrowser(prayTimeHtmlReport(context.resources, selectedMonth))
-            },
-        )
-
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.year_view)) },
-            onClick = {
-                closeMenu()
-                viewModel.openYearView()
             },
         )
 
