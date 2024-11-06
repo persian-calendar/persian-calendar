@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar.dialogs
+package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -31,9 +31,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
-import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import kotlinx.coroutines.delay

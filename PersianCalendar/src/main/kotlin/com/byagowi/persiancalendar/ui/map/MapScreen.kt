@@ -81,8 +81,8 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.calendar.dialogs.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
