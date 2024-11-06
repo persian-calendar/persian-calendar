@@ -134,7 +134,7 @@ fun SharedTransitionScope.AgendaScreen(
                                     bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
                                     start = 24.dp,
                                 )
-                            ) { MoreButton { baseJdn = jdn } }
+                            ) { MoreButton(stringResource(R.string.more)) { baseJdn = jdn } }
                             val events = eventsCache(jdn)
                             Column {
                                 val date = jdn.inCalendar(mainCalendar)

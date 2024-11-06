@@ -136,7 +136,7 @@ fun SharedTransitionScope.EventsTab(
                 )
             ) { DayEvents(events) { viewModel.refreshCalendar() } }
             if (events.isNotEmpty()) Box(Modifier.padding(top = 4.dp)) {
-                MoreButton(navigateToAgenda)
+                MoreButton(stringResource(R.string.agenda), navigateToAgenda)
             }
         }
 
@@ -174,7 +174,7 @@ fun SharedTransitionScope.EventsTab(
 }
 
 @Composable
-fun MoreButton(action: () -> Unit) {
+fun MoreButton(contentDescription: String, action: () -> Unit) {
     Box(
         Modifier
             .clip(MaterialTheme.shapes.large)
@@ -186,7 +186,7 @@ fun MoreButton(action: () -> Unit) {
             Icons.Default.MoreHoriz,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.size(24.dp),
-            contentDescription = stringResource(R.string.agenda),
+            contentDescription = contentDescription,
         )
     }
 }
