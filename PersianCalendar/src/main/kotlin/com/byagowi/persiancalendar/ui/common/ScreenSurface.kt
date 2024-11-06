@@ -28,6 +28,7 @@ fun SharedTransitionScope.ScreenSurface(
     animatedContentScope: AnimatedContentScope,
     shape: Shape = materialCornerExtraLargeTop(),
     // Remove when https://issuetracker.google.com/issues/376709945 is resolved
+    // Actually this can be simplified into a simple Box inside a Surface when that resolved
     workaroundClipBug: Boolean = false,
     content: @Composable () -> Unit,
 ) {
