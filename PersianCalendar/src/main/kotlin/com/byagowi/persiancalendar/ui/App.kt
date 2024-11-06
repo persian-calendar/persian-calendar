@@ -8,7 +8,6 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -502,7 +501,7 @@ private fun BoxScope.DrawerDarkModeToggle() {
             .align(Alignment.BottomEnd)
             .clickable(
                 indication = ripple(bounded = false),
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = null,
                 onClick = {
                     coroutineScope.launch { delay(THREE_SECONDS_AND_HALF_IN_MILLIS) }
                     val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme

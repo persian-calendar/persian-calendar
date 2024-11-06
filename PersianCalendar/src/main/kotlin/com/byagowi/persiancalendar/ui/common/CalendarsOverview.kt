@@ -330,7 +330,7 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .clickable(
-                            interactionSource = remember { MutableInteractionSource() },
+                            interactionSource = null,
                             indication = ripple(bounded = false),
                         ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
                         .semantics { this.contentDescription = formatDate(date) },

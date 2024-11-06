@@ -210,7 +210,7 @@ fun NumberPicker(
                             .then(
                                 if (disableEdit) Modifier else Modifier.clickable(
                                     indication = null,
-                                    interactionSource = remember { MutableInteractionSource() },
+                                    interactionSource = null,
                                     onClickLabel = onClickLabel,
                                 ) { showTextEdit = true },
                             ),

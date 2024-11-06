@@ -681,7 +681,7 @@ private fun SharedTransitionScope.Toolbar(
             Column(
                 Modifier.clickable(
                     indication = ripple(bounded = false),
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = null,
                     onClickLabel = stringResource(
                         if (isYearView && !yearViewIsInYearSelection) R.string.select_year
                         else R.string.year_view
