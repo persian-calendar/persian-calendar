@@ -225,11 +225,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 composable(agendaRoute) {
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
-                    if (previousRoute == calendarRoute) {
-                        val viewModel = viewModel<CalendarViewModel>(previousEntry)
-                        AgendaScreen(viewModel, animatedContentScope = this) {
-                            navigateUp(agendaRoute)
-                        }
+                    val viewModel = if (previousRoute == calendarRoute) {
+                        viewModel<CalendarViewModel>(previousEntry)
+                    } else viewModel<CalendarViewModel>()
+                    AgendaScreen(viewModel, animatedContentScope = this) {
+                        navigateUp(agendaRoute)
                     }
                 }
 
