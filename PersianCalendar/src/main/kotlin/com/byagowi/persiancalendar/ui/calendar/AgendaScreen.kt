@@ -80,7 +80,7 @@ fun SharedTransitionScope.AgendaScreen(
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
-                val primaryColor = MaterialTheme.colorScheme.primary
+                val circleColor = MaterialTheme.colorScheme.surfaceVariant
                 val radius = with(LocalDensity.current) { 16.dp.toPx() }
                 val context = LocalContext.current
                 val language by language.collectAsState()
@@ -117,13 +117,13 @@ fun SharedTransitionScope.AgendaScreen(
                                     Box(
                                         Modifier
                                             .width(32.dp)
-                                            .drawBehind { drawCircle(primaryColor, radius) },
+                                            .drawBehind { drawCircle(circleColor, radius) },
                                         contentAlignment = Alignment.Center
                                     ) {
                                         Text(
                                             text = formatNumber(date.dayOfMonth),
                                             style = MaterialTheme.typography.headlineSmall,
-                                            color = MaterialTheme.colorScheme.onPrimary
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                                         )
                                     }
                                     Spacer(Modifier.width(8.dp))
