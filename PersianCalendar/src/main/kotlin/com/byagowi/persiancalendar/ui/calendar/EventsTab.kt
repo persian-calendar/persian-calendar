@@ -158,7 +158,7 @@ fun EventsTab(
         }
 
         // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(modifier = Modifier.height(76.dp))
+        Spacer(modifier = Modifier.height(46.dp))
     }
 }
 
