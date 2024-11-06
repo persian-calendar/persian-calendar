@@ -85,6 +85,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -149,6 +150,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
+import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calendar
@@ -271,7 +273,11 @@ fun SharedTransitionScope.CalendarScreen(
                         }
                     } else {
                         val scrollState = rememberScrollState()
-                        Column(modifier = Modifier.verticalScroll(scrollState)) {
+                        Column(
+                            modifier = Modifier
+                                .clip(materialCornerExtraLargeTop())
+                                .verticalScroll(scrollState),
+                        ) {
                             val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
                             Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
                                 val height = calendarHeight - 4.dp
