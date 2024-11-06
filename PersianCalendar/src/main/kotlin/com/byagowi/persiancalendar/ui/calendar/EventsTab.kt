@@ -124,7 +124,9 @@ fun EventsTab(
                 )
             }
             DayEvents(events) { viewModel.refreshCalendar() }
-            if (events.isNotEmpty()) MoreButton(navigateToAgenda)
+            if (events.isNotEmpty()) Box(Modifier.padding(top = 4.dp)) {
+                MoreButton(navigateToAgenda)
+            }
         }
 
         val language by language.collectAsState()
@@ -164,7 +166,6 @@ fun EventsTab(
 fun MoreButton(action: () -> Unit) {
     Box(
         Modifier
-            .padding(top = 2.dp)
             .clip(MaterialTheme.shapes.large)
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable { action() }
