@@ -60,7 +60,7 @@ fun SharedTransitionScope.AgendaScreen(
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
-                    val jdn by remember {
+                    val jdn by remember(baseJdn) {
                         derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
                     }
                     val date = jdn.inCalendar(mainCalendar)
