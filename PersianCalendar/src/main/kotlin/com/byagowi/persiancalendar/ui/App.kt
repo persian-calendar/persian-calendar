@@ -98,6 +98,7 @@ import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
+import com.byagowi.persiancalendar.ui.calendar.AgendaScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
@@ -178,7 +179,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     navController.currentDestination?.route == route
 
                 fun navigateUp(currentRoute: String) {
-                    // If we aren't in the screen that this was supposed to be called, just ignore, happens while transition
+                    // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
                     if (!isCurrentDestination(currentRoute)) return
                     // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
                     if (!navController.popBackStack()) finish()
@@ -207,6 +208,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 )
                             }
                         },
+                        navigateToAgenda = { navController.navigate(agendaRoute) },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = { daysOffset ->
                             navController.graph.findNode(astronomyRoute)?.let { destination ->
@@ -219,6 +221,17 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         animatedContentScope = this,
                         isCurrentDestination = isCurrentDestination(calendarRoute),
                     )
+                }
+
+                composable(agendaRoute) {
+                    val previousEntry = navController.previousBackStackEntry
+                    val previousRoute = previousEntry?.destination?.route
+                    if (previousRoute == calendarRoute) {
+                        val viewModel = viewModel<CalendarViewModel>(previousEntry)
+                        AgendaScreen(viewModel, animatedContentScope = this) {
+                            navigateUp(agendaRoute)
+                        }
+                    }
                 }
 
                 composable(converterRoute) {
@@ -399,6 +412,7 @@ private const val compassRoute = "compass"
 private const val levelRoute = "level"
 private const val mapRoute = "map"
 private const val converterRoute = "converter"
+private const val agendaRoute = "agenda"
 private const val astronomyRoute = "astronomy"
 private const val settingsRoute = "settings"
 private const val aboutRoute = "about"

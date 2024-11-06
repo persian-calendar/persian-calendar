@@ -8,20 +8,27 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -45,8 +52,10 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
@@ -60,11 +69,16 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewModel) {
+fun SharedTransitionScope.EventsTab(
+    navigateToHolidaysSettings: () -> Unit,
+    navigateToAgenda: () -> Unit,
+    viewModel: CalendarViewModel,
+    animatedContentScope: AnimatedContentScope,
+) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
-        val context = LocalContext.current
 
         val jdn by viewModel.selectedDay.collectAsState()
         val refreshToken by viewModel.refreshToken.collectAsState()
@@ -105,30 +119,92 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
             }
         }
 
-        val events = remember(jdn, refreshToken) {
-            (eventsRepository?.getEvents(jdn, context.readDayDeviceEvents(jdn))
-                ?: emptyList()).sortedBy {
-                when {
-                    it.isHoliday -> 0L
-                    it !is CalendarEvent.DeviceCalendarEvent -> 1L
-                    else -> it.start.time
-                }
+        Column {
+            val events = readEvents(jdn, refreshToken)
+            Spacer(Modifier.height(16.dp))
+            AnimatedVisibility(events.isEmpty()) {
+                Text(
+                    stringResource(R.string.no_event),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp),
+                    textAlign = TextAlign.Center,
+                )
             }
+            DayEvents(animatedContentScope, events, true) {
+                viewModel.refreshCalendar()
+            }
+            if (events.isNotEmpty()) MoreButton(navigateToAgenda)
         }
-        Spacer(Modifier.height(16.dp))
-        AnimatedVisibility(events.isEmpty()) {
-            Text(
-                stringResource(R.string.no_event),
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                textAlign = TextAlign.Center,
+
+        val language by language.collectAsState()
+        val context = LocalContext.current
+        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
+            Spacer(modifier = Modifier.height(16.dp))
+            EncourageActionLayout(
+                header = stringResource(R.string.warn_if_events_not_set),
+                discardAction = {
+                    context.preferences.edit {
+                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
+                    }
+                },
+                acceptAction = navigateToHolidaysSettings,
+            )
+        } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
+            var showDialog by remember { mutableStateOf(false) }
+            if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
+
+            Spacer(modifier = Modifier.height(16.dp))
+            EncourageActionLayout(
+                header = stringResource(R.string.ask_for_calendar_permission),
+                discardAction = {
+                    context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
+                },
+                acceptButton = stringResource(R.string.yes),
+                acceptAction = { showDialog = true },
             )
         }
 
-        val launcher =
-            rememberLauncherForActivityResult(ViewEventContract()) { viewModel.refreshCalendar() }
+        // Events addition fab placeholder, so events can be scrolled after it
+        Spacer(modifier = Modifier.height(76.dp))
+    }
+}
 
+@Composable
+fun MoreButton(action: () -> Unit) {
+    Box(
+        Modifier
+            .padding(start = 24.dp, top = 2.dp)
+            .clip(MaterialTheme.shapes.large)
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .clickable { action() }
+            .padding(horizontal = 12.dp, vertical = 1.dp),
+    ) {
+        Icon(
+            Icons.Default.MoreHoriz,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(24.dp),
+            contentDescription = stringResource(R.string.more),
+        )
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+fun SharedTransitionScope.DayEvents(
+    animatedContentScope: AnimatedContentScope,
+    events: List<CalendarEvent<*>>,
+    isCurrent: Boolean,
+    refreshCalendar: () -> Unit,
+) {
+    Column(
+        if (isCurrent) Modifier.sharedElement(
+            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+            animatedVisibilityScope = animatedContentScope,
+        ) else Modifier
+    ) {
+        val context = LocalContext.current
+        val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
         events.forEach { event ->
             val backgroundColor by animateColor(
                 when {
@@ -209,37 +285,23 @@ fun EventsTab(navigateToHolidaysSettings: () -> Unit, viewModel: CalendarViewMod
                 }
             }
         }
-
-        val language by language.collectAsState()
-        if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
-            Spacer(modifier = Modifier.height(16.dp))
-            EncourageActionLayout(
-                header = stringResource(R.string.warn_if_events_not_set),
-                discardAction = {
-                    context.preferences.edit {
-                        putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
-                    }
-                },
-                acceptAction = navigateToHolidaysSettings,
-            )
-        } else if (PREF_SHOW_DEVICE_CALENDAR_EVENTS !in context.preferences) {
-            var showDialog by remember { mutableStateOf(false) }
-            if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            EncourageActionLayout(
-                header = stringResource(R.string.ask_for_calendar_permission),
-                discardAction = {
-                    context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) }
-                },
-                acceptButton = stringResource(R.string.yes),
-                acceptAction = { showDialog = true },
-            )
-        }
-
-        // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(modifier = Modifier.height(76.dp))
     }
+}
+
+@Composable
+fun readEvents(jdn: Jdn, refreshToken: Int): List<CalendarEvent<*>> {
+    val context = LocalContext.current
+    val events = remember(jdn, refreshToken) {
+        (eventsRepository?.getEvents(jdn, context.readDayDeviceEvents(jdn))
+            ?: emptyList()).sortedBy {
+            when {
+                it.isHoliday -> 0L
+                it !is CalendarEvent.DeviceCalendarEvent -> 1L
+                else -> it.start.time
+            }
+        }
+    }
+    return events
 }
 
 private class ViewEventContract : ActivityResultContract<Long, Void?>() {

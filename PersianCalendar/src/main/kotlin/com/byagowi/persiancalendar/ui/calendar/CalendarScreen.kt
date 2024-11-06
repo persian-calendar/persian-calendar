@@ -171,6 +171,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 @Composable
 fun SharedTransitionScope.CalendarScreen(
     openDrawer: () -> Unit,
+    navigateToAgenda: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -238,6 +239,7 @@ fun SharedTransitionScope.CalendarScreen(
 
                 val detailsTabs = detailsTabs(
                     viewModel = viewModel,
+                    navigateToAgenda = navigateToAgenda,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -353,6 +355,7 @@ private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) 
 @Composable
 private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
+    navigateToAgenda: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -363,7 +366,14 @@ private fun SharedTransitionScope.detailsTabs(
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     return listOfNotNull(
         R.string.calendar to { interactionSource -> CalendarsTab(viewModel, interactionSource) },
-        R.string.events to { EventsTab(navigateToHolidaysSettings, viewModel) },
+        R.string.events to {
+            EventsTab(
+                navigateToHolidaysSettings = navigateToHolidaysSettings,
+                navigateToAgenda = navigateToAgenda,
+                viewModel = viewModel,
+                animatedContentScope = animatedContentScope
+            )
+        },
         // The optional third tab
         if (enableTimesTab(context) && !removeThirdTab) R.string.times to { interactionSource ->
             TimesTab(
