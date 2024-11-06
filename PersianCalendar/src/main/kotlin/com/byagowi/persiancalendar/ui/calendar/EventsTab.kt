@@ -8,7 +8,10 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -49,6 +52,7 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
@@ -65,11 +69,13 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun EventsTab(
+fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: () -> Unit,
     navigateToAgenda: () -> Unit,
     viewModel: CalendarViewModel,
+    animatedContentScope: AnimatedContentScope,
 ) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
@@ -123,7 +129,12 @@ fun EventsTab(
                     textAlign = TextAlign.Center,
                 )
             }
-            DayEvents(events) { viewModel.refreshCalendar() }
+            Column(
+                Modifier.sharedBounds(
+                    rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+                    animatedVisibilityScope = animatedContentScope,
+                )
+            ) { DayEvents(events) { viewModel.refreshCalendar() } }
             if (events.isNotEmpty()) Box(Modifier.padding(top = 4.dp)) {
                 MoreButton(navigateToAgenda)
             }

@@ -371,6 +371,7 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 navigateToAgenda = navigateToAgenda,
                 viewModel = viewModel,
+                animatedContentScope = animatedContentScope,
             )
         },
         // The optional third tab

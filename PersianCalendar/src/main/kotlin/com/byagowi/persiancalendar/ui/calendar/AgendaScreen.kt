@@ -37,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
@@ -146,7 +147,12 @@ fun SharedTransitionScope.AgendaScreen(
                                         )
                                     }
                                     Spacer(Modifier.width(8.dp))
-                                    Column { DayEvents(events) {} }
+                                    Column(
+                                        if (baseJdn == jdn) Modifier.sharedBounds(
+                                            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+                                            animatedVisibilityScope = animatedContentScope,
+                                        ) else Modifier,
+                                    ) { DayEvents(events) {} }
                                 }
                             }
                         }
