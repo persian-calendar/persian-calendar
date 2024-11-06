@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
@@ -91,32 +92,49 @@ fun SharedTransitionScope.AgendaScreen(
                             val jdn = indexToJdn(baseJdn, index)
                             if (index == 0 || index == ITEMS_COUNT - 1) return@items Box(
                                 Modifier.padding(
-                                    top = if (index == 0) 24.dp else 8.dp,
+                                    top = if (index == 0) 24.dp else 16.dp,
                                     bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
                                     start = 24.dp,
                                 )
                             ) { MoreButton { baseJdn = jdn } }
                             val events = eventsCache(jdn)
-                            Column(
-                                if (events.isEmpty()) Modifier else Modifier.padding(
-                                    top = if (index == ITEMS_COUNT / 2) 24.dp else 0.dp,
-                                    bottom = if (index == ITEMS_COUNT / 2 - 1) 0.dp else 24.dp,
-                                )
-                            ) {
+                            Column {
                                 val date = jdn.inCalendar(mainCalendar)
+                                if (date.dayOfMonth == 1) {
+                                    Text(
+                                        language.my.format(
+                                            date.monthName, formatNumber(date.year)
+                                        ),
+                                        fontSize = 32.sp,
+                                        modifier = Modifier
+                                            .padding(
+                                                start = 24.dp, end = 24.dp, top = 24.dp
+                                            )
+                                            .clickable(
+                                                interactionSource = null,
+                                                indication = ripple(bounded = false),
+                                            ) {
+                                                calendarViewModel.changeSelectedMonthOffsetCommand(
+                                                    mainCalendar.getMonthsDistance(
+                                                        Jdn.today(), Jdn(date),
+                                                    )
+                                                )
+                                                navigateUp()
+                                            },
+                                    )
+                                }
                                 if (events.isNotEmpty()) Row(
-                                    Modifier
-                                        .padding(start = 24.dp, end = 24.dp)
-                                        .clickable(
-                                            interactionSource = null,
-                                            indication = ripple(bounded = false),
-                                        ) {
-                                            bringDate(calendarViewModel, jdn, context)
-                                            navigateUp()
-                                        },
+                                    Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
                                 ) {
                                     Box(
                                         Modifier
+                                            .clickable(
+                                                interactionSource = null,
+                                                indication = ripple(bounded = false),
+                                            ) {
+                                                bringDate(calendarViewModel, jdn, context)
+                                                navigateUp()
+                                            }
                                             .width(32.dp)
                                             .drawBehind { drawCircle(circleColor, radius) },
                                         contentAlignment = Alignment.Center
@@ -129,32 +147,6 @@ fun SharedTransitionScope.AgendaScreen(
                                     }
                                     Spacer(Modifier.width(8.dp))
                                     Column { DayEvents(events) {} }
-                                }
-                                if (mainCalendar.getMonthLength(
-                                        date.year, date.month
-                                    ) == date.dayOfMonth
-                                ) {
-                                    val nextMonth =
-                                        mainCalendar.getMonthStartFromMonthsDistance(jdn, 1)
-                                    Text(
-                                        language.my.format(
-                                            nextMonth.monthName, formatNumber(nextMonth.year)
-                                        ),
-                                        style = MaterialTheme.typography.headlineMedium,
-                                        modifier = Modifier
-                                            .padding(horizontal = 24.dp)
-                                            .clickable(
-                                                interactionSource = null,
-                                                indication = ripple(bounded = false),
-                                            ) {
-                                                calendarViewModel.changeSelectedMonthOffsetCommand(
-                                                    mainCalendar.getMonthsDistance(
-                                                        Jdn.today(), Jdn(nextMonth),
-                                                    )
-                                                )
-                                                navigateUp()
-                                            },
-                                    )
                                 }
                             }
                         }
