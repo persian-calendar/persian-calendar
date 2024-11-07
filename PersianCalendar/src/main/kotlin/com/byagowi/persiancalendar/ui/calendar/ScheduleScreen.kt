@@ -65,7 +65,7 @@ import com.byagowi.persiancalendar.utils.monthName
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.AgendaScreen(
+fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,

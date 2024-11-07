@@ -78,7 +78,7 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 @Composable
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: () -> Unit,
-    navigateToAgenda: () -> Unit,
+    navigateToSchedule: () -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
 ) {
@@ -141,7 +141,7 @@ fun SharedTransitionScope.EventsTab(
                 )
             ) { DayEvents(events) { viewModel.refreshCalendar() } }
             if (events.isNotEmpty()) Box(Modifier.padding(top = 4.dp)) {
-                MoreButton(stringResource(R.string.agenda), navigateToAgenda)
+                MoreButton(stringResource(R.string.schedule), navigateToSchedule)
             }
         }
 

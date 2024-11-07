@@ -172,7 +172,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 @Composable
 fun SharedTransitionScope.CalendarScreen(
     openDrawer: () -> Unit,
-    navigateToAgenda: () -> Unit,
+    navigateToSchedule: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -202,7 +202,7 @@ fun SharedTransitionScope.CalendarScreen(
                     animatedContentScope = animatedContentScope,
                     addEvent = addEvent,
                     openDrawer = openDrawer,
-                    navigateToAgenda = navigateToAgenda,
+                    navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
                 )
             }
@@ -246,7 +246,7 @@ fun SharedTransitionScope.CalendarScreen(
 
                 val detailsTabs = detailsTabs(
                     viewModel = viewModel,
-                    navigateToAgenda = navigateToAgenda,
+                    navigateToSchedule = navigateToSchedule,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -366,7 +366,7 @@ private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) 
 @Composable
 private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
-    navigateToAgenda: () -> Unit,
+    navigateToSchedule: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -380,7 +380,7 @@ private fun SharedTransitionScope.detailsTabs(
         R.string.events to {
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
-                navigateToAgenda = navigateToAgenda,
+                navigateToSchedule = navigateToSchedule,
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
             )
@@ -650,7 +650,7 @@ private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
     addEvent: () -> Unit,
     openDrawer: () -> Unit,
-    navigateToAgenda: () -> Unit,
+    navigateToSchedule: () -> Unit,
     viewModel: CalendarViewModel,
 ) {
     val context = LocalContext.current
@@ -781,7 +781,7 @@ private fun SharedTransitionScope.Toolbar(
                 ) { viewModel.openSearch() }
             }
             AnimatedVisibility(!isYearView) {
-                Menu(animatedContentScope, addEvent, navigateToAgenda, viewModel)
+                Menu(animatedContentScope, addEvent, navigateToSchedule, viewModel)
             }
         },
     )
@@ -792,7 +792,7 @@ private fun SharedTransitionScope.Toolbar(
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     addEvent: () -> Unit,
-    navigateToAgenda: () -> Unit,
+    navigateToSchedule: () -> Unit,
     viewModel: CalendarViewModel,
 ) {
     val context = LocalContext.current
@@ -846,10 +846,10 @@ private fun SharedTransitionScope.Menu(
         HorizontalDivider()
 
         AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.agenda)) },
+            text = { Text(stringResource(R.string.schedule)) },
             onClick = {
                 closeMenu()
-                navigateToAgenda()
+                navigateToSchedule()
             },
         )
 

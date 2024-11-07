@@ -97,9 +97,9 @@ import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
-import com.byagowi.persiancalendar.ui.calendar.AgendaScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
@@ -207,7 +207,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 )
                             }
                         },
-                        navigateToAgenda = { navController.navigate(agendaRoute) },
+                        navigateToSchedule = { navController.navigate(scheduleRoute) },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = { daysOffset ->
                             navController.graph.findNode(astronomyRoute)?.let { destination ->
@@ -222,14 +222,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     )
                 }
 
-                composable(agendaRoute) {
+                composable(scheduleRoute) {
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
                     val viewModel = if (previousRoute == calendarRoute) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
-                    AgendaScreen(viewModel, animatedContentScope = this) {
-                        navigateUp(agendaRoute)
+                    ScheduleScreen(viewModel, animatedContentScope = this) {
+                        navigateUp(scheduleRoute)
                     }
                 }
 
@@ -411,7 +411,7 @@ private const val compassRoute = "compass"
 private const val levelRoute = "level"
 private const val mapRoute = "map"
 private const val converterRoute = "converter"
-private const val agendaRoute = "agenda"
+private const val scheduleRoute = "schedule"
 private const val astronomyRoute = "astronomy"
 private const val settingsRoute = "settings"
 private const val aboutRoute = "about"
