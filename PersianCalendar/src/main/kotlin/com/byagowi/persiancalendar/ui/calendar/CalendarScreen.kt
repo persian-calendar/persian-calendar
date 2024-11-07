@@ -291,20 +291,16 @@ fun SharedTransitionScope.CalendarScreen(
                                 .pointerInput(Unit) {
                                     awaitEachGesture {
                                         val down = awaitFirstDown(requireUnconsumed = false)
-                                        // Check the pointer isn't already been lifted as that means the gesture is canceled
-                                        if (currentEvent.changes.fastFirstOrNull { it.id == down.id }?.pressed == true) {
-                                            val event = awaitPointerEvent()
-                                            val dragEvent =
-                                                event.changes.fastFirstOrNull { it.id == down.id }
-                                            if (dragEvent?.isConsumed == false) {
-                                                verticalDrag(dragEvent.id) {
-                                                    val dragAmount = it.positionChange().y
-                                                    if (dragAmount < -40.dp.toPx()) {
-                                                        if (scrollState.value == scrollState.maxValue) navigateToSchedule()
-                                                    } else if (dragAmount > 40.dp.toPx()) {
-                                                        if (scrollState.value == 0) viewModel.openYearView()
-                                                    }
-                                                }
+                                        val event = awaitPointerEvent()
+                                        val dragEvent =
+                                            event.changes.fastFirstOrNull { it.id == down.id }
+                                        // TODO: Consider drag slop
+                                        if (dragEvent != null) verticalDrag(dragEvent.id) {
+                                            val dragAmount = it.positionChange().y
+                                            if (dragAmount < -40.dp.toPx()) {
+                                                if (scrollState.value == scrollState.maxValue) navigateToSchedule()
+                                            } else if (dragAmount > 40.dp.toPx()) {
+                                                if (scrollState.value == 0) viewModel.openYearView()
                                             }
                                         }
                                     }
