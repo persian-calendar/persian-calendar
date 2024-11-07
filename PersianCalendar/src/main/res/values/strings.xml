@@ -402,8 +402,10 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="holidays_in_red">Holidays in red color</string>
     <string name="add_widget">Add widget</string>
     <string name="vibration">Vibration</string>
-    <!-- it's a noun, a part of the app that enlists upcoming events -->
+    <!-- It's a noun, a part of the app that enlists upcoming events -->
     <string name="schedule">Schedule</string>
+    <!-- It's a verb, used for functionality of the app that can give a report -->
+    <string name="print">Print</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

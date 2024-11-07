@@ -20,10 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Print
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,6 +35,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,8 +57,11 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
@@ -94,6 +95,7 @@ fun SharedTransitionScope.ScheduleScreen(
         }
     }
     val coroutineScope = rememberCoroutineScope()
+    val language by language.collectAsState()
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -123,28 +125,63 @@ fun SharedTransitionScope.ScheduleScreen(
                             } else state.scrollToItem(ITEMS_COUNT / 2)
                         }
                     }
-                    val context = LocalContext.current
-                    fun showPrintReport(isLongClick: Boolean) {
-                        val date = firstVisibleItemJdn.inCalendar(mainCalendar)
-                        runCatching {
-                            context.openHtmlInBrowser(
-                                monthHtmlReport(context, date, wholeYear = isLongClick)
-                            )
-                        }.onFailure(logException)
+
+                    var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
+                    if (showDatePickerDialog) {
+                        DatePickerDialog(firstVisibleItemJdn, {
+                            showDatePickerDialog = false
+                        }) { jdn ->
+                            if (abs(firstVisibleItemJdn - jdn) > 30 || abs(baseJdn - jdn) > 30) {
+                                baseJdn = jdn
+                            }
+                            coroutineScope.launch {
+                                state.animateScrollToItem(jdn - baseJdn + ITEMS_COUNT / 2)
+                            }
+                        }
                     }
-                    Box(
-                        @OptIn(ExperimentalFoundationApi::class) Modifier
-                            .minimumInteractiveComponentSize()
-                            .size(24.dp)
-                            .combinedClickable(
-                                indication = ripple(bounded = false),
-                                interactionSource = null,
-                                onClick = { showPrintReport(isLongClick = false) },
-                                onClickLabel = "Print",
-                                onLongClick = { showPrintReport(isLongClick = true) },
-                                onLongClickLabel = stringResource(R.string.year),
-                            ),
-                    ) { Icon(Icons.Default.Print, contentDescription = "Print") }
+
+                    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                        AppDropdownMenuItem(
+                            text = { Text(stringResource(R.string.select_date)) },
+                            onClick = {
+                                showDatePickerDialog = true
+                                closeMenu()
+                            },
+                        )
+
+                        val context = LocalContext.current
+                        fun showPrintReport(isWholeYear: Boolean = false) {
+                            closeMenu()
+                            val date = firstVisibleItemJdn.inCalendar(mainCalendar)
+                            runCatching {
+                                context.openHtmlInBrowser(
+                                    monthHtmlReport(context, date, wholeYear = isWholeYear)
+                                )
+                            }.onFailure(logException)
+                        }
+                        AppDropdownMenuItem(
+                            text = { Text(stringResource(R.string.print)) },
+                            onClick = { showPrintReport() },
+                            trailingIcon = {
+                                Box(
+                                    @OptIn(ExperimentalFoundationApi::class) Modifier
+                                        .minimumInteractiveComponentSize()
+                                        .size(24.dp)
+                                        .combinedClickable(
+                                            indication = ripple(bounded = false),
+                                            interactionSource = null,
+                                            onClick = { showPrintReport() },
+                                            onClickLabel = stringResource(R.string.print),
+                                            onLongClick = { showPrintReport(true) },
+                                            onLongClickLabel = language.inParentheses.format(
+                                                stringResource(R.string.print),
+                                                stringResource(R.string.year)
+                                            ),
+                                        ),
+                                ) { /*Icon(Icons.Default.Print, contentDescription = "Print")*/ }
+                            },
+                        )
+                    }
                 },
             )
         },
@@ -152,7 +189,6 @@ fun SharedTransitionScope.ScheduleScreen(
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
                 val context = LocalContext.current
-                val language by language.collectAsState()
                 val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
                 val isVazirEnabled by isVazirEnabled.collectAsState()
                 val circleTextStyle =

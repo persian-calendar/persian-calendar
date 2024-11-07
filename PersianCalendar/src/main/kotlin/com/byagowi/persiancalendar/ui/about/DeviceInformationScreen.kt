@@ -122,7 +122,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 }
                 AppIconButton(
                     icon = Icons.Default.Print,
-                    title = "Print",
+                    title = stringResource(R.string.print),
                 ) { context.openHtmlInBrowser(generateHtmlReport(items)) }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) AppIconButton(
                     icon = Icons.Default.SportsEsports,
