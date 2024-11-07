@@ -31,6 +31,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -79,11 +80,20 @@ fun SharedTransitionScope.ScheduleScreen(
 ) {
     var baseJdn by remember { mutableStateOf(calendarViewModel.selectedDay.value) }
     val state = rememberLazyListState(ITEMS_COUNT / 2, 0)
+    val today by calendarViewModel.today.collectAsState()
+    var isFirstTime by remember { mutableStateOf(true) }
     val firstVisibleItemJdn by remember {
         derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
     }
+    LaunchedEffect(today) {
+        if (isFirstTime) {
+            isFirstTime = false
+        } else if (firstVisibleItemJdn == today - 1) {
+            baseJdn = today
+            state.animateScrollToItem(ITEMS_COUNT / 2)
+        }
+    }
     val coroutineScope = rememberCoroutineScope()
-    val today by calendarViewModel.today.collectAsState()
 
     Scaffold(
         containerColor = Color.Transparent,
