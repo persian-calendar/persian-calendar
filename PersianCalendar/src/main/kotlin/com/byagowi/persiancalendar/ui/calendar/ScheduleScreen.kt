@@ -278,6 +278,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                                         Jdn.today(), Jdn(nextMonth),
                                                     )
                                                 )
+                                                calendarViewModel.openYearView()
                                                 navigateUp()
                                             },
                                     )
