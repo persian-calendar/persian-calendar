@@ -28,10 +28,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -169,7 +170,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                 modifier = Modifier
                     .size(70.dp)
                     .align(Alignment.Center)
-                    .semantics { this.hideFromAccessibility() }
+                    .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
                     .sharedBounds(
                         rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
                         animatedVisibilityScope = animatedContentScope,

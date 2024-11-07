@@ -34,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
@@ -41,7 +42,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -140,7 +141,9 @@ fun NumberPicker(
                     text = label(range.first + indexOfElement - 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics { this.hideFromAccessibility() }
+                        .semantics {
+                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                        }
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
@@ -217,7 +220,9 @@ fun NumberPicker(
                     text = label(range.first + indexOfElement + 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics { this.hideFromAccessibility() }
+                        .semantics {
+                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
+                        }
                         .offset(y = halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
