@@ -34,7 +34,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,6 +64,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import kotlinx.coroutines.launch
+import kotlin.math.abs
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -74,10 +74,11 @@ fun SharedTransitionScope.ScheduleScreen(
     navigateUp: () -> Unit,
 ) {
     var baseJdn by remember { mutableStateOf(calendarViewModel.selectedDay.value) }
-    val state = key(baseJdn) { rememberLazyListState(ITEMS_COUNT / 2, 0) }
-    val firstVisibleItemJdn by remember(baseJdn) {
+    val state = rememberLazyListState(ITEMS_COUNT / 2, 0)
+    val firstVisibleItemJdn by remember {
         derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
     }
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -98,11 +99,14 @@ fun SharedTransitionScope.ScheduleScreen(
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
                     val today by calendarViewModel.today.collectAsState()
-                    val coroutineScope = rememberCoroutineScope()
                     TodayActionButton(today != firstVisibleItemJdn) {
-                        if (baseJdn == today) coroutineScope.launch {
-                            state.animateScrollToItem(ITEMS_COUNT / 2)
-                        } else baseJdn = today
+                        baseJdn = today
+                        coroutineScope.launch {
+                            val destination = ITEMS_COUNT / 2
+                            if (abs(state.firstVisibleItemIndex - destination) < 10)
+                                state.animateScrollToItem(ITEMS_COUNT / 2)
+                            else state.scrollToItem(ITEMS_COUNT / 2)
+                        }
                     }
                     val context = LocalContext.current
                     fun showPrintReport(isLongClick: Boolean) {
@@ -150,7 +154,12 @@ fun SharedTransitionScope.ScheduleScreen(
                                     bottom = if (index == 0) 8.dp else paddingValues.calculateBottomPadding(),
                                     start = 24.dp,
                                 )
-                            ) { MoreButton(stringResource(R.string.more)) { baseJdn = jdn } }
+                            ) {
+                                MoreButton(stringResource(R.string.more)) {
+                                    baseJdn = jdn
+                                    coroutineScope.launch { state.scrollToItem(ITEMS_COUNT / 2) }
+                                }
+                            }
                             val events = eventsCache(jdn)
                             Column {
                                 val date = jdn.inCalendar(mainCalendar)
