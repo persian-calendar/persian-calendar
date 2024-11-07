@@ -360,7 +360,7 @@ fun bringDate(
     ).show()
 }
 
-private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) -> Unit>
+private typealias DetailsTab = Pair<Int, @Composable (Dp, MutableInteractionSource) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -376,17 +376,18 @@ private fun SharedTransitionScope.detailsTabs(
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     return listOfNotNull(
-        R.string.calendar to { interactionSource -> CalendarsTab(viewModel, interactionSource) },
-        R.string.events to {
+        R.string.calendar to { _, interactionSource -> CalendarsTab(viewModel, interactionSource) },
+        R.string.events to { minHeight, _ ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 navigateToSchedule = navigateToSchedule,
                 viewModel = viewModel,
+                minHeight = minHeight,
                 animatedContentScope = animatedContentScope,
             )
         },
         // The optional third tab
-        if (enableTimesTab(context) && !removeThirdTab) R.string.times to { interactionSource ->
+        if (enableTimesTab(context) && !removeThirdTab) R.string.times to { _, interactionSource ->
             TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -459,7 +460,7 @@ private fun Details(
                         else Modifier
                     )
             ) {
-                tabs[index].second(interactionSource)
+                tabs[index].second(contentMinHeight * 3 / 4, interactionSource)
                 Spacer(Modifier.height(bottomPadding))
             }
         }

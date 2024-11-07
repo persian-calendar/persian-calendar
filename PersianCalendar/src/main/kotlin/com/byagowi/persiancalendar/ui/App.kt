@@ -207,7 +207,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 )
                             }
                         },
-                        navigateToSchedule = { navController.navigate(scheduleRoute) },
+                        navigateToSchedule = {
+                            if (isCurrentDestination(calendarRoute)) {
+                                navController.navigate(scheduleRoute)
+                            }
+                        },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = { daysOffset ->
                             navController.graph.findNode(astronomyRoute)?.let { destination ->

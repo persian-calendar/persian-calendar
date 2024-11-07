@@ -14,29 +14,23 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material.icons.filled.MoreHoriz
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
-import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -47,11 +41,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -79,10 +75,15 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: () -> Unit,
     navigateToSchedule: () -> Unit,
+    minHeight: Dp,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
 ) {
-    Column(Modifier.fillMaxWidth()) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = minHeight)
+    ) {
         Spacer(Modifier.height(8.dp))
 
         val jdn by viewModel.selectedDay.collectAsState()
@@ -124,8 +125,8 @@ fun SharedTransitionScope.EventsTab(
             }
         }
 
+        val events = readEvents(jdn, refreshToken)
         Column(Modifier.padding(horizontal = 24.dp)) {
-            val events = readEvents(jdn, refreshToken)
             Spacer(Modifier.height(16.dp))
             AnimatedVisibility(events.isEmpty()) {
                 Text(
@@ -140,9 +141,6 @@ fun SharedTransitionScope.EventsTab(
                     animatedVisibilityScope = animatedContentScope,
                 )
             ) { DayEvents(events) { viewModel.refreshCalendar() } }
-            if (events.isNotEmpty()) Box(Modifier.padding(top = 4.dp)) {
-                MoreButton(stringResource(R.string.schedule), navigateToSchedule)
-            }
         }
 
         val language by language.collectAsState()
@@ -173,31 +171,24 @@ fun SharedTransitionScope.EventsTab(
             )
         }
 
-        // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(modifier = Modifier.height(46.dp))
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MoreButton(title: String, action: () -> Unit) {
-    TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = { PlainTooltip { Text(title) } },
-        state = rememberTooltipState()
-    ) {
         Box(
             Modifier
-                .clip(MaterialTheme.shapes.large)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-                .clickable { action() }
-                .padding(horizontal = 12.dp, vertical = 1.dp),
+                // Events addition fab placeholder, so events can be scrolled after it
+                .height(76.dp)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                Icons.Default.MoreHoriz,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp),
-                contentDescription = title,
+            Box(
+                Modifier
+                    .fillMaxWidth(.25f)
+                    .height(76.dp)
+                    .pointerInput(Unit) {
+                        detectVerticalDragGestures { _, dragAmount ->
+                            if (dragAmount < -100) {
+                                navigateToSchedule()
+                            }
+                        }
+                    },
             )
         }
     }
