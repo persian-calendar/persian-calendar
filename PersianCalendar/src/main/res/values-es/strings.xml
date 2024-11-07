@@ -422,4 +422,6 @@
     <string name="holidays_in_red">Vacaciones en rojo</string>
     <string name="add_widget">Añadir un widget</string>
     <string name="vibration">Vibración</string>
+    <string name="schedule">Horario</string>
+    <string name="print">Imprimir</string>
 </resources>
