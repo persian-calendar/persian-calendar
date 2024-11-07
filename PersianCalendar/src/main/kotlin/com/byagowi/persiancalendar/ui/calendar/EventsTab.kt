@@ -15,6 +15,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -70,6 +72,7 @@ import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 @Composable
 fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: () -> Unit,
+    navigateToSchedule: () -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
 ) {
@@ -161,8 +164,27 @@ fun SharedTransitionScope.EventsTab(
             )
         }
 
-        // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(modifier = Modifier.height(76.dp))
+        Box(
+            Modifier
+                // Events addition fab placeholder, so events can be scrolled after it
+                .height(76.dp)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Box(
+                Modifier
+                    .fillMaxWidth(1 / 3f)
+                    .height(76.dp)
+                    .pointerInput(Unit) {
+                        detectVerticalDragGestures { _, dragAmount ->
+                            when {
+                                dragAmount < -40.dp.toPx() -> navigateToSchedule()
+                                dragAmount > 40.dp.toPx() -> viewModel.openYearView()
+                            }
+                        }
+                    },
+            )
+        }
     }
 }
 

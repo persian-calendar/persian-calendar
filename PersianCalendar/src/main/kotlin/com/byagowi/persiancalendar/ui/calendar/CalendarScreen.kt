@@ -246,6 +246,7 @@ fun SharedTransitionScope.CalendarScreen(
 
                 val detailsTabs = detailsTabs(
                     viewModel = viewModel,
+                    navigateToSchedule = navigateToSchedule,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -365,6 +366,7 @@ private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) 
 @Composable
 private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
+    navigateToSchedule: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -379,6 +381,7 @@ private fun SharedTransitionScope.detailsTabs(
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
+                navigateToSchedule = navigateToSchedule,
                 animatedContentScope = animatedContentScope,
             )
         },
