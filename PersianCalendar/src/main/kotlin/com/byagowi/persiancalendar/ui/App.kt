@@ -55,7 +55,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -68,7 +67,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -472,7 +471,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
             .height(196.dp)
             .clip(MaterialTheme.shapes.extraLarge)
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() },
+            .semantics { this.hideFromAccessibility() },
         pageSpacing = 8.dp,
     ) {
         val season = Season.entries[it % 4]
@@ -500,7 +499,7 @@ private fun BoxScope.DrawerDarkModeToggle() {
         label = "dark mode toggle",
         targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
         modifier = Modifier
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+            .semantics { this.hideFromAccessibility() }
             .padding(32.dp)
             .align(Alignment.BottomEnd)
             .clickable(
