@@ -404,7 +404,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="vibration">Vibration</string>
     <!-- It's a noun, a part of the app that enlists upcoming events -->
     <string name="schedule">Schedule</string>
-    <!-- It's a verb, used for functionality of the app that can give a report -->
+    <!-- Used in a menu item in schedule part of the app to create a print report from events -->
     <string name="print">Print</string>
 
     <plurals name="shift_work_record_title">
