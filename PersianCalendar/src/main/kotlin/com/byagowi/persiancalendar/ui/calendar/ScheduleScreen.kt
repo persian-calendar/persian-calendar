@@ -230,8 +230,9 @@ fun SharedTransitionScope.ScheduleScreen(
                                             .size(36.dp)
                                             .background(
                                                 when {
-                                                    jdn < today -> MaterialTheme.colorScheme
-                                                        .primaryContainer.copy(alpha = .6f)
+                                                    jdn < today -> MaterialTheme.colorScheme.primaryContainer.copy(
+                                                        alpha = .6f
+                                                    )
 
                                                     jdn > today -> MaterialTheme.colorScheme.primaryContainer
                                                     else -> MaterialTheme.colorScheme.primary
