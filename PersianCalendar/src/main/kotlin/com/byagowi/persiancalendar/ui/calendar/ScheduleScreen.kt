@@ -43,6 +43,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
@@ -50,6 +52,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -60,6 +63,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
@@ -79,6 +83,7 @@ fun SharedTransitionScope.ScheduleScreen(
         derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
     }
     val coroutineScope = rememberCoroutineScope()
+    val today by calendarViewModel.today.collectAsState()
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -86,7 +91,8 @@ fun SharedTransitionScope.ScheduleScreen(
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     val date = firstVisibleItemJdn.inCalendar(mainCalendar)
-                    Column {
+                    val screenTitle = stringResource(R.string.schedule)
+                    Column(Modifier.semantics { this.contentDescription = screenTitle }) {
                         Crossfade(date.monthName, label = "title") { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
                         }
@@ -98,14 +104,13 @@ fun SharedTransitionScope.ScheduleScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
-                    val today by calendarViewModel.today.collectAsState()
                     TodayActionButton(today != firstVisibleItemJdn) {
                         baseJdn = today
                         coroutineScope.launch {
                             val destination = ITEMS_COUNT / 2
-                            if (abs(state.firstVisibleItemIndex - destination) < 30)
+                            if (abs(state.firstVisibleItemIndex - destination) < 30) {
                                 state.animateScrollToItem(ITEMS_COUNT / 2)
-                            else state.scrollToItem(ITEMS_COUNT / 2)
+                            } else state.scrollToItem(ITEMS_COUNT / 2)
                         }
                     }
                     val context = LocalContext.current
@@ -187,6 +192,10 @@ fun SharedTransitionScope.ScheduleScreen(
                                             text = formatNumber(date.dayOfMonth),
                                             style = circleTextStyle,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.semantics {
+                                                if (isTalkBackEnabled) this.contentDescription =
+                                                    formatDate(date, forceNonNumerical = true)
+                                            },
                                         )
                                     }
                                     Spacer(Modifier.width(8.dp))
