@@ -28,6 +28,9 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -89,6 +92,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.AwaitPointerEventScope
+import androidx.compose.ui.input.pointer.PointerId
+import androidx.compose.ui.input.pointer.PointerInputChange
+import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -98,6 +107,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastFirstOrNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -246,7 +256,6 @@ fun SharedTransitionScope.CalendarScreen(
 
                 val detailsTabs = detailsTabs(
                     viewModel = viewModel,
-                    navigateToSchedule = navigateToSchedule,
                     navigateToHolidaysSettings = navigateToHolidaysSettings,
                     navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -281,7 +290,28 @@ fun SharedTransitionScope.CalendarScreen(
                         Column(
                             modifier = Modifier
                                 .clip(materialCornerExtraLargeTop())
-                                .verticalScroll(scrollState),
+                                .verticalScroll(scrollState)
+                                .pointerInput(Unit) {
+                                    awaitEachGesture {
+                                        val down = awaitFirstDown(requireUnconsumed = false)
+                                        val drag =
+                                            awaitPointerSlopOrCancellation(pointerId = down.id)
+                                        if (drag != null) {
+                                            verticalDrag(drag.id) {
+                                                val dragAmount = it.positionChange().y
+                                                when {
+                                                    dragAmount < -80.dp.toPx() -> {
+                                                        if (scrollState.value == scrollState.maxValue) navigateToSchedule()
+                                                    }
+
+                                                    dragAmount > 80.dp.toPx() -> {
+                                                        if (scrollState.value == 0) viewModel.openYearView()
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
                         ) {
                             val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
                             Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
@@ -319,6 +349,29 @@ fun SharedTransitionScope.CalendarScreen(
                 ) == SnackbarResult.ActionPerformed
             ) context.bringMarketPage()
         }
+    }
+}
+
+// This is simplified from https://android.googlesource.com/platform/frameworks/support/+/dcaa116/compose/material/material/src/commonMain/kotlin/androidx/compose/material/DragGestureDetectorCopy.kt
+private suspend inline fun AwaitPointerEventScope.awaitPointerSlopOrCancellation(
+    pointerId: PointerId,
+): PointerInputChange? {
+    if (currentEvent.changes.fastFirstOrNull { it.id == pointerId }?.pressed != true) {
+        return null // The pointer has already been lifted, so the gesture is canceled
+    }
+
+    var pointer: PointerId = pointerId
+    while (true) {
+        val event = awaitPointerEvent()
+        val dragEvent = event.changes.fastFirstOrNull { it.id == pointer } ?: return null
+        if (dragEvent.isConsumed) {
+            return null
+        } else if (dragEvent.changedToUpIgnoreConsumed()) {
+            val otherDown = event.changes.fastFirstOrNull { it.pressed }
+            // This is the last "up"
+            if (otherDown == null) return null
+            else pointer = otherDown.id
+        } else return dragEvent
     }
 }
 
@@ -366,7 +419,6 @@ private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) 
 @Composable
 private fun SharedTransitionScope.detailsTabs(
     viewModel: CalendarViewModel,
-    navigateToSchedule: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -381,7 +433,6 @@ private fun SharedTransitionScope.detailsTabs(
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
-                navigateToSchedule = navigateToSchedule,
                 animatedContentScope = animatedContentScope,
             )
         },
