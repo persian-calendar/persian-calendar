@@ -103,7 +103,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         baseJdn = today
                         coroutineScope.launch {
                             val destination = ITEMS_COUNT / 2
-                            if (abs(state.firstVisibleItemIndex - destination) < 10)
+                            if (abs(state.firstVisibleItemIndex - destination) < 30)
                                 state.animateScrollToItem(ITEMS_COUNT / 2)
                             else state.scrollToItem(ITEMS_COUNT / 2)
                         }
