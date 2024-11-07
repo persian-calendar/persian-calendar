@@ -92,10 +92,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.AwaitPointerEventScope
-import androidx.compose.ui.input.pointer.PointerId
-import androidx.compose.ui.input.pointer.PointerInputChange
-import androidx.compose.ui.input.pointer.changedToUpIgnoreConsumed
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalConfiguration
@@ -291,20 +287,21 @@ fun SharedTransitionScope.CalendarScreen(
                             modifier = Modifier
                                 .clip(materialCornerExtraLargeTop())
                                 .verticalScroll(scrollState)
+                                // This is simplified from https://android.googlesource.com/platform/frameworks/support/+/dcaa116/compose/material/material/src/commonMain/kotlin/androidx/compose/material/DragGestureDetectorCopy.kt
                                 .pointerInput(Unit) {
                                     awaitEachGesture {
                                         val down = awaitFirstDown(requireUnconsumed = false)
-                                        val drag =
-                                            awaitPointerSlopOrCancellation(pointerId = down.id)
-                                        if (drag != null) {
-                                            verticalDrag(drag.id) {
-                                                val dragAmount = it.positionChange().y
-                                                when {
-                                                    dragAmount < -80.dp.toPx() -> {
+                                        // Check the pointer isn't already been lifted as that means the gesture is canceled
+                                        if (currentEvent.changes.fastFirstOrNull { it.id == down.id }?.pressed == true) {
+                                            val event = awaitPointerEvent()
+                                            val dragEvent =
+                                                event.changes.fastFirstOrNull { it.id == down.id }
+                                            if (dragEvent?.isConsumed == false) {
+                                                verticalDrag(dragEvent.id) {
+                                                    val dragAmount = it.positionChange().y
+                                                    if (dragAmount < -40.dp.toPx()) {
                                                         if (scrollState.value == scrollState.maxValue) navigateToSchedule()
-                                                    }
-
-                                                    dragAmount > 80.dp.toPx() -> {
+                                                    } else if (dragAmount > 40.dp.toPx()) {
                                                         if (scrollState.value == 0) viewModel.openYearView()
                                                     }
                                                 }
@@ -349,29 +346,6 @@ fun SharedTransitionScope.CalendarScreen(
                 ) == SnackbarResult.ActionPerformed
             ) context.bringMarketPage()
         }
-    }
-}
-
-// This is simplified from https://android.googlesource.com/platform/frameworks/support/+/dcaa116/compose/material/material/src/commonMain/kotlin/androidx/compose/material/DragGestureDetectorCopy.kt
-private suspend inline fun AwaitPointerEventScope.awaitPointerSlopOrCancellation(
-    pointerId: PointerId,
-): PointerInputChange? {
-    if (currentEvent.changes.fastFirstOrNull { it.id == pointerId }?.pressed != true) {
-        return null // The pointer has already been lifted, so the gesture is canceled
-    }
-
-    var pointer: PointerId = pointerId
-    while (true) {
-        val event = awaitPointerEvent()
-        val dragEvent = event.changes.fastFirstOrNull { it.id == pointer } ?: return null
-        if (dragEvent.isConsumed) {
-            return null
-        } else if (dragEvent.changedToUpIgnoreConsumed()) {
-            val otherDown = event.changes.fastFirstOrNull { it.pressed }
-            // This is the last "up"
-            if (otherDown == null) return null
-            else pointer = otherDown.id
-        } else return dragEvent
     }
 }
 
