@@ -37,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,11 +58,13 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -72,15 +75,16 @@ fun SharedTransitionScope.ScheduleScreen(
 ) {
     var baseJdn by remember { mutableStateOf(calendarViewModel.selectedDay.value) }
     val state = key(baseJdn) { rememberLazyListState(ITEMS_COUNT / 2, 0) }
+    val firstVisibleItemJdn by remember(baseJdn) {
+        derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
-                    val jdn by remember(baseJdn) {
-                        derivedStateOf { indexToJdn(baseJdn, state.firstVisibleItemIndex) }
-                    }
-                    val date = jdn.inCalendar(mainCalendar)
+                    val date = firstVisibleItemJdn.inCalendar(mainCalendar)
                     Column {
                         Crossfade(date.monthName, label = "title") { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
@@ -93,10 +97,16 @@ fun SharedTransitionScope.ScheduleScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
+                    val today by calendarViewModel.today.collectAsState()
+                    val coroutineScope = rememberCoroutineScope()
+                    TodayActionButton(today != firstVisibleItemJdn) {
+                        if (baseJdn == today) coroutineScope.launch {
+                            state.animateScrollToItem(ITEMS_COUNT / 2)
+                        } else baseJdn = today
+                    }
                     val context = LocalContext.current
                     fun showPrintReport(isLongClick: Boolean) {
-                        val jdn = indexToJdn(baseJdn, state.firstVisibleItemIndex)
-                        val date = jdn.inCalendar(mainCalendar)
+                        val date = firstVisibleItemJdn.inCalendar(mainCalendar)
                         runCatching {
                             context.openHtmlInBrowser(
                                 monthHtmlReport(context, date, wholeYear = isLongClick)
