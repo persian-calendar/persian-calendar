@@ -229,7 +229,13 @@ fun SharedTransitionScope.ScheduleScreen(
                                             }
                                             .size(36.dp)
                                             .background(
-                                                MaterialTheme.colorScheme.surfaceVariant,
+                                                when {
+                                                    jdn < today -> MaterialTheme.colorScheme
+                                                        .primaryContainer.copy(alpha = .6f)
+
+                                                    jdn > today -> MaterialTheme.colorScheme.primaryContainer
+                                                    else -> MaterialTheme.colorScheme.primary
+                                                },
                                                 CircleShape,
                                             ),
                                         contentAlignment = Alignment.Center,
@@ -237,7 +243,11 @@ fun SharedTransitionScope.ScheduleScreen(
                                         Text(
                                             text = formatNumber(date.dayOfMonth),
                                             style = circleTextStyle,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            color = when {
+                                                jdn < today -> MaterialTheme.colorScheme.onPrimaryContainer
+                                                jdn > today -> MaterialTheme.colorScheme.onPrimaryContainer
+                                                else -> MaterialTheme.colorScheme.onPrimary
+                                            },
                                             modifier = Modifier.semantics {
                                                 if (isTalkBackEnabled) this.contentDescription =
                                                     formatDate(date, forceNonNumerical = true)
