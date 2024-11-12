@@ -103,7 +103,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastFirstOrNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -290,11 +289,9 @@ fun SharedTransitionScope.CalendarScreen(
                                 // This is simplified from https://android.googlesource.com/platform/frameworks/support/+/dcaa116/compose/material/material/src/commonMain/kotlin/androidx/compose/material/DragGestureDetectorCopy.kt
                                 .pointerInput(Unit) {
                                     awaitEachGesture {
-                                        val down = awaitFirstDown(requireUnconsumed = false)
+                                        val id = awaitFirstDown(requireUnconsumed = false).id
                                         val event = awaitPointerEvent()
-                                        val dragEvent =
-                                            event.changes.fastFirstOrNull { it.id == down.id }
-                                        if (dragEvent != null) verticalDrag(dragEvent.id) {
+                                        if (event.changes.any { it.id == id }) verticalDrag(id) {
                                             val dragAmount = it.positionChange().y
                                             if (dragAmount < -40.dp.toPx()) {
                                                 if (scrollState.value == scrollState.maxValue) navigateToSchedule()
