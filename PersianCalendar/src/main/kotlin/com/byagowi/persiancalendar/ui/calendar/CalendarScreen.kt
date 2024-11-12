@@ -294,7 +294,6 @@ fun SharedTransitionScope.CalendarScreen(
                                         val event = awaitPointerEvent()
                                         val dragEvent =
                                             event.changes.fastFirstOrNull { it.id == down.id }
-                                        // TODO: Consider drag slop
                                         if (dragEvent != null) verticalDrag(dragEvent.id) {
                                             val dragAmount = it.positionChange().y
                                             if (dragAmount < -40.dp.toPx()) {
