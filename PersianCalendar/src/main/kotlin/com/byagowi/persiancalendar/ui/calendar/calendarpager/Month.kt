@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.LocalContentColor
@@ -157,7 +156,6 @@ fun Month(
                 )
             }
         }
-        val daysInteractionSource = remember { MutableInteractionSource() }
         repeat(monthLength) { dayOffset ->
             if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingWeekDay) % 7 == 0)) {
                 Box(contentAlignment = Alignment.Center) {
@@ -180,7 +178,7 @@ fun Month(
                 modifier = Modifier
                     .combinedClickable(
                         indication = null,
-                        interactionSource = daysInteractionSource,
+                        interactionSource = null,
                         onClick = { viewModel.changeSelectedDay(day) },
                         onClickLabel = stringResource(R.string.select_day),
                         onLongClickLabel = stringResource(R.string.add_event),
