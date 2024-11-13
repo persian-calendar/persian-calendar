@@ -38,21 +38,21 @@ import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
+import com.byagowi.persiancalendar.PREF_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
-import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.athanSoundName
+import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
-import com.byagowi.persiancalendar.global.notificationAthanVibration
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -184,14 +184,6 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             },
         )
     }
-    AnimatedVisibility(isLocationSet && notificationAthan) {
-        SettingsSwitch(
-            PREF_NOTIFICATION_ATHAN_VIBRATION,
-            notificationAthanVibration.collectAsState().value,
-            stringResource(R.string.vibration),
-            language.tryTranslateAthanNotificationVibrationSummary()
-        )
-    }
     AnimatedVisibility(isLocationSet && !notificationAthan) {
         SettingsSwitch(
             PREF_ASCENDING_ATHAN_VOLUME,
@@ -204,6 +196,14 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
         SettingsClickable(
             stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary)
         ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }
+    }
+    AnimatedVisibility(isLocationSet) {
+        SettingsSwitch(
+            PREF_ATHAN_VIBRATION,
+            athanVibration.collectAsState().value,
+            stringResource(R.string.vibration),
+            language.tryTranslateAthanVibrationSummary()
+        )
     }
     AnimatedVisibility(isLocationSet) {
         var midnightSummary by remember {

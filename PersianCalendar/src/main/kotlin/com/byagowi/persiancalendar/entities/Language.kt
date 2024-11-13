@@ -358,7 +358,7 @@ enum class Language(val code: String, val nativeName: String) {
         else -> null
     }
 
-    fun tryTranslateAthanNotificationVibrationSummary() = when (this) {
+    fun tryTranslateAthanVibrationSummary() = when (this) {
         EN_US, EN_IR -> "Enable vibrator in the beginning of athan"
         FA, FA_AF -> "فعال‌سازی لرزش در ابتدای پخش اذان"
         else -> null

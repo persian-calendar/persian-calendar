@@ -6,7 +6,7 @@ import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
-import com.byagowi.persiancalendar.DEFAULT_ATHAN_NOTIFICATION_VIBRATION
+import com.byagowi.persiancalendar.DEFAULT_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
+import com.byagowi.persiancalendar.PREF_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -51,7 +52,6 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
-import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
@@ -148,8 +148,8 @@ val isNotifyDate: StateFlow<Boolean> get() = isNotifyDate_
 
 private val notificationAthan_ = MutableStateFlow(isNotifyDate.value)
 val notificationAthan: StateFlow<Boolean> get() = notificationAthan_
-private val notificationAthanVibration_ = MutableStateFlow(DEFAULT_ATHAN_NOTIFICATION_VIBRATION)
-val notificationAthanVibration: StateFlow<Boolean> get() = notificationAthanVibration_
+private val athanVibration_ = MutableStateFlow(DEFAULT_ATHAN_VIBRATION)
+val athanVibration: StateFlow<Boolean> get() = athanVibration_
 private val ascendingAthan_ = MutableStateFlow(DEFAULT_ASCENDING_ATHAN_VOLUME)
 val ascendingAthan: StateFlow<Boolean> get() = ascendingAthan_
 
@@ -402,11 +402,7 @@ fun updateStoredPreference(context: Context) {
     isWidgetClock = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan_.value = preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
-    notificationAthanVibration_.value =
-        preferences.getBoolean(
-            PREF_NOTIFICATION_ATHAN_VIBRATION,
-            DEFAULT_ATHAN_NOTIFICATION_VIBRATION
-        )
+    athanVibration_.value = preferences.getBoolean(PREF_ATHAN_VIBRATION, DEFAULT_ATHAN_VIBRATION)
     ascendingAthan_.value =
         preferences.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
     isCenterAlignWidgets = preferences.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)

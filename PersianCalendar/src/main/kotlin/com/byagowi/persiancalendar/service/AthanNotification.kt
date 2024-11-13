@@ -25,11 +25,11 @@ import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
-import com.byagowi.persiancalendar.global.notificationAthanVibration
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION
@@ -53,17 +53,19 @@ class AthanNotification : Service() {
         intent ?: return START_STICKY
         applyAppLanguage(this)
 
-        val notificationId =
-            if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000)
-            else (if (notificationAthan.value) 3000 else 3001)
+        val athanVibration = athanVibration.value
+        val notificationAthan = notificationAthan.value
+        val notificationId = if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000) else {
+            if (notificationAthan) 3000 else 3001
+        }
         val notificationChannelId = notificationId.toString()
 
         val notificationManager = getSystemService<NotificationManager>()
 
         val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
-        if (!notificationAthan.value) startAthanActivity(this, athanKey)
+        if (!notificationAthan) startAthanActivity(this, athanKey)
 
-        val soundUri = if (notificationAthan.value) getAthanUri(this) else null
+        val soundUri = if (notificationAthan) getAthanUri(this) else null
         if (soundUri != null) runCatching {
             // ensure custom reminder sounds play well
             grantUriPermission(
@@ -74,15 +76,14 @@ class AthanNotification : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 notificationChannelId, getString(R.string.athan),
-                if (notificationAthan.value) NotificationManager.IMPORTANCE_HIGH
+                if (notificationAthan) NotificationManager.IMPORTANCE_HIGH
                 else NotificationManager.IMPORTANCE_DEFAULT
             ).also {
                 it.description = getString(R.string.athan)
                 it.enableLights(true)
                 it.lightColor = Color.GREEN
-                val vibration = notificationAthanVibration.value
-                if (vibration) it.vibrationPattern = LongArray(2) { 500 }
-                it.enableVibration(vibration)
+                if (athanVibration) it.vibrationPattern = LongArray(2) { 500 }
+                it.enableVibration(athanVibration)
                 it.setBypassDnd(athanKey == FAJR_KEY)
                 if (soundUri == null) it.setSound(null, null) else it.setSound(
                     soundUri, AudioAttributes.Builder()
@@ -139,7 +140,7 @@ class AthanNotification : Service() {
                 )
             )
 
-        if (notificationAthan.value) {
+        if (notificationAthan) {
             notificationBuilder.priority = NotificationCompat.PRIORITY_MAX
             notificationBuilder.setSound(soundUri, AudioManager.STREAM_NOTIFICATION)
             notificationBuilder.setCategory(NotificationCompat.CATEGORY_ALARM)
@@ -166,7 +167,7 @@ class AthanNotification : Service() {
 
         var stop = {}
         val preventPhoneCallIntervention =
-            if (notificationAthan.value) PreventPhoneCallIntervention(stop) else null
+            if (notificationAthan) PreventPhoneCallIntervention(stop) else null
         stop = {
             preventPhoneCallIntervention?.let { it.stopListener() }
             notificationManager?.cancel(notificationId)
