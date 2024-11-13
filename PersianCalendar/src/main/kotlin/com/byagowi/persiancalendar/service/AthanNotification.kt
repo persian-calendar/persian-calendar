@@ -56,7 +56,8 @@ class AthanNotification : Service() {
         val athanVibration = athanVibration.value
         val notificationAthan = notificationAthan.value
         val notificationId = if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000) else {
-            if (notificationAthan) 3000 else 3001
+            if (notificationAthan) (if (athanVibration) 3000 else 3002)
+            else (if (athanVibration) 3001 else 3003)
         }
         val notificationChannelId = notificationId.toString()
 
