@@ -6,7 +6,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -100,8 +99,7 @@ fun SharedTransitionScope.TimesTab(
             Times(isExpanded, prayTimes)
             Spacer(Modifier.height(8.dp))
             Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
+                Modifier.align(Alignment.CenterHorizontally),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (cityName != null) Text(
