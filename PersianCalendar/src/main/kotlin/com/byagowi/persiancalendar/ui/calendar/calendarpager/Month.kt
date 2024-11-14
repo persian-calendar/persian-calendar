@@ -4,6 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -58,7 +59,7 @@ import kotlin.math.min
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Month(
+fun BoxScope.Month(
     viewModel: CalendarViewModel,
     offset: Int,
     width: Dp,
