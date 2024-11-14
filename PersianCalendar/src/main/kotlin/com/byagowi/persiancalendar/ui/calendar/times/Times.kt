@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -32,7 +33,10 @@ import io.github.persiancalendar.praytimes.PrayTimes
 @Composable
 fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
     FlowRow(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            // Make tab's footer moves smooth
+            .animateContentSize(),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
