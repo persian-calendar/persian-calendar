@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.getFromStringId
@@ -43,7 +44,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
         getTimeNames().forEach { timeId ->
             AnimatedVisibility(
                 visible = isExpanded || when (timeId) {
-                    com.byagowi.persiancalendar.R.string.fajr, com.byagowi.persiancalendar.R.string.dhuhr, com.byagowi.persiancalendar.R.string.maghrib -> true
+                    R.string.fajr, R.string.dhuhr, R.string.maghrib -> true
                     else -> false
                 },
                 enter = fadeIn() + expandHorizontally(),
@@ -56,7 +57,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes) {
                 ) { state ->
                     Column(
                         modifier = Modifier.defaultMinSize(
-                            minWidth = dimensionResource(com.byagowi.persiancalendar.R.dimen.time_item_size),
+                            minWidth = dimensionResource(R.dimen.time_item_size),
                         ),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
