@@ -11,10 +11,10 @@ import androidx.compose.ui.draw.alpha
 
 @Composable
 fun FadingHorizontalDivider(visible: Boolean) {
-    val topDividerAlpha by animateFloatAsState(
+    val alpha by animateFloatAsState(
         if (visible) 1f else 0f,
-        label = "fading horizontal divider",
+        label = "alpha",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     )
-    HorizontalDivider(Modifier.alpha(topDividerAlpha))
+    HorizontalDivider(Modifier.alpha(alpha))
 }
