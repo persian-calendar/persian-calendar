@@ -115,9 +115,8 @@ fun SharedTransitionScope.TimesTab(
                 tint = MaterialTheme.colorScheme.primary
             )
         }
-
+        Spacer(Modifier.height(8.dp))
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
-            modifier = Modifier.padding(top = 16.dp),
             header = "مایلید برنامه اذان پخش کند؟",
             discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
             acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
