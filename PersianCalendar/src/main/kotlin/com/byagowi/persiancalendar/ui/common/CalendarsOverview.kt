@@ -287,7 +287,7 @@ fun CalendarsOverview(
         Spacer(Modifier.height(8.dp))
         ExpandArrow(
             modifier = Modifier
-                .size(16.dp)
+                .size(20.dp)
                 .align(Alignment.CenterHorizontally),
             isExpanded = isExpanded,
             tint = MaterialTheme.colorScheme.primary,

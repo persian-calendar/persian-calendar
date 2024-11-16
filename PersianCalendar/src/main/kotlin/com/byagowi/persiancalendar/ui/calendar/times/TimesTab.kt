@@ -109,7 +109,11 @@ fun SharedTransitionScope.TimesTab(
             if (cityName != null) Text(
                 cityName ?: "", style = MaterialTheme.typography.bodyLarge
             )
-            ExpandArrow(isExpanded = isExpanded, tint = MaterialTheme.colorScheme.primary)
+            ExpandArrow(
+                modifier = Modifier.size(20.dp),
+                isExpanded = isExpanded,
+                tint = MaterialTheme.colorScheme.primary
+            )
         }
 
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
