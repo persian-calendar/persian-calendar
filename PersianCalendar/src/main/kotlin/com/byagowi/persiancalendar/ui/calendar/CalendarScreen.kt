@@ -145,9 +145,9 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
-import com.byagowi.persiancalendar.ui.common.FadingHorizontalDivider
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollHorizontalDivider
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
@@ -482,7 +482,7 @@ private fun Details(
                 val tabModifier = if (scrollableTabs) {
                     // Currently scrollable tabs only happen on landscape layout
                     val scrollState = rememberScrollState()
-                    FadingHorizontalDivider(scrollState.value != 0)
+                    ScrollHorizontalDivider(scrollState, top = true)
                     Modifier.verticalScroll(scrollState)
                 } else Modifier
                 Column(tabModifier.defaultMinSize(minHeight = tabMinHeight)) {

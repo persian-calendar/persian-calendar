@@ -49,8 +49,7 @@ fun AppDialog(
                             )
                         ) { title() }
                     }
-
-                    FadingHorizontalDivider(scrollState.value != 0)
+                    ScrollHorizontalDivider(scrollState, top = true)
                 }
 
                 CompositionLocalProvider(
@@ -65,11 +64,7 @@ fun AppDialog(
                 }
 
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
-                    FadingHorizontalDivider(
-                        scrollState.value != scrollState.maxValue &&
-                                // Happens when page isn't initialized
-                                scrollState.maxValue != Int.MAX_VALUE
-                    )
+                    ScrollHorizontalDivider(scrollState, top = false)
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
