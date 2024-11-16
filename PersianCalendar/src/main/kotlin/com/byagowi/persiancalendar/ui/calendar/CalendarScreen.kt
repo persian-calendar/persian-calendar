@@ -145,6 +145,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.FadingHorizontalDivider
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
@@ -477,16 +478,17 @@ private fun Details(
         HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
             /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
             val tabMinHeight = contentMinHeight - 48.dp - bottomPadding
-            Column(
-                Modifier
-                    .defaultMinSize(minHeight = tabMinHeight)
-                    .then(
-                        if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
-                        else Modifier
-                    )
-            ) {
-                tabs[index].second(interactionSource, tabMinHeight)
-                Spacer(Modifier.height(bottomPadding))
+            Box {
+                val tabModifier = if (scrollableTabs) {
+                    // Currently scrollable tabs only happen on landscape layout
+                    val scrollState = rememberScrollState()
+                    FadingHorizontalDivider(scrollState.value != 0)
+                    Modifier.verticalScroll(scrollState)
+                } else Modifier
+                Column(tabModifier.defaultMinSize(minHeight = tabMinHeight)) {
+                    tabs[index].second(interactionSource, tabMinHeight)
+                    Spacer(Modifier.height(bottomPadding))
+                }
             }
         }
     }
