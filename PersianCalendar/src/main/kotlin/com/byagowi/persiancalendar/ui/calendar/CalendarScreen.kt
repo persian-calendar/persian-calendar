@@ -379,7 +379,7 @@ fun bringDate(
     ).show()
 }
 
-private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource) -> Unit>
+private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource, Dp) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -394,8 +394,14 @@ private fun SharedTransitionScope.detailsTabs(
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     return listOfNotNull(
-        R.string.calendar to { interactionSource -> CalendarsTab(viewModel, interactionSource) },
-        R.string.events to {
+        R.string.calendar to { interactionSource, minHeight ->
+            CalendarsTab(
+                viewModel = viewModel,
+                interactionSource = interactionSource,
+                minHeight = minHeight
+            )
+        },
+        R.string.events to { _, _ ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
@@ -403,7 +409,7 @@ private fun SharedTransitionScope.detailsTabs(
             )
         },
         // The optional third tab
-        if (enableTimesTab(context) && !removeThirdTab) R.string.times to { interactionSource ->
+        if (enableTimesTab(context) && !removeThirdTab) R.string.times to { interactionSource, minHeight ->
             TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -411,6 +417,7 @@ private fun SharedTransitionScope.detailsTabs(
                 animatedContentScope = animatedContentScope,
                 viewModel = viewModel,
                 interactionSource = interactionSource,
+                minHeight = minHeight,
             )
         } else null,
     )
@@ -468,15 +475,17 @@ private fun Details(
         }
 
         HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
+            /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
+            val tabMinHeight = contentMinHeight - 48.dp - bottomPadding
             Column(
                 Modifier
-                    .defaultMinSize(minHeight = contentMinHeight * 3 / 4)
+                    .defaultMinSize(minHeight = tabMinHeight)
                     .then(
                         if (scrollableTabs) Modifier.verticalScroll(rememberScrollState())
                         else Modifier
                     )
             ) {
-                tabs[index].second(interactionSource)
+                tabs[index].second(interactionSource, tabMinHeight)
                 Spacer(Modifier.height(bottomPadding))
             }
         }
@@ -487,20 +496,29 @@ private fun Details(
 private fun CalendarsTab(
     viewModel: CalendarViewModel,
     interactionSource: MutableInteractionSource,
+    minHeight: Dp,
 ) {
-    Column {
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    Column(
+        Modifier
+            .defaultMinSize(minHeight = minHeight)
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClickLabel = stringResource(R.string.more),
+                onClick = { isExpanded = !isExpanded },
+            )
+    ) {
         val jdn by viewModel.selectedDay.collectAsState()
         val today by viewModel.today.collectAsState()
-        var isExpanded by rememberSaveable { mutableStateOf(false) }
+        Spacer(Modifier.height(24.dp))
         CalendarsOverview(
             jdn = jdn,
             today = today,
             selectedCalendar = mainCalendar,
             shownCalendars = enabledCalendars,
             isExpanded = isExpanded,
-            interactionSource = interactionSource,
-            topPadding = 24.dp,
-        ) { isExpanded = !isExpanded }
+        )
 
         val context = LocalContext.current
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(

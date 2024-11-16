@@ -12,8 +12,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.indication
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -37,7 +35,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -424,7 +421,6 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
     val jdn by viewModel.selectedDate.collectAsState()
     val today by viewModel.today.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
-    val interactionSource = remember { MutableInteractionSource() }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
@@ -436,20 +432,18 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
         Column(Modifier.weight(1f)) {
             AnimatedVisibility(
                 visible = screenMode == ConverterScreenMode.CONVERTER,
-                modifier = Modifier.indication(
-                    interactionSource = interactionSource,
-                    indication = ripple(bounded = false),
-                )
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.extraLarge)
+                    .clickable { isExpanded = !isExpanded }
+                    .padding(top = 12.dp, bottom = 12.dp)
             ) {
                 CalendarsOverview(
                     jdn = jdn,
                     today = today,
                     selectedCalendar = calendar,
                     shownCalendars = enabledCalendars - calendar,
-                    isExpanded = isExpanded,
-                    interactionSource = interactionSource,
-                    topPadding = 12.dp,
-                ) { isExpanded = !isExpanded }
+                    isExpanded = isExpanded
+                )
             }
             AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart(viewModel, jdn, calendar)
@@ -467,21 +461,17 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                 onClick = { isExpanded = !isExpanded },
                 modifier = Modifier.padding(top = 16.dp),
             ) {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .indication(interactionSource = interactionSource, indication = ripple()),
-                ) {
+                Spacer(Modifier.height(20.dp))
+                Box(Modifier.fillMaxWidth()) {
                     CalendarsOverview(
                         jdn = jdn,
                         today = today,
                         selectedCalendar = calendar,
                         shownCalendars = enabledCalendars - calendar,
                         isExpanded = isExpanded,
-                        interactionSource = interactionSource,
-                        topPadding = 20.dp,
-                    ) { isExpanded = !isExpanded }
+                    )
                 }
+                Spacer(Modifier.height(12.dp))
             }
         }
         AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {

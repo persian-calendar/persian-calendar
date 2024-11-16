@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +34,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
@@ -63,6 +65,7 @@ fun SharedTransitionScope.TimesTab(
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     interactionSource: MutableInteractionSource,
+    minHeight: Dp,
 ) {
     val context = LocalContext.current
     val cityName by cityName.collectAsState()
@@ -75,6 +78,7 @@ fun SharedTransitionScope.TimesTab(
                 viewModel.removeThirdTab()
             },
             acceptAction = navigateToSettingsLocationTab,
+            hideOnAccept = false,
         )
     }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
@@ -82,31 +86,30 @@ fun SharedTransitionScope.TimesTab(
     val jdn by viewModel.selectedDay.collectAsState()
     val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
 
-    Column {
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .clickable(
-                    indication = null,
-                    interactionSource = interactionSource,
-                    onClickLabel = stringResource(R.string.more),
-                    onClick = { isExpanded = !isExpanded },
-                )
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = minHeight)
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource,
+                onClickLabel = stringResource(R.string.more),
+                onClick = { isExpanded = !isExpanded },
+            )
+    ) {
+        Spacer(Modifier.height(16.dp))
+        AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy, animatedContentScope)
+        Spacer(Modifier.height(16.dp))
+        Times(isExpanded, prayTimes)
+        Spacer(Modifier.height(8.dp))
+        Row(
+            Modifier.align(Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(Modifier.height(16.dp))
-            AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy, animatedContentScope)
-            Spacer(Modifier.height(16.dp))
-            Times(isExpanded, prayTimes)
-            Spacer(Modifier.height(8.dp))
-            Row(
-                Modifier.align(Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                if (cityName != null) Text(
-                    cityName ?: "", style = MaterialTheme.typography.bodyLarge
-                )
-                ExpandArrow(isExpanded = isExpanded, tint = MaterialTheme.colorScheme.primary)
-            }
+            if (cityName != null) Text(
+                cityName ?: "", style = MaterialTheme.typography.bodyLarge
+            )
+            ExpandArrow(isExpanded = isExpanded, tint = MaterialTheme.colorScheme.primary)
         }
 
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(

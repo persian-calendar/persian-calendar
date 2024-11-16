@@ -9,7 +9,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,7 +45,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
@@ -80,32 +78,21 @@ fun CalendarsOverview(
     selectedCalendar: Calendar,
     shownCalendars: List<Calendar>,
     isExpanded: Boolean,
-    interactionSource: MutableInteractionSource,
-    topPadding: Dp = 0.dp,
-    toggleExpansion: () -> Unit,
 ) {
     val context = LocalContext.current
     val isToday = today == jdn
     Column(
-        Modifier
-            .clickable(
-                indication = null,
-                interactionSource = interactionSource,
-                onClickLabel = stringResource(R.string.more),
-                onClick = toggleExpansion,
+        Modifier.semantics {
+            if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
+                context.resources,
+                jdn,
+                isToday,
+                EventsStore.empty(),
+                withZodiac = true,
+                withOtherCalendars = true,
+                withTitle = true
             )
-            .padding(top = topPadding)
-            .semantics {
-                if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
-                    context.resources,
-                    jdn,
-                    isToday,
-                    EventsStore.empty(),
-                    withZodiac = true,
-                    withOtherCalendars = true,
-                    withTitle = true
-                )
-            },
+        },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -297,16 +284,14 @@ fun CalendarsOverview(
             }
         }
 
+        Spacer(Modifier.height(8.dp))
         ExpandArrow(
             modifier = Modifier
-                .padding(top = 8.dp)
                 .size(16.dp)
                 .align(Alignment.CenterHorizontally),
             isExpanded = isExpanded,
             tint = MaterialTheme.colorScheme.primary,
         )
-
-        Spacer(Modifier.height(16.dp))
     }
 }
 

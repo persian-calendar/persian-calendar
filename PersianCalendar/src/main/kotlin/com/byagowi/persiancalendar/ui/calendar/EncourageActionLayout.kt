@@ -29,6 +29,7 @@ fun ColumnScope.EncourageActionLayout(
     modifier: Modifier = Modifier,
     header: String,
     acceptButton: String = stringResource(R.string.settings),
+    hideOnAccept: Boolean = true,
     discardAction: () -> Unit = {},
     acceptAction: () -> Unit,
 ) {
@@ -57,7 +58,7 @@ fun ColumnScope.EncourageActionLayout(
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
                     onClick = {
-                        shown = false
+                        if (hideOnAccept) shown = false
                         acceptAction()
                     },
                     Modifier.weight(1f),
