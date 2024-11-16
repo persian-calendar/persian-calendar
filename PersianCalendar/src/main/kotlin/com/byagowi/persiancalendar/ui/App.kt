@@ -345,7 +345,7 @@ private fun DrawerTopGradient() {
         Modifier
             .fillMaxWidth()
             .windowInsetsTopHeight(WindowInsets.systemBars)
-            .background(Brush.verticalGradient(0f to topColor, 1f to Color.Transparent)),
+            .background(Brush.verticalGradient(listOf(topColor, Color.Transparent))),
     )
 }
 

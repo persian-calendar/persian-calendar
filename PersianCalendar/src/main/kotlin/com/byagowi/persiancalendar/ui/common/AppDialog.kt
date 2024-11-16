@@ -49,22 +49,30 @@ fun AppDialog(
                             )
                         ) { title() }
                     }
-                    ScrollHorizontalDivider(scrollState, top = true)
                 }
 
-                CompositionLocalProvider(
-                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                val hasFooterButtons =
+                    neutralButton != null || dismissButton != null || confirmButton != null
+
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(weight = 1f, fill = false)
                 ) {
-                    Column(
-                        Modifier
-                            .weight(weight = 1f, fill = false)
-                            .fillMaxWidth()
-                            .verticalScroll(scrollState)
-                    ) { content() }
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                    ) {
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .verticalScroll(scrollState)
+                        ) { content() }
+                    }
+                    if (title != null) ScrollShadow(scrollState, top = true)
+                    if (hasFooterButtons) ScrollShadow(scrollState, top = false)
                 }
 
-                if (neutralButton != null || dismissButton != null || confirmButton != null) {
-                    ScrollHorizontalDivider(scrollState, top = false)
+                if (hasFooterButtons) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
