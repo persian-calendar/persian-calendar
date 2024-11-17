@@ -479,16 +479,14 @@ private fun Details(
             /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
             val tabMinHeight = contentMinHeight - 48.dp - bottomPadding
             Box {
-                val tabModifier = if (scrollableTabs) {
-                    // Currently scrollable tabs only happen on landscape layout
-                    val scrollState = rememberScrollState()
-                    ScrollShadow(scrollState, top = true)
-                    Modifier.verticalScroll(scrollState)
-                } else Modifier
+                // Currently scrollable tabs only happen on landscape layout
+                val scrollState = if (scrollableTabs) rememberScrollState() else null
+                val tabModifier = scrollState?.let(Modifier::verticalScroll) ?: Modifier
                 Column(tabModifier.defaultMinSize(minHeight = tabMinHeight)) {
                     tabs[index].second(interactionSource, tabMinHeight)
                     Spacer(Modifier.height(bottomPadding))
                 }
+                if (scrollState != null) ScrollShadow(scrollState, top = true)
             }
         }
     }
