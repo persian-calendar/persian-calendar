@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import kotlin.math.abs
 
@@ -22,7 +23,9 @@ import kotlin.math.abs
 fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
     // If max value is infinity the page isn't even initialized
     val height = if (scrollState.maxValue == Int.MAX_VALUE) 0.dp else animateDpAsState(
-        abs((scrollState.value - (if (top) 0 else scrollState.maxValue)) / 16).coerceAtMost(8).dp,
+        with(LocalDensity.current) {
+            (abs((scrollState.value - (if (top) 0 else scrollState.maxValue))) / 8).toDp()
+        }.coerceAtMost(8.dp),
         label = "scroll shadow height",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value
