@@ -22,7 +22,7 @@ fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
     // If max value is infinity the page isn't even initialized
     val height = if (scrollState.maxValue == Int.MAX_VALUE) 0.dp else animateDpAsState(
         if (scrollState.value != if (top) 0 else scrollState.maxValue) 8.dp else 0.dp,
-        label = "height",
+        label = "scroll shadow height",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value
     val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 1 / 3f)
