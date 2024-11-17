@@ -29,7 +29,7 @@ fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
         label = "scroll shadow height",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     ).value
-    val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 1 / 3f)
+    val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .5f)
     val colors = if (top) listOf(color, Color.Transparent) else listOf(Color.Transparent, color)
     Box(
         Modifier
