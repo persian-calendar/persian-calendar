@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -19,24 +19,24 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
-    val alpha = if (scrollState.maxValue == Int.MAX_VALUE) {
+    val height = if (scrollState.maxValue == Int.MAX_VALUE) {
         // If max value is infinity the page isn't even initialized
-        0f
+        0.dp
     } else {
         val visible = if (top) scrollState.value != 0 else scrollState.value != scrollState.maxValue
-        animateFloatAsState(
-            if (visible) 1 / 3f else 0f,
+        animateDpAsState(
+            if (visible) 8.dp else 0.dp,
             label = "alpha",
             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         ).value
     }
-    val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = alpha)
+    val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 1 / 3f)
     val colors = if (top) listOf(color, Color.Transparent) else listOf(Color.Transparent, color)
     Box(
         Modifier
             .align(if (top) Alignment.TopCenter else Alignment.BottomCenter)
             .fillMaxWidth()
-            .height(8.dp)
+            .height(height)
             .background(Brush.verticalGradient(colors)),
     )
 }
