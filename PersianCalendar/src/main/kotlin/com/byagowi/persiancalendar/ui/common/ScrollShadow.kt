@@ -19,17 +19,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
-    val height = if (scrollState.maxValue == Int.MAX_VALUE) {
-        // If max value is infinity the page isn't even initialized
-        0.dp
-    } else {
-        val visible = if (top) scrollState.value != 0 else scrollState.value != scrollState.maxValue
-        animateDpAsState(
-            if (visible) 8.dp else 0.dp,
-            label = "alpha",
-            animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-        ).value
-    }
+    // If max value is infinity the page isn't even initialized
+    val height = if (scrollState.maxValue == Int.MAX_VALUE) 0.dp else animateDpAsState(
+        if (scrollState.value != if (top) 0 else scrollState.maxValue) 8.dp else 0.dp,
+        label = "alpha",
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+    ).value
     val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 1 / 3f)
     val colors = if (top) listOf(color, Color.Transparent) else listOf(Color.Transparent, color)
     Box(
