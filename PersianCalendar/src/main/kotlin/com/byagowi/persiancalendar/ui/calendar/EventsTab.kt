@@ -45,7 +45,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -166,7 +165,7 @@ fun SharedTransitionScope.EventsTab(
 
         // Events addition fab placeholder, so events can be scrolled after it
         Spacer(Modifier.height(76.dp))
-        Spacer(Modifier.height(bottomPadding.coerceAtLeast(16.dp)))
+        Spacer(Modifier.height(bottomPadding))
     }
 }
 

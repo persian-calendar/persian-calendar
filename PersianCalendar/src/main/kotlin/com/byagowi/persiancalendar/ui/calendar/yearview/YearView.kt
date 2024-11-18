@@ -241,7 +241,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                         }
                     }
                 }
-                val space = bottomPadding.coerceAtLeast(24.dp) * scale.value.coerceIn(.4f, 1f)
+                val space = bottomPadding * scale.value.coerceIn(.4f, 1f)
                 val alpha = (.15f * (1 - scale.value)).coerceIn(0f, .15f)
                 Spacer(Modifier.height(space))
                 if (yearOffset != halfPages - 1) Text(

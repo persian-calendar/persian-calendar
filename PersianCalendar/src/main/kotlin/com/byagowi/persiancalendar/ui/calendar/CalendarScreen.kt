@@ -239,6 +239,8 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }
         val bottomPadding = paddingValues.calculateBottomPadding()
+            // For screens without navigation bar, at least make sure it has some bottom padding
+            .coerceAtLeast(24.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val maxHeight = maxHeight
             val maxWidth = maxWidth
@@ -570,7 +572,7 @@ private fun CalendarsTab(
                 ) else requestExemption()
             }
         }
-        Spacer(Modifier.height(bottomPadding.coerceAtLeast(16.dp)))
+        Spacer(Modifier.height(bottomPadding))
     }
 }
 
