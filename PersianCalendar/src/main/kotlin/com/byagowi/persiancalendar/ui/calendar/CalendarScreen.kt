@@ -58,8 +58,8 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.SwipeDown
-import androidx.compose.material.icons.outlined.SwipeUp
+import androidx.compose.material.icons.twotone.SwipeDown
+import androidx.compose.material.icons.twotone.SwipeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -878,7 +878,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.schedule)) },
-            trailingIcon = { Icon(Icons.Outlined.SwipeUp, null) },
+            trailingIcon = { Icon(Icons.TwoTone.SwipeUp, null) },
         ) {
             closeMenu()
             navigateToSchedule()
@@ -886,7 +886,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.year_view)) },
-            trailingIcon = { Icon(Icons.Outlined.SwipeDown, null) },
+            trailingIcon = { Icon(Icons.TwoTone.SwipeDown, null) },
         ) {
             closeMenu()
             viewModel.openYearView()
