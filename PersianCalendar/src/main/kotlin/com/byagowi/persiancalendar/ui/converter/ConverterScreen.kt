@@ -135,14 +135,11 @@ fun SharedTransitionScope.ConverterScreen(
                             minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
                         ) {
                             ConverterScreenMode.entries.forEach {
-                                AppDropdownMenuItem(
-                                    text = { Text(stringResource(it.title)) },
-                                    onClick = {
-                                        showMenu = false
-                                        hapticFeedback.performLongPress()
-                                        viewModel.changeScreenMode(it)
-                                    },
-                                )
+                                AppDropdownMenuItem({ Text(stringResource(it.title)) }) {
+                                    showMenu = false
+                                    hapticFeedback.performLongPress()
+                                    viewModel.changeScreenMode(it)
+                                }
                             }
                         }
                     }

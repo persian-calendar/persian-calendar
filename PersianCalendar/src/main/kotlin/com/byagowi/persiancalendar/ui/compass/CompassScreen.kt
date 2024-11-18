@@ -230,19 +230,16 @@ fun SharedTransitionScope.CompassScreen(
                             preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
                         if (BuildConfig.DEVELOPMENT) {
-                            AppDropdownMenuItem(
-                                text = { Text("Do a rotation") },
-                                onClick = {
-                                    closeMenu()
-                                    // Ugly, but is test only
-                                    val animator = ValueAnimator.ofFloat(0f, 1f)
-                                    animator.duration = TEN_SECONDS_IN_MILLIS
-                                    animator.addUpdateListener {
-                                        compassView?.angle = it.animatedFraction * 360
-                                    }
-                                    if (Random.nextBoolean()) animator.start() else animator.reverse()
-                                },
-                            )
+                            AppDropdownMenuItem({ Text("Do a rotation") }) {
+                                closeMenu()
+                                // Ugly, but is test only
+                                val animator = ValueAnimator.ofFloat(0f, 1f)
+                                animator.duration = TEN_SECONDS_IN_MILLIS
+                                animator.addUpdateListener {
+                                    compassView?.angle = it.animatedFraction * 360
+                                }
+                                if (Random.nextBoolean()) animator.start() else animator.reverse()
+                            }
                         }
                     }
                 },

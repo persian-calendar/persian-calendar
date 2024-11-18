@@ -165,20 +165,14 @@ fun SharedTransitionScope.AstronomyScreen(
                         )
                     }
                     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-                        AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.select_date)) },
-                            onClick = {
-                                closeMenu()
-                                viewModel.showDatePickerDialog()
-                            },
-                        )
-                        AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.map)) },
-                            onClick = {
-                                closeMenu()
-                                navigateToMap()
-                            },
-                        )
+                        AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
+                            closeMenu()
+                            viewModel.showDatePickerDialog()
+                        }
+                        AppDropdownMenuItem({ Text(stringResource(R.string.map)) }) {
+                            closeMenu()
+                            navigateToMap()
+                        }
                     }
                 },
             )

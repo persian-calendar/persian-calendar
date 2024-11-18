@@ -853,62 +853,46 @@ private fun SharedTransitionScope.Menu(
     }
 
     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.select_date)) },
-            onClick = {
-                closeMenu()
-                showDatePickerDialog = true
-            },
-        )
+        AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
+            closeMenu()
+            showDatePickerDialog = true
+        }
 
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.add_event)) },
-            onClick = {
-                closeMenu()
-                addEvent()
-            },
-        )
+        AppDropdownMenuItem({ Text(stringResource(R.string.add_event)) }) {
+            closeMenu()
+            addEvent()
+        }
 
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.shift_work_settings)) },
-            onClick = {
-                closeMenu()
-                val dialogViewModel = ShiftWorkViewModel()
-                // from already initialized global variable till a better solution
-                fillViewModelFromGlobalVariables(dialogViewModel, viewModel.selectedDay.value)
-                viewModel.setShiftWorkViewModel(dialogViewModel)
-            },
-        )
+        AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
+            closeMenu()
+            val dialogViewModel = ShiftWorkViewModel()
+            // from already initialized global variable till a better solution
+            fillViewModelFromGlobalVariables(dialogViewModel, viewModel.selectedDay.value)
+            viewModel.setShiftWorkViewModel(dialogViewModel)
+        }
 
         HorizontalDivider()
 
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.schedule)) },
-            onClick = {
-                closeMenu()
-                navigateToSchedule()
-            },
-        )
+        AppDropdownMenuItem({ Text(stringResource(R.string.schedule)) }) {
+            closeMenu()
+            navigateToSchedule()
+        }
 
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.year_view)) },
-            onClick = {
-                closeMenu()
-                viewModel.openYearView()
-            },
-        )
+        AppDropdownMenuItem({ Text(stringResource(R.string.year_view)) }) {
+            closeMenu()
+            viewModel.openYearView()
+        }
 
         val coordinates by coordinates.collectAsState()
         if (coordinates != null) AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.month_pray_times)) },
-            onClick = {
-                closeMenu()
-                val selectedMonthOffset = viewModel.selectedMonthOffset.value
-                val selectedMonth =
-                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-                context.openHtmlInBrowser(prayTimeHtmlReport(context.resources, selectedMonth))
-            },
-        )
+            text = { Text(stringResource(R.string.month_pray_times)) }
+        ) {
+            closeMenu()
+            val selectedMonthOffset = viewModel.selectedMonthOffset.value
+            val selectedMonth =
+                mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
+            context.openHtmlInBrowser(prayTimeHtmlReport(context.resources, selectedMonth))
+        }
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
         if (isTalkBackEnabled && enabledCalendars.size == 1) return@ThreeDotsDropdownMenu

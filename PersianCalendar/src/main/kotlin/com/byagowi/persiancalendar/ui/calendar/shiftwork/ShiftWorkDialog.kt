@@ -207,13 +207,10 @@ fun ColumnScope.ShiftWorkDialogContent(
                         minWidth = 40.dp,
                     ) {
                         (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
-                            AppDropdownMenuItem(
-                                onClick = {
-                                    selectedTypeDropdownIndex = -1
-                                    viewModel.changeShiftWorkTypeOfPosition(position, it)
-                                },
-                                text = { Text(it) }
-                            )
+                            AppDropdownMenuItem({ Text(it) }) {
+                                selectedTypeDropdownIndex = -1
+                                viewModel.changeShiftWorkTypeOfPosition(position, it)
+                            }
                         }
                     }
                 }
@@ -246,14 +243,11 @@ fun ColumnScope.ShiftWorkDialogContent(
                         minWidth = 40.dp,
                     ) {
                         (0..14).map { length ->
-                            AppDropdownMenuItem(
-                                onClick = {
-                                    focusManager.clearFocus()
-                                    selectedLengthDropdownIndex = -1
-                                    viewModel.changeShiftWorkLengthOfPosition(position, length)
-                                },
-                                text = { Text(formatNumber(length)) }
-                            )
+                            AppDropdownMenuItem({ Text(formatNumber(length)) }) {
+                                focusManager.clearFocus()
+                                selectedLengthDropdownIndex = -1
+                                viewModel.changeShiftWorkLengthOfPosition(position, length)
+                            }
                         }
                     }
                 }

@@ -149,13 +149,10 @@ fun SharedTransitionScope.ScheduleScreen(
                     }
 
                     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-                        AppDropdownMenuItem(
-                            text = { Text(stringResource(R.string.select_date)) },
-                            onClick = {
-                                showDatePickerDialog = true
-                                closeMenu()
-                            },
-                        )
+                        AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
+                            showDatePickerDialog = true
+                            closeMenu()
+                        }
 
                         val context = LocalContext.current
                         fun showPrintReport(isWholeYear: Boolean = false) {
@@ -169,7 +166,6 @@ fun SharedTransitionScope.ScheduleScreen(
                         }
                         AppDropdownMenuItem(
                             text = { Text(stringResource(R.string.print)) },
-                            onClick = { showPrintReport() },
                             trailingIcon = {
                                 Box(
                                     @OptIn(ExperimentalFoundationApi::class) Modifier
@@ -188,7 +184,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         ),
                                 ) { /*Icon(Icons.Default.Print, contentDescription = "Print")*/ }
                             },
-                        )
+                        ) { showPrintReport() }
                     }
                 },
             )

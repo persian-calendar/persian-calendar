@@ -238,40 +238,31 @@ const val LOCATION_ATHAN_TAB = 2
 @Composable
 private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     val context = LocalContext.current
-    AppDropdownMenuItem(
-        text = { Text(stringResource(R.string.live_wallpaper_settings)) },
-        onClick = {
-            closeMenu()
-            runCatching {
-                context.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
-            }.onFailure(logException).getOrNull().debugAssertNotNull
-        },
-    )
-    AppDropdownMenuItem(
-        text = { Text(stringResource(R.string.screensaver_settings)) },
-        onClick = {
-            closeMenu()
-            runCatching { context.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }.onFailure(
-                logException
-            ).getOrNull().debugAssertNotNull
-        },
-    )
+    AppDropdownMenuItem({ Text(stringResource(R.string.live_wallpaper_settings)) }) {
+        closeMenu()
+        runCatching {
+            context.startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER))
+        }.onFailure(logException).getOrNull().debugAssertNotNull
+    }
+    AppDropdownMenuItem({ Text(stringResource(R.string.screensaver_settings)) }) {
+        closeMenu()
+        runCatching { context.startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }.onFailure(
+            logException
+        ).getOrNull().debugAssertNotNull
+    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.add_quick_settings_tile)) },
-            onClick = {
-                closeMenu()
-                context.getSystemService<StatusBarManager>()?.requestAddTileService(
-                    ComponentName(
-                        context.packageName, PersianCalendarTileService::class.qualifiedName ?: "",
-                    ),
-                    context.getString(R.string.app_name),
-                    Icon.createWithResource(context, R.drawable.day19),
-                    {},
-                    {},
-                )
-            },
-        )
+        AppDropdownMenuItem({ Text(stringResource(R.string.add_quick_settings_tile)) }) {
+            closeMenu()
+            context.getSystemService<StatusBarManager>()?.requestAddTileService(
+                ComponentName(
+                    context.packageName, PersianCalendarTileService::class.qualifiedName ?: "",
+                ),
+                context.getString(R.string.app_name),
+                Icon.createWithResource(context, R.drawable.day19),
+                {},
+                {},
+            )
+        }
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && runCatching {
             AppWidgetManager.getInstance(
@@ -287,57 +278,36 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem(
-            text = { Text("Static vs generated icons") },
-            onClick = { showDialog = true },
-        )
+        AppDropdownMenuItem({ Text("Static vs generated icons") }) { showDialog = true }
         if (showDialog) IconsDemoDialog { showDialog = false }
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem(
-            text = { Text("Dynamic Colors") },
-            onClick = { showDialog = true },
-        )
+        AppDropdownMenuItem({ Text("Dynamic Colors") }) { showDialog = true }
         if (showDialog) DynamicColorsDialog { showDialog = false }
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem(
-            text = { Text("Color Scheme") },
-            onClick = { showDialog = true },
-        )
+        AppDropdownMenuItem({ Text("Color Scheme") }) { showDialog = true }
         if (showDialog) ColorSchemeDemoDialog { showDialog = false }
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem(
-            text = { Text("Typography") },
-            onClick = { showDialog = true },
-        )
+        AppDropdownMenuItem({ Text("Typography") }) { showDialog = true }
         if (showDialog) TypographyDemoDialog { showDialog = false }
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem(
-            text = { Text("Shapes") },
-            onClick = { showDialog = true },
-        )
+        AppDropdownMenuItem({ Text("Shapes") }) { showDialog = true }
         if (showDialog) ShapesDemoDialog { showDialog = false }
     }
-    AppDropdownMenuItem(
-        text = { Text("Clear preferences store and exit") },
-        onClick = {
-            context.preferences.edit { clear() }
-            context.getActivity()?.finish()
-        },
-    )
+    AppDropdownMenuItem({ Text("Clear preferences store and exit") }) {
+        context.preferences.edit { clear() }
+        context.getActivity()?.finish()
+    }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
-        AppDropdownMenuItem(
-            text = { Text("Schedule an alarm") },
-            onClick = { showDialog = true },
-        )
+        AppDropdownMenuItem({ Text("Schedule an alarm") }) { showDialog = true }
         if (showDialog) ScheduleAlarm { showDialog = false }
     }
 
@@ -370,7 +340,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         "Filtered Log Viewer" to "logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E",
         "Unfiltered Log Viewer" to "logcat -v raw -t 500",
     ).forEach { (title, command) ->
-        AppDropdownMenuItem(text = { Text(title) }, onClick = { viewCommandResult(command) })
+        AppDropdownMenuItem({ Text(title) }) { viewCommandResult(command) }
     }
 
     HorizontalDivider()
@@ -383,17 +353,14 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
 
     HorizontalDivider()
 
-    AppDropdownMenuItem(
-        text = { Text("Start Dream") },
-        onClick = {
-            // https://stackoverflow.com/a/23112947
-            runCatching {
-                context.startActivity(
-                    Intent(Intent.ACTION_MAIN).setClassName(
-                        "com.android.systemui", "com.android.systemui.Somnambulator"
-                    )
+    AppDropdownMenuItem({ Text("Start Dream") }) {
+        // https://stackoverflow.com/a/23112947
+        runCatching {
+            context.startActivity(
+                Intent(Intent.ACTION_MAIN).setClassName(
+                    "com.android.systemui", "com.android.systemui.Somnambulator"
                 )
-            }.onFailure(logException).getOrNull().debugAssertNotNull
-        },
-    )
+            )
+        }.onFailure(logException).getOrNull().debugAssertNotNull
+    }
 }

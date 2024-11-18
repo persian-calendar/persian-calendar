@@ -33,9 +33,9 @@ fun AppDropdownMenu(
 @Composable
 fun AppDropdownMenuItem(
     text: @Composable () -> Unit,
-    onClick: () -> Unit,
     trailingIcon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
+    onClick: () -> Unit,
 ) {
     MaterialTheme(
         typography = MaterialTheme.typography.copy(labelLarge = MaterialTheme.typography.bodyLarge),
@@ -59,8 +59,7 @@ fun AppDropdownMenuRadioItem(
     AppDropdownMenuItem(
         text = { Text(text) },
         trailingIcon = { RadioButton(selected = isSelected, onClick = null) },
-        onClick = { setSelected(!isSelected) },
-    )
+    ) { setSelected(!isSelected) }
 }
 
 @Composable
@@ -72,8 +71,7 @@ fun AppDropdownMenuCheckableItem(
     AppDropdownMenuItem(
         text = { Text(text) },
         trailingIcon = { Checkbox(checked = isChecked, onCheckedChange = null) },
-        onClick = { setChecked(!isChecked) },
-    )
+    ) { setChecked(!isChecked) }
 }
 
 @Composable
