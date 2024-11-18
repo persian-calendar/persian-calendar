@@ -38,7 +38,7 @@ fun ColumnScope.EncourageActionLayout(
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(start = 24.dp, end = 24.dp, bottom = 16.dp)
+                .padding(horizontal = 24.dp)
         ) {
             Text(
                 header,

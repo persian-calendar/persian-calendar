@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.invisibleToUser
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
@@ -81,7 +82,7 @@ fun SharedTransitionScope.TimesTab(
             acceptAction = navigateToSettingsLocationTab,
             hideOnAccept = false,
         )
-        Spacer(Modifier.height(bottomPadding))
+        Spacer(Modifier.height(bottomPadding.coerceAtLeast(16.dp)))
     }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
@@ -117,13 +118,12 @@ fun SharedTransitionScope.TimesTab(
                 tint = MaterialTheme.colorScheme.primary
             )
         }
-        Spacer(Modifier.height(16.dp))
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
             header = "مایلید برنامه اذان پخش کند؟",
             discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
             acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
         )
-        Spacer(Modifier.height(bottomPadding))
+        Spacer(Modifier.height(bottomPadding.coerceAtLeast(16.dp)))
     }
 }
 

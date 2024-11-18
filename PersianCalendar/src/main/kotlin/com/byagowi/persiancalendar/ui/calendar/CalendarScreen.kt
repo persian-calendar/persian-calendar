@@ -104,6 +104,7 @@ import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -572,7 +573,7 @@ private fun CalendarsTab(
                 ) else requestExemption()
             }
         }
-        Spacer(Modifier.height(bottomPadding))
+        Spacer(Modifier.height(bottomPadding.coerceAtLeast(16.dp)))
     }
 }
 
