@@ -66,6 +66,7 @@ fun SharedTransitionScope.TimesTab(
     animatedContentScope: AnimatedContentScope,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
+    bottomPadding: Dp,
 ) {
     val context = LocalContext.current
     val cityName by cityName.collectAsState()
@@ -80,6 +81,7 @@ fun SharedTransitionScope.TimesTab(
             acceptAction = navigateToSettingsLocationTab,
             hideOnAccept = false,
         )
+        Spacer(Modifier.height(bottomPadding))
     }
     var isExpanded by rememberSaveable { mutableStateOf(false) }
 
@@ -115,12 +117,13 @@ fun SharedTransitionScope.TimesTab(
                 tint = MaterialTheme.colorScheme.primary
             )
         }
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(16.dp))
         if (showEnableAthanForPersianUsers()) EncourageActionLayout(
             header = "مایلید برنامه اذان پخش کند؟",
             discardAction = { context.preferences.edit { putString(PREF_ATHAN_ALARM, "") } },
             acceptAction = navigateToSettingsLocationTabSetAthanAlarm,
         )
+        Spacer(Modifier.height(bottomPadding))
     }
 }
 

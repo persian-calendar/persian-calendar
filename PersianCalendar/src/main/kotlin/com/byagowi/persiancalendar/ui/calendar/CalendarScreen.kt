@@ -257,6 +257,7 @@ fun SharedTransitionScope.CalendarScreen(
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                     navigateToAstronomy = navigateToAstronomy,
                     animatedContentScope = animatedContentScope,
+                    bottomPadding = bottomPadding,
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
@@ -275,7 +276,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 viewModel = viewModel,
                                 tabs = detailsTabs,
                                 pagerState = detailsPagerState,
-                                bottomPadding = bottomPadding,
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
                                 modifier = Modifier.fillMaxHeight(),
@@ -315,7 +315,6 @@ fun SharedTransitionScope.CalendarScreen(
                                     viewModel = viewModel,
                                     tabs = detailsTabs,
                                     pagerState = detailsPagerState,
-                                    bottomPadding = bottomPadding,
                                     contentMinHeight = detailsMinHeight,
                                     modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
                                 )
@@ -391,6 +390,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
     animatedContentScope: AnimatedContentScope,
+    bottomPadding: Dp,
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
@@ -399,7 +399,8 @@ private fun SharedTransitionScope.detailsTabs(
             CalendarsTab(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
-                minHeight = minHeight
+                minHeight = minHeight,
+                bottomPadding = bottomPadding,
             )
         },
         R.string.events to { _, _ ->
@@ -407,6 +408,7 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
+                bottomPadding = bottomPadding,
             )
         },
         // The optional third tab
@@ -419,6 +421,7 @@ private fun SharedTransitionScope.detailsTabs(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
                 minHeight = minHeight,
+                bottomPadding = bottomPadding,
             )
         } else null,
     )
@@ -445,7 +448,6 @@ private fun Details(
     viewModel: CalendarViewModel,
     tabs: List<DetailsTab>,
     pagerState: PagerState,
-    bottomPadding: Dp,
     contentMinHeight: Dp,
     modifier: Modifier,
     scrollableTabs: Boolean = false,
@@ -477,14 +479,12 @@ private fun Details(
 
         HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
             /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
-            val tabMinHeight = contentMinHeight - 48.dp - bottomPadding
+            val tabMinHeight = contentMinHeight - 48.dp
             Box {
                 // Currently scrollable tabs only happen on landscape layout
                 val scrollState = if (scrollableTabs) rememberScrollState() else null
-                val tabModifier = scrollState?.let(Modifier::verticalScroll) ?: Modifier
-                Column(tabModifier.defaultMinSize(minHeight = tabMinHeight)) {
+                Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
                     tabs[index].second(interactionSource, tabMinHeight)
-                    Spacer(Modifier.height(bottomPadding))
                 }
                 if (scrollState != null) ScrollShadow(scrollState, top = true)
             }
@@ -497,6 +497,7 @@ private fun CalendarsTab(
     viewModel: CalendarViewModel,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
+    bottomPadding: Dp,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Column(
@@ -569,6 +570,7 @@ private fun CalendarsTab(
                 ) else requestExemption()
             }
         }
+        Spacer(Modifier.height(bottomPadding))
     }
 }
 
