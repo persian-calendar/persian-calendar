@@ -273,7 +273,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToMap = { navController.navigate(mapRoute) },
                         viewModel = viewModel,
-                        isCurrentDestination = isCurrentDestination(astronomyRoute),
                     )
                 }
 

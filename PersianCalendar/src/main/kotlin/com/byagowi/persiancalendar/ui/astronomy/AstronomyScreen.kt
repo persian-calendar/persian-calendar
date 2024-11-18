@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -107,6 +106,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
+import kotlin.math.max
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -115,7 +115,6 @@ fun SharedTransitionScope.AstronomyScreen(
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
-    isCurrentDestination: Boolean,
 ) {
     LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
@@ -177,28 +176,14 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
             )
         },
-        bottomBar = {
-            Box(
-                Modifier.renderInSharedTransitionScopeOverlay(
-                    renderInOverlay = { isCurrentDestination && isTransitionActive },
-                ),
-            ) {
-                val modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .safeDrawingPadding()
-                if (!isLandscape) SliderBar(
-                    modifier, animatedContentScope, slider, viewModel
-                ) { slider = it }
-            }
-        },
     ) { paddingValues ->
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
-                BoxWithConstraints(Modifier.fillMaxSize()) {
-                    val bottomPadding = paddingValues.calculateBottomPadding()
+                val bottomPadding = paddingValues.calculateBottomPadding()
+                if (isLandscape) BoxWithConstraints(Modifier.fillMaxSize()) {
                     val maxHeight = maxHeight
                     val maxWidth = maxWidth
-                    if (isLandscape) Row(Modifier.fillMaxWidth()) {
+                    Row(Modifier.fillMaxWidth()) {
                         Column(
                             Modifier
                                 .width((maxWidth / 2).coerceAtMost(480.dp))
@@ -211,9 +196,7 @@ fun SharedTransitionScope.AstronomyScreen(
                         ) {
                             Header(Modifier, viewModel)
                             Spacer(Modifier.weight(1f))
-                            SliderBar(Modifier, animatedContentScope, slider, viewModel) {
-                                slider = it
-                            }
+                            SliderBar(animatedContentScope, slider, viewModel) { slider = it }
                         }
                         SolarDisplay(
                             Modifier
@@ -222,43 +205,57 @@ fun SharedTransitionScope.AstronomyScreen(
                                 .height(maxHeight - bottomPadding),
                             animatedContentScope, viewModel, slider, navigateToMap,
                         )
-                    } else Layout(
-                        // Puts content in middle of available space after the measured header
-                        modifier = Modifier.verticalScroll(rememberScrollState()),
-                        content = {
-                            // Header
-                            Header(
-                                Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
-                                viewModel,
-                            )
-                            // Content
-                            SolarDisplay(
-                                Modifier
-                                    .fillMaxWidth()
-                                    .height(maxWidth - (56 * 2 + 8).dp),
-                                animatedContentScope, viewModel, slider, navigateToMap,
-                            )
-                        },
-                    ) { (header, content), constraints ->
-                        val placeableHeader = header.measure(constraints)
-                        val placeableContent = content.measure(constraints)
-                        layout(
-                            width = constraints.maxWidth,
-                            height = placeableHeader.height + placeableContent.height +
-                                    // To make solar display can be scrolled above bottom padding in smaller screen
-                                    bottomPadding.roundToPx(),
-                        ) {
-                            // Put the header at top
-                            placeableHeader.placeRelative(0, 0)
+                    }
+                } else Column {
+                    BoxWithConstraints(Modifier.weight(1f, fill = false)) {
+                        val maxHeight = maxHeight
+                        val maxWidth = maxWidth
+                        Layout(
+                            // Puts content in middle of available space after the measured header
+                            modifier = Modifier.verticalScroll(rememberScrollState()),
+                            content = {
+                                // Header
+                                Header(
+                                    Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp),
+                                    viewModel,
+                                )
+                                // Content
+                                SolarDisplay(
+                                    Modifier
+                                        .fillMaxWidth()
+                                        .height(maxWidth - (56 * 2 + 8).dp),
+                                    animatedContentScope, viewModel, slider, navigateToMap,
+                                )
+                            },
+                        ) { (header, content), constraints ->
+                            val placeableHeader = header.measure(constraints)
+                            val placeableContent = content.measure(constraints)
+                            layout(
+                                width = constraints.maxWidth,
+                                height = max(
+                                    placeableHeader.height + placeableContent.height +
+                                            // To make solar display can be scrolled above bottom padding in smaller screen
+                                            bottomPadding.roundToPx(),
+                                    maxHeight.roundToPx(),
+                                ),
+                            ) {
+                                // Put the header at top
+                                placeableHeader.placeRelative(0, 0)
 
-                            val availableHeight =
-                                (maxHeight - bottomPadding).roundToPx() - placeableHeader.height
-                            val space = availableHeight / 2 - placeableContent.height / 2
-                            placeableContent.placeRelative(
-                                0, placeableHeader.height + space.coerceAtLeast(0)
-                            )
+                                val availableHeight = maxHeight.roundToPx() - placeableHeader.height
+                                val space = availableHeight / 2 - placeableContent.height / 2
+                                placeableContent.placeRelative(
+                                    0, placeableHeader.height + space.coerceAtLeast(0)
+                                )
+                            }
                         }
                     }
+                    SliderBar(
+                        animatedContentScope = animatedContentScope,
+                        slider = slider,
+                        viewModel = viewModel,
+                    ) { slider = it }
+                    Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
         }
@@ -277,7 +274,6 @@ fun SharedTransitionScope.AstronomyScreen(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.SliderBar(
-    modifier: Modifier,
     animatedContentScope: AnimatedContentScope,
     slider: SliderView?,
     viewModel: AstronomyViewModel,
@@ -292,7 +288,7 @@ private fun SharedTransitionScope.SliderBar(
         viewModel.animateToRelativeDayOffset(days)
     }
 
-    @OptIn(ExperimentalFoundationApi::class) Column(modifier.fillMaxWidth()) {
+    @OptIn(ExperimentalFoundationApi::class) Column(Modifier.fillMaxWidth()) {
         Text(
             state.date.formatDateAndTime(),
             textAlign = TextAlign.Center,
