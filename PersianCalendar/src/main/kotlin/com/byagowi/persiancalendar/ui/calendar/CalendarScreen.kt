@@ -293,14 +293,16 @@ fun SharedTransitionScope.CalendarScreen(
                                 // This is simplified from https://android.googlesource.com/platform/frameworks/support/+/dcaa116/compose/material/material/src/commonMain/kotlin/androidx/compose/material/DragGestureDetectorCopy.kt
                                 .pointerInput(Unit) {
                                     awaitEachGesture {
+                                        val wasAtTop = scrollState.value == 0
+                                        val wasAtEnd = scrollState.value == scrollState.maxValue
                                         val id = awaitFirstDown(requireUnconsumed = false).id
                                         val event = awaitPointerEvent()
                                         if (event.changes.any { it.id == id }) verticalDrag(id) {
                                             val dragAmount = it.positionChange().y
                                             if (dragAmount < -40.dp.toPx()) {
-                                                if (scrollState.value == scrollState.maxValue) navigateToSchedule()
+                                                if (wasAtEnd) navigateToSchedule()
                                             } else if (dragAmount > 40.dp.toPx()) {
-                                                if (scrollState.value == 0) viewModel.openYearView()
+                                                if (wasAtTop) viewModel.openYearView()
                                             }
                                         }
                                     }
