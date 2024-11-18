@@ -234,9 +234,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             layout(
                                 width = constraints.maxWidth,
                                 height = max(
-                                    placeableHeader.height + placeableContent.height +
-                                            // To make solar display can be scrolled above bottom padding in smaller screen
-                                            bottomPadding.roundToPx(),
+                                    placeableHeader.height + placeableContent.height,
                                     maxHeight.roundToPx(),
                                 ),
                             ) {
@@ -252,11 +250,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             }
                         }
                     }
-                    SliderBar(
-                        animatedContentScope = animatedContentScope,
-                        slider = slider,
-                        viewModel = viewModel,
-                    ) { slider = it }
+                    SliderBar(animatedContentScope, slider, viewModel) { slider = it }
                     Spacer(Modifier.height(16.dp + bottomPadding))
                 }
             }
