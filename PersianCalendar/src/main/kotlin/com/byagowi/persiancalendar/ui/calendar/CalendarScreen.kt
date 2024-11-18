@@ -192,12 +192,10 @@ fun SharedTransitionScope.CalendarScreen(
     isCurrentDestination: Boolean,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-
     val isYearView by viewModel.isYearView.collectAsState()
-
     val context = LocalContext.current
-
     val addEvent = addEvent(viewModel)
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -214,6 +212,7 @@ fun SharedTransitionScope.CalendarScreen(
                     openDrawer = openDrawer,
                     navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
+                    isLandscape = isLandscape,
                 )
             }
         },
@@ -239,8 +238,6 @@ fun SharedTransitionScope.CalendarScreen(
                 putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
             }
         }
-        val isLandscape =
-            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
         val bottomPadding = paddingValues.calculateBottomPadding()
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val maxHeight = maxHeight
@@ -692,6 +689,7 @@ private fun SharedTransitionScope.Toolbar(
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
     viewModel: CalendarViewModel,
+    isLandscape: Boolean,
 ) {
     val context = LocalContext.current
 
@@ -821,7 +819,7 @@ private fun SharedTransitionScope.Toolbar(
                 ) { viewModel.openSearch() }
             }
             AnimatedVisibility(!isYearView) {
-                Menu(animatedContentScope, addEvent, navigateToSchedule, viewModel)
+                Menu(animatedContentScope, addEvent, navigateToSchedule, viewModel, isLandscape)
             }
         },
     )
@@ -834,6 +832,7 @@ private fun SharedTransitionScope.Menu(
     addEvent: () -> Unit,
     navigateToSchedule: () -> Unit,
     viewModel: CalendarViewModel,
+    isLandscape: Boolean,
 ) {
     val context = LocalContext.current
 
@@ -878,7 +877,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.schedule)) },
-            trailingIcon = { Icon(Icons.TwoTone.SwipeUp, null) },
+            trailingIcon = { if (!isLandscape) Icon(Icons.TwoTone.SwipeUp, null) },
         ) {
             closeMenu()
             navigateToSchedule()
@@ -886,7 +885,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.year_view)) },
-            trailingIcon = { Icon(Icons.TwoTone.SwipeDown, null) },
+            trailingIcon = { if (!isLandscape) Icon(Icons.TwoTone.SwipeDown, null) },
         ) {
             closeMenu()
             viewModel.openYearView()
