@@ -210,9 +210,10 @@ fun SharedTransitionScope.AstronomyScreen(
                     BoxWithConstraints(Modifier.weight(1f, fill = false)) {
                         val maxHeight = maxHeight
                         val maxWidth = maxWidth
+                        var needsScroll by remember { mutableStateOf(false) }
+                        // Puts content in middle of available space after the measured header
                         Layout(
-                            // Puts content in middle of available space after the measured header
-                            modifier = Modifier.verticalScroll(rememberScrollState()),
+                            modifier = if (needsScroll) Modifier.verticalScroll(rememberScrollState()) else Modifier,
                             content = {
                                 // Header
                                 Header(
@@ -244,6 +245,7 @@ fun SharedTransitionScope.AstronomyScreen(
 
                                 val availableHeight = maxHeight.roundToPx() - placeableHeader.height
                                 val space = availableHeight / 2 - placeableContent.height / 2
+                                needsScroll = space <= 0
                                 placeableContent.placeRelative(
                                     0, placeableHeader.height + space.coerceAtLeast(0)
                                 )
