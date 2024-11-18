@@ -132,7 +132,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     if (rawAngleChange > PI) 2 * PI.toFloat() - rawAngleChange
                     else if (rawAngleChange < -PI) 2 * PI.toFloat() + rawAngleChange
                     else rawAngleChange
-                debugLog(angleChange.toString())
                 val minutesChange = -(angleChange * rotationSpeed / PI.toFloat() / 2).toInt()
                 rotationDirection = minutesChange.sign
                 rotationalMinutesChange(minutesChange)
