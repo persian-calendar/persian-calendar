@@ -292,9 +292,11 @@ fun SharedTransitionScope.CalendarScreen(
                                 .verticalScroll(scrollState)
                                 .pointerInput(Unit) {
                                     awaitEachGesture {
+                                        // Don't inline this
+                                        val id = awaitFirstDown(requireUnconsumed = false).id
                                         val wasAtTop = scrollState.value == 0
                                         val wasAtEnd = scrollState.value == scrollState.maxValue
-                                        verticalDrag(awaitFirstDown(requireUnconsumed = false).id) {
+                                        verticalDrag(id) {
                                             val dragAmount = it.positionChange().y
                                             if (dragAmount < -40.dp.toPx()) {
                                                 if (wasAtEnd) navigateToSchedule()
