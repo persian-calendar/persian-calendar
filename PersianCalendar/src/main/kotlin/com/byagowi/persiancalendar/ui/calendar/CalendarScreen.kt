@@ -291,6 +291,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 .clip(materialCornerExtraLargeTop())
                                 .verticalScroll(scrollState)
                                 .pointerInput(Unit) {
+                                    val threshold = 40.dp.toPx()
                                     awaitEachGesture {
                                         // Don't inline this
                                         val id = awaitFirstDown(requireUnconsumed = false).id
@@ -298,11 +299,10 @@ fun SharedTransitionScope.CalendarScreen(
                                         val wasAtEnd = scrollState.value == scrollState.maxValue
                                         verticalDrag(id) {
                                             val dragAmount = it.positionChange().y
-                                            if (dragAmount < -40.dp.toPx()) {
-                                                if (wasAtEnd) navigateToSchedule()
-                                            } else if (dragAmount > 40.dp.toPx()) {
-                                                if (wasAtTop) viewModel.openYearView()
-                                            }
+                                            if (dragAmount < -threshold && wasAtEnd)
+                                                navigateToSchedule()
+                                            else if (dragAmount > threshold && wasAtTop)
+                                                viewModel.openYearView()
                                         }
                                     }
                                 },
