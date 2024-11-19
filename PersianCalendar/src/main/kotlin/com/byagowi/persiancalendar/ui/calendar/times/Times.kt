@@ -39,7 +39,7 @@ import java.util.Date
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long) {
+fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean) {
     FlowRow(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,7 +49,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long) {
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         val timeIds = getTimeNames()
-        val nextTimeId = prayTimes.getNextTimeId(now, timeIds, isExpanded)
+        val nextTimeId = if (isToday) prayTimes.getNextTimeId(now, timeIds, isExpanded) else 0
         timeIds.forEach { timeId ->
             AnimatedVisibility(
                 visible = isExpanded || when (timeId) {

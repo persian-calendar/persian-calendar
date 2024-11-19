@@ -88,6 +88,7 @@ fun SharedTransitionScope.TimesTab(
     val jdn by viewModel.selectedDay.collectAsState()
     val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
     val now by viewModel.now.collectAsState()
+    val today by viewModel.today.collectAsState()
 
     Column(
         Modifier
@@ -101,9 +102,12 @@ fun SharedTransitionScope.TimesTab(
             )
     ) {
         Spacer(Modifier.height(16.dp))
-        AstronomicalOverview(viewModel, prayTimes, now, navigateToAstronomy, animatedContentScope)
+        val isToday = jdn == today
+        AstronomicalOverview(
+            viewModel, prayTimes, now, isToday, navigateToAstronomy, animatedContentScope
+        )
         Spacer(Modifier.height(16.dp))
-        Times(isExpanded, prayTimes, now)
+        Times(isExpanded, prayTimes, now, isToday)
         Spacer(Modifier.height(8.dp))
         Row(
             Modifier.align(Alignment.CenterHorizontally),
@@ -142,16 +146,16 @@ private fun SharedTransitionScope.AstronomicalOverview(
     viewModel: CalendarViewModel,
     prayTimes: PrayTimes,
     now: Long,
+    isToday: Boolean,
     navigateToAstronomy: (Int) -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val today by viewModel.today.collectAsState()
     val jdn by viewModel.selectedDay.collectAsState()
     val sunViewNeedsAnimation by viewModel.sunViewNeedsAnimation.collectAsState()
     LaunchedEffect(Unit) { viewModel.astronomicalOverviewLaunched() }
 
     Crossfade(
-        targetState = jdn == today,
+        targetState = isToday,
         label = "heading",
         modifier = Modifier
             .fillMaxWidth()
@@ -173,7 +177,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
         ) else Box(Modifier.fillMaxSize()) {
             AndroidView(
                 factory = ::MoonView,
-                update = { if (jdn != today) it.jdn = jdn.value.toFloat() },
+                update = { if (!isToday) it.jdn = jdn.value.toFloat() },
                 modifier = Modifier
                     .size(70.dp)
                     .align(Alignment.Center)
