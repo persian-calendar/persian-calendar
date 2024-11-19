@@ -59,25 +59,23 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
                 enter = fadeIn() + expandHorizontally(),
                 exit = fadeOut() + shrinkHorizontally(),
             ) {
-                AnimatedContent(
-                    targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
-                    label = "time",
-                    transitionSpec = appCrossfadeSpec,
-                ) { state ->
-                    Column(
-                        modifier = Modifier.defaultMinSize(
-                            minWidth = dimensionResource(R.dimen.time_item_size),
-                        ),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        val textColor by animateColor(
-                            if (nextTimeId == timeId) MaterialTheme.colorScheme.primary
-                            else LocalContentColor.current
-                        )
-                        Text(stringResource(timeId), color = textColor)
-                        Text(state, color = textColor.copy(AppBlendAlpha))
-                        Spacer(Modifier.height(8.dp))
-                    }
+                Column(
+                    modifier = Modifier.defaultMinSize(
+                        minWidth = dimensionResource(R.dimen.time_item_size),
+                    ),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    val textColor by animateColor(
+                        if (nextTimeId == timeId) MaterialTheme.colorScheme.primary
+                        else LocalContentColor.current
+                    )
+                    Text(stringResource(timeId), color = textColor)
+                    AnimatedContent(
+                        targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
+                        label = "time",
+                        transitionSpec = appCrossfadeSpec,
+                    ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
+                    Spacer(Modifier.height(8.dp))
                 }
             }
         }
