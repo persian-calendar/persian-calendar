@@ -18,6 +18,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -170,7 +171,7 @@ fun SharedTransitionScope.EventsTab(
 }
 
 @Composable
-fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
+fun ColumnScope.DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     events.forEach { event ->

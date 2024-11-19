@@ -5,12 +5,14 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -48,7 +50,6 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -58,22 +59,30 @@ import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
+import kotlin.math.ceil
 import kotlin.math.min
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.Month(
-    viewModel: CalendarViewModel,
     offset: Int,
     width: Dp,
     height: Dp,
     addEvent: () -> Unit,
     monthColors: MonthColors,
+    navigateToWeek: ((Jdn) -> Unit)?,
     animatedContentScope: AnimatedContentScope,
+    today: Jdn,
+    isHighlighted: Boolean,
+    selectedDay: Jdn,
+    refreshToken: Int,
+    setSelectedDay: (Jdn) -> Unit,
+    onlyWeek: Int? = null,
 ) {
-    val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
+    val previousMonthLength =
+        if (onlyWeek == null) null else (monthStartJdn - 1).inCalendar(mainCalendar).dayOfMonth
 
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
 
@@ -83,10 +92,8 @@ fun SharedTransitionScope.Month(
     val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
-    val rowsCount = 7
+    val rowsCount = if (onlyWeek != null) 2 else 7
 
-    val isHighlighted by viewModel.isHighlighted.collectAsState()
-    val selectedDay by viewModel.selectedDay.collectAsState()
     val widthPx = with(LocalDensity.current) { width.toPx() }
     val heightPx = with(LocalDensity.current) { height.toPx() }
     val cellWidthPx = widthPx / columnsCount
@@ -96,14 +103,14 @@ fun SharedTransitionScope.Month(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     run {
+        val cellIndex = selectedDay - monthStartJdn + startingWeekDay
         val highlightedDayOfMonth = selectedDay - monthStartJdn
-        val cellIndex = highlightedDayOfMonth + startingWeekDay
         val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
             x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
             } + cellWidthPx / 2f,
             // +1 for weekday names initials row
-            y = (cellIndex / 7 + 1.5f) * cellHeightPx,
+            y = ((if (onlyWeek != null) 0 else (cellIndex / 7)) + 1.5f) * cellHeightPx,
         ) else null
         // Invalidate the indicator state on table size changes
         key(width, height) {
@@ -111,7 +118,6 @@ fun SharedTransitionScope.Month(
         }
     }
 
-    val refreshToken by viewModel.refreshToken.collectAsState()
     val context = LocalContext.current
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
     val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
@@ -161,11 +167,25 @@ fun SharedTransitionScope.Month(
                 )
             }
         }
-        repeat(monthLength) { dayOffset ->
-            if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingWeekDay) % 7 == 0)) {
-                Box(contentAlignment = Alignment.Center) {
-                    val weekNumber =
-                        formatNumber(monthStartWeekOfYear + (dayOffset + startingWeekDay) / 7)
+        repeat(ceil((monthLength + startingWeekDay) / 7f).toInt() * 7) { dayOffset ->
+            if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
+            val day = monthStartJdn + dayOffset - startingWeekDay
+            if (isShowWeekOfYearEnabled && dayOffset % 7 == 0) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = if (navigateToWeek != null) Modifier.clickable(
+                        indication = ripple(bounded = false),
+                        interactionSource = null,
+                    ) {
+                        navigateToWeek(
+                            if (isHighlighted && (selectedDay - day) in 0..<7) selectedDay
+                            else if (dayOffset < startingWeekDay) day + startingWeekDay
+                            // Select first non weekend day of the week
+                            else day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
+                        )
+                    } else Modifier
+                ) {
+                    val weekNumber = formatNumber(monthStartWeekOfYear + dayOffset / 7)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
                         weekNumber,
@@ -176,10 +196,12 @@ fun SharedTransitionScope.Month(
                     )
                 }
             }
-            if (dayOffset == 0) repeat(startingWeekDay) { Spacer(Modifier) }
-            val day = monthStartJdn + dayOffset
             val isToday = day == today
-            Canvas(
+            val isBeforeMonth = dayOffset < startingWeekDay
+            val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
+            if (previousMonthLength == null && (isBeforeMonth || isAfterMonth)) {
+                Spacer(Modifier)
+            } else Canvas(
                 modifier = Modifier
                     .sharedBounds(
                         rememberSharedContentState(SHARED_CONTENT_KEY_JDN + day.value),
@@ -188,11 +210,11 @@ fun SharedTransitionScope.Month(
                     .combinedClickable(
                         indication = null,
                         interactionSource = null,
-                        onClick = { viewModel.changeSelectedDay(day) },
+                        onClick = { setSelectedDay(day) },
                         onClickLabel = stringResource(R.string.select_day),
                         onLongClickLabel = stringResource(R.string.add_event),
                         onLongClick = {
-                            viewModel.changeSelectedDay(day)
+                            setSelectedDay(day)
                             addEvent()
                         },
                     )
@@ -206,8 +228,9 @@ fun SharedTransitionScope.Month(
                             withOtherCalendars = false,
                             withTitle = true,
                             withWeekOfYear = false,
-                        ) else (dayOffset + 1).toString()
-                    },
+                        ) else (dayOffset + 1 - startingWeekDay).toString()
+                    }
+                    .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
             ) {
                 val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
                 val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
@@ -232,7 +255,14 @@ fun SharedTransitionScope.Month(
                     style = Stroke(width = 1.dp.toPx()),
                 )
                 val textLayoutResult = textMeasurer.measure(
-                    text = formatNumber(dayOffset + 1, mainCalendarDigits),
+                    text = formatNumber(
+                        if (previousMonthLength != null && isBeforeMonth) {
+                            previousMonthLength - (startingWeekDay - dayOffset) + 1
+                        } else if (onlyWeek != null && isAfterMonth) {
+                            dayOffset + 1 - monthLength - startingWeekDay
+                        } else dayOffset + 1 - startingWeekDay,
+                        mainCalendarDigits,
+                    ),
                     style = daysStyle,
                 )
                 drawText(

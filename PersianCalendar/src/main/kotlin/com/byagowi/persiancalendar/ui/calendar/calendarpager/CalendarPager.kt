@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -29,9 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
@@ -45,8 +48,8 @@ fun SharedTransitionScope.CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
     addEvent: () -> Unit,
-    width: Dp,
-    height: Dp,
+    navigateToWeek: (Jdn) -> Unit,
+    size: DpSize,
     animatedContentScope: AnimatedContentScope,
 ) {
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
@@ -62,26 +65,55 @@ fun SharedTransitionScope.CalendarPager(
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
 
     val scope = rememberCoroutineScope()
+    val today by viewModel.today.collectAsState()
+    val isHighlighted by viewModel.isHighlighted.collectAsState()
+    val selectedDay by viewModel.selectedDay.collectAsState()
+    val refreshToken by viewModel.refreshToken.collectAsState()
+    val width = size.width
+    val height = size.height
 
     HorizontalPager(state = pagerState) { page ->
         Box(modifier = Modifier.height(height)) {
             val arrowWidth = width / 12
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
             PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = true)
-            Box(modifier = Modifier.padding(start = arrowWidth, end = arrowWidth)) {
+            Box(modifier = Modifier.padding(horizontal = arrowWidth)) {
                 Month(
-                    viewModel = viewModel,
                     offset = -applyOffset(page),
                     width = width - arrowWidth * 2,
                     height = height,
                     addEvent = addEvent,
                     monthColors = monthColors,
                     animatedContentScope = animatedContentScope,
+                    navigateToWeek = navigateToWeek,
+                    today = today,
+                    isHighlighted = isHighlighted,
+                    refreshToken = refreshToken,
+                    selectedDay = selectedDay,
+                    setSelectedDay = { viewModel.changeSelectedDay(it) },
                 )
             }
             PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = false)
         }
     }
+}
+
+fun calendarPagerSize(
+    isLandscape: Boolean,
+    maxWidth: Dp,
+    maxHeight: Dp,
+    twoRows: Boolean = false
+): DpSize {
+    return if (isLandscape) {
+        val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
+        val height = 400.dp.coerceAtMost(maxHeight)
+        DpSize(width, height)
+    } else DpSize(
+        maxWidth,
+        (maxHeight / 2f).coerceIn(280.dp, 440.dp).let {
+            if (twoRows) it / 7 * 2 else it
+        } - 8.dp
+    )
 }
 
 @Composable
@@ -94,13 +126,14 @@ private fun applyOffset(position: Int) = monthsLimit / 2 - position
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-private fun BoxScope.PagerArrow(
+fun BoxScope.PagerArrow(
     arrowWidth: Dp,
     arrowHeight: Dp,
     scope: CoroutineScope,
     pagerState: PagerState,
     index: Int,
     isPrevious: Boolean,
+    week: Int? = 0,
 ) {
     Box(
         modifier = Modifier
@@ -108,14 +141,16 @@ private fun BoxScope.PagerArrow(
             .size(arrowWidth, arrowHeight),
     ) {
         val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
-        val contentDescription = stringResource(stringId, stringResource(R.string.month))
+        val contentDescription = if (week == null) {
+            stringResource(stringId, stringResource(R.string.month))
+        } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1)
         Icon(
             if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
             else Icons.AutoMirrored.Default.KeyboardArrowRight,
             contentDescription = contentDescription,
             modifier = Modifier
                 .width(arrowWidth.coerceAtMost(MaterialIconDimension.dp))
-                .combinedClickable(
+                .then(if (week == null) Modifier.combinedClickable(
                     indication = ripple(bounded = false),
                     interactionSource = null,
                     onClick = {
@@ -130,7 +165,14 @@ private fun BoxScope.PagerArrow(
                         }
                     },
                     onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
-                )
+                ) else Modifier.clickable(
+                    indication = ripple(bounded = false),
+                    interactionSource = null,
+                ) {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                    }
+                })
                 .align(if (isPrevious) Alignment.CenterEnd else Alignment.CenterStart)
                 .alpha(.9f),
         )

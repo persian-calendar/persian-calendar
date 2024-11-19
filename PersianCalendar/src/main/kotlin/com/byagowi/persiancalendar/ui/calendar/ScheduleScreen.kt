@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.Timelapse
+import androidx.compose.material.icons.outlined.Timelapse
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -66,6 +68,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -85,6 +88,7 @@ import kotlin.math.abs
 fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
+    navigateToWeek: (Jdn) -> Unit,
     navigateUp: () -> Unit,
 ) {
     var baseJdn by remember { mutableStateOf(calendarViewModel.selectedDay.value) }
@@ -132,6 +136,10 @@ fun SharedTransitionScope.ScheduleScreen(
                                 state.animateScrollToItem(ITEMS_COUNT / 2)
                             } else state.scrollToItem(ITEMS_COUNT / 2)
                         }
+                    }
+
+                    AppIconButton(Icons.Default.Timelapse, stringResource(R.string.schedule)) {
+                        navigateToWeek(firstVisibleItemJdn)
                     }
 
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }

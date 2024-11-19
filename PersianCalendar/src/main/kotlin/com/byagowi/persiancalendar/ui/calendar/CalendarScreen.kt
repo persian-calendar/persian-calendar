@@ -45,7 +45,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -105,7 +105,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtLeast
-import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -134,6 +133,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
 import com.byagowi.persiancalendar.ui.calendar.reports.prayTimeHtmlReport
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkDialog
@@ -187,6 +187,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
+    navigateToWeek: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
@@ -242,8 +243,9 @@ fun SharedTransitionScope.CalendarScreen(
             // For screens without navigation bar, at least make sure it has some bottom padding
             .coerceAtLeast(24.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            val maxHeight = maxHeight
             val maxWidth = maxWidth
+            val maxHeight = maxHeight
+            val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight)
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(isYearView) {
@@ -269,11 +271,14 @@ fun SharedTransitionScope.CalendarScreen(
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
                 ) {
                     if (isLandscape) Row {
-                        val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
-                        val height = 400.dp.coerceAtMost(maxHeight)
-                        Box(Modifier.width(width)) {
+                        Box(Modifier.size(pagerSize)) {
                             CalendarPager(
-                                viewModel, pagerState, addEvent, width, height, animatedContentScope
+                                viewModel = viewModel,
+                                pagerState = pagerState,
+                                addEvent = addEvent,
+                                navigateToWeek = navigateToWeek,
+                                size = pagerSize,
+                                animatedContentScope = animatedContentScope,
                             )
                         }
                         ScreenSurface(animatedContentScope, materialCornerExtraLargeNoBottomEnd()) {
@@ -309,16 +314,19 @@ fun SharedTransitionScope.CalendarScreen(
                                     }
                                 },
                         ) {
-                            val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
+                            val calendarHeight = pagerSize.height
                             Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
-                                val height = calendarHeight - 4.dp
                                 CalendarPager(
-                                    viewModel, pagerState, addEvent, maxWidth, height,
-                                    animatedContentScope
+                                    viewModel = viewModel,
+                                    pagerState = pagerState,
+                                    addEvent = addEvent,
+                                    navigateToWeek = navigateToWeek,
+                                    size = pagerSize,
+                                    animatedContentScope = animatedContentScope,
                                 )
                             }
-                            Spacer(Modifier.height(4.dp))
-                            val detailsMinHeight = maxHeight - calendarHeight
+                            Spacer(Modifier.height(8.dp))
+                            val detailsMinHeight = maxHeight - calendarHeight - 8.dp
                             ScreenSurface(animatedContentScope, workaroundClipBug = true) {
                                 Details(
                                     viewModel = viewModel,
@@ -965,7 +973,7 @@ private class AddEventContract : ActivityResultContract<Jdn, Void?>() {
 }
 
 @Composable
-private fun addEvent(viewModel: CalendarViewModel): () -> Unit {
+fun addEvent(viewModel: CalendarViewModel): () -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
         viewModel.refreshCalendar()
     }
