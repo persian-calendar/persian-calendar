@@ -49,7 +49,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         val timeIds = getTimeNames()
-        val nextTimeId = if (isToday) prayTimes.getNextTimeId(now, timeIds, isExpanded) else 0
+        val nextTimeId = if (isToday) prayTimes.getNextTimeId(now, timeIds, isExpanded) else null
         timeIds.forEach { timeId ->
             AnimatedVisibility(
                 visible = isExpanded || when (timeId) {
