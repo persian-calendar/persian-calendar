@@ -87,6 +87,7 @@ fun SharedTransitionScope.TimesTab(
 
     val jdn by viewModel.selectedDay.collectAsState()
     val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())
+    val now by viewModel.now.collectAsState()
 
     Column(
         Modifier
@@ -100,9 +101,9 @@ fun SharedTransitionScope.TimesTab(
             )
     ) {
         Spacer(Modifier.height(16.dp))
-        AstronomicalOverview(viewModel, prayTimes, navigateToAstronomy, animatedContentScope)
+        AstronomicalOverview(viewModel, prayTimes, now, navigateToAstronomy, animatedContentScope)
         Spacer(Modifier.height(16.dp))
-        Times(isExpanded, prayTimes)
+        Times(isExpanded, prayTimes, now)
         Spacer(Modifier.height(8.dp))
         Row(
             Modifier.align(Alignment.CenterHorizontally),
@@ -140,13 +141,13 @@ private fun showEnableAthanForPersianUsers(): Boolean {
 private fun SharedTransitionScope.AstronomicalOverview(
     viewModel: CalendarViewModel,
     prayTimes: PrayTimes,
+    now: Long,
     navigateToAstronomy: (Int) -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
     val today by viewModel.today.collectAsState()
     val jdn by viewModel.selectedDay.collectAsState()
     val sunViewNeedsAnimation by viewModel.sunViewNeedsAnimation.collectAsState()
-    val now by viewModel.now.collectAsState()
     LaunchedEffect(Unit) { viewModel.astronomicalOverviewLaunched() }
 
     Crossfade(
