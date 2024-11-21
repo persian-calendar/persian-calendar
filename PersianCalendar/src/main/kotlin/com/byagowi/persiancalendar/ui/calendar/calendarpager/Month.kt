@@ -80,7 +80,7 @@ fun SharedTransitionScope.Month(
     val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
-    val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
+    val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
     val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
     val rowsCount = 7
@@ -165,7 +165,7 @@ fun SharedTransitionScope.Month(
             if (isShowWeekOfYearEnabled && (dayOffset == 0 || (dayOffset + startingWeekDay) % 7 == 0)) {
                 Box(contentAlignment = Alignment.Center) {
                     val weekNumber =
-                        formatNumber(weekOfYearStart + (dayOffset + startingWeekDay) / 7)
+                        formatNumber(monthStartWeekOfYear + (dayOffset + startingWeekDay) / 7)
                     val description = stringResource(R.string.nth_week_of_year, weekNumber)
                     Text(
                         weekNumber,
