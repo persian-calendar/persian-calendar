@@ -56,7 +56,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_JDN
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -224,12 +223,6 @@ fun SharedTransitionScope.ScheduleScreen(
                                 ) {
                                     Box(
                                         Modifier
-                                            .sharedBounds(
-                                                rememberSharedContentState(
-                                                    SHARED_CONTENT_KEY_JDN + jdn.value
-                                                ),
-                                                animatedVisibilityScope = animatedContentScope,
-                                            )
                                             .padding(top = 4.dp)
                                             .clickable(
                                                 interactionSource = null,
