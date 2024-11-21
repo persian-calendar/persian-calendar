@@ -161,3 +161,4 @@ const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy
 const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to a level
 const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns compass icon to a compass
 const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen to astronomy's
+const val SHARED_CONTENT_KEY_JDN = "jdn" // Move days on calendar table, a prefix

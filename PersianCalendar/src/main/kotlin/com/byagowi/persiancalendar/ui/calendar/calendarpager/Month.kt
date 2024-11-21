@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -34,6 +36,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_JDN
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -57,15 +60,16 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import kotlin.math.min
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun BoxScope.Month(
+fun SharedTransitionScope.Month(
     viewModel: CalendarViewModel,
     offset: Int,
     width: Dp,
     height: Dp,
     addEvent: () -> Unit,
     monthColors: MonthColors,
+    animatedContentScope: AnimatedContentScope,
 ) {
     val today by viewModel.today.collectAsState()
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
@@ -177,6 +181,10 @@ fun BoxScope.Month(
             val isToday = day == today
             Canvas(
                 modifier = Modifier
+                    .sharedBounds(
+                        rememberSharedContentState(SHARED_CONTENT_KEY_JDN + day.value),
+                        animatedVisibilityScope = animatedContentScope,
+                    )
                     .combinedClickable(
                         indication = null,
                         interactionSource = null,

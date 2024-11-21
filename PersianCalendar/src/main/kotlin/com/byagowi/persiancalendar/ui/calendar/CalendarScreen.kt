@@ -272,7 +272,9 @@ fun SharedTransitionScope.CalendarScreen(
                         val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
                         val height = 400.dp.coerceAtMost(maxHeight)
                         Box(Modifier.width(width)) {
-                            CalendarPager(viewModel, pagerState, addEvent, width, height)
+                            CalendarPager(
+                                viewModel, pagerState, addEvent, width, height, animatedContentScope
+                            )
                         }
                         ScreenSurface(animatedContentScope, materialCornerExtraLargeNoBottomEnd()) {
                             Details(
@@ -310,7 +312,10 @@ fun SharedTransitionScope.CalendarScreen(
                             val calendarHeight = (maxHeight / 2f).coerceIn(280.dp, 440.dp)
                             Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
                                 val height = calendarHeight - 4.dp
-                                CalendarPager(viewModel, pagerState, addEvent, maxWidth, height)
+                                CalendarPager(
+                                    viewModel, pagerState, addEvent, maxWidth, height,
+                                    animatedContentScope
+                                )
                             }
                             Spacer(Modifier.height(4.dp))
                             val detailsMinHeight = maxHeight - calendarHeight
