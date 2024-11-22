@@ -28,13 +28,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
-import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
@@ -114,7 +114,7 @@ fun SharedTransitionScope.WeekScreen(
             Column {
                 val language by language.collectAsState()
                 val refreshToken by calendarViewModel.refreshToken.collectAsState()
-                HorizontalPager(state = pagerState) { page ->
+                HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
                     Box(modifier = Modifier.height(pagerSize.height)) {
                         WeekPage(
                             pagerSize,
