@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
+import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -63,25 +64,26 @@ fun SharedTransitionScope.WeekScreen(
     navigateUp: () -> Unit,
 ) {
     var selectedDay by remember { mutableStateOf(initialSelectedDay) }
+    val date = selectedDay.inCalendar(mainCalendar)
     val today by calendarViewModel.today.collectAsState()
     val context = LocalContext.current
     var isClickedOnce by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val initialPage = remember {
-        val a = initialSelectedDay - applyWeekStartOffsetToWeekDay(
-            initialSelectedDay.weekDay
-        )
-        val b = today - applyWeekStartOffsetToWeekDay(today.weekDay)
-        (a - b) / 7 + weeksLimit / 2
+        val initialSelectedDayWeekStart =
+            initialSelectedDay - applyWeekStartOffsetToWeekDay(initialSelectedDay.weekDay)
+        val todayWeekStart = today - applyWeekStartOffsetToWeekDay(today.weekDay)
+        (initialSelectedDayWeekStart - todayWeekStart) / 7 + weeksLimit / 2
     }
     val pagerState = rememberPagerState(initialPage = initialPage) { weeksLimit }
 
     DisposableEffect(Unit) {
         onDispose {
-            if (isClickedOnce) bringDate(calendarViewModel, selectedDay, context, highlight = true)
+            if (isClickedOnce) {
+                bringDate(calendarViewModel, selectedDay, context, highlight = selectedDay != today)
+            }
         }
     }
-    val date = selectedDay.inCalendar(mainCalendar)
     val addEvent = addEvent(calendarViewModel)
     Scaffold(
         containerColor = Color.Transparent,
@@ -117,19 +119,20 @@ fun SharedTransitionScope.WeekScreen(
                 HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
                     Box(modifier = Modifier.height(pagerSize.height)) {
                         WeekPage(
-                            pagerSize,
-                            addEvent,
-                            monthColors,
-                            selectedDay,
-                            { jdn -> selectedDay = jdn },
-                            { isClickedOnce = true },
-                            animatedContentScope,
-                            language,
-                            coroutineScope,
-                            pagerState,
-                            page,
-                            today,
-                            refreshToken,
+                            pagerSize = pagerSize,
+                            addEvent = addEvent,
+                            monthColors = monthColors,
+                            selectedDay = selectedDay,
+                            selectedDayDate = date,
+                            setSelectedDay = { jdn -> selectedDay = jdn },
+                            setClickedOnce = { isClickedOnce = true },
+                            animatedContentScope = animatedContentScope,
+                            language = language,
+                            coroutineScope = coroutineScope,
+                            pagerState = pagerState,
+                            page = page,
+                            today = today,
+                            refreshToken = refreshToken,
                         )
                     }
                 }
@@ -180,6 +183,7 @@ private fun SharedTransitionScope.WeekPage(
     addEvent: () -> Unit,
     monthColors: MonthColors,
     selectedDay: Jdn,
+    selectedDayDate: AbstractDate,
     setSelectedDay: (Jdn) -> Unit,
     setClickedOnce: () -> Unit,
     animatedContentScope: AnimatedContentScope,
@@ -192,9 +196,8 @@ private fun SharedTransitionScope.WeekPage(
 ) {
     Box {
         val offset = page - weeksLimit / 2
-        val date = (today + 7 * offset).inCalendar(mainCalendar)
-        val startOfYearJdn = Jdn(mainCalendar, date.year, 1, 1)
         val initialDay = today + 7 * offset
+        val startOfYearJdn = Jdn(mainCalendar, selectedDayDate.year, 1, 1)
         val week = initialDay.getWeekOfYear(startOfYearJdn)
 
         val isCurrentPage = pagerState.currentPage == page

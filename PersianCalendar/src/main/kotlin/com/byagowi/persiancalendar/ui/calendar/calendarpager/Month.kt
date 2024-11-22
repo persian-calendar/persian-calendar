@@ -185,7 +185,7 @@ fun SharedTransitionScope.Month(
                         interactionSource = null,
                     ) {
                         navigateToWeek(
-                            if (isHighlighted && (selectedDay - day) in 0..<7) selectedDay
+                            if (selectedDay - day in 0..<7) selectedDay
                             else if (dayOffset < startingWeekDay) day + startingWeekDay
                             // Select first non weekend day of the week
                             else day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
