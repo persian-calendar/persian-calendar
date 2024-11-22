@@ -138,7 +138,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         }
                     }
 
-                    AppIconButton(Icons.Default.Timelapse, stringResource(R.string.schedule)) {
+                    AppIconButton(Icons.Default.Timelapse, stringResource(R.string.week_view)) {
                         navigateToWeek(firstVisibleItemJdn)
                     }
 
