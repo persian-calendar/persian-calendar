@@ -180,6 +180,7 @@ import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
+import java.util.Date
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -230,7 +231,7 @@ fun SharedTransitionScope.CalendarScreen(
                         renderInOverlay = { isCurrentDestination && isTransitionActive },
                     ),
                 isVisible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
-                action = addEvent,
+                action = { addEvent(AddEventData.fromJdn(viewModel.selectedDay.value)) },
                 icon = Icons.Default.Add,
                 title = stringResource(R.string.add_event),
             )
@@ -310,10 +311,8 @@ fun SharedTransitionScope.CalendarScreen(
                                         val wasAtEnd = scrollState.value == scrollState.maxValue
                                         verticalDrag(id) {
                                             val dragAmount = it.positionChange().y
-                                            if (dragAmount < -threshold && wasAtEnd)
-                                                navigateToSchedule()
-                                            else if (dragAmount > threshold && wasAtTop)
-                                                viewModel.openYearView()
+                                            if (dragAmount < -threshold && wasAtEnd) navigateToSchedule()
+                                            else if (dragAmount > threshold && wasAtTop) viewModel.openYearView()
                                         }
                                     }
                                 },
@@ -717,7 +716,7 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
 @Composable
 private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
-    addEvent: () -> Unit,
+    addEvent: (AddEventData) -> Unit,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToWeek: (Jdn) -> Unit,
@@ -869,7 +868,7 @@ private fun SharedTransitionScope.Toolbar(
 @Composable
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
-    addEvent: () -> Unit,
+    addEvent: (AddEventData) -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToWeek: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
@@ -903,7 +902,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem({ Text(stringResource(R.string.add_event)) }) {
             closeMenu()
-            addEvent()
+            addEvent(AddEventData.fromJdn(viewModel.selectedDay.value))
         }
 
         AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
@@ -987,38 +986,57 @@ private fun SharedTransitionScope.Menu(
     }
 }
 
-private class AddEventContract : ActivityResultContract<Jdn, Void?>() {
-    override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-    override fun createIntent(context: Context, input: Jdn): Intent {
-        val time = input.toGregorianCalendar().timeInMillis
-        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).putExtra(
-            CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                input, input.inCalendar(mainCalendar)
+data class AddEventData(
+    val beginTime: Date,
+    val endTime: Date,
+    val allDay: Boolean,
+    val description: String,
+) {
+    companion object {
+        fun fromJdn(jdn: Jdn): AddEventData {
+            val time = jdn.toGregorianCalendar().time
+            return AddEventData(
+                beginTime = time,
+                endTime = time,
+                allDay = true,
+                description = dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
             )
-        ).putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
-            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
-            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
+        }
+    }
+}
+
+private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
+    override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
+    override fun createIntent(context: Context, input: AddEventData): Intent {
+        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
+            .putExtra(CalendarContract.Events.DESCRIPTION, input.description)
+            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, input.beginTime.time)
+            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, input.endTime.time)
+            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, input.allDay)
     }
 }
 
 @Composable
-fun addEvent(viewModel: CalendarViewModel): () -> Unit {
+fun addEvent(viewModel: CalendarViewModel): (AddEventData) -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
         viewModel.refreshCalendar()
     }
 
     val context = LocalContext.current
+    var addEventData by remember { mutableStateOf<AddEventData?>(null) }
 
     var showDialog by rememberSaveable { mutableStateOf(false) }
     if (showDialog) AskForCalendarPermissionDialog { isGranted ->
         viewModel.refreshCalendar()
         showDialog = false
-        if (isGranted) runCatching {
-            addEvent.launch(viewModel.selectedDay.value)
-        }.onFailure(logException).onFailure {
+        val data = addEventData.debugAssertNotNull ?: return@AskForCalendarPermissionDialog
+        if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
             Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
         }
     }
 
-    return { showDialog = true }
+    return {
+        showDialog = true
+        addEventData = it
+    }
 }

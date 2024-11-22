@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -69,7 +70,7 @@ fun SharedTransitionScope.Month(
     offset: Int,
     width: Dp,
     height: Dp,
-    addEvent: () -> Unit,
+    addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
     navigateToWeek: ((Jdn) -> Unit)?,
     animatedContentScope: AnimatedContentScope,
@@ -222,7 +223,7 @@ fun SharedTransitionScope.Month(
                         onLongClickLabel = stringResource(R.string.add_event),
                         onLongClick = {
                             setSelectedDay(day)
-                            addEvent()
+                            addEvent(AddEventData.fromJdn(day))
                         },
                     )
                     .semantics {

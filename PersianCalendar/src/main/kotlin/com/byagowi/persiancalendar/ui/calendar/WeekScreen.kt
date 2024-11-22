@@ -5,24 +5,28 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -39,6 +43,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -63,12 +68,14 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
+import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.GregorianCalendar
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -191,7 +198,7 @@ fun SharedTransitionScope.WeekScreen(
                         Box {
                             LazyColumn(state = state) {
                                 items(24) { hour ->
-                                    Column(Modifier.defaultMinSize(minHeight = 64.dp)) {
+                                    Column {
                                         Row(
                                             verticalAlignment = Alignment.CenterVertically,
                                             modifier = Modifier
@@ -214,7 +221,7 @@ fun SharedTransitionScope.WeekScreen(
                                             }
                                             if (hourEvents.isNotEmpty()) DayEvents(hourEvents) {
                                                 calendarViewModel.refreshCalendar()
-                                            }
+                                            } else AddHourEvent(addEvent, selectedDay, hour)
                                         }
                                     }
                                 }
@@ -228,11 +235,46 @@ fun SharedTransitionScope.WeekScreen(
     }
 }
 
+@Composable
+fun AddHourEvent(addEvent: (AddEventData) -> Unit, jdn: Jdn, hour: Int) {
+    Box(
+        Modifier
+            .padding(top = 4.dp)
+            .clip(MaterialTheme.shapes.medium)
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .5f))
+            .clickable {
+                val time = jdn.toGregorianCalendar()
+                time.set(GregorianCalendar.HOUR_OF_DAY, hour)
+                time.set(GregorianCalendar.MINUTE, 0)
+                time.set(GregorianCalendar.SECOND, 0)
+                val beginTime = time.time
+                time.set(GregorianCalendar.HOUR_OF_DAY, hour + 1)
+                val endTime = time.time
+                addEvent(
+                    AddEventData(
+                        beginTime = beginTime,
+                        endTime = endTime,
+                        allDay = false,
+                        description = dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
+                    )
+                )
+            }
+            .padding(all = 12.dp),
+    ) {
+        Icon(
+            Icons.Default.Add,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(24.dp),
+            contentDescription = stringResource(R.string.add_event),
+        )
+    }
+}
+
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun SharedTransitionScope.WeekPage(
     pagerSize: DpSize,
-    addEvent: () -> Unit,
+    addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
     selectedDay: Jdn,
     selectedDayDate: AbstractDate,

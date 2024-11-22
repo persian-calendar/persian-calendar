@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
@@ -46,7 +47,7 @@ import kotlinx.coroutines.launch
 fun SharedTransitionScope.CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
-    addEvent: () -> Unit,
+    addEvent: (AddEventData) -> Unit,
     navigateToWeek: (Jdn) -> Unit,
     size: DpSize,
     animatedContentScope: AnimatedContentScope,
