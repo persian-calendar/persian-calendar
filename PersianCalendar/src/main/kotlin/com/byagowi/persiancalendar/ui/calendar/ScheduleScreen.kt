@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Timelapse
-import androidx.compose.material.icons.outlined.Timelapse
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -138,9 +137,10 @@ fun SharedTransitionScope.ScheduleScreen(
                         }
                     }
 
-                    AppIconButton(Icons.Default.Timelapse, stringResource(R.string.week_view)) {
-                        navigateToWeek(firstVisibleItemJdn)
-                    }
+                    AppIconButton(
+                        icon = Icons.Default.Timelapse,
+                        title = stringResource(R.string.daily_schedule)
+                    ) { navigateToWeek(firstVisibleItemJdn) }
 
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
                     if (showDatePickerDialog) {

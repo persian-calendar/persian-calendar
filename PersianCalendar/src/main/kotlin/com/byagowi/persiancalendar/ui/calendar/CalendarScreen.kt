@@ -932,7 +932,7 @@ private fun SharedTransitionScope.Menu(
             viewModel.openYearView()
         }
 
-        AppDropdownMenuItem({ Text(stringResource(R.string.week_view)) },) {
+        AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
             closeMenu()
             navigateToWeek(viewModel.selectedDay.value)
         }
