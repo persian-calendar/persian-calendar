@@ -205,15 +205,17 @@
     <string name="nth_week_of_year">%1$s semana del año</string>
     <string name="shift_work_settings">Ajustes del turno de trabajo</string>
     <string name="remove">Eliminar</string>
-    <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
-    <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
+    <string name="shift_work_starting_date">La fecha seleccionada en el calendario %1$s se utilizará como día de inicio del turno.</string>
+    <string name="shift_work_starting_date_edit">%1$s, previamente seleccionado, es el día de inicio del turno de trabajo elegido.</string>
     <string name="shift_work_reset_button">Deshabilitar o reprogramar</string>
     <plurals name="minutes">
         <item quantity="one">%1$s minuto</item>
+        <item quantity="many">%1$s minutos</item>
         <item quantity="other">%1$s minutos</item>
     </plurals>
     <plurals name="hours">
         <item quantity="one">%1$s hora</item>
+        <item quantity="many">%1$s horas</item>
         <item quantity="other">%1$s horas</item>
     </plurals>
     <string name="spaced_and">" y "</string>
@@ -221,12 +223,13 @@
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_information">Información del dispositivo</string>
-    <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
-    <string name="center_align_widgets">Center align the widgets</string>
-    <string name="n_till">%1$s till to %2$s</string>
+    <string name="center_align_widgets_summary">Alineación central de widgets 4x1 y 2x2</string>
+    <string name="center_align_widgets">Centrar los widgets</string>
+    <string name="n_till">Faltan %1$s para %2$s</string>
     <plurals name="shift_work_record_title">
-        <item quantity="one">%1$s día %2$s</item>
-        <item quantity="other">%1$s días %2$s</item>
+        <item quantity="one">%1$s %2$s día</item>
+        <item quantity="many">%1$s %2$s días</item>
+        <item quantity="other">%1$s %2$s días</item>
     </plurals>
     <string name="recurs">Recurre</string>
     <string name="am">AM</string>
@@ -245,20 +248,23 @@
     <string name="age_widget_title">Título del widget</string>
     <plurals name="days">
         <item quantity="one">%1$s día</item>
+        <item quantity="many">%1$s días</item>
         <item quantity="other">%1$s días</item>
     </plurals>
     <plurals name="months">
         <item quantity="one">%1$s mes</item>
+        <item quantity="many">%1$s meses</item>
         <item quantity="other">%1$s meses</item>
     </plurals>
     <plurals name="years">
         <item quantity="one">%1$s año</item>
+        <item quantity="many">%1$s años</item>
         <item quantity="other">%1$s años</item>
     </plurals>
     <string name="preview">Previsualización</string>
     <string name="ignore">Ignorar</string>
     <string name="theme_default">Predeterminado del sistema</string>
-    <string name="theme_light">Light</string>
+    <string name="theme_light">Claro</string>
     <string name="theme_dark">Oscuro</string>
     <string name="theme_modern">Moderno</string>
     <string name="theme_aqua">Blue</string>
@@ -270,7 +276,7 @@
     <string name="islamic_calendar_short">Islámico</string>
     <string name="gregorian_calendar_short">Gregoriano</string>
     <string name="method_jafari">Shia Ithna-Ashari, Leva Institute, Qum</string>
-    <string name="method_mwl">Muslim World League</string>
+    <string name="method_mwl">Liga del Mundo Islámico</string>
     <string name="method_isna">Sociedad islámica Norteamericana</string>
     <string name="method_egypt">Egyptian General Authority of Survey</string>
     <string name="method_makkah">Umm Al-Qura University, Makkah</string>
@@ -381,7 +387,7 @@
     <string name="mars">Marte</string>
     <string name="jupiter">Júpiter</string>
     <string name="saturn">Saturno</string>
-    <string name="uranus">Uranus</string>
+    <string name="uranus">Urano</string>
     <string name="neptune">Neptuno</string>
     <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
     <string name="screensaver_settings">Ajustes del salvapantallas</string>
@@ -424,4 +430,5 @@
     <string name="vibration">Vibración</string>
     <string name="schedule">Horario</string>
     <string name="print">Imprimir</string>
+    <string name="week_view">Vista semanal</string>
 </resources>
