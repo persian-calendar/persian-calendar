@@ -3,12 +3,12 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -73,7 +73,7 @@ fun SharedTransitionScope.CalendarPager(
     val height = size.height
 
     HorizontalPager(state = pagerState) { page ->
-        Box(modifier = Modifier.height(height)) {
+        Box {
             val arrowWidth = width / 12
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
             PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = true)
@@ -112,7 +112,7 @@ fun calendarPagerSize(
         maxWidth,
         (maxHeight / 2f).coerceIn(280.dp, 440.dp).let {
             if (twoRows) it / 7 * 2 else it
-        } - 8.dp
+        } - 12.dp
     )
 }
 

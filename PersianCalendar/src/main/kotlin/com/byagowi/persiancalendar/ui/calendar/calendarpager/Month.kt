@@ -9,6 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -150,7 +151,13 @@ fun SharedTransitionScope.Month(
         cellWidthPx, cellHeightPx
     ) * 1 / 40
 
-    FixedSizeHorizontalGrid(columnsCount, rowsCount) {
+    val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
+    FixedSizeHorizontalGrid(
+        columnsCount = columnsCount,
+        rowsCount = rowsCount,
+        cellHeight = cellHeightPx,
+        modifier = Modifier.height(height / 7 * if (onlyWeek != null) 2 else (daysRowsCount + 1)),
+    ) {
         if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(contentAlignment = Alignment.Center) {
@@ -167,7 +174,7 @@ fun SharedTransitionScope.Month(
                 )
             }
         }
-        repeat(ceil((monthLength + startingWeekDay) / 7f).toInt() * 7) { dayOffset ->
+        repeat(daysRowsCount * 7) { dayOffset ->
             if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
             val day = monthStartJdn + dayOffset - startingWeekDay
             if (isShowWeekOfYearEnabled && dayOffset % 7 == 0) {

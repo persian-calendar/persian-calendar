@@ -23,6 +23,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
@@ -97,8 +98,10 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
@@ -314,8 +317,18 @@ fun SharedTransitionScope.CalendarScreen(
                                     }
                                 },
                         ) {
-                            val calendarHeight = pagerSize.height
-                            Box(Modifier.offset { IntOffset(0, scrollState.value * 3 / 4) }) {
+                            var calendarHeight by remember {
+                                mutableStateOf(pagerSize.height / 7 * 6)
+                            }
+                            val density = LocalDensity.current
+                            Box(
+                                Modifier
+                                    .offset { IntOffset(0, scrollState.value * 3 / 4) }
+                                    .onSizeChanged {
+                                        calendarHeight = with(density) { it.height.toDp() }
+                                    }
+                                    .animateContentSize(),
+                            ) {
                                 CalendarPager(
                                     viewModel = viewModel,
                                     pagerState = pagerState,
@@ -325,8 +338,9 @@ fun SharedTransitionScope.CalendarScreen(
                                     animatedContentScope = animatedContentScope,
                                 )
                             }
-                            Spacer(Modifier.height(8.dp))
-                            val detailsMinHeight = maxHeight - calendarHeight - 8.dp
+
+                            Spacer(Modifier.height(12.dp))
+                            val detailsMinHeight = maxHeight - calendarHeight - 12.dp
                             ScreenSurface(animatedContentScope, workaroundClipBug = true) {
                                 Details(
                                     viewModel = viewModel,
