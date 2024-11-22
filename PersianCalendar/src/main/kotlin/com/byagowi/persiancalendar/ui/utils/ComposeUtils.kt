@@ -59,3 +59,6 @@ const val SettingsItemHeight = SettingsHorizontalPaddingItem * 2
 
 // Common alpha value to blend a component with it's background
 const val AppBlendAlpha = .75f
+
+// analogous to compat's listPreferredItemPaddingLeft/Right, it's in .dp
+const val ItemWidth = 100f

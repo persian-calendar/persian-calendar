@@ -1,20 +1,28 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,11 +38,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
@@ -45,6 +58,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.PagerArrow
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -54,6 +68,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -138,36 +153,73 @@ fun SharedTransitionScope.WeekScreen(
                 }
                 Spacer(Modifier.height(8.dp))
                 ScreenSurface(animatedContentScope) {
-                    Box(Modifier.fillMaxSize()) {
-                        val events = readEvents(selectedDay, refreshToken)
-//                        val eventsWithTime = events
-//                            .filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-//                            .filter { it.time != null }
-//                        val eventsWithoutTime = events - eventsWithTime.toSet()
-                        val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
-                        Column(
-                            if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
-                                rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                                animatedVisibilityScope = animatedContentScope,
-                            ) else Modifier,
-                        ) {
-                            Column(Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)) {
-                                DayEvents(events) {}
+                    val events = readEvents(selectedDay, refreshToken)
+                    val eventsWithTime = events
+                        .filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
+                        .filter { it.time != null }
+                    val eventsWithoutTime = events - eventsWithTime.toSet()
+                    val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
+                    Column {
+                        Spacer(Modifier.height(24.dp))
+                        AnimatedVisibility(events.isEmpty()) {
+                            Text(
+                                stringResource(R.string.no_event),
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 24.dp)
+                            )
+                        }
+                        AnimatedVisibility(eventsWithoutTime.isNotEmpty()) {
+                            Column(
+                                Modifier
+                                    .padding(horizontal = 24.dp)
+                                    .then(
+                                        if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
+                                            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+                                            animatedVisibilityScope = animatedContentScope,
+                                        ) else Modifier
+                                    )
+                            ) {
+                                DayEvents(eventsWithoutTime) {
+                                    calendarViewModel.refreshCalendar()
+                                }
                             }
-//                            eventsWithTime.forEach {
-//                                Spacer(Modifier.height(16.dp))
-//                                Text(
-//                                    "${it.time?.replace(" ", "")}:",
-//                                    style = MaterialTheme.typography.titleLarge,
-//                                    modifier = Modifier.padding(start = 16.dp),
-//                                    maxLines = 1,
-//                                )
-//                                Text(
-//                                    it.title,
-//                                    style = MaterialTheme.typography.headlineLarge,
-//                                    modifier = Modifier.padding(start = 8.dp),
-//                                )
-//                            }
+                        }
+                        Spacer(Modifier.height(12.dp))
+                        val state = rememberLazyListState(7, 0)
+                        Box {
+                            LazyColumn(state = state) {
+                                items(24) { hour ->
+                                    Column(Modifier.defaultMinSize(minHeight = 64.dp)) {
+                                        Row(
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            modifier = Modifier
+                                                .padding(top = 8.dp)
+                                                .then(
+                                                    if (hour < 7) Modifier.alpha(.5f)
+                                                    else Modifier
+                                                ),
+                                        ) {
+                                            Text(
+                                                formatNumber("${hour}:00"),
+                                                modifier = Modifier.width(64.dp),
+                                                textAlign = TextAlign.Center
+                                            )
+                                            HorizontalDivider()
+                                        }
+                                        Column(Modifier.padding(horizontal = 24.dp)) {
+                                            val hourEvents = eventsWithTime.filter {
+                                                it.startTime.get(Calendar.HOUR_OF_DAY) == hour
+                                            }
+                                            if (hourEvents.isNotEmpty()) DayEvents(hourEvents) {
+                                                calendarViewModel.refreshCalendar()
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            ScrollShadow(state)
                         }
                     }
                 }

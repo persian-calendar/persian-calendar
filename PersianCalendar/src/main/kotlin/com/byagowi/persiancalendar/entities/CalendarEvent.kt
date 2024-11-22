@@ -7,6 +7,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.Date
+import java.util.GregorianCalendar
 
 sealed class CalendarEvent<T : AbstractDate>(
     val title: String, val isHoliday: Boolean, val date: T
@@ -25,7 +26,8 @@ sealed class CalendarEvent<T : AbstractDate>(
 
     class DeviceCalendarEvent(
         date: CivilDate, title: String, isHoliday: Boolean, val id: Long, val description: String,
-        val start: Date, val end: Date, val color: String, val time: String?,
+        val start: Date, val end: Date, val color: String,
+        val time: String?, val startTime: GregorianCalendar, val endTime: GregorianCalendar,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date)
 
     val oneLinerTitleWithTime

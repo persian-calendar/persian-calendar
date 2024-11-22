@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -57,6 +56,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -305,9 +305,7 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
         calendarsToShow.forEach { calendar ->
             val date = jdn.inCalendar(calendar)
             Column(
-                modifier = Modifier.defaultMinSize(
-                    minWidth = dimensionResource(R.dimen.calendar_item_size),
-                ),
+                modifier = Modifier.defaultMinSize(minWidth = ItemWidth.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val clipboardManager = LocalClipboardManager.current

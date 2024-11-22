@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
@@ -31,6 +30,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
@@ -60,9 +60,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
                 exit = fadeOut() + shrinkHorizontally(),
             ) {
                 Column(
-                    modifier = Modifier.defaultMinSize(
-                        minWidth = dimensionResource(R.dimen.time_item_size),
-                    ),
+                    modifier = Modifier.defaultMinSize(minWidth = ItemWidth.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val textColor by animateColor(

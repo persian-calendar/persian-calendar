@@ -192,6 +192,8 @@ private fun readDeviceEvents(
                             (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
                                 " $EN_DASH ${endCalendar.clock()}"
                             else ""),
+                startTime = startCalendar,
+                endTime = endCalendar,
                 description = it.getString(2)?.replace(descriptionCleaningPattern, "") ?: "",
                 start = startDate,
                 end = endDate,
