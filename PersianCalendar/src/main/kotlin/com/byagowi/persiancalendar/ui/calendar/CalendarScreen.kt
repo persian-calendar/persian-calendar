@@ -267,6 +267,7 @@ fun SharedTransitionScope.CalendarScreen(
                     navigateToAstronomy = navigateToAstronomy,
                     animatedContentScope = animatedContentScope,
                     bottomPadding = bottomPadding,
+                    navigateToWeek = navigateToWeek,
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
@@ -421,6 +422,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
+    navigateToWeek: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
     bottomPadding: Dp,
 ): List<DetailsTab> {
@@ -441,6 +443,7 @@ private fun SharedTransitionScope.detailsTabs(
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
                 bottomPadding = bottomPadding,
+                navigateToWeek = navigateToWeek,
             )
         },
         // The optional third tab
