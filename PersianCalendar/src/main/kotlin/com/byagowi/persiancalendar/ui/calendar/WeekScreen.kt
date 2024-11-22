@@ -160,77 +160,87 @@ fun SharedTransitionScope.WeekScreen(
                 }
                 Spacer(Modifier.height(8.dp))
                 ScreenSurface(animatedContentScope) {
-                    val events = readEvents(selectedDay, refreshToken)
-                    val eventsWithTime = events
-                        .filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-                        .filter { it.time != null }
-                    val eventsWithoutTime = events - eventsWithTime.toSet()
-                    val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
+                    DaySchedule(
+                        selectedDay = selectedDay,
+                        refreshToken = refreshToken,
+                        calendarViewModel = calendarViewModel,
+                        animatedContentScope = animatedContentScope,
+                        addEvent = addEvent
+                    )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun SharedTransitionScope.DaySchedule(
+    selectedDay: Jdn,
+    refreshToken: Int,
+    calendarViewModel: CalendarViewModel,
+    animatedContentScope: AnimatedContentScope,
+    addEvent: (AddEventData) -> Unit
+) {
+    val events = readEvents(selectedDay, refreshToken)
+    val eventsWithTime =
+        events.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
+    val eventsWithoutTime = events - eventsWithTime.toSet()
+    val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
+    Column {
+        Spacer(Modifier.height(24.dp))
+        AnimatedVisibility(events.isEmpty()) {
+            Text(
+                stringResource(R.string.no_event),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+            )
+        }
+        AnimatedVisibility(eventsWithoutTime.isNotEmpty()) {
+            Column(
+                Modifier
+                    .padding(horizontal = 24.dp)
+                    .then(
+                        if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
+                            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+                            animatedVisibilityScope = animatedContentScope,
+                        ) else Modifier
+                    )
+            ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
+        }
+        Spacer(Modifier.height(12.dp))
+        val state = rememberLazyListState(7, 0)
+        Box {
+            LazyColumn(state = state) {
+                items(24) { hour ->
                     Column {
-                        Spacer(Modifier.height(24.dp))
-                        AnimatedVisibility(events.isEmpty()) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .then(if (hour < 7) Modifier.alpha(.5f) else Modifier),
+                        ) {
                             Text(
-                                stringResource(R.string.no_event),
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 24.dp)
+                                formatNumber("${hour}:00"),
+                                modifier = Modifier.width(64.dp),
+                                textAlign = TextAlign.Center
                             )
+                            HorizontalDivider()
                         }
-                        AnimatedVisibility(eventsWithoutTime.isNotEmpty()) {
-                            Column(
-                                Modifier
-                                    .padding(horizontal = 24.dp)
-                                    .then(
-                                        if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
-                                            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                                            animatedVisibilityScope = animatedContentScope,
-                                        ) else Modifier
-                                    )
-                            ) {
-                                DayEvents(eventsWithoutTime) {
-                                    calendarViewModel.refreshCalendar()
-                                }
+                        Column(Modifier.padding(horizontal = 24.dp)) {
+                            val hourEvents = eventsWithTime.filter {
+                                it.startTime.get(Calendar.HOUR_OF_DAY) == hour
                             }
-                        }
-                        Spacer(Modifier.height(12.dp))
-                        val state = rememberLazyListState(7, 0)
-                        Box {
-                            LazyColumn(state = state) {
-                                items(24) { hour ->
-                                    Column {
-                                        Row(
-                                            verticalAlignment = Alignment.CenterVertically,
-                                            modifier = Modifier
-                                                .padding(top = 8.dp)
-                                                .then(
-                                                    if (hour < 7) Modifier.alpha(.5f)
-                                                    else Modifier
-                                                ),
-                                        ) {
-                                            Text(
-                                                formatNumber("${hour}:00"),
-                                                modifier = Modifier.width(64.dp),
-                                                textAlign = TextAlign.Center
-                                            )
-                                            HorizontalDivider()
-                                        }
-                                        Column(Modifier.padding(horizontal = 24.dp)) {
-                                            val hourEvents = eventsWithTime.filter {
-                                                it.startTime.get(Calendar.HOUR_OF_DAY) == hour
-                                            }
-                                            if (hourEvents.isNotEmpty()) DayEvents(hourEvents) {
-                                                calendarViewModel.refreshCalendar()
-                                            } else AddHourEvent(addEvent, selectedDay, hour)
-                                        }
-                                    }
-                                }
-                            }
-                            ScrollShadow(state)
+                            if (hourEvents.isNotEmpty()) DayEvents(hourEvents) {
+                                calendarViewModel.refreshCalendar()
+                            } else AddHourEvent(addEvent, selectedDay, hour)
                         }
                     }
                 }
             }
+            ScrollShadow(state)
         }
     }
 }
