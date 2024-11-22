@@ -48,7 +48,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
@@ -133,6 +135,7 @@ fun SharedTransitionScope.WeekScreen(
         },
     ) { paddingValues ->
         val monthColors = appMonthColors()
+        val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val pagerSize = calendarPagerSize(false, this.maxWidth, this.maxHeight, true)
             Column {
@@ -165,7 +168,8 @@ fun SharedTransitionScope.WeekScreen(
                         refreshToken = refreshToken,
                         calendarViewModel = calendarViewModel,
                         animatedContentScope = animatedContentScope,
-                        addEvent = addEvent
+                        addEvent = addEvent,
+                        bottomPadding = bottomPadding,
                     )
                 }
             }
@@ -180,7 +184,8 @@ private fun SharedTransitionScope.DaySchedule(
     refreshToken: Int,
     calendarViewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
-    addEvent: (AddEventData) -> Unit
+    addEvent: (AddEventData) -> Unit,
+    bottomPadding: Dp,
 ) {
     val events = readEvents(selectedDay, refreshToken)
     val eventsWithTime =
@@ -239,6 +244,7 @@ private fun SharedTransitionScope.DaySchedule(
                         }
                     }
                 }
+                item { Spacer(Modifier.height(bottomPadding)) }
             }
             ScrollShadow(state)
         }
