@@ -215,6 +215,7 @@ fun SharedTransitionScope.CalendarScreen(
                     addEvent = addEvent,
                     openDrawer = openDrawer,
                     navigateToSchedule = navigateToSchedule,
+                    navigateToWeek = navigateToWeek,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
                 )
@@ -719,6 +720,7 @@ private fun SharedTransitionScope.Toolbar(
     addEvent: () -> Unit,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
+    navigateToWeek: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -850,7 +852,14 @@ private fun SharedTransitionScope.Toolbar(
                 ) { viewModel.openSearch() }
             }
             AnimatedVisibility(!isYearView) {
-                Menu(animatedContentScope, addEvent, navigateToSchedule, viewModel, isLandscape)
+                Menu(
+                    animatedContentScope = animatedContentScope,
+                    addEvent = addEvent,
+                    navigateToSchedule = navigateToSchedule,
+                    viewModel = viewModel,
+                    isLandscape = isLandscape,
+                    navigateToWeek = navigateToWeek,
+                )
             }
         },
     )
@@ -862,6 +871,7 @@ private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     addEvent: () -> Unit,
     navigateToSchedule: () -> Unit,
+    navigateToWeek: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -920,6 +930,11 @@ private fun SharedTransitionScope.Menu(
         ) {
             closeMenu()
             viewModel.openYearView()
+        }
+
+        AppDropdownMenuItem({ Text(stringResource(R.string.week_view)) },) {
+            closeMenu()
+            navigateToWeek(viewModel.selectedDay.value)
         }
 
         val coordinates by coordinates.collectAsState()
