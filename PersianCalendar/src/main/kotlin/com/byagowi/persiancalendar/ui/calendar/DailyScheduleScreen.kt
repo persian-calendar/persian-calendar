@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -97,6 +98,15 @@ fun SharedTransitionScope.DailyScheduleScreen(
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
     val dayInitialPage = remember { dayPageFromJdn(selectedDay, today) }
     val dayPagerState = rememberPagerState(initialPage = dayInitialPage) { daysLimit }
+    val setSelectedDayInWeekPager = { jdn: Jdn ->
+        selectedDay = jdn
+        coroutineScope.launch {
+            val destination = dayPageFromJdn(jdn, today)
+            if (abs(destination - dayPagerState.currentPage) > 1)
+                dayPagerState.scrollToPage(destination)
+            else dayPagerState.animateScrollToPage(destination)
+        }
+    }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -106,15 +116,19 @@ fun SharedTransitionScope.DailyScheduleScreen(
         }
     }
     val addEvent = addEvent(calendarViewModel)
+    val hasWeeksPager = LocalConfiguration.current.screenHeightDp > 600
+    val language by language.collectAsState()
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
                     Column {
-                        Crossfade(date.monthName, label = "title") { state ->
-                            Text(state, style = MaterialTheme.typography.titleLarge)
-                        }
+                        Crossfade(
+                            if (hasWeeksPager) date.monthName
+                            else language.dm.format(formatNumber(date.dayOfMonth), date.monthName),
+                            label = "title",
+                        ) { state -> Text(state, style = MaterialTheme.typography.titleLarge) }
                         Crossfade(formatNumber(date.year), label = "subtitle") { state ->
                             Text(state, style = MaterialTheme.typography.titleMedium)
                         }
@@ -138,10 +152,14 @@ fun SharedTransitionScope.DailyScheduleScreen(
         val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val pagerSize = calendarPagerSize(false, this.maxWidth, this.maxHeight, true)
+            // Don't show weeks pager if there isn't enough space
             Column {
-                val language by language.collectAsState()
                 val refreshToken by calendarViewModel.refreshToken.collectAsState()
-                HorizontalPager(state = weekPagerState, verticalAlignment = Alignment.Top) { page ->
+                if (hasWeeksPager) HorizontalPager(
+                    state = weekPagerState,
+                    verticalAlignment = Alignment.Top,
+                    modifier = Modifier.padding(bottom = 8.dp),
+                ) { page ->
                     Box(modifier = Modifier.height(pagerSize.height)) {
                         WeekPage(
                             pagerSize = pagerSize,
@@ -149,15 +167,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                             monthColors = monthColors,
                             selectedDay = selectedDay,
                             selectedDayDate = date,
-                            setSelectedDay = { jdn ->
-                                selectedDay = jdn
-                                coroutineScope.launch {
-                                    val destination = dayPageFromJdn(jdn, today)
-                                    if (abs(destination - dayPagerState.currentPage) > 1)
-                                        dayPagerState.scrollToPage(destination)
-                                    else dayPagerState.animateScrollToPage(destination)
-                                }
-                            },
+                            setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
                             setClickedOnce = { isClickedOnce = true },
                             animatedContentScope = animatedContentScope,
                             language = language,
@@ -169,7 +179,6 @@ fun SharedTransitionScope.DailyScheduleScreen(
                         )
                     }
                 }
-                Spacer(Modifier.height(8.dp))
                 ScreenSurface(animatedContentScope) {
                     HorizontalPager(
                         state = dayPagerState,
