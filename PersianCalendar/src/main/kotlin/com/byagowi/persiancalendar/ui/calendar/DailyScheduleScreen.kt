@@ -225,7 +225,8 @@ private fun SharedTransitionScope.DaySchedule(
     val eventsWithoutTime = events - eventsWithTime.toSet()
     val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
     Column {
-        Spacer(Modifier.height(24.dp))
+        val hasHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
+        if (hasHeader) Spacer(Modifier.height(24.dp))
         if (events.isEmpty()) Text(
             stringResource(R.string.no_event),
             textAlign = TextAlign.Center,
@@ -243,7 +244,7 @@ private fun SharedTransitionScope.DaySchedule(
                     ) else Modifier
                 )
         ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
-        Spacer(Modifier.height(12.dp))
+        if (hasHeader) Spacer(Modifier.height(12.dp))
         val state = rememberLazyListState(7, 0)
         Box {
             LazyColumn(state = state) {
@@ -274,7 +275,7 @@ private fun SharedTransitionScope.DaySchedule(
                 }
                 item { Spacer(Modifier.height(bottomPadding)) }
             }
-            ScrollShadow(state)
+            if (hasHeader) ScrollShadow(state)
         }
     }
 }
