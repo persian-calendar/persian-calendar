@@ -102,9 +102,9 @@ fun SharedTransitionScope.DailyScheduleScreen(
     val context = LocalContext.current
     var isClickedOnce by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val weekInitialPage = remember { weekPageFromJdn(initialSelectedDay, today) }
+    val weekInitialPage = remember(today) { weekPageFromJdn(initialSelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
-    val dayInitialPage = remember { dayPageFromJdn(selectedDay, today) }
+    val dayInitialPage = remember(today) { dayPageFromJdn(selectedDay, today) }
     val dayPagerState = rememberPagerState(initialPage = dayInitialPage) { daysLimit }
     val setSelectedDayInWeekPager = { jdn: Jdn ->
         selectedDay = jdn
@@ -126,6 +126,20 @@ fun SharedTransitionScope.DailyScheduleScreen(
     val addEvent = addEvent(calendarViewModel)
     val hasWeeksPager = LocalConfiguration.current.screenHeightDp > 600
     val language by language.collectAsState()
+
+    val todayButtonAction = {
+        selectedDay = today
+        coroutineScope.launch {
+            weekPagerState.scrollToPage(weeksLimit / 2)
+            dayPagerState.scrollToPage(daysLimit / 2)
+        }
+    }
+
+    var isFirstTime by remember { mutableStateOf(true) }
+    LaunchedEffect(today) {
+        if (isFirstTime) isFirstTime = false else if (selectedDay == today - 1) todayButtonAction()
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -145,13 +159,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
-                    TodayActionButton(today != selectedDay) {
-                        selectedDay = today
-                        coroutineScope.launch {
-                            weekPagerState.scrollToPage(weeksLimit / 2)
-                            dayPagerState.scrollToPage(daysLimit / 2)
-                        }
-                    }
+                    TodayActionButton(today != selectedDay) { todayButtonAction() }
                 }
             )
         },
@@ -261,7 +269,7 @@ private fun SharedTransitionScope.DaySchedule(
             }
         }
 
-        val hasHeader by remember {
+        val hasHeader by remember(events) {
             val needsHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
             derivedStateOf {
                 needsHeader && !state.lastScrolledForward && state.firstVisibleItemIndex <= 7
