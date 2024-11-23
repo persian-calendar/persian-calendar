@@ -125,7 +125,10 @@ class AthanNotification : Service() {
         val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)
         notificationBuilder.setAutoCancel(true)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(R.drawable.sun)
+            .setSmallIcon(
+                if (athanKey in listOf(DHUHR_KEY, ASR_KEY)) R.drawable.brightness7
+                else R.drawable.brightness4
+            )
             .setContentTitle(title)
             .setContentText(subtitle)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
