@@ -252,7 +252,7 @@ private fun SharedTransitionScope.DaySchedule(
 }
 
 @Composable
-fun AddHourEvent(addEvent: (AddEventData) -> Unit, jdn: Jdn, hour: Int) {
+private fun AddHourEvent(addEvent: (AddEventData) -> Unit, jdn: Jdn, hour: Int) {
     Box(
         Modifier
             .padding(top = 4.dp)
