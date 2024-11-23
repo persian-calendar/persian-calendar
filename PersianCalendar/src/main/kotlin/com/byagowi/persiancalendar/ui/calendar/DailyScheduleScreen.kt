@@ -210,6 +210,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                             addEvent = addEvent,
                             bottomPadding = bottomPadding,
                             navigateUp = navigateUp,
+                            setClickedOnce = { isClickedOnce = true },
                         )
                     }
                 }
@@ -236,6 +237,7 @@ private fun SharedTransitionScope.DaySchedule(
     addEvent: (AddEventData) -> Unit,
     bottomPadding: Dp,
     navigateUp: () -> Unit,
+    setClickedOnce: () -> Unit,
 ) {
     val events = readEvents(selectedDay, refreshToken)
     val eventsWithTime =
@@ -284,7 +286,18 @@ private fun SharedTransitionScope.DaySchedule(
                                 animatedVisibilityScope = animatedContentScope,
                             ) else Modifier
                         )
-                ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
+                ) {
+                    DayEvents(eventsWithoutTime.take(3)) {
+                        calendarViewModel.refreshCalendar()
+                    }
+                    if (eventsWithoutTime.size > 3) {
+                        Spacer(Modifier.height(4.dp))
+                        MoreButton(stringResource(R.string.more)) {
+                            setClickedOnce()
+                            navigateUp()
+                        }
+                    }
+                }
                 Spacer(Modifier.height(12.dp))
             }
         }
