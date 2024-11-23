@@ -7,6 +7,9 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -46,6 +49,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -112,7 +117,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            if (isClickedOnce) {
+            if (isClickedOnce && calendarViewModel.selectedDay.value != selectedDay) {
                 bringDate(calendarViewModel, selectedDay, context, highlight = selectedDay != today)
             }
         }
@@ -204,6 +209,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                             animatedContentScope = animatedContentScope,
                             addEvent = addEvent,
                             bottomPadding = bottomPadding,
+                            navigateUp = navigateUp,
                         )
                     }
                 }
@@ -229,14 +235,29 @@ private fun SharedTransitionScope.DaySchedule(
     animatedContentScope: AnimatedContentScope,
     addEvent: (AddEventData) -> Unit,
     bottomPadding: Dp,
+    navigateUp: () -> Unit,
 ) {
     val events = readEvents(selectedDay, refreshToken)
     val eventsWithTime =
         events.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
     val eventsWithoutTime = events - eventsWithTime.toSet()
     val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
+
     Column {
         val state = rememberLazyListState(7, 0)
+        val detectSwipeUpModifier = Modifier.pointerInput(Unit) {
+            val threshold = 40.dp.toPx()
+            awaitEachGesture {
+                // Don't inline this
+                val id = awaitFirstDown(requireUnconsumed = false).id
+                val wasAtTop =
+                    state.firstVisibleItemIndex == 0 && state.firstVisibleItemScrollOffset == 0
+                verticalDrag(id) {
+                    if (it.positionChange().y > threshold && wasAtTop) navigateUp()
+                }
+            }
+        }
+
         val showHeader by remember {
             val needsHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
             derivedStateOf {
@@ -246,7 +267,7 @@ private fun SharedTransitionScope.DaySchedule(
             }
         }
         AnimatedVisibility(showHeader) {
-            Column {
+            Column(detectSwipeUpModifier) {
                 Spacer(Modifier.height(24.dp))
                 if (events.isEmpty()) Text(
                     stringResource(R.string.no_event),
@@ -271,18 +292,15 @@ private fun SharedTransitionScope.DaySchedule(
         Box {
             LazyColumn(state = state) {
                 items(24) { hour ->
-                    Column {
+                    Column(detectSwipeUpModifier) {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
-                                .padding(top = 8.dp)
+                                .padding(top = 8.dp, start = 24.dp, end = 24.dp)
                                 .then(if (hour < 7) Modifier.alpha(.5f) else Modifier),
                         ) {
-                            Text(
-                                formatNumber("${hour}:00"),
-                                modifier = Modifier.width(64.dp),
-                                textAlign = TextAlign.Center
-                            )
+                            Text(formatNumber("${hour}:00"))
+                            Spacer(Modifier.width(8.dp))
                             HorizontalDivider()
                         }
                         Column(Modifier.padding(horizontal = 24.dp)) {
