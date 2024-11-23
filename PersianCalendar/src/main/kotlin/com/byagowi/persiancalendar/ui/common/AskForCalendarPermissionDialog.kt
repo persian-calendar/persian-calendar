@@ -29,13 +29,17 @@ import com.byagowi.persiancalendar.utils.preferences
 fun AskForCalendarPermissionDialog(setGranted: (Boolean) -> Unit) {
     val context = LocalContext.current
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return setGranted(true)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        setGranted(true)
+        return
+    }
     if (ActivityCompat.checkSelfPermission(
             context, Manifest.permission.READ_CALENDAR
         ) == PackageManager.PERMISSION_GRANTED
     ) {
         context.preferences.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) }
-        return setGranted(true)
+        setGranted(true)
+        return
     }
 
     val launcher = rememberLauncherForActivityResult(

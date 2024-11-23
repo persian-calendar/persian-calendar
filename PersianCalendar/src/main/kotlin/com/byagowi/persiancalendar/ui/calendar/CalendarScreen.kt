@@ -1025,18 +1025,15 @@ fun addEvent(viewModel: CalendarViewModel): (AddEventData) -> Unit {
     val context = LocalContext.current
     var addEventData by remember { mutableStateOf<AddEventData?>(null) }
 
-    var showDialog by rememberSaveable { mutableStateOf(false) }
-    if (showDialog) AskForCalendarPermissionDialog { isGranted ->
-        viewModel.refreshCalendar()
-        showDialog = false
-        val data = addEventData.debugAssertNotNull ?: return@AskForCalendarPermissionDialog
-        if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
-            Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+    addEventData?.let { data ->
+        AskForCalendarPermissionDialog { isGranted ->
+            viewModel.refreshCalendar()
+            if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
+                Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+            }
+            addEventData = null
         }
     }
 
-    return {
-        showDialog = true
-        addEventData = it
-    }
+    return { addEventData = it }
 }

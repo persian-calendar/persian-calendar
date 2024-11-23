@@ -306,14 +306,14 @@ private fun SharedTransitionScope.WeekPage(
 ) {
     Box {
         val offset = page - weeksLimit / 2
-        val initialDay = today + 7 * offset
+        val sampleDay = today + 7 * offset
         val startOfYearJdn = Jdn(mainCalendar, selectedDayDate.year, 1, 1)
-        val week = initialDay.getWeekOfYear(startOfYearJdn)
+        val week = sampleDay.getWeekOfYear(startOfYearJdn)
 
         val isCurrentPage = pagerState.currentPage == page
         LaunchedEffect(isCurrentPage) {
             if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
-                setSelectedDay(initialDay + (selectedDay.weekDay - today.weekDay))
+                setSelectedDay(sampleDay + (selectedDay.weekDay - today.weekDay))
             }
         }
 
