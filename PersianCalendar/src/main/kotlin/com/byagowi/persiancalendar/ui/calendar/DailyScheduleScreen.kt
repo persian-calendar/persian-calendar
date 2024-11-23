@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -78,6 +77,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
+import kotlin.math.abs
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -93,13 +93,10 @@ fun SharedTransitionScope.DailyScheduleScreen(
     val context = LocalContext.current
     var isClickedOnce by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    val initialPage = remember {
-        val initialSelectedDayWeekStart =
-            initialSelectedDay - applyWeekStartOffsetToWeekDay(initialSelectedDay.weekDay)
-        val todayWeekStart = today - applyWeekStartOffsetToWeekDay(today.weekDay)
-        (initialSelectedDayWeekStart - todayWeekStart) / 7 + weeksLimit / 2
-    }
-    val pagerState = rememberPagerState(initialPage = initialPage) { weeksLimit }
+    val weekInitialPage = remember { weekPageFromJdn(initialSelectedDay, today) }
+    val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
+    val dayInitialPage = remember { dayPageFromJdn(selectedDay, today) }
+    val dayPagerState = rememberPagerState(initialPage = dayInitialPage) { daysLimit }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -128,7 +125,10 @@ fun SharedTransitionScope.DailyScheduleScreen(
                 actions = {
                     TodayActionButton(today != selectedDay) {
                         selectedDay = today
-                        coroutineScope.launch { pagerState.scrollToPage(weeksLimit / 2) }
+                        coroutineScope.launch {
+                            weekPagerState.scrollToPage(weeksLimit / 2)
+                            dayPagerState.scrollToPage(daysLimit / 2)
+                        }
                     }
                 }
             )
@@ -141,7 +141,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
             Column {
                 val language by language.collectAsState()
                 val refreshToken by calendarViewModel.refreshToken.collectAsState()
-                HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
+                HorizontalPager(state = weekPagerState, verticalAlignment = Alignment.Top) { page ->
                     Box(modifier = Modifier.height(pagerSize.height)) {
                         WeekPage(
                             pagerSize = pagerSize,
@@ -149,12 +149,20 @@ fun SharedTransitionScope.DailyScheduleScreen(
                             monthColors = monthColors,
                             selectedDay = selectedDay,
                             selectedDayDate = date,
-                            setSelectedDay = { jdn -> selectedDay = jdn },
+                            setSelectedDay = { jdn ->
+                                selectedDay = jdn
+                                coroutineScope.launch {
+                                    val destination = dayPageFromJdn(jdn, today)
+                                    if (abs(destination - dayPagerState.currentPage) > 1)
+                                        dayPagerState.scrollToPage(destination)
+                                    else dayPagerState.animateScrollToPage(destination)
+                                }
+                            },
                             setClickedOnce = { isClickedOnce = true },
                             animatedContentScope = animatedContentScope,
                             language = language,
                             coroutineScope = coroutineScope,
-                            pagerState = pagerState,
+                            weekPagerState = weekPagerState,
                             page = page,
                             today = today,
                             refreshToken = refreshToken,
@@ -163,19 +171,43 @@ fun SharedTransitionScope.DailyScheduleScreen(
                 }
                 Spacer(Modifier.height(8.dp))
                 ScreenSurface(animatedContentScope) {
-                    DaySchedule(
-                        selectedDay = selectedDay,
-                        refreshToken = refreshToken,
-                        calendarViewModel = calendarViewModel,
-                        animatedContentScope = animatedContentScope,
-                        addEvent = addEvent,
-                        bottomPadding = bottomPadding,
-                    )
+                    HorizontalPager(
+                        state = dayPagerState,
+                        verticalAlignment = Alignment.Top,
+                    ) { page ->
+                        val isCurrentPage = dayPagerState.currentPage == page
+                        LaunchedEffect(isCurrentPage) {
+                            if (isCurrentPage) {
+                                selectedDay = today + (page - daysLimit / 2)
+                                val destination = weekPageFromJdn(selectedDay, today)
+                                if (abs(destination - weekPagerState.currentPage) > 1)
+                                    weekPagerState.scrollToPage(destination)
+                                else weekPagerState.animateScrollToPage(destination)
+                            }
+                        }
+
+                        DaySchedule(
+                            selectedDay = today + (page - daysLimit / 2),
+                            refreshToken = refreshToken,
+                            calendarViewModel = calendarViewModel,
+                            animatedContentScope = animatedContentScope,
+                            addEvent = addEvent,
+                            bottomPadding = bottomPadding,
+                        )
+                    }
                 }
             }
         }
     }
 }
+
+private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
+    val dayWeekStart = day - applyWeekStartOffsetToWeekDay(day.weekDay)
+    val todayWeekStart = today - applyWeekStartOffsetToWeekDay(today.weekDay)
+    return (dayWeekStart - todayWeekStart) / 7 + weeksLimit / 2
+}
+
+private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -194,27 +226,23 @@ private fun SharedTransitionScope.DaySchedule(
     val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
     Column {
         Spacer(Modifier.height(24.dp))
-        AnimatedVisibility(events.isEmpty()) {
-            Text(
-                stringResource(R.string.no_event),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-            )
-        }
-        AnimatedVisibility(eventsWithoutTime.isNotEmpty()) {
-            Column(
-                Modifier
-                    .padding(horizontal = 24.dp)
-                    .then(
-                        if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
-                            rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                            animatedVisibilityScope = animatedContentScope,
-                        ) else Modifier
-                    )
-            ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
-        }
+        if (events.isEmpty()) Text(
+            stringResource(R.string.no_event),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+        )
+        Column(
+            Modifier
+                .padding(horizontal = 24.dp)
+                .then(
+                    if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
+                        rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+                        animatedVisibilityScope = animatedContentScope,
+                    ) else Modifier
+                )
+        ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
         Spacer(Modifier.height(12.dp))
         val state = rememberLazyListState(7, 0)
         Box {
@@ -299,7 +327,7 @@ private fun SharedTransitionScope.WeekPage(
     animatedContentScope: AnimatedContentScope,
     language: Language,
     coroutineScope: CoroutineScope,
-    pagerState: PagerState,
+    weekPagerState: PagerState,
     page: Int,
     today: Jdn,
     refreshToken: Int,
@@ -310,7 +338,7 @@ private fun SharedTransitionScope.WeekPage(
         val startOfYearJdn = Jdn(mainCalendar, selectedDayDate.year, 1, 1)
         val week = sampleDay.getWeekOfYear(startOfYearJdn)
 
-        val isCurrentPage = pagerState.currentPage == page
+        val isCurrentPage = weekPagerState.currentPage == page
         LaunchedEffect(isCurrentPage) {
             if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
                 setSelectedDay(sampleDay + (selectedDay.weekDay - today.weekDay))
@@ -324,7 +352,7 @@ private fun SharedTransitionScope.WeekPage(
             arrowWidth = arrowWidth,
             arrowHeight = arrowHeight,
             scope = coroutineScope,
-            pagerState = pagerState,
+            pagerState = weekPagerState,
             week = week,
             index = page,
             isPrevious = true,
@@ -358,7 +386,7 @@ private fun SharedTransitionScope.WeekPage(
             arrowWidth = arrowWidth,
             arrowHeight = arrowHeight,
             scope = coroutineScope,
-            pagerState = pagerState,
+            pagerState = weekPagerState,
             index = page,
             week = week,
             isPrevious = false
@@ -367,3 +395,4 @@ private fun SharedTransitionScope.WeekPage(
 }
 
 private const val weeksLimit = 25000 // this should be an even number
+private const val daysLimit = 175000 // this should be an even number
