@@ -81,9 +81,10 @@ fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     navigateToDailySchedule: (Jdn) -> Unit,
+    initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
 ) {
-    var baseJdn by remember { mutableStateOf(calendarViewModel.selectedDay.value) }
+    var baseJdn by remember { mutableStateOf(initiallySelectedDay) }
     val state = rememberLazyListState(ITEMS_COUNT / 2, 0)
     val today by calendarViewModel.today.collectAsState()
     var isFirstTime by remember { mutableStateOf(true) }

@@ -144,7 +144,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         BackHandler(enabled = true) { coroutineScope.launch { drawerState.close() } }
     }
 
-    val selectedWeek = "selectedWeek"
+    val selectedDayKey = "SELECTED_DAY"
     val tabKey = "TAB"
     val settingsKey = "SETTINGS"
     val daysOffsetKey = "DAYS_OFFSET"
@@ -217,7 +217,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         navigateToDailySchedule = { jdn ->
                             navController.graph.findNode(dailyScheduleRoute)?.let { destination ->
                                 navController.navigate(
-                                    destination.id, bundleOf(selectedWeek to jdn.value)
+                                    destination.id, bundleOf(selectedDayKey to jdn.value)
                                 )
                             }
                         },
@@ -235,23 +235,28 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     )
                 }
 
-                composable(scheduleRoute) {
+                composable(scheduleRoute) { backStackEntry ->
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
                     val viewModel = if (previousRoute == calendarRoute) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
+
+                    val jdn =
+                        backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
+                            ?.let { Jdn(it) } ?: remember { viewModel.selectedDay.value }
                     ScheduleScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
-                        navigateToDailySchedule = { jdn ->
+                        navigateToDailySchedule = { day ->
                             navController.graph.findNode(dailyScheduleRoute)?.let { destination ->
                                 navController.navigate(
-                                    destination.id, bundleOf(selectedWeek to jdn.value)
+                                    destination.id, bundleOf(selectedDayKey to day.value)
                                 )
                             }
                         },
-                        navigateUp = { navigateUp(scheduleRoute) }
+                        navigateUp = { navigateUp(scheduleRoute) },
+                        initiallySelectedDay = jdn,
                     )
                 }
 
@@ -261,12 +266,24 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     val viewModel = if (previousRoute == calendarRoute) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
-                    val jdn = backStackEntry.arguments?.getLong(selectedWeek, 0)?.takeIf { it != 0L }?.let {
+                    val jdn =
+                        backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
+                            ?.let {
                         Jdn(it)
                     } ?: Jdn.today()
-                    DailyScheduleScreen(viewModel, jdn, animatedContentScope = this) {
-                        navigateUp(dailyScheduleRoute)
-                    }
+                    DailyScheduleScreen(
+                        calendarViewModel = viewModel,
+                        initialSelectedDay = jdn,
+                        animatedContentScope = this,
+                        navigateUp = { navigateUp(dailyScheduleRoute) },
+                        navigateToSchedule = { day: Jdn ->
+                            navController.graph.findNode(scheduleRoute)?.let { destination ->
+                                navController.navigate(
+                                    destination.id, bundleOf(selectedDayKey to day.value)
+                                )
+                            }
+                        },
+                    )
                 }
 
                 composable(converterRoute) {
