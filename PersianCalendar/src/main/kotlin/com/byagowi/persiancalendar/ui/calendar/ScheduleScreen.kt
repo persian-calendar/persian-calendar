@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -71,6 +70,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -206,7 +206,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 val circleTextStyle =
                     if (mainCalendarDigitsIsArabic || isVazirEnabled) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge
-                Box(modifier = Modifier.fillMaxSize()) {
+                Box {
                     val eventsCache = eventsCache(calendarViewModel)
                     LazyColumn(state = state) {
                         items(ITEMS_COUNT) { index ->
@@ -309,6 +309,8 @@ fun SharedTransitionScope.ScheduleScreen(
                             }
                         }
                     }
+                    ScrollShadow(state, top = true)
+                    ScrollShadow(state, top = false)
                 }
             }
         }
