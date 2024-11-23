@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -34,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -234,27 +236,38 @@ private fun SharedTransitionScope.DaySchedule(
     val eventsWithoutTime = events - eventsWithTime.toSet()
     val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
     Column {
-        val hasHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
-        if (hasHeader) Spacer(Modifier.height(24.dp))
-        if (events.isEmpty()) Text(
-            stringResource(R.string.no_event),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp)
-        )
-        Column(
-            Modifier
-                .padding(horizontal = 24.dp)
-                .then(
-                    if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
-                        rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                        animatedVisibilityScope = animatedContentScope,
-                    ) else Modifier
-                )
-        ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
-        if (hasHeader) Spacer(Modifier.height(12.dp))
         val state = rememberLazyListState(7, 0)
+        val showHeader by remember {
+            val needsHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
+            derivedStateOf {
+                val itemIndex = state.firstVisibleItemIndex
+                val zeroOffset = state.firstVisibleItemScrollOffset == 0
+                needsHeader && (itemIndex < 7 || (itemIndex == 7 && zeroOffset))
+            }
+        }
+        AnimatedVisibility(showHeader) {
+            Column {
+                Spacer(Modifier.height(24.dp))
+                if (events.isEmpty()) Text(
+                    stringResource(R.string.no_event),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                )
+                Column(
+                    Modifier
+                        .padding(horizontal = 24.dp)
+                        .then(
+                            if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
+                                rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
+                                animatedVisibilityScope = animatedContentScope,
+                            ) else Modifier
+                        )
+                ) { DayEvents(eventsWithoutTime) { calendarViewModel.refreshCalendar() } }
+                Spacer(Modifier.height(12.dp))
+            }
+        }
         Box {
             LazyColumn(state = state) {
                 items(24) { hour ->
@@ -284,7 +297,7 @@ private fun SharedTransitionScope.DaySchedule(
                 }
                 item { Spacer(Modifier.height(bottomPadding)) }
             }
-            if (hasHeader) ScrollShadow(state)
+            ScrollShadow(state)
         }
     }
 }
