@@ -82,6 +82,7 @@ import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarSettings
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanSettings
@@ -195,10 +196,13 @@ fun SharedTransitionScope.SettingsScreen(
             ScreenSurface(animatedContentScope) {
                 HorizontalPager(state = pagerState) { index ->
                     Box(modifier = Modifier.fillMaxSize()) {
-                        Column(Modifier.verticalScroll(rememberScrollState())) {
+                        val scrollState = rememberScrollState()
+                        Column(Modifier.verticalScroll(scrollState)) {
                             tabs[index].content(this)
                             Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
                         }
+                        ScrollShadow(scrollState, top = true)
+                        ScrollShadow(scrollState, top = false)
                     }
                 }
             }

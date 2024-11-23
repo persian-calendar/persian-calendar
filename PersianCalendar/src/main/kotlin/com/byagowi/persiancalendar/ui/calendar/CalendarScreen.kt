@@ -517,7 +517,10 @@ private fun Details(
                 Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
                     tabs[index].second(interactionSource, tabMinHeight)
                 }
-                if (scrollState != null) ScrollShadow(scrollState, top = true)
+                if (scrollState != null) {
+                    ScrollShadow(scrollState, top = true)
+                    ScrollShadow(scrollState, top = false)
+                }
             }
         }
     }
