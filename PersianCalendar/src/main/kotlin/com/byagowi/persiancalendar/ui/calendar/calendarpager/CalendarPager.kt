@@ -48,7 +48,7 @@ fun SharedTransitionScope.CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
     addEvent: (AddEventData) -> Unit,
-    navigateToWeek: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn) -> Unit,
     size: DpSize,
     animatedContentScope: AnimatedContentScope,
 ) {
@@ -85,7 +85,7 @@ fun SharedTransitionScope.CalendarPager(
                     addEvent = addEvent,
                     monthColors = monthColors,
                     animatedContentScope = animatedContentScope,
-                    navigateToWeek = navigateToWeek,
+                    navigateToDailySchedule = navigateToDailySchedule,
                     today = today,
                     isHighlighted = isHighlighted,
                     refreshToken = refreshToken,

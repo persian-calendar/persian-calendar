@@ -81,7 +81,7 @@ import java.util.GregorianCalendar
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.WeekScreen(
+fun SharedTransitionScope.DailyScheduleScreen(
     calendarViewModel: CalendarViewModel,
     initialSelectedDay: Jdn,
     animatedContentScope: AnimatedContentScope,
@@ -341,7 +341,7 @@ private fun SharedTransitionScope.WeekPage(
                 height = height,
                 addEvent = addEvent,
                 monthColors = monthColors,
-                navigateToWeek = null,
+                navigateToDailySchedule = null,
                 animatedContentScope = animatedContentScope,
                 onlyWeek = week,
                 today = today,

@@ -99,8 +99,8 @@ import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
+import com.byagowi.persiancalendar.ui.calendar.DailyScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
-import com.byagowi.persiancalendar.ui.calendar.WeekScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
@@ -214,8 +214,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 navController.navigate(scheduleRoute)
                             }
                         },
-                        navigateToWeek = { jdn ->
-                            navController.graph.findNode(weekRoute)?.let { destination ->
+                        navigateToDailySchedule = { jdn ->
+                            navController.graph.findNode(dailyScheduleRoute)?.let { destination ->
                                 navController.navigate(
                                     destination.id, bundleOf(selectedWeek to jdn.value)
                                 )
@@ -244,8 +244,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     ScheduleScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
-                        navigateToWeek = { jdn ->
-                            navController.graph.findNode(weekRoute)?.let { destination ->
+                        navigateToDailySchedule = { jdn ->
+                            navController.graph.findNode(dailyScheduleRoute)?.let { destination ->
                                 navController.navigate(
                                     destination.id, bundleOf(selectedWeek to jdn.value)
                                 )
@@ -255,7 +255,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     )
                 }
 
-                composable(weekRoute) { backStackEntry ->
+                composable(dailyScheduleRoute) { backStackEntry ->
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
                     val viewModel = if (previousRoute == calendarRoute) {
@@ -264,8 +264,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     val jdn = backStackEntry.arguments?.getLong(selectedWeek, 0)?.takeIf { it != 0L }?.let {
                         Jdn(it)
                     } ?: Jdn.today()
-                    WeekScreen(viewModel, jdn, animatedContentScope = this) {
-                        navigateUp(weekRoute)
+                    DailyScheduleScreen(viewModel, jdn, animatedContentScope = this) {
+                        navigateUp(dailyScheduleRoute)
                     }
                 }
 
@@ -447,7 +447,7 @@ private const val levelRoute = "level"
 private const val mapRoute = "map"
 private const val converterRoute = "converter"
 private const val scheduleRoute = "schedule"
-private const val weekRoute = "week"
+private const val dailyScheduleRoute = "dailySchedule"
 private const val astronomyRoute = "astronomy"
 private const val settingsRoute = "settings"
 private const val aboutRoute = "about"

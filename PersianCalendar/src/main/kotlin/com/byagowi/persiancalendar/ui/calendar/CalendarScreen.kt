@@ -191,7 +191,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
-    navigateToWeek: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
@@ -216,7 +216,7 @@ fun SharedTransitionScope.CalendarScreen(
                     addEvent = addEvent,
                     openDrawer = openDrawer,
                     navigateToSchedule = navigateToSchedule,
-                    navigateToWeek = navigateToWeek,
+                    navigateToDailySchedule = navigateToDailySchedule,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
                 )
@@ -281,7 +281,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 viewModel = viewModel,
                                 pagerState = pagerState,
                                 addEvent = addEvent,
-                                navigateToWeek = navigateToWeek,
+                                navigateToDailySchedule = navigateToDailySchedule,
                                 size = pagerSize,
                                 animatedContentScope = animatedContentScope,
                             )
@@ -333,7 +333,7 @@ fun SharedTransitionScope.CalendarScreen(
                                     viewModel = viewModel,
                                     pagerState = pagerState,
                                     addEvent = addEvent,
-                                    navigateToWeek = navigateToWeek,
+                                    navigateToDailySchedule = navigateToDailySchedule,
                                     size = pagerSize,
                                     animatedContentScope = animatedContentScope,
                                 )
@@ -719,7 +719,7 @@ private fun SharedTransitionScope.Toolbar(
     addEvent: (AddEventData) -> Unit,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
-    navigateToWeek: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -857,7 +857,7 @@ private fun SharedTransitionScope.Toolbar(
                     navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
-                    navigateToWeek = navigateToWeek,
+                    navigateToDailySchedule = navigateToDailySchedule,
                 )
             }
         },
@@ -870,7 +870,7 @@ private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     addEvent: (AddEventData) -> Unit,
     navigateToSchedule: () -> Unit,
-    navigateToWeek: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -933,7 +933,7 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
             closeMenu()
-            navigateToWeek(viewModel.selectedDay.value)
+            navigateToDailySchedule(viewModel.selectedDay.value)
         }
 
         val coordinates by coordinates.collectAsState()

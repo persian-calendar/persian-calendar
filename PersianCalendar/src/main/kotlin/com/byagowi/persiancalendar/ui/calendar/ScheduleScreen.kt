@@ -87,7 +87,7 @@ import kotlin.math.abs
 fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
-    navigateToWeek: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn) -> Unit,
     navigateUp: () -> Unit,
 ) {
     var baseJdn by remember { mutableStateOf(calendarViewModel.selectedDay.value) }
@@ -140,7 +140,7 @@ fun SharedTransitionScope.ScheduleScreen(
                     AppIconButton(
                         icon = Icons.Default.Timelapse,
                         title = stringResource(R.string.daily_schedule)
-                    ) { navigateToWeek(firstVisibleItemJdn) }
+                    ) { navigateToDailySchedule(firstVisibleItemJdn) }
 
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
                     if (showDatePickerDialog) {
