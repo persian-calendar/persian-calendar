@@ -258,10 +258,14 @@ private fun SharedTransitionScope.DaySchedule(
             }
         }
 
-        AnimatedVisibility(run {
+        val hasHeader by remember {
             val needsHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
-            needsHeader && !state.lastScrolledForward && state.canScrollForward
-        }) {
+            derivedStateOf {
+                needsHeader && !state.lastScrolledForward && state.firstVisibleItemIndex <= 7
+            }
+        }
+
+        AnimatedVisibility(hasHeader) {
             Column(detectSwipeUpModifier) {
                 Spacer(Modifier.height(24.dp))
                 if (events.isEmpty()) Text(
