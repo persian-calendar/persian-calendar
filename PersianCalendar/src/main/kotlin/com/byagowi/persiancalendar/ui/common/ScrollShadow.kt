@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -37,16 +35,12 @@ fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
     ScrollShadowBar(top, height)
 }
 
-// Only top is supported with lazy list
+// It doesn't consider the amount unlike the non lazy one
 @Composable
-fun BoxScope.ScrollShadow(listState: LazyListState) {
-    val isAtTop by remember {
-        derivedStateOf {
-            listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
-        }
-    }
-    val height by animateDpAsState(if (isAtTop) 0.dp else 8.dp, label = "height")
-    ScrollShadowBar(true, height)
+fun BoxScope.ScrollShadow(listState: LazyListState, top: Boolean) {
+    val needsShadow = if (top) listState.canScrollBackward else listState.canScrollForward
+    val height by animateDpAsState(if (needsShadow) 8.dp else 0.dp, label = "height")
+    ScrollShadowBar(top, height)
 }
 
 @Composable

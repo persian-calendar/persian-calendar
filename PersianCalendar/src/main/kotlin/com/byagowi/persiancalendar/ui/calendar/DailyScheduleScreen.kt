@@ -310,7 +310,8 @@ private fun SharedTransitionScope.DaySchedule(
                 }
                 item { Spacer(Modifier.height(bottomPadding)) }
             }
-            ScrollShadow(state)
+            ScrollShadow(state, top = true)
+            ScrollShadow(state, top = false)
         }
     }
 }

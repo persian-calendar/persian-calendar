@@ -58,6 +58,7 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DialogSurface
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -140,127 +141,129 @@ fun ColumnScope.ShiftWorkDialogContent(
     var selectedLengthDropdownIndex by remember { mutableIntStateOf(-1) }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
-    LazyColumn(
+    val language by language.collectAsState()
+    Box(
         Modifier
             .weight(weight = 1f, fill = false)
             .fillMaxWidth(),
-        state = lazyListState,
     ) {
-        item {
-            val summary = shiftWorkRows.filter { it.length != 0 }.map {
-                pluralStringResource(
-                    R.plurals.shift_work_record_title,
-                    it.length,
-                    formatNumber(it.length),
-                    shiftWorkKeyToString(it.type)
-                )
-            }.joinToString(spacedComma)
-            AnimatedVisibility(summary.isNotEmpty()) {
-                AnimatedContent(
-                    summary,
-                    transitionSpec = appCrossfadeSpec,
-                    label = "summary",
-                ) { state ->
-                    Text(
-                        state,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
+        LazyColumn(state = lazyListState) {
+            item {
+                val summary = shiftWorkRows.filter { it.length != 0 }.map {
+                    pluralStringResource(
+                        R.plurals.shift_work_record_title,
+                        it.length,
+                        formatNumber(it.length),
+                        shiftWorkKeyToString(it.type)
                     )
+                }.joinToString(spacedComma)
+                Column {
+                    AnimatedVisibility(summary.isNotEmpty()) {
+                        AnimatedContent(
+                            summary,
+                            transitionSpec = appCrossfadeSpec,
+                            label = "summary",
+                        ) { state ->
+                            Text(
+                                state,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                            )
+                        }
+                    }
                 }
             }
-        }
-        itemsIndexed(shiftWorkRows) { position, (type, length) ->
-            Row(
-                modifier = Modifier
-                    .height(48.dp)
-                    .fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Spacer(Modifier.width(16.dp))
-                Text(text = formatNumber(position + 1) + spacedColon)
-                Box(Modifier.weight(70f)) {
-                    TextField(
-                        shiftWorkKeyToString(type),
-                        onValueChange = { value ->
+            itemsIndexed(shiftWorkRows) { position, (type, length) ->
+                Row(
+                    modifier = Modifier
+                        .height(48.dp)
+                        .fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Spacer(Modifier.width(16.dp))
+                    Text(text = formatNumber(position + 1) + spacedColon)
+                    Box(Modifier.weight(70f)) {
+                        TextField(shiftWorkKeyToString(type), onValueChange = { value ->
                             selectedTypeDropdownIndex = -1
                             viewModel.changeShiftWorkTypeOfPosition(
                                 position,
                                 // Don't allow inserting '=' or ',' as they have special meaning
                                 value.replace(Regex("[=,]"), "")
                             )
-                        },
-                        trailingIcon = {
+                        }, trailingIcon = {
                             IconButton(onClick = { selectedTypeDropdownIndex = position }) {
                                 ExpandArrow(
                                     isExpanded = selectedTypeDropdownIndex == position,
                                     contentDescription = stringResource(R.string.more_options),
                                 )
                             }
-                        }
-                    )
-                    val language by language.collectAsState()
-                    AppDropdownMenu(
-                        expanded = selectedTypeDropdownIndex == position,
-                        onDismissRequest = { selectedTypeDropdownIndex = -1 },
-                        minWidth = 40.dp,
-                    ) {
-                        (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
-                            AppDropdownMenuItem({ Text(it) }) {
-                                selectedTypeDropdownIndex = -1
-                                viewModel.changeShiftWorkTypeOfPosition(position, it)
+                        })
+                        AppDropdownMenu(
+                            expanded = selectedTypeDropdownIndex == position,
+                            onDismissRequest = { selectedTypeDropdownIndex = -1 },
+                            minWidth = 40.dp,
+                        ) {
+                            (shiftWorkTitles.values + language.additionalShiftWorkTitles).forEach {
+                                AppDropdownMenuItem({ Text(it) }) {
+                                    selectedTypeDropdownIndex = -1
+                                    viewModel.changeShiftWorkTypeOfPosition(position, it)
+                                }
                             }
                         }
                     }
-                }
-                Spacer(Modifier.width(4.dp))
-                Box(Modifier.weight(30f)) {
-                    TextField(
-                        value = formatNumber(length),
-                        readOnly = true,
-                        onValueChange = {
-                            selectedTypeDropdownIndex = -1
-                            viewModel.changeShiftWorkLengthOfPosition(
-                                position,
-                                it.toIntOrNull() ?: 0
-                            )
-                        },
-                        modifier = Modifier
-                            .onFocusChanged {
-                                if (it.hasFocus) selectedLengthDropdownIndex = position
-                                else if (selectedLengthDropdownIndex == position)
-                                    selectedLengthDropdownIndex = -1
-                            }
-                            .focusRequester(focusRequester),
-                    )
-                    AppDropdownMenu(
-                        expanded = selectedLengthDropdownIndex == position,
-                        onDismissRequest = {
-                            focusManager.clearFocus()
-                            selectedLengthDropdownIndex = -1
-                        },
-                        minWidth = 40.dp,
-                    ) {
-                        (0..14).map { length ->
-                            AppDropdownMenuItem({ Text(formatNumber(length)) }) {
+                    Spacer(Modifier.width(4.dp))
+                    Box(Modifier.weight(30f)) {
+                        TextField(
+                            value = formatNumber(length),
+                            readOnly = true,
+                            onValueChange = {
+                                selectedTypeDropdownIndex = -1
+                                viewModel.changeShiftWorkLengthOfPosition(
+                                    position = position,
+                                    length = it.toIntOrNull() ?: 0,
+                                )
+                            },
+                            modifier = Modifier
+                                .onFocusChanged {
+                                    if (it.hasFocus) selectedLengthDropdownIndex = position
+                                    else if (selectedLengthDropdownIndex == position) {
+                                        selectedLengthDropdownIndex = -1
+                                    }
+                                }
+                                .focusRequester(focusRequester),
+                        )
+                        AppDropdownMenu(
+                            expanded = selectedLengthDropdownIndex == position,
+                            onDismissRequest = {
                                 focusManager.clearFocus()
                                 selectedLengthDropdownIndex = -1
-                                viewModel.changeShiftWorkLengthOfPosition(position, length)
+                            },
+                            minWidth = 40.dp,
+                        ) {
+                            (0..14).map { length ->
+                                AppDropdownMenuItem({ Text(formatNumber(length)) }) {
+                                    focusManager.clearFocus()
+                                    selectedLengthDropdownIndex = -1
+                                    viewModel.changeShiftWorkLengthOfPosition(position, length)
+                                }
                             }
                         }
                     }
+                    IconButton(onClick = { viewModel.removeShiftWorkPosition(position) }) {
+                        Icon(
+                            imageVector = Icons.Default.RemoveCircleOutline,
+                            contentDescription = stringResource(R.string.remove),
+                            tint = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                    Spacer(Modifier.width(12.dp))
                 }
-                IconButton(onClick = { viewModel.removeShiftWorkPosition(position) }) {
-                    Icon(
-                        imageVector = Icons.Default.RemoveCircleOutline,
-                        contentDescription = stringResource(R.string.remove),
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                }
-                Spacer(Modifier.width(12.dp))
             }
         }
+        ScrollShadow(lazyListState, top = true)
+        ScrollShadow(lazyListState, top = false)
     }
 
     Spacer(modifier = Modifier.height(8.dp))
