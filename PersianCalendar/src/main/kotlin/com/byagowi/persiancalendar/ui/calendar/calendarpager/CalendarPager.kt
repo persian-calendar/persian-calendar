@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
@@ -48,7 +47,6 @@ fun SharedTransitionScope.CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
     addEvent: (AddEventData) -> Unit,
-    navigateToDailySchedule: (Jdn) -> Unit,
     size: DpSize,
     animatedContentScope: AnimatedContentScope,
 ) {

@@ -281,7 +281,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 viewModel = viewModel,
                                 pagerState = pagerState,
                                 addEvent = addEvent,
-                                navigateToDailySchedule = navigateToDailySchedule,
                                 size = pagerSize,
                                 animatedContentScope = animatedContentScope,
                             )
@@ -334,7 +333,6 @@ fun SharedTransitionScope.CalendarScreen(
                                         viewModel = viewModel,
                                         pagerState = pagerState,
                                         addEvent = addEvent,
-                                        navigateToDailySchedule = navigateToDailySchedule,
                                         size = pagerSize,
                                         animatedContentScope = animatedContentScope,
                                     )
