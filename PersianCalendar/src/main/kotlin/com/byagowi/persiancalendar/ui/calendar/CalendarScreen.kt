@@ -934,9 +934,11 @@ private fun SharedTransitionScope.Menu(
             viewModel.openYearView()
         }
 
-        AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
-            closeMenu()
-            navigateToDailySchedule(viewModel.selectedDay.value)
+        if (BuildConfig.DEVELOPMENT) {
+            AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
+                closeMenu()
+                navigateToDailySchedule(viewModel.selectedDay.value)
+            }
         }
 
         val coordinates by coordinates.collectAsState()

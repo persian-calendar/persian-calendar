@@ -47,6 +47,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -131,10 +132,12 @@ fun SharedTransitionScope.ScheduleScreen(
                         }
                     }
 
-                    AppIconButton(
-                        icon = Icons.Default.Timelapse,
-                        title = stringResource(R.string.daily_schedule)
-                    ) { navigateToDailySchedule(firstVisibleItemJdn) }
+                    if (BuildConfig.DEVELOPMENT) {
+                        AppIconButton(
+                            icon = Icons.Default.Timelapse,
+                            title = stringResource(R.string.daily_schedule)
+                        ) { navigateToDailySchedule(firstVisibleItemJdn) }
+                    }
 
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
                     if (showDatePickerDialog) {

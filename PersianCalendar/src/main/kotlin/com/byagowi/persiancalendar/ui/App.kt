@@ -79,6 +79,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
@@ -215,10 +216,12 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             }
                         },
                         navigateToDailySchedule = { jdn ->
-                            navController.graph.findNode(dailyScheduleRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(selectedDayKey to jdn.value)
-                                )
+                            if (BuildConfig.DEVELOPMENT) {
+                                navController.graph.findNode(dailyScheduleRoute)?.let { dst ->
+                                    navController.navigate(
+                                        dst.id, bundleOf(selectedDayKey to jdn.value)
+                                    )
+                                }
                             }
                         },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
@@ -249,10 +252,12 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
                         navigateToDailySchedule = { day ->
-                            navController.graph.findNode(dailyScheduleRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(selectedDayKey to day.value)
-                                )
+                            if (BuildConfig.DEVELOPMENT) {
+                                navController.graph.findNode(dailyScheduleRoute)?.let { dst ->
+                                    navController.navigate(
+                                        dst.id, bundleOf(selectedDayKey to day.value)
+                                    )
+                                }
                             }
                         },
                         navigateUp = { navigateUp(scheduleRoute) },
@@ -260,30 +265,33 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     )
                 }
 
-                composable(dailyScheduleRoute) { backStackEntry ->
-                    val previousEntry = navController.previousBackStackEntry
-                    val previousRoute = previousEntry?.destination?.route
-                    val viewModel = if (previousRoute == calendarRoute) {
-                        viewModel<CalendarViewModel>(previousEntry)
-                    } else viewModel<CalendarViewModel>()
-                    val jdn =
-                        backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
-                            ?.let {
-                        Jdn(it)
-                    } ?: Jdn.today()
-                    DailyScheduleScreen(
-                        calendarViewModel = viewModel,
-                        initialSelectedDay = jdn,
-                        animatedContentScope = this,
-                        navigateUp = { navigateUp(dailyScheduleRoute) },
-                        navigateToSchedule = { day: Jdn ->
-                            navController.graph.findNode(scheduleRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(selectedDayKey to day.value)
-                                )
-                            }
-                        },
-                    )
+                if (BuildConfig.DEVELOPMENT) {
+                    composable(dailyScheduleRoute) { backStackEntry ->
+                        val previousEntry = navController.previousBackStackEntry
+                        val previousRoute = previousEntry?.destination?.route
+                        val viewModel = if (previousRoute == calendarRoute) {
+                            viewModel<CalendarViewModel>(previousEntry)
+                        } else viewModel<CalendarViewModel>()
+                        val jdn =
+                            backStackEntry.arguments?.getLong(selectedDayKey, 0)
+                                ?.takeIf { it != 0L }
+                                ?.let {
+                                    Jdn(it)
+                                } ?: Jdn.today()
+                        DailyScheduleScreen(
+                            calendarViewModel = viewModel,
+                            initialSelectedDay = jdn,
+                            animatedContentScope = this,
+                            navigateUp = { navigateUp(dailyScheduleRoute) },
+                            navigateToSchedule = { day: Jdn ->
+                                navController.graph.findNode(scheduleRoute)?.let { destination ->
+                                    navController.navigate(
+                                        destination.id, bundleOf(selectedDayKey to day.value)
+                                    )
+                                }
+                            },
+                        )
+                    }
                 }
 
                 composable(converterRoute) {

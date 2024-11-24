@@ -72,13 +72,13 @@ fun SharedTransitionScope.Month(
     height: Dp,
     addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
-    navigateToDailySchedule: ((Jdn) -> Unit)?,
     animatedContentScope: AnimatedContentScope,
     today: Jdn,
     isHighlighted: Boolean,
     selectedDay: Jdn,
     refreshToken: Int,
     setSelectedDay: (Jdn) -> Unit,
+    onWeekClick: ((Jdn) -> Unit)? = null,
     onlyWeek: Int? = null,
 ) {
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
@@ -181,11 +181,11 @@ fun SharedTransitionScope.Month(
             if (isShowWeekOfYearEnabled && dayOffset % 7 == 0) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = if (navigateToDailySchedule != null) Modifier.clickable(
+                    modifier = if (onWeekClick != null) Modifier.clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,
                     ) {
-                        navigateToDailySchedule(
+                        onWeekClick(
                             if (selectedDay - day in 0..<7) selectedDay
                             else if (dayOffset < startingWeekDay) day + startingWeekDay
                             // Select first non weekend day of the week

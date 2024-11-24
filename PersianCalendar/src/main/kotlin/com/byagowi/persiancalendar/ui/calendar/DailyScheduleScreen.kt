@@ -431,7 +431,6 @@ private fun SharedTransitionScope.WeekPage(
                 height = height,
                 addEvent = addEvent,
                 monthColors = monthColors,
-                navigateToDailySchedule = null,
                 animatedContentScope = animatedContentScope,
                 onlyWeek = week,
                 today = today,

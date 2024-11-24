@@ -85,12 +85,12 @@ fun SharedTransitionScope.CalendarPager(
                     addEvent = addEvent,
                     monthColors = monthColors,
                     animatedContentScope = animatedContentScope,
-                    navigateToDailySchedule = navigateToDailySchedule,
                     today = today,
                     isHighlighted = isHighlighted,
                     refreshToken = refreshToken,
                     selectedDay = selectedDay,
                     setSelectedDay = { viewModel.changeSelectedDay(it) },
+                    // onWeekClick = navigateToDailySchedule,
                 )
             }
             PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = false)
