@@ -430,5 +430,5 @@
     <string name="vibration">Vibración</string>
     <string name="schedule">Horario</string>
     <string name="print">Imprimir</string>
-<!--    <string name="week_view">Vista semanal</string>-->
+    <string name="week_view">Vista semanal</string>
 </resources>
