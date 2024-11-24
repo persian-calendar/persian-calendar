@@ -95,6 +95,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -144,6 +145,7 @@ fun SharedTransitionScope.AboutScreen(
                     AboutScreenContent(navigateToLicenses, paddingValues.calculateBottomPadding())
                 }
             }
+            ScrollShadow(scrollState, top = false)
         }
     }
 }
