@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Timelapse
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -47,7 +45,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -60,7 +57,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
-import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -81,7 +77,6 @@ import kotlin.math.abs
 fun SharedTransitionScope.ScheduleScreen(
     calendarViewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
-    navigateToDailySchedule: (Jdn) -> Unit,
     initiallySelectedDay: Jdn,
     navigateUp: () -> Unit,
 ) {
@@ -130,13 +125,6 @@ fun SharedTransitionScope.ScheduleScreen(
                                 state.animateScrollToItem(ITEMS_COUNT / 2)
                             } else state.scrollToItem(ITEMS_COUNT / 2)
                         }
-                    }
-
-                    if (BuildConfig.DEVELOPMENT) {
-                        AppIconButton(
-                            icon = Icons.Default.Timelapse,
-                            title = stringResource(R.string.daily_schedule)
-                        ) { navigateToDailySchedule(firstVisibleItemJdn) }
                     }
 
                     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
