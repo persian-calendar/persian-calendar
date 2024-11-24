@@ -13,6 +13,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -57,6 +59,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
 
@@ -80,7 +83,7 @@ fun SharedTransitionScope.LicensesScreen(
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
                 ScreenSurface(animatedContentScope) {
-                    Licenses(paddingValues.calculateBottomPadding())
+                    Box { Licenses(paddingValues.calculateBottomPadding()) }
                     Box(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterEnd,
@@ -147,10 +150,11 @@ private fun Sidebar(modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun Licenses(bottomPadding: Dp) {
+private fun BoxScope.Licenses(bottomPadding: Dp) {
     val sections = remember { getCreditsSections() }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
-    LazyColumn {
+    val listState = rememberLazyListState()
+    LazyColumn(state = listState) {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) HorizontalDivider(
                 modifier = Modifier.padding(start = 16.dp, end = 88.dp),
@@ -205,4 +209,6 @@ private fun Licenses(bottomPadding: Dp) {
         }
         item { Spacer(Modifier.height(bottomPadding)) }
     }
+    ScrollShadow(listState = listState, top = true)
+    ScrollShadow(listState = listState, top = false)
 }

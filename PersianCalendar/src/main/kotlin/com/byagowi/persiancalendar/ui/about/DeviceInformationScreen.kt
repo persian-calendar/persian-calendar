@@ -19,6 +19,7 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Android
@@ -76,6 +78,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.getActivity
@@ -145,33 +148,38 @@ fun SharedTransitionScope.DeviceInformationScreen(
         )
         ScreenSurface(animatedContentScope) {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-                LazyColumn {
-                    item { Spacer(Modifier.height(16.dp)) }
-                    item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
-                    itemsIndexed(items) { i, item ->
-                        if (i > 0) HorizontalDivider(
-                            Modifier.padding(horizontal = 20.dp),
-                            color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
-                        )
-                        Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
-                            Text(item.title, fontWeight = FontWeight.Bold)
-                            Row {
-                                SelectionContainer {
-                                    when (val content = item.content) {
-                                        is AnnotatedString -> Text(content)
-                                        else -> Text(content.toString())
+                Box {
+                    val listState = rememberLazyListState()
+                    LazyColumn(state = listState) {
+                        item { Spacer(Modifier.height(16.dp)) }
+                        item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
+                        itemsIndexed(items) { i, item ->
+                            if (i > 0) HorizontalDivider(
+                                Modifier.padding(horizontal = 20.dp),
+                                color = MaterialTheme.colorScheme.outline.copy(alpha = .5f)
+                            )
+                            Column(Modifier.padding(vertical = 4.dp, horizontal = 24.dp)) {
+                                Text(item.title, fontWeight = FontWeight.Bold)
+                                Row {
+                                    SelectionContainer {
+                                        when (val content = item.content) {
+                                            is AnnotatedString -> Text(content)
+                                            else -> Text(content.toString())
+                                        }
                                     }
+                                    Spacer(
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .fillMaxWidth(),
+                                    )
+                                    Text(item.version)
                                 }
-                                Spacer(
-                                    modifier = Modifier
-                                        .weight(1f)
-                                        .fillMaxWidth(),
-                                )
-                                Text(item.version)
                             }
                         }
+                        item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
                     }
-                    item { Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.systemBars)) }
+                    ScrollShadow(listState = listState, top = true)
+                    ScrollShadow(listState = listState, top = false)
                 }
             }
         }
