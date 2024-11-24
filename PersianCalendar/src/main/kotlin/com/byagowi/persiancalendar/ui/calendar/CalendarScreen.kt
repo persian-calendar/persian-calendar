@@ -298,58 +298,61 @@ fun SharedTransitionScope.CalendarScreen(
                         }
                     } else {
                         val scrollState = rememberScrollState()
-                        Column(
-                            modifier = Modifier
-                                .clip(materialCornerExtraLargeTop())
-                                .verticalScroll(scrollState)
-                                .pointerInput(Unit) {
-                                    val threshold = 40.dp.toPx()
-                                    awaitEachGesture {
-                                        // Don't inline this
-                                        val id = awaitFirstDown(requireUnconsumed = false).id
-                                        val wasAtTop = scrollState.value == 0
-                                        val wasAtEnd = scrollState.value == scrollState.maxValue
-                                        verticalDrag(id) {
-                                            val dragAmount = it.positionChange().y
-                                            if (dragAmount < -threshold && wasAtEnd) navigateToSchedule()
-                                            else if (dragAmount > threshold && wasAtTop) viewModel.openYearView()
+                        Box {
+                            Column(
+                                modifier = Modifier
+                                    .clip(materialCornerExtraLargeTop())
+                                    .verticalScroll(scrollState)
+                                    .pointerInput(Unit) {
+                                        val threshold = 40.dp.toPx()
+                                        awaitEachGesture {
+                                            // Don't inline this
+                                            val id = awaitFirstDown(requireUnconsumed = false).id
+                                            val wasAtTop = scrollState.value == 0
+                                            val wasAtEnd = scrollState.value == scrollState.maxValue
+                                            verticalDrag(id) {
+                                                val dragAmount = it.positionChange().y
+                                                if (dragAmount < -threshold && wasAtEnd) navigateToSchedule()
+                                                else if (dragAmount > threshold && wasAtTop) viewModel.openYearView()
+                                            }
                                         }
-                                    }
-                                },
-                        ) {
-                            var calendarHeight by remember {
-                                mutableStateOf(pagerSize.height / 7 * 6)
-                            }
-                            val density = LocalDensity.current
-                            Box(
-                                Modifier
-                                    .offset { IntOffset(0, scrollState.value * 3 / 4) }
-                                    .onSizeChanged {
-                                        calendarHeight = with(density) { it.height.toDp() }
-                                    }
-                                    .animateContentSize(),
+                                    },
                             ) {
-                                CalendarPager(
-                                    viewModel = viewModel,
-                                    pagerState = pagerState,
-                                    addEvent = addEvent,
-                                    navigateToDailySchedule = navigateToDailySchedule,
-                                    size = pagerSize,
-                                    animatedContentScope = animatedContentScope,
-                                )
-                            }
+                                var calendarHeight by remember {
+                                    mutableStateOf(pagerSize.height / 7 * 6)
+                                }
+                                val density = LocalDensity.current
+                                Box(
+                                    Modifier
+                                        .offset { IntOffset(0, scrollState.value * 3 / 4) }
+                                        .onSizeChanged {
+                                            calendarHeight = with(density) { it.height.toDp() }
+                                        }
+                                        .animateContentSize(),
+                                ) {
+                                    CalendarPager(
+                                        viewModel = viewModel,
+                                        pagerState = pagerState,
+                                        addEvent = addEvent,
+                                        navigateToDailySchedule = navigateToDailySchedule,
+                                        size = pagerSize,
+                                        animatedContentScope = animatedContentScope,
+                                    )
+                                }
 
-                            Spacer(Modifier.height(12.dp))
-                            val detailsMinHeight = maxHeight - calendarHeight - 12.dp
-                            ScreenSurface(animatedContentScope, workaroundClipBug = true) {
-                                Details(
-                                    viewModel = viewModel,
-                                    tabs = detailsTabs,
-                                    pagerState = detailsPagerState,
-                                    contentMinHeight = detailsMinHeight,
-                                    modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
-                                )
+                                Spacer(Modifier.height(12.dp))
+                                val detailsMinHeight = maxHeight - calendarHeight - 12.dp
+                                ScreenSurface(animatedContentScope, workaroundClipBug = true) {
+                                    Details(
+                                        viewModel = viewModel,
+                                        tabs = detailsTabs,
+                                        pagerState = detailsPagerState,
+                                        contentMinHeight = detailsMinHeight,
+                                        modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
+                                    )
+                                }
                             }
+                            ScrollShadow(scrollState, top = false)
                         }
                     }
                 }
