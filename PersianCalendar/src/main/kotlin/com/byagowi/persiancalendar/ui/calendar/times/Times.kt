@@ -96,5 +96,5 @@ private fun PrayTimes.getNextTimeId(now: Long, timeIds: List<Int>, isExpanded: B
             R.string.midnight -> midnight > clock && isExpanded
             else -> false
         }
-    } ?: timeIds[0]
+    } ?: if (isExpanded) R.string.imsak else R.string.fajr
 }
