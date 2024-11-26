@@ -88,7 +88,7 @@ private fun PrayTimes.getNextTimeId(now: Long, timeIds: List<Int>, isExpanded: B
             R.string.imsak -> imsak > clock && isExpanded
             R.string.fajr -> fajr > clock
             R.string.sunrise -> sunrise > clock && isExpanded
-            R.string.dhuhr -> dhuhr > clock && isExpanded
+            R.string.dhuhr -> dhuhr > clock
             R.string.asr -> asr > clock && isExpanded
             R.string.sunset -> sunset > clock && isExpanded
             R.string.maghrib -> maghrib > clock
