@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.theme.nextTimeColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.getFromStringId
@@ -49,6 +50,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         val timeIds = getTimeNames()
+        val nextTimeColor = nextTimeColor()
         val nextTimeId = if (isToday) prayTimes.getNextTimeId(now, timeIds, isExpanded) else null
         timeIds.forEach { timeId ->
             AnimatedVisibility(
@@ -64,8 +66,7 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val textColor by animateColor(
-                        if (nextTimeId == timeId) MaterialTheme.colorScheme.primary
-                        else LocalContentColor.current
+                        if (nextTimeId == timeId) nextTimeColor else LocalContentColor.current
                     )
                     Text(stringResource(timeId), color = textColor)
                     AnimatedContent(

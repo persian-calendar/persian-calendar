@@ -329,6 +329,16 @@ fun appMonthColors(): MonthColors {
 }
 
 @Composable
+fun nextTimeColor(): Color {
+    val theme = effectiveTheme()
+    val context = LocalContext.current
+    return if (theme.isDynamicColors) when (theme) {
+        Theme.LIGHT, Theme.MODERN -> Color(context.getColor(android.R.color.system_accent1_500))
+        else -> MaterialTheme.colorScheme.primary
+    } else MaterialTheme.colorScheme.primary
+}
+
+@Composable
 fun appSunViewColors(): SunViewColors {
     val theme = effectiveTheme()
     val context = LocalContext.current
