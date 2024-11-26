@@ -339,6 +339,12 @@ fun nextTimeColor(): Color {
 }
 
 @Composable
+fun scrollShadowColor(): Color {
+    val theme by theme.collectAsState()
+    return animateColor(Color(if (theme.isDark) 0x40FFFFFF else 0x60000000)).value
+}
+
+@Composable
 fun appSunViewColors(): SunViewColors {
     val theme = effectiveTheme()
     val context = LocalContext.current

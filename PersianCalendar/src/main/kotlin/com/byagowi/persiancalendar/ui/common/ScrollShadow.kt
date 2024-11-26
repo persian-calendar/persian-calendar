@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.scrollShadowColor
 import kotlin.math.abs
 
 @Composable
@@ -45,7 +45,7 @@ fun BoxScope.ScrollShadow(listState: LazyListState, top: Boolean) {
 
 @Composable
 private fun BoxScope.ScrollShadowBar(top: Boolean, height: Dp) {
-    val color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = .5f)
+    val color = scrollShadowColor()
     val colors = if (top) listOf(color, Color.Transparent) else listOf(Color.Transparent, color)
     Box(
         Modifier
