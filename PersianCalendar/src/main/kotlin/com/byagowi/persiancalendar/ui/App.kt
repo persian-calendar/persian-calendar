@@ -6,6 +6,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -101,6 +102,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.DailyScheduleScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
@@ -160,8 +162,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     modifier = Modifier.renderInSharedTransitionScopeOverlay(),
                 ) {
                     Box {
-                        DrawerContent(drawerState, navController, finish)
+                        val scrollState = rememberScrollState()
+                        DrawerContent(drawerState, navController, finish, scrollState)
                         DrawerTopGradient()
+                        ScrollShadow(scrollState, top = true)
+                        ScrollShadow(scrollState, top = false)
                     }
                 }
             },
@@ -396,10 +401,11 @@ private fun DrawerContent(
     drawerState: DrawerState,
     navController: NavHostController,
     finish: () -> Unit,
+    scrollState: ScrollState,
 ) {
     Column(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(scrollState)
             .windowInsetsPadding(WindowInsets.systemBars)
     ) {
         Box {
