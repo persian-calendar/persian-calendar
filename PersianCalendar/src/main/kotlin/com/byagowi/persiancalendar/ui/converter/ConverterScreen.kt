@@ -59,6 +59,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
@@ -77,6 +78,7 @@ import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
+import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -162,7 +164,8 @@ fun SharedTransitionScope.ConverterScreen(
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
                 Box(Modifier.fillMaxSize()) {
-                    Column(Modifier.verticalScroll(rememberScrollState())) {
+                    val scrollState = rememberScrollState()
+                    Column(Modifier.verticalScroll(scrollState)) {
                         Spacer(modifier = Modifier.height(24.dp))
 
                         val isLandscape =
@@ -209,8 +212,14 @@ fun SharedTransitionScope.ConverterScreen(
                             }
                         }
 
-                        Spacer(Modifier.height(paddingValues.calculateBottomPadding()))
+                        Spacer(
+                            Modifier.height(
+                                paddingValues.calculateBottomPadding().coerceAtLeast(24.dp)
+                            )
+                        )
                     }
+                    ScrollShadow(scrollState, top = true)
+                    ScrollShadow(scrollState, top = false)
                 }
             }
         }
