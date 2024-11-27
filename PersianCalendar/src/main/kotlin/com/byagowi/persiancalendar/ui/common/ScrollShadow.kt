@@ -39,7 +39,11 @@ fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
 @Composable
 fun BoxScope.ScrollShadow(listState: LazyListState, top: Boolean) {
     val needsShadow = if (top) listState.canScrollBackward else listState.canScrollForward
-    val height by animateDpAsState(if (needsShadow) 8.dp else 0.dp, label = "height")
+    val height by animateDpAsState(
+        if (needsShadow) 8.dp else 0.dp,
+        label = "height",
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+    )
     ScrollShadowBar(top, height)
 }
 
