@@ -252,6 +252,7 @@ private fun SharedTransitionScope.DaySchedule(
     val eventsWithTime =
         events.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
     val eventsWithoutTime = events - eventsWithTime.toSet()
+    val hoursEvents = eventsWithTime.groupBy { it.startTime[Calendar.HOUR_OF_DAY] }
     val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
 
     Column {
@@ -324,10 +325,8 @@ private fun SharedTransitionScope.DaySchedule(
                             HorizontalDivider()
                         }
                         Column(Modifier.padding(horizontal = 24.dp)) {
-                            val hourEvents = eventsWithTime.filter {
-                                it.startTime.get(Calendar.HOUR_OF_DAY) == hour
-                            }
-                            if (hourEvents.isNotEmpty()) DayEvents(hourEvents) {
+                            val hourEvents = hoursEvents[hour]
+                            if (hourEvents != null) DayEvents(hourEvents) {
                                 calendarViewModel.refreshCalendar()
                             } else AddHourEvent(addEvent, selectedDay, hour)
                         }
