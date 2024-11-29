@@ -95,7 +95,9 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): Abst
 
         "last weekday of month" -> {
             val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
-            val weekDay = event["weekday"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val weekDay = isoWeekToApp(
+                event["weekday"]?.toIntOrNull().debugAssertNotNull ?: return null
+            )
             val offset = event["offset"]?.toIntOrNull() ?: 0
             type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay) + offset)
         }
