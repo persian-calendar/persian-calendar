@@ -124,30 +124,30 @@ class EventsTests {
 
     @ParameterizedTest
     @CsvSource(
-        "1400, 12, 29, 2",
-        "1400, 12, 28, 1",
-        "1400, 12, 27, 7",
-        "1400, 12, 26, 6",
-        "1400, 12, 25, 5",
-        "1400, 12, 24, 4",
-        "1400, 12, 23, 3",
-        "1400, 12, 27, 7",
-        "1399, 12, 29, 7",
-        "1398, 12, 23, 7",
-        "1397, 12, 24, 7",
-        "1396, 12, 25, 7",
-        "1395, 12, 27, 7",
-        "1394, 12, 28, 7",
-        "1393, 12, 29, 7",
-        "1392, 12, 23, 7",
-        "1391, 12, 25, 7",
-        "1390, 12, 26, 7",
+        "1400, 12, 29, 1",
+        "1400, 12, 28, 7",
+        "1400, 12, 27, 6",
+        "1400, 12, 26, 5",
+        "1400, 12, 25, 4",
+        "1400, 12, 24, 3",
+        "1400, 12, 23, 2",
+        "1400, 12, 27, 6",
+        "1399, 12, 29, 6",
+        "1398, 12, 23, 6",
+        "1397, 12, 24, 6",
+        "1396, 12, 25, 6",
+        "1395, 12, 27, 6",
+        "1394, 12, 28, 6",
+        "1393, 12, 29, 6",
+        "1392, 12, 23, 6",
+        "1391, 12, 25, 6",
+        "1390, 12, 26, 6",
     )
     fun `getLastWeekDayOfMonth calculations correctness`(
         year: Int, month: Int, day: Int, weekDay: Int
     ) {
         val calendar = Calendar.SHAMSI
-        assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, weekDay))
+        assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, isoWeekToApp(weekDay)))
         val event = mapOf(
             "rule" to "last weekday of month", "weekday" to "$weekDay", "month" to "$month",
         )
