@@ -5,12 +5,14 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.getDateInstance
+import com.byagowi.persiancalendar.entities.isoWeekToApp
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.util.GregorianCalendar
 import kotlin.test.assertEquals
 
 class EventsTests {
@@ -55,7 +57,7 @@ class EventsTests {
         assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 6, 3))
         val title = "روز جهانی فلسفه (سومین پنجشنبهٔ نوامبر)"
         val event = mapOf(
-            "rule" to "nth weekday of month", "nth" to "3", "weekday" to "6", "month" to "11",
+            "rule" to "nth weekday of month", "nth" to "3", "weekday" to "5", "month" to "11",
             "type" to "International", "title" to title, "holiday" to "false",
         )
         assertEquals(getDateInstance(event, year, calendar), CivilDate(year, month, day))
@@ -63,56 +65,56 @@ class EventsTests {
 
     @ParameterizedTest
     @CsvSource(
-        "1400, 12, 15, 2, 3",
-        "1400, 12, 21, 1, 3",
-        "1400, 12, 20, 7, 3",
-        "1400, 12, 19, 6, 3",
-        "1400, 12, 18, 5, 3",
-        "1400, 12, 17, 4, 3",
-        "1400, 12, 16, 3, 3",
-        "1400, 12, 20, 7, 3",
+        "1400, 12, 15, 1, 3",
+        "1400, 12, 21, 7, 3",
+        "1400, 12, 20, 6, 3",
+        "1400, 12, 19, 5, 3",
+        "1400, 12, 18, 4, 3",
+        "1400, 12, 17, 3, 3",
+        "1400, 12, 16, 2, 3",
+        "1400, 12, 20, 6, 3",
 
-        "1400, 12, 7, 1, 1",
-        "1400, 12, 14, 1, 2",
-        "1400, 12, 21, 1, 3",
-        "1400, 12, 28, 1, 4",
+        "1400, 12, 7, 7, 1",
+        "1400, 12, 14, 7, 2",
+        "1400, 12, 21, 7, 3",
+        "1400, 12, 28, 7, 4",
 
-        "1400, 12, 1, 2, 1",
-        "1400, 12, 8, 2, 2",
-        "1400, 12, 15, 2, 3",
-        "1400, 12, 22, 2, 4",
-        "1400, 12, 29, 2, 5",
+        "1400, 12, 1, 1, 1",
+        "1400, 12, 8, 1, 2",
+        "1400, 12, 15, 1, 3",
+        "1400, 12, 22, 1, 4",
+        "1400, 12, 29, 1, 5",
 
-        "1400, 12, 2, 3, 1",
-        "1400, 12, 9, 3, 2",
-        "1400, 12, 16, 3, 3",
-        "1400, 12, 23, 3, 4",
+        "1400, 12, 2, 2, 1",
+        "1400, 12, 9, 2, 2",
+        "1400, 12, 16, 2, 3",
+        "1400, 12, 23, 2, 4",
 
-        "1400, 12, 3, 4, 1",
-        "1400, 12, 10, 4, 2",
-        "1400, 12, 17, 4, 3",
-        "1400, 12, 24, 4, 4",
+        "1400, 12, 3, 3, 1",
+        "1400, 12, 10, 3, 2",
+        "1400, 12, 17, 3, 3",
+        "1400, 12, 24, 3, 4",
 
-        "1400, 12, 4, 5, 1",
-        "1400, 12, 11, 5, 2",
-        "1400, 12, 18, 5, 3",
-        "1400, 12, 25, 5, 4",
+        "1400, 12, 4, 4, 1",
+        "1400, 12, 11, 4, 2",
+        "1400, 12, 18, 4, 3",
+        "1400, 12, 25, 4, 4",
 
-        "1400, 12, 5, 6, 1",
-        "1400, 12, 12, 6, 2",
-        "1400, 12, 19, 6, 3",
-        "1400, 12, 26, 6, 4",
+        "1400, 12, 5, 5, 1",
+        "1400, 12, 12, 5, 2",
+        "1400, 12, 19, 5, 3",
+        "1400, 12, 26, 5, 4",
 
-        "1400, 12, 6, 7, 1",
-        "1400, 12, 13, 7, 2",
-        "1400, 12, 20, 7, 3",
-        "1400, 12, 27, 7, 4",
+        "1400, 12, 6, 6, 1",
+        "1400, 12, 13, 6, 2",
+        "1400, 12, 20, 6, 3",
+        "1400, 12, 27, 6, 4",
     )
     fun `getNthWeekDayOfMonth calculations correctness`(
         year: Int, month: Int, day: Int, weekDay: Int, nth: Int,
     ) {
         val calendar = Calendar.SHAMSI
-        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, weekDay, nth))
+        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, isoWeekToApp(weekDay), nth))
         val event = mapOf(
             "rule" to "nth weekday of month", "nth" to "$nth",
             "weekday" to "$weekDay", "month" to "$month",

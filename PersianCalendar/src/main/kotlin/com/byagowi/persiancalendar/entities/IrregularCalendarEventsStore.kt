@@ -102,7 +102,9 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): Abst
 
         "nth weekday of month" -> {
             val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
-            val weekDay = event["weekday"]?.toIntOrNull().debugAssertNotNull ?: return null
+            val weekDay = isoWeekToApp(
+                event["weekday"]?.toIntOrNull().debugAssertNotNull ?: return null
+            )
             val nth = event["nth"]?.toIntOrNull().debugAssertNotNull ?: return null
             type.createDate(year, month, type.getNthWeekDayOfMonth(year, month, weekDay, nth))
         }
@@ -110,3 +112,8 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): Abst
         else -> null.debugAssertNotNull
     }
 }
+
+// Turn https://en.wikipedia.org/wiki/ISO_week_date ISO-8601 day of week numbering
+// to what app uses internally
+@VisibleForTesting
+fun isoWeekToApp(value: Int): Int = (value % 7) + 1
