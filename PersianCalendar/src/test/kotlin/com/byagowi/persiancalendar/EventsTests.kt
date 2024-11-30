@@ -5,14 +5,12 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.getDateInstance
-import com.byagowi.persiancalendar.entities.isoWeekToApp
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.util.GregorianCalendar
 import kotlin.test.assertEquals
 
 class EventsTests {
@@ -54,7 +52,7 @@ class EventsTests {
     )
     fun `test World Philosophy Day instances`(year: Int, month: Int, day: Int) {
         val calendar = Calendar.GREGORIAN
-        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 6, 3))
+        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, 5, 3))
         val title = "روز جهانی فلسفه (سومین پنجشنبهٔ نوامبر)"
         val event = mapOf(
             "rule" to "nth weekday of month", "nth" to "3", "weekday" to "5", "month" to "11",
@@ -114,7 +112,7 @@ class EventsTests {
         year: Int, month: Int, day: Int, weekDay: Int, nth: Int,
     ) {
         val calendar = Calendar.SHAMSI
-        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, isoWeekToApp(weekDay), nth))
+        assertEquals(day, calendar.getNthWeekDayOfMonth(year, month, weekDay, nth))
         val event = mapOf(
             "rule" to "nth weekday of month", "nth" to "$nth",
             "weekday" to "$weekDay", "month" to "$month",
@@ -147,7 +145,7 @@ class EventsTests {
         year: Int, month: Int, day: Int, weekDay: Int
     ) {
         val calendar = Calendar.SHAMSI
-        assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, isoWeekToApp(weekDay)))
+        assertEquals(day, calendar.getLastWeekDayOfMonth(year, month, weekDay))
         val event = mapOf(
             "rule" to "last weekday of month", "weekday" to "$weekDay", "month" to "$month",
         )

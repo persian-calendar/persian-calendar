@@ -36,15 +36,18 @@ enum class Calendar(
         NEPALI -> NepaliDate(year, month, day)
     }
 
-    // 1 means Saturday on it and 7 means Friday
+    // "The values are numbered following the ISO-8601 standard, from 1 (Monday) to 7 (Sunday)."
     fun getNthWeekDayOfMonth(year: Int, month: Int, weekDay: Int, nth: Int): Int {
+        val appWeekDay = (weekDay % 7) + 1
         val monthStartWeekDay = Jdn(this, year, month, 1).weekDay
-        return weekDay - monthStartWeekDay + nth * 7 - if (monthStartWeekDay < weekDay) 7 else 0
+        return appWeekDay - monthStartWeekDay + nth * 7 - if (monthStartWeekDay < appWeekDay) 7 else 0
     }
 
+    // "The values are numbered following the ISO-8601 standard, from 1 (Monday) to 7 (Sunday)."
     fun getLastWeekDayOfMonth(year: Int, month: Int, weekDay: Int): Int {
+        val appWeekDay = (weekDay % 7) + 1
         val monthLength = getMonthLength(year, month)
-        return monthLength - (Jdn(this, year, month, monthLength) - weekDay + 1).weekDay
+        return monthLength - (Jdn(this, year, month, monthLength) - appWeekDay + 1).weekDay
     }
 
     fun getYearMonths(year: Int): Int =
