@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -39,11 +38,11 @@ fun BoxScope.ScrollShadow(scrollState: ScrollState, top: Boolean) {
 @Composable
 fun BoxScope.ScrollShadow(listState: LazyListState, top: Boolean) {
     val needsShadow = if (top) listState.canScrollBackward else listState.canScrollForward
-    val height by animateDpAsState(
+    val height = if (listState.canScrollBackward || listState.canScrollForward) animateDpAsState(
         if (needsShadow) 8.dp else 0.dp,
         label = "height",
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
-    )
+    ).value else 0.dp
     ScrollShadowBar(top, height)
 }
 
