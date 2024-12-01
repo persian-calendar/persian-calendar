@@ -6,6 +6,7 @@ import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -272,13 +273,15 @@ fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.close)) }
         },
     ) {
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(8.dp))
         calendars.forEach { (accountName, values) ->
-            Text(
-                accountName,
-                modifier = Modifier.padding(horizontal = 24.dp),
-                style = MaterialTheme.typography.titleMedium,
-            )
+            Box(Modifier.height(SettingsItemHeight.dp), contentAlignment = Alignment.BottomStart) {
+                Text(
+                    accountName,
+                    modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+            }
             values.forEach {
                 val checked = it.id !in idsToExclude
                 Row(
@@ -287,7 +290,7 @@ fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
                         .clickable {
                             if (checked) idsToExclude.add(it.id) else idsToExclude.remove(it.id)
                         }
-                        .height(SettingsItemHeight.dp)
+                        .height(42.dp)
                         .fillMaxWidth(),
                 ) {
                     Checkbox(
