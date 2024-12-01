@@ -3,6 +3,9 @@ package com.byagowi.persiancalendar.global
 import android.content.Context
 import android.content.res.Resources
 import android.view.accessibility.AccessibilityManager
+import androidx.collection.LongSet
+import androidx.collection.MutableLongSet
+import androidx.collection.emptyLongSet
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
@@ -38,6 +41,7 @@ import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_VIBRATION
+import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -241,6 +245,9 @@ val wallpaperAutomatic: StateFlow<Boolean> get() = wallpaperAutomatic_
 
 private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
 val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarEvents_
+
+private val eventCalendarsIdsToExclude_ = MutableStateFlow(emptyLongSet())
+val eventCalendarsIdsToExclude: StateFlow<LongSet> get() = eventCalendarsIdsToExclude_
 
 var whatToShowOnWidgets = emptySet<String>()
     private set
@@ -474,6 +481,12 @@ fun updateStoredPreference(context: Context) {
 
     isShowDeviceCalendarEvents_.value =
         preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
+    eventCalendarsIdsToExclude_.value = MutableLongSet().also { set ->
+        if (isShowDeviceCalendarEvents_.value) set.addAll(
+            (preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null)
+                ?: "").splitFilterNotEmpty(",").mapNotNull { it.toLongOrNull() }.toLongArray()
+        )
+    }
     whatToShowOnWidgets =
         preferences.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 

@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
@@ -173,11 +174,13 @@ private fun readDeviceEvents(
             CalendarContract.Instances.VISIBLE, // 5
             CalendarContract.Instances.ALL_DAY, // 6
             CalendarContract.Instances.EVENT_COLOR, // 7
-            CalendarContract.Instances.DISPLAY_COLOR // 8
+            CalendarContract.Instances.DISPLAY_COLOR, // 8
+            CalendarContract.Instances.CALENDAR_ID, // 9
         ), null, null, null
     )?.use {
         generateSequence { if (it.moveToNext()) it else null }.filter {
-            it.getString(5) == "1" // is visible
+            it.getString(5) == "1" && // is visible
+                    it.getLong(9) !in eventCalendarsIdsToExclude.value
         }.map {
             val startDate = Date(it.getLong(3))
             val endDate = Date(it.getLong(4))

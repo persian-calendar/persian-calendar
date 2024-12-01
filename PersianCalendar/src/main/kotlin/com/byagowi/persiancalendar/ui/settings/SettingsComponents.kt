@@ -283,6 +283,7 @@ fun SettingsSwitch(
     value: Boolean,
     title: String,
     summary: String? = null,
+    extraWidget: (@Composable () -> Unit)? = null,
     onBeforeToggle: (Boolean) -> Boolean = { it },
 ) {
     val context = LocalContext.current
@@ -290,7 +291,7 @@ fun SettingsSwitch(
         val newValue = onBeforeToggle(!value)
         if (value != newValue) context.preferences.edit { putBoolean(key, newValue) }
     }
-    SettingsSwitchLayout(toggle, title, summary, value)
+    SettingsSwitchLayout(toggle, title, summary, value, extraWidget = extraWidget)
 }
 
 @Composable
@@ -298,6 +299,7 @@ private fun SettingsLayout(
     onClick: () -> Unit,
     title: String,
     summary: String?,
+    extraWidget: (@Composable () -> Unit)? = null,
     widget: (@Composable () -> Unit)? = null,
 ) {
     Box(
@@ -306,7 +308,8 @@ private fun SettingsLayout(
             .clickable(onClick = onClick)
             .padding(horizontal = 8.dp),
     ) {
-        val endPadding = 16f + if (widget != null) widgetSize + 16 else 0f
+        val endPadding = 16 + (if (widget != null) widgetSize + 16f else 0f) +
+                (if (extraWidget != null) widgetSize + 8f else 0f)
         Column(
             Modifier
                 .align(alignment = Alignment.CenterStart)
@@ -338,6 +341,13 @@ private fun SettingsLayout(
                 .size(widgetSize.dp),
             contentAlignment = Alignment.Center,
         ) { if (widget != null) widget() }
+        if (extraWidget != null) Box(
+            Modifier
+                .align(alignment = Alignment.CenterEnd)
+                .padding(end = (widgetSize + 16 + 8f).dp)
+                .size(widgetSize.dp),
+            contentAlignment = Alignment.Center,
+        ) { extraWidget() }
     }
 }
 
@@ -347,11 +357,15 @@ private fun SettingsSwitchLayout(
     title: String,
     summary: String?,
     value: Boolean,
+    extraWidget: (@Composable () -> Unit)? = null,
 ) {
     val hapticFeedback = LocalHapticFeedback.current
-    SettingsLayout({ hapticFeedback.performLongPress(); toggle() }, title, summary) {
-        Switch(checked = value, onCheckedChange = null)
-    }
+    SettingsLayout(
+        onClick = { hapticFeedback.performLongPress(); toggle() },
+        title = title,
+        summary = summary,
+        extraWidget = extraWidget,
+    ) { Switch(checked = value, onCheckedChange = null) }
 }
 
 @Composable
