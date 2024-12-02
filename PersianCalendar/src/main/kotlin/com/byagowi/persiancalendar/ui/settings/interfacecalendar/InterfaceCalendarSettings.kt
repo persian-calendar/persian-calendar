@@ -17,6 +17,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.FilledIconButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -60,7 +62,6 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
@@ -74,6 +75,7 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 
 @Composable
@@ -148,10 +150,12 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
                 var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                 Row {
                     AnimatedVisibility(isShowDeviceCalendarEvents) {
-                        AppIconButton(
-                            icon = Icons.Default.Settings,
-                            title = stringResource(R.string.settings),
-                        ) { showEventsSettingsDialog = true }
+                        FilledIconButton(onClick = { showEventsSettingsDialog = true }) {
+                            Icon(
+                                Icons.Default.Settings,
+                                contentDescription = stringResource(R.string.settings),
+                            )
+                        }
                     }
                 }
                 if (showEventsSettingsDialog) EventsToExcludeDialog {
@@ -217,9 +221,8 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     )
 }
 
-
 @Composable
-fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
+private fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
     data class CalendarsEntry(
         val id: Long,
         val accountName: String,
@@ -260,7 +263,7 @@ fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
                     )
                 }.toList().groupBy { it.accountName }
             }
-        }.onFailure {
+        }.onFailure(logException).onFailure {
             Toast.makeText(
                 context, R.string.device_does_not_support, Toast.LENGTH_SHORT
             ).show()
