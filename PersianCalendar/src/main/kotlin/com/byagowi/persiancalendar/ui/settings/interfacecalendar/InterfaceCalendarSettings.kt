@@ -149,7 +149,9 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             extraWidget = {
                 var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                 Row {
-                    AnimatedVisibility(isShowDeviceCalendarEvents) {
+                    AnimatedVisibility(
+                        isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty()
+                    ) {
                         FilledIconButton(onClick = { showEventsSettingsDialog = true }) {
                             Icon(
                                 Icons.Default.Settings,
@@ -221,15 +223,15 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     )
 }
 
+private data class CalendarsEntry(
+    val id: Long,
+    val accountName: String,
+    val displayName: String,
+    val color: Color?,
+)
+
 @Composable
 private fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
-    data class CalendarsEntry(
-        val id: Long,
-        val accountName: String,
-        val displayName: String,
-        val color: Color?,
-    )
-
     val context = LocalContext.current
     val idsToExclude = remember {
         buildList { eventCalendarsIdsToExclude.value.forEach { add(it) } }.toMutableStateList()
@@ -241,34 +243,9 @@ private fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
             }
         }
     }
-    val calendars = remember {
-        runCatching {
-            context.contentResolver.query(
-                CalendarContract.Calendars.CONTENT_URI.buildUpon().build(), arrayOf(
-                    CalendarContract.Calendars._ID, // 0
-                    CalendarContract.Calendars.ACCOUNT_NAME, // 1
-                    CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, // 2
-                    CalendarContract.Calendars.CALENDAR_COLOR, // 3
-                    CalendarContract.Calendars.VISIBLE, // 4
-                ), null, null, null
-            )?.use {
-                generateSequence { if (it.moveToNext()) it else null }.filter {
-                    it.getString(4) == "1"
-                }.map {
-                    CalendarsEntry(
-                        it.getLong(0),
-                        it.getString(1),
-                        it.getString(2),
-                        it.getIntOrNull(3)?.let(::Color),
-                    )
-                }.toList().groupBy { it.accountName }
-            }
-        }.onFailure(logException).onFailure {
-            Toast.makeText(
-                context, R.string.device_does_not_support, Toast.LENGTH_SHORT
-            ).show()
-            onDismissRequest()
-        }.getOrNull() ?: emptyMap()
+    val calendars = resolveDeviceCalendars {
+        Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+        onDismissRequest()
     }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -313,4 +290,34 @@ private fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
             }
         }
     }
+}
+
+@Composable
+private fun resolveDeviceCalendars(onFailure: (Throwable) -> Unit): Map<String, List<CalendarsEntry>> {
+    val context = LocalContext.current
+    val calendars = remember {
+        runCatching {
+            context.contentResolver.query(
+                CalendarContract.Calendars.CONTENT_URI.buildUpon().build(), arrayOf(
+                    CalendarContract.Calendars._ID, // 0
+                    CalendarContract.Calendars.ACCOUNT_NAME, // 1
+                    CalendarContract.Calendars.CALENDAR_DISPLAY_NAME, // 2
+                    CalendarContract.Calendars.CALENDAR_COLOR, // 3
+                    CalendarContract.Calendars.VISIBLE, // 4
+                ), null, null, null
+            )?.use {
+                generateSequence { if (it.moveToNext()) it else null }.filter {
+                    it.getString(4) == "1"
+                }.map {
+                    CalendarsEntry(
+                        it.getLong(0),
+                        it.getString(1),
+                        it.getString(2),
+                        it.getIntOrNull(3)?.let(::Color),
+                    )
+                }.toList().groupBy { it.accountName }
+            }
+        }.onFailure(logException).onFailure(onFailure).getOrNull() ?: emptyMap()
+    }
+    return calendars
 }
