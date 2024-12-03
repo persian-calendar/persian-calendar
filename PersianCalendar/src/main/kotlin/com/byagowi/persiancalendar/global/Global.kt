@@ -5,7 +5,7 @@ import android.content.res.Resources
 import android.view.accessibility.AccessibilityManager
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
-import androidx.collection.mutableLongSetOf
+import androidx.collection.longSetOf
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
@@ -481,7 +481,7 @@ fun updateStoredPreference(context: Context) {
 
     isShowDeviceCalendarEvents_.value =
         preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
-    eventCalendarsIdsToExclude_.value = if (isShowDeviceCalendarEvents_.value) mutableLongSetOf(
+    eventCalendarsIdsToExclude_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
         *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null) ?: "").splitFilterNotEmpty(",")
             .mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
