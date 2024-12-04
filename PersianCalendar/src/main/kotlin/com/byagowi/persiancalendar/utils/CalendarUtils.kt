@@ -367,19 +367,20 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
     }
 }
 
-fun yearViewYearFormat(year: Int, secondaryCalendar: Calendar?): String {
-    val formattedYear = formatNumber(year)
+fun yearViewYearFormat(mainCalendarYear: Int, secondaryCalendar: Calendar?): String {
+    val formattedYear = formatNumber(mainCalendarYear)
     return if (secondaryCalendar == null) formattedYear else {
-        val startOfYear = Jdn(
-            mainCalendar.createDate(year, 1, 1)
-        ).inCalendar(secondaryCalendar).year
-        val endOfYear = (Jdn(
-            mainCalendar.createDate(year + 1, 1, 1)
-        ) - 1).inCalendar(secondaryCalendar).year
-        val secondaryTitle =
-            listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) { formatNumber(it) }
+        val secondaryTitle = otherCalendarFormat(mainCalendarYear, secondaryCalendar)
         language.value.inParentheses.format(formattedYear, secondaryTitle)
     }
+}
+
+fun otherCalendarFormat(mainCalendarYear: Int, calendar: Calendar): String {
+    val startOfYear = Jdn(mainCalendar.createDate(mainCalendarYear, 1, 1)).inCalendar(calendar).year
+    val endOfYear = (Jdn(
+        mainCalendar.createDate(mainCalendarYear + 1, 1, 1)
+    ) - 1).inCalendar(calendar).year
+    return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) { formatNumber(it) }
 }
 
 private fun getCalendarNameAbbr(date: AbstractDate) =

@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -22,9 +23,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -55,6 +61,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
@@ -66,8 +73,8 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
-import com.byagowi.persiancalendar.utils.yearViewYearFormat
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.floor
@@ -247,23 +254,38 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 val space = bottomPadding * scale.value.coerceIn(.4f, 1f)
                 val alpha = (.15f * (1 - scale.value)).coerceIn(0f, .15f)
                 Spacer(Modifier.height(space))
-                if (yearOffset != halfPages - 1) Text(
-                    yearViewYearFormat(yearOffset + todayDate.year + 1, secondaryCalendar),
-                    style = MaterialTheme.typography.headlineMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(LocalContentColor.current.copy(alpha = alpha))
-                        .padding((32 * alpha).dp)
-                        .then(detectZoom)
-                        .clickable(onClickLabel = stringResource(R.string.select_year)) {
-                            coroutineScope.launch {
-                                if (scale.value <= yearSelectionModeMaxScale) scale.snapTo(1f)
-                                lazyListState.animateScrollToItem(halfPages + yearOffset + 1)
-                            }
-                        },
-                )
+                if (yearOffset != halfPages - 1) Box(Modifier.align(Alignment.CenterHorizontally)) {
+                    val year = yearOffset + todayDate.year + 1
+                    val tooltip = enabledCalendars.let { if (it.size > 1) it.drop(1) else it }
+                        .map { calendar ->
+                        otherCalendarFormat(year, calendar) + " " + stringResource(calendar.title)
+                    }.joinToString("\n")
+                    @OptIn(ExperimentalMaterial3Api::class)
+                    TooltipBox(
+                        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                        tooltip = { PlainTooltip { Text(tooltip, textAlign = TextAlign.Center) } },
+                        state = rememberTooltipState(),
+                    ) {
+                        Text(
+                            formatNumber(year),
+                            style = MaterialTheme.typography.headlineMedium,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .clip(MaterialTheme.shapes.medium)
+                                .background(LocalContentColor.current.copy(alpha = alpha))
+                                .padding((32 * alpha).dp)
+                                .then(detectZoom)
+                                .clickable(onClickLabel = stringResource(R.string.select_year)) {
+                                    coroutineScope.launch {
+                                        if (scale.value <= yearSelectionModeMaxScale) scale.snapTo(
+                                            1f
+                                        )
+                                        lazyListState.animateScrollToItem(halfPages + yearOffset + 1)
+                                    }
+                                },
+                        )
+                    }
+                }
             }
         }
     }
