@@ -258,8 +258,11 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                     val year = yearOffset + todayDate.year + 1
                     val tooltip = enabledCalendars.let { if (it.size > 1) it.drop(1) else it }
                         .map { calendar ->
-                        otherCalendarFormat(year, calendar) + " " + stringResource(calendar.title)
-                    }.joinToString("\n")
+                            otherCalendarFormat(
+                                year,
+                                calendar
+                            ) + " " + stringResource(calendar.title)
+                        }.joinToString("\n")
                     @OptIn(ExperimentalMaterial3Api::class)
                     TooltipBox(
                         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),

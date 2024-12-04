@@ -177,6 +177,7 @@ private val language_ = MutableStateFlow(Language.FA)
 val language: StateFlow<Language> get() = language_
 
 private val userSetTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
+
 // Don't use this just to detect dark mode as it's invalid in system default
 val userSetTheme: StateFlow<Theme> get() = userSetTheme_
 
@@ -391,9 +392,9 @@ fun updateStoredPreference(context: Context) {
 
     prefersWidgetsDynamicColors_.value =
         userSetTheme.value.isDynamicColors && preferences.getBoolean(
-        PREF_WIDGETS_PREFER_SYSTEM_COLORS,
-        true
-    )
+            PREF_WIDGETS_PREFER_SYSTEM_COLORS,
+            true
+        )
 
     preferredDigits = if (!preferences.getBoolean(
             PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS
