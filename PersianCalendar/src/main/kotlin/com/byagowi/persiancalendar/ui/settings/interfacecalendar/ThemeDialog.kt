@@ -113,8 +113,9 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
                             Box(contentAlignment = Alignment.TopCenter) {
+                                val isDark = entry.isDark == true
                                 val disabledRadio =
-                                    !entry.isDark.xor(preferenceKey == PREF_SYSTEM_LIGHT_THEME)
+                                    !isDark.xor(preferenceKey == PREF_SYSTEM_LIGHT_THEME)
                                 RadioButton(
                                     selected = selectedTheme == entry,
                                     enabled = !disabledRadio,

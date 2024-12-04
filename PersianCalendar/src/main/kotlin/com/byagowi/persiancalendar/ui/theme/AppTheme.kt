@@ -131,9 +131,10 @@ private fun isPowerSaveMode(context: Context): Boolean =
 private fun appColorScheme(): ColorScheme {
     val theme = effectiveTheme()
     val context = LocalContext.current
+    val isDark = theme.isDark == true
     var colorScheme = if (theme.isDynamicColors) {
-        if (theme.isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else if (theme.isDark) DefaultDarkColorScheme else DefaultLightColorScheme
+        if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+    } else if (isDark) DefaultDarkColorScheme else DefaultLightColorScheme
     // Handle black theme which is useful for OLED screens
     if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
 
@@ -340,7 +341,7 @@ fun nextTimeColor(): Color {
 
 @Composable
 fun scrollShadowColor(): Color =
-    animateColor(Color(if (effectiveTheme().isDark) 0x38FFFFFF else 0x38000000)).value
+    animateColor(Color(if (effectiveTheme().isDark == true) 0x38FFFFFF else 0x38000000)).value
 
 @Composable
 fun appSunViewColors(): SunViewColors {

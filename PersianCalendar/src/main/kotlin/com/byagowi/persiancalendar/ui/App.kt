@@ -542,12 +542,13 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 @Composable
 private fun BoxScope.DrawerDarkModeToggle() {
     val userSetTheme by userSetTheme.collectAsState()
-    if (userSetTheme == Theme.SYSTEM_DEFAULT) return
+    // If current theme is default theme, isDark is null so no toggle is shown also
+    val isDark = userSetTheme.isDark ?: return
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     Crossfade(
         label = "dark mode toggle",
-        targetState = if (userSetTheme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+        targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
         modifier = Modifier
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
             .padding(32.dp)
@@ -557,11 +558,11 @@ private fun BoxScope.DrawerDarkModeToggle() {
                 interactionSource = null,
                 onClick = {
                     coroutineScope.launch { delay(THREE_SECONDS_AND_HALF_IN_MILLIS) }
-                    val systemTheme = if (userSetTheme.isDark) systemLightTheme else systemDarkTheme
+                    val systemTheme = if (isDark) systemLightTheme else systemDarkTheme
                     context.preferences.edit {
                         putString(PREF_THEME, systemTheme.value.key)
                         putString(
-                            if (userSetTheme.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
+                            if (isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
                             userSetTheme.key
                         )
                     }
@@ -573,10 +574,10 @@ private fun BoxScope.DrawerDarkModeToggle() {
             )
             .padding(8.dp),
     ) {
-        val tint by animateColor(MaterialTheme.colorScheme.onSurface.copy(alpha = if (userSetTheme.isDark) .9f else .6f))
+        val tint by animateColor(MaterialTheme.colorScheme.onSurface.copy(alpha = if (isDark) .9f else .6f))
         Icon(
             it,
-            stringResource(if (userSetTheme.isDark) R.string.theme_dark else R.string.theme_light),
+            stringResource(if (isDark) R.string.theme_dark else R.string.theme_light),
             tint = tint,
         )
     }

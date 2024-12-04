@@ -10,9 +10,10 @@ enum class Theme(
     @StringRes val title: Int,
     val hasGradient: Boolean = true,
     private val lackDynamicColors: Boolean = false,
-    val isDark: Boolean = false,
+    // This is null in system default, if that's needed, use effectiveTheme()
+    val isDark: Boolean? = false,
 ) {
-    SYSTEM_DEFAULT("SystemDefault", R.string.theme_default),
+    SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, isDark = null),
     LIGHT("LightTheme", R.string.theme_light),
     MODERN("ClassicTheme"/*legacy*/, R.string.theme_modern),
     AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua, lackDynamicColors = true),
