@@ -955,7 +955,7 @@ private fun SharedTransitionScope.Menu(
         }
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
-        if (isTalkBackEnabled && enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
+        if (isTalkBackEnabled || enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
 
         HorizontalDivider()
 
