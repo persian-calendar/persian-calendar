@@ -177,6 +177,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.yearViewYearFormat
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
@@ -753,7 +754,7 @@ private fun SharedTransitionScope.Toolbar(
                     if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
                 )
                 subtitle = if (yearViewOffset == 0 || yearViewIsInYearSelection) "" else {
-                    formatNumber(todayDate.year + yearViewOffset)
+                    yearViewYearFormat(todayDate.year + yearViewOffset, secondaryCalendar)
                 }
             } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName

@@ -59,6 +59,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
@@ -66,6 +67,7 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
+import com.byagowi.persiancalendar.utils.yearViewYearFormat
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.floor
@@ -164,6 +166,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         }
     }
 
+    val secondaryCalendar = secondaryCalendar
     LazyColumn(state = lazyListState, modifier = detectZoom) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages
@@ -245,7 +248,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 val alpha = (.15f * (1 - scale.value)).coerceIn(0f, .15f)
                 Spacer(Modifier.height(space))
                 if (yearOffset != halfPages - 1) Text(
-                    formatNumber(yearOffset + todayDate.year + 1),
+                    yearViewYearFormat(yearOffset + todayDate.year + 1, secondaryCalendar),
                     style = MaterialTheme.typography.headlineMedium,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
