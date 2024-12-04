@@ -43,7 +43,7 @@ import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
-import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
@@ -54,13 +54,13 @@ import com.byagowi.persiancalendar.utils.preferences
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val theme by theme.collectAsState()
+    val userSetTheme by userSetTheme.collectAsState()
     var showMore by rememberSaveable { mutableStateOf(false) }
     val systemLightTheme by systemLightTheme.collectAsState()
     val systemDarkTheme by systemDarkTheme.collectAsState()
     val themesToCheck = run {
-        if (theme == Theme.SYSTEM_DEFAULT) listOf(systemLightTheme, systemDarkTheme)
-        else listOf(theme)
+        if (userSetTheme == Theme.SYSTEM_DEFAULT) listOf(systemLightTheme, systemDarkTheme)
+        else listOf(userSetTheme)
     }
     val anyThemeHasGradient = themesToCheck.any { it.hasGradient }
     val anyThemeIsDynamicColors = themesToCheck.any { it.isDynamicColors }
@@ -95,7 +95,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         context.preferences.edit {
                             putString(PREF_THEME, entry.key)
                             // Consider returning to system default as some sort of theme reset
-                            if (theme != Theme.SYSTEM_DEFAULT && entry == Theme.SYSTEM_DEFAULT) {
+                            if (userSetTheme != Theme.SYSTEM_DEFAULT && entry == Theme.SYSTEM_DEFAULT) {
                                 remove(PREF_SYSTEM_LIGHT_THEME)
                                 remove(PREF_SYSTEM_DARK_THEME)
                                 remove(PREF_RED_HOLIDAYS)
@@ -105,10 +105,10 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     }
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             ) {
-                RadioButton(selected = entry == theme, onClick = null)
+                RadioButton(selected = entry == userSetTheme, onClick = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(stringResource(entry.title))
-                AnimatedVisibility(visible = showMore && theme == Theme.SYSTEM_DEFAULT) {
+                AnimatedVisibility(visible = showMore && userSetTheme == Theme.SYSTEM_DEFAULT) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size

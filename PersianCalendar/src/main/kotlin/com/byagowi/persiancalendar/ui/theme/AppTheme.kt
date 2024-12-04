@@ -56,7 +56,7 @@ import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
-import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -116,7 +116,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 // The app's theme after custom dark/light theme is applied
 @Composable
 private fun effectiveTheme(): Theme {
-    val explicitlySetTheme = theme.collectAsState().value
+    val explicitlySetTheme = userSetTheme.collectAsState().value
     if (explicitlySetTheme != Theme.SYSTEM_DEFAULT) return explicitlySetTheme
     return if (isSystemInDarkTheme()) {
         if (isPowerSaveMode(LocalContext.current)) Theme.BLACK

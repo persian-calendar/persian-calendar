@@ -42,7 +42,7 @@ import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
-import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
@@ -179,8 +179,8 @@ fun ColumnScope.WidgetConfiguration() {
 
 @Composable
 fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
-    val theme by theme.collectAsState()
-    if (theme.isDynamicColors) {
+    val userSetTheme by userSetTheme.collectAsState()
+    if (userSetTheme.isDynamicColors) {
         SettingsSwitch(
             key = PREF_WIDGETS_PREFER_SYSTEM_COLORS,
             value = prefersWidgetsDynamicColors,

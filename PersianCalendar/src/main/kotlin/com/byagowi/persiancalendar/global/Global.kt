@@ -176,8 +176,9 @@ var highLatitudesMethod = HighLatitudesMethod.NightMiddle
 private val language_ = MutableStateFlow(Language.FA)
 val language: StateFlow<Language> get() = language_
 
-private val theme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
-val theme: StateFlow<Theme> get() = theme_
+private val userSetTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
+// Don't use this just to detect dark mode as it's invalid in system default
+val userSetTheme: StateFlow<Theme> get() = userSetTheme_
 
 private val systemDarkTheme_ = MutableStateFlow(Theme.SYSTEM_DEFAULT)
 val systemDarkTheme: StateFlow<Theme> get() = systemDarkTheme_
@@ -361,7 +362,7 @@ fun updateStoredPreference(context: Context) {
 
     language_.value = preferences.getString(PREF_APP_LANGUAGE, null)
         ?.let(Language::valueOfLanguageCode) ?: Language.getPreferredDefaultLanguage(context)
-    theme_.value = run {
+    userSetTheme_.value = run {
         val key = preferences.getString(PREF_THEME, null)
         Theme.entries.find { it.key == key }
     } ?: Theme.SYSTEM_DEFAULT
@@ -388,7 +389,8 @@ fun updateStoredPreference(context: Context) {
         else -> false
     }
 
-    prefersWidgetsDynamicColors_.value = theme.value.isDynamicColors && preferences.getBoolean(
+    prefersWidgetsDynamicColors_.value =
+        userSetTheme.value.isDynamicColors && preferences.getBoolean(
         PREF_WIDGETS_PREFER_SYSTEM_COLORS,
         true
     )

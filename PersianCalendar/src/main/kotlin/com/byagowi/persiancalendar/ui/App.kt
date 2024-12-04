@@ -92,7 +92,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
-import com.byagowi.persiancalendar.global.theme
+import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
@@ -541,13 +541,13 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
 
 @Composable
 private fun BoxScope.DrawerDarkModeToggle() {
-    val theme by theme.collectAsState()
-    if (theme == Theme.SYSTEM_DEFAULT) return
+    val userSetTheme by userSetTheme.collectAsState()
+    if (userSetTheme == Theme.SYSTEM_DEFAULT) return
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     Crossfade(
         label = "dark mode toggle",
-        targetState = if (theme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
+        targetState = if (userSetTheme.isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,
         modifier = Modifier
             .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
             .padding(32.dp)
@@ -557,12 +557,12 @@ private fun BoxScope.DrawerDarkModeToggle() {
                 interactionSource = null,
                 onClick = {
                     coroutineScope.launch { delay(THREE_SECONDS_AND_HALF_IN_MILLIS) }
-                    val systemTheme = if (theme.isDark) systemLightTheme else systemDarkTheme
+                    val systemTheme = if (userSetTheme.isDark) systemLightTheme else systemDarkTheme
                     context.preferences.edit {
                         putString(PREF_THEME, systemTheme.value.key)
                         putString(
-                            if (theme.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
-                            theme.key
+                            if (userSetTheme.isDark) PREF_SYSTEM_DARK_THEME else PREF_SYSTEM_LIGHT_THEME,
+                            userSetTheme.key
                         )
                     }
                 },
@@ -573,9 +573,10 @@ private fun BoxScope.DrawerDarkModeToggle() {
             )
             .padding(8.dp),
     ) {
-        val tint by animateColor(MaterialTheme.colorScheme.onSurface.copy(alpha = if (theme.isDark) .9f else .6f))
+        val tint by animateColor(MaterialTheme.colorScheme.onSurface.copy(alpha = if (userSetTheme.isDark) .9f else .6f))
         Icon(
-            it, stringResource(if (theme.isDark) R.string.theme_dark else R.string.theme_light),
+            it,
+            stringResource(if (userSetTheme.isDark) R.string.theme_dark else R.string.theme_light),
             tint = tint,
         )
     }
