@@ -936,17 +936,13 @@ private fun SharedTransitionScope.Menu(
             viewModel.openYearView()
         }
 
-        if (BuildConfig.DEVELOPMENT) {
-            AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
-                closeMenu()
-                navigateToDailySchedule(viewModel.selectedDay.value)
-            }
+        AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
+            closeMenu()
+            navigateToDailySchedule(viewModel.selectedDay.value)
         }
 
         val coordinates by coordinates.collectAsState()
-        if (coordinates != null) AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.month_pray_times)) }
-        ) {
+        if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
             closeMenu()
             val selectedMonthOffset = viewModel.selectedMonthOffset.value
             val selectedMonth =
