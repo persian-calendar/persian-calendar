@@ -129,7 +129,7 @@ fun BoxScope.PagerArrow(
     pagerState: PagerState,
     index: Int,
     isPrevious: Boolean,
-    week: Int? = 0,
+    week: Int? = null,
 ) {
     Box(
         modifier = Modifier
