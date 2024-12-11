@@ -213,11 +213,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 )
                             }
                         },
-                        navigateToSchedule = {
-                            if (isCurrentDestination(calendarRoute)) {
-                                navController.navigate(scheduleRoute)
-                            }
-                        },
+                        navigateToSchedule = { navController.navigate(scheduleRoute) },
                         navigateToDailySchedule = { jdn ->
                             navController.graph.findNode(dailyScheduleRoute)?.let { dst ->
                                 navController.navigate(

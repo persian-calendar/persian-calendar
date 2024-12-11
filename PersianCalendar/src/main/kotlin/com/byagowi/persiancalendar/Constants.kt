@@ -72,6 +72,7 @@ const val PREF_WALLPAPER_DARK = "WallpaperDark"
 const val PREF_WALLPAPER_AUTOMATIC = "WallpaperAutomatic"
 const val PREF_DREAM_NOISE = "DreamNoise"
 const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
+const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"

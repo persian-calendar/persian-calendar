@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.global
 import android.content.Context
 import android.content.res.Resources
 import android.view.accessibility.AccessibilityManager
+import androidx.annotation.StringRes
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
@@ -69,6 +70,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
+import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
@@ -90,6 +92,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.generated.citiesStore
+import com.byagowi.persiancalendar.ui.calendar.SwipeUpAction
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -244,6 +247,9 @@ val wallpaperDark: StateFlow<Boolean> get() = wallpaperDark_
 
 private val wallpaperAutomatic_ = MutableStateFlow(DEFAULT_WALLPAPER_AUTOMATIC)
 val wallpaperAutomatic: StateFlow<Boolean> get() = wallpaperAutomatic_
+
+private val preferredSwipeUpAction_ = MutableStateFlow(SwipeUpAction.entries[0])
+val preferredSwipeUpAction: StateFlow<SwipeUpAction> get() = preferredSwipeUpAction_
 
 private val isShowDeviceCalendarEvents_ = MutableStateFlow(false)
 val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarEvents_
@@ -440,6 +446,10 @@ fun updateStoredPreference(context: Context) {
     wallpaperDark_.value = preferences.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK)
     wallpaperAutomatic_.value =
         preferences.getBoolean(PREF_WALLPAPER_AUTOMATIC, DEFAULT_WALLPAPER_AUTOMATIC)
+
+    preferredSwipeUpAction_.value = SwipeUpAction.entries.firstOrNull {
+        it.name == preferences.getString(PREF_SWIPE_UP_ACTION, null)
+    } ?: SwipeUpAction.entries[0]
 
     val storedCity = preferences.getString(PREF_SELECTED_LOCATION, null)
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }

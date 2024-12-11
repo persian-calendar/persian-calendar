@@ -24,8 +24,10 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.clickable
@@ -121,6 +123,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -133,6 +136,7 @@ import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
@@ -182,6 +186,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
+import kotlin.math.abs
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -306,14 +311,27 @@ fun SharedTransitionScope.CalendarScreen(
                                     .pointerInput(Unit) {
                                         val threshold = 40.dp.toPx()
                                         awaitEachGesture {
-                                            // Don't inline this
+                                            // Don't inline id into verticalDrag, the order matters
                                             val id = awaitFirstDown(requireUnconsumed = false).id
                                             val wasAtTop = scrollState.value == 0
                                             val wasAtEnd = scrollState.value == scrollState.maxValue
+                                            var successful = false
                                             verticalDrag(id) {
                                                 val dragAmount = it.positionChange().y
-                                                if (dragAmount < -threshold && wasAtEnd) navigateToSchedule()
-                                                else if (dragAmount > threshold && wasAtTop) viewModel.openYearView()
+                                                if (abs(dragAmount) < threshold) return@verticalDrag
+                                                if (successful) return@verticalDrag
+                                                if (wasAtEnd && dragAmount < 0) {
+                                                    when (preferredSwipeUpAction.value) {
+                                                        SwipeUpAction.Schedule -> navigateToSchedule()
+                                                        SwipeUpAction.DailySchedule -> {
+                                                            navigateToDailySchedule(viewModel.selectedDay.value)
+                                                        }
+                                                    }
+                                                    successful = true
+                                                } else if (wasAtTop) {
+                                                    viewModel.openYearView()
+                                                    successful = true
+                                                }
                                             }
                                         }
                                     },
@@ -920,12 +938,31 @@ private fun SharedTransitionScope.Menu(
 
         HorizontalDivider()
 
-        AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.schedule)) },
-            trailingIcon = { if (!isLandscape) Icon(Icons.TwoTone.SwipeUp, null) },
-        ) {
-            closeMenu()
-            navigateToSchedule()
+        val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
+        listOf(
+            SwipeUpAction.DailySchedule to { navigateToDailySchedule(viewModel.selectedDay.value) },
+            SwipeUpAction.Schedule to { navigateToSchedule() },
+        ).forEach { (item, action) ->
+            AppDropdownMenuItem(
+                text = { Text(stringResource(item.titleId)) },
+                trailingIcon = icon@{
+                    if (isLandscape || isTalkBackEnabled) return@icon
+                    Box(Modifier.clickable(null, ripple(bounded = false)) {
+                        context.preferences.edit { putString(PREF_SWIPE_UP_ACTION, item.name) }
+                    }) {
+                        val alpha by animateFloatAsState(
+                            targetValue = if (preferredSwipeUpAction == item) 1f else .2f,
+                            label = "alpha",
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioMediumBouncy,
+                                stiffness = Spring.StiffnessLow,
+                            ),
+                        )
+                        val color = LocalContentColor.current.copy(alpha)
+                        Icon(Icons.TwoTone.SwipeUp, null, tint = color)
+                    }
+                },
+            ) { closeMenu(); action() }
         }
 
         AppDropdownMenuItem(
@@ -934,11 +971,6 @@ private fun SharedTransitionScope.Menu(
         ) {
             closeMenu()
             viewModel.openYearView()
-        }
-
-        AppDropdownMenuItem({ Text(stringResource(R.string.daily_schedule)) }) {
-            closeMenu()
-            navigateToDailySchedule(viewModel.selectedDay.value)
         }
 
         val coordinates by coordinates.collectAsState()
