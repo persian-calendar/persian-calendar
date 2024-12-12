@@ -256,7 +256,7 @@ fun SharedTransitionScope.CalendarScreen(
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val maxWidth = maxWidth
             val maxHeight = maxHeight
-            val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight)
+            val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(isYearView) {

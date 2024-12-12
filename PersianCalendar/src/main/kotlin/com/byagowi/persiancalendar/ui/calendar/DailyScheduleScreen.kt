@@ -110,9 +110,9 @@ fun SharedTransitionScope.DailyScheduleScreen(
         selectedDay = jdn
         coroutineScope.launch {
             val destination = dayPageFromJdn(jdn, today)
-            if (abs(destination - dayPagerState.currentPage) > 1)
+            if (abs(destination - dayPagerState.currentPage) > 1) {
                 dayPagerState.scrollToPage(destination)
-            else dayPagerState.animateScrollToPage(destination)
+            } else dayPagerState.animateScrollToPage(destination)
         }
     }
 
@@ -160,14 +160,15 @@ fun SharedTransitionScope.DailyScheduleScreen(
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
                     TodayActionButton(today != selectedDay) { todayButtonAction() }
-                }
+                },
             )
         },
     ) { paddingValues ->
         val monthColors = appMonthColors()
         val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            val pagerSize = calendarPagerSize(false, this.maxWidth, this.maxHeight, true)
+            val pagerSize =
+                calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
             // Don't show weeks pager if there isn't enough space
             Column {
                 val refreshToken by calendarViewModel.refreshToken.collectAsState()
@@ -205,9 +206,9 @@ fun SharedTransitionScope.DailyScheduleScreen(
                             if (isCurrentPage) {
                                 selectedDay = today + (page - daysLimit / 2)
                                 val destination = weekPageFromJdn(selectedDay, today)
-                                if (abs(destination - weekPagerState.currentPage) > 1)
+                                if (abs(destination - weekPagerState.currentPage) > 1) {
                                     weekPagerState.scrollToPage(destination)
-                                else weekPagerState.animateScrollToPage(destination)
+                                } else weekPagerState.animateScrollToPage(destination)
                             }
                         }
 
@@ -439,7 +440,7 @@ private fun SharedTransitionScope.WeekPage(
                 setSelectedDay = {
                     setClickedOnce()
                     setSelectedDay(it)
-                }
+                },
             )
         }
         PagerArrow(

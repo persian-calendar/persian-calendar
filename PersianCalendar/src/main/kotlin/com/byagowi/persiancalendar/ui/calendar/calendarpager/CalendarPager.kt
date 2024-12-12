@@ -100,11 +100,12 @@ fun calendarPagerSize(
     isLandscape: Boolean,
     maxWidth: Dp,
     maxHeight: Dp,
+    bottomPadding: Dp,
     twoRows: Boolean = false
 ): DpSize {
     return if (isLandscape) {
         val width = (maxWidth * 45 / 100).coerceAtMost(400.dp)
-        val height = 400.dp.coerceAtMost(maxHeight)
+        val height = 400.dp.coerceAtMost(maxHeight - bottomPadding)
         DpSize(width, height)
     } else DpSize(
         maxWidth,
