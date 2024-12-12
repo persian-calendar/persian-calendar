@@ -251,6 +251,7 @@ fun SharedTransitionScope.CalendarScreen(
             }
         }
         val bottomPadding = paddingValues.calculateBottomPadding()
+        val bottomPaddingWithMinimum = bottomPadding
             // For screens without navigation bar, at least make sure it has some bottom padding
             .coerceAtLeast(24.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
@@ -260,7 +261,7 @@ fun SharedTransitionScope.CalendarScreen(
 
             Column(Modifier.fillMaxSize()) {
                 AnimatedVisibility(isYearView) {
-                    YearView(viewModel, maxWidth, maxHeight, bottomPadding)
+                    YearView(viewModel, maxWidth, maxHeight, bottomPaddingWithMinimum)
                 }
 
                 // To preserve pager's state even in year view where calendar isn't in the tree
@@ -273,7 +274,7 @@ fun SharedTransitionScope.CalendarScreen(
                     navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
                     navigateToAstronomy = navigateToAstronomy,
                     animatedContentScope = animatedContentScope,
-                    bottomPadding = bottomPadding,
+                    bottomPadding = bottomPaddingWithMinimum,
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 

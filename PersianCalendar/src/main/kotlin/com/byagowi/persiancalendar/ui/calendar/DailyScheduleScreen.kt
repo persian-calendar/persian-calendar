@@ -165,7 +165,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
         },
     ) { paddingValues ->
         val monthColors = appMonthColors()
-        val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
+        val bottomPadding = paddingValues.calculateBottomPadding()
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val pagerSize =
                 calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
@@ -218,7 +218,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                             calendarViewModel = calendarViewModel,
                             animatedContentScope = animatedContentScope,
                             addEvent = addEvent,
-                            bottomPadding = bottomPadding,
+                            bottomPadding = bottomPadding.coerceAtLeast(16.dp),
                             navigateUp = navigateUp,
                             navigateToSchedule = navigateToSchedule,
                         )
