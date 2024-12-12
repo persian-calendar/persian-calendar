@@ -954,10 +954,6 @@ private fun SharedTransitionScope.Menu(
                         val alpha by animateFloatAsState(
                             targetValue = if (preferredSwipeUpAction == item) 1f else .2f,
                             label = "alpha",
-                            animationSpec = spring(
-                                dampingRatio = Spring.DampingRatioMediumBouncy,
-                                stiffness = Spring.StiffnessLow,
-                            ),
                         )
                         val color = LocalContentColor.current.copy(alpha)
                         Icon(Icons.TwoTone.SwipeUp, null, tint = color)
