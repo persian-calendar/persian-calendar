@@ -967,7 +967,10 @@ private fun SharedTransitionScope.Menu(
 
         AppDropdownMenuItem(
             text = { Text(stringResource(R.string.year_view)) },
-            trailingIcon = { if (!isLandscape) Icon(Icons.TwoTone.SwipeDown, null) },
+            trailingIcon = icon@{
+                if (isLandscape || isTalkBackEnabled) return@icon
+                Icon(Icons.TwoTone.SwipeDown, null)
+            },
         ) {
             closeMenu()
             viewModel.openYearView()
