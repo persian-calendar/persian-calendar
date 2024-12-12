@@ -968,10 +968,7 @@ private fun SharedTransitionScope.Menu(
                 if (isLandscape || isTalkBackEnabled) return@icon
                 Icon(Icons.TwoTone.SwipeDown, null)
             },
-        ) {
-            closeMenu()
-            viewModel.openYearView()
-        }
+        ) { closeMenu(); viewModel.openYearView() }
 
         val coordinates by coordinates.collectAsState()
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
