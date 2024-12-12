@@ -20,7 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
@@ -79,7 +78,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         val invisible = Modifier
             .alpha(0f)
             .height(8.dp)
-            .semantics { @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser() }
+            .semantics { this.invisibleToUser() }
         val systemThemeOptions = listOf(
             Triple(R.string.theme_light, PREF_SYSTEM_LIGHT_THEME, systemLightTheme),
             Triple(R.string.theme_dark, PREF_SYSTEM_DARK_THEME, systemDarkTheme)

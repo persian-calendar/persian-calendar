@@ -34,7 +34,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
@@ -141,9 +140,7 @@ fun NumberPicker(
                     text = label(range.first + indexOfElement - 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics {
-                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                        }
+                        .semantics { this.invisibleToUser() }
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
@@ -220,9 +217,7 @@ fun NumberPicker(
                     text = label(range.first + indexOfElement + 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics {
-                            @OptIn(ExperimentalComposeUiApi::class) this.invisibleToUser()
-                        }
+                        .semantics { this.invisibleToUser() }
                         .offset(y = halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
