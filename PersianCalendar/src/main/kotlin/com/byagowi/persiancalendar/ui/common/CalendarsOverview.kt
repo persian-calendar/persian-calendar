@@ -260,26 +260,26 @@ fun CalendarsOverview(
         }
 
         AnimatedVisibility(isExpanded) {
-            val startOfYearText = stringResource(
-                R.string.start_of_year_diff,
-                formatNumber(jdn - startOfYearJdn + 1),
-                formatNumber(currentWeek),
-                formatNumber(date.month)
-            )
-            val endOfYearText = stringResource(
-                R.string.end_of_year_diff,
-                formatNumber(endOfYearJdn - jdn),
-                formatNumber(weeksCount - currentWeek),
-                formatNumber(12 - date.month)
-            )
             SelectionContainer {
+                val startOfYearText = stringResource(
+                    R.string.start_of_year_diff,
+                    formatNumber(jdn - startOfYearJdn + 1),
+                    formatNumber(currentWeek),
+                    formatNumber(date.month)
+                )
+                val endOfYearText = stringResource(
+                    R.string.end_of_year_diff,
+                    formatNumber(endOfYearJdn - jdn),
+                    formatNumber(weeksCount - currentWeek),
+                    formatNumber(12 - date.month)
+                )
                 Text(
                     "$startOfYearText\n$endOfYearText",
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 4.dp, bottom = 8.dp),
+                        .padding(start = 24.dp, end = 24.dp, top = 4.dp),
                 )
             }
         }
