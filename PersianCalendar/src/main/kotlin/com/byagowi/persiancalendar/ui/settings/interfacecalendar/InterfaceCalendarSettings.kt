@@ -264,8 +264,10 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.close)) }
         },
         neutralButton = {
-            AnimatedVisibility(!showHolidaysToggles) {
-                TextButton(onClick = { showHolidaysToggles = true }) { Text(holidayLabel) }
+            Row {
+                AnimatedVisibility(!showHolidaysToggles) {
+                    TextButton(onClick = { showHolidaysToggles = true }) { Text(holidayLabel) }
+                }
             }
         },
     ) {
