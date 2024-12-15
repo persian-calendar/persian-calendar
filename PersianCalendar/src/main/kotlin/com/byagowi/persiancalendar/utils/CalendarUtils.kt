@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
@@ -202,7 +203,7 @@ private fun readDeviceEvents(
                 end = endDate,
                 date = startCalendar.toCivilDate(),
                 color = it.getString(7) ?: it.getString(8) ?: "",
-                isHoliday = false
+                isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
             )
         }.take(1000 /* let's put some limitation */).toList()
     }

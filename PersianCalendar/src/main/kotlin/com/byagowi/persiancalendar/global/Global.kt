@@ -42,6 +42,7 @@ import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_VIBRATION
+import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
@@ -256,6 +257,9 @@ val isShowDeviceCalendarEvents: StateFlow<Boolean> get() = isShowDeviceCalendarE
 
 private val eventCalendarsIdsToExclude_ = MutableStateFlow(emptyLongSet())
 val eventCalendarsIdsToExclude: StateFlow<LongSet> get() = eventCalendarsIdsToExclude_
+
+private val eventCalendarsIdsAsHoliday_ = MutableStateFlow(emptyLongSet())
+val eventCalendarsIdsAsHoliday: StateFlow<LongSet> get() = eventCalendarsIdsAsHoliday_
 
 var whatToShowOnWidgets = emptySet<String>()
     private set
@@ -498,6 +502,11 @@ fun updateStoredPreference(context: Context) {
         *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null) ?: "").splitFilterNotEmpty(",")
             .mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
+    eventCalendarsIdsAsHoliday_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
+        *(preferences.getString(PREF_CALENDARS_IDS_AS_HOLIDAY, null) ?: "").splitFilterNotEmpty(",")
+            .mapNotNull { it.toLongOrNull() }.toLongArray()
+    ) else emptyLongSet()
+
     whatToShowOnWidgets =
         preferences.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 

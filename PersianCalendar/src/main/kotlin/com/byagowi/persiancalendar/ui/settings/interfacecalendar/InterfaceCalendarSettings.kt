@@ -6,13 +6,12 @@ import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Checkbox
@@ -35,7 +34,9 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -45,6 +46,7 @@ import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
+import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
@@ -57,7 +59,9 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
+import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
@@ -72,7 +76,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
@@ -160,7 +163,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
                         }
                     }
                 }
-                if (showEventsSettingsDialog) EventsToExcludeDialog {
+                if (showEventsSettingsDialog) EventsSettingsDialog {
                     showEventsSettingsDialog = false
                 }
             },
@@ -231,15 +234,20 @@ private data class CalendarsEntry(
 )
 
 @Composable
-private fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
+private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val idsToExclude = remember {
         buildList { eventCalendarsIdsToExclude.value.forEach { add(it) } }.toMutableStateList()
     }
+    val holidaysIds = remember {
+        buildList { eventCalendarsIdsAsHoliday.value.forEach { add(it) } }.toMutableStateList()
+    }
+    var showHolidaysToggles by rememberSaveable { mutableStateOf(holidaysIds.isNotEmpty()) }
     DisposableEffect(Unit) {
         onDispose {
             context.preferences.edit {
                 putString(PREF_CALENDARS_IDS_TO_EXCLUDE, idsToExclude.toSet().joinToString(","))
+                putString(PREF_CALENDARS_IDS_AS_HOLIDAY, holidaysIds.toSet().joinToString(","))
             }
         }
     }
@@ -247,45 +255,84 @@ private fun EventsToExcludeDialog(onDismissRequest: () -> Unit) {
         Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
         onDismissRequest()
     }
+    val language by language.collectAsState()
+    val holidayLabel = if (language.isArabicScript) holidayString
+    else holidayString.replaceFirstChar { it.uppercaseChar() }
     AppDialog(
         onDismissRequest = onDismissRequest,
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.close)) }
         },
+        neutralButton = {
+            AnimatedVisibility(!showHolidaysToggles) {
+                TextButton(onClick = { showHolidaysToggles = true }) { Text(holidayLabel) }
+            }
+        },
     ) {
-        Spacer(Modifier.height(8.dp))
-        calendars.forEach { (accountName, values) ->
-            Box(Modifier.height(SettingsItemHeight.dp), contentAlignment = Alignment.BottomStart) {
+        var holidayTextWidth by remember { mutableStateOf(64.dp) }
+        calendars.entries.forEachIndexed { i, (accountName, values) ->
+            Spacer(Modifier.height((if (i == 0) 24 else 16).dp))
+            Row(Modifier.height(48.dp)) {
                 Text(
                     accountName,
-                    modifier = Modifier.padding(start = 24.dp, bottom = 8.dp),
+                    modifier = Modifier
+                        .alignByBaseline()
+                        .padding(start = 24.dp, bottom = 8.dp)
+                        .weight(1f),
                     style = MaterialTheme.typography.titleMedium,
                 )
+                AnimatedVisibility(i == 0 && showHolidaysToggles, Modifier.alignByBaseline()) {
+                    val density = LocalDensity.current
+                    Text(
+                        holidayLabel,
+                        Modifier
+                            .onSizeChanged {
+                                holidayTextWidth = with(density) { it.width.toDp() }
+                            }
+                            .padding(end = 16.dp),
+                    )
+                }
             }
             values.forEach {
-                val checked = it.id !in idsToExclude
+                val visibility = it.id !in idsToExclude
+                val isHoliday = it.id in holidaysIds
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .clickable {
-                            if (checked) idsToExclude.add(it.id) else idsToExclude.remove(it.id)
+                            if (visibility) idsToExclude.add(it.id) else {
+                                idsToExclude.remove(it.id)
+                                if (isHoliday) holidaysIds.remove(it.id)
+                            }
                         }
-                        .height(42.dp)
-                        .fillMaxWidth(),
+                        .height(42.dp),
                 ) {
-                    Checkbox(
-                        checked = checked,
-                        onCheckedChange = null,
-                        modifier = Modifier.padding(start = 24.dp, end = 16.dp),
-                        colors = CheckboxDefaults.colors().let { colors ->
-                            if (it.color != null) colors.copy(
-                                checkedBorderColor = it.color,
-                                checkedBoxColor = it.color,
-                                uncheckedBorderColor = it.color,
-                            ) else colors
-                        },
-                    )
-                    Text(it.displayName)
+                    Row(Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            checked = visibility,
+                            onCheckedChange = null,
+                            modifier = Modifier.padding(start = 24.dp, end = 16.dp),
+                            colors = CheckboxDefaults.colors().let { colors ->
+                                if (it.color != null) colors.copy(
+                                    checkedBorderColor = it.color,
+                                    checkedBoxColor = it.color,
+                                    uncheckedBorderColor = it.color,
+                                ) else colors
+                            },
+                        )
+                        Text(it.displayName)
+                    }
+                    AnimatedVisibility(showHolidaysToggles && visibility) {
+                        Checkbox(
+                            checked = isHoliday,
+                            onCheckedChange = { value ->
+                                if (value) holidaysIds.add(it.id) else holidaysIds.remove(it.id)
+                            },
+                            modifier = Modifier
+                                .width(holidayTextWidth)
+                                .padding(end = 16.dp),
+                        )
+                    }
                 }
             }
         }
