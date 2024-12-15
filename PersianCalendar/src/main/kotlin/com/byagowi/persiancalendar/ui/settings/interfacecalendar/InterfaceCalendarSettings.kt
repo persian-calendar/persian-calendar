@@ -288,9 +288,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                     Text(
                         holidayLabel,
                         Modifier
-                            .onSizeChanged {
-                                holidayTextWidth = with(density) { it.width.toDp() }
-                            }
+                            .onSizeChanged { holidayTextWidth = with(density) { it.width.toDp() } }
                             .padding(end = 16.dp),
                     )
                 }
