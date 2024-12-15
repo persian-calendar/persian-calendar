@@ -272,7 +272,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
         var holidayTextWidth by remember { mutableStateOf(64.dp) }
         calendars.entries.forEachIndexed { i, (accountName, values) ->
             Spacer(Modifier.height((if (i == 0) 24 else 16).dp))
-            Row(Modifier.height(48.dp)) {
+            Row {
                 Text(
                     accountName,
                     modifier = Modifier
