@@ -79,7 +79,8 @@ fun AppDialog(
                         neutralButton?.invoke()
                         Spacer(Modifier.weight(1f))
                         dismissButton?.invoke()
-                        if (dismissButton != null) Spacer(Modifier.width(8.dp))
+                        if (dismissButton != null && confirmButton != null)
+                            Spacer(Modifier.width(8.dp))
                         confirmButton?.invoke()
                     }
                 }
