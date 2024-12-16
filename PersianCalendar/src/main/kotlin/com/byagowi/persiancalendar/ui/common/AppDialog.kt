@@ -51,9 +51,6 @@ fun AppDialog(
                     }
                 }
 
-                val hasFooterButtons =
-                    neutralButton != null || dismissButton != null || confirmButton != null
-
                 Box(
                     Modifier
                         .fillMaxWidth()
@@ -68,11 +65,11 @@ fun AppDialog(
                                 .verticalScroll(scrollState)
                         ) { content() }
                     }
-                    if (title != null) ScrollShadow(scrollState, top = true)
-                    if (hasFooterButtons) ScrollShadow(scrollState, top = false)
+                    ScrollShadow(scrollState, top = true)
+                    ScrollShadow(scrollState, top = false)
                 }
 
-                if (hasFooterButtons) {
+                if (neutralButton != null || dismissButton != null || confirmButton != null) {
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
