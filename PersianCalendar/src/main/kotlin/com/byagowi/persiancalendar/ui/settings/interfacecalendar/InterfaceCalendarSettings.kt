@@ -243,17 +243,24 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
         buildList { eventCalendarsIdsAsHoliday.value.forEach { add(it) } }.toMutableStateList()
     }
     var showHolidaysToggles by rememberSaveable { mutableStateOf(holidaysIds.isNotEmpty()) }
-    DisposableEffect(Unit) {
-        onDispose {
-            context.preferences.edit {
-                putString(PREF_CALENDARS_IDS_TO_EXCLUDE, idsToExclude.toSet().joinToString(","))
-                putString(PREF_CALENDARS_IDS_AS_HOLIDAY, holidaysIds.toSet().joinToString(","))
-            }
-        }
-    }
     val calendars = resolveDeviceCalendars {
         Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
         onDismissRequest()
+    }
+    DisposableEffect(Unit) {
+        onDispose {
+            val shownIds = calendars.values.flatten().map { it.id }.toSet()
+            context.preferences.edit {
+                putString(
+                    PREF_CALENDARS_IDS_TO_EXCLUDE,
+                    shownIds.intersect(idsToExclude).joinToString(","),
+                )
+                putString(
+                    PREF_CALENDARS_IDS_AS_HOLIDAY,
+                    shownIds.intersect(holidaysIds).joinToString(","),
+                )
+            }
+        }
     }
     val language by language.collectAsState()
     val holidayLabel = if (language.isArabicScript) holidayString
