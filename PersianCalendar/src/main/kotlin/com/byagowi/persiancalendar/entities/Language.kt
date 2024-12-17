@@ -237,7 +237,8 @@ enum class Language(val code: String, val nativeName: String) {
 
     val defaultWeekEnds
         get() = when {
-            this == FA -> setOf("6")
+            this == FA || isIranExclusive -> setOf("6")
+            isAfghanistanExclusive -> setOf("6")
             isNepali -> setOf("0")
             prefersGregorianCalendar -> setOf("0", "1") // Saturday and Sunday
             else -> setOf("6") // 6 means Friday
