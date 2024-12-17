@@ -1,9 +1,10 @@
 package com.byagowi.persiancalendar.global
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Resources
+import android.os.Build
 import android.view.accessibility.AccessibilityManager
-import androidx.annotation.StringRes
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
@@ -101,6 +102,7 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.saveLanguage
 import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -307,6 +309,7 @@ private var secondaryCalendarEnabled = false
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
     debugLog("Utils: initGlobal is called")
+    setAppLocaleFromSystem(context)
     updateStoredPreference(context)
     applyAppLanguage(context)
     loadLanguageResources(context.resources)
@@ -364,6 +367,24 @@ fun loadLanguageResources(resources: Resources) {
     else resources.getString(R.string.spaced_and)
     spacedColon = resources.getString(R.string.spaced_colon)
     spacedComma = resources.getString(R.string.spaced_comma)
+}
+
+fun getOverrideLocale(context: Context): Language? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        val localeManager = context.getSystemService<LocaleManager>()
+        localeManager?.overrideLocaleConfig?.supportedLocales?.get(0)
+            ?.let { Language.valueOfLanguageCode(it.language) }
+    } else null
+}
+
+fun setAppLocaleFromSystem(context: Context) {
+    getOverrideLocale(context)?.let { override ->
+        val lang = context.preferences.getString(PREF_APP_LANGUAGE, null)
+        if (lang == null || language.value != override) {
+            context.preferences.saveLanguage(override)
+            updateStoredPreference(context)
+        }
+    }
 }
 
 fun updateStoredPreference(context: Context) {

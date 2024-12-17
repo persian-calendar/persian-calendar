@@ -8,6 +8,7 @@ import android.os.LocaleList
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.getOverrideLocale
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -15,6 +16,8 @@ import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
     runCatching {
+        // If override by system, let it be
+        if (getOverrideLocale(context) != null) return@runCatching
         val locale = language.value.asSystemLocale()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             context.getSystemService<LocaleManager>()?.applicationLocales = LocaleList(locale)

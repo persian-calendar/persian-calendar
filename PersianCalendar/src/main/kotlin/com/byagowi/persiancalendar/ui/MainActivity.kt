@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.setAppLocaleFromSystem
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -92,6 +93,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
+        setAppLocaleFromSystem(this)
         applyAppLanguage(this)
         update(applicationContext, false)
         ++resumeToken_.value

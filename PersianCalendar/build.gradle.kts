@@ -13,6 +13,10 @@ android {
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
+    androidResources {
+        generateLocaleConfig = true
+    }
+
     compileSdk = 35
 
     buildFeatures {
