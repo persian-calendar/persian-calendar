@@ -75,11 +75,6 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/notification_divider" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -107,11 +102,6 @@
                 tools:text="time2" />
 
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/notification_divider" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -141,11 +131,6 @@
 
         </LinearLayout>
 
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/notification_divider" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -173,12 +158,6 @@
                 tools:text="time4" />
 
         </LinearLayout>
-
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/notification_divider" />
-
 
         <LinearLayout
             android:layout_width="wrap_content"
