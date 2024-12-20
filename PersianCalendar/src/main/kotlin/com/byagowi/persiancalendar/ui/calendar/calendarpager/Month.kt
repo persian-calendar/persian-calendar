@@ -281,8 +281,8 @@ fun SharedTransitionScope.Month(
                         else -> contentColor
                     },
                     topLeft = Offset(
-                        x = center.x - textLayoutResult.size.width / 2,
-                        y = center.y - textLayoutResult.size.height / 2 + dayOffsetY,
+                        x = this.center.x - textLayoutResult.size.width / 2,
+                        y = this.center.y - textLayoutResult.size.height / 2 + dayOffsetY,
                     ),
                 )
             }
