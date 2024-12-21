@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.PagerArrow
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -408,26 +409,13 @@ private fun SharedTransitionScope.WeekPage(
         }
 
         val height = pagerSize.height
-        val arrowWidth = pagerSize.width / 12
         val arrowHeight = height / 2 + (if (language.isArabicScript) 4 else 0).dp
-        PagerArrow(
-            arrowWidth = arrowWidth,
-            arrowHeight = arrowHeight,
-            scope = coroutineScope,
-            pagerState = weekPagerState,
-            week = week,
-            index = page,
-            isPrevious = true,
-        )
-        Box(
-            modifier = Modifier
-                .height(height)
-                .padding(horizontal = arrowWidth)
-        ) {
+        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, true, week)
+        Box(modifier = Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
             val monthOffset = mainCalendar.getMonthsDistance(today, selectedDay)
             Month(
                 offset = monthOffset,
-                width = pagerSize.width - arrowWidth * 2,
+                width = pagerSize.width - (pagerArrowSizeAndPadding * 2).dp,
                 height = height,
                 addEvent = addEvent,
                 monthColors = monthColors,
@@ -443,15 +431,7 @@ private fun SharedTransitionScope.WeekPage(
                 },
             )
         }
-        PagerArrow(
-            arrowWidth = arrowWidth,
-            arrowHeight = arrowHeight,
-            scope = coroutineScope,
-            pagerState = weekPagerState,
-            index = page,
-            week = week,
-            isPrevious = false
-        )
+        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, false, week)
     }
 }
 

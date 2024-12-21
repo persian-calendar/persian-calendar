@@ -72,13 +72,12 @@ fun SharedTransitionScope.CalendarPager(
 
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         Box {
-            val arrowWidth = width / 12
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
-            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = true)
-            Box(modifier = Modifier.padding(horizontal = arrowWidth)) {
+            PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = true)
+            Box(modifier = Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
                 Month(
                     offset = -applyOffset(page),
-                    width = width - arrowWidth * 2,
+                    width = width - (pagerArrowSizeAndPadding * 2).dp,
                     height = height,
                     addEvent = addEvent,
                     monthColors = monthColors,
@@ -91,7 +90,7 @@ fun SharedTransitionScope.CalendarPager(
                     // onWeekClick = navigateToDailySchedule,
                 )
             }
-            PagerArrow(arrowWidth, arrowHeight, scope, pagerState, page, isPrevious = false)
+            PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = false)
         }
     }
 }
@@ -121,10 +120,12 @@ private const val monthsLimit = 5000 // this should be an even number
 
 private fun applyOffset(position: Int) = monthsLimit / 2 - position
 
+private const val pagerArrowSize = 40 // 24 + 8 + 8
+const val pagerArrowSizeAndPadding = pagerArrowSize + 4
+
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 fun BoxScope.PagerArrow(
-    arrowWidth: Dp,
     arrowHeight: Dp,
     scope: CoroutineScope,
     pagerState: PagerState,
@@ -135,7 +136,7 @@ fun BoxScope.PagerArrow(
     Box(
         modifier = Modifier
             .align(if (isPrevious) Alignment.TopStart else Alignment.TopEnd)
-            .size(arrowWidth, arrowHeight),
+            .size(pagerArrowSize.dp, arrowHeight),
     ) {
         val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
         val contentDescription = if (week == null) {
@@ -146,7 +147,7 @@ fun BoxScope.PagerArrow(
             else Icons.AutoMirrored.Default.KeyboardArrowRight,
             contentDescription = contentDescription,
             modifier = Modifier
-                .width(arrowWidth.coerceAtMost(MaterialIconDimension.dp))
+                .width(MaterialIconDimension.dp)
                 .then(if (week == null) Modifier.combinedClickable(
                     indication = ripple(bounded = false),
                     interactionSource = null,
