@@ -94,8 +94,8 @@ private fun startAthanBody(context: Context, prayTimeKey: String) {
         if (notificationAthan.value || ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
-        ) ContextCompat.startForegroundService(
-            context, Intent(context, AthanNotification::class.java)
+        ) context.startService(
+            Intent(context, AthanNotification::class.java)
                 .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
         ) else startAthanActivity(context, prayTimeKey)
     }.onFailure(logException)

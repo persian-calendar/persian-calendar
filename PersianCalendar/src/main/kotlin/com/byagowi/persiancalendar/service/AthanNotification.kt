@@ -167,7 +167,7 @@ class AthanNotification : Service() {
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
-        startForeground(notificationId, notificationBuilder.build())
+        notificationManager?.notify(notificationId, notificationBuilder.build())
 
         var stop = {}
         val preventPhoneCallIntervention =

@@ -310,7 +310,6 @@
         <service
             android:name=".service.AthanNotification"
             android:exported="false"
-            android:foregroundServiceType="mediaPlayback"
             android:label="Athan Service" />
 
         <service
