@@ -30,6 +30,7 @@ fun SharedTransitionScope.ScreenSurface(
     // Remove when https://issuetracker.google.com/issues/376709945 is resolved
     // Actually this can be simplified into a simple Box inside a Surface when that resolved
     workaroundClipBug: Boolean = false,
+    disableSharedContent: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
@@ -39,14 +40,14 @@ fun SharedTransitionScope.ScreenSurface(
         Surface(
             shape = shape,
             color = animateColor(MaterialTheme.colorScheme.surface).value,
-            modifier = if (isOnCI) Modifier else Modifier.sharedElement(
+            modifier = if (disableSharedContent || isOnCI) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
             ),
         ) {}
         // Content
         Box(
-            (if (isOnCI) Modifier else Modifier.sharedBounds(
+            (if (disableSharedContent || isOnCI) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
             )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)

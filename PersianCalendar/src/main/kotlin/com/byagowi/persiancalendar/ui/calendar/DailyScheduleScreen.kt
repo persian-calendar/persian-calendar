@@ -5,18 +5,28 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,11 +35,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarViewDay
+import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,28 +55,38 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAny
+import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
@@ -87,6 +112,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -141,6 +167,8 @@ fun SharedTransitionScope.DailyScheduleScreen(
         if (isFirstTime) isFirstTime = false else if (selectedDay == today - 1) todayButtonAction()
     }
 
+    var isWeekView by rememberSaveable { mutableStateOf(false) }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -161,6 +189,17 @@ fun SharedTransitionScope.DailyScheduleScreen(
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
                     TodayActionButton(today != selectedDay) { todayButtonAction() }
+                    IconButton({ isWeekView = !isWeekView }) {
+                        Crossfade(isWeekView, label = "icon") { state ->
+                            if (state) Icon(
+                                Icons.Default.CalendarViewDay,
+                                contentDescription = stringResource(R.string.week_view),
+                            ) else Icon(
+                                Icons.Default.CalendarViewWeek,
+                                contentDescription = stringResource(R.string.daily_schedule),
+                            )
+                        }
+                    }
                 },
             )
         },
@@ -176,26 +215,34 @@ fun SharedTransitionScope.DailyScheduleScreen(
                 if (hasWeeksPager) HorizontalPager(
                     state = weekPagerState,
                     verticalAlignment = Alignment.Top,
-                    modifier = Modifier.padding(bottom = 8.dp),
+                    pageSpacing = 2.dp,
                 ) { page ->
-                    WeekPage(
-                        pagerSize = pagerSize,
-                        addEvent = addEvent,
-                        monthColors = monthColors,
-                        selectedDay = selectedDay,
-                        selectedDayDate = date,
-                        setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
-                        setClickedOnce = { isClickedOnce = true },
-                        animatedContentScope = animatedContentScope,
-                        language = language,
-                        coroutineScope = coroutineScope,
-                        weekPagerState = weekPagerState,
-                        page = page,
-                        today = today,
-                        refreshToken = refreshToken,
-                    )
+                    Column {
+                        WeekPage(
+                            pagerSize = pagerSize,
+                            addEvent = addEvent,
+                            monthColors = monthColors,
+                            selectedDay = selectedDay,
+                            selectedDayDate = date,
+                            setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
+                            setClickedOnce = { isClickedOnce = true },
+                            animatedContentScope = animatedContentScope,
+                            language = language,
+                            coroutineScope = coroutineScope,
+                            weekPagerState = weekPagerState,
+                            page = page,
+                            today = today,
+                            refreshToken = refreshToken,
+                        )
+                        if (isWeekView) Spacer(Modifier.height(8.dp))
+                        if (isWeekView) ScreenSurface(
+                            animatedContentScope = animatedContentScope,
+                            disableSharedContent = page != weeksLimit / 2,
+                        ) { WeekView(bottomPadding) }
+                    }
                 }
-                ScreenSurface(animatedContentScope) {
+                if (!isWeekView) Spacer(Modifier.height(8.dp))
+                if (!isWeekView) ScreenSurface(animatedContentScope) {
                     HorizontalPager(
                         state = dayPagerState,
                         verticalAlignment = Alignment.Top,
@@ -235,6 +282,192 @@ private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
 }
 
 private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
+
+@Composable
+private fun WeekView(bottomPadding: Dp) {
+    val scale = remember { Animatable(1f) }
+    val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
+    val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
+    val initial = remember(density) { with(density) { (cellHeight * 7).roundToPx() } }
+    val scrollState = rememberScrollState(initial)
+    Column(
+        Modifier
+            .fillMaxSize()
+            .pointerInput(Unit) {
+                awaitEachGesture {
+                    awaitFirstDown(requireUnconsumed = false)
+                    do {
+                        val event = awaitPointerEvent()
+                        coroutineScope.launch {
+                            val value = scale.value * event.calculateZoom()
+                            scale.snapTo(value.coerceIn(.5f, 2f))
+                        }
+                    } while (event.changes.fastAny { it.pressed })
+                }
+            },
+    ) {
+        var tableWidthPx by remember { mutableIntStateOf(0) }
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .onSizeChanged { tableWidthPx = it.width }
+                .height(cellHeight),
+        ) {
+            repeat(8) {
+                Box(
+                    modifier = Modifier
+                        .height(cellHeight)
+                        .weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(it.toString())
+                }
+            }
+        }
+        Box {
+            val maxWidthPx = tableWidthPx * 7f / 8
+            val cellHeightPx = with(density) { cellHeight.toPx() }
+            var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
+            val cellWidthPx = tableWidthPx / 8
+
+            Box(Modifier.verticalScroll(scrollState)) {
+                val clockCache = remember {
+                    lruCache(1024, create = { minutes: Int ->
+                        Clock.fromMinutesCount(minutes).toBasicFormatString()
+                    })
+                }
+                Column(Modifier.fillMaxWidth()) {
+                    Row(Modifier.fillMaxWidth()) {
+                        repeat(8) { column ->
+                            Column(Modifier.weight(1f)) {
+                                repeat(24) { row ->
+                                    Box(
+                                        Modifier
+                                            .height(cellHeight)
+                                            .fillMaxWidth()
+                                            .then(
+                                                if (column == 0) Modifier else Modifier
+                                                    .border(
+                                                        Dp.Hairline,
+                                                        MaterialTheme.colorScheme.outlineVariant.copy(
+                                                            .5f
+                                                        ),
+                                                    )
+                                                    .clickable(
+                                                        indication = null,
+                                                        interactionSource = null,
+                                                    ) {
+                                                        offsetPosition = Offset(
+                                                            cellWidthPx * column.toFloat(),
+                                                            cellHeightPx * row / scale.value
+                                                        )
+                                                    },
+                                            ),
+                                        contentAlignment = Alignment.Center,
+                                    ) { if (column == 0) Text(clockCache[row * 60]) }
+                                }
+                            }
+                        }
+                    }
+                    Spacer(Modifier.height(bottomPadding))
+                }
+
+                val x = if (cellWidthPx == 0) 0 else (offsetPosition.x / cellWidthPx).roundToInt()
+                val ySteps = (cellHeightPx / 4).roundToInt()
+                val y = (offsetPosition.y * scale.value / ySteps).roundToInt()
+                val offset = if (cellWidthPx == 0 || offsetPosition == Offset.Zero) Offset.Zero
+                else animateOffsetAsState(
+                    Offset(x * cellWidthPx.toFloat(), y * ySteps.toFloat()),
+                    label = "offset"
+                ).value
+                var duration by remember { mutableFloatStateOf(cellHeightPx / 4 * 4f) }
+                val animatedDuration by animateFloatAsState(
+                    duration.roundToInt().toFloat(),
+                    label = "duration"
+                )
+                val widthFraction = remember { Animatable(1f) }
+                Box(
+                    Modifier
+                        .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
+                        .size(
+                            with(density) { (cellWidthPx * widthFraction.value).toDp() },
+                            with(density) { (animatedDuration * scale.value).toDp() },
+                        )
+                        .border(
+                            1.dp,
+                            MaterialTheme.colorScheme.outlineVariant,
+                            MaterialTheme.shapes.extraSmall,
+                        )
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                val id = awaitFirstDown().id
+                                coroutineScope.launch { widthFraction.animateTo(.95f) }
+                                var action = Float.NaN
+                                drag(id) {
+                                    val delta = it.positionChange()
+                                    if (action.isNaN()) action = when {
+                                        abs(it.position.y - duration * scale.value) < cellHeightPx * .2f -> 1f
+                                        abs(it.position.y) < cellHeightPx * .2f -> -1f
+                                        else -> 0f
+                                    }
+                                    when (action) {
+                                        1f -> duration = (duration + delta.y / scale.value)
+                                            .coerceIn(ySteps * 1f, ySteps * 16f)
+                                            .coerceAtMost((ySteps * 24 * 4) - offsetPosition.y)
+
+                                        -1f -> {
+                                            val newValueY = offsetPosition.y + delta.y / scale.value
+                                            offsetPosition = offsetPosition.copy(
+                                                y = newValueY.coerceIn(0f, cellHeightPx * 23)
+                                            )
+                                            duration = (duration - delta.y / scale.value).coerceIn(
+                                                ySteps * 1f, ySteps * 16f
+                                            )
+                                        }
+
+                                        else -> {
+                                            val newValueX = offsetPosition.x - delta.x
+                                            val newValueY = offsetPosition.y + delta.y / scale.value
+                                            offsetPosition = Offset(
+                                                newValueX.coerceIn(tableWidthPx / 8f, maxWidthPx),
+                                                newValueY.coerceIn(0f, cellHeightPx * 24 - duration)
+                                            )
+                                        }
+                                    }
+                                    it.consume()
+                                }
+                                coroutineScope.launch { widthFraction.animateTo(1f) }
+                            }
+                        }
+                        .alpha(
+                            animateFloatAsState(
+                                if (offset == Offset.Zero) 0f else 1f, animationSpec = spring(
+                                    Spring.DampingRatioLowBouncy, Spring.StiffnessLow
+                                ), label = "alpha"
+                            ).value
+                        )
+                        .background(MaterialTheme.colorScheme.surface)
+                        .clip(MaterialTheme.shapes.extraSmall),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    val from = clockCache[y * 15]
+                    val to = clockCache[(y + (duration / (cellHeightPx / 4)).roundToInt()) * 15]
+                    Text("$from\n$to")
+                    Box(
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .height(4.dp)
+                            .fillMaxWidth()
+                            .background(MaterialTheme.colorScheme.outlineVariant),
+                    )
+                }
+            }
+            ScrollShadow(scrollState, top = true)
+            ScrollShadow(scrollState, top = false)
+        }
+    }
+}
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
