@@ -173,7 +173,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         }
     }
 
-    val secondaryCalendar = secondaryCalendar
     LazyColumn(state = lazyListState, modifier = detectZoom) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages

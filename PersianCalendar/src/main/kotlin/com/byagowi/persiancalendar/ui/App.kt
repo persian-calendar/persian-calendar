@@ -169,7 +169,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
             },
         ) {
-            NavHost(navController = navController, startDestination = startDestination) {
+            NavHost(navController = navController, startDestination = dailyScheduleRoute) {
 
                 fun navigateToSettingsLocationTab() {
                     navController.graph.findNode(settingsRoute)?.let { destination ->
