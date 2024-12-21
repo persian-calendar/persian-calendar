@@ -178,24 +178,22 @@ fun SharedTransitionScope.DailyScheduleScreen(
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier.padding(bottom = 8.dp),
                 ) { page ->
-                    Box(modifier = Modifier.height(pagerSize.height)) {
-                        WeekPage(
-                            pagerSize = pagerSize,
-                            addEvent = addEvent,
-                            monthColors = monthColors,
-                            selectedDay = selectedDay,
-                            selectedDayDate = date,
-                            setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
-                            setClickedOnce = { isClickedOnce = true },
-                            animatedContentScope = animatedContentScope,
-                            language = language,
-                            coroutineScope = coroutineScope,
-                            weekPagerState = weekPagerState,
-                            page = page,
-                            today = today,
-                            refreshToken = refreshToken,
-                        )
-                    }
+                    WeekPage(
+                        pagerSize = pagerSize,
+                        addEvent = addEvent,
+                        monthColors = monthColors,
+                        selectedDay = selectedDay,
+                        selectedDayDate = date,
+                        setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
+                        setClickedOnce = { isClickedOnce = true },
+                        animatedContentScope = animatedContentScope,
+                        language = language,
+                        coroutineScope = coroutineScope,
+                        weekPagerState = weekPagerState,
+                        page = page,
+                        today = today,
+                        refreshToken = refreshToken,
+                    )
                 }
                 ScreenSurface(animatedContentScope) {
                     HorizontalPager(
@@ -395,7 +393,7 @@ private fun SharedTransitionScope.WeekPage(
     today: Jdn,
     refreshToken: Int,
 ) {
-    Box {
+    Box(Modifier.height(pagerSize.height)) {
         val offset = page - weeksLimit / 2
         val sampleDay = today + 7 * offset
         val startOfYearJdn = Jdn(mainCalendar, selectedDayDate.year, 1, 1)
