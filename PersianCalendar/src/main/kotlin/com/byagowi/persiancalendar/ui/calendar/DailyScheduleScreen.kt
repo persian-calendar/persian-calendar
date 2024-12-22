@@ -394,10 +394,12 @@ private fun WeekView(bottomPadding: Dp) {
                             with(density) { (cellWidthPx * widthFraction.value).toDp() },
                             with(density) { (animatedDuration * scale.value).toDp() },
                         )
-                        .border(
-                            1.dp,
-                            MaterialTheme.colorScheme.outlineVariant,
-                            MaterialTheme.shapes.extraSmall,
+                        .then(
+                            if (offset == Offset.Zero) Modifier else Modifier.border(
+                                1.dp,
+                                MaterialTheme.colorScheme.outlineVariant,
+                                MaterialTheme.shapes.extraSmall,
+                            )
                         )
                         .pointerInput(Unit) {
                             awaitEachGesture {
