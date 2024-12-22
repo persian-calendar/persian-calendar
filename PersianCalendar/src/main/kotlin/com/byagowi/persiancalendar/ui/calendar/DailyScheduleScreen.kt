@@ -339,8 +339,10 @@ private fun WeekView(bottomPadding: Dp) {
                 }
                 Column(Modifier.fillMaxWidth()) {
                     Row(Modifier.fillMaxWidth()) {
+                        val outlineColor = MaterialTheme.colorScheme.outlineVariant.copy(.5f)
                         repeat(8) { column ->
                             Column(Modifier.weight(1f)) {
+                                if (column == 0) Spacer(Modifier.height(cellHeight / 2))
                                 repeat(24) { row ->
                                     Box(
                                         Modifier
@@ -350,9 +352,7 @@ private fun WeekView(bottomPadding: Dp) {
                                                 if (column == 0) Modifier else Modifier
                                                     .border(
                                                         Dp.Hairline,
-                                                        MaterialTheme.colorScheme.outlineVariant.copy(
-                                                            .5f
-                                                        ),
+                                                        outlineColor,
                                                     )
                                                     .clickable(
                                                         indication = null,
@@ -365,7 +365,17 @@ private fun WeekView(bottomPadding: Dp) {
                                                     },
                                             ),
                                         contentAlignment = Alignment.Center,
-                                    ) { if (column == 0) Text(clockCache[row * 60]) }
+                                    ) {
+                                        if (column == 0 && row != 23) {
+                                            Text(clockCache[(row + 1) * 60])
+                                            HorizontalDivider(
+                                                Modifier
+                                                    .width(8.dp)
+                                                    .align(Alignment.CenterEnd),
+                                                Dp.Hairline,
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         }
