@@ -259,6 +259,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                                 },
                                 selectedDay = selectedDay,
                                 setSelectedDay = { selectedDay = it },
+                                addEvent = addEvent,
                             )
                         }
                     }
@@ -311,6 +312,7 @@ private fun WeekView(
     selectedDay: Jdn,
     setSelectedDay: (Jdn) -> Unit,
     bottomPadding: Dp,
+    addEvent: (AddEventData) -> Unit,
 ) {
     val weekStart = selectedDay - applyWeekStartOffsetToWeekDay(selectedDay.weekDay)
     val scale = remember { Animatable(1f) }
@@ -336,35 +338,25 @@ private fun WeekView(
             },
     ) {
         var tableWidthPx by remember { mutableIntStateOf(0) }
-        Row(
-            Modifier
-                .fillMaxWidth()
-                .onSizeChanged { tableWidthPx = it.width }
-                .height(cellHeight),
-        ) {
-            repeat(8) {
-                Box(
-                    modifier = Modifier
-                        .height(cellHeight)
-                        .weight(1f),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(it.toString())
-                }
-            }
-        }
-        Box {
+//        Row(
+//            Modifier
+//                .fillMaxWidth()
+//                .height(cellHeight),
+//        ) {
+//            repeat(8) {
+//                Box(
+//                    modifier = Modifier
+//                        .height(cellHeight)
+//                        .weight(1f),
+//                    contentAlignment = Alignment.Center,
+//                ) { Text(it.toString()) }
+//            }
+//        }
+        Box(Modifier.onSizeChanged { tableWidthPx = it.width }) {
             val maxWidthPx = tableWidthPx * 7f / 8
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
             val cellWidthPx = tableWidthPx / 8
-            setAddAction {
-                val cellHeightScaledPx = cellHeightPx * scale.value
-                offsetPosition = Offset(
-                    cellWidthPx * (applyWeekStartOffsetToWeekDay(selectedDay.weekDay) + 1f),
-                    ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
-                )
-            }
 
             Box(Modifier.verticalScroll(scrollState)) {
                 val clockCache = remember {
@@ -430,6 +422,43 @@ private fun WeekView(
                     duration.roundToInt().toFloat(),
                     label = "duration"
                 )
+
+                setAddAction {
+                    val cellHeightScaledPx = cellHeightPx * scale.value
+                    if (offsetPosition == Offset.Zero) offsetPosition = Offset(
+                        cellWidthPx * (applyWeekStartOffsetToWeekDay(selectedDay.weekDay) + 1f),
+                        ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
+                    ) else {
+                        val time = selectedDay.toGregorianCalendar()
+                        run {
+                            val minutes = y * 15
+                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
+                            time[GregorianCalendar.MINUTE] = minutes % 60
+                        }
+                        time[GregorianCalendar.SECOND] = 0
+                        val beginTime = time.time
+                        run {
+                            val minutes = (y + (duration / (cellHeightPx / 4)).roundToInt()) * 15
+                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
+                            time[GregorianCalendar.MINUTE] = minutes % 60
+                        }
+                        val endTime = time.time
+                        addEvent(
+                            AddEventData(
+                                beginTime = beginTime,
+                                endTime = endTime,
+                                allDay = false,
+                                description = dayTitleSummary(
+                                    selectedDay,
+                                    selectedDay.inCalendar(mainCalendar),
+                                ),
+                            )
+                        )
+                        duration = cellHeightPx / 4 * 4f
+                        offsetPosition = Offset.Zero
+                    }
+                }
+
                 val widthFraction = remember { Animatable(1f) }
                 Box(
                     Modifier
@@ -634,11 +663,11 @@ private fun AddHourEvent(addEvent: (AddEventData) -> Unit, jdn: Jdn, hour: Int) 
             .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .5f))
             .clickable {
                 val time = jdn.toGregorianCalendar()
-                time.set(GregorianCalendar.HOUR_OF_DAY, hour)
-                time.set(GregorianCalendar.MINUTE, 0)
-                time.set(GregorianCalendar.SECOND, 0)
+                time[GregorianCalendar.HOUR_OF_DAY] = hour
+                time[GregorianCalendar.MINUTE] = 0
+                time[GregorianCalendar.SECOND] = 0
                 val beginTime = time.time
-                time.set(GregorianCalendar.HOUR_OF_DAY, hour + 1)
+                time[GregorianCalendar.HOUR_OF_DAY] = hour + 1
                 val endTime = time.time
                 addEvent(
                     AddEventData(
