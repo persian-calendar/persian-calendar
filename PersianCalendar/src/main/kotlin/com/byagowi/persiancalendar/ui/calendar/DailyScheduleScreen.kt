@@ -414,9 +414,11 @@ private fun WeekView(bottomPadding: Dp) {
                                         else -> 0f
                                     }
                                     when (action) {
-                                        1f -> duration = (duration + delta.y / scale.value)
-                                            .coerceIn(ySteps * 1f, ySteps * 16f)
-                                            .coerceAtMost((ySteps * 24 * 4) - offsetPosition.y)
+                                        1f -> duration =
+                                            (duration + delta.y / scale.value).coerceIn(
+                                                minimumValue = ySteps * 1f,
+                                                maximumValue = (ySteps * 24 * 4) - offsetPosition.y
+                                            )
 
                                         -1f -> {
                                             val newValueY = offsetPosition.y + delta.y / scale.value
