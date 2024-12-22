@@ -212,13 +212,13 @@ fun SharedTransitionScope.DailyScheduleScreen(
             // Don't show weeks pager if there isn't enough space
             Column {
                 val refreshToken by calendarViewModel.refreshToken.collectAsState()
-                if (hasWeeksPager) HorizontalPager(
+                HorizontalPager(
                     state = weekPagerState,
                     verticalAlignment = Alignment.Top,
                     pageSpacing = 2.dp,
                 ) { page ->
                     Column {
-                        WeekPage(
+                        if (hasWeeksPager) WeekPage(
                             pagerSize = pagerSize,
                             addEvent = addEvent,
                             monthColors = monthColors,
