@@ -99,6 +99,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPa
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
+import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -112,6 +113,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
 import kotlin.math.abs
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -168,9 +170,20 @@ fun SharedTransitionScope.DailyScheduleScreen(
     }
 
     var isWeekView by rememberSaveable { mutableStateOf(false) }
+    var weekViewAddAction by remember { mutableStateOf({}) }
 
     Scaffold(
         containerColor = Color.Transparent,
+        floatingActionButton = {
+            ShrinkingFloatingActionButton(
+                modifier = Modifier.padding(end = 8.dp),
+                isVisible = isWeekView,
+                action = weekViewAddAction,
+                icon = Icons.Default.Add,
+                title = stringResource(R.string.add_event),
+                noTitle = true,
+            )
+        },
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 title = {
@@ -238,7 +251,16 @@ fun SharedTransitionScope.DailyScheduleScreen(
                         if (isWeekView) ScreenSurface(
                             animatedContentScope = animatedContentScope,
                             disableSharedContent = page != weeksLimit / 2,
-                        ) { WeekView(bottomPadding) }
+                        ) {
+                            WeekView(
+                                bottomPadding = bottomPadding,
+                                setAddAction = {
+                                    if (weekPagerState.currentPage == page) weekViewAddAction = it
+                                },
+                                selectedDay = selectedDay,
+                                setSelectedDay = { selectedDay = it },
+                            )
+                        }
                     }
                 }
                 if (!isWeekView) Spacer(Modifier.height(8.dp))
@@ -284,12 +306,18 @@ private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
 private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
 
 @Composable
-private fun WeekView(bottomPadding: Dp) {
+private fun WeekView(
+    setAddAction: (() -> Unit) -> Unit,
+    selectedDay: Jdn,
+    setSelectedDay: (Jdn) -> Unit,
+    bottomPadding: Dp,
+) {
+    val weekStart = selectedDay - applyWeekStartOffsetToWeekDay(selectedDay.weekDay)
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
-    val initial = remember(density) { with(density) { (cellHeight * 7).roundToPx() } }
+    val initial = remember(density) { with(density) { (cellHeight * 7 - 16.dp).roundToPx() } }
     val scrollState = rememberScrollState(initial)
     Column(
         Modifier
@@ -330,6 +358,13 @@ private fun WeekView(bottomPadding: Dp) {
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
             val cellWidthPx = tableWidthPx / 8
+            setAddAction {
+                val cellHeightScaledPx = cellHeightPx * scale.value
+                offsetPosition = Offset(
+                    cellWidthPx * (applyWeekStartOffsetToWeekDay(selectedDay.weekDay) + 1f),
+                    ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
+                )
+            }
 
             Box(Modifier.verticalScroll(scrollState)) {
                 val clockCache = remember {
@@ -350,10 +385,7 @@ private fun WeekView(bottomPadding: Dp) {
                                             .fillMaxWidth()
                                             .then(
                                                 if (column == 0) Modifier else Modifier
-                                                    .border(
-                                                        Dp.Hairline,
-                                                        outlineColor,
-                                                    )
+                                                    .border(Dp.Hairline, outlineColor)
                                                     .clickable(
                                                         indication = null,
                                                         interactionSource = null,
@@ -362,6 +394,7 @@ private fun WeekView(bottomPadding: Dp) {
                                                             cellWidthPx * column.toFloat(),
                                                             cellHeightPx * row / scale.value
                                                         )
+                                                        setSelectedDay(weekStart + column - 1)
                                                     },
                                             ),
                                         contentAlignment = Alignment.Center,
@@ -389,6 +422,7 @@ private fun WeekView(bottomPadding: Dp) {
                 val offset = if (cellWidthPx == 0 || offsetPosition == Offset.Zero) Offset.Zero
                 else animateOffsetAsState(
                     Offset(x * cellWidthPx.toFloat(), y * ySteps.toFloat()),
+                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
                     label = "offset"
                 ).value
                 var duration by remember { mutableFloatStateOf(cellHeightPx / 4 * 4f) }
@@ -447,6 +481,10 @@ private fun WeekView(bottomPadding: Dp) {
                                                 newValueX.coerceIn(tableWidthPx / 8f, maxWidthPx),
                                                 newValueY.coerceIn(0f, cellHeightPx * 24 - duration)
                                             )
+
+                                            val effectiveColumn =
+                                                (offsetPosition.x / cellWidthPx).roundToInt()
+                                            setSelectedDay(weekStart + effectiveColumn - 1)
                                         }
                                     }
                                     it.consume()

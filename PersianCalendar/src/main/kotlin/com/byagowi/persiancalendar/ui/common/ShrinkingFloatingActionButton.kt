@@ -28,6 +28,7 @@ fun ShrinkingFloatingActionButton(
     action: () -> Unit,
     icon: ImageVector,
     title: String,
+    noTitle: Boolean = false,
 ) {
     var showLabel by rememberSaveable { mutableStateOf(true) }
     AnimatedVisibility(
@@ -46,7 +47,7 @@ fun ShrinkingFloatingActionButton(
                     delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
                     showLabel = false
                 }
-                AnimatedVisibility(showLabel) { Text(title) }
+                if (!noTitle) AnimatedVisibility(showLabel) { Text(title) }
             }
         }
     }
