@@ -211,7 +211,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
                                 contentDescription = stringResource(R.string.week_view),
                             ) else Icon(
                                 Icons.Default.CalendarViewWeek,
-                                contentDescription = stringResource(R.string.daily_schedule),
+                                contentDescription = stringResource(R.string.day_view),
                             )
                         }
                     }

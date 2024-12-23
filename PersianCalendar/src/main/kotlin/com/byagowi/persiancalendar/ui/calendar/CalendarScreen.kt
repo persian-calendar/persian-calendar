@@ -322,7 +322,7 @@ fun SharedTransitionScope.CalendarScreen(
                                                 if (wasAtEnd && dragAmount < 0) {
                                                     when (preferredSwipeUpAction.value) {
                                                         SwipeUpAction.Schedule -> navigateToSchedule()
-                                                        SwipeUpAction.DailySchedule -> {
+                                                        SwipeUpAction.DayView -> {
                                                             navigateToDailySchedule(
                                                                 viewModel.selectedDay.value, false
                                                             )
@@ -948,7 +948,7 @@ private fun SharedTransitionScope.Menu(
         val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
         listOf(
             SwipeUpAction.Schedule to { navigateToSchedule() },
-            SwipeUpAction.DailySchedule to {
+            SwipeUpAction.DayView to {
                 navigateToDailySchedule(viewModel.selectedDay.value, false)
             },
             SwipeUpAction.WeekView to {
