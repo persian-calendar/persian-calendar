@@ -385,7 +385,11 @@ private fun WeekView(
                                 repeat(24) { row ->
                                     Box(
                                         Modifier
-                                            .height(cellHeight)
+                                            .height(
+                                                if (column == 0 && row == 23) 0.dp
+                                                else if (column == 0 || row != 23) cellHeight
+                                                else cellHeight + bottomPadding
+                                            )
                                             .fillMaxWidth()
                                             .then(
                                                 if (column == 0) Modifier else Modifier
@@ -418,7 +422,6 @@ private fun WeekView(
                             }
                         }
                     }
-                    Spacer(Modifier.height(bottomPadding))
                 }
 
                 val defaultWidth = .95f
@@ -583,7 +586,7 @@ private fun WeekView(
                 ) {
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
-                    Text("$from\n$to")
+                    Text("$from\n$to", textAlign = TextAlign.Center)
                     Box(
                         Modifier
                             .align(Alignment.BottomCenter)
