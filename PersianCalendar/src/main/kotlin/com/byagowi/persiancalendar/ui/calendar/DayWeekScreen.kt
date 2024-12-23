@@ -288,7 +288,7 @@ fun SharedTransitionScope.DayWeekScreen(
                             }
                         }
 
-                        DaySchedule(
+                        DayView(
                             selectedDay = today + (page - daysLimit / 2),
                             refreshToken = refreshToken,
                             calendarViewModel = calendarViewModel,
@@ -628,7 +628,7 @@ private fun WeekView(
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SharedTransitionScope.DaySchedule(
+private fun SharedTransitionScope.DayView(
     selectedDay: Jdn,
     refreshToken: Int,
     calendarViewModel: CalendarViewModel,
