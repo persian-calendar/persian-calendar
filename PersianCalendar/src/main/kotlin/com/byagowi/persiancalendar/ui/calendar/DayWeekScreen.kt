@@ -11,6 +11,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -602,7 +603,10 @@ private fun WeekView(
 
                 val time = GregorianCalendar().also { it.timeInMillis = now }
                 val dayOfWeek = Jdn(time.toCivilDate()) - weekStart
-                if (dayOfWeek in 0..7) HorizontalDivider(
+                val primary = MaterialTheme.colorScheme.primary
+                val radius = with(density) { 4.dp.toPx() }
+                val lineSize = with(density) { 1.dp.toPx() }
+                if (dayOfWeek in 0..6) Canvas(
                     Modifier
                         .offset {
                             IntOffset(
@@ -610,8 +614,11 @@ private fun WeekView(
                                 (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
                             )
                         }
-                        .width(with(density) { cellWidthPx.toDp() })
-                )
+                        .size(1.dp)
+                ) {
+                    drawCircle(primary, radius)
+                    drawLine(primary, Offset.Zero, Offset(-cellWidthPx, 0f), lineSize)
+                }
             }
             ScrollShadow(scrollState, top = true)
             ScrollShadow(scrollState, top = false)
