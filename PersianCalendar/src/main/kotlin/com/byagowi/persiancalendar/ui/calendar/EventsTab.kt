@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
 import android.widget.Toast
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.compose.animation.AnimatedContent
@@ -18,7 +19,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -171,19 +171,40 @@ fun SharedTransitionScope.EventsTab(
 }
 
 @Composable
-fun ColumnScope.DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
+fun eventColor(event: CalendarEvent.DeviceCalendarEvent): Color {
+    return runCatching {
+        // should be turned to long then int otherwise gets stupid alpha
+        if (event.color.isEmpty()) null else Color(event.color.toLong())
+    }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
+}
+
+fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
+    event: CalendarEvent.DeviceCalendarEvent,
+    context: Context
+) {
+    runCatching { this@viewEvent.launch(event.id) }
+        .onFailure {
+            Toast
+                .makeText(
+                    context,
+                    R.string.device_does_not_support,
+                    Toast.LENGTH_SHORT
+                )
+                .show()
+        }
+        .onFailure(logException)
+}
+
+fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
+
+@Composable
+fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     events.forEach { event ->
         val backgroundColor by animateColor(
             when {
-                event is CalendarEvent.DeviceCalendarEvent -> {
-                    runCatching {
-                        // should be turned to long then int otherwise gets stupid alpha
-                        if (event.color.isEmpty()) null else Color(event.color.toLong())
-                    }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
-                }
-
+                event is CalendarEvent.DeviceCalendarEvent -> eventColor(event)
                 event.isHoliday -> MaterialTheme.colorScheme.primary
                 else -> MaterialTheme.colorScheme.surfaceVariant
             }
@@ -207,17 +228,7 @@ fun ColumnScope.DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () ->
                         enabled = event is CalendarEvent.DeviceCalendarEvent,
                         onClick = {
                             if (event is CalendarEvent.DeviceCalendarEvent) {
-                                runCatching { launcher.launch(event.id) }
-                                    .onFailure {
-                                        Toast
-                                            .makeText(
-                                                context,
-                                                R.string.device_does_not_support,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                            .show()
-                                    }
-                                    .onFailure(logException)
+                                launcher.viewEvent(event, context)
                             }
                         },
                     )
@@ -230,9 +241,7 @@ fun ColumnScope.DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () ->
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                val contentColor by animateColor(
-                    if (backgroundColor.isLight) Color.Black else Color.White,
-                )
+                val contentColor by animateColor(eventTextColor(backgroundColor))
                 Box(modifier = Modifier.weight(1f, fill = false)) {
                     SelectionContainer {
                         Text(
@@ -271,7 +280,7 @@ fun readEvents(jdn: Jdn, refreshToken: Int): List<CalendarEvent<*>> {
     return events
 }
 
-private class ViewEventContract : ActivityResultContract<Long, Void?>() {
+class ViewEventContract : ActivityResultContract<Long, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?) = null
     override fun createIntent(context: Context, input: Long): Intent {
         return Intent(Intent.ACTION_VIEW).setData(

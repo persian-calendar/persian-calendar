@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -28,6 +29,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -79,6 +81,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
@@ -258,6 +261,8 @@ fun SharedTransitionScope.DailyScheduleScreen(
                                 selectedDay = selectedDay,
                                 setSelectedDay = { selectedDay = it },
                                 addEvent = addEvent,
+                                refreshCalendar = calendarViewModel::refreshCalendar,
+                                refreshToken = refreshToken,
                             )
                         }
                     }
@@ -311,6 +316,8 @@ private fun WeekView(
     setSelectedDay: (Jdn) -> Unit,
     bottomPadding: Dp,
     addEvent: (AddEventData) -> Unit,
+    refreshCalendar: () -> Unit,
+    refreshToken: Int,
 ) {
     val weekStart = selectedDay - applyWeekStartOffsetToWeekDay(selectedDay.weekDay)
     val scale = remember { Animatable(1f) }
@@ -319,6 +326,11 @@ private fun WeekView(
     val density = LocalDensity.current
     val initial = remember(density) { with(density) { (cellHeight * 7 - 16.dp).roundToPx() } }
     val scrollState = rememberScrollState(initial)
+    val events = (weekStart..weekStart + 7).toList().map {
+        readEvents(it, refreshToken)
+            .filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
+    }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -408,6 +420,40 @@ private fun WeekView(
                     Spacer(Modifier.height(bottomPadding))
                 }
 
+                val defaultWidth = .95f
+                val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
+                    refreshCalendar()
+                }
+                val context = LocalContext.current
+                events.mapIndexed { i, it ->
+                    it.map { event ->
+                        val start = event.startTime[Calendar.HOUR_OF_DAY] +
+                                event.startTime[Calendar.MINUTE] / 60f
+                        val end = event.endTime[Calendar.HOUR_OF_DAY] +
+                                event.endTime[Calendar.MINUTE] / 60f
+                        val color = eventColor(event)
+                        Text(
+                            event.title,
+                            color = eventTextColor(color),
+                            maxLines = 1,
+                            fontSize = 12.sp,
+                            modifier = Modifier
+                                .offset {
+                                    IntOffset(
+                                        (cellWidthPx * (i + 1)).roundToInt(),
+                                        (start * cellHeightPx).roundToInt()
+                                    )
+                                }
+                                .requiredSize(
+                                    with(density) { (cellWidthPx * defaultWidth).toDp() },
+                                    with(density) { ((end - start) * cellHeightPx).toDp() - 3.dp },
+                                )
+                                .clickable { launcher.viewEvent(event, context) }
+                                .background(color, MaterialTheme.shapes.small)
+                        )
+                    }
+                }
+
                 val x = (offsetPosition.x / cellWidthPx).roundToInt()
                 val ySteps = (cellHeightPx / 4).roundToInt()
                 val y = (offsetPosition.y * scale.value / ySteps).roundToInt()
@@ -423,7 +469,7 @@ private fun WeekView(
                     label = "duration"
                 )
 
-                setAddAction {
+                val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
                     if (offsetPosition == Offset.Zero) offsetPosition = Offset(
                         cellWidthPx * (applyWeekStartOffsetToWeekDay(selectedDay.weekDay) + 1f),
@@ -458,8 +504,8 @@ private fun WeekView(
                         offsetPosition = Offset.Zero
                     }
                 }
+                setAddAction(addAction)
 
-                val defaultWidth = .95f
                 val widthFraction = remember { Animatable(defaultWidth) }
                 Box(
                     Modifier
@@ -475,6 +521,7 @@ private fun WeekView(
                                 MaterialTheme.shapes.extraSmall,
                             )
                         )
+                        .clickable(indication = null, interactionSource = null) { addAction() }
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
