@@ -327,8 +327,8 @@ private fun WeekView(
     val density = LocalDensity.current
     val initial = remember(density) { with(density) { (cellHeight * 7 - 16.dp).roundToPx() } }
     val scrollState = rememberScrollState(initial)
-    val events = (weekStart..weekStart + 7).toList().map {
-        readEvents(it, refreshToken)
+    val events = (weekStart..weekStart + 7).toList().map { jdn ->
+        readEvents(jdn, refreshToken)
             .filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
     }
 
@@ -434,7 +434,7 @@ private fun WeekView(
                                 event.endTime[Calendar.MINUTE] / 60f
                         val color = eventColor(event)
                         Text(
-                            event.title,
+                            " " + event.title,
                             color = eventTextColor(color),
                             maxLines = 1,
                             fontSize = 12.sp,
