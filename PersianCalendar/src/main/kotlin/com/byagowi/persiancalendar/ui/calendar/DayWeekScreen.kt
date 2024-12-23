@@ -119,7 +119,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.DailyScheduleScreen(
+fun SharedTransitionScope.DayWeekScreen(
     calendarViewModel: CalendarViewModel,
     initialSelectedDay: Jdn,
     animatedContentScope: AnimatedContentScope,
