@@ -108,6 +108,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -486,6 +487,7 @@ private fun WeekView(
                     label = "duration"
                 )
 
+                var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
                     if (offsetPosition == Offset.Zero) offsetPosition = Offset(
@@ -517,11 +519,19 @@ private fun WeekView(
                                 ),
                             )
                         )
-                        duration = cellHeightPx / 4 * 4f
-                        offsetPosition = Offset.Zero
+                        resetOnNextRefresh = true
                     }
                 }
                 setAddAction(addAction)
+
+                val resumeToken by resumeToken.collectAsState()
+                LaunchedEffect(resumeToken) {
+                    if (resetOnNextRefresh) {
+                        duration = cellHeightPx / 4 * 4f
+                        offsetPosition = Offset.Zero
+                        resetOnNextRefresh = false
+                    }
+                }
 
                 val widthFraction = remember { Animatable(defaultWidth) }
                 val radius = with(density) { 4.dp.toPx() }
