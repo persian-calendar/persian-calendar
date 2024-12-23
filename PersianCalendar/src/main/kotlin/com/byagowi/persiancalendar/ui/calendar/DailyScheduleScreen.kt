@@ -417,9 +417,10 @@ private fun WeekView(
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
                     label = "offset"
                 ).value
-                var duration by remember { mutableFloatStateOf(cellHeightPx / 4 * 4f) }
+                var duration by remember { mutableFloatStateOf(cellHeightPx) }
+                val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
                 val animatedDuration by animateFloatAsState(
-                    duration.roundToInt().toFloat(),
+                    targetValue = dy * (cellHeightPx / 4),
                     label = "duration"
                 )
 
@@ -438,7 +439,7 @@ private fun WeekView(
                         time[GregorianCalendar.SECOND] = 0
                         val beginTime = time.time
                         run {
-                            val minutes = (y + (duration / (cellHeightPx / 4)).roundToInt()) * 15
+                            val minutes = (y + dy) * 15
                             time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
                             time[GregorianCalendar.MINUTE] = minutes % 60
                         }
@@ -466,7 +467,7 @@ private fun WeekView(
                         .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
                         .size(
                             with(density) { (cellWidthPx * widthFraction.value).toDp() },
-                            with(density) { (animatedDuration * scale.value).toDp() },
+                            with(density) { animatedDuration.toDp() },
                         )
                         .then(
                             if (offset == Offset.Zero) Modifier else Modifier.border(
@@ -534,7 +535,7 @@ private fun WeekView(
                     contentAlignment = Alignment.Center,
                 ) {
                     val from = clockCache[y * 15]
-                    val to = clockCache[(y + (duration / (cellHeightPx / 4)).roundToInt()) * 15]
+                    val to = clockCache[(y + dy) * 15]
                     Text("$from\n$to")
                     Box(
                         Modifier
