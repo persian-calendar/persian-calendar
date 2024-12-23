@@ -68,18 +68,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -105,6 +110,7 @@ import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -376,6 +382,8 @@ private fun WeekView(
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
             val cellWidthPx = tableWidthPx / 8
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
+            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+            val directionSign = if (isRtl) -1 else 1
 
             Box(Modifier.verticalScroll(scrollState)) {
                 val clockCache = remember {
@@ -516,19 +524,15 @@ private fun WeekView(
                 setAddAction(addAction)
 
                 val widthFraction = remember { Animatable(defaultWidth) }
+                val radius = with(density) { 4.dp.toPx() }
+                val lineSize = with(density) { 1.dp.toPx() }
+
                 Box(
                     Modifier
                         .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
                         .size(
-                            with(density) { (cellWidthPx * widthFraction.value).toDp() },
+                            with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) { animatedDuration.toDp() },
-                        )
-                        .then(
-                            if (offset == Offset.Zero) Modifier else Modifier.border(
-                                1.dp,
-                                MaterialTheme.colorScheme.outlineVariant,
-                                MaterialTheme.shapes.extraSmall,
-                            )
                         )
                         .clickable(indication = null, interactionSource = null) { addAction() }
                         .pointerInput(Unit) {
@@ -561,7 +565,8 @@ private fun WeekView(
                                         }
 
                                         else -> {
-                                            val newValueX = offsetPosition.x - delta.x
+                                            val newValueX =
+                                                offsetPosition.x + directionSign * delta.x
                                             val newValueY = offsetPosition.y + delta.y / scale.value
                                             offsetPosition = Offset(
                                                 newValueX.coerceIn(tableWidthPx / 8f, maxWidthPx),
@@ -584,40 +589,78 @@ private fun WeekView(
                                     Spring.DampingRatioLowBouncy, Spring.StiffnessLow
                                 ), label = "alpha"
                             ).value
-                        )
-                        .background(MaterialTheme.colorScheme.surface.copy(.5f))
-                        .clip(MaterialTheme.shapes.extraSmall),
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
+                    val circleBorder = MaterialTheme.colorScheme.surface
+                    val background = MaterialTheme.colorScheme.surface.copy(AppBlendAlpha)
+                    val primary = MaterialTheme.colorScheme.primary
+                    if (offset != Offset.Zero) Canvas(
+                        Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxSize(),
+                    ) {
+                        val rectTopLeft = Offset(
+                            x = if (isRtl) this.size.width * (1 - widthFraction.value) else 0f,
+                            y = 0f
+                        )
+                        val rectSize = Size(
+                            width = this.size.width * widthFraction.value,
+                            height = this.size.height - lineSize * 2
+                        )
+                        drawRoundRect(
+                            background,
+                            size = rectSize,
+                            topLeft = rectTopLeft,
+                            cornerRadius = CornerRadius(radius, radius),
+                        )
+                        drawRoundRect(
+                            primary,
+                            topLeft = rectTopLeft,
+                            size = Size(
+                                width = this.size.width * widthFraction.value,
+                                height = this.size.height - lineSize * 2,
+                            ),
+                            style = Stroke(lineSize),
+                            cornerRadius = CornerRadius(radius, radius),
+                        )
+                        val offset1 = Offset(
+                            x = this.center.x - (this.size.width / 2 - radius - lineSize * 2) * directionSign,
+                            y = 0f
+                        )
+                        drawCircle(circleBorder, radius + lineSize * 2, offset1)
+                        drawCircle(primary, radius, offset1)
+                        val offset2 = Offset(
+                            x = this.center.x + (this.size.width * widthFraction.value / 2 - radius - lineSize * 2) * directionSign,
+                            y = this.size.height - lineSize * 2
+                        )
+                        drawCircle(circleBorder, radius + lineSize * 2, offset2)
+                        drawCircle(primary, radius, offset2)
+                    }
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
                     Text("$from\n$to", textAlign = TextAlign.Center)
-                    Box(
-                        Modifier
-                            .align(Alignment.BottomCenter)
-                            .height(4.dp)
-                            .fillMaxWidth()
-                            .background(MaterialTheme.colorScheme.outlineVariant),
-                    )
                 }
 
                 val time = GregorianCalendar().also { it.timeInMillis = now }
                 val dayOfWeek = Jdn(time.toCivilDate()) - weekStart
                 val primary = MaterialTheme.colorScheme.primary
-                val radius = with(density) { 4.dp.toPx() }
-                val lineSize = with(density) { 1.dp.toPx() }
-                if (dayOfWeek in 0..6) Canvas(
-                    Modifier
-                        .offset {
-                            IntOffset(
-                                (cellWidthPx * (dayOfWeek + 1)).roundToInt(),
-                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
-                            )
-                        }
-                        .size(1.dp)
+                if (dayOfWeek in 0..6) Canvas(Modifier
+                    .offset {
+                        IntOffset(
+                            (cellWidthPx * (dayOfWeek + 1)).roundToInt(),
+                            (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                        )
+                    }
+                    .size(1.dp)
                 ) {
                     drawCircle(primary, radius)
-                    drawLine(primary, Offset.Zero, Offset(-cellWidthPx, 0f), lineSize)
+                    drawLine(
+                        color = primary,
+                        start = Offset.Zero,
+                        end = Offset(directionSign * cellWidthPx, 0f),
+                        strokeWidth = lineSize
+                    )
                 }
             }
             ScrollShadow(scrollState, top = true)
