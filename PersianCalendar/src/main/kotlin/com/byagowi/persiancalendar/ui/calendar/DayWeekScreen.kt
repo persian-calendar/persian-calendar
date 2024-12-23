@@ -108,6 +108,7 @@ import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.toCivilDate
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -264,6 +265,7 @@ fun SharedTransitionScope.DayWeekScreen(
                                 addEvent = addEvent,
                                 refreshCalendar = calendarViewModel::refreshCalendar,
                                 refreshToken = refreshToken,
+                                now = calendarViewModel.now.collectAsState().value,
                             )
                         }
                     }
@@ -310,6 +312,9 @@ private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
 
 private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
 
+private fun hoursFractionOfDay(date: GregorianCalendar): Float =
+    date[Calendar.HOUR_OF_DAY] + date[Calendar.MINUTE] / 60f
+
 @Composable
 private fun WeekView(
     setAddAction: (() -> Unit) -> Unit,
@@ -319,6 +324,7 @@ private fun WeekView(
     addEvent: (AddEventData) -> Unit,
     refreshCalendar: () -> Unit,
     refreshToken: Int,
+    now: Long,
 ) {
     val weekStart = selectedDay - applyWeekStartOffsetToWeekDay(selectedDay.weekDay)
     val scale = remember { Animatable(1f) }
@@ -431,10 +437,8 @@ private fun WeekView(
                 val context = LocalContext.current
                 events.mapIndexed { i, it ->
                     it.map { event ->
-                        val start = event.startTime[Calendar.HOUR_OF_DAY] +
-                                event.startTime[Calendar.MINUTE] / 60f
-                        val end = event.endTime[Calendar.HOUR_OF_DAY] +
-                                event.endTime[Calendar.MINUTE] / 60f
+                        val start = hoursFractionOfDay(event.startTime)
+                        val end = hoursFractionOfDay(event.endTime)
                         val color = eventColor(event)
                         Text(
                             " " + event.title,
@@ -580,7 +584,7 @@ private fun WeekView(
                                 ), label = "alpha"
                             ).value
                         )
-                        .background(MaterialTheme.colorScheme.surface)
+                        .background(MaterialTheme.colorScheme.surface.copy(.5f))
                         .clip(MaterialTheme.shapes.extraSmall),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -595,6 +599,19 @@ private fun WeekView(
                             .background(MaterialTheme.colorScheme.outlineVariant),
                     )
                 }
+
+                val time = GregorianCalendar().also { it.timeInMillis = now }
+                val dayOfWeek = Jdn(time.toCivilDate()) - weekStart
+                if (dayOfWeek in 0..7) HorizontalDivider(
+                    Modifier
+                        .offset {
+                            IntOffset(
+                                (cellWidthPx * (dayOfWeek + 1)).roundToInt(),
+                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                            )
+                        }
+                        .width(with(density) { cellWidthPx.toDp() })
+                )
             }
             ScrollShadow(scrollState, top = true)
             ScrollShadow(scrollState, top = false)
