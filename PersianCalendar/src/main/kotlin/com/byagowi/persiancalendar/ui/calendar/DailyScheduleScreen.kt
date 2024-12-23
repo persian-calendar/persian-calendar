@@ -355,6 +355,7 @@ private fun WeekView(
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
             val cellWidthPx = tableWidthPx / 8
+            var duration by remember { mutableFloatStateOf(cellHeightPx) }
 
             Box(Modifier.verticalScroll(scrollState)) {
                 val clockCache = remember {
@@ -384,6 +385,7 @@ private fun WeekView(
                                                             cellWidthPx * column.toFloat(),
                                                             cellHeightPx * row / scale.value
                                                         )
+                                                        duration = cellHeightPx / scale.value
                                                         setSelectedDay(weekStart + column - 1)
                                                     },
                                             ),
@@ -415,7 +417,6 @@ private fun WeekView(
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
                     label = "offset"
                 ).value
-                var duration by remember { mutableFloatStateOf(cellHeightPx) }
                 val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
