@@ -327,7 +327,7 @@ fun SharedTransitionScope.CalendarScreen(
                                                         }
                                                     }
                                                     successful = true
-                                                } else if (wasAtTop) {
+                                                } else if (wasAtTop && dragAmount > 0) {
                                                     viewModel.openYearView()
                                                     successful = true
                                                 }
