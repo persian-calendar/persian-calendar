@@ -195,7 +195,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
-    navigateToDailySchedule: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
@@ -323,7 +323,15 @@ fun SharedTransitionScope.CalendarScreen(
                                                     when (preferredSwipeUpAction.value) {
                                                         SwipeUpAction.Schedule -> navigateToSchedule()
                                                         SwipeUpAction.DailySchedule -> {
-                                                            navigateToDailySchedule(viewModel.selectedDay.value)
+                                                            navigateToDailySchedule(
+                                                                viewModel.selectedDay.value, false
+                                                            )
+                                                        }
+
+                                                        SwipeUpAction.WeekView -> {
+                                                            navigateToDailySchedule(
+                                                                viewModel.selectedDay.value, true
+                                                            )
                                                         }
                                                     }
                                                     successful = true
@@ -741,7 +749,7 @@ private fun SharedTransitionScope.Toolbar(
     addEvent: (AddEventData) -> Unit,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
-    navigateToDailySchedule: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -892,7 +900,7 @@ private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     addEvent: (AddEventData) -> Unit,
     navigateToSchedule: () -> Unit,
-    navigateToDailySchedule: (Jdn) -> Unit,
+    navigateToDailySchedule: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -939,8 +947,13 @@ private fun SharedTransitionScope.Menu(
 
         val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
         listOf(
-            SwipeUpAction.DailySchedule to { navigateToDailySchedule(viewModel.selectedDay.value) },
             SwipeUpAction.Schedule to { navigateToSchedule() },
+            SwipeUpAction.DailySchedule to {
+                navigateToDailySchedule(viewModel.selectedDay.value, false)
+            },
+            SwipeUpAction.WeekView to {
+                navigateToDailySchedule(viewModel.selectedDay.value, true)
+            },
         ).forEach { (item, action) ->
             AppDropdownMenuItem(
                 text = { Text(stringResource(item.titleId)) },

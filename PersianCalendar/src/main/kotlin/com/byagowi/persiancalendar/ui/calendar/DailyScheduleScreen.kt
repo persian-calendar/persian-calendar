@@ -124,6 +124,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
     initialSelectedDay: Jdn,
     animatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
+    isInitiallyWeek: Boolean,
     navigateToSchedule: (Jdn) -> Unit,
 ) {
     var selectedDay by remember { mutableStateOf(initialSelectedDay) }
@@ -170,7 +171,7 @@ fun SharedTransitionScope.DailyScheduleScreen(
         if (isFirstTime) isFirstTime = false else if (selectedDay == today - 1) todayButtonAction()
     }
 
-    var isWeekView by rememberSaveable { mutableStateOf(false) }
+    var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
     var weekViewAddAction by remember { mutableStateOf({}) }
 
     Scaffold(

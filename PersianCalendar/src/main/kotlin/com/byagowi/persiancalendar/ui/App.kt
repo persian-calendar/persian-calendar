@@ -145,6 +145,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
     }
 
     val selectedDayKey = "SELECTED_DAY"
+    val isWeekKey = "IS_WEEK"
     val tabKey = "TAB"
     val settingsKey = "SETTINGS"
     val daysOffsetKey = "DAYS_OFFSET"
@@ -213,10 +214,13 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                             }
                         },
                         navigateToSchedule = { navController.navigate(scheduleRoute) },
-                        navigateToDailySchedule = { jdn ->
+                        navigateToDailySchedule = { jdn, isWeek ->
                             navController.graph.findNode(dailyScheduleRoute)?.let { dst ->
                                 navController.navigate(
-                                    dst.id, bundleOf(selectedDayKey to jdn.value)
+                                    dst.id, bundleOf(
+                                        selectedDayKey to jdn.value,
+                                        isWeekKey to isWeek
+                                    )
                                 )
                             }
                         },
@@ -258,8 +262,9 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     val viewModel = if (previousRoute == calendarRoute) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
-                    val jdn =
-                        backStackEntry.arguments?.getLong(selectedDayKey, 0)
+                    val arguments = backStackEntry.arguments
+                    val isWeek = arguments?.getBoolean(isWeekKey) ?: false
+                    val jdn = arguments?.getLong(selectedDayKey, 0)
                             ?.takeIf { it != 0L }
                             ?.let {
                                 Jdn(it)
@@ -268,6 +273,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         calendarViewModel = viewModel,
                         initialSelectedDay = jdn,
                         animatedContentScope = this,
+                        isInitiallyWeek = isWeek,
                         navigateUp = { navigateUp(dailyScheduleRoute) },
                         navigateToSchedule = { day: Jdn ->
                             navController.graph.findNode(scheduleRoute)?.let { destination ->
