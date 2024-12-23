@@ -582,20 +582,19 @@ private fun WeekView(
                                 }
                                 coroutineScope.launch { widthFraction.animateTo(defaultWidth) }
                             }
-                        }
-                        .alpha(
-                            animateFloatAsState(
-                                if (offset == Offset.Zero) 0f else 1f, animationSpec = spring(
-                                    Spring.DampingRatioLowBouncy, Spring.StiffnessLow
-                                ), label = "alpha"
-                            ).value
-                        ),
+                        },
                     contentAlignment = Alignment.Center,
-                ) {
-                    val circleBorder = MaterialTheme.colorScheme.surface
-                    val background = MaterialTheme.colorScheme.surface.copy(AppBlendAlpha)
-                    val primary = MaterialTheme.colorScheme.primary
-                    if (offset != Offset.Zero) Canvas(
+                ) addEventRectangle@{
+                    val alpha by animateFloatAsState(
+                        if (offset == Offset.Zero) 0f else 1f, animationSpec = spring(
+                            Spring.DampingRatioNoBouncy, Spring.StiffnessLow
+                        ), label = "alpha"
+                    )
+                    if (offset == Offset.Zero) return@addEventRectangle
+                    val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
+                    val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
+                    val primary = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
+                    Canvas(
                         Modifier
                             .align(Alignment.BottomCenter)
                             .fillMaxSize(),
