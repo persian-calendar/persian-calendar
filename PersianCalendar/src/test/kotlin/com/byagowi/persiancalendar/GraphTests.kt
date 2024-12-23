@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar
 
-import androidx.collection.intListOf
 import com.byagowi.persiancalendar.ui.calendar.Graph
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -42,7 +41,7 @@ class GraphTest {
         g.addEdge(1, 0)
         g.addEdge(2, 1)
         g.addEdge(3, 4)
-        assertEquals(listOf(intListOf(0, 1, 2), intListOf(3, 4)), g.connectedComponents().toList())
+        assertEquals(listOf(listOf(0, 1, 2), listOf(3, 4)), g.connectedComponents().toList())
         assertEquals(listOf(0, 1, 0, 0, 1), g.colors())
     }
 }
