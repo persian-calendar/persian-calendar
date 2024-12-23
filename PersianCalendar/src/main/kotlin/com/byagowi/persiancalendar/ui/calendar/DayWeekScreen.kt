@@ -323,6 +323,31 @@ private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit 
 private fun hoursFractionOfDay(date: GregorianCalendar): Float =
     date[Calendar.HOUR_OF_DAY] + date[Calendar.MINUTE] / 60f
 
+private data class EventDivision(
+    val event: CalendarEvent.DeviceCalendarEvent, val column: Int, val columnsCount: Int
+)
+
+private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<EventDivision> {
+    val graph = Graph(events.size)
+    events.indices.forEach { i ->
+        events.indices.forEach inner@{ j ->
+            if (i == j) return@inner
+            val a = events[i]
+            val b = events[j]
+            if (a.startTime.timeInMillis in (b.startTime.timeInMillis..<b.endTime.timeInMillis)) {
+                graph.addEdge(i, j)
+            }
+        }
+    }
+    val columnsCount = MutableList(events.size) { 0 }
+    val colors = graph.colors()
+    graph.connectedComponents().forEach { group ->
+        val max = group.maxOf { colors[it] } + 1
+        group.forEach { columnsCount[it] = max }
+    }
+    return events.indices.map { EventDivision(events[it], colors[it], columnsCount[it]) }
+}
+
 @Composable
 private fun WeekView(
     setAddAction: (() -> Unit) -> Unit,
@@ -342,8 +367,9 @@ private fun WeekView(
     val initial = remember(density) { with(density) { (cellHeight * 7 - 16.dp).roundToPx() } }
     val scrollState = rememberScrollState(initial)
     val events = (weekStart..weekStart + 7).toList().map { jdn ->
-        readEvents(jdn, refreshToken)
-            .filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
+        addDivisions(readEvents(
+            jdn, refreshToken
+        ).filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null })
     }
 
     Column(
@@ -446,10 +472,11 @@ private fun WeekView(
                 }
                 val context = LocalContext.current
                 events.mapIndexed { i, it ->
-                    it.map { event ->
+                    it.map { (event, column, columnsCount) ->
                         val start = hoursFractionOfDay(event.startTime)
                         val end = hoursFractionOfDay(event.endTime)
                         val color = eventColor(event)
+                        val widthSpace = cellWidthPx * (1 - defaultWidth)
                         Text(
                             " " + event.title,
                             color = eventTextColor(color),
@@ -458,12 +485,12 @@ private fun WeekView(
                             modifier = Modifier
                                 .offset {
                                     IntOffset(
-                                        (cellWidthPx * (i + 1)).roundToInt(),
+                                        (cellWidthPx * (i + 1) + cellWidthPx / columnsCount * column).roundToInt(),
                                         (start * cellHeightPx).roundToInt()
                                     )
                                 }
                                 .requiredSize(
-                                    with(density) { (cellWidthPx * defaultWidth).toDp() },
+                                    with(density) { (cellWidthPx / columnsCount - widthSpace).toDp() },
                                     with(density) { ((end - start) * cellHeightPx).toDp() - 3.dp },
                                 )
                                 .clickable { launcher.viewEvent(event, context) }
