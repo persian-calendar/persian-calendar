@@ -459,7 +459,8 @@ private fun WeekView(
                     }
                 }
 
-                val widthFraction = remember { Animatable(1f) }
+                val defaultWidth = .95f
+                val widthFraction = remember { Animatable(defaultWidth) }
                 Box(
                     Modifier
                         .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
@@ -477,7 +478,7 @@ private fun WeekView(
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
-                                coroutineScope.launch { widthFraction.animateTo(.95f) }
+                                coroutineScope.launch { widthFraction.animateTo(1f) }
                                 var action = Float.NaN
                                 drag(id) {
                                     val delta = it.positionChange()
@@ -518,7 +519,7 @@ private fun WeekView(
                                     }
                                     it.consume()
                                 }
-                                coroutineScope.launch { widthFraction.animateTo(1f) }
+                                coroutineScope.launch { widthFraction.animateTo(defaultWidth) }
                             }
                         }
                         .alpha(
