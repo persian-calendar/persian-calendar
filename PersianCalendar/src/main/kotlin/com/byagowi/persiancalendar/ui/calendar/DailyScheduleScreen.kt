@@ -56,7 +56,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -70,7 +69,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -337,7 +335,6 @@ private fun WeekView(
                 }
             },
     ) {
-        var tableWidthPx by remember { mutableIntStateOf(0) }
 //        Row(
 //            Modifier
 //                .fillMaxWidth()
@@ -352,7 +349,8 @@ private fun WeekView(
 //                ) { Text(it.toString()) }
 //            }
 //        }
-        Box(Modifier.onSizeChanged { tableWidthPx = it.width }) {
+        BoxWithConstraints {
+            val tableWidthPx = with(density) { this@BoxWithConstraints.maxWidth.toPx() }
             val maxWidthPx = tableWidthPx * 7f / 8
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
@@ -408,12 +406,12 @@ private fun WeekView(
                     Spacer(Modifier.height(bottomPadding))
                 }
 
-                val x = if (cellWidthPx == 0) 0 else (offsetPosition.x / cellWidthPx).roundToInt()
+                val x = (offsetPosition.x / cellWidthPx).roundToInt()
                 val ySteps = (cellHeightPx / 4).roundToInt()
                 val y = (offsetPosition.y * scale.value / ySteps).roundToInt()
-                val offset = if (cellWidthPx == 0 || offsetPosition == Offset.Zero) Offset.Zero
+                val offset = if (offsetPosition == Offset.Zero) Offset.Zero
                 else animateOffsetAsState(
-                    Offset(x * cellWidthPx.toFloat(), y * ySteps.toFloat()),
+                    Offset(x * cellWidthPx, y * ySteps.toFloat()),
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
                     label = "offset"
                 ).value
