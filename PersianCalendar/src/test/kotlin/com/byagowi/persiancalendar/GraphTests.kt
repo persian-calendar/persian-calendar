@@ -6,8 +6,9 @@ import kotlin.test.assertEquals
 
 class GraphTest {
     @Test
-    fun colors0() {
+    fun empty() {
         val g = Graph(0)
+        assertEquals(listOf(), g.connectedComponents().toList())
         assertEquals(listOf(), g.colors())
     }
 

@@ -29,7 +29,7 @@ class Graph(private val verticesCount: Int) {
         if (verticesCount == 0) return emptyList()
         val result = MutableList(verticesCount) { -1 }
         result[0] = 0
-        val available = BooleanArray(verticesCount) { false }
+        val available = BooleanArray(verticesCount)
         (1..<verticesCount).forEach { x ->
             adjacency[x].forEach { if (result[it] != -1) available[result[it]] = true }
             result[x] = (0..<verticesCount).firstOrNull { !available[it] } ?: verticesCount
