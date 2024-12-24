@@ -268,6 +268,9 @@ fun SharedTransitionScope.DayWeekScreen(
                                 setAddAction = {
                                     if (weekPagerState.currentPage == page) weekViewAddAction = it
                                 },
+                                weekStart = (today + (page - weeksLimit / 2) * 7).let {
+                                    it - applyWeekStartOffsetToWeekDay(it.weekDay)
+                                },
                                 selectedDay = selectedDay,
                                 setSelectedDay = { selectedDay = it },
                                 addEvent = addEvent,
@@ -351,6 +354,7 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
 @Composable
 private fun WeekView(
     setAddAction: (() -> Unit) -> Unit,
+    weekStart: Jdn,
     selectedDay: Jdn,
     setSelectedDay: (Jdn) -> Unit,
     bottomPadding: Dp,
@@ -359,7 +363,6 @@ private fun WeekView(
     refreshToken: Int,
     now: Long,
 ) {
-    val weekStart = selectedDay - applyWeekStartOffsetToWeekDay(selectedDay.weekDay)
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
     val coroutineScope = rememberCoroutineScope()
