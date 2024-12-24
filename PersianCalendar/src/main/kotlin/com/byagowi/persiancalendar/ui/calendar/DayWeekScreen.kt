@@ -344,7 +344,8 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
     }
     val columnsCount = MutableList(events.size) { 0 }
     val colors = graph.colors()
-    graph.connectedComponents().forEach { group ->
+    graph.connectedComponents().forEach { g ->
+        val group = g.toList()
         val max = group.maxOf { colors[it] } + 1
         group.forEach { columnsCount[it] = max }
     }

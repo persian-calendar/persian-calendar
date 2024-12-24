@@ -13,24 +13,18 @@ class Graph(private val verticesCount: Int) {
     }
 
     // https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/
-    fun connectedComponents() = sequence<List<Int>> {
+    fun connectedComponents() = sequence {
         val visited = BooleanArray(verticesCount)
-        (0..<verticesCount).forEach {
-            if (!visited[it]) {
-                val group = mutableListOf<Int>()
-                dfs(it, visited, group)
-                yield(group)
-            }
-        }
+        (0..<verticesCount).forEach { if (!visited[it]) yield(sequence { dfs(it, visited) }) }
     }
 
-    private fun dfs(v: Int, visited: BooleanArray, group: MutableList<Int>) {
+    private suspend fun SequenceScope<Int>.dfs(v: Int, visited: BooleanArray) {
         visited[v] = true
-        group.add(v)
-        adjacency[v].forEach { if (!visited[it]) dfs(it, visited, group) }
+        yield(v)
+        adjacency[v].forEach { if (!visited[it]) dfs(it, visited) }
     }
 
-    // https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/#
+    // https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
     fun colors(): List<Int> {
         if (verticesCount == 0) return emptyList()
         val result = MutableList(verticesCount) { -1 }
