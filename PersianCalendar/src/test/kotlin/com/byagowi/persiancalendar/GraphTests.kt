@@ -42,10 +42,7 @@ class GraphTest {
         g.addEdge(1, 0)
         g.addEdge(2, 1)
         g.addEdge(3, 4)
-        assertEquals(
-            listOf(listOf(0, 1, 2), listOf(3, 4)),
-            g.connectedComponents().map { it.toList() }.toList()
-        )
+        assertEquals(listOf(listOf(0, 1, 2), listOf(3, 4)), g.connectedComponents().toList())
         assertEquals(listOf(0, 1, 0, 0, 1), g.colors())
     }
 }

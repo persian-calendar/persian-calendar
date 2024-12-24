@@ -13,10 +13,10 @@ class Graph(verticesCount: Int) {
     }
 
     // https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/
-    fun connectedComponents() = sequence {
+    fun connectedComponents(): Sequence<List<Int>> = sequence {
         val visited = BooleanArray(adjacency.size)
         adjacency.indices.forEach { if (!visited[it]) yield(sequence { dfs(it, visited) }) }
-    }
+    }.map { it.toList() }
 
     private suspend fun SequenceScope<Int>.dfs(v: Int, visited: BooleanArray) {
         visited[v] = true
