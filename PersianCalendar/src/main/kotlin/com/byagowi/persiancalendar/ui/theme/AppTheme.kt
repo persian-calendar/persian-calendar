@@ -136,7 +136,13 @@ private fun appColorScheme(): ColorScheme {
         if (isDark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else if (isDark) DefaultDarkColorScheme else DefaultLightColorScheme
     // Handle black theme which is useful for OLED screens
-    if (theme == Theme.BLACK) colorScheme = colorScheme.copy(surface = Color.Black)
+    if (theme == Theme.BLACK) colorScheme = colorScheme.copy(
+        surface = Color.Black,
+        surfaceContainerLow = colorScheme.surfaceContainerLowest,
+        surfaceContainer = colorScheme.surfaceContainerLowest,
+        surfaceContainerHigh = colorScheme.surfaceContainerLow,
+        surfaceContainerHighest = colorScheme.surfaceContainer,
+    )
 
     val backgroundColor = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_600))
