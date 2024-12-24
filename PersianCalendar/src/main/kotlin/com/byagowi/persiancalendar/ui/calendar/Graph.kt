@@ -12,6 +12,7 @@ class Graph(verticesCount: Int) {
         adjacency[y].add(x)
     }
 
+    // DFS isn't the most optimized implementation but should serve us well for our use
     // https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/
     fun connectedComponents(): Sequence<List<Int>> = sequence {
         val visited = BooleanArray(adjacency.size)
@@ -24,6 +25,8 @@ class Graph(verticesCount: Int) {
         adjacency[v].forEach { if (!visited[it]) dfs(it, visited) }
     }
 
+    // Greedy coloring isn't going to get us the most optimized coloring but the problem is
+    // considered being NP-Complete so even a approximation should be enough for the use.
     // https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
     fun colors(): List<Int> {
         if (adjacency.isEmpty()) return emptyList()
