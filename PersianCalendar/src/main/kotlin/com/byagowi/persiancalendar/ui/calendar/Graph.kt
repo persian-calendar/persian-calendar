@@ -26,7 +26,7 @@ class Graph(verticesCount: Int) {
     }
 
     // Greedy coloring isn't going to get us the most optimized coloring but the problem is
-    // considered being NP-Complete so even a approximation should be enough for the use.
+    // considered being NP-Complete so even an approximation should be enough for the use.
     // https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
     fun colors(): List<Int> {
         if (adjacency.isEmpty()) return emptyList()
