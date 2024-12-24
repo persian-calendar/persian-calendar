@@ -8,7 +8,7 @@ class GraphTest {
     @Test
     fun empty() {
         val g = Graph(0)
-        assertEquals(listOf(), g.connectedComponents().toList())
+        assertEquals(listOf(), g.connectedComponents())
         assertEquals(listOf(), g.colors())
     }
 
@@ -42,7 +42,7 @@ class GraphTest {
         g.addEdge(1, 0)
         g.addEdge(2, 1)
         g.addEdge(3, 4)
-        assertEquals(listOf(listOf(0, 1, 2), listOf(3, 4)), g.connectedComponents().toList())
+        assertEquals(listOf(listOf(0, 1, 2), listOf(3, 4)), g.connectedComponents())
         assertEquals(listOf(0, 1, 0, 0, 1), g.colors())
     }
 }
