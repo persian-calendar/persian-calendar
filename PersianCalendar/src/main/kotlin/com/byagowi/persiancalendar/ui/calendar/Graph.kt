@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 // These aren't the most optimized implementations, probably going to be replaced with
-// better one in the future though they should be enough for our use
+// better ones in the future though they should be enough for our use
 class Graph(verticesCount: Int) {
     private val adjacency = List(verticesCount) { mutableSetOf<Int>() }
 
