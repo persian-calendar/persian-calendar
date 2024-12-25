@@ -24,7 +24,7 @@ data class Clock(val hours: Int, val minutes: Int) {
 
     fun toTimeZoneOffsetFormat(): String {
         val sign = if (hours < 0) "-" else "+"
-        return "%s%02d:%02d".format(Locale.ENGLISH, sign, abs(hours), minutes)
+        return "%s%02d:%02d".format(Locale.ENGLISH, sign, abs(hours), abs(minutes))
     }
 
     fun toFormattedString(forcedIn12: Boolean = false, printAmPm: Boolean = true): String {
