@@ -92,7 +92,9 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
 import io.github.persiancalendar.calculator.eval
 import java.util.GregorianCalendar
+import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -542,9 +544,10 @@ private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, 
                     else viewModel.changeSecondTimeZone(zones[it])
                 },
                 label = {
-                    val offset = Clock.fromMinutesCount(
-                        minutes = zones[it].rawOffset / ONE_MINUTE_IN_MILLIS.toInt()
-                    ).toTimeZoneOffsetFormat()
+                    val minutes = zones[it].rawOffset / ONE_MINUTE_IN_MILLIS.toInt()
+                    val (h, m) = Clock.fromMinutesCount(abs(minutes))
+                    val sign = if (minutes < 0) "-" else "+"
+                    val offset = "%s%02d:%02d".format(Locale.ENGLISH, sign, h, m)
                     val id = zones[it].id.replace("_", " ").replace(Regex(".*/"), "")
                     "$id ($offset)"
                 },

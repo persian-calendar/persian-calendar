@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
-import kotlin.math.abs
 
 data class Clock(val hours: Int, val minutes: Int) {
     constructor(date: GregorianCalendar) :
@@ -21,11 +20,6 @@ data class Clock(val hours: Int, val minutes: Int) {
 
     fun toBasicFormatString(hours: Int = this.hours): String =
         formatNumber("%d:%02d".format(Locale.ENGLISH, hours, minutes))
-
-    fun toTimeZoneOffsetFormat(): String {
-        val sign = if (hours < 0) "-" else "+"
-        return "%s%02d:%02d".format(Locale.ENGLISH, sign, abs(hours), abs(minutes))
-    }
 
     fun toFormattedString(forcedIn12: Boolean = false, printAmPm: Boolean = true): String {
         if (clockIn24 && !forcedIn12) return toBasicFormatString()
