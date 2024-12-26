@@ -939,6 +939,15 @@ private fun SharedTransitionScope.Menu(
             viewModel.setShiftWorkViewModel(dialogViewModel)
         }
 
+        val coordinates by coordinates.collectAsState()
+        if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
+            closeMenu()
+            val selectedMonthOffset = viewModel.selectedMonthOffset.value
+            val selectedMonth =
+                mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
+            context.openHtmlInBrowser(prayTimeHtmlReport(context.resources, selectedMonth))
+        }
+
         HorizontalDivider()
 
         val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
@@ -976,15 +985,6 @@ private fun SharedTransitionScope.Menu(
                 Icon(Icons.TwoTone.SwipeDown, null)
             },
         ) { closeMenu(); viewModel.openYearView() }
-
-        val coordinates by coordinates.collectAsState()
-        if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
-            closeMenu()
-            val selectedMonthOffset = viewModel.selectedMonthOffset.value
-            val selectedMonth =
-                mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-            context.openHtmlInBrowser(prayTimeHtmlReport(context.resources, selectedMonth))
-        }
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
         if (isTalkBackEnabled || enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
