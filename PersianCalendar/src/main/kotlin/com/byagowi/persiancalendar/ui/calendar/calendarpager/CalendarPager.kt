@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
@@ -87,6 +88,7 @@ fun SharedTransitionScope.CalendarPager(
                     refreshToken = refreshToken,
                     selectedDay = selectedDay,
                     setSelectedDay = { viewModel.changeSelectedDay(it) },
+                    isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                     // onWeekClick = navigateToDayWeek,
                 )
             }

@@ -10,6 +10,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -35,6 +37,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -46,7 +49,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -80,13 +82,12 @@ fun SharedTransitionScope.Month(
     setSelectedDay: (Jdn) -> Unit,
     onWeekClick: ((Jdn) -> Unit)? = null,
     onlyWeek: Int? = null,
+    isShowWeekOfYearEnabled: Boolean,
 ) {
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
     val previousMonthLength =
         if (onlyWeek == null) null else (monthStartJdn - 1).inCalendar(mainCalendar).dayOfMonth
-
-    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled
 
     val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
@@ -152,6 +153,25 @@ fun SharedTransitionScope.Month(
         cellWidthPx, cellHeightPx
     ) * 1 / 40
 
+    @Composable
+    fun WeekOfYear(week: Int) {
+        val weekNumber = formatNumber(week)
+        val description = stringResource(R.string.nth_week_of_year, weekNumber)
+        Text(
+            weekNumber,
+            fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
+            modifier = Modifier
+                .alpha(AppBlendAlpha)
+                .semantics { this.contentDescription = description },
+        )
+    }
+    if (onlyWeek != null) Box(
+        Modifier
+            .offset(-pagerArrowSizeAndPadding.dp * .625f, height / 2)
+            .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, height / 2)),
+        contentAlignment = Alignment.Center,
+    ) { WeekOfYear(onlyWeek) }
+
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     FixedSizeHorizontalGrid(
         columnsCount = columnsCount,
@@ -191,18 +211,7 @@ fun SharedTransitionScope.Month(
                             // Select first non weekend day of the week
                             else day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
                         )
-                    } else Modifier
-                ) {
-                    val weekNumber = formatNumber(monthStartWeekOfYear + dayOffset / 7)
-                    val description = stringResource(R.string.nth_week_of_year, weekNumber)
-                    Text(
-                        weekNumber,
-                        fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
-                        modifier = Modifier
-                            .alpha(AppBlendAlpha)
-                            .semantics { this.contentDescription = description },
-                    )
-                }
+                    } else Modifier) { WeekOfYear(monthStartWeekOfYear + dayOffset / 7) }
             }
             val isToday = day == today
             val isBeforeMonth = dayOffset < startingWeekDay
