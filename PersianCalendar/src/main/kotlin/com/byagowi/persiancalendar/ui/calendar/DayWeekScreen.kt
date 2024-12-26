@@ -84,7 +84,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
@@ -187,15 +186,15 @@ fun SharedTransitionScope.DayWeekScreen(
     }
 
     var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
-    var weekViewAddAction by remember { mutableStateOf({}) }
+    var addAction by remember { mutableStateOf({}) }
 
     Scaffold(
         containerColor = Color.Transparent,
         floatingActionButton = {
             ShrinkingFloatingActionButton(
                 modifier = Modifier.padding(end = 8.dp),
-                isVisible = isWeekView,
-                action = weekViewAddAction,
+                isVisible = true,
+                action = addAction,
                 icon = Icons.Default.Add,
                 title = stringResource(R.string.add_event),
                 noTitle = true,
@@ -274,18 +273,20 @@ fun SharedTransitionScope.DayWeekScreen(
                                 animatedContentScope = animatedContentScope,
                                 disableSharedContent = !isInitialWeek,
                             ) {
-                                WeekView(
+                                DaysView(
                                     bottomPadding = bottomPadding,
                                     setAddAction = {
-                                        if (weekPagerState.currentPage == page) weekViewAddAction =
-                                            it
+                                        if (weekPagerState.currentPage == page) {
+                                            addAction = it
+                                        }
                                     },
-                                    weekStart = weekStart,
+                                    startingDay = weekStart,
                                     selectedDay = selectedDay,
                                     setSelectedDay = { selectedDay = it },
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
                                     refreshToken = refreshToken,
+                                    days = 7,
                                     now = calendarViewModel.now.collectAsState().value,
                                 )
                             }
@@ -310,15 +311,32 @@ fun SharedTransitionScope.DayWeekScreen(
                                 }
                             }
 
-                            DayView(
-                                selectedDay = today + (page - daysLimit / 2),
-                                refreshToken = refreshToken,
-                                calendarViewModel = calendarViewModel,
-                                animatedContentScope = animatedContentScope,
+//                            DayView(
+//                                selectedDay = today + (page - daysLimit / 2),
+//                                refreshToken = refreshToken,
+//                                calendarViewModel = calendarViewModel,
+//                                animatedContentScope = animatedContentScope,
+//                                addEvent = addEvent,
+//                                bottomPadding = bottomPadding.coerceAtLeast(16.dp),
+//                                navigateUp = navigateUp,
+//                                navigateToSchedule = navigateToSchedule,
+//                            )
+                            val startingDay = today + (page - daysLimit / 2)
+                            DaysView(
+                                bottomPadding = bottomPadding,
+                                setAddAction = {
+                                    if (dayPagerState.currentPage == page) {
+                                        addAction = it
+                                    }
+                                },
+                                startingDay = startingDay,
+                                selectedDay = selectedDay,
+                                setSelectedDay = { selectedDay = it },
                                 addEvent = addEvent,
-                                bottomPadding = bottomPadding.coerceAtLeast(16.dp),
-                                navigateUp = navigateUp,
-                                navigateToSchedule = navigateToSchedule,
+                                refreshCalendar = calendarViewModel::refreshCalendar,
+                                refreshToken = refreshToken,
+                                days = 1,
+                                now = calendarViewModel.now.collectAsState().value,
                             )
                         }
                     }
@@ -365,9 +383,9 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
 }
 
 @Composable
-private fun WeekView(
+private fun DaysView(
     setAddAction: (() -> Unit) -> Unit,
-    weekStart: Jdn,
+    startingDay: Jdn,
     selectedDay: Jdn,
     setSelectedDay: (Jdn) -> Unit,
     bottomPadding: Dp,
@@ -375,13 +393,15 @@ private fun WeekView(
     refreshCalendar: () -> Unit,
     refreshToken: Int,
     now: Long,
+    days: Int,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
     val scrollState = rememberScrollState(with(density) { (cellHeight * 7 - 16.dp).roundToPx() })
-    val events = (weekStart..weekStart + 6).toList().map { jdn -> readEvents(jdn, refreshToken) }
+    val events = (startingDay..(startingDay + days - 1)).toList()
+        .map { jdn -> readEvents(jdn, refreshToken) }
 //    val eventsWithoutTime = events.map { dayEvents ->
 //        dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent }
 //    }
@@ -422,10 +442,11 @@ private fun WeekView(
 //        }
         BoxWithConstraints {
             val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
-            val tableWidth = (this@BoxWithConstraints.maxWidth - pagerArrowSizeAndPadding.dp * 2)
+            val tableWidth = (this@BoxWithConstraints.maxWidth
+                    - pagerArrowSizeAndPadding.dp * (if (days == 7) 2 else 1))
             val tableWidthPx = with(density) { tableWidth.toPx() }
-            val cellWidth = tableWidth / 7
-            val cellWidthPx = tableWidthPx / 7
+            val cellWidth = tableWidth / days
+            val cellWidthPx = tableWidthPx / days
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
@@ -445,18 +466,21 @@ private fun WeekView(
                             .fillMaxWidth()
                             .height(cellHeight * 24 + bottomPadding),
                     ) {
-                        (0..7).forEach {
-                            drawLine(
-                                outlineColor,
-                                Offset(firstColumnPx + cellWidthPx * it, 0f),
-                                Offset(firstColumnPx + cellWidthPx * it, this.size.height),
-                            )
+                        (0..days).forEach { i ->
+                            val x = (firstColumnPx + cellWidthPx * i).let {
+                                if (isRtl) this.size.width - it else it
+                            }
+                            drawLine(outlineColor, Offset(x, 0f), Offset(x, this.size.height))
+                        }
+                        val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
+                        val x2 = (firstColumnPx + cellWidthPx * days).let {
+                            if (isRtl) this.size.width - it else it
                         }
                         (1..23).forEach {
                             drawLine(
                                 outlineColor,
-                                Offset(firstColumnPx, cellHeightPx * it),
-                                Offset(firstColumnPx + cellWidthPx * 7, cellHeightPx * it),
+                                Offset(x1, cellHeightPx * it),
+                                Offset(x2, cellHeightPx * it),
                             )
                         }
                     }
@@ -467,7 +491,7 @@ private fun WeekView(
                                 repeat(24) { row ->
                                     Box(
                                         when (column) {
-                                            0, 8 -> Modifier
+                                            0, days + 1 -> Modifier
                                             else -> Modifier.clickable(
                                                 indication = null,
                                                 interactionSource = null,
@@ -477,10 +501,10 @@ private fun WeekView(
                                                     cellHeightPx * row / scale.value
                                                 )
                                                 duration = cellHeightPx / scale.value
-                                                setSelectedDay(weekStart + column - 1)
+                                                setSelectedDay(startingDay + column - 1)
                                             }
                                         }.size(
-                                            if (column == 0 || column == 8) pagerArrowSizeAndPadding.dp
+                                            if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
                                             else cellWidth,
                                             if (column == 0 && row == 23) 0.dp else cellHeight,
                                         ),
@@ -554,7 +578,7 @@ private fun WeekView(
                 val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
                     if (offsetPosition == Offset.Zero) offsetPosition = Offset(
-                        cellWidthPx * applyWeekStartOffsetToWeekDay(selectedDay.weekDay),
+                        cellWidthPx * (selectedDay - startingDay),
                         ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
                     ) else {
                         val time = selectedDay.toGregorianCalendar()
@@ -653,7 +677,7 @@ private fun WeekView(
 
                                             val effectiveColumn =
                                                 (offsetPosition.x / cellWidthPx).roundToInt()
-                                            setSelectedDay(weekStart + effectiveColumn)
+                                            setSelectedDay(startingDay + effectiveColumn)
                                         }
                                     }
                                     it.consume()
@@ -720,16 +744,17 @@ private fun WeekView(
                 }
 
                 val time = GregorianCalendar().also { it.timeInMillis = now }
-                val dayOfWeek = Jdn(time.toCivilDate()) - weekStart
+                val offsetDay = Jdn(time.toCivilDate()) - startingDay
                 val primary = MaterialTheme.colorScheme.primary
-                if (dayOfWeek in 0..6) Canvas(Modifier
-                    .offset {
-                        IntOffset(
-                            (cellWidthPx * (dayOfWeek + 1)).roundToInt(),
-                            (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
-                        )
-                    }
-                    .size(1.dp)
+                if (offsetDay in 0..<days) Canvas(
+                    Modifier
+                        .offset {
+                            IntOffset(
+                                (cellWidthPx * (offsetDay + 1)).roundToInt(),
+                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                            )
+                        }
+                        .size(1.dp)
                 ) {
                     drawCircle(primary, radius)
                     drawLine(
