@@ -59,7 +59,7 @@ class AthanNotification : Service() {
             if (notificationAthan) (if (athanVibration) 3000 else 3002)
             else (if (athanVibration) 3001 else 3003)
         }
-        lastNotficationId = notificationId
+        AthanActivity.lastNotificationId = notificationId
         val notificationChannelId = notificationId.toString()
 
         val notificationManager = getSystemService<NotificationManager>()
@@ -185,5 +185,3 @@ class AthanNotification : Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 }
-
-var lastNotficationId: Int? = 0

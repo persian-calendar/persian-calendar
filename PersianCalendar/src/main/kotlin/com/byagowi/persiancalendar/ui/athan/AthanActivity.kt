@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.service.AthanNotification
-import com.byagowi.persiancalendar.service.lastNotficationId
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
@@ -87,7 +86,7 @@ class AthanActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         if (intent?.action == CANCEL_ATHAN_NOTIFICATION) {
-            lastNotficationId?.let { getSystemService<NotificationManager>()?.cancel(it) }
+            lastNotificationId?.let { getSystemService<NotificationManager>()?.cancel(it) }
             runCatching {
                 stopService(Intent(this, AthanNotification::class.java))
             }.onFailure(logException)
@@ -183,5 +182,6 @@ class AthanActivity : ComponentActivity() {
 
     companion object {
         const val CANCEL_ATHAN_NOTIFICATION = "CANCEL_ATHAN_NOTIFICATION"
+        var lastNotificationId: Int? = 0
     }
 }
