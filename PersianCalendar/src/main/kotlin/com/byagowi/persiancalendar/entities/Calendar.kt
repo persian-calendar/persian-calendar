@@ -54,7 +54,7 @@ enum class Calendar(
         (Jdn(this, year + 1, 1, 1) - 1).inCalendar(this).month
 
     fun getMonthLength(year: Int, month: Int): Int =
-        Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - Jdn(this, year, month, 1)
+        (Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - 1).inCalendar(this).dayOfMonth
 
     private fun getMonthStartFromMonthsDistance(
         baseYear: Int, baseMonth: Int, monthsDistance: Int
