@@ -366,12 +366,14 @@ private fun WeekView(
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
-    val initial = remember(density) { with(density) { (cellHeight * 7 - 16.dp).roundToPx() } }
-    val scrollState = rememberScrollState(initial)
-    val events = (weekStart..weekStart + 6).toList().map { jdn ->
-        addDivisions(readEvents(
-            jdn, refreshToken
-        ).filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null })
+    val scrollState = rememberScrollState(with(density) { (cellHeight * 7 - 16.dp).roundToPx() })
+    val events = (weekStart..weekStart + 6).toList().map { jdn -> readEvents(jdn, refreshToken) }
+//    val eventsWithoutTime = events.map { dayEvents ->
+//        dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent }
+//    }
+    val eventsWithTime = events.map { dayEvents ->
+        val deviceEvents = dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
+        addDivisions(deviceEvents.filter { it.time != null })
     }
 
     Column(
@@ -491,7 +493,7 @@ private fun WeekView(
                     refreshCalendar()
                 }
                 val context = LocalContext.current
-                events.mapIndexed { i, it ->
+                eventsWithTime.mapIndexed { i, it ->
                     it.map { (event, column, columnsCount) ->
                         val start = hoursFractionOfDay(event.startTime)
                         val end = hoursFractionOfDay(event.endTime)
