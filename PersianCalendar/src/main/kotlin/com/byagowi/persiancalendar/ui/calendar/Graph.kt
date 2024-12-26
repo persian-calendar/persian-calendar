@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-// These aren't the most optimized implementations, probably going to be replaced with
-// better ones in the future though they should be enough for our use
 class Graph(verticesCount: Int) {
     private val adjacency = List(verticesCount) { mutableSetOf<Int>() }
 
@@ -12,31 +10,23 @@ class Graph(verticesCount: Int) {
         adjacency[y].add(x)
     }
 
-    // DFS isn't the most optimized implementation but should serve us well for our use
-    // https://www.geeksforgeeks.org/connected-components-in-an-undirected-graph/
-    fun connectedComponents(): List<List<Int>> = sequence {
-        val visited = BooleanArray(adjacency.size)
-        adjacency.indices.forEach { if (!visited[it]) yield(sequence { dfs(it, visited) }) }
-    }.map { it.toList() }.toList()
-
-    private suspend fun SequenceScope<Int>.dfs(v: Int, visited: BooleanArray) {
-        visited[v] = true
-        yield(v)
-        adjacency[v].forEach { if (!visited[it]) dfs(it, visited) }
+    fun connectedComponents(): List<List<Int>> {
+        val visited = mutableSetOf<Int>()
+        suspend fun SequenceScope<Int>.dfs(vertex: Int): Unit =
+            adjacency[vertex.also { yield(it) }].forEach { if (it !in visited) dfs(it) }
+        return adjacency.indices.mapNotNull {
+            if (it in visited) null else sequence { dfs(it) }.onEach(visited::add).toList()
+        }
     }
 
-    // Greedy coloring isn't going to get us the most optimized coloring but the problem is
-    // considered being NP-Complete so even an approximation should be enough for the use.
-    // https://www.geeksforgeeks.org/graph-coloring-set-2-greedy-algorithm/
-    fun colors(): List<Int> {
-        if (adjacency.isEmpty()) return emptyList()
+    // It's a simple greedy implementation, https://en.wikipedia.org/wiki/Greedy_coloring
+    // readEvents applies a sort by starting point which is suggested for
+    // https://en.wikipedia.org/wiki/Interval_graph
+    fun coloring(): List<Int> {
         val result = MutableList(adjacency.size) { -1 }
-        result[0] = 0
-        val available = BooleanArray(adjacency.size)
-        adjacency.indices.drop(1).forEach { x ->
-            adjacency[x].forEach { if (result[it] != -1) available[result[it]] = true }
-            result[x] = adjacency.indices.firstOrNull { !available[it] } ?: adjacency.size
-            available.fill(false)
+        adjacency.forEachIndexed { i, x ->
+            val used = buildSet { x.forEach { if (result[it] != -1) add(result[it]) } }
+            result[i] = adjacency.indices.firstOrNull { it !in used } ?: 0
         }
         return result
     }
