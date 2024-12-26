@@ -220,7 +220,6 @@ fun SharedTransitionScope.CalendarScreen(
                 if (it) Search(viewModel)
                 else Toolbar(
                     animatedContentScope = animatedContentScope,
-                    addEvent = addEvent,
                     openDrawer = openDrawer,
                     navigateToSchedule = navigateToSchedule,
                     navigateToDayWeek = navigateToDayWeek,
@@ -751,7 +750,6 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
 @Composable
 private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
-    addEvent: (AddEventData) -> Unit,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToDayWeek: (Jdn, Boolean) -> Unit,
@@ -888,7 +886,6 @@ private fun SharedTransitionScope.Toolbar(
             AnimatedVisibility(!isYearView) {
                 Menu(
                     animatedContentScope = animatedContentScope,
-                    addEvent = addEvent,
                     navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
@@ -903,7 +900,6 @@ private fun SharedTransitionScope.Toolbar(
 @Composable
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
-    addEvent: (AddEventData) -> Unit,
     navigateToSchedule: () -> Unit,
     navigateToDayWeek: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
@@ -933,11 +929,6 @@ private fun SharedTransitionScope.Menu(
         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
             closeMenu()
             showDatePickerDialog = true
-        }
-
-        AppDropdownMenuItem({ Text(stringResource(R.string.add_event)) }) {
-            closeMenu()
-            addEvent(AddEventData.fromJdn(viewModel.selectedDay.value))
         }
 
         AppDropdownMenuItem({ Text(stringResource(R.string.shift_work_settings)) }) {
