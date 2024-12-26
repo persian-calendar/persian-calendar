@@ -121,6 +121,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
@@ -131,6 +132,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -147,6 +149,7 @@ import com.byagowi.persiancalendar.ui.calendar.shiftwork.fillViewModelFromGlobal
 import com.byagowi.persiancalendar.ui.calendar.times.TimesTab
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearView
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
@@ -994,6 +997,16 @@ private fun SharedTransitionScope.Menu(
         if (isTalkBackEnabled || enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
 
         HorizontalDivider()
+
+        val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+        AppDropdownMenuCheckableItem(
+            text = stringResource(R.string.week_number),
+            isChecked = isShowWeekOfYearEnabled,
+            setChecked = {
+                context.preferences.edit { putBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, it) }
+                closeMenu()
+            },
+        )
 
         var showSecondaryCalendarSubMenu by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuExpandableItem(

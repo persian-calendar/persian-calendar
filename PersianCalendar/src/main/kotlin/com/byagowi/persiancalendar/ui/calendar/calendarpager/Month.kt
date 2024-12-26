@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
@@ -9,6 +11,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
@@ -157,12 +160,17 @@ fun SharedTransitionScope.Month(
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
 
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-    if (onlyWeek != null && isShowWeekOfYearEnabled) {
-        (0..<daysRowsCount).forEach { row ->
+    (0..<daysRowsCount).forEach { row ->
+        AnimatedVisibility(
+            isShowWeekOfYearEnabled || onlyWeek != null,
+            modifier = Modifier
+                .offset(-pagerArrowSizeAndPadding.dp * .625f, cellHeight * (1 + row))
+                .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, cellHeight)),
+            label = "week number",
+        ) {
             Box(
                 Modifier
-                    .offset(-pagerArrowSizeAndPadding.dp * .625f, cellHeight * (1 + row))
-                    .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, cellHeight))
+                    .fillMaxSize()
                     .then(if (onWeekClick != null) Modifier.clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,

@@ -63,6 +63,7 @@ import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -180,12 +181,14 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         stringResource(R.string.astronomy),
         stringResource(R.string.astronomical_info_summary)
     )
-    SettingsSwitchWithInnerState(
-        PREF_SHOW_WEEK_OF_YEAR_NUMBER,
-        false,
-        stringResource(R.string.week_number),
-        stringResource(R.string.week_number_summary)
-    )
+    run {
+        val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+        SettingsSwitch(
+            PREF_SHOW_WEEK_OF_YEAR_NUMBER, isShowWeekOfYearEnabled,
+            stringResource(R.string.week_number),
+            stringResource(R.string.week_number_summary)
+        )
+    }
     run {
         LaunchedEffect(Unit) {
             val preferences = context.preferences
