@@ -13,7 +13,6 @@ import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -369,7 +368,7 @@ private fun WeekView(
     val density = LocalDensity.current
     val initial = remember(density) { with(density) { (cellHeight * 7 - 16.dp).roundToPx() } }
     val scrollState = rememberScrollState(initial)
-    val events = (weekStart..weekStart + 7).toList().map { jdn ->
+    val events = (weekStart..weekStart + 6).toList().map { jdn ->
         addDivisions(readEvents(
             jdn, refreshToken
         ).filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null })
@@ -406,11 +405,13 @@ private fun WeekView(
 //            }
 //        }
         BoxWithConstraints {
-            val tableWidthPx = with(density) { this@BoxWithConstraints.maxWidth.toPx() }
-            val maxWidthPx = tableWidthPx * 7f / 8
+            val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
+            val tableWidth = (this@BoxWithConstraints.maxWidth - pagerArrowSizeAndPadding.dp * 2)
+            val tableWidthPx = with(density) { tableWidth.toPx() }
+            val cellWidth = tableWidth / 7
+            val cellWidthPx = tableWidthPx / 7
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
-            val cellWidthPx = tableWidthPx / 8
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             val directionSign = if (isRtl) -1 else 1
@@ -421,36 +422,52 @@ private fun WeekView(
                         Clock.fromMinutesCount(minutes).toBasicFormatString()
                     })
                 }
-                Column(Modifier.fillMaxWidth()) {
+                Box(Modifier.fillMaxWidth()) {
+                    val outlineColor = MaterialTheme.colorScheme.outlineVariant
+                    Canvas(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(cellHeight * 24 + bottomPadding),
+                    ) {
+                        (0..7).forEach {
+                            drawLine(
+                                outlineColor,
+                                Offset(firstColumnPx + cellWidthPx * it, 0f),
+                                Offset(firstColumnPx + cellWidthPx * it, this.size.height),
+                            )
+                        }
+                        (1..23).forEach {
+                            drawLine(
+                                outlineColor,
+                                Offset(firstColumnPx, cellHeightPx * it),
+                                Offset(firstColumnPx + cellWidthPx * 7, cellHeightPx * it),
+                            )
+                        }
+                    }
                     Row(Modifier.fillMaxWidth()) {
-                        val outlineColor = MaterialTheme.colorScheme.outlineVariant.copy(.5f)
-                        repeat(8) { column ->
-                            Column(Modifier.weight(1f)) {
+                        repeat(9) { column ->
+                            Column {
                                 if (column == 0) Spacer(Modifier.height(cellHeight / 2))
                                 repeat(24) { row ->
                                     Box(
-                                        Modifier
-                                            .height(
-                                                if (column == 0 && row == 23) 0.dp
-                                                else if (column == 0 || row != 23) cellHeight
-                                                else cellHeight + bottomPadding
-                                            )
-                                            .fillMaxWidth()
-                                            .then(
-                                                if (column == 0) Modifier else Modifier
-                                                    .border(Dp.Hairline, outlineColor)
-                                                    .clickable(
-                                                        indication = null,
-                                                        interactionSource = null,
-                                                    ) {
-                                                        offsetPosition = Offset(
-                                                            cellWidthPx * column.toFloat(),
-                                                            cellHeightPx * row / scale.value
-                                                        )
-                                                        duration = cellHeightPx / scale.value
-                                                        setSelectedDay(weekStart + column - 1)
-                                                    },
-                                            ),
+                                        when (column) {
+                                            0, 8 -> Modifier
+                                            else -> Modifier.clickable(
+                                                indication = null,
+                                                interactionSource = null,
+                                            ) {
+                                                offsetPosition = Offset(
+                                                    cellWidthPx * (column - 1),
+                                                    cellHeightPx * row / scale.value
+                                                )
+                                                duration = cellHeightPx / scale.value
+                                                setSelectedDay(weekStart + column - 1)
+                                            }
+                                        }.size(
+                                            if (column == 0 || column == 8) pagerArrowSizeAndPadding.dp
+                                            else cellWidth,
+                                            if (column == 0 && row == 23) 0.dp else cellHeight,
+                                        ),
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         if (column == 0 && row != 23) {
@@ -488,7 +505,7 @@ private fun WeekView(
                             modifier = Modifier
                                 .offset {
                                     IntOffset(
-                                        (cellWidthPx * (i + 1) + cellWidthPx / columnsCount * column).roundToInt(),
+                                        (firstColumnPx + cellWidthPx * i + cellWidthPx / columnsCount * column).roundToInt(),
                                         (start * cellHeightPx).roundToInt()
                                     )
                                 }
@@ -521,7 +538,7 @@ private fun WeekView(
                 val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
                     if (offsetPosition == Offset.Zero) offsetPosition = Offset(
-                        cellWidthPx * (applyWeekStartOffsetToWeekDay(selectedDay.weekDay) + 1f),
+                        cellWidthPx * applyWeekStartOffsetToWeekDay(selectedDay.weekDay),
                         ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
                     ) else {
                         val time = selectedDay.toGregorianCalendar()
@@ -569,7 +586,12 @@ private fun WeekView(
 
                 Box(
                     Modifier
-                        .offset { IntOffset(offset.x.roundToInt(), offset.y.roundToInt()) }
+                        .offset {
+                            IntOffset(
+                                (offset.x + firstColumnPx).roundToInt(),
+                                offset.y.roundToInt(),
+                            )
+                        }
                         .size(
                             with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) { animatedDuration.toDp() },
@@ -609,13 +631,13 @@ private fun WeekView(
                                                 offsetPosition.x + directionSign * delta.x
                                             val newValueY = offsetPosition.y + delta.y / scale.value
                                             offsetPosition = Offset(
-                                                newValueX.coerceIn(tableWidthPx / 8f, maxWidthPx),
+                                                newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
                                                 newValueY.coerceIn(0f, cellHeightPx * 24 - duration)
                                             )
 
                                             val effectiveColumn =
                                                 (offsetPosition.x / cellWidthPx).roundToInt()
-                                            setSelectedDay(weekStart + effectiveColumn - 1)
+                                            setSelectedDay(weekStart + effectiveColumn)
                                         }
                                     }
                                     it.consume()
