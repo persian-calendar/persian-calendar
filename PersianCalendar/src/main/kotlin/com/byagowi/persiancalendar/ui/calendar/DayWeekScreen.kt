@@ -924,7 +924,6 @@ private fun SharedTransitionScope.WeekPage(
                     setClickedOnce()
                     setSelectedDay(it)
                 },
-                isShowWeekOfYearEnabled = false,
             )
         }
         PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, false, week)

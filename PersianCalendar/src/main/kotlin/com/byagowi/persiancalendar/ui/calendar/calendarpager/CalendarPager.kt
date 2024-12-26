@@ -88,7 +88,6 @@ fun SharedTransitionScope.CalendarPager(
                     refreshToken = refreshToken,
                     selectedDay = selectedDay,
                     setSelectedDay = { viewModel.changeSelectedDay(it) },
-                    isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                     // onWeekClick = navigateToDayWeek,
                 )
             }

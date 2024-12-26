@@ -49,6 +49,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -82,7 +83,6 @@ fun SharedTransitionScope.Month(
     setSelectedDay: (Jdn) -> Unit,
     onWeekClick: ((Jdn) -> Unit)? = null,
     onlyWeek: Int? = null,
-    isShowWeekOfYearEnabled: Boolean,
 ) {
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     val monthStartJdn = Jdn(monthStartDate)
@@ -94,12 +94,13 @@ fun SharedTransitionScope.Month(
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
-    val columnsCount = if (isShowWeekOfYearEnabled) 8 else 7
+    val columnsCount = 7
     val rowsCount = if (onlyWeek != null) 2 else 7
 
     val widthPx = with(LocalDensity.current) { width.toPx() }
     val heightPx = with(LocalDensity.current) { height.toPx() }
     val cellWidthPx = widthPx / columnsCount
+    val cellHeight = height / rowsCount
     val cellHeightPx = heightPx / rowsCount
     val cellRadius =
         min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5.dp.toPx() }
@@ -109,7 +110,7 @@ fun SharedTransitionScope.Month(
         val cellIndex = selectedDay - monthStartJdn + startingWeekDay
         val highlightedDayOfMonth = selectedDay - monthStartJdn
         val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
-            x = (cellIndex % 7 + if (isShowWeekOfYearEnabled) 1 else 0).let {
+            x = (cellIndex % 7).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
             } + cellWidthPx / 2f,
             // +1 for weekday names initials row
@@ -153,33 +154,48 @@ fun SharedTransitionScope.Month(
         cellWidthPx, cellHeightPx
     ) * 1 / 40
 
-    @Composable
-    fun WeekOfYear(week: Int) {
-        val weekNumber = formatNumber(week)
-        val description = stringResource(R.string.nth_week_of_year, weekNumber)
-        Text(
-            weekNumber,
-            fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
-            modifier = Modifier
-                .alpha(AppBlendAlpha)
-                .semantics { this.contentDescription = description },
-        )
-    }
-    if (onlyWeek != null) Box(
-        Modifier
-            .offset(-pagerArrowSizeAndPadding.dp * .625f, height / 2)
-            .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, height / 2)),
-        contentAlignment = Alignment.Center,
-    ) { WeekOfYear(onlyWeek) }
-
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
+
+    if (isShowWeekOfYearEnabled || onlyWeek != null) {
+        (0..<daysRowsCount).forEach { row ->
+            Box(
+                Modifier
+                    .offset(-pagerArrowSizeAndPadding.dp * .625f, cellHeight * (1 + row))
+                    .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, cellHeight))
+                    .then(if (onWeekClick != null) Modifier.clickable(
+                        indication = ripple(bounded = false),
+                        interactionSource = null,
+                    ) {
+                        val day = if (row == 0) monthStartJdn
+                        else monthStartJdn - applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay) + row * 7
+                        onWeekClick(when {
+                            selectedDay - day in 0..<7 -> selectedDay
+                            row == 0 -> day
+                            // Select first non weekend day of the week
+                            else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
+                        })
+                    } else Modifier),
+                contentAlignment = Alignment.Center,
+            ) {
+                val weekNumber = formatNumber(monthStartWeekOfYear + row)
+                val description = stringResource(R.string.nth_week_of_year, weekNumber)
+                Text(
+                    weekNumber,
+                    fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
+                    modifier = Modifier
+                        .alpha(AppBlendAlpha)
+                        .semantics { this.contentDescription = description },
+                )
+            }
+        }
+    }
+
     FixedSizeHorizontalGrid(
         columnsCount = columnsCount,
         rowsCount = rowsCount,
         cellHeight = cellHeightPx,
         modifier = Modifier.height(height / 7 * if (onlyWeek != null) 2 else (daysRowsCount + 1)),
     ) {
-        if (isShowWeekOfYearEnabled) Spacer(Modifier)
         (0..<7).forEach { column ->
             Box(contentAlignment = Alignment.Center) {
                 val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
@@ -198,21 +214,6 @@ fun SharedTransitionScope.Month(
         repeat(daysRowsCount * 7) { dayOffset ->
             if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
             val day = monthStartJdn + dayOffset - startingWeekDay
-            if (isShowWeekOfYearEnabled && dayOffset % 7 == 0) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = if (onWeekClick != null) Modifier.clickable(
-                        indication = ripple(bounded = false),
-                        interactionSource = null,
-                    ) {
-                        onWeekClick(
-                            if (selectedDay - day in 0..<7) selectedDay
-                            else if (dayOffset < startingWeekDay) day + startingWeekDay
-                            // Select first non weekend day of the week
-                            else day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
-                        )
-                    } else Modifier) { WeekOfYear(monthStartWeekOfYear + dayOffset / 7) }
-            }
             val isToday = day == today
             val isBeforeMonth = dayOffset < startingWeekDay
             val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
