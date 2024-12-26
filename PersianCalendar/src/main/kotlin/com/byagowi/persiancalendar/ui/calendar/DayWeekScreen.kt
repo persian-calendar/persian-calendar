@@ -95,7 +95,6 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
@@ -258,56 +257,63 @@ fun SharedTransitionScope.DayWeekScreen(
                             today = today,
                             refreshToken = refreshToken,
                         )
-                        if (isWeekView) Spacer(Modifier.height(8.dp))
-                        if (isWeekView) ScreenSurface(
-                            animatedContentScope = animatedContentScope,
-                            disableSharedContent = page != weeksLimit / 2,
-                        ) {
-                            WeekView(
-                                bottomPadding = bottomPadding,
-                                setAddAction = {
-                                    if (weekPagerState.currentPage == page) weekViewAddAction = it
-                                },
-                                weekStart = (today + (page - weeksLimit / 2) * 7).let {
-                                    it - applyWeekStartOffsetToWeekDay(it.weekDay)
-                                },
-                                selectedDay = selectedDay,
-                                setSelectedDay = { selectedDay = it },
-                                addEvent = addEvent,
-                                refreshCalendar = calendarViewModel::refreshCalendar,
-                                refreshToken = refreshToken,
-                                now = calendarViewModel.now.collectAsState().value,
-                            )
+                        if (isWeekView) {
+                            Spacer(Modifier.height(8.dp))
+                            val weekStart = (today + (page - weeksLimit / 2) * 7).let {
+                                it - applyWeekStartOffsetToWeekDay(it.weekDay)
+                            }
+                            val isInitialWeek = initialSelectedDay - weekStart in 0..<7
+                            ScreenSurface(
+                                animatedContentScope = animatedContentScope,
+                                disableSharedContent = !isInitialWeek,
+                            ) {
+                                WeekView(
+                                    bottomPadding = bottomPadding,
+                                    setAddAction = {
+                                        if (weekPagerState.currentPage == page) weekViewAddAction =
+                                            it
+                                    },
+                                    weekStart = weekStart,
+                                    selectedDay = selectedDay,
+                                    setSelectedDay = { selectedDay = it },
+                                    addEvent = addEvent,
+                                    refreshCalendar = calendarViewModel::refreshCalendar,
+                                    refreshToken = refreshToken,
+                                    now = calendarViewModel.now.collectAsState().value,
+                                )
+                            }
                         }
                     }
                 }
-                if (!isWeekView) Spacer(Modifier.height(8.dp))
-                if (!isWeekView) ScreenSurface(animatedContentScope) {
-                    HorizontalPager(
-                        state = dayPagerState,
-                        verticalAlignment = Alignment.Top,
-                    ) { page ->
-                        val isCurrentPage = dayPagerState.currentPage == page
-                        LaunchedEffect(isCurrentPage) {
-                            if (isCurrentPage) {
-                                selectedDay = today + (page - daysLimit / 2)
-                                val destination = weekPageFromJdn(selectedDay, today)
-                                if (abs(destination - weekPagerState.currentPage) > 1) {
-                                    weekPagerState.scrollToPage(destination)
-                                } else weekPagerState.animateScrollToPage(destination)
+                if (!isWeekView) {
+                    Spacer(Modifier.height(8.dp))
+                    ScreenSurface(animatedContentScope) {
+                        HorizontalPager(
+                            state = dayPagerState,
+                            verticalAlignment = Alignment.Top,
+                        ) { page ->
+                            val isCurrentPage = dayPagerState.currentPage == page
+                            LaunchedEffect(isCurrentPage) {
+                                if (isCurrentPage) {
+                                    selectedDay = today + (page - daysLimit / 2)
+                                    val destination = weekPageFromJdn(selectedDay, today)
+                                    if (abs(destination - weekPagerState.currentPage) > 1) {
+                                        weekPagerState.scrollToPage(destination)
+                                    } else weekPagerState.animateScrollToPage(destination)
+                                }
                             }
-                        }
 
-                        DayView(
-                            selectedDay = today + (page - daysLimit / 2),
-                            refreshToken = refreshToken,
-                            calendarViewModel = calendarViewModel,
-                            animatedContentScope = animatedContentScope,
-                            addEvent = addEvent,
-                            bottomPadding = bottomPadding.coerceAtLeast(16.dp),
-                            navigateUp = navigateUp,
-                            navigateToSchedule = navigateToSchedule,
-                        )
+                            DayView(
+                                selectedDay = today + (page - daysLimit / 2),
+                                refreshToken = refreshToken,
+                                calendarViewModel = calendarViewModel,
+                                animatedContentScope = animatedContentScope,
+                                addEvent = addEvent,
+                                bottomPadding = bottomPadding.coerceAtLeast(16.dp),
+                                navigateUp = navigateUp,
+                                navigateToSchedule = navigateToSchedule,
+                            )
+                        }
                     }
                 }
             }

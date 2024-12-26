@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
@@ -84,7 +83,7 @@ fun SharedTransitionScope.Month(
     selectedDay: Jdn,
     refreshToken: Int,
     setSelectedDay: (Jdn) -> Unit,
-    onWeekClick: ((Jdn) -> Unit)? = null,
+    onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     onlyWeek: Int? = null,
 ) {
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
@@ -182,7 +181,7 @@ fun SharedTransitionScope.Month(
                             row == 0 -> day
                             // Select first non weekend day of the week
                             else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
-                        })
+                        }, true)
                     } else Modifier),
                 contentAlignment = Alignment.Center,
             ) {

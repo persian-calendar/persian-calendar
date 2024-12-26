@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -49,6 +50,7 @@ fun SharedTransitionScope.CalendarPager(
     pagerState: PagerState,
     addEvent: (AddEventData) -> Unit,
     size: DpSize,
+    navigateToDayWeek: (Jdn, Boolean) -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
@@ -88,7 +90,7 @@ fun SharedTransitionScope.CalendarPager(
                     refreshToken = refreshToken,
                     selectedDay = selectedDay,
                     setSelectedDay = { viewModel.changeSelectedDay(it) },
-                    // onWeekClick = navigateToDayWeek,
+                    onWeekClick = navigateToDayWeek,
                 )
             }
             PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = false)
