@@ -53,7 +53,7 @@ fun monthHtmlReport(context: Context, date: AbstractDate, wholeYear: Boolean) = 
         meta(charset = "utf8")
         style {
             unsafe {
-                val calendarColumnsPercent = 100 / if (isShowWeekOfYearEnabled) 8 else 7
+                val calendarColumnsPercent = 100 / if (isShowWeekOfYearEnabled.value) 8 else 7
                 +"""
                     body { font-family: system-ui }
                     td { vertical-align: top }
@@ -99,7 +99,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     }
     table("calendar") {
         tr {
-            if (isShowWeekOfYearEnabled) th {}
+            if (isShowWeekOfYearEnabled.value) th {}
             repeat(7) { th { +getWeekDayName(revertWeekStartOffsetFromWeekDay(it)) } }
         }
         val monthLength = date.calendar.getMonthLength(date.year, date.month)
@@ -114,7 +114,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         }.chunked(7).forEach { row ->
             val firstJdnInWeek = row.firstNotNullOfOrNull { it?.second/*jdn*/ } ?: return@forEach
             tr {
-                if (isShowWeekOfYearEnabled) {
+                if (isShowWeekOfYearEnabled.value) {
                     val weekOfYear = firstJdnInWeek.getWeekOfYear(startOfYearJdn)
                     th { sub { small { +formatNumber(weekOfYear) } } }
                 }

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.global
 import android.content.Context
 import android.content.res.Resources
 import android.view.accessibility.AccessibilityManager
-import androidx.annotation.StringRes
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
@@ -231,14 +230,15 @@ val secondaryCalendarDigits
         preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
         else -> secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS
     }
-var isShowWeekOfYearEnabled = false
-    private set
 var isCenterAlignWidgets = true
     private set
 var weekStartOffset = 0
     private set
 var weekEnds = BooleanArray(7)
     private set
+
+private val isShowWeekOfYearEnabled_ = MutableStateFlow(false)
+val isShowWeekOfYearEnabled: StateFlow<Boolean> get() = isShowWeekOfYearEnabled_
 
 private val dreamNoise_ = MutableStateFlow(DEFAULT_DREAM_NOISE)
 val dreamNoise: StateFlow<Boolean> get() = dreamNoise_
@@ -487,7 +487,7 @@ fun updateStoredPreference(context: Context) {
         secondaryCalendarEnabled = false
     }.getOrNull().debugAssertNotNull
 
-    isShowWeekOfYearEnabled = preferences.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
+    isShowWeekOfYearEnabled_.value = preferences.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
         (preferences.getString(PREF_WEEK_START, null) ?: language.defaultWeekStart).toIntOrNull()
             ?: 0

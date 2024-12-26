@@ -156,7 +156,8 @@ fun SharedTransitionScope.Month(
 
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
 
-    if (isShowWeekOfYearEnabled || onlyWeek != null) {
+    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+    if (onlyWeek != null && isShowWeekOfYearEnabled) {
         (0..<daysRowsCount).forEach { row ->
             Box(
                 Modifier

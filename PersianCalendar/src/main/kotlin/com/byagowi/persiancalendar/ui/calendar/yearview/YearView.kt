@@ -66,7 +66,6 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
@@ -118,7 +117,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         lruCache(4, create = { height: Float ->
             DayPainter(
                 resources = context.resources,
-                width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled) 8 else 7,
+                width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled.value) 8 else 7,
                 height = height / 7,/* rows count*/
                 isRtl = isRtl,
                 colors = monthColors,
@@ -240,7 +239,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                 ),
                                                 deviceEvents = yearDeviceEvents,
                                                 isRtl = isRtl,
-                                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+                                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
                                                 selectedDay = viewModel.selectedDay.value,
                                             )
                                         }

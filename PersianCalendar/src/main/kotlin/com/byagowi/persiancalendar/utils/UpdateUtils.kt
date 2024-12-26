@@ -453,7 +453,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val contentDescription = renderMonthWidget(
         dayPainter = DayPainter(
             resources = context.resources,
-            width = width.toFloat() / if (isShowWeekOfYearEnabled) 8 else 7,
+            width = width.toFloat() / if (isShowWeekOfYearEnabled.value) 8 else 7,
             height = height.toFloat() / 7/* row count*/,
             isRtl = isRtl,
             colors = colors,
@@ -465,7 +465,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         today = today,
         deviceEvents = monthDeviceEvents,
         isRtl = isRtl,
-        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
         selectedDay = null,
     )
     canvas.also {
