@@ -6,6 +6,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -30,6 +31,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -101,6 +103,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.PagerArrow
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
+import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -426,49 +429,98 @@ private fun DaysView(
                 }
             },
     ) {
-        if (days == 1) {
-            val hasHeader by remember(events) {
-                val needsHeader = eventsWithTime[0].isEmpty() || eventsWithoutTime[0].isNotEmpty()
-                derivedStateOf {
-                    needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.value
-                }
+        val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
+        val hasHeader by remember(events) {
+            val needsHeader = eventsWithTime.all { it.isEmpty() } || maxDayAllDayEvents != 0
+            derivedStateOf {
+                needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.value
             }
-
-            AnimatedVisibility(hasHeader) {
-                Column(Modifier.padding(horizontal = 24.dp)) {
-                    Spacer(Modifier.height(16.dp))
-                    if (events[0].isEmpty()) Text(
-                        stringResource(R.string.no_event),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
-                    )
-                    DayEvents(eventsWithoutTime[0].take(3)) { refreshCalendar() }
-                    if (eventsWithoutTime.size > 3) {
-                        Spacer(Modifier.height(4.dp))
-                        MoreButton(stringResource(R.string.more)) {
-                            navigateToSchedule(selectedDay)
+        }
+        val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
+            refreshCalendar()
+        }
+        val context = LocalContext.current
+        val defaultWidthReductionDp = 2.dp
+        val defaultWidthReduction = with(density) { defaultWidthReductionDp.toPx() }
+        AnimatedVisibility(hasHeader) {
+            if (days == 1) Column(Modifier.padding(horizontal = 24.dp)) {
+                Spacer(Modifier.height(16.dp))
+                if (events[0].isEmpty()) Text(
+                    stringResource(R.string.no_event),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                )
+                DayEvents(eventsWithoutTime[0].take(3)) { refreshCalendar() }
+                if (eventsWithoutTime[0].size > 3) {
+                    Spacer(Modifier.height(4.dp))
+                    MoreButton(stringResource(R.string.more)) {
+                        navigateToSchedule(selectedDay)
+                    }
+                }
+                Spacer(Modifier.height(12.dp))
+            } else BoxWithConstraints {
+                val cellWidth = (this.maxWidth - pagerArrowSizeAndPadding.dp * 2) / days
+                var isExpanded by rememberSaveable { mutableStateOf(false) }
+                Row(
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = if (maxDayAllDayEvents > 3) Modifier.clickable(
+                        indication = null,
+                        interactionSource = null,
+                    ) { isExpanded = !isExpanded } else Modifier
+                ) {
+                    Box(
+                        Modifier
+                            .width(pagerArrowSizeAndPadding.dp)
+                            .align(Alignment.Bottom),
+                    ) {
+                        if (maxDayAllDayEvents > 3) Box(
+                            Modifier
+                                .width(pagerArrowSizeAndPadding.dp)
+                                .padding(bottom = 2.dp),
+                            contentAlignment = Alignment.BottomCenter,
+                        ) { ExpandArrow(isExpanded = isExpanded) }
+                    }
+                    Row(
+                        Modifier
+                            .padding(top = 2.dp, end = pagerArrowSizeAndPadding.dp)
+                            .animateContentSize(),
+                    ) {
+                        eventsWithoutTime.forEach { dayEvents ->
+                            Column(Modifier.weight(1f)) {
+                                dayEvents.forEachIndexed { i, event ->
+                                    if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                                        Text(
+                                            " " + event.title,
+                                            maxLines = 1,
+                                            fontSize = 12.sp,
+                                            modifier = Modifier
+                                                .requiredWidth(cellWidth - defaultWidthReductionDp)
+                                                .then(
+                                                    if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable {
+                                                        launcher.viewEvent(event, context)
+                                                    } else Modifier,
+                                                )
+                                                .padding(bottom = 2.dp)
+                                                .background(
+                                                    eventColor(event), MaterialTheme.shapes.small
+                                                ),
+                                        )
+                                    }
+                                    if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
+                                        " +" + formatNumber(dayEvents.size - 3),
+                                        modifier = Modifier.padding(bottom = 4.dp),
+                                        maxLines = 1,
+                                        fontSize = 12.sp,
+                                    )
+                                }
+                            }
                         }
                     }
-                    Spacer(Modifier.height(12.dp))
                 }
             }
         }
-//        Row(
-//            Modifier
-//                .fillMaxWidth()
-//                .height(cellHeight),
-//        ) {
-//            repeat(8) {
-//                Box(
-//                    modifier = Modifier
-//                        .height(cellHeight)
-//                        .weight(1f),
-//                    contentAlignment = Alignment.Center,
-//                ) { Text(it.toString()) }
-//            }
-//        }
         BoxWithConstraints {
             val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
             val tableWidth = (this@BoxWithConstraints.maxWidth
@@ -554,11 +606,6 @@ private fun DaysView(
                     }
                 }
 
-                val defaultWidthReduction = with(density) { 4.dp.toPx() }
-                val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
-                    refreshCalendar()
-                }
-                val context = LocalContext.current
                 eventsWithTime.mapIndexed { i, it ->
                     it.map { (event, column, columnsCount) ->
                         val start = hoursFractionOfDay(event.startTime)

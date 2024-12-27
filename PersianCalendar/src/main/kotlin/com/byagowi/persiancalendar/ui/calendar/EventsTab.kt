@@ -171,11 +171,16 @@ fun SharedTransitionScope.EventsTab(
 }
 
 @Composable
-fun eventColor(event: CalendarEvent.DeviceCalendarEvent): Color {
-    return runCatching {
-        // should be turned to long then int otherwise gets stupid alpha
-        if (event.color.isEmpty()) null else Color(event.color.toLong())
-    }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
+fun eventColor(event: CalendarEvent<*>): Color {
+    return when {
+        event is CalendarEvent.DeviceCalendarEvent -> runCatching {
+            // should be turned to long then int otherwise gets stupid alpha
+            if (event.color.isEmpty()) null else Color(event.color.toLong())
+        }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
+
+        event.isHoliday -> MaterialTheme.colorScheme.primary
+        else -> MaterialTheme.colorScheme.surfaceVariant
+    }
 }
 
 fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
@@ -202,14 +207,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     events.forEach { event ->
-        val backgroundColor by animateColor(
-            when {
-                event is CalendarEvent.DeviceCalendarEvent -> eventColor(event)
-                event.isHoliday -> MaterialTheme.colorScheme.primary
-                else -> MaterialTheme.colorScheme.surfaceVariant
-            }
-        )
-
+        val backgroundColor by animateColor(eventColor(event))
         val eventTime = (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
         AnimatedContent(
             (if (event.isHoliday) language.value.inParentheses.format(
