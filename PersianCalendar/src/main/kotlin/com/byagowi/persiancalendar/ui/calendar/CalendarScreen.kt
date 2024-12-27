@@ -198,7 +198,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
-    navigateToDayWeek: (Jdn, Boolean) -> Unit,
+    navigateToDays: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
@@ -222,7 +222,7 @@ fun SharedTransitionScope.CalendarScreen(
                     animatedContentScope = animatedContentScope,
                     openDrawer = openDrawer,
                     navigateToSchedule = navigateToSchedule,
-                    navigateToDayWeek = navigateToDayWeek,
+                    navigateToDays = navigateToDays,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
                 )
@@ -289,7 +289,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 pagerState = pagerState,
                                 addEvent = addEvent,
                                 size = pagerSize,
-                                navigateToDayWeek = navigateToDayWeek,
+                                navigateToDays = navigateToDays,
                                 animatedContentScope = animatedContentScope,
                             )
                         }
@@ -326,13 +326,13 @@ fun SharedTransitionScope.CalendarScreen(
                                                     when (preferredSwipeUpAction.value) {
                                                         SwipeUpAction.Schedule -> navigateToSchedule()
                                                         SwipeUpAction.DayView -> {
-                                                            navigateToDayWeek(
+                                                            navigateToDays(
                                                                 viewModel.selectedDay.value, false
                                                             )
                                                         }
 
                                                         SwipeUpAction.WeekView -> {
-                                                            navigateToDayWeek(
+                                                            navigateToDays(
                                                                 viewModel.selectedDay.value, true
                                                             )
                                                         }
@@ -363,7 +363,7 @@ fun SharedTransitionScope.CalendarScreen(
                                         pagerState = pagerState,
                                         addEvent = addEvent,
                                         size = pagerSize,
-                                        navigateToDayWeek = navigateToDayWeek,
+                                        navigateToDays = navigateToDays,
                                         animatedContentScope = animatedContentScope,
                                     )
                                 }
@@ -752,7 +752,7 @@ private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
-    navigateToDayWeek: (Jdn, Boolean) -> Unit,
+    navigateToDays: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -889,7 +889,7 @@ private fun SharedTransitionScope.Toolbar(
                     navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
-                    navigateToDayWeek = navigateToDayWeek,
+                    navigateToDays = navigateToDays,
                 )
             }
         },
@@ -901,7 +901,7 @@ private fun SharedTransitionScope.Toolbar(
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     navigateToSchedule: () -> Unit,
-    navigateToDayWeek: (Jdn, Boolean) -> Unit,
+    navigateToDays: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -954,10 +954,10 @@ private fun SharedTransitionScope.Menu(
         listOf(
             SwipeUpAction.Schedule to { navigateToSchedule() },
             SwipeUpAction.DayView to {
-                navigateToDayWeek(viewModel.selectedDay.value, false)
+                navigateToDays(viewModel.selectedDay.value, false)
             },
             SwipeUpAction.WeekView to {
-                navigateToDayWeek(viewModel.selectedDay.value, true)
+                navigateToDays(viewModel.selectedDay.value, true)
             },
         ).forEach { (item, action) ->
             AppDropdownMenuItem(

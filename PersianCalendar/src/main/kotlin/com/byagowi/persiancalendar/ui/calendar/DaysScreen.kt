@@ -123,7 +123,7 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.DayWeekScreen(
+fun SharedTransitionScope.DaysScreen(
     calendarViewModel: CalendarViewModel,
     initialSelectedDay: Jdn,
     animatedContentScope: AnimatedContentScope,
@@ -332,9 +332,9 @@ fun SharedTransitionScope.DayWeekScreen(
 }
 
 private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
-    val dayWeekStart = day - applyWeekStartOffsetToWeekDay(day.weekDay)
-    val todayWeekStart = today - applyWeekStartOffsetToWeekDay(today.weekDay)
-    return (dayWeekStart - todayWeekStart) / 7 + weeksLimit / 2
+    val daysStart = day - applyWeekStartOffsetToWeekDay(day.weekDay)
+    val todaysStart = today - applyWeekStartOffsetToWeekDay(today.weekDay)
+    return (daysStart - todaysStart) / 7 + weeksLimit / 2
 }
 
 private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
