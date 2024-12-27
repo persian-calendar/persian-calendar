@@ -135,7 +135,7 @@ fun SharedTransitionScope.DaysScreen(
     val date = selectedDay.inCalendar(mainCalendar)
     val today by calendarViewModel.today.collectAsState()
     val context = LocalContext.current
-    var isClickedOnce by remember { mutableStateOf(false) }
+    var isEverClicked by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val weekInitialPage = remember(today) { weekPageFromJdn(initialSelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
@@ -153,7 +153,7 @@ fun SharedTransitionScope.DaysScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            if (isClickedOnce && calendarViewModel.selectedDay.value != selectedDay) {
+            if (isEverClicked && calendarViewModel.selectedDay.value != selectedDay) {
                 bringDate(calendarViewModel, selectedDay, context, highlight = selectedDay != today)
             }
         }
@@ -251,7 +251,7 @@ fun SharedTransitionScope.DaysScreen(
                             selectedDay = selectedDay,
                             selectedDayDate = date,
                             setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
-                            setClickedOnce = { isClickedOnce = true },
+                            setEverClicked = { isEverClicked = true },
                             animatedContentScope = animatedContentScope,
                             language = language,
                             coroutineScope = coroutineScope,
@@ -277,7 +277,7 @@ fun SharedTransitionScope.DaysScreen(
                                     },
                                     startingDay = weekStart,
                                     selectedDay = selectedDay,
-                                    setSelectedDay = { selectedDay = it },
+                                    setSelectedDay = { isEverClicked = true; selectedDay = it },
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
                                     refreshToken = refreshToken,
@@ -758,8 +758,7 @@ private fun DaysView(
                                         }
 
                                         else -> {
-                                            val newValueX =
-                                                offset.x + directionSign * delta.x
+                                            val newValueX = offset.x + directionSign * delta.x
                                             val newValueY = offset.y + delta.y / scale.value
                                             offset = Offset(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
@@ -855,7 +854,7 @@ private fun SharedTransitionScope.WeekPage(
     selectedDay: Jdn,
     selectedDayDate: AbstractDate,
     setSelectedDay: (Jdn) -> Unit,
-    setClickedOnce: () -> Unit,
+    setEverClicked: () -> Unit,
     animatedContentScope: AnimatedContentScope,
     language: Language,
     coroutineScope: CoroutineScope,
@@ -894,10 +893,7 @@ private fun SharedTransitionScope.WeekPage(
                 isHighlighted = true,
                 selectedDay = selectedDay,
                 refreshToken = refreshToken,
-                setSelectedDay = {
-                    setClickedOnce()
-                    setSelectedDay(it)
-                },
+                setSelectedDay = { setEverClicked(); setSelectedDay(it) },
             )
         }
         PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, false, week)
