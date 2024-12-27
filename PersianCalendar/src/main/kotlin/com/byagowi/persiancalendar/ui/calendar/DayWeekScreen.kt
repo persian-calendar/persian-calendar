@@ -481,6 +481,7 @@ private fun DaysView(
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             val directionSign = if (isRtl) -1 else 1
+            val lineSize = with(density) { 1.dp.toPx() }
 
             Box(Modifier.verticalScroll(scrollState)) {
                 val clockCache = remember {
@@ -499,18 +500,16 @@ private fun DaysView(
                             val x = (firstColumnPx + cellWidthPx * i).let {
                                 if (isRtl) this.size.width - it else it
                             }
-                            drawLine(outlineVariant, Offset(x, 0f), Offset(x, this.size.height))
+                            val y = this.size.height
+                            drawLine(outlineVariant, Offset(x, lineSize * 2), Offset(x, y))
                         }
                         val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
                         val x2 = (firstColumnPx + cellWidthPx * days).let {
                             if (isRtl) this.size.width - it else it
                         }
                         (0..23).forEach {
-                            drawLine(
-                                outlineVariant,
-                                Offset(x1, cellHeightPx * it),
-                                Offset(x2, cellHeightPx * it),
-                            )
+                            val y = if (it == 0) lineSize * 2 else cellHeightPx * it
+                            drawLine(outlineVariant, Offset(x1, y), Offset(x2, y))
                         }
                     }
                     Row(Modifier.fillMaxWidth()) {
@@ -652,21 +651,19 @@ private fun DaysView(
 
                 val widthReduction = remember { Animatable(defaultWidthReduction) }
                 val radius = with(density) { 4.dp.toPx() }
-                val lineSize = with(density) { 1.dp.toPx() }
 
                 // Time indicator
                 val time = GregorianCalendar().also { it.timeInMillis = now }
                 val offsetDay = Jdn(time.toCivilDate()) - startingDay
                 val primary = MaterialTheme.colorScheme.primary
-                if (offsetDay in 0..<days) Canvas(
-                    Modifier
-                        .offset {
-                            IntOffset(
-                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
-                            )
-                        }
-                        .size(1.dp)
+                if (offsetDay in 0..<days) Canvas(Modifier
+                    .offset {
+                        IntOffset(
+                            (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
+                            (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                        )
+                    }
+                    .size(1.dp)
                 ) {
                     drawCircle(primary, radius)
                     drawLine(
