@@ -460,7 +460,7 @@ private fun DaysView(
                     })
                 }
                 Box(Modifier.fillMaxWidth()) {
-                    val outlineColor = MaterialTheme.colorScheme.outlineVariant
+                    val outlineVariant = MaterialTheme.colorScheme.outlineVariant
                     Canvas(
                         Modifier
                             .fillMaxWidth()
@@ -470,7 +470,7 @@ private fun DaysView(
                             val x = (firstColumnPx + cellWidthPx * i).let {
                                 if (isRtl) this.size.width - it else it
                             }
-                            drawLine(outlineColor, Offset(x, 0f), Offset(x, this.size.height))
+                            drawLine(outlineVariant, Offset(x, 0f), Offset(x, this.size.height))
                         }
                         val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
                         val x2 = (firstColumnPx + cellWidthPx * days).let {
@@ -478,7 +478,7 @@ private fun DaysView(
                         }
                         (1..23).forEach {
                             drawLine(
-                                outlineColor,
+                                outlineVariant,
                                 Offset(x1, cellHeightPx * it),
                                 Offset(x2, cellHeightPx * it),
                             )
@@ -724,7 +724,7 @@ private fun DaysView(
                     if (offset == Offset.Zero) return@addEventRectangle
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
                     val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
-                    val primary = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
+                    val primaryWithAlpha = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
                     Canvas(
                         Modifier
                             .align(Alignment.BottomCenter)
@@ -745,7 +745,7 @@ private fun DaysView(
                             cornerRadius = CornerRadius(radius, radius),
                         )
                         drawRoundRect(
-                            primary,
+                            primaryWithAlpha,
                             topLeft = rectTopLeft,
                             size = Size(
                                 width = this.size.width - widthReduction.value,
@@ -759,13 +759,13 @@ private fun DaysView(
                             y = 0f
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset1)
-                        drawCircle(primary, radius, offset1)
+                        drawCircle(primaryWithAlpha, radius, offset1)
                         val offset2 = Offset(
                             x = this.center.x + (this.size.width / 2 - widthReduction.value - radius - lineSize * 2) * directionSign,
                             y = this.size.height - lineSize * 2
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset2)
-                        drawCircle(primary, radius, offset2)
+                        drawCircle(primaryWithAlpha, radius, offset2)
                     }
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
