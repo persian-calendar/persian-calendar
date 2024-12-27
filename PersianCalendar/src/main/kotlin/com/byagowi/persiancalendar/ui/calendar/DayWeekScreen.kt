@@ -526,7 +526,7 @@ private fun DaysView(
                     }
                 }
 
-                val defaultWidth = .95f
+                val defaultWidthReduction = with(density) { 4.dp.toPx() }
                 val launcher = rememberLauncherForActivityResult(ViewEventContract()) {
                     refreshCalendar()
                 }
@@ -536,7 +536,6 @@ private fun DaysView(
                         val start = hoursFractionOfDay(event.startTime)
                         val end = hoursFractionOfDay(event.endTime)
                         val color = eventColor(event)
-                        val widthSpace = cellWidthPx * (1 - defaultWidth)
                         Text(
                             " " + event.title,
                             color = eventTextColor(color),
@@ -550,7 +549,7 @@ private fun DaysView(
                                     )
                                 }
                                 .requiredSize(
-                                    with(density) { (cellWidthPx / columnsCount - widthSpace).toDp() },
+                                    with(density) { (cellWidthPx / columnsCount - defaultWidthReduction).toDp() },
                                     with(density) { ((end - start) * cellHeightPx).toDp() - 3.dp },
                                 )
                                 .clickable { launcher.viewEvent(event, context) }
@@ -622,7 +621,7 @@ private fun DaysView(
                     }
                 }
 
-                val widthFraction = remember { Animatable(defaultWidth) }
+                val widthReduction = remember { Animatable(defaultWidthReduction) }
                 val radius = with(density) { 4.dp.toPx() }
                 val lineSize = with(density) { 1.dp.toPx() }
 
@@ -642,7 +641,7 @@ private fun DaysView(
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
-                                coroutineScope.launch { widthFraction.animateTo(1f) }
+                                coroutineScope.launch { widthReduction.animateTo(0f) }
                                 var action = Float.NaN
                                 drag(id) {
                                     val delta = it.positionChange()
@@ -684,7 +683,11 @@ private fun DaysView(
                                     }
                                     it.consume()
                                 }
-                                coroutineScope.launch { widthFraction.animateTo(defaultWidth) }
+                                coroutineScope.launch {
+                                    widthReduction.animateTo(
+                                        defaultWidthReduction
+                                    )
+                                }
                             }
                         },
                     contentAlignment = Alignment.Center,
@@ -704,11 +707,11 @@ private fun DaysView(
                             .fillMaxSize(),
                     ) {
                         val rectTopLeft = Offset(
-                            x = if (isRtl) this.size.width * (1 - widthFraction.value) else 0f,
+                            x = if (isRtl) widthReduction.value else 0f,
                             y = 0f
                         )
                         val rectSize = Size(
-                            width = this.size.width * widthFraction.value,
+                            width = this.size.width - widthReduction.value,
                             height = this.size.height - lineSize * 2
                         )
                         drawRoundRect(
@@ -721,7 +724,7 @@ private fun DaysView(
                             primary,
                             topLeft = rectTopLeft,
                             size = Size(
-                                width = this.size.width * widthFraction.value,
+                                width = this.size.width - widthReduction.value,
                                 height = this.size.height - lineSize * 2,
                             ),
                             style = Stroke(lineSize),
@@ -734,7 +737,7 @@ private fun DaysView(
                         drawCircle(circleBorder, radius + lineSize * 2, offset1)
                         drawCircle(primary, radius, offset1)
                         val offset2 = Offset(
-                            x = this.center.x + (this.size.width * widthFraction.value / 2 - radius - lineSize * 2) * directionSign,
+                            x = this.center.x + (this.size.width / 2 - widthReduction.value - radius - lineSize * 2) * directionSign,
                             y = this.size.height - lineSize * 2
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset2)
