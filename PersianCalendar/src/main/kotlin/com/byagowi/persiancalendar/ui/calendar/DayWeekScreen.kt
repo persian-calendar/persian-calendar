@@ -523,8 +523,11 @@ private fun DaysView(
         }
         BoxWithConstraints {
             val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
-            val tableWidth = (this@BoxWithConstraints.maxWidth
-                    - pagerArrowSizeAndPadding.dp * (if (days == 7) 2 else 1))
+            val tableWidth = this@BoxWithConstraints.maxWidth - when (days) {
+                1 -> pagerArrowSizeAndPadding.dp + 24.dp
+                else -> pagerArrowSizeAndPadding.dp * 2
+            }
+            val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
             val tableWidthPx = with(density) { tableWidth.toPx() }
             val cellWidth = tableWidth / days
             val cellWidthPx = tableWidthPx / days
@@ -548,15 +551,16 @@ private fun DaysView(
                             .fillMaxWidth()
                             .height(cellHeight * 24 + bottomPadding),
                     ) {
+                        val paintCellWidthPx = if (days == 1) oneDayTableWidthPx else cellWidthPx
                         (0..days).forEach { i ->
-                            val x = (firstColumnPx + cellWidthPx * i).let {
+                            val x = (firstColumnPx + paintCellWidthPx * i).let {
                                 if (isRtl) this.size.width - it else it
                             }
                             val y = this.size.height
                             drawLine(outlineVariant, Offset(x, lineSize * 2), Offset(x, y))
                         }
                         val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
-                        val x2 = (firstColumnPx + cellWidthPx * days).let {
+                        val x2 = (firstColumnPx + paintCellWidthPx * days).let {
                             if (isRtl) this.size.width - it else it
                         }
                         (0..23).forEach {
