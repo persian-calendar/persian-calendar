@@ -448,7 +448,7 @@ private fun DaysView(
             val cellWidth = tableWidth / days
             val cellWidthPx = tableWidthPx / days
             val cellHeightPx = with(density) { cellHeight.toPx() }
-            var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Zero) }
+            var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Unspecified) }
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             val directionSign = if (isRtl) -1 else 1
@@ -559,10 +559,12 @@ private fun DaysView(
                     }
                 }
 
-                val x = (offsetPosition.x / cellWidthPx).roundToInt()
+                val x = if (offsetPosition == Offset.Unspecified) 0
+                else (offsetPosition.x / cellWidthPx).roundToInt()
                 val ySteps = (cellHeightPx / 4).roundToInt()
-                val y = (offsetPosition.y * scale.value / ySteps).roundToInt()
-                val offset = if (offsetPosition == Offset.Zero) Offset.Zero
+                val y = if (offsetPosition == Offset.Unspecified) 0
+                else (offsetPosition.y * scale.value / ySteps).roundToInt()
+                val offset = if (offsetPosition == Offset.Unspecified) Offset.Zero
                 else animateOffsetAsState(
                     Offset(x * cellWidthPx, y * ySteps.toFloat()),
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
@@ -577,7 +579,7 @@ private fun DaysView(
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
-                    if (offsetPosition == Offset.Zero) offsetPosition = Offset(
+                    if (offsetPosition == Offset.Unspecified) offsetPosition = Offset(
                         cellWidthPx * (selectedDay - startingDay),
                         ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
                     ) else {
@@ -615,7 +617,7 @@ private fun DaysView(
                 LaunchedEffect(resumeToken) {
                     if (resetOnNextRefresh) {
                         duration = cellHeightPx / 4 * 4f
-                        offsetPosition = Offset.Zero
+                        offsetPosition = Offset.Unspecified
                         resetOnNextRefresh = false
                     }
                 }
