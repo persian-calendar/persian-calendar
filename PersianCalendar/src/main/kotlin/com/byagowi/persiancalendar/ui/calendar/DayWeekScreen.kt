@@ -759,7 +759,7 @@ private fun DaysView(
                     ) {
                         val rectTopLeft = Offset(
                             x = if (isRtl) widthReduction.value else 0f,
-                            y = 0f
+                            y = if (offset.y < radius) lineSize else 0f,
                         )
                         val rectSize = Size(
                             width = this.size.width - widthReduction.value,
@@ -783,7 +783,7 @@ private fun DaysView(
                         )
                         val offset1 = Offset(
                             x = this.center.x - (this.size.width / 2 - radius - lineSize * 2) * directionSign,
-                            y = 0f
+                            y = if (offset.y < radius) radius - offset.y else 0f
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset1)
                         drawCircle(primaryWithAlpha, radius, offset1)
