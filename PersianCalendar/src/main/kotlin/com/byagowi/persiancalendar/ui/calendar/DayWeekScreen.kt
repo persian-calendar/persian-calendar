@@ -743,11 +743,12 @@ private fun DaysView(
                     contentAlignment = Alignment.Center,
                 ) addEventRectangle@{
                     val alpha by animateFloatAsState(
-                        if (offset == Offset.Unspecified) 0f else 1f, animationSpec = spring(
+                        if (offsetPosition == Offset.Unspecified) 0f else 1f,
+                        animationSpec = spring(
                             Spring.DampingRatioNoBouncy, Spring.StiffnessLow
                         ), label = "alpha"
                     )
-                    if (offset == Offset.Unspecified) return@addEventRectangle
+                    if (offsetPosition == Offset.Unspecified) return@addEventRectangle
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
                     val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
                     val primaryWithAlpha = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
