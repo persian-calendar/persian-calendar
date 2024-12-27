@@ -494,10 +494,12 @@ private fun DaysView(
                             Column(Modifier.weight(1f)) {
                                 dayEvents.forEachIndexed { i, event ->
                                     if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                                        val color = eventColor(event)
                                         Text(
                                             " " + event.title,
                                             maxLines = 1,
                                             fontSize = 12.sp,
+                                            color = eventTextColor(color),
                                             modifier = Modifier
                                                 .requiredWidth(cellWidth - defaultWidthReductionDp)
                                                 .padding(bottom = 2.dp)
