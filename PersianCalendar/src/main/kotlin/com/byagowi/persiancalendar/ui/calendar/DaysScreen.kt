@@ -161,8 +161,10 @@ fun SharedTransitionScope.DaysScreen(
     val addEvent = addEvent(calendarViewModel)
     val hasWeeksPager = LocalConfiguration.current.screenHeightDp > 600
     val language by language.collectAsState()
+    var isAddEventBoxEnabled by remember { mutableStateOf(false) }
 
     val todayButtonAction = {
+        isAddEventBoxEnabled = false
         selectedDay = today
         coroutineScope.launch {
             // Don't change their order before testing
@@ -214,7 +216,9 @@ fun SharedTransitionScope.DaysScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                 actions = {
-                    TodayActionButton(today != selectedDay) { todayButtonAction() }
+                    TodayActionButton(today != selectedDay || isAddEventBoxEnabled) {
+                        todayButtonAction()
+                    }
                     IconButton({ isWeekView = !isWeekView }) {
                         Crossfade(isWeekView, label = "icon") { state ->
                             if (state) Icon(
@@ -284,6 +288,8 @@ fun SharedTransitionScope.DaysScreen(
                                     days = 7,
                                     now = calendarViewModel.now.collectAsState().value,
                                     navigateToSchedule = navigateToSchedule,
+                                    isAddEventBoxEnabled = isAddEventBoxEnabled,
+                                    setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                 )
                             }
                         }
@@ -322,6 +328,8 @@ fun SharedTransitionScope.DaysScreen(
                                 days = 1,
                                 now = calendarViewModel.now.collectAsState().value,
                                 navigateToSchedule = navigateToSchedule,
+                                isAddEventBoxEnabled = isAddEventBoxEnabled,
+                                setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                             )
                         }
                     }
@@ -380,6 +388,8 @@ private fun DaysView(
     now: Long,
     days: Int,
     navigateToSchedule: (Jdn) -> Unit,
+    isAddEventBoxEnabled: Boolean,
+    setAddEventBoxEnabled: () -> Unit,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -568,6 +578,7 @@ private fun DaysView(
                                                     cellWidthPx * (column - 1),
                                                     cellHeightPx * row / scale.value
                                                 )
+                                                setAddEventBoxEnabled()
                                                 duration = cellHeightPx / scale.value
                                                 setSelectedDay(startingDay + column - 1)
                                             }
@@ -646,10 +657,13 @@ private fun DaysView(
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
-                    if (offset == Offset.Unspecified) offset = Offset(
-                        cellWidthPx * (selectedDay - startingDay),
-                        ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
-                    ) else {
+                    if (offset == Offset.Unspecified) {
+                        offset = Offset(
+                            cellWidthPx * (selectedDay - startingDay),
+                            ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
+                        )
+                        setAddEventBoxEnabled()
+                    } else {
                         val time = selectedDay.toGregorianCalendar()
                         run {
                             val minutes = y * 15
@@ -686,6 +700,12 @@ private fun DaysView(
                         duration = cellHeightPx / 4 * 4f
                         offset = Offset.Unspecified
                         resetOnNextRefresh = false
+                    }
+                }
+
+                LaunchedEffect(isAddEventBoxEnabled) {
+                    if (!isAddEventBoxEnabled && offset != Offset.Unspecified) {
+                        offset = Offset.Unspecified
                     }
                 }
 
