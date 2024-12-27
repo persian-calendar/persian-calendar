@@ -757,7 +757,11 @@ private fun DaysView(
                             with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) { animatedDuration.toDp() },
                         )
-                        .clickable(indication = null, interactionSource = null) { addAction() }
+                        .clickable(
+                            indication = null,
+                            interactionSource = null,
+                            onClickLabel = stringResource(R.string.add_event)
+                        ) { addAction() }
                         .pointerInput(Unit) {
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
