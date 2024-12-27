@@ -743,6 +743,7 @@ private fun DaysView(
                     Text("$from\n$to", textAlign = TextAlign.Center)
                 }
 
+                // Time indicator
                 val time = GregorianCalendar().also { it.timeInMillis = now }
                 val offsetDay = Jdn(time.toCivilDate()) - startingDay
                 val primary = MaterialTheme.colorScheme.primary
@@ -750,7 +751,7 @@ private fun DaysView(
                     Modifier
                         .offset {
                             IntOffset(
-                                (cellWidthPx * (offsetDay + 1)).roundToInt(),
+                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
                                 (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
                             )
                         }
@@ -759,7 +760,7 @@ private fun DaysView(
                     drawCircle(primary, radius)
                     drawLine(
                         color = primary,
-                        start = Offset.Zero,
+                        start = Offset(if (isRtl) this.size.width else 0f, 0f),
                         end = Offset(directionSign * cellWidthPx, 0f),
                         strokeWidth = lineSize
                     )
