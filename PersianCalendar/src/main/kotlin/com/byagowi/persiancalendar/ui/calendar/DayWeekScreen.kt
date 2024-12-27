@@ -625,6 +625,30 @@ private fun DaysView(
                 val radius = with(density) { 4.dp.toPx() }
                 val lineSize = with(density) { 1.dp.toPx() }
 
+                // Time indicator
+                val time = GregorianCalendar().also { it.timeInMillis = now }
+                val offsetDay = Jdn(time.toCivilDate()) - startingDay
+                val primary = MaterialTheme.colorScheme.primary
+                if (offsetDay in 0..<days) Canvas(
+                    Modifier
+                        .offset {
+                            IntOffset(
+                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
+                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                            )
+                        }
+                        .size(1.dp)
+                ) {
+                    drawCircle(primary, radius)
+                    drawLine(
+                        color = primary,
+                        start = Offset(if (isRtl) this.size.width else 0f, 0f),
+                        end = Offset(directionSign * cellWidthPx, 0f),
+                        strokeWidth = lineSize
+                    )
+                }
+
+                // Event to add box
                 Box(
                     Modifier
                         .offset {
@@ -746,29 +770,6 @@ private fun DaysView(
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
                     Text("$from\n$to", textAlign = TextAlign.Center)
-                }
-
-                // Time indicator
-                val time = GregorianCalendar().also { it.timeInMillis = now }
-                val offsetDay = Jdn(time.toCivilDate()) - startingDay
-                val primary = MaterialTheme.colorScheme.primary
-                if (offsetDay in 0..<days) Canvas(
-                    Modifier
-                        .offset {
-                            IntOffset(
-                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
-                            )
-                        }
-                        .size(1.dp)
-                ) {
-                    drawCircle(primary, radius)
-                    drawLine(
-                        color = primary,
-                        start = Offset(if (isRtl) this.size.width else 0f, 0f),
-                        end = Offset(directionSign * cellWidthPx, 0f),
-                        strokeWidth = lineSize
-                    )
                 }
             }
             ScrollShadow(scrollState, top = true)
