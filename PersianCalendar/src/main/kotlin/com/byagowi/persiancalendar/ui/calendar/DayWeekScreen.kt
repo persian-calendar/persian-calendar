@@ -19,7 +19,6 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.drag
-import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -34,8 +33,6 @@ import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -67,8 +64,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -91,7 +86,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -313,16 +307,6 @@ fun SharedTransitionScope.DayWeekScreen(
                                 }
                             }
 
-//                            DayView(
-//                                selectedDay = today + (page - daysLimit / 2),
-//                                refreshToken = refreshToken,
-//                                calendarViewModel = calendarViewModel,
-//                                animatedContentScope = animatedContentScope,
-//                                addEvent = addEvent,
-//                                bottomPadding = bottomPadding.coerceAtLeast(16.dp),
-//                                navigateUp = navigateUp,
-//                                navigateToSchedule = navigateToSchedule,
-//                            )
                             val startingDay = today + (page - daysLimit / 2)
                             DaysView(
                                 bottomPadding = bottomPadding,
@@ -854,145 +838,6 @@ private fun DaysView(
             ScrollShadow(scrollState, top = true)
             ScrollShadow(scrollState, top = false)
         }
-    }
-}
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-private fun SharedTransitionScope.DayView(
-    selectedDay: Jdn,
-    refreshToken: Int,
-    calendarViewModel: CalendarViewModel,
-    animatedContentScope: AnimatedContentScope,
-    addEvent: (AddEventData) -> Unit,
-    bottomPadding: Dp,
-    navigateUp: () -> Unit,
-    navigateToSchedule: (Jdn) -> Unit,
-) {
-    val events = readEvents(selectedDay, refreshToken)
-    val eventsWithTime =
-        events.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().filter { it.time != null }
-    val eventsWithoutTime = events - eventsWithTime.toSet()
-    val hoursEvents = eventsWithTime.groupBy { it.startTime[Calendar.HOUR_OF_DAY] }
-    val calendarPageJdn = remember { calendarViewModel.selectedDay.value }
-
-    Column {
-        val state = rememberLazyListState(7, 0)
-        val detectSwipeUpModifier = Modifier.pointerInput(Unit) {
-            val threshold = 40.dp.toPx()
-            awaitEachGesture {
-                // Don't inline this
-                val id = awaitFirstDown(requireUnconsumed = false).id
-                val wasAtTop =
-                    state.firstVisibleItemIndex == 0 && state.firstVisibleItemScrollOffset == 0
-                verticalDrag(id) {
-                    if (it.positionChange().y > threshold && wasAtTop) navigateUp()
-                }
-            }
-        }
-
-        val hasHeader by remember(events) {
-            val needsHeader = eventsWithTime.isEmpty() || eventsWithoutTime.isNotEmpty()
-            derivedStateOf {
-                needsHeader && !state.lastScrolledForward && state.firstVisibleItemIndex <= 7
-            }
-        }
-
-        AnimatedVisibility(hasHeader) {
-            Column(detectSwipeUpModifier) {
-                Spacer(Modifier.height(24.dp))
-                if (events.isEmpty()) Text(
-                    stringResource(R.string.no_event),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp)
-                )
-                Column(
-                    Modifier
-                        .padding(horizontal = 24.dp)
-                        .then(
-                            if (calendarPageJdn == selectedDay) Modifier.sharedBounds(
-                                rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
-                                animatedVisibilityScope = animatedContentScope,
-                            ) else Modifier
-                        )
-                ) {
-                    DayEvents(eventsWithoutTime.take(3)) {
-                        calendarViewModel.refreshCalendar()
-                    }
-                    if (eventsWithoutTime.size > 3) {
-                        Spacer(Modifier.height(4.dp))
-                        MoreButton(stringResource(R.string.more)) {
-                            navigateToSchedule(selectedDay)
-                        }
-                    }
-                }
-                Spacer(Modifier.height(12.dp))
-            }
-        }
-        Box {
-            LazyColumn(state = state) {
-                items(24) { hour ->
-                    Column(detectSwipeUpModifier) {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .padding(top = 8.dp, start = 24.dp, end = 24.dp)
-                                .then(if (hour < 7) Modifier.alpha(.5f) else Modifier),
-                        ) {
-                            Text(formatNumber("${hour}:00"))
-                            Spacer(Modifier.width(8.dp))
-                            HorizontalDivider()
-                        }
-                        Column(Modifier.padding(horizontal = 24.dp)) {
-                            val hourEvents = hoursEvents[hour]
-                            if (hourEvents != null) DayEvents(hourEvents) {
-                                calendarViewModel.refreshCalendar()
-                            } else AddHourEvent(addEvent, selectedDay, hour)
-                        }
-                    }
-                }
-                item { Spacer(Modifier.height(bottomPadding)) }
-            }
-            ScrollShadow(state, top = true)
-            ScrollShadow(state, top = false)
-        }
-    }
-}
-
-@Composable
-private fun AddHourEvent(addEvent: (AddEventData) -> Unit, jdn: Jdn, hour: Int) {
-    Box(
-        Modifier
-            .padding(top = 4.dp)
-            .clip(MaterialTheme.shapes.medium)
-            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = .5f))
-            .clickable {
-                val time = jdn.toGregorianCalendar()
-                time[GregorianCalendar.HOUR_OF_DAY] = hour
-                time[GregorianCalendar.MINUTE] = 0
-                time[GregorianCalendar.SECOND] = 0
-                val beginTime = time.time
-                time[GregorianCalendar.HOUR_OF_DAY] = hour + 1
-                val endTime = time.time
-                addEvent(
-                    AddEventData(
-                        beginTime = beginTime,
-                        endTime = endTime,
-                        allDay = false,
-                        description = dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
-                    )
-                )
-            }
-            .padding(all = 12.dp),
-    ) {
-        Icon(
-            Icons.Default.Add,
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(24.dp),
-            contentDescription = stringResource(R.string.add_event),
-        )
     }
 }
 
