@@ -725,7 +725,7 @@ private fun DaysView(
                     )
                 }
 
-                // Event to add box
+                // Add event box
                 Box(
                     Modifier
                         .offset {
@@ -832,14 +832,15 @@ private fun DaysView(
                             style = Stroke(lineSize),
                             cornerRadius = CornerRadius(radius, radius),
                         )
+                        val circleOffset = this.size.width * .025f
                         val offset1 = Offset(
-                            x = this.center.x - (this.size.width / 2 - radius - lineSize * 2) * directionSign,
+                            x = this.center.x - (this.size.width / 2 - radius - circleOffset) * directionSign,
                             y = if (offset.y < radius) radius - offset.y else 0f
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset1)
                         drawCircle(primaryWithAlpha, radius, offset1)
                         val offset2 = Offset(
-                            x = this.center.x + (this.size.width / 2 - widthReduction.value - radius - lineSize * 2) * directionSign,
+                            x = this.center.x + (this.size.width / 2 - widthReduction.value - radius - circleOffset) * directionSign,
                             y = this.size.height - lineSize * 2
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset2)
