@@ -516,7 +516,7 @@ private fun DaysView(
             val cellWidth = tableWidth / days
             val cellWidthPx = tableWidthPx / days
             val cellHeightPx = with(density) { cellHeight.toPx() }
-            var offsetPosition by remember(tableWidthPx) { mutableStateOf(Offset.Unspecified) }
+            var offset by remember(tableWidthPx) { mutableStateOf(Offset.Unspecified) }
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             val directionSign = if (isRtl) -1 else 1
@@ -564,7 +564,7 @@ private fun DaysView(
                                                 indication = null,
                                                 interactionSource = null,
                                             ) {
-                                                offsetPosition = Offset(
+                                                offset = Offset(
                                                     cellWidthPx * (column - 1),
                                                     cellHeightPx * row / scale.value
                                                 )
@@ -621,12 +621,17 @@ private fun DaysView(
                     }
                 }
 
-                val x = if (offsetPosition == Offset.Unspecified) 0
-                else (offsetPosition.x / cellWidthPx).roundToInt()
+                val x = if (offset == Offset.Unspecified) 0
+                else (offset.x / cellWidthPx).roundToInt()
+                LaunchedEffect(selectedDay) {
+                    val selectedDayIndex = selectedDay - startingDay
+                    if (offset != Offset.Unspecified && selectedDayIndex != x)
+                        offset = offset.copy(x = selectedDayIndex * cellWidthPx)
+                }
                 val ySteps = (cellHeightPx / 4).roundToInt()
-                val y = if (offsetPosition == Offset.Unspecified) 0
-                else (offsetPosition.y * scale.value / ySteps).roundToInt()
-                val offset = if (offsetPosition == Offset.Unspecified) Offset.Zero
+                val y = if (offset == Offset.Unspecified) 0
+                else (offset.y * scale.value / ySteps).roundToInt()
+                val animatedOffset = if (offset == Offset.Unspecified) Offset.Zero
                 else animateOffsetAsState(
                     Offset(x * cellWidthPx, y * ySteps.toFloat()),
                     animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
@@ -641,7 +646,7 @@ private fun DaysView(
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 val addAction = {
                     val cellHeightScaledPx = cellHeightPx * scale.value
-                    if (offsetPosition == Offset.Unspecified) offsetPosition = Offset(
+                    if (offset == Offset.Unspecified) offset = Offset(
                         cellWidthPx * (selectedDay - startingDay),
                         ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
                     ) else {
@@ -679,7 +684,7 @@ private fun DaysView(
                 LaunchedEffect(resumeToken) {
                     if (resetOnNextRefresh) {
                         duration = cellHeightPx / 4 * 4f
-                        offsetPosition = Offset.Unspecified
+                        offset = Offset.Unspecified
                         resetOnNextRefresh = false
                     }
                 }
@@ -714,8 +719,8 @@ private fun DaysView(
                     Modifier
                         .offset {
                             IntOffset(
-                                (offset.x + firstColumnPx).roundToInt(),
-                                offset.y.roundToInt(),
+                                (animatedOffset.x + firstColumnPx).roundToInt(),
+                                animatedOffset.y.roundToInt(),
                             )
                         }
                         .size(
@@ -739,12 +744,12 @@ private fun DaysView(
                                         1f -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
-                                                maximumValue = (ySteps * 24 * 4) - offsetPosition.y
+                                                maximumValue = (ySteps * 24 * 4) - offset.y
                                             )
 
                                         -1f -> {
-                                            val newValueY = offsetPosition.y + delta.y / scale.value
-                                            offsetPosition = offsetPosition.copy(
+                                            val newValueY = offset.y + delta.y / scale.value
+                                            offset = offset.copy(
                                                 y = newValueY.coerceIn(0f, cellHeightPx * 23)
                                             )
                                             duration = (duration - delta.y / scale.value).coerceIn(
@@ -754,15 +759,15 @@ private fun DaysView(
 
                                         else -> {
                                             val newValueX =
-                                                offsetPosition.x + directionSign * delta.x
-                                            val newValueY = offsetPosition.y + delta.y / scale.value
-                                            offsetPosition = Offset(
+                                                offset.x + directionSign * delta.x
+                                            val newValueY = offset.y + delta.y / scale.value
+                                            offset = Offset(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
                                                 newValueY.coerceIn(0f, cellHeightPx * 24 - duration)
                                             )
 
                                             val effectiveColumn =
-                                                (offsetPosition.x / cellWidthPx).roundToInt()
+                                                (offset.x / cellWidthPx).roundToInt()
                                             setSelectedDay(startingDay + effectiveColumn)
                                         }
                                     }
@@ -778,12 +783,12 @@ private fun DaysView(
                     contentAlignment = Alignment.Center,
                 ) addEventRectangle@{
                     val alpha by animateFloatAsState(
-                        if (offsetPosition == Offset.Unspecified) 0f else 1f,
+                        if (offset == Offset.Unspecified) 0f else 1f,
                         animationSpec = spring(
                             Spring.DampingRatioNoBouncy, Spring.StiffnessLow
                         ), label = "alpha"
                     )
-                    if (offsetPosition == Offset.Unspecified) return@addEventRectangle
+                    if (offset == Offset.Unspecified) return@addEventRectangle
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
                     val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
                     val primaryWithAlpha = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
@@ -794,7 +799,7 @@ private fun DaysView(
                     ) {
                         val rectTopLeft = Offset(
                             x = if (isRtl) widthReduction.value else 0f,
-                            y = if (offset.y < radius) lineSize else 0f,
+                            y = if (animatedOffset.y < radius) lineSize else 0f,
                         )
                         val rectSize = Size(
                             width = this.size.width - widthReduction.value,
@@ -819,7 +824,7 @@ private fun DaysView(
                         val circleOffset = this.size.width * .025f
                         val offset1 = Offset(
                             x = this.center.x - (this.size.width / 2 - radius - circleOffset) * directionSign,
-                            y = if (offset.y < radius) radius - offset.y else 0f
+                            y = if (animatedOffset.y < radius) radius - animatedOffset.y else 0f
                         )
                         drawCircle(circleBorder, radius + lineSize * 2, offset1)
                         drawCircle(primaryWithAlpha, radius, offset1)
