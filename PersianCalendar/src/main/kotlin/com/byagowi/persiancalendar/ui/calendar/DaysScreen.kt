@@ -48,6 +48,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -64,6 +66,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -187,8 +190,11 @@ fun SharedTransitionScope.DaysScreen(
     var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
     var addAction by remember { mutableStateOf({}) }
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         containerColor = Color.Transparent,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         floatingActionButton = {
             ShrinkingFloatingActionButton(
                 modifier = Modifier.padding(end = 8.dp),
@@ -290,6 +296,7 @@ fun SharedTransitionScope.DaysScreen(
                                     navigateToSchedule = navigateToSchedule,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
+                                    snackbarHostState = snackbarHostState,
                                 )
                             }
                         }
@@ -330,6 +337,7 @@ fun SharedTransitionScope.DaysScreen(
                                 navigateToSchedule = navigateToSchedule,
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
+                                snackbarHostState = snackbarHostState,
                             )
                         }
                     }
@@ -390,6 +398,7 @@ private fun DaysView(
     navigateToSchedule: (Jdn) -> Unit,
     isAddEventBoxEnabled: Boolean,
     setAddEventBoxEnabled: () -> Unit,
+    snackbarHostState: SnackbarHostState,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -491,15 +500,16 @@ private fun DaysView(
                                             fontSize = 12.sp,
                                             modifier = Modifier
                                                 .requiredWidth(cellWidth - defaultWidthReductionDp)
-                                                .then(
-                                                    if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable {
-                                                        launcher.viewEvent(event, context)
-                                                    } else Modifier,
-                                                )
                                                 .padding(bottom = 2.dp)
-                                                .background(
-                                                    eventColor(event), MaterialTheme.shapes.small
-                                                ),
+                                                .clip(MaterialTheme.shapes.small)
+                                                .background(eventColor(event))
+                                                .clickable {
+                                                    if (event is CalendarEvent.DeviceCalendarEvent)
+                                                        launcher.viewEvent(event, context)
+                                                    else coroutineScope.launch {
+                                                        snackbarHostState.showSnackbar(event.title)
+                                                    }
+                                                },
                                         )
                                     }
                                     if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(

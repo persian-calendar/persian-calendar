@@ -265,10 +265,10 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     val arguments = backStackEntry.arguments
                     val isWeek = arguments?.getBoolean(isWeekKey) ?: false
                     val jdn = arguments?.getLong(selectedDayKey, 0)
-                            ?.takeIf { it != 0L }
-                            ?.let {
-                                Jdn(it)
-                            } ?: Jdn.today()
+                        ?.takeIf { it != 0L }
+                        ?.let {
+                            Jdn(it)
+                        } ?: Jdn.today()
                     DaysScreen(
                         calendarViewModel = viewModel,
                         initialSelectedDay = jdn,
