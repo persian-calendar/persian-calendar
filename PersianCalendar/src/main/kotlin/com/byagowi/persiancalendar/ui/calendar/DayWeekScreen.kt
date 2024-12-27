@@ -276,9 +276,7 @@ fun SharedTransitionScope.DayWeekScreen(
                                 DaysView(
                                     bottomPadding = bottomPadding,
                                     setAddAction = {
-                                        if (weekPagerState.currentPage == page) {
-                                            addAction = it
-                                        }
+                                        if (weekPagerState.currentPage == page) addAction = it
                                     },
                                     startingDay = weekStart,
                                     selectedDay = selectedDay,
@@ -288,6 +286,7 @@ fun SharedTransitionScope.DayWeekScreen(
                                     refreshToken = refreshToken,
                                     days = 7,
                                     now = calendarViewModel.now.collectAsState().value,
+                                    navigateToSchedule = navigateToSchedule,
                                 )
                             }
                         }
@@ -325,9 +324,7 @@ fun SharedTransitionScope.DayWeekScreen(
                             DaysView(
                                 bottomPadding = bottomPadding,
                                 setAddAction = {
-                                    if (dayPagerState.currentPage == page) {
-                                        addAction = it
-                                    }
+                                    if (dayPagerState.currentPage == page) addAction = it
                                 },
                                 startingDay = startingDay,
                                 selectedDay = selectedDay,
@@ -337,6 +334,7 @@ fun SharedTransitionScope.DayWeekScreen(
                                 refreshToken = refreshToken,
                                 days = 1,
                                 now = calendarViewModel.now.collectAsState().value,
+                                navigateToSchedule = navigateToSchedule,
                             )
                         }
                     }
@@ -394,20 +392,22 @@ private fun DaysView(
     refreshToken: Int,
     now: Long,
     days: Int,
+    navigateToSchedule: (Jdn) -> Unit,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
-    val scrollState = rememberScrollState(with(density) { (cellHeight * 7 - 16.dp).roundToPx() })
+    val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
+    val scrollState = rememberScrollState(initialScroll)
     val events = (startingDay..(startingDay + days - 1)).toList()
         .map { jdn -> readEvents(jdn, refreshToken) }
-//    val eventsWithoutTime = events.map { dayEvents ->
-//        dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent }
-//    }
     val eventsWithTime = events.map { dayEvents ->
         val deviceEvents = dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
         addDivisions(deviceEvents.filter { it.time != null })
+    }
+    val eventsWithoutTime = events.map { dayEvents ->
+        dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
     }
 
     Column(
@@ -426,6 +426,35 @@ private fun DaysView(
                 }
             },
     ) {
+        if (days == 1) {
+            val hasHeader by remember(events) {
+                val needsHeader = eventsWithTime[0].isEmpty() || eventsWithoutTime[0].isNotEmpty()
+                derivedStateOf {
+                    needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.value
+                }
+            }
+
+            AnimatedVisibility(hasHeader) {
+                Column(Modifier.padding(horizontal = 24.dp)) {
+                    Spacer(Modifier.height(16.dp))
+                    if (events[0].isEmpty()) Text(
+                        stringResource(R.string.no_event),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 24.dp)
+                    )
+                    DayEvents(eventsWithoutTime[0].take(3)) { refreshCalendar() }
+                    if (eventsWithoutTime.size > 3) {
+                        Spacer(Modifier.height(4.dp))
+                        MoreButton(stringResource(R.string.more)) {
+                            navigateToSchedule(selectedDay)
+                        }
+                    }
+                    Spacer(Modifier.height(12.dp))
+                }
+            }
+        }
 //        Row(
 //            Modifier
 //                .fillMaxWidth()
@@ -476,7 +505,7 @@ private fun DaysView(
                         val x2 = (firstColumnPx + cellWidthPx * days).let {
                             if (isRtl) this.size.width - it else it
                         }
-                        (1..23).forEach {
+                        (0..23).forEach {
                             drawLine(
                                 outlineVariant,
                                 Offset(x1, cellHeightPx * it),
