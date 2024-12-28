@@ -756,18 +756,26 @@ private fun DaysView(
                     )
                 }
 
+                var intention by remember { mutableStateOf<DragIntention?>(null) }
+
                 // Add event box
                 Box(
                     Modifier
                         .offset {
                             IntOffset(
                                 (animatedOffset.x + firstColumnPx).roundToInt(),
-                                animatedOffset.y.roundToInt(),
+                                (animatedOffset.y +
+                                        if (intention == DragIntention.ExtendUp) duration - animatedDuration
+                                        else 0f).roundToInt(),
                             )
                         }
                         .size(
                             with(density) { cellWidthPx.toDp() - 1.dp },
-                            with(density) { animatedDuration.toDp() },
+                            with(density) {
+                                (animatedDuration +
+                                        if (intention == DragIntention.ExtendUp) offset.y - animatedOffset.y
+                                        else 0f).toDp()
+                            },
                         )
                         .clickable(
                             indication = null,
@@ -778,16 +786,15 @@ private fun DaysView(
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
                                 coroutineScope.launch { widthReduction.animateTo(0f) }
-                                var action: DragIntention? = null
                                 drag(id) {
                                     val delta = it.positionChange()
-                                    if (action == null) action = when {
+                                    if (intention == null) intention = when {
                                         abs(it.position.y - duration * scale.value) < cellHeightPx * .2f -> DragIntention.ExtendDown
 
                                         abs(it.position.y) < cellHeightPx * .2f -> DragIntention.ExtendUp
                                         else -> DragIntention.Move
                                     }
-                                    when (action) {
+                                    when (intention) {
                                         DragIntention.ExtendDown -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
@@ -822,10 +829,9 @@ private fun DaysView(
                                     }
                                     it.consume()
                                 }
+                                intention = null
                                 coroutineScope.launch {
-                                    widthReduction.animateTo(
-                                        defaultWidthReduction
-                                    )
+                                    widthReduction.animateTo(defaultWidthReduction)
                                 }
                             }
                         },
