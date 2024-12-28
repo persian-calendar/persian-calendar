@@ -493,7 +493,7 @@ private fun DaysView(
                     }
                     Row(
                         Modifier
-                            .padding(top = 2.dp, end = pagerArrowSizeAndPadding.dp)
+                            .padding(end = pagerArrowSizeAndPadding.dp)
                             .animateContentSize(),
                     ) {
                         eventsWithoutTime.forEach { dayEvents ->
@@ -508,7 +508,10 @@ private fun DaysView(
                                             color = eventTextColor(color),
                                             modifier = Modifier
                                                 .requiredWidth(cellWidth - defaultWidthReductionDp)
-                                                .padding(bottom = 2.dp)
+                                                .padding(
+                                                    top = if (i == 0) 2.dp else 0.dp,
+                                                    bottom = 2.dp,
+                                                )
                                                 .clip(MaterialTheme.shapes.small)
                                                 .background(eventColor(event))
                                                 .clickable {
