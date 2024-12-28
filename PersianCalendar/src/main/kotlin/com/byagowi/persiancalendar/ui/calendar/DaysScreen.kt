@@ -410,7 +410,13 @@ private fun DaysView(
         .map { jdn -> readEvents(jdn, refreshToken) }
     val eventsWithTime = events.map { dayEvents ->
         val deviceEvents = dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-        addDivisions(deviceEvents.filter { it.time != null })
+        addDivisions(deviceEvents.filter { it.time != null }.sortedWith { x, y ->
+            x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
+                if (it != 0) return@sortedWith it
+            }
+            // If both start at the same time, put bigger events first, better for interval graphs
+            y.start.timeInMillis.compareTo(x.end.timeInMillis)
+        })
     }
     val eventsWithoutTime = events.map { dayEvents ->
         dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
@@ -506,9 +512,9 @@ private fun DaysView(
                                                 .clip(MaterialTheme.shapes.small)
                                                 .background(eventColor(event))
                                                 .clickable {
-                                                    if (event is CalendarEvent.DeviceCalendarEvent)
+                                                    if (event is CalendarEvent.DeviceCalendarEvent) {
                                                         launcher.viewEvent(event, context)
-                                                    else coroutineScope.launch {
+                                                    } else coroutineScope.launch {
                                                         snackbarHostState.showSnackbar(event.title)
                                                     }
                                                 },
