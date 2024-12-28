@@ -806,9 +806,9 @@ private fun DaysView(
                                 drag(id) {
                                     val delta = it.positionChange()
                                     if (intention == null) intention = when {
-                                        abs(it.position.y - duration * scale.value) < cellHeightPx * .2f -> DragIntention.ExtendDown
+                                        abs(it.position.y - duration * scale.value) < cellHeightPx * scale.value * .2f -> DragIntention.ExtendDown
 
-                                        abs(it.position.y) < cellHeightPx * .2f -> DragIntention.ExtendUp
+                                        abs(it.position.y) < cellHeightPx * scale.value * .2f -> DragIntention.ExtendUp
                                         else -> DragIntention.Move
                                     }
                                     when (intention) {
