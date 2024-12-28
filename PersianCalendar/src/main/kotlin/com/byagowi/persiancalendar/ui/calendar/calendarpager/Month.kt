@@ -161,7 +161,7 @@ fun SharedTransitionScope.Month(
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
     (0..<daysRowsCount).forEach { row ->
         AnimatedVisibility(
-            isShowWeekOfYearEnabled || onlyWeek != null,
+            isShowWeekOfYearEnabled,
             modifier = Modifier
                 .offset(-pagerArrowSizeAndPadding.dp * .625f, cellHeight * (1 + row))
                 .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, cellHeight)),
