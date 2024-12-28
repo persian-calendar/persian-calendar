@@ -14,9 +14,6 @@ import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugLog
 
-/**
- * Startup broadcast receiver
- */
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
