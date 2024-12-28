@@ -878,7 +878,10 @@ private fun DaysView(
                     }
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
-                    Text("$from\n$to", textAlign = TextAlign.Center)
+                    Text(
+                        from + (if (dy < 3) " " else "\n") + to,
+                        textAlign = TextAlign.Center,
+                    )
                 }
             }
             ScrollShadow(scrollState, top = true)
