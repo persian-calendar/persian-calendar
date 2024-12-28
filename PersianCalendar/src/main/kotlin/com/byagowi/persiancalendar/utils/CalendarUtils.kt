@@ -183,25 +183,21 @@ private fun readDeviceEvents(
             it.getString(5) == "1" && // is visible
                     it.getLong(9) !in eventCalendarsIdsToExclude.value
         }.map {
-            val startDate = Date(it.getLong(3))
-            val endDate = Date(it.getLong(4))
-            val startCalendar = startDate.toGregorianCalendar()
-            val endCalendar = endDate.toGregorianCalendar()
+            val start = Date(it.getLong(3)).toGregorianCalendar()
+            val end = Date(it.getLong(4)).toGregorianCalendar()
             fun GregorianCalendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getLong(0),
                 title = it.getString(1),
                 time = if (it.getString(6/*ALL_DAY*/) == "1") null else
-                    startCalendar.clock() +
+                    start.clock() +
                             (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                                " $EN_DASH ${endCalendar.clock()}"
+                                " $EN_DASH ${end.clock()}"
                             else ""),
-                startTime = startCalendar,
-                endTime = endCalendar,
+                start = start,
+                end = end,
                 description = it.getString(2)?.replace(descriptionCleaningPattern, "") ?: "",
-                start = startDate,
-                end = endDate,
-                date = startCalendar.toCivilDate(),
+                date = start.toCivilDate(),
                 color = it.getString(7) ?: it.getString(8) ?: "",
                 isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
             )

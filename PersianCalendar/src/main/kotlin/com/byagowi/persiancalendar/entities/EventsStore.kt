@@ -24,7 +24,7 @@ private constructor(private val store: Map<Int, List<T>>) {
         date: CivilDate, irregularCalendarEventsStore: IrregularCalendarEventsStore,
         deviceEvents: DeviceCalendarEventsStore
     ): List<CalendarEvent<*>> {
-        return deviceEvents.getEventsEntry(date).sortedBy { it.start.time } +
+        return deviceEvents.getEventsEntry(date).sortedBy { it.start.timeInMillis } +
                 getEvents(date, irregularCalendarEventsStore)
     }
 

@@ -271,7 +271,7 @@ fun readEvents(jdn: Jdn, refreshToken: Int): List<CalendarEvent<*>> {
             when {
                 it.isHoliday -> 0L
                 it !is CalendarEvent.DeviceCalendarEvent -> 1L
-                else -> it.start.time
+                else -> it.start.timeInMillis
             }
         }
     }

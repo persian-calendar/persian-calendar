@@ -369,7 +369,7 @@ private fun addDivisions(events: List<CalendarEvent.DeviceCalendarEvent>): List<
             if (i == j) return@inner
             val a = events[i]
             val b = events[j]
-            if (a.startTime.timeInMillis in (b.startTime.timeInMillis..<b.endTime.timeInMillis)) {
+            if (a.start.timeInMillis in (b.start.timeInMillis..<b.end.timeInMillis)) {
                 graph.addEdge(i, j)
             }
         }
@@ -619,8 +619,8 @@ private fun DaysView(
 
                 eventsWithTime.mapIndexed { i, it ->
                     it.map { (event, column, columnsCount) ->
-                        val start = hoursFractionOfDay(event.startTime)
-                        val end = hoursFractionOfDay(event.endTime)
+                        val start = hoursFractionOfDay(event.start)
+                        val end = hoursFractionOfDay(event.end)
                         val color = eventColor(event)
                         Text(
                             " " + event.title,
