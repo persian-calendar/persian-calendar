@@ -611,7 +611,7 @@ private fun DaysView(
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         if (column == 0 && row != 23) {
-                                            Text(clockCache[(row + 1) * 60])
+                                            Text(clockCache[(row + 1) * 60], fontSize = 12.sp)
                                             HorizontalDivider(
                                                 Modifier
                                                     .width(8.dp)
