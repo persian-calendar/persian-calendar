@@ -450,10 +450,11 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         else EventsStore.empty()
     val isRtl =
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
     val contentDescription = renderMonthWidget(
         dayPainter = DayPainter(
             resources = context.resources,
-            width = width.toFloat() / if (isShowWeekOfYearEnabled.value) 8 else 7,
+            width = width.toFloat() / if (isShowWeekOfYearEnabled) 8 else 7,
             height = height.toFloat() / 7/* row count*/,
             isRtl = isRtl,
             colors = colors,
@@ -465,7 +466,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         today = today,
         deviceEvents = monthDeviceEvents,
         isRtl = isRtl,
-        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
+        isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         selectedDay = null,
     )
     canvas.also {
@@ -479,10 +480,52 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)
+    remoteViews.setViewVisibility(
+        R.id.week_number_column, if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
+    )
+    remoteViews.setDirection(R.id.month_grid_parent, context.resources)
+    // remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
 
-    remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
+    val monthStart = Jdn(baseDate)
+    val weekStart = applyWeekStartOffsetToWeekDay(Jdn(baseDate).weekDay)
+    val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
+    monthWidgetCells.subList(weekStart, weekStart + monthLength).forEachIndexed { i, id ->
+        val jdn = monthStart + i
+        val action = jdnActionKey + jdn.value
+        remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
+        if (isTalkBackEnabled) {
+            val daySummary = getA11yDaySummary(
+                context.resources, jdn, jdn == today, monthDeviceEvents,
+                withZodiac = false, withOtherCalendars = false, withTitle = true,
+            )
+            remoteViews.setContentDescription(id, daySummary)
+        }
+    }
     return remoteViews
 }
+
+const val jdnActionKey = "JDN"
+
+private val monthWidgetCells = listOf(
+    R.id.month_grid_cell1x1, R.id.month_grid_cell1x2, R.id.month_grid_cell1x3,
+    R.id.month_grid_cell1x4, R.id.month_grid_cell1x5, R.id.month_grid_cell1x6,
+    R.id.month_grid_cell1x7,
+    R.id.month_grid_cell2x1, R.id.month_grid_cell2x2, R.id.month_grid_cell2x3,
+    R.id.month_grid_cell2x4, R.id.month_grid_cell2x5, R.id.month_grid_cell2x6,
+    R.id.month_grid_cell2x7,
+    R.id.month_grid_cell3x1, R.id.month_grid_cell3x2, R.id.month_grid_cell3x3,
+    R.id.month_grid_cell3x4, R.id.month_grid_cell3x5, R.id.month_grid_cell3x6,
+    R.id.month_grid_cell3x7,
+    R.id.month_grid_cell4x1, R.id.month_grid_cell4x2, R.id.month_grid_cell4x3,
+    R.id.month_grid_cell4x4, R.id.month_grid_cell4x5, R.id.month_grid_cell4x6,
+    R.id.month_grid_cell4x7,
+    R.id.month_grid_cell5x1, R.id.month_grid_cell5x2, R.id.month_grid_cell5x3,
+    R.id.month_grid_cell5x4, R.id.month_grid_cell5x5, R.id.month_grid_cell5x6,
+    R.id.month_grid_cell5x7,
+    R.id.month_grid_cell6x1, R.id.month_grid_cell6x2, R.id.month_grid_cell6x3,
+    R.id.month_grid_cell6x4, R.id.month_grid_cell6x5, R.id.month_grid_cell6x6,
+    R.id.month_grid_cell6x7,
+)
 
 private fun createMapRemoteViews(
     context: Context, width: Int, height: Int, time: Long

@@ -52,6 +52,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -118,6 +119,7 @@ import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
+import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -135,6 +137,11 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         "ASTRONOMY" -> astronomyRoute
         "MAP" -> mapRoute
         else -> calendarRoute
+    }
+    var initialJdn by remember {
+        mutableStateOf(intentStartDestination?.takeIf { it.startsWith(jdnActionKey) }?.let {
+            it.replace(jdnActionKey, "").toLongOrNull()?.let(::Jdn)
+        })
     }
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -191,6 +198,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
 
                 composable(calendarRoute) {
+                    val viewModel = viewModel<CalendarViewModel>()
+                    initialJdn?.let { viewModel.changeSelectedDay(it); initialJdn = null }
                     CalendarScreen(
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToHolidaysSettings = {
@@ -232,7 +241,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                                 )
                             }
                         },
-                        viewModel = viewModel<CalendarViewModel>(),
+                        viewModel = viewModel,
                         animatedContentScope = this,
                         isCurrentDestination = isCurrentDestination(calendarRoute),
                     )
