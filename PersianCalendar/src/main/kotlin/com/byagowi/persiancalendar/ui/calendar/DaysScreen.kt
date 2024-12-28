@@ -115,6 +115,7 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -777,32 +778,34 @@ private fun DaysView(
                             awaitEachGesture {
                                 val id = awaitFirstDown().id
                                 coroutineScope.launch { widthReduction.animateTo(0f) }
-                                var action = Float.NaN
+                                var action: DragIntention? = null
                                 drag(id) {
                                     val delta = it.positionChange()
-                                    if (action.isNaN()) action = when {
-                                        abs(it.position.y - duration * scale.value) < cellHeightPx * .2f -> 1f
-                                        abs(it.position.y) < cellHeightPx * .2f -> -1f
-                                        else -> 0f
+                                    if (action == null) action = when {
+                                        abs(it.position.y - duration * scale.value) < cellHeightPx * .2f -> DragIntention.ExtendDown
+
+                                        abs(it.position.y) < cellHeightPx * .2f -> DragIntention.ExtendUp
+                                        else -> DragIntention.Move
                                     }
                                     when (action) {
-                                        1f -> duration =
+                                        DragIntention.ExtendDown -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
                                                 maximumValue = (ySteps * 24 * 4) - offset.y
                                             )
 
-                                        -1f -> {
+                                        DragIntention.ExtendUp -> {
                                             val newValueY = offset.y + delta.y / scale.value
                                             offset = offset.copy(
                                                 y = newValueY.coerceIn(0f, cellHeightPx * 23)
                                             )
-                                            duration = (duration - delta.y / scale.value).coerceIn(
-                                                ySteps * 1f, ySteps * 16f
-                                            )
+                                            duration =
+                                                (duration - delta.y / scale.value).coerceAtLeast(
+                                                    ySteps * 1f
+                                                )
                                         }
 
-                                        else -> {
+                                        DragIntention.Move -> {
                                             val newValueX = offset.x + directionSign * delta.x
                                             val newValueY = offset.y + delta.y / scale.value
                                             offset = Offset(
@@ -814,6 +817,8 @@ private fun DaysView(
                                                 (offset.x / cellWidthPx).roundToInt()
                                             setSelectedDay(startingDay + effectiveColumn)
                                         }
+
+                                        else -> null.debugAssertNotNull
                                     }
                                     it.consume()
                                 }
@@ -892,6 +897,8 @@ private fun DaysView(
         }
     }
 }
+
+private enum class DragIntention { ExtendUp, ExtendDown, Move }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
