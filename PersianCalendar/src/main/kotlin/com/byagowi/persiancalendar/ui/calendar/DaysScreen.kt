@@ -781,17 +781,17 @@ private fun DaysView(
                         .offset {
                             IntOffset(
                                 (animatedOffset.x + firstColumnPx).roundToInt(),
-                                (animatedOffset.y +
-                                        if (intention == DragIntention.ExtendUp) duration - animatedDuration
-                                        else 0f).roundToInt(),
+                                (animatedOffset.y + if (intention == DragIntention.ExtendUp) {
+                                    duration * scale.value - animatedDuration
+                                } else 0f).roundToInt(),
                             )
                         }
                         .size(
                             with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) {
-                                (animatedDuration +
-                                        if (intention == DragIntention.ExtendUp) offset.y - animatedOffset.y
-                                        else 0f).toDp()
+                                (animatedDuration + if (intention == DragIntention.ExtendUp) {
+                                    offset.y * scale.value - animatedOffset.y
+                                } else 0f).toDp()
                             },
                         )
                         .clickable(
