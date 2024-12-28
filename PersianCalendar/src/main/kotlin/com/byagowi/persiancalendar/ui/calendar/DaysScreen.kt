@@ -19,6 +19,7 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.drag
+import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -193,6 +194,19 @@ fun SharedTransitionScope.DaysScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val swipeDownModifier = Modifier.pointerInput(Unit) {
+        val threshold = 40.dp.toPx()
+        awaitEachGesture {
+            var successful = false
+            verticalDrag(awaitFirstDown(requireUnconsumed = false).id) {
+                if (!successful && it.positionChange().y > threshold) {
+                    navigateUp()
+                    successful = true
+                }
+            }
+        }
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -208,6 +222,7 @@ fun SharedTransitionScope.DaysScreen(
         },
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+                modifier = swipeDownModifier,
                 title = {
                     Column {
                         Crossfade(
@@ -255,22 +270,24 @@ fun SharedTransitionScope.DaysScreen(
                     pageSpacing = 2.dp,
                 ) { page ->
                     Column {
-                        if (hasWeeksPager) WeekPage(
-                            pagerSize = pagerSize,
-                            addEvent = addEvent,
-                            monthColors = monthColors,
-                            selectedDay = selectedDay,
-                            selectedDayDate = date,
-                            setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
-                            setEverClicked = { isEverClicked = true },
-                            animatedContentScope = animatedContentScope,
-                            language = language,
-                            coroutineScope = coroutineScope,
-                            weekPagerState = weekPagerState,
-                            page = page,
-                            today = today,
-                            refreshToken = refreshToken,
-                        )
+                        if (hasWeeksPager) Box(swipeDownModifier) {
+                            WeekPage(
+                                pagerSize = pagerSize,
+                                addEvent = addEvent,
+                                monthColors = monthColors,
+                                selectedDay = selectedDay,
+                                selectedDayDate = date,
+                                setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
+                                setEverClicked = { isEverClicked = true },
+                                animatedContentScope = animatedContentScope,
+                                language = language,
+                                coroutineScope = coroutineScope,
+                                weekPagerState = weekPagerState,
+                                page = page,
+                                today = today,
+                                refreshToken = refreshToken,
+                            )
+                        }
                         if (isWeekView) {
                             Spacer(Modifier.height(8.dp))
                             val weekStart = (today + (page - weeksLimit / 2) * 7).let {
