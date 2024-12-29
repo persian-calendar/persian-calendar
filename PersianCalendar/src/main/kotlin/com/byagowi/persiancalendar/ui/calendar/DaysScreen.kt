@@ -827,6 +827,7 @@ private fun DaysView(
                                 val id = awaitFirstDown().id
                                 coroutineScope.launch { widthReduction.animateTo(0f) }
                                 drag(id) {
+                                    if (offset == Offset.Unspecified) return@drag
                                     val delta = it.positionChange()
                                     if (intention == null) intention = when {
                                         abs(it.position.y - duration * scale.value) < cellHeightPx * scale.value * .2f -> DragIntention.ExtendDown
