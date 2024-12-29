@@ -497,6 +497,7 @@ private fun DaysView(
                 Row(
                     verticalAlignment = Alignment.Bottom,
                     modifier = if (maxDayAllDayEvents > 3) Modifier.clickable(
+                        onClickLabel = stringResource(R.string.more),
                         indication = null,
                         interactionSource = null,
                     ) { isExpanded = !isExpanded } else Modifier
