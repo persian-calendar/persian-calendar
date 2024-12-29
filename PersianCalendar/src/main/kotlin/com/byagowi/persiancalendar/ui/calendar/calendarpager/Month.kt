@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_JDN
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_WEEK_NUMBER
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -160,16 +161,26 @@ fun SharedTransitionScope.Month(
 
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
     (0..<daysRowsCount).forEach { row ->
+        val weekNumber = monthStartWeekOfYear + row
         AnimatedVisibility(
-            isShowWeekOfYearEnabled,
+            isShowWeekOfYearEnabled && (onlyWeek == null || onlyWeek == weekNumber),
             modifier = Modifier
-                .offset(-pagerArrowSizeAndPadding.dp * .625f, cellHeight * (1 + row))
+                .offset(
+                    -pagerArrowSizeAndPadding.dp * .625f,
+                    cellHeight * (1 + if (onlyWeek == null) row else 0)
+                )
                 .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, cellHeight)),
             label = "week number",
         ) {
             Box(
                 Modifier
                     .fillMaxSize()
+                    .sharedBounds(
+                        rememberSharedContentState(
+                            "$SHARED_CONTENT_KEY_WEEK_NUMBER$monthStartJdn-$weekNumber"
+                        ),
+                        animatedVisibilityScope = animatedContentScope,
+                    )
                     .then(if (onWeekClick != null) Modifier.clickable(
                         onClickLabel = stringResource(R.string.week_view),
                         indication = ripple(bounded = false),
@@ -186,10 +197,10 @@ fun SharedTransitionScope.Month(
                     } else Modifier),
                 contentAlignment = Alignment.Center,
             ) {
-                val weekNumber = formatNumber(monthStartWeekOfYear + row)
-                val description = stringResource(R.string.nth_week_of_year, weekNumber)
+                val formattedWeekNumber = formatNumber(weekNumber)
+                val description = stringResource(R.string.nth_week_of_year, formattedWeekNumber)
                 Text(
-                    weekNumber,
+                    formattedWeekNumber,
                     fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
                     modifier = Modifier
                         .alpha(AppBlendAlpha)
