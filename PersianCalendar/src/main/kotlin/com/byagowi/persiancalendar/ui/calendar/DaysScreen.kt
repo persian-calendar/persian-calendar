@@ -575,7 +575,7 @@ private fun DaysView(
         BoxWithConstraints {
             val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
             val tableWidth = this@BoxWithConstraints.maxWidth - when (days) {
-                1 -> pagerArrowSizeAndPadding.dp + 24.dp
+                1 -> pagerArrowSizeAndPadding.dp + 24.dp - defaultWidthReductionDp
                 else -> pagerArrowSizeAndPadding.dp * 2
             }
             val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
