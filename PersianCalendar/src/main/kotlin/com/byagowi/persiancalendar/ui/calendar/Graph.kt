@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+// The use in this app is https://en.wikipedia.org/wiki/Interval_graph
 class Graph(verticesCount: Int) {
     private val adjacency = List(verticesCount) { mutableSetOf<Int>() }
 
@@ -20,8 +21,8 @@ class Graph(verticesCount: Int) {
     }
 
     // It's a simple greedy implementation, https://en.wikipedia.org/wiki/Greedy_coloring
-    // readEvents applies a sort by starting point which is suggested for
-    // https://en.wikipedia.org/wiki/Interval_graph
+    // readEvents applies a sort by starting point which is suggested for interval graphs
+    // and a sort for putting longer events first is done in DaysScreen
     fun coloring(): List<Int> {
         val result = MutableList(adjacency.size) { -1 }
         adjacency.forEachIndexed { i, x ->
