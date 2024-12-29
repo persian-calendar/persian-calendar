@@ -195,11 +195,14 @@ fun SharedTransitionScope.DaysScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val swipeDownModifier = Modifier.pointerInput(Unit) {
-        val threshold = 40.dp.toPx()
+        val threshold = 80.dp.toPx()
         awaitEachGesture {
+            val id = awaitFirstDown(requireUnconsumed = false).id
             var successful = false
-            verticalDrag(awaitFirstDown(requireUnconsumed = false).id) {
-                if (!successful && it.positionChange().y > threshold) {
+            var yAccumulation = 0f
+            verticalDrag(id) {
+                yAccumulation += it.positionChange().y
+                if (!successful && yAccumulation > threshold) {
                     navigateUp()
                     successful = true
                 }

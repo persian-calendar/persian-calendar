@@ -311,18 +311,19 @@ fun SharedTransitionScope.CalendarScreen(
                                     .clip(materialCornerExtraLargeTop())
                                     .verticalScroll(scrollState)
                                     .pointerInput(Unit) {
-                                        val threshold = 40.dp.toPx()
+                                        val threshold = 80.dp.toPx()
                                         awaitEachGesture {
                                             // Don't inline id into verticalDrag, the order matters
                                             val id = awaitFirstDown(requireUnconsumed = false).id
                                             val wasAtTop = scrollState.value == 0
                                             val wasAtEnd = scrollState.value == scrollState.maxValue
                                             var successful = false
+                                            var yAccumulation = 0f
                                             verticalDrag(id) {
-                                                val dragAmount = it.positionChange().y
-                                                if (abs(dragAmount) < threshold) return@verticalDrag
+                                                yAccumulation += it.positionChange().y
+                                                if (abs(yAccumulation) < threshold) return@verticalDrag
                                                 if (successful) return@verticalDrag
-                                                if (wasAtEnd && dragAmount < 0) {
+                                                if (wasAtEnd && yAccumulation < 0) {
                                                     when (preferredSwipeUpAction.value) {
                                                         SwipeUpAction.Schedule -> navigateToSchedule()
                                                         SwipeUpAction.DayView -> {
@@ -338,7 +339,7 @@ fun SharedTransitionScope.CalendarScreen(
                                                         }
                                                     }
                                                     successful = true
-                                                } else if (wasAtTop && dragAmount > 0) {
+                                                } else if (wasAtTop && yAccumulation > 0) {
                                                     viewModel.openYearView()
                                                     successful = true
                                                 }
