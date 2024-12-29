@@ -256,8 +256,8 @@ fun SharedTransitionScope.DaysScreen(
                         todayButtonAction()
                     }
                     IconButton({ isWeekView = !isWeekView }) {
-                        val title = if (isWeekView) stringResource(R.string.week_view)
-                        else stringResource(R.string.day_view)
+                        val title = if (isWeekView) stringResource(R.string.day_view)
+                        else stringResource(R.string.week_view)
                         TooltipBox(
                             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
                             tooltip = { PlainTooltip { Text(title) } },
