@@ -63,6 +63,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -140,11 +141,13 @@ fun SharedTransitionScope.DaysScreen(
     isInitiallyWeek: Boolean,
     navigateToSchedule: (Jdn) -> Unit,
 ) {
-    var selectedDay by remember { mutableStateOf(initialSelectedDay) }
+    var selectedDay by rememberSaveable(
+        saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
+    ) { mutableStateOf(initialSelectedDay) }
     val date = selectedDay.inCalendar(mainCalendar)
     val today by calendarViewModel.today.collectAsState()
     val context = LocalContext.current
-    var isEverClicked by remember { mutableStateOf(false) }
+    var isEverClicked by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val weekInitialPage = remember(today) { weekPageFromJdn(initialSelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
