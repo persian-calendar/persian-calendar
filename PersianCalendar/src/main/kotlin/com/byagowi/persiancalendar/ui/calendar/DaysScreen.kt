@@ -48,11 +48,15 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -252,14 +256,17 @@ fun SharedTransitionScope.DaysScreen(
                         todayButtonAction()
                     }
                     IconButton({ isWeekView = !isWeekView }) {
-                        Crossfade(isWeekView, label = "icon") { state ->
-                            if (state) Icon(
-                                Icons.Default.CalendarViewDay,
-                                contentDescription = stringResource(R.string.week_view),
-                            ) else Icon(
-                                Icons.Default.CalendarViewWeek,
-                                contentDescription = stringResource(R.string.day_view),
-                            )
+                        val title = if (isWeekView) stringResource(R.string.week_view)
+                        else stringResource(R.string.day_view)
+                        TooltipBox(
+                            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                            tooltip = { PlainTooltip { Text(title) } },
+                            state = rememberTooltipState()
+                        ) {
+                            Crossfade(isWeekView, label = "icon") { state ->
+                                if (state) Icon(Icons.Default.CalendarViewDay, title)
+                                else Icon(Icons.Default.CalendarViewWeek, title)
+                            }
                         }
                     }
                 },
@@ -635,9 +642,7 @@ private fun DaysView(
                                                 }
                                                 .then(if (isTalkBackEnabled) Modifier.semantics {
                                                     this.contentDescription =
-                                                        (startingDay + (column - 1)).weekDayName +
-                                                                " " + clockCache[row * 60] +
-                                                                " " + clockCache[(row + 1) * 60]
+                                                        (startingDay + (column - 1)).weekDayName + " " + clockCache[row * 60] + " " + clockCache[(row + 1) * 60]
                                                 } else Modifier)
                                         }.size(
                                             if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
