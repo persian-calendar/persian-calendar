@@ -171,6 +171,7 @@ fun SharedTransitionScope.Month(
                 Modifier
                     .fillMaxSize()
                     .then(if (onWeekClick != null) Modifier.clickable(
+                        onClickLabel = stringResource(R.string.week_view),
                         indication = ripple(bounded = false),
                         interactionSource = null,
                     ) {
