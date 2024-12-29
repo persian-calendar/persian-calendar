@@ -80,6 +80,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -95,6 +97,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
@@ -614,18 +617,25 @@ private fun DaysView(
                                     Box(
                                         when (column) {
                                             0, days + 1 -> Modifier
-                                            else -> Modifier.clickable(
-                                                indication = null,
-                                                interactionSource = null,
-                                            ) {
-                                                offset = Offset(
-                                                    cellWidthPx * (column - 1),
-                                                    cellHeightPx * row / scale.value
-                                                )
-                                                setAddEventBoxEnabled()
-                                                duration = cellHeightPx / scale.value
-                                                setSelectedDay(startingDay + column - 1)
-                                            }
+                                            else -> Modifier
+                                                .clickable(
+                                                    indication = null,
+                                                    interactionSource = null,
+                                                ) {
+                                                    offset = Offset(
+                                                        cellWidthPx * (column - 1),
+                                                        cellHeightPx * row / scale.value
+                                                    )
+                                                    setAddEventBoxEnabled()
+                                                    duration = cellHeightPx / scale.value
+                                                    setSelectedDay(startingDay + column - 1)
+                                                }
+                                                .then(if (isTalkBackEnabled) Modifier.semantics {
+                                                    this.contentDescription =
+                                                        (startingDay + (column - 1)).weekDayName +
+                                                                " " + clockCache[row * 60] +
+                                                                " " + clockCache[(row + 1) * 60]
+                                                } else Modifier)
                                         }.size(
                                             if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
                                             else cellWidth,
