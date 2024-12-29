@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
@@ -260,7 +261,7 @@ fun SharedTransitionScope.DaysScreen(
         },
     ) { paddingValues ->
         val monthColors = appMonthColors()
-        val bottomPadding = paddingValues.calculateBottomPadding()
+        val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             val pagerSize =
                 calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
