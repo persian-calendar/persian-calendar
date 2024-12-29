@@ -795,7 +795,10 @@ private fun DaysView(
                     drawLine(
                         color = primary,
                         start = Offset(if (isRtl) this.size.width else 0f, 0f),
-                        end = Offset(directionSign * cellWidthPx, 0f),
+                        end = Offset(
+                            directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
+                            0f
+                        ),
                         strokeWidth = lineSize
                     )
                 }
