@@ -588,6 +588,8 @@ private fun DaysView(
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             val directionSign = if (isRtl) -1 else 1
             val lineSize = with(density) { 1.dp.toPx() }
+            val heightSizeReduction = 3.dp
+            val heightSizeReductionPx = with(density) { heightSizeReduction.toPx() }
 
             Box(Modifier.verticalScroll(scrollState)) {
                 val clockCache = remember {
@@ -686,7 +688,7 @@ private fun DaysView(
                                 }
                                 .requiredSize(
                                     with(density) { (cellWidthPx / columnsCount - defaultWidthReduction).toDp() },
-                                    with(density) { ((end - start) * cellHeightPx).toDp() - 3.dp },
+                                    with(density) { ((end - start) * cellHeightPx).toDp() - heightSizeReduction },
                                 )
                                 .clickable { launcher.viewEvent(event, context) }
                                 .background(color, MaterialTheme.shapes.small)
@@ -773,6 +775,8 @@ private fun DaysView(
 
                 val widthReduction = remember { Animatable(defaultWidthReduction) }
                 val radius = with(density) { 4.dp.toPx() }
+                // The same value as MaterialTheme.shapes.small
+                val corner = with(density) { 8.dp.toPx() }
 
                 // Time indicator
                 val time = GregorianCalendar().also { it.timeInMillis = now }
@@ -899,25 +903,22 @@ private fun DaysView(
                         )
                         val rectSize = Size(
                             width = this.size.width - widthReduction.value,
-                            height = this.size.height - lineSize * 2
+                            height = this.size.height - heightSizeReductionPx
                         )
                         drawRoundRect(
                             background,
                             size = rectSize,
                             topLeft = rectTopLeft,
-                            cornerRadius = CornerRadius(radius, radius),
+                            cornerRadius = CornerRadius(corner),
                         )
                         drawRoundRect(
                             primaryWithAlpha,
                             topLeft = rectTopLeft,
-                            size = Size(
-                                width = this.size.width - widthReduction.value,
-                                height = this.size.height - lineSize * 2,
-                            ),
+                            size = rectSize,
                             style = Stroke(lineSize),
-                            cornerRadius = CornerRadius(radius, radius),
+                            cornerRadius = CornerRadius(corner),
                         )
-                        val circleOffset = this.size.width * .025f
+                        val circleOffset = this.size.width * .05f
                         val offset1 = Offset(
                             x = this.center.x - (this.size.width / 2 - radius - circleOffset) * directionSign,
                             y = if (animatedOffset.y < radius) radius - animatedOffset.y else 0f
