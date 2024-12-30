@@ -57,6 +57,7 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -232,7 +233,15 @@ fun SharedTransitionScope.DaysScreen(
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 modifier = swipeDownModifier,
                 title = {
-                    Column {
+                    Column(
+                        Modifier.clickable(
+                            interactionSource = null,
+                            indication = ripple(bounded = false),
+                            onClickLabel = stringResource(
+                                if (!isWeekView) R.string.week_view else R.string.calendar
+                            )
+                        ) { if (!isWeekView) isWeekView = true else navigateUp() }
+                    ) {
                         Crossfade(
                             if (hasWeeksPager) date.monthName
                             else language.dm.format(formatNumber(date.dayOfMonth), date.monthName),
