@@ -954,7 +954,7 @@ private fun DaysView(
                     Text(
                         from + when {
                             dy >= 3 -> "\n"
-                            days == 1 -> " "
+                            days == 7 -> " "
                             else -> " $EN_DASH "
                         } + to,
                         textAlign = TextAlign.Center,
