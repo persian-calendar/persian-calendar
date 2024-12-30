@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
+import androidx.compose.material.icons.filled.Yard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -41,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -52,21 +54,30 @@ import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
+import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
+import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
+import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
+import io.github.persiancalendar.calendar.PersianDate
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -119,7 +130,7 @@ fun SharedTransitionScope.EventsTab(
         }
 
         Column(Modifier.padding(horizontal = 24.dp)) {
-            val events = readEvents(jdn, refreshToken)
+            val events = readEvents(jdn, refreshToken, viewModel)
             Spacer(Modifier.height(16.dp))
             AnimatedVisibility(events.isEmpty()) {
                 Text(
@@ -178,7 +189,7 @@ fun eventColor(event: CalendarEvent<*>): Color {
             if (event.color.isEmpty()) null else Color(event.color.toLong())
         }.onFailure(logException).getOrNull() ?: MaterialTheme.colorScheme.primary
 
-        event.isHoliday -> MaterialTheme.colorScheme.primary
+        event.isHoliday || event is CalendarEvent.EquinoxCalendarEvent -> MaterialTheme.colorScheme.primary
         else -> MaterialTheme.colorScheme.surfaceVariant
     }
 }
@@ -249,9 +260,10 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         )
                     }
                 }
-                AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent) {
+                AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent || event is CalendarEvent.EquinoxCalendarEvent) {
                     Icon(
-                        Icons.AutoMirrored.Default.OpenInNew,
+                        if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
+                        else Icons.AutoMirrored.Default.OpenInNew,
                         contentDescription = null,
                         tint = contentColor,
                         modifier = Modifier.padding(start = 8.dp),
@@ -263,7 +275,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
 }
 
 @Composable
-fun readEvents(jdn: Jdn, refreshToken: Int): List<CalendarEvent<*>> {
+fun readEvents(jdn: Jdn, refreshToken: Int, viewModel: CalendarViewModel): List<CalendarEvent<*>> {
     val context = LocalContext.current
     val events = remember(jdn, refreshToken) {
         (eventsRepository?.getEvents(jdn, context.readDayDeviceEvents(jdn))
@@ -273,6 +285,37 @@ fun readEvents(jdn: Jdn, refreshToken: Int): List<CalendarEvent<*>> {
                 it !is CalendarEvent.DeviceCalendarEvent -> 1L
                 else -> it.start.timeInMillis
             }
+        }
+    }
+
+    if (mainCalendar == Calendar.SHAMSI) {
+        val date = jdn.toPersianDate()
+        if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
+            val now by viewModel.now.collectAsState()
+            val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, context)
+            val title = rawTitle.replace(": ", "\n") + run {
+                var remainedTime = equinoxTime - now
+                if (remainedTime < 0 || remainedTime > DAY_IN_MILLIS * 356) ""
+                else "\n" + buildList {
+                    val days = (remainedTime / DAY_IN_MILLIS).toInt()
+                    if (days != 0) {
+                        add(pluralStringResource(R.plurals.days, days, formatNumber(days)))
+                        remainedTime -= days * DAY_IN_MILLIS
+                    }
+                    val hours = (remainedTime / ONE_HOUR_IN_MILLIS).toInt()
+                    if (hours != 0) {
+                        add(pluralStringResource(R.plurals.hours, hours, formatNumber(hours)))
+                        remainedTime -= hours * ONE_HOUR_IN_MILLIS
+                    }
+                    val minutes = (remainedTime / ONE_MINUTE_IN_MILLIS).toInt()
+                    if (minutes != 0) add(
+                        pluralStringResource(R.plurals.minutes, minutes, formatNumber(minutes))
+                    )
+                }.joinToString(spacedComma)
+            }
+            return listOf(
+                CalendarEvent.EquinoxCalendarEvent(title, false, date)
+            ) + events
         }
     }
     return events

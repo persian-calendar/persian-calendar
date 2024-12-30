@@ -311,7 +311,7 @@ private fun eventsCache(calendarViewModel: CalendarViewModel): @Composable (Jdn)
     val emptyDays by remember(refreshToken) { mutableStateOf(mutableLongSetOf()) }
     return { jdn ->
         if (jdn.value in emptyDays) emptyList() else {
-            val events = readEvents(jdn, refreshToken)
+            val events = readEvents(jdn, refreshToken, calendarViewModel)
             if (events.isEmpty()) emptyDays.add(jdn.value)
             events
         }

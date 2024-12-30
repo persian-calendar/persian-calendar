@@ -20,6 +20,9 @@ sealed class CalendarEvent<T : AbstractDate>(
     class PersianCalendarEvent(title: String, isHoliday: Boolean, date: PersianDate) :
         CalendarEvent<PersianDate>(title, isHoliday, date)
 
+    class EquinoxCalendarEvent(title: String, isHoliday: Boolean, date: PersianDate) :
+        CalendarEvent<PersianDate>(title, isHoliday, date)
+
     class NepaliCalendarEvent(title: String, isHoliday: Boolean, date: NepaliDate) :
         CalendarEvent<NepaliDate>(title, isHoliday, date)
 
@@ -43,6 +46,7 @@ sealed class CalendarEvent<T : AbstractDate>(
             is GregorianCalendarEvent,
             is IslamicCalendarEvent,
             is PersianCalendarEvent,
+            is EquinoxCalendarEvent,
             is NepaliCalendarEvent -> title
 
             is DeviceCalendarEvent -> oneLinerTitleWithTime +

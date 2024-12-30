@@ -330,6 +330,7 @@ fun SharedTransitionScope.DaysScreen(
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
+                                    calendarViewModel = calendarViewModel,
                                 )
                             }
                         }
@@ -371,6 +372,7 @@ fun SharedTransitionScope.DaysScreen(
                                 isAddEventBoxEnabled = isAddEventBoxEnabled,
                                 setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                 snackbarHostState = snackbarHostState,
+                                calendarViewModel = calendarViewModel,
                             )
                         }
                     }
@@ -432,6 +434,7 @@ private fun DaysView(
     isAddEventBoxEnabled: Boolean,
     setAddEventBoxEnabled: () -> Unit,
     snackbarHostState: SnackbarHostState,
+    calendarViewModel: CalendarViewModel,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -440,7 +443,7 @@ private fun DaysView(
     val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
     val scrollState = rememberScrollState(initialScroll)
     val events = (startingDay..(startingDay + days - 1)).toList()
-        .map { jdn -> readEvents(jdn, refreshToken) }
+        .map { jdn -> readEvents(jdn, refreshToken, calendarViewModel) }
     val eventsWithTime = events.map { dayEvents ->
         val deviceEvents = dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
         addDivisions(deviceEvents.filter { it.time != null }.sortedWith { x, y ->

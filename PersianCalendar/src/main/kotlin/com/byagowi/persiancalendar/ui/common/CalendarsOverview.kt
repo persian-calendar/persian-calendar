@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -124,16 +125,8 @@ fun CalendarsOverview(
         val date = jdn.inCalendar(selectedCalendar)
         val equinox = remember(selectedCalendar, jdn) {
             if (date !is PersianDate) return@remember null
-            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) {
-                val addition = if (date.month == 12) 1 else 0
-                val equinoxYear = date.year + addition
-                val calendar = Date(
-                    seasons(jdn.toCivilDate().year).marchEquinox.toMillisecondsSince1970()
-                ).toGregorianCalendar()
-                context.getString(
-                    R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()
-                )
-            } else null
+            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1)
+                equinoxTitle(date, jdn, context).first else null
         }
         AnimatedVisibility(visible = equinox != null) {
             SelectionContainer {
@@ -293,6 +286,16 @@ fun CalendarsOverview(
             tint = MaterialTheme.colorScheme.primary,
         )
     }
+}
+
+fun equinoxTitle(date: PersianDate, jdn: Jdn, context: Context): Pair<String, Long> {
+    val addition = if (date.month == 12) 1 else 0
+    val equinoxYear = date.year + addition
+    val timestamp = seasons(jdn.toCivilDate().year).marchEquinox.toMillisecondsSince1970()
+    val calendar = Date(timestamp).toGregorianCalendar()
+    return context.getString(
+        R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()
+    ) to timestamp
 }
 
 @Composable
