@@ -128,6 +128,7 @@ import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -255,7 +256,16 @@ fun SharedTransitionScope.DaysScreen(
                     TodayActionButton(today != selectedDay || isAddEventBoxEnabled) {
                         todayButtonAction()
                     }
-                    IconButton({ isWeekView = !isWeekView }) {
+                    IconButton({
+                        isWeekView = !isWeekView
+                        // Ugly fix
+                        val storedSelectedDay = selectedDay
+                        if (!isWeekView) coroutineScope.launch {
+                            delay(100)
+                            selectedDay = storedSelectedDay
+                            dayPagerState.scrollToPage(dayPageFromJdn(selectedDay, today))
+                        }
+                    }) {
                         val title = if (isWeekView) stringResource(R.string.day_view)
                         else stringResource(R.string.week_view)
                         TooltipBox(
