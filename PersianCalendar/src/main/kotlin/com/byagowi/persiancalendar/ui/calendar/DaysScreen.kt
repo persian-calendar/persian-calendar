@@ -952,7 +952,11 @@ private fun DaysView(
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
                     Text(
-                        from + (if (dy < 3) " $EN_DASH " else "\n") + to,
+                        from + when {
+                            dy >= 3 -> "\n"
+                            days == 1 -> " "
+                            else -> " $EN_DASH "
+                        } + to,
                         textAlign = TextAlign.Center,
                     )
                 }
