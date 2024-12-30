@@ -97,6 +97,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
+import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
@@ -951,7 +952,7 @@ private fun DaysView(
                     val from = clockCache[y * 15]
                     val to = clockCache[(y + dy) * 15]
                     Text(
-                        from + (if (dy < 3) " " else "\n") + to,
+                        from + (if (dy < 3) " ${EN_DASH}DASH " else "\n") + to,
                         textAlign = TextAlign.Center,
                     )
                 }
