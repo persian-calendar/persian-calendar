@@ -48,6 +48,7 @@ fun SharedTransitionScope.CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
     addEvent: (AddEventData) -> Unit,
+    today: Jdn,
     size: DpSize,
     navigateToDays: (Jdn, Boolean) -> Unit,
     animatedContentScope: AnimatedContentScope,
@@ -55,7 +56,14 @@ fun SharedTransitionScope.CalendarPager(
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
     LaunchedEffect(key1 = selectedMonthOffsetCommand) {
         val offset = selectedMonthOffsetCommand ?: return@LaunchedEffect
-        pagerState.animateScrollToPage(applyOffset(-offset))
+        val page = applyOffset(-offset)
+        if (viewModel.daysScreenSelectedDay.value == null) {
+            pagerState.animateScrollToPage(page)
+        } else {
+            // Apply immediately if we're just coming back from days screen
+            pagerState.scrollToPage(page)
+            viewModel.changeDaysScreenSelectedDay(null)
+        }
         viewModel.changeSelectedMonthOffsetCommand(null)
     }
 
@@ -65,7 +73,6 @@ fun SharedTransitionScope.CalendarPager(
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
 
     val scope = rememberCoroutineScope()
-    val today by viewModel.today.collectAsState()
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
     val refreshToken by viewModel.refreshToken.collectAsState()

@@ -77,7 +77,15 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _yearViewIsInYearSelection = MutableStateFlow(false)
     val yearViewIsInYearSelection: StateFlow<Boolean> get() = _yearViewIsInYearSelection
 
+    private val _daysScreenSelectedDay = MutableStateFlow<Jdn?>(null)
+    val daysScreenSelectedDay: StateFlow<Jdn?> get() = _daysScreenSelectedDay
+
     // Commands
+    fun changeDaysScreenSelectedDay(jdn: Jdn?) {
+        jdn?.let { changeSelectedDay(it) }
+        _daysScreenSelectedDay.value = jdn
+    }
+
     fun changeSelectedMonthOffsetCommand(offset: Int?) {
         _selectedMonthOffsetCommand.value = offset
     }

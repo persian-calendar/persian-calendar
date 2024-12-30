@@ -58,7 +58,6 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -151,8 +150,7 @@ fun SharedTransitionScope.DaysScreen(
     ) { mutableStateOf(initialSelectedDay) }
     val date = selectedDay.inCalendar(mainCalendar)
     val today by calendarViewModel.today.collectAsState()
-    val context = LocalContext.current
-    var isEverClicked by rememberSaveable { mutableStateOf(false) }
+    calendarViewModel.changeDaysScreenSelectedDay(selectedDay)
     val coroutineScope = rememberCoroutineScope()
     val weekInitialPage = remember(today) { weekPageFromJdn(initialSelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
@@ -169,13 +167,6 @@ fun SharedTransitionScope.DaysScreen(
         }
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            if (isEverClicked && calendarViewModel.selectedDay.value != selectedDay) {
-                bringDate(calendarViewModel, selectedDay, context, highlight = selectedDay != today)
-            }
-        }
-    }
     val addEvent = addEvent(calendarViewModel)
     val hasWeeksPager = LocalConfiguration.current.screenHeightDp > 600
     val language by language.collectAsState()
@@ -183,7 +174,6 @@ fun SharedTransitionScope.DaysScreen(
 
     val todayButtonAction = {
         isAddEventBoxEnabled = false
-        isEverClicked = true
         selectedDay = today
         coroutineScope.launch {
             // Don't change their order before testing
@@ -304,7 +294,6 @@ fun SharedTransitionScope.DaysScreen(
                                 selectedDay = selectedDay,
                                 selectedDayDate = date,
                                 setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
-                                setEverClicked = { isEverClicked = true },
                                 animatedContentScope = animatedContentScope,
                                 language = language,
                                 coroutineScope = coroutineScope,
@@ -331,10 +320,7 @@ fun SharedTransitionScope.DaysScreen(
                                     },
                                     startingDay = weekStart,
                                     selectedDay = selectedDay,
-                                    setSelectedDay = {
-                                        isEverClicked = true
-                                        setSelectedDayInWeekPager(it)
-                                    },
+                                    setSelectedDay = setSelectedDayInWeekPager,
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
                                     refreshToken = refreshToken,
@@ -976,7 +962,6 @@ private fun SharedTransitionScope.WeekPager(
     selectedDay: Jdn,
     selectedDayDate: AbstractDate,
     setSelectedDay: (Jdn) -> Unit,
-    setEverClicked: () -> Unit,
     animatedContentScope: AnimatedContentScope,
     language: Language,
     coroutineScope: CoroutineScope,
@@ -1015,7 +1000,7 @@ private fun SharedTransitionScope.WeekPager(
                 isHighlighted = true,
                 selectedDay = selectedDay,
                 refreshToken = refreshToken,
-                setSelectedDay = { setEverClicked(); setSelectedDay(it) },
+                setSelectedDay = setSelectedDay,
             )
         }
         PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, false, week)

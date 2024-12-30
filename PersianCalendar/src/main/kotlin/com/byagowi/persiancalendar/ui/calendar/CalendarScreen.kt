@@ -208,6 +208,12 @@ fun SharedTransitionScope.CalendarScreen(
     val context = LocalContext.current
     val addEvent = addEvent(viewModel)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val today by viewModel.today.collectAsState()
+
+    val daysScreenSelectedDay by viewModel.daysScreenSelectedDay.collectAsState()
+    LaunchedEffect(daysScreenSelectedDay) {
+        daysScreenSelectedDay?.let { bringDate(viewModel, it, context, it != today) }
+    }
 
     Scaffold(
         containerColor = Color.Transparent,
@@ -225,6 +231,7 @@ fun SharedTransitionScope.CalendarScreen(
                     navigateToDays = navigateToDays,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
+                    today = today,
                 )
             }
         },
@@ -275,6 +282,7 @@ fun SharedTransitionScope.CalendarScreen(
                     navigateToAstronomy = navigateToAstronomy,
                     animatedContentScope = animatedContentScope,
                     bottomPadding = bottomPaddingWithMinimum,
+                    today = today,
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
@@ -286,6 +294,7 @@ fun SharedTransitionScope.CalendarScreen(
                         Box(Modifier.size(pagerSize)) {
                             CalendarPager(
                                 viewModel = viewModel,
+                                today = today,
                                 pagerState = pagerState,
                                 addEvent = addEvent,
                                 size = pagerSize,
@@ -361,6 +370,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 ) {
                                     CalendarPager(
                                         viewModel = viewModel,
+                                        today = today,
                                         pagerState = pagerState,
                                         addEvent = addEvent,
                                         size = pagerSize,
@@ -454,6 +464,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToAstronomy: (Int) -> Unit,
     animatedContentScope: AnimatedContentScope,
     bottomPadding: Dp,
+    today: Jdn,
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
@@ -464,6 +475,7 @@ private fun SharedTransitionScope.detailsTabs(
                 interactionSource = interactionSource,
                 minHeight = minHeight,
                 bottomPadding = bottomPadding,
+                today = today,
             )
         },
         R.string.events to { _, _ ->
@@ -564,6 +576,7 @@ private fun CalendarsTab(
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
+    today: Jdn,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Column(
@@ -577,7 +590,6 @@ private fun CalendarsTab(
             )
     ) {
         val jdn by viewModel.selectedDay.collectAsState()
-        val today by viewModel.today.collectAsState()
         Spacer(Modifier.height(24.dp))
         CalendarsOverview(
             jdn = jdn,
@@ -756,11 +768,11 @@ private fun SharedTransitionScope.Toolbar(
     navigateToDays: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
+    today: Jdn,
 ) {
     val context = LocalContext.current
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
-    val today by viewModel.today.collectAsState()
     val todayDate = remember(today, mainCalendar) { today.inCalendar(mainCalendar) }
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
