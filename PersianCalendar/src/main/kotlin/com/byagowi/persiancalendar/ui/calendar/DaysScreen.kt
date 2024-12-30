@@ -322,7 +322,10 @@ fun SharedTransitionScope.DaysScreen(
                                     },
                                     startingDay = weekStart,
                                     selectedDay = selectedDay,
-                                    setSelectedDay = { isEverClicked = true; selectedDay = it },
+                                    setSelectedDay = {
+                                        isEverClicked = true
+                                        setSelectedDayInWeekPager(it)
+                                    },
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
                                     refreshToken = refreshToken,
@@ -345,23 +348,23 @@ fun SharedTransitionScope.DaysScreen(
                             verticalAlignment = Alignment.Top,
                         ) { page ->
                             val isCurrentPage = dayPagerState.currentPage == page
+                            val pageDay = today + (page - daysLimit / 2)
                             LaunchedEffect(isCurrentPage) {
                                 if (isCurrentPage) {
-                                    selectedDay = today + (page - daysLimit / 2)
-                                    val destination = weekPageFromJdn(selectedDay, today)
+                                    selectedDay = pageDay
+                                    val destination = weekPageFromJdn(pageDay, today)
                                     if (abs(destination - weekPagerState.currentPage) > 1) {
                                         weekPagerState.scrollToPage(destination)
                                     } else weekPagerState.animateScrollToPage(destination)
                                 }
                             }
 
-                            val startingDay = today + (page - daysLimit / 2)
                             DaysView(
                                 bottomPadding = bottomPadding,
                                 setAddAction = {
                                     if (dayPagerState.currentPage == page) addAction = it
                                 },
-                                startingDay = startingDay,
+                                startingDay = pageDay,
                                 selectedDay = selectedDay,
                                 setSelectedDay = { selectedDay = it },
                                 addEvent = addEvent,
