@@ -288,7 +288,7 @@ fun SharedTransitionScope.DaysScreen(
                 ) { page ->
                     Column {
                         if (hasWeeksPager) Box(swipeDownModifier) {
-                            WeekPage(
+                            WeekPager(
                                 pagerSize = pagerSize,
                                 addEvent = addEvent,
                                 monthColors = monthColors,
@@ -953,7 +953,7 @@ private enum class DragIntention { ExtendUp, ExtendDown, Move }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun SharedTransitionScope.WeekPage(
+private fun SharedTransitionScope.WeekPager(
     pagerSize: DpSize,
     addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
