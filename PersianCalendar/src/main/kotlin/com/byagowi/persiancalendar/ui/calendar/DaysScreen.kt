@@ -129,7 +129,6 @@ import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -159,9 +158,10 @@ fun SharedTransitionScope.DaysScreen(
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
     val dayInitialPage = remember(today) { dayPageFromJdn(selectedDay, today) }
     val dayPagerState = rememberPagerState(initialPage = dayInitialPage) { daysLimit }
+    var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
     val setSelectedDayInWeekPager = { jdn: Jdn ->
         selectedDay = jdn
-        coroutineScope.launch {
+        if (!isWeekView) coroutineScope.launch {
             val destination = dayPageFromJdn(jdn, today)
             if (abs(destination - dayPagerState.currentPage) > 1) {
                 dayPagerState.scrollToPage(destination)
@@ -183,6 +183,7 @@ fun SharedTransitionScope.DaysScreen(
 
     val todayButtonAction = {
         isAddEventBoxEnabled = false
+        isEverClicked = true
         selectedDay = today
         coroutineScope.launch {
             // Don't change their order before testing
@@ -191,9 +192,11 @@ fun SharedTransitionScope.DaysScreen(
                 weekPagerState.animateScrollToPage(weeksLimit / 2)
             } else weekPagerState.scrollToPage(weeksLimit / 2)
 
-            if (abs(dayPagerState.currentPage - daysLimit / 2) == 1) {
-                dayPagerState.animateScrollToPage(daysLimit / 2)
-            } else dayPagerState.scrollToPage(daysLimit / 2)
+            if (!isWeekView) {
+                if (abs(dayPagerState.currentPage - daysLimit / 2) == 1) {
+                    dayPagerState.animateScrollToPage(daysLimit / 2)
+                } else dayPagerState.scrollToPage(daysLimit / 2)
+            }
         }
     }
 
@@ -202,7 +205,6 @@ fun SharedTransitionScope.DaysScreen(
         if (isFirstTime) isFirstTime = false else if (selectedDay == today - 1) todayButtonAction()
     }
 
-    var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
     var addAction by remember { mutableStateOf({}) }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -259,11 +261,7 @@ fun SharedTransitionScope.DaysScreen(
                     }
                     IconButton({
                         isWeekView = !isWeekView
-                        // Ugly fix
-                        val storedSelectedDay = selectedDay
                         if (!isWeekView) coroutineScope.launch {
-                            delay(100)
-                            selectedDay = storedSelectedDay
                             dayPagerState.scrollToPage(dayPageFromJdn(selectedDay, today))
                         }
                     }) {
