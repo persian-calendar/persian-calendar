@@ -69,6 +69,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
+import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -289,6 +290,19 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                             if (i != 0) Spacer(Modifier.width(8.dp))
                             val parts = x.split(" ")
                             if (parts.size == 2 && !isTalkBackEnabled) {
+                                val isGradient by isGradient.collectAsState()
+                                val foldedCardBrush = if (isGradient) Brush.verticalGradient(
+                                    .25f to contentColor,
+                                    .499f to contentColor.copy(
+                                        alpha = if (contentColor.isLight) .75f else .5f
+                                    ),
+                                    .5f to contentColor,
+                                ) else Brush.verticalGradient(
+                                    .49f to contentColor,
+                                    .491f to Color.Transparent,
+                                    .509f to Color.Transparent,
+                                    .51f to contentColor,
+                                )
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     CompositionLocalProvider(
                                         LocalLayoutDirection provides LayoutDirection.Ltr
@@ -303,13 +317,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                                                         color = backgroundColor,
                                                         modifier = Modifier
                                                             .background(
-                                                                Brush.verticalGradient(
-                                                                    .25f to contentColor,
-                                                                    .499f to contentColor.copy(
-                                                                        alpha = if (contentColor.isLight) .75f else .5f
-                                                                    ),
-                                                                    .5f to contentColor,
-                                                                ),
+                                                                foldedCardBrush,
                                                                 MaterialTheme.shapes.extraSmall,
                                                             )
                                                             .width(28.dp),
