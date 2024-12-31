@@ -45,7 +45,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -293,18 +293,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                                     CompositionLocalProvider(
                                         LocalLayoutDirection provides LayoutDirection.Ltr
                                     ) {
-                                        Row(
-                                            Modifier.drawWithCache {
-                                                onDrawWithContent {
-                                                    drawContent()
-                                                    drawLine(
-                                                        backgroundColor,
-                                                        this.center.copy(x = 0f),
-                                                        this.center.copy(x = this.size.width),
-                                                    )
-                                                }
-                                            }
-                                        ) {
+                                        Row {
                                             parts[0].padStart(2, formatNumber(0)[0])
                                                 .forEachIndexed { i, c ->
                                                     Text(
@@ -314,10 +303,16 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                                                         color = backgroundColor,
                                                         modifier = Modifier
                                                             .background(
-                                                                contentColor,
-                                                                MaterialTheme.shapes.extraSmall
+                                                                Brush.verticalGradient(
+                                                                    .25f to contentColor,
+                                                                    .499f to contentColor.copy(
+                                                                        alpha = if (contentColor.isLight) .75f else .5f
+                                                                    ),
+                                                                    .5f to contentColor,
+                                                                ),
+                                                                MaterialTheme.shapes.extraSmall,
                                                             )
-                                                            .width(18.dp),
+                                                            .width(28.dp),
                                                     )
                                                     if (i == 0) Spacer(Modifier.width(2.dp))
                                                 }
