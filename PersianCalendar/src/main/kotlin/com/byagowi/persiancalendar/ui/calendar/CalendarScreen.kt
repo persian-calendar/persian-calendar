@@ -122,6 +122,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
+import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
@@ -136,6 +137,7 @@ import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
@@ -346,10 +348,16 @@ fun SharedTransitionScope.CalendarScreen(
                                                                 viewModel.selectedDay.value, true
                                                             )
                                                         }
+
+                                                        SwipeUpAction.None -> {}
                                                     }
                                                     successful = true
                                                 } else if (wasAtTop && yAccumulation > 0) {
-                                                    viewModel.openYearView()
+                                                    when (preferredSwipeDownAction.value) {
+                                                        SwipeDownAction.YearView -> viewModel.openYearView()
+
+                                                        SwipeDownAction.None -> {}
+                                                    }
                                                     successful = true
                                                 }
                                             }
@@ -978,7 +986,12 @@ private fun SharedTransitionScope.Menu(
                 trailingIcon = icon@{
                     if (isLandscape || isTalkBackEnabled) return@icon
                     Box(Modifier.clickable(null, ripple(bounded = false)) {
-                        context.preferences.edit { putString(PREF_SWIPE_UP_ACTION, item.name) }
+                        context.preferences.edit {
+                            putString(
+                                PREF_SWIPE_UP_ACTION,
+                                (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name
+                            )
+                        }
                     }) {
                         val alpha by animateFloatAsState(
                             targetValue = if (preferredSwipeUpAction == item) 1f else .2f,
@@ -991,11 +1004,27 @@ private fun SharedTransitionScope.Menu(
             ) { closeMenu(); action() }
         }
 
+        val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
         AppDropdownMenuItem(
-            text = { Text(stringResource(R.string.year_view)) },
+            text = { Text(stringResource(SwipeDownAction.YearView.titleId)) },
             trailingIcon = icon@{
                 if (isLandscape || isTalkBackEnabled) return@icon
-                Icon(Icons.TwoTone.SwipeDown, null)
+                Box(Modifier.clickable(null, ripple(bounded = false)) {
+                    context.preferences.edit {
+                        putString(
+                            PREF_SWIPE_DOWN_ACTION,
+                            (if (preferredSwipeDownAction == SwipeDownAction.YearView)
+                                SwipeUpAction.None else SwipeDownAction.YearView).name
+                        )
+                    }
+                }) {
+                    val alpha by animateFloatAsState(
+                        targetValue = if (preferredSwipeDownAction == SwipeDownAction.YearView) 1f else .2f,
+                        label = "alpha",
+                    )
+                    val color = LocalContentColor.current.copy(alpha)
+                    Icon(Icons.TwoTone.SwipeDown, null, tint = color)
+                }
             },
         ) { closeMenu(); viewModel.openYearView() }
 
