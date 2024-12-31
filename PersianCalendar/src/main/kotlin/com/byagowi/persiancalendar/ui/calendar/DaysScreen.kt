@@ -105,6 +105,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.PagerArrow
@@ -200,6 +201,7 @@ fun SharedTransitionScope.DaysScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
     val swipeDownModifier = Modifier.pointerInput(Unit) {
         val threshold = 80.dp.toPx()
         awaitEachGesture {
@@ -209,7 +211,10 @@ fun SharedTransitionScope.DaysScreen(
             verticalDrag(id) {
                 yAccumulation += it.positionChange().y
                 if (!successful && yAccumulation > threshold) {
-                    navigateUp()
+                    when (preferredSwipeUpAction) {
+                        SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
+                        else -> {}
+                    }
                     successful = true
                 }
             }

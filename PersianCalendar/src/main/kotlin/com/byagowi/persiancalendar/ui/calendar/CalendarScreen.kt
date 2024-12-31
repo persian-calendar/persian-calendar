@@ -1000,7 +1000,7 @@ private fun SharedTransitionScope.Menu(
                             targetValue = if (preferredSwipeUpAction == item) 1f else .2f,
                             label = "alpha",
                         )
-                        val color = LocalContentColor.current.copy(alpha)
+                        val color = LocalContentColor.current.copy(alpha = alpha)
                         Icon(Icons.TwoTone.SwipeUp, null, tint = color)
                     }
                 },
@@ -1027,7 +1027,7 @@ private fun SharedTransitionScope.Menu(
                         targetValue = if (preferredSwipeDownAction == SwipeDownAction.YearView) 1f else .2f,
                         label = "alpha",
                     )
-                    val color = LocalContentColor.current.copy(alpha)
+                    val color = LocalContentColor.current.copy(alpha = alpha)
                     Icon(Icons.TwoTone.SwipeDown, null, tint = color)
                 }
             },
