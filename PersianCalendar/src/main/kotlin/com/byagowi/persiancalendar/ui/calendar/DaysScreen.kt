@@ -94,6 +94,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.EN_DASH
@@ -547,6 +548,9 @@ private fun DaysView(
                             .padding(end = pagerArrowSizeAndPadding.dp)
                             .animateContentSize(),
                     ) {
+                        val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
+                            lineHeight = 24.sp
+                        )
                         eventsWithoutTime.forEach { dayEvents ->
                             Column(Modifier.weight(1f)) {
                                 dayEvents.forEachIndexed { i, event ->
@@ -555,7 +559,7 @@ private fun DaysView(
                                         Text(
                                             " " + event.title,
                                             maxLines = 1,
-                                            style = MaterialTheme.typography.bodySmall,
+                                            style = headerTextStyle,
                                             color = eventTextColor(color),
                                             modifier = Modifier
                                                 .requiredWidth(cellWidth - defaultWidthReduction)
@@ -578,7 +582,7 @@ private fun DaysView(
                                         " +" + formatNumber(dayEvents.size - 3),
                                         modifier = Modifier.padding(bottom = 4.dp),
                                         maxLines = 1,
-                                        style = MaterialTheme.typography.bodySmall,
+                                        style = headerTextStyle,
                                     )
                                 }
                             }
