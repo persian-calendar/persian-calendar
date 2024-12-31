@@ -291,11 +291,11 @@ fun CalendarsOverview(
 
 fun equinoxTitle(date: PersianDate, jdn: Jdn, context: Context): Pair<String, Long> {
     val gregorianYear = jdn.toCivilDate().year
+    val timestamp = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
     val equinoxYear = when (mainCalendar) {
         Calendar.SHAMSI -> date.year + if (date.month == 12) 1 else 0
         else -> gregorianYear
     }
-    val timestamp = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
     val calendar = Date(timestamp).toGregorianCalendar()
     return context.getString(
         R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()
