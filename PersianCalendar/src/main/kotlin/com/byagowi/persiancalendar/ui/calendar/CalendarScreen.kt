@@ -989,7 +989,10 @@ private fun SharedTransitionScope.Menu(
                         context.preferences.edit {
                             putString(
                                 PREF_SWIPE_UP_ACTION,
-                                (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name
+                                when (preferredSwipeUpAction) {
+                                    item -> SwipeUpAction.None
+                                    else -> item
+                                }.name,
                             )
                         }
                     }) {
@@ -1013,8 +1016,10 @@ private fun SharedTransitionScope.Menu(
                     context.preferences.edit {
                         putString(
                             PREF_SWIPE_DOWN_ACTION,
-                            (if (preferredSwipeDownAction == SwipeDownAction.YearView)
-                                SwipeUpAction.None else SwipeDownAction.YearView).name
+                            when (preferredSwipeDownAction) {
+                                SwipeDownAction.YearView -> SwipeUpAction.None
+                                else -> SwipeDownAction.YearView
+                            }.name,
                         )
                     }
                 }) {
