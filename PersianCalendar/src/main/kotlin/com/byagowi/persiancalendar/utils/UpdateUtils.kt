@@ -1125,7 +1125,9 @@ fun Context.launchAppPendingIntent(action: String? = null): PendingIntent? {
     return PendingIntent.getActivity(
         this, 0,
         Intent(this, MainActivity::class.java).setAction(action)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
+                if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
+            }),
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
