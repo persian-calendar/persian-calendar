@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
@@ -289,9 +290,12 @@ fun CalendarsOverview(
 }
 
 fun equinoxTitle(date: PersianDate, jdn: Jdn, context: Context): Pair<String, Long> {
-    val addition = if (date.month == 12) 1 else 0
-    val equinoxYear = date.year + addition
-    val timestamp = seasons(jdn.toCivilDate().year).marchEquinox.toMillisecondsSince1970()
+    val gregorianYear = jdn.toCivilDate().year
+    val equinoxYear = when (mainCalendar) {
+        Calendar.SHAMSI -> date.year + if (date.month == 12) 1 else 0
+        else -> gregorianYear
+    }
+    val timestamp = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
     val calendar = Date(timestamp).toGregorianCalendar()
     return context.getString(
         R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()

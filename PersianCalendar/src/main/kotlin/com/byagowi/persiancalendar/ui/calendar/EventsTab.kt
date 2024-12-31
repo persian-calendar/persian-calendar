@@ -68,10 +68,10 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -364,7 +364,7 @@ fun readEvents(jdn: Jdn, refreshToken: Int, viewModel: CalendarViewModel): List<
         }
     }
 
-    if (mainCalendar == Calendar.SHAMSI) {
+    if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
             val now by viewModel.now.collectAsState()
