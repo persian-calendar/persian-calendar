@@ -183,7 +183,7 @@ val appColorAnimationSpec = spring<Color>(stiffness = Spring.StiffnessMediumLow)
 fun animateColor(color: Color) = animateColorAsState(color, appColorAnimationSpec, "color")
 
 /** This is similar to what [androidx.compose.animation.Crossfade] uses */
-private val crossfadeSpec = fadeIn(tween()).togetherWith(fadeOut(tween()))
+private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
 
 // Our own cross fade spec where AnimatedContent() has nicer effect
 // than Crossfade() (usually on non binary changes) but we need a crossfade effect also

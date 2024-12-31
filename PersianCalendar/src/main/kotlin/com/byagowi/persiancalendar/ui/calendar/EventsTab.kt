@@ -13,6 +13,10 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.snap
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -225,7 +229,11 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                 event.title, holidayString
             ) else event.title) + eventTime,
             label = "event title",
-            transitionSpec = appCrossfadeSpec,
+            transitionSpec = {
+                if (event is CalendarEvent.EquinoxCalendarEvent) {
+                    fadeIn(snap()) togetherWith fadeOut(snap())
+                } else appCrossfadeSpec()
+            },
         ) { title ->
             Row(
                 @OptIn(ExperimentalFoundationApi::class) Modifier
