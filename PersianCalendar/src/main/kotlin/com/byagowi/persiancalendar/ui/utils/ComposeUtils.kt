@@ -50,6 +50,7 @@ fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 // When something needs to match with Material default theme corner sizes
 const val ExtraLargeShapeCornerSize = 28f
 const val LargeShapeCornerSize = 16f
+const val SmallShapeCornerSize = 8f
 
 // Plain items in settings should have this horizontal padding
 const val SettingsHorizontalPaddingItem = 24

@@ -94,7 +94,6 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.EN_DASH
@@ -121,6 +120,7 @@ import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -494,8 +494,8 @@ private fun DaysView(
             refreshCalendar()
         }
         val context = LocalContext.current
-        val defaultWidthReductionDp = 2.dp
-        val defaultWidthReduction = with(density) { defaultWidthReductionDp.toPx() }
+        val defaultWidthReduction = 2.dp
+        val defaultWidthReductionPx = with(density) { defaultWidthReduction.toPx() }
         AnimatedVisibility(hasHeader) {
             if (days == 1) Column(Modifier.padding(horizontal = 24.dp)) {
                 Spacer(Modifier.height(16.dp))
@@ -550,10 +550,10 @@ private fun DaysView(
                                         Text(
                                             " " + event.title,
                                             maxLines = 1,
-                                            fontSize = 12.sp,
+                                            style = MaterialTheme.typography.bodySmall,
                                             color = eventTextColor(color),
                                             modifier = Modifier
-                                                .requiredWidth(cellWidth - defaultWidthReductionDp)
+                                                .requiredWidth(cellWidth - defaultWidthReduction)
                                                 .padding(
                                                     top = if (i == 0) 2.dp else 0.dp,
                                                     bottom = 2.dp,
@@ -573,7 +573,7 @@ private fun DaysView(
                                         " +" + formatNumber(dayEvents.size - 3),
                                         modifier = Modifier.padding(bottom = 4.dp),
                                         maxLines = 1,
-                                        fontSize = 12.sp,
+                                        style = MaterialTheme.typography.bodySmall,
                                     )
                                 }
                             }
@@ -585,7 +585,7 @@ private fun DaysView(
         BoxWithConstraints {
             val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
             val tableWidth = this@BoxWithConstraints.maxWidth - when (days) {
-                1 -> pagerArrowSizeAndPadding.dp + 24.dp - defaultWidthReductionDp
+                1 -> pagerArrowSizeAndPadding.dp + 24.dp - defaultWidthReduction
                 else -> pagerArrowSizeAndPadding.dp * 2
             }
             val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
@@ -597,7 +597,6 @@ private fun DaysView(
             var duration by remember { mutableFloatStateOf(cellHeightPx) }
             val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
             val directionSign = if (isRtl) -1 else 1
-            val lineSize = with(density) { 1.dp.toPx() }
             val heightSizeReduction = 3.dp
             val heightSizeReductionPx = with(density) { heightSizeReduction.toPx() }
 
@@ -614,20 +613,21 @@ private fun DaysView(
                             .fillMaxWidth()
                             .height(cellHeight * 24 + bottomPadding),
                     ) {
+                        val topLineY = 2.dp.toPx()
                         val paintCellWidthPx = if (days == 1) oneDayTableWidthPx else cellWidthPx
                         (0..days).forEach { i ->
                             val x = (firstColumnPx + paintCellWidthPx * i).let {
                                 if (isRtl) this.size.width - it else it
                             }
                             val y = this.size.height
-                            drawLine(outlineVariant, Offset(x, lineSize * 2), Offset(x, y))
+                            drawLine(outlineVariant, Offset(x, topLineY), Offset(x, y))
                         }
                         val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
                         val x2 = (firstColumnPx + paintCellWidthPx * days).let {
                             if (isRtl) this.size.width - it else it
                         }
                         (0..23).forEach {
-                            val y = if (it == 0) lineSize * 2 else cellHeightPx * it
+                            val y = if (it == 0) topLineY else cellHeightPx * it
                             drawLine(outlineVariant, Offset(x1, y), Offset(x2, y))
                         }
                     }
@@ -664,7 +664,10 @@ private fun DaysView(
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         if (column == 0 && row != 23) {
-                                            Text(clockCache[(row + 1) * 60], fontSize = 12.sp)
+                                            Text(
+                                                clockCache[(row + 1) * 60],
+                                                style = MaterialTheme.typography.bodySmall,
+                                            )
                                             HorizontalDivider(
                                                 Modifier
                                                     .width(8.dp)
@@ -688,7 +691,7 @@ private fun DaysView(
                             " " + event.title,
                             color = eventTextColor(color),
                             maxLines = 1,
-                            fontSize = 12.sp,
+                            style = MaterialTheme.typography.bodySmall,
                             modifier = Modifier
                                 .offset {
                                     IntOffset(
@@ -697,7 +700,7 @@ private fun DaysView(
                                     )
                                 }
                                 .requiredSize(
-                                    with(density) { (cellWidthPx / columnsCount - defaultWidthReduction).toDp() },
+                                    with(density) { (cellWidthPx / columnsCount - defaultWidthReductionPx).toDp() },
                                     with(density) { ((end - start) * cellHeightPx).toDp() - heightSizeReduction },
                                 )
                                 .clickable { launcher.viewEvent(event, context) }
@@ -783,10 +786,8 @@ private fun DaysView(
                     }
                 }
 
-                val widthReduction = remember { Animatable(defaultWidthReduction) }
+                val widthReduction = remember { Animatable(defaultWidthReductionPx) }
                 val radius = with(density) { 4.dp.toPx() }
-                // The same value as MaterialTheme.shapes.small
-                val corner = with(density) { 8.dp.toPx() }
 
                 // Time indicator
                 val time = GregorianCalendar().also { it.timeInMillis = now }
@@ -809,7 +810,7 @@ private fun DaysView(
                             directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
                             0f
                         ),
-                        strokeWidth = lineSize
+                        strokeWidth = 1.dp.toPx()
                     )
                 }
 
@@ -889,7 +890,7 @@ private fun DaysView(
                                 }
                                 intention = null
                                 coroutineScope.launch {
-                                    widthReduction.animateTo(defaultWidthReduction)
+                                    widthReduction.animateTo(defaultWidthReductionPx)
                                 }
                             }
                         },
@@ -912,7 +913,7 @@ private fun DaysView(
                     ) {
                         val rectTopLeft = Offset(
                             x = if (isRtl) widthReduction.value else 0f,
-                            y = if (animatedOffset.y < radius) lineSize else 0f,
+                            y = if (animatedOffset.y < radius) 1.dp.toPx() else 0f,
                         )
                         val rectSize = Size(
                             width = this.size.width - widthReduction.value,
@@ -922,27 +923,28 @@ private fun DaysView(
                             background,
                             size = rectSize,
                             topLeft = rectTopLeft,
-                            cornerRadius = CornerRadius(corner),
+                            cornerRadius = CornerRadius(SmallShapeCornerSize.dp.toPx()),
                         )
                         drawRoundRect(
                             primaryWithAlpha,
                             topLeft = rectTopLeft,
                             size = rectSize,
-                            style = Stroke(lineSize),
-                            cornerRadius = CornerRadius(corner),
+                            style = Stroke(1.dp.toPx()),
+                            cornerRadius = CornerRadius(SmallShapeCornerSize.dp.toPx()),
                         )
                         val circleOffset = this.size.width * .05f
                         val offset1 = Offset(
                             x = this.center.x - (this.size.width / 2 - radius - circleOffset) * directionSign,
                             y = if (animatedOffset.y < radius) radius - animatedOffset.y else 0f
                         )
-                        drawCircle(circleBorder, radius + lineSize * 2, offset1)
+                        val circleBorderSize = 2.dp.toPx()
+                        drawCircle(circleBorder, radius + circleBorderSize, offset1)
                         drawCircle(primaryWithAlpha, radius, offset1)
                         val offset2 = Offset(
                             x = this.center.x + (this.size.width / 2 - widthReduction.value - radius - circleOffset) * directionSign,
-                            y = this.size.height - lineSize * 2
+                            y = this.size.height - heightSizeReduction.toPx()
                         )
-                        drawCircle(circleBorder, radius + lineSize * 2, offset2)
+                        drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)
                     }
                     val from = clockCache[y * 15]
