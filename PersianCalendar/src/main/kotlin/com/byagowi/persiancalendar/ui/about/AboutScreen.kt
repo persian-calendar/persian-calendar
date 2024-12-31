@@ -5,9 +5,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
@@ -61,6 +63,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -88,7 +91,9 @@ import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DEVELOPER
 import com.byagowi.persiancalendar.generated.faq
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -308,12 +313,7 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         }
 
         // Developers
-        Text(
-            stringResource(R.string.about_developers),
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(start = 24.dp, end = 12.dp, top = 12.dp),
-        )
-        DevelopersChips()
+        Developers()
 
         Spacer(Modifier.height(bottomPadding))
     }
@@ -401,10 +401,12 @@ private fun launchReportIntent(context: Context) {
     }.onFailure(logException)
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun DevelopersChips() {
+private fun Developers() {
     val context = LocalContext.current
-    val developers = remember {
+    var refreshToken by remember { mutableIntStateOf(0) }
+    val developers = remember(refreshToken) {
         listOf(
             R.string.about_developers_list to Icons.Default.Android,
             R.string.about_designers_list to Icons.Default.Palette,
@@ -417,36 +419,56 @@ private fun DevelopersChips() {
             }
         }.shuffled()
     }
+
+    Text(
+        stringResource(R.string.about_developers),
+        style = MaterialTheme.typography.bodyLarge,
+        modifier = Modifier
+            .padding(start = 24.dp, end = 12.dp, top = 12.dp)
+            .then(if (isTalkBackEnabled) Modifier else Modifier.clickable(
+                interactionSource = null,
+                indication = ripple(bounded = false),
+            ) { ++refreshToken }),
+    )
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Ltr,
         LocalMinimumInteractiveComponentSize provides Dp.Unspecified,
     ) {
-        @OptIn(ExperimentalLayoutApi::class) FlowRow(
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-        ) {
-            developers.forEach { (username, displayName, icon) ->
-                ElevatedFilterChip(
-                    modifier = Modifier.padding(all = 4.dp),
-                    onClick = click@{
-                        if (username == "ImanSoltanian") return@click // The only person without GitHub account
-                        runCatching {
-                            val uri = "https://github.com/$username".toUri()
-                            CustomTabsIntent.Builder().build().launchUrl(context, uri)
-                        }.onFailure(logException)
-                    },
-                    label = { Text(displayName) },
-                    selected = true,
-                    colors = FilterChipDefaults.elevatedFilterChipColors(),
-                    leadingIcon = {
-                        Icon(
-                            icon,
-                            contentDescription = displayName,
-                            Modifier.size(AssistChipDefaults.IconSize)
+        SharedTransitionLayout {
+            AnimatedContent(targetState = developers, label = "developers") { state ->
+                @OptIn(ExperimentalLayoutApi::class) FlowRow(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                ) {
+                    state.forEach { (username, displayName, icon) ->
+                        ElevatedFilterChip(
+                            modifier = Modifier
+                                .padding(all = 4.dp)
+                                .sharedElement(
+                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_DEVELOPER + username),
+                                    animatedVisibilityScope = this@AnimatedContent,
+                                ),
+                            onClick = click@{
+                                if (username == "ImanSoltanian") return@click // The only person without GitHub account
+                                runCatching {
+                                    val uri = "https://github.com/$username".toUri()
+                                    CustomTabsIntent.Builder().build().launchUrl(context, uri)
+                                }.onFailure(logException)
+                            },
+                            label = { Text(displayName) },
+                            selected = true,
+                            colors = FilterChipDefaults.elevatedFilterChipColors(),
+                            leadingIcon = {
+                                Icon(
+                                    icon,
+                                    contentDescription = displayName,
+                                    Modifier.size(AssistChipDefaults.IconSize)
+                                )
+                            },
                         )
-                    },
-                )
+                    }
+                }
             }
         }
     }

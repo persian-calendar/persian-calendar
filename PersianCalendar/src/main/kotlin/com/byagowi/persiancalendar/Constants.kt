@@ -167,3 +167,4 @@ const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns compass icon to a comp
 const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen to astronomy's
 const val SHARED_CONTENT_KEY_JDN = "jdn" // Move days on calendar table, a prefix
 const val SHARED_CONTENT_KEY_WEEK_NUMBER = "weekNumber" // Transition to week view, a prefix
+const val SHARED_CONTENT_KEY_DEVELOPER = "developer" // Developers chips, a prefix
