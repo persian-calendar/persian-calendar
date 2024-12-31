@@ -21,13 +21,13 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
@@ -36,6 +36,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,14 +45,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -64,6 +68,7 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -259,13 +264,76 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 val contentColor by animateColor(eventTextColor(backgroundColor))
-                Box(modifier = Modifier.weight(1f, fill = false)) {
+                Column(modifier = Modifier.weight(1f, fill = false)) {
                     SelectionContainer {
                         Text(
                             title,
                             color = contentColor,
                             style = MaterialTheme.typography.bodyMedium,
                         )
+                    }
+                    if (event is CalendarEvent.EquinoxCalendarEvent) Row equinox@{
+                        var remainedTime = event.remainingMillis
+                        if (remainedTime < 0 || remainedTime > DAY_IN_MILLIS * 356) return@equinox
+                        buildList {
+                            val days = (remainedTime / DAY_IN_MILLIS).toInt()
+                            add(pluralStringResource(R.plurals.days, days, formatNumber(days)))
+                            remainedTime -= days * DAY_IN_MILLIS
+                            val hours = (remainedTime / ONE_HOUR_IN_MILLIS).toInt()
+                            add(pluralStringResource(R.plurals.hours, hours, formatNumber(hours)))
+                            remainedTime -= hours * ONE_HOUR_IN_MILLIS
+                            val minutes = (remainedTime / ONE_MINUTE_IN_MILLIS).toInt()
+                            val formatted = formatNumber(minutes)
+                            add(pluralStringResource(R.plurals.minutes, minutes, formatted))
+                        }.forEachIndexed { i, x ->
+                            if (i != 0) Spacer(Modifier.width(8.dp))
+                            val parts = x.split(" ")
+                            if (parts.size == 2 && !isTalkBackEnabled) {
+                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                    CompositionLocalProvider(
+                                        LocalLayoutDirection provides LayoutDirection.Ltr
+                                    ) {
+                                        Row(
+                                            Modifier.drawWithCache {
+                                                onDrawWithContent {
+                                                    drawContent()
+                                                    drawLine(
+                                                        backgroundColor,
+                                                        this.center.copy(x = 0f),
+                                                        this.center.copy(x = this.size.width),
+                                                    )
+                                                }
+                                            }
+                                        ) {
+                                            parts[0].padStart(2, formatNumber(0)[0])
+                                                .forEachIndexed { i, c ->
+                                                    Text(
+                                                        "$c",
+                                                        style = MaterialTheme.typography.headlineSmall,
+                                                        textAlign = TextAlign.Center,
+                                                        color = backgroundColor,
+                                                        modifier = Modifier
+                                                            .background(
+                                                                contentColor,
+                                                                MaterialTheme.shapes.extraSmall
+                                                            )
+                                                            .width(18.dp),
+                                                    )
+                                                    if (i == 0) Spacer(Modifier.width(2.dp))
+                                                }
+                                        }
+                                    }
+                                    Text(
+                                        parts[1], color = contentColor,
+                                        style = MaterialTheme.typography.bodyMedium,
+                                    )
+                                }
+                            } else Text(
+                                x,
+                                color = contentColor,
+                                style = MaterialTheme.typography.bodyMedium,
+                            )
+                        }
                     }
                 }
                 AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent || event is CalendarEvent.EquinoxCalendarEvent) {
@@ -301,29 +369,10 @@ fun readEvents(jdn: Jdn, refreshToken: Int, viewModel: CalendarViewModel): List<
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
             val now by viewModel.now.collectAsState()
             val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, context)
-            val title = rawTitle.replace(": ", "\n") + run {
-                var remainedTime = equinoxTime - now
-                if (remainedTime < 0 || remainedTime > DAY_IN_MILLIS * 356) ""
-                else "\n" + buildList {
-                    val days = (remainedTime / DAY_IN_MILLIS).toInt()
-                    if (days != 0) {
-                        add(pluralStringResource(R.plurals.days, days, formatNumber(days)))
-                        remainedTime -= days * DAY_IN_MILLIS
-                    }
-                    val hours = (remainedTime / ONE_HOUR_IN_MILLIS).toInt()
-                    if (hours != 0) {
-                        add(pluralStringResource(R.plurals.hours, hours, formatNumber(hours)))
-                        remainedTime -= hours * ONE_HOUR_IN_MILLIS
-                    }
-                    val minutes = (remainedTime / ONE_MINUTE_IN_MILLIS).toInt()
-                    if (minutes != 0) add(
-                        pluralStringResource(R.plurals.minutes, minutes, formatNumber(minutes))
-                    )
-                }.joinToString(spacedComma)
-            }
-            return listOf(
-                CalendarEvent.EquinoxCalendarEvent(title, false, date)
-            ) + events
+            val title = rawTitle.replace(": ", "\n")
+            val remainedTime = equinoxTime - now
+            val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, remainedTime)
+            return listOf(event) + events
         }
     }
     return events
