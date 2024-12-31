@@ -405,8 +405,7 @@ private fun launchReportIntent(context: Context) {
 @Composable
 private fun Developers() {
     val context = LocalContext.current
-    var refreshToken by remember { mutableIntStateOf(0) }
-    val developers = remember(refreshToken) {
+    val developersBeforeShuffle = remember {
         listOf(
             R.string.about_developers_list to Icons.Default.Android,
             R.string.about_designers_list to Icons.Default.Palette,
@@ -417,8 +416,10 @@ private fun Developers() {
                 val (username, displayName) = it.split(": ")
                 Triple(username, displayName, icon)
             }
-        }.shuffled()
+        }
     }
+    var refreshToken by remember { mutableIntStateOf(0) }
+    val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
 
     Text(
         stringResource(R.string.about_developers),
