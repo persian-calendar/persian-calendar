@@ -105,6 +105,7 @@ import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getActivity
+import com.byagowi.persiancalendar.ui.utils.isOnCI
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
@@ -446,9 +447,11 @@ private fun Developers() {
                         ElevatedFilterChip(
                             modifier = Modifier
                                 .padding(all = 4.dp)
-                                .sharedElement(
-                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_DEVELOPER + username),
-                                    animatedVisibilityScope = this@AnimatedContent,
+                                .then(
+                                    if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
+                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_DEVELOPER + username),
+                                        animatedVisibilityScope = this@AnimatedContent,
+                                    )
                                 ),
                             onClick = click@{
                                 if (username == "ImanSoltanian") return@click // The only person without GitHub account
