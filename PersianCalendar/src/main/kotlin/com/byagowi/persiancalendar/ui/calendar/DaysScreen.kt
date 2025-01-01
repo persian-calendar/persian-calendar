@@ -45,6 +45,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -123,7 +124,6 @@ import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
-import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
@@ -238,16 +238,12 @@ fun SharedTransitionScope.DaysScreen(
             containerColor = Color.Transparent,
             snackbarHost = { SnackbarHost(snackbarHostState) },
             floatingActionButton = {
-                Box(Modifier.renderInSharedTransitionScopeOverlay()) {
-                    ShrinkingFloatingActionButton(
-                        modifier = Modifier.padding(end = 8.dp),
-                        isVisible = true,
-                        action = addAction,
-                        icon = Icons.Default.Add,
-                        title = stringResource(R.string.add_event),
-                        noTitle = true,
-                    )
-                }
+                FloatingActionButton(
+                    onClick = addAction,
+                    modifier = Modifier
+                        .renderInSharedTransitionScopeOverlay()
+                        .padding(end = 8.dp),
+                ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
             },
             topBar = {
                 @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
