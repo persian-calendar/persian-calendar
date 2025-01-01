@@ -8,10 +8,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.theme.appFabElevation
 
 @Composable
 fun StopButton(isStopped: Boolean, setStop: (Boolean) -> Unit) {
-    FloatingActionButton(onClick = { setStop(!isStopped) }) {
+    FloatingActionButton(onClick = { setStop(!isStopped) }, elevation = appFabElevation()) {
         Icon(
             if (isStopped) Icons.Default.PlayArrow else Icons.Default.Stop,
             contentDescription = stringResource(

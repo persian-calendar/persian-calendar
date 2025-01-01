@@ -125,6 +125,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
@@ -240,6 +241,7 @@ fun SharedTransitionScope.DaysScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = addAction,
+                    elevation = appFabElevation(),
                     modifier = Modifier
                         .renderInSharedTransitionScopeOverlay()
                         .padding(end = 8.dp),

@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
 import kotlinx.coroutines.delay
 
@@ -36,7 +37,7 @@ fun ShrinkingFloatingActionButton(
         enter = scaleIn(),
         exit = scaleOut(),
     ) {
-        FloatingActionButton(onClick = action) {
+        FloatingActionButton(onClick = action, elevation = appFabElevation()) {
             Row(
                 Modifier.padding(horizontal = if (showLabel) 16.dp else 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
