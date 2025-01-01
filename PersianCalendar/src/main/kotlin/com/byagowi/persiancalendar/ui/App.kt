@@ -284,13 +284,6 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                         animatedContentScope = this,
                         isInitiallyWeek = isWeek,
                         navigateUp = { navigateUp(daysRoute) },
-                        navigateToSchedule = { day: Jdn ->
-                            navController.graph.findNode(scheduleRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(selectedDayKey to day.value)
-                                )
-                            }
-                        },
                     )
                 }
 

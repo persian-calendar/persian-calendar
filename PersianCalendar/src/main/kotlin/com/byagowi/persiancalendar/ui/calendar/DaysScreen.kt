@@ -154,7 +154,6 @@ fun SharedTransitionScope.DaysScreen(
     animatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
-    navigateToSchedule: (Jdn) -> Unit,
 ) {
     var selectedDay by rememberSaveable(
         saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
@@ -365,7 +364,6 @@ fun SharedTransitionScope.DaysScreen(
                                             refreshToken = refreshToken,
                                             days = 7,
                                             now = calendarViewModel.now.collectAsState().value,
-                                            navigateToSchedule = navigateToSchedule,
                                             isAddEventBoxEnabled = isAddEventBoxEnabled,
                                             setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                             snackbarHostState = snackbarHostState,
@@ -416,7 +414,6 @@ fun SharedTransitionScope.DaysScreen(
                                         refreshToken = refreshToken,
                                         days = 1,
                                         now = calendarViewModel.now.collectAsState().value,
-                                        navigateToSchedule = navigateToSchedule,
                                         isAddEventBoxEnabled = isAddEventBoxEnabled,
                                         setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                         snackbarHostState = snackbarHostState,
@@ -480,7 +477,6 @@ private fun DaysView(
     refreshToken: Int,
     now: Long,
     days: Int,
-    navigateToSchedule: (Jdn) -> Unit,
     isAddEventBoxEnabled: Boolean,
     setAddEventBoxEnabled: () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -538,7 +534,18 @@ private fun DaysView(
         val defaultWidthReduction = 2.dp
         val defaultWidthReductionPx = with(density) { defaultWidthReduction.toPx() }
         AnimatedVisibility(hasHeader) {
-            if (days == 1) Column(Modifier.padding(horizontal = 24.dp)) {
+            var isExpanded by rememberSaveable { mutableStateOf(false) }
+            val clickToExpandModifier = Modifier.clickable(
+                onClickLabel = stringResource(R.string.more),
+                interactionSource = null,
+                indication = null,
+            ) { isExpanded = !isExpanded }
+            if (days == 1) Column(
+                (if (eventsWithoutTime[0].size > 3) {
+                    clickToExpandModifier
+                } else Modifier).padding(horizontal = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 Spacer(Modifier.height(16.dp))
                 if (events[0].isEmpty()) Text(
                     stringResource(R.string.no_event),
@@ -547,24 +554,21 @@ private fun DaysView(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
                 )
-                DayEvents(eventsWithoutTime[0].take(3)) { refreshCalendar() }
-                if (eventsWithoutTime[0].size > 3) {
-                    Spacer(Modifier.height(4.dp))
-                    MoreButton(stringResource(R.string.more)) {
-                        navigateToSchedule(selectedDay)
+                Column(Modifier.animateContentSize()) {
+                    DayEvents(eventsWithoutTime[0].let { if (isExpanded) it else it.take(3) }) {
+                        refreshCalendar()
                     }
                 }
-                Spacer(Modifier.height(12.dp))
+                if (eventsWithoutTime[0].size > 3) {
+                    Spacer(Modifier.height(4.dp))
+                    ExpandArrow(isExpanded = isExpanded)
+                    Spacer(Modifier.height(8.dp))
+                } else Spacer(Modifier.height(12.dp))
             } else BoxWithConstraints {
                 val cellWidth = (this.maxWidth - pagerArrowSizeAndPadding.dp * 2) / days
-                var isExpanded by rememberSaveable { mutableStateOf(false) }
                 Row(
                     verticalAlignment = Alignment.Bottom,
-                    modifier = if (maxDayAllDayEvents > 3) Modifier.clickable(
-                        onClickLabel = stringResource(R.string.more),
-                        indication = null,
-                        interactionSource = null,
-                    ) { isExpanded = !isExpanded } else Modifier
+                    modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier
                 ) {
                     Box(
                         Modifier
