@@ -168,3 +168,5 @@ const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen
 const val SHARED_CONTENT_KEY_JDN = "jdn" // Move days on calendar table, a prefix
 const val SHARED_CONTENT_KEY_WEEK_NUMBER = "weekNumber" // Transition to week view, a prefix
 const val SHARED_CONTENT_KEY_DEVELOPER = "developer" // Developers chips, a prefix
+const val SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT = "daysScreenSurfaceContent"
+const val SHARED_CONTENT_KEY_DAYS_SCREEN_ICON = "daysScreenIcon"

@@ -13,10 +13,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.snap
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -77,6 +73,7 @@ import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
@@ -236,9 +233,8 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
             ) else event.title) + eventTime,
             label = "event title",
             transitionSpec = {
-                if (event is CalendarEvent.EquinoxCalendarEvent) {
-                    fadeIn(snap()) togetherWith fadeOut(snap())
-                } else appCrossfadeSpec()
+                (if (event is CalendarEvent.EquinoxCalendarEvent) noTransitionSpec
+                else appCrossfadeSpec)()
             },
         ) { title ->
             Row(
