@@ -271,7 +271,7 @@
     <string name="iran_official_events">مرکز تقویم دانشگاه تهران، رسمی</string>
     <string name="afghanistan_events">افغانستان</string>
     <string name="other_holidays">سایر</string>
-    <string name="view_source">مشاهده منبع</string>
+    <string name="view_source">عرض المصدر</string>
     <!--Widget customizations-->
     <string name="widget_customization_other_calendars">التقاويم الأخرى على مصغر 1×4 أو 2×2</string>
     <string name="widget_customization_non_holiday_events">المناسبات (غير العُطل) على مصغر 2×2 والتنبه</string>
@@ -436,8 +436,8 @@
     <string name="full_screen">ملء الشاشة</string>
     <string name="exit_full_screen">الخروج من وضع ملء الشاشة</string>
     <string name="color_gradient">تدرج اللون</string>
-    <string name="qr_code">كيو آر كد</string>
-    <string name="time_zones">منطقة زمنية</string>
+    <string name="qr_code">رمز QR</string>
+    <string name="time_zones">المناطق الزمنية</string>
     <plurals name="work_days">
         <item quantity="zero">لا يوم العمل</item>
         <item quantity="one">العمل يوم واحد</item>
@@ -466,4 +466,10 @@
     <string name="save">حفظ</string>
     <string name="holidays_in_red">العطل باللون الأحمر</string>
     <string name="add_widget">إضافة المصغر</string>
+    <string name="week_view">العرض أسبوعي</string>
+    <string name="schedule">الجدول</string>
+    <string name="print">طباعة</string>
+    <string name="daily_schedule">الجدول اليومي</string>
+    <string name="day_view">العرض اليومي</string>
+    <string name="vibration">الاهتزاز</string>
 </resources>
