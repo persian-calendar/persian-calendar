@@ -270,35 +270,30 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         )
                     }
                     if (event is CalendarEvent.EquinoxCalendarEvent) Row equinox@{
+                        val isGradient by isGradient.collectAsState()
+                        val foldedCardBrush = if (isGradient) Brush.verticalGradient(
+                            .25f to contentColor,
+                            .499f to contentColor.copy(
+                                alpha = if (contentColor.isLight) .75f else .5f
+                            ),
+                            .5f to contentColor,
+                        ) else Brush.verticalGradient(
+                            .49f to contentColor,
+                            .491f to Color.Transparent,
+                            .509f to Color.Transparent,
+                            .51f to contentColor,
+                        )
+
                         var remainedTime = event.remainingMillis
                         if (remainedTime < 0 || remainedTime > DAY_IN_MILLIS * 356) return@equinox
-                        buildList {
-                            val days = (remainedTime / DAY_IN_MILLIS).toInt()
-                            add(pluralStringResource(R.plurals.days, days, formatNumber(days)))
-                            remainedTime -= days * DAY_IN_MILLIS
-                            val hours = (remainedTime / ONE_HOUR_IN_MILLIS).toInt()
-                            add(pluralStringResource(R.plurals.hours, hours, formatNumber(hours)))
-                            remainedTime -= hours * ONE_HOUR_IN_MILLIS
-                            val minutes = (remainedTime / ONE_MINUTE_IN_MILLIS).toInt()
-                            val formatted = formatNumber(minutes)
-                            add(pluralStringResource(R.plurals.minutes, minutes, formatted))
+                        countDownTimeParts.map { (pluralId, interval) ->
+                            val x = (remainedTime / interval).toInt()
+                            remainedTime -= x * interval
+                            pluralStringResource(pluralId, x, formatNumber(x))
                         }.forEachIndexed { i, x ->
                             if (i != 0) Spacer(Modifier.width(8.dp))
                             val parts = x.split(" ")
-                            if (parts.size == 2 && !isTalkBackEnabled) {
-                                val isGradient by isGradient.collectAsState()
-                                val foldedCardBrush = if (isGradient) Brush.verticalGradient(
-                                    .25f to contentColor,
-                                    .499f to contentColor.copy(
-                                        alpha = if (contentColor.isLight) .75f else .5f
-                                    ),
-                                    .5f to contentColor,
-                                ) else Brush.verticalGradient(
-                                    .49f to contentColor,
-                                    .491f to Color.Transparent,
-                                    .509f to Color.Transparent,
-                                    .51f to contentColor,
-                                )
+                            if (parts.size == 2 && parts[0].length <= 2 && !isTalkBackEnabled) {
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     CompositionLocalProvider(
                                         LocalLayoutDirection provides LayoutDirection.Ltr
@@ -348,6 +343,12 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
         }
     }
 }
+
+private val countDownTimeParts = listOf(
+    R.plurals.days to DAY_IN_MILLIS,
+    R.plurals.hours to ONE_HOUR_IN_MILLIS,
+    R.plurals.minutes to ONE_MINUTE_IN_MILLIS,
+)
 
 @Composable
 fun readEvents(jdn: Jdn, refreshToken: Int, viewModel: CalendarViewModel): List<CalendarEvent<*>> {
