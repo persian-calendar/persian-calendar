@@ -112,6 +112,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -133,9 +134,13 @@ import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
+import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getEnabledAlarms
+import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
+import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
@@ -867,28 +872,63 @@ private fun DaysView(
                 val radius = with(density) { 4.dp.toPx() }
 
                 // Time indicator
-                val time = GregorianCalendar().also { it.timeInMillis = now }
-                val offsetDay = Jdn(time.toCivilDate()) - startingDay
-                val primary = MaterialTheme.colorScheme.primary
-                if (offsetDay in 0..<days) Canvas(Modifier
-                    .offset {
-                        IntOffset(
-                            (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                            (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                run {
+                    val time = GregorianCalendar().also { it.timeInMillis = now }
+                    val offsetDay = Jdn(time.toCivilDate()) - startingDay
+                    val primary = MaterialTheme.colorScheme.primary
+                    if (offsetDay in 0..<days) Canvas(Modifier
+                        .offset {
+                            IntOffset(
+                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
+                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                            )
+                        }
+                        .size(1.dp)
+                    ) {
+                        drawCircle(primary, radius)
+                        drawLine(
+                            color = primary,
+                            start = Offset(if (isRtl) this.size.width else 0f, 0f),
+                            end = Offset(
+                                directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
+                                0f
+                            ),
+                            strokeWidth = 1.dp.toPx()
                         )
                     }
-                    .size(1.dp)
-                ) {
-                    drawCircle(primary, radius)
-                    drawLine(
-                        color = primary,
-                        start = Offset(if (isRtl) this.size.width else 0f, 0f),
-                        end = Offset(
-                            directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
-                            0f
-                        ),
-                        strokeWidth = 1.dp.toPx()
-                    )
+                }
+
+                getEnabledAlarms(context).takeIf { it.isNotEmpty() }?.let { enabledTimes ->
+                    val middayColor = Color(0xFFFF9800)
+                    val strokeWidth = with(density) { 1.dp.toPx() }
+                    val timesNames = enabledTimes.map(::getPrayTimeName)
+                    val coordinates = coordinates.collectAsState().value ?: return@let
+                    (0..<days).map { offsetDay ->
+                        val date = (startingDay + offsetDay).toGregorianCalendar()
+                        val prayTimes = coordinates.calculatePrayTimes(date)
+                        timesNames.forEach {
+                            val fraction = prayTimes.getFromStringId(it).toHoursFraction()
+                            Canvas(Modifier
+                                .offset {
+                                    IntOffset(
+                                        (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
+                                        (fraction * cellHeightPx).roundToInt()
+                                    )
+                                }
+                                .size(1.dp)
+                            ) {
+                                drawLine(
+                                    color = middayColor,
+                                    start = Offset(if (isRtl) this.size.width else 0f, 0f),
+                                    end = Offset(
+                                        directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
+                                        0f
+                                    ),
+                                    strokeWidth = strokeWidth,
+                                )
+                            }
+                        }
+                    }
                 }
 
                 var intention by remember { mutableStateOf<DragIntention?>(null) }
