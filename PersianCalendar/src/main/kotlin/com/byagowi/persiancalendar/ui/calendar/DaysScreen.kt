@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+import android.content.res.Configuration
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
@@ -134,7 +135,10 @@ import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
+import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
@@ -356,6 +360,7 @@ fun SharedTransitionScope.DaysScreen(
                                                     addAction = it
                                                 }
                                             },
+                                            hasWeekPager = hasWeeksPager,
                                             startingDay = weekStart,
                                             selectedDay = selectedDay,
                                             setSelectedDay = setSelectedDayInWeekPager,
@@ -418,6 +423,7 @@ fun SharedTransitionScope.DaysScreen(
                                         setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                         snackbarHostState = snackbarHostState,
                                         calendarViewModel = calendarViewModel,
+                                        hasWeekPager = hasWeeksPager
                                     )
                                 }
                             }
@@ -481,6 +487,7 @@ private fun DaysView(
     setAddEventBoxEnabled: () -> Unit,
     snackbarHostState: SnackbarHostState,
     calendarViewModel: CalendarViewModel,
+    hasWeekPager: Boolean,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -522,7 +529,8 @@ private fun DaysView(
     ) {
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
         val hasHeader by remember(events) {
-            val needsHeader = eventsWithTime.all { it.isEmpty() } || maxDayAllDayEvents != 0
+            val needsHeader =
+                eventsWithTime.all { it.isEmpty() } || maxDayAllDayEvents != 0 || (days != 1 && !hasWeekPager)
             derivedStateOf {
                 needsHeader && !scrollState.lastScrolledForward && scrollState.value <= initialScroll * scale.value
             }
@@ -590,8 +598,25 @@ private fun DaysView(
                         val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
                             lineHeight = 24.sp
                         )
-                        eventsWithoutTime.forEach { dayEvents ->
+                        eventsWithoutTime.forEachIndexed { i, dayEvents ->
                             Column(Modifier.weight(1f)) {
+                                if (!hasWeekPager) {
+                                    val weekDayPosition = revertWeekStartOffsetFromWeekDay(i)
+                                    val weekDayName = getWeekDayName(weekDayPosition)
+                                    val isLandscape =
+                                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                                    Text(
+                                        text = if (isLandscape) weekDayName else {
+                                            getInitialOfWeekDay(weekDayPosition)
+                                        },
+                                        maxLines = 1,
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        modifier = Modifier
+                                            .width(cellWidth)
+                                            .semantics { this.contentDescription = weekDayName },
+                                    )
+                                }
                                 dayEvents.forEachIndexed { i, event ->
                                     if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
                                         val color = eventColor(event)
