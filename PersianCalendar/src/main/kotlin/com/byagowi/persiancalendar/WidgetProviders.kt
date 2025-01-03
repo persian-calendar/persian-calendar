@@ -48,6 +48,7 @@ class AgeWidget : WidgetProvider() {
                 remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + it)
                 remove(PREF_SELECTED_WIDGET_TEXT_COLOR + it)
                 remove(PREF_SELECTED_DATE_AGE_WIDGET + it)
+                remove(PREF_SELECTED_DATE_AGE_WIDGET_START + it)
                 remove(PREF_TITLE_AGE_WIDGET + it)
             }
         }

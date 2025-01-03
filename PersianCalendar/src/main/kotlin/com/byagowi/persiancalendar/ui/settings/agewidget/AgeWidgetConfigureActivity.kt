@@ -35,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
+import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET_START
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
@@ -108,8 +109,9 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
             .safeDrawingPadding()
             .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
     ) {
+        val today = remember { Jdn.today() }
         WidgetPreview { context, width, height ->
-            createAgeRemoteViews(context, width, height, appWidgetId)
+            createAgeRemoteViews(context, width, height, appWidgetId, today)
         }
         Column(
             Modifier
@@ -151,13 +153,30 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
                     label = { Text(stringResource(R.string.age_widget_title)) },
                 )
 
-                SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
-                    val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    DatePickerDialog(
-                        initialJdn = context.preferences.getJdnOrNull(key) ?: Jdn.today(),
-                        onDismissRequest = onDismissRequest,
-                    ) { jdn -> context.preferences.edit { putJdn(key, jdn) } }
+                val primaryKey = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
+                var primaryJdn by remember {
+                    mutableStateOf(context.preferences.getJdnOrNull(primaryKey) ?: today)
                 }
+                SettingsClickable(stringResource(R.string.select_date)) { onDismissRequest ->
+                    DatePickerDialog(initialJdn = primaryJdn, onDismissRequest = onDismissRequest) {
+                        primaryJdn = it
+                        context.preferences.edit { putJdn(primaryKey, it) }
+                    }
+                }
+
+                AnimatedVisibility(primaryJdn > today) {
+                    val secondaryKey = PREF_SELECTED_DATE_AGE_WIDGET_START + appWidgetId
+                    var jdn by remember {
+                        mutableStateOf(context.preferences.getJdnOrNull(secondaryKey) ?: today)
+                    }
+                    SettingsClickable(stringResource(R.string.starting_date)) { onDismissRequest ->
+                        DatePickerDialog(initialJdn = jdn, onDismissRequest = onDismissRequest) {
+                            jdn = it
+                            context.preferences.edit { putJdn(secondaryKey, it) }
+                        }
+                    }
+                }
+
                 val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
                 WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
                 AnimatedVisibility(!prefersWidgetsDynamicColors) {

@@ -238,6 +238,7 @@
     <string name="enable_location_services">مکان‌یاب خاموش است، برای بهره‌وری از این ویژگی لطفاً آن را روشن سازید.</string>
     <string name="widget_age_name">تقویم فارسی (سن)</string>
     <string name="select_date">انتخاب تاریخ</string>
+    <string name="starting_date">تاریخ شروع</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <plurals name="days">
         <item quantity="one">%1$s روز</item>

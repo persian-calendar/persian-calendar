@@ -37,6 +37,16 @@
             android:textAlignment="center"
             android:textSize="18sp" />
 
+        <ProgressBar
+            android:id="@+id/progress"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="40dp"
+            android:layout_height="4dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
+
     </LinearLayout>
+
 
 </FrameLayout>

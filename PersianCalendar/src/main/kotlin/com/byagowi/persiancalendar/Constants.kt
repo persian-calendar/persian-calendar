@@ -50,6 +50,7 @@ const val PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS = "EnglishGregorianPersianMonths
 const val PREF_SELECTED_WIDGET_TEXT_COLOR = "SelectedWidgetTextColor"
 const val PREF_SELECTED_WIDGET_BACKGROUND_COLOR = "SelectedWidgetBackgroundColor"
 const val PREF_SELECTED_DATE_AGE_WIDGET = "SelectedDateForAgeWidget"
+const val PREF_SELECTED_DATE_AGE_WIDGET_START = "SelectedDateForAgeWidgetStart"
 const val PREF_TITLE_AGE_WIDGET = "TitleForAgeWidget"
 const val PREF_ATHAN_ALARM = "AthanAlarm"
 const val PREF_ATHAN_GAP = "AthanGap"

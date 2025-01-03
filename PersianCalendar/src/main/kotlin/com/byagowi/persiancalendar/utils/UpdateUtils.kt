@@ -49,6 +49,7 @@ import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
 import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
+import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET_START
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
@@ -207,7 +208,7 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     AppWidgetManager.getInstance(context).run {
         updateFromRemoteViews<AgeWidget>(context, now) { width, height, widgetId ->
-            createAgeRemoteViews(context, width, height, widgetId)
+            createAgeRemoteViews(context, width, height, widgetId, jdn)
         }
         updateFromRemoteViews<Widget1x1>(context, now) { width, height, _ ->
             create1x1RemoteViews(context, width, height, date)
@@ -321,12 +322,14 @@ private fun getWidgetTextColor(
 ) = preferences.getString(key, null)?.let(Color::parseColor)
     ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
-fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: Int): RemoteViews {
+fun createAgeRemoteViews(
+    context: Context, width: Int, height: Int, widgetId: Int, today: Jdn,
+): RemoteViews {
     val preferences = context.preferences
-    val baseJdn = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today()
+    val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
     val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
     val subtitle =
-        calculateDaysDifference(context.resources, baseJdn, Jdn.today(), isInWidget = true)
+        calculateDaysDifference(context.resources, primary, Jdn.today(), isInWidget = true)
     val textColor = getWidgetTextColor(preferences, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(
         preferences, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
@@ -340,6 +343,11 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
         if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(it)
         else remoteViews.setTextColor(it, textColor)
     }
+    val secondary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET_START + widgetId)
+    if (secondary != null && primary > secondary && primary > today && today >= secondary) {
+        remoteViews.setViewVisibility(R.id.progress, View.VISIBLE)
+        remoteViews.setProgressBar(R.id.progress, primary - secondary, today - secondary, false)
+    } else remoteViews.setViewVisibility(R.id.progress, View.GONE)
     remoteViews.setOnClickPendingIntent(
         R.id.age_widget_root,
         context.launchAgeWidgetConfigurationAppPendingIntent(widgetId)

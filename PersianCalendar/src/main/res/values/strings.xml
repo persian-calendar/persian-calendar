@@ -238,6 +238,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="share">Share</string>
     <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
     <string name="select_date">Select date</string>
+    <string name="starting_date">Starting date</string>
     <string name="age_widget_title">Widget title</string>
     <string name="preview">Preview</string>
     <string name="ignore">Ignore</string>
