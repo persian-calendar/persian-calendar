@@ -409,4 +409,10 @@
     <string name="widget_background_transparency">شەفافیەتی پاشبنەمای ویجت</string>
     <string name="save">هەڵگرتن</string>
     <string name="exempt_app_battery_optimization">ئایا دەتەوێت ئەپەکە زیاد بکەیت بۆ ئیستسنای باشکردنی باتری بۆ کارایی دروستی ئاگادارکردنەوەکە؟</string>
+    <string name="week_view">پێشاندانی حەفتانە</string>
+    <string name="schedule">بەرنامە</string>
+    <string name="print">چاپکردن</string>
+    <string name="daily_schedule">بەرنامەی ڕۆژانە</string>
+    <string name="day_view">پێشاندانی ڕۆژانە</string>
+    <string name="vibration">لەرزین</string>
 </resources>
