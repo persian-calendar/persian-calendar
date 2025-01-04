@@ -141,7 +141,7 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
-import com.byagowi.persiancalendar.utils.getFromStringId
+import com.byagowi.persiancalendar.utils.getFractionFromStringId
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.getWeekDayName
@@ -918,7 +918,7 @@ private fun DaysView(
                         val date = (startingDay + offsetDay).toGregorianCalendar()
                         val prayTimes = coordinates.calculatePrayTimes(date)
                         timesNames.forEach {
-                            val fraction = prayTimes.getFromStringId(it).toHoursFraction()
+                            val fraction = prayTimes.getFractionFromStringId(it)
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
                                 (fraction * cellHeightPx).roundToInt()
