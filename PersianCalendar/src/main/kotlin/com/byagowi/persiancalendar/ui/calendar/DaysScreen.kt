@@ -918,10 +918,9 @@ private fun DaysView(
                         val date = (startingDay + offsetDay).toGregorianCalendar()
                         val prayTimes = coordinates.calculatePrayTimes(date)
                         timesNames.forEach {
-                            val fraction = prayTimes.getFractionFromStringId(it)
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (fraction * cellHeightPx).roundToInt()
+                                (prayTimes.getFractionFromStringId(it) * cellHeightPx).roundToInt()
                             )
                             Canvas(
                                 Modifier
