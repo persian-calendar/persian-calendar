@@ -43,6 +43,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Brightness4
 import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -81,6 +82,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.positionChange
@@ -899,24 +901,33 @@ private fun DaysView(
                 }
 
                 getEnabledAlarms(context).takeIf { it.isNotEmpty() }?.let { enabledTimes ->
-                    val middayColor = Color(0xFFFF9800)
+                    val middayColor = Color(0xCCFF9800)
                     val strokeWidth = with(density) { 1.dp.toPx() }
+                    val size = 12
+                    val centerOffset = with(density) {
+                        IntOffset((size / 2).dp.roundToPx(), (size / 2).dp.roundToPx())
+                    }
                     val timesNames = enabledTimes.map(::getPrayTimeName)
                     val coordinates = coordinates.collectAsState().value ?: return@let
+                    val circleRadius = with(density) { (size / 4).dp.toPx() }
+                    val pathEffect = with(density) {
+                        PathEffect.dashPathEffect(floatArrayOf(2.dp.toPx(), 2.dp.toPx()))
+                    }
                     (0..<days).map { offsetDay ->
                         val date = (startingDay + offsetDay).toGregorianCalendar()
                         val prayTimes = coordinates.calculatePrayTimes(date)
                         timesNames.forEach {
                             val fraction = prayTimes.getFromStringId(it).toHoursFraction()
-                            Canvas(Modifier
-                                .offset {
-                                    IntOffset(
-                                        (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                        (fraction * cellHeightPx).roundToInt()
-                                    )
-                                }
-                                .size(1.dp)
+                            val position = IntOffset(
+                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
+                                (fraction * cellHeightPx).roundToInt()
+                            )
+                            Canvas(
+                                Modifier
+                                    .offset { position }
+                                    .size(1.dp),
                             ) {
+                                if (offsetDay != 0) drawCircle(middayColor, circleRadius)
                                 drawLine(
                                     color = middayColor,
                                     start = Offset(if (isRtl) this.size.width else 0f, 0f),
@@ -924,9 +935,18 @@ private fun DaysView(
                                         directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
                                         0f
                                     ),
+                                    pathEffect = pathEffect,
                                     strokeWidth = strokeWidth,
                                 )
                             }
+                            if (offsetDay == 0) Icon(
+                                Icons.Default.Brightness4,
+                                null,
+                                Modifier
+                                    .offset { position - centerOffset }
+                                    .size(size.dp),
+                                middayColor,
+                            )
                         }
                     }
                 }
