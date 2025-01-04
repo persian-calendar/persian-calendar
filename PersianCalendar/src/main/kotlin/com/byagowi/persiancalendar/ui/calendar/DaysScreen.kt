@@ -44,6 +44,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Brightness4
+import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -901,7 +902,7 @@ private fun DaysView(
                 }
 
                 getEnabledAlarms(context).takeIf { it.isNotEmpty() }?.let { enabledTimes ->
-                    val middayColor = Color(0xCCFF9800)
+                    val middayColor = Color(0xffbe923b)
                     val strokeWidth = with(density) { 1.dp.toPx() }
                     val size = 12
                     val centerOffset = with(density) {
@@ -940,7 +941,8 @@ private fun DaysView(
                                 )
                             }
                             if (offsetDay == 0) Icon(
-                                Icons.Default.Brightness4,
+                                if (it in listOf(R.string.dhuhr, R.string.asr))
+                                    Icons.Default.Brightness7 else Icons.Default.Brightness4,
                                 null,
                                 Modifier
                                     .offset { position - centerOffset }
