@@ -9,6 +9,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,6 +42,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -55,6 +60,7 @@ import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -98,10 +104,31 @@ fun SharedTransitionScope.ScheduleScreen(
     val coroutineScope = rememberCoroutineScope()
     val language by language.collectAsState()
 
+    val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
+    val swipeDownModifier = Modifier.pointerInput(Unit) {
+        val threshold = 80.dp.toPx()
+        awaitEachGesture {
+            val id = awaitFirstDown(requireUnconsumed = false).id
+            var successful = false
+            var yAccumulation = 0f
+            verticalDrag(id) {
+                yAccumulation += it.positionChange().y
+                if (!successful && yAccumulation > threshold) {
+                    when (preferredSwipeUpAction) {
+                        SwipeUpAction.Schedule -> navigateUp()
+                        else -> {}
+                    }
+                    successful = true
+                }
+            }
+        }
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
+                modifier = swipeDownModifier,
                 title = {
                     val date = firstVisibleItemJdn.inCalendar(mainCalendar)
                     val screenTitle = stringResource(R.string.schedule)
