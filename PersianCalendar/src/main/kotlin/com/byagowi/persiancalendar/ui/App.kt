@@ -256,7 +256,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                     val jdn =
                         backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
-                            ?.let { Jdn(it) } ?: remember { viewModel.selectedDay.value }
+                            ?.let(::Jdn) ?: remember { viewModel.selectedDay.value }
                     ScheduleScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
@@ -273,11 +273,8 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     } else viewModel<CalendarViewModel>()
                     val arguments = backStackEntry.arguments
                     val isWeek = arguments?.getBoolean(isWeekKey) ?: false
-                    val jdn = arguments?.getLong(selectedDayKey, 0)
-                        ?.takeIf { it != 0L }
-                        ?.let {
-                            Jdn(it)
-                        } ?: Jdn.today()
+                    val jdn = arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }?.let(::Jdn)
+                        ?: Jdn.today()
                     DaysScreen(
                         calendarViewModel = viewModel,
                         initialSelectedDay = jdn,

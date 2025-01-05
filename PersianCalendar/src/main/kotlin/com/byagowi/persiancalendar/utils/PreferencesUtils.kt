@@ -40,7 +40,7 @@ fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) {
 }
 
 fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
-    getLong(key, -1).takeIf { it != -1L }?.let { Jdn(it) }
+    getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
 
 // Ignore offset if it isn't set in less than month ago
 val SharedPreferences.isIslamicOffsetExpired
