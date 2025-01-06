@@ -189,6 +189,7 @@ fun SharedTransitionScope.DaysTable(
                         indication = ripple(bounded = false),
                         interactionSource = null,
                     ) {
+                        if (onlyWeek != null) return@clickable // row isn't compatible thus not supported
                         val day = if (row == 0) monthStartJdn
                         else monthStartJdn - applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay) + row * 7
                         onWeekClick(when {
