@@ -162,14 +162,15 @@ fun SharedTransitionScope.DaysTable(
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
 
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-    repeat(daysRowsCount) { row ->
-        val weekNumber = monthStartWeekOfYear + row
+
+    @Composable
+    fun WeekNumber(row: Int) {
+        val weekNumber = onlyWeek ?: (monthStartWeekOfYear + row)
         AnimatedVisibility(
-            isShowWeekOfYearEnabled && (onlyWeek == null || onlyWeek == weekNumber),
+            isShowWeekOfYearEnabled,
             modifier = Modifier
                 .offset(
-                    (16 - 4).dp,
-                    cellHeight * (1 + if (onlyWeek == null) row else 0)
+                    (16 - 4).dp, cellHeight * (1 + if (onlyWeek == null) row else 0)
                 )
                 .size((24 + 8).dp, cellHeight),
             label = "week number",
@@ -246,11 +247,12 @@ fun SharedTransitionScope.DaysTable(
         val isToday = day == today
         val isBeforeMonth = dayOffset < startingWeekDay
         val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
+        val column = dayOffset % 7
+        if (column == 0) WeekNumber(row)
         if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Canvas(
             modifier = cellsSizeModifier
                 .offset(
-                    pagerArrowSizeAndPadding.dp + cellWidth * (dayOffset % 7),
-                    cellHeight * (row + 1)
+                    pagerArrowSizeAndPadding.dp + cellWidth * column, cellHeight * (row + 1)
                 )
                 .sharedBounds(
                     rememberSharedContentState(SHARED_CONTENT_KEY_JDN + day.value),
