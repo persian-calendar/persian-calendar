@@ -39,7 +39,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
@@ -100,8 +99,9 @@ fun SharedTransitionScope.DaysTable(
     val columnsCount = 7
     val rowsCount = if (onlyWeek != null) 2 else 7
 
-    val widthPx = with(LocalDensity.current) { width.toPx() }
-    val heightPx = with(LocalDensity.current) { height.toPx() }
+    val density = LocalDensity.current
+    val widthPx = with(density) { width.toPx() }
+    val heightPx = with(density) { height.toPx() }
     val cellWidth = width / columnsCount
     val cellWidthPx = widthPx / columnsCount
     val cellHeight = height / rowsCount
@@ -109,6 +109,7 @@ fun SharedTransitionScope.DaysTable(
     val cellRadius =
         min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5.dp.toPx() }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+    val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
 
     run {
         val cellIndex = selectedDay - monthStartJdn + startingWeekDay
@@ -116,7 +117,7 @@ fun SharedTransitionScope.DaysTable(
         val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
             x = (cellIndex % 7).let {
                 if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
-            } + cellWidthPx / 2f,
+            } + pagerArrowSizeAndPaddingPx + cellWidthPx / 2f,
             // +1 for weekday names initials row
             y = ((if (onlyWeek != null) 0 else (cellIndex / 7)) + 1.5f) * cellHeightPx,
         ) else null
@@ -167,10 +168,10 @@ fun SharedTransitionScope.DaysTable(
             isShowWeekOfYearEnabled && (onlyWeek == null || onlyWeek == weekNumber),
             modifier = Modifier
                 .offset(
-                    -pagerArrowSizeAndPadding.dp * .625f,
+                    (16 - 4).dp,
                     cellHeight * (1 + if (onlyWeek == null) row else 0)
                 )
-                .size(DpSize(pagerArrowSizeAndPadding.dp * .625f, cellHeight)),
+                .size((24 + 8).dp, cellHeight),
             label = "week number",
         ) {
             Box(
@@ -219,7 +220,10 @@ fun SharedTransitionScope.DaysTable(
     repeat(7) { column ->
         Box(
             contentAlignment = Alignment.Center,
-            modifier = cellsSizeModifier.offset(cellWidth * column, 0.dp)
+            modifier = cellsSizeModifier.offset(
+                pagerArrowSizeAndPadding.dp + cellWidth * column,
+                0.dp
+            )
         ) {
             val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
             val description = stringResource(
@@ -244,7 +248,10 @@ fun SharedTransitionScope.DaysTable(
         val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
         if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Canvas(
             modifier = cellsSizeModifier
-                .offset(cellWidth * (dayOffset % 7), cellHeight * (row + 1))
+                .offset(
+                    pagerArrowSizeAndPadding.dp + cellWidth * (dayOffset % 7),
+                    cellHeight * (row + 1)
+                )
                 .sharedBounds(
                     rememberSharedContentState(SHARED_CONTENT_KEY_JDN + day.value),
                     animatedVisibilityScope = animatedContentScope,

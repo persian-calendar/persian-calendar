@@ -8,7 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -83,22 +82,20 @@ fun SharedTransitionScope.CalendarPager(
         Box {
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
             PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = true)
-            Box(modifier = Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
-                DaysTable(
-                    offset = -applyOffset(page),
-                    width = width - (pagerArrowSizeAndPadding * 2).dp,
-                    height = height,
-                    addEvent = addEvent,
-                    monthColors = monthColors,
-                    animatedContentScope = animatedContentScope,
-                    today = today,
-                    isHighlighted = isHighlighted,
-                    refreshToken = refreshToken,
-                    selectedDay = selectedDay,
-                    setSelectedDay = { viewModel.changeSelectedDay(it) },
-                    onWeekClick = navigateToDays,
-                )
-            }
+            DaysTable(
+                offset = -applyOffset(page),
+                width = width - (pagerArrowSizeAndPadding * 2).dp,
+                height = height,
+                addEvent = addEvent,
+                monthColors = monthColors,
+                animatedContentScope = animatedContentScope,
+                today = today,
+                isHighlighted = isHighlighted,
+                refreshToken = refreshToken,
+                selectedDay = selectedDay,
+                setSelectedDay = { viewModel.changeSelectedDay(it) },
+                onWeekClick = navigateToDays,
+            )
             PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = false)
         }
     }
