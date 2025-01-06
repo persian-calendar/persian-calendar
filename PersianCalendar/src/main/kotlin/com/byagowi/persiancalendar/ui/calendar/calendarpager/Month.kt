@@ -161,7 +161,7 @@ fun SharedTransitionScope.Month(
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
 
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-    (0..<daysRowsCount).forEach { row ->
+    repeat(daysRowsCount) { row ->
         val weekNumber = monthStartWeekOfYear + row
         AnimatedVisibility(
             isShowWeekOfYearEnabled && (onlyWeek == null || onlyWeek == weekNumber),
@@ -216,7 +216,7 @@ fun SharedTransitionScope.Month(
 
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
 
-    (0..<7).forEach { column ->
+    repeat(7) { column ->
         Box(
             contentAlignment = Alignment.Center,
             modifier = cellsSizeModifier.offset(cellWidth * column, 0.dp)
