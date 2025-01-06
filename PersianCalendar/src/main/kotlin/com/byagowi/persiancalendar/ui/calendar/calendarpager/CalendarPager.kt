@@ -84,7 +84,7 @@ fun SharedTransitionScope.CalendarPager(
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
             PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = true)
             Box(modifier = Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
-                Month(
+                DaysTable(
                     offset = -applyOffset(page),
                     width = width - (pagerArrowSizeAndPadding * 2).dp,
                     height = height,

@@ -72,7 +72,7 @@ import kotlin.math.min
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.Month(
+fun SharedTransitionScope.DaysTable(
     offset: Int,
     width: Dp,
     height: Dp,

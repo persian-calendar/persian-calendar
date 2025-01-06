@@ -120,7 +120,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.Month
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.DaysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.PagerArrow
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -1140,7 +1140,7 @@ private fun SharedTransitionScope.WeekPager(
         PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, true, week)
         Box(modifier = Modifier.padding(horizontal = pagerArrowSizeAndPadding.dp)) {
             val monthOffset = mainCalendar.getMonthsDistance(today, selectedDay)
-            Month(
+            DaysTable(
                 offset = monthOffset,
                 width = pagerSize.width - (pagerArrowSizeAndPadding * 2).dp,
                 height = height,
