@@ -163,57 +163,6 @@ fun SharedTransitionScope.DaysTable(
 
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
 
-    @Composable
-    fun WeekNumber(row: Int) {
-        val weekNumber = onlyWeek ?: (monthStartWeekOfYear + row)
-        AnimatedVisibility(
-            isShowWeekOfYearEnabled,
-            modifier = Modifier
-                .offset(
-                    (16 - 4).dp, cellHeight * (1 + if (onlyWeek == null) row else 0)
-                )
-                .size((24 + 8).dp, cellHeight),
-            label = "week number",
-        ) {
-            Box(
-                Modifier
-                    .fillMaxSize()
-                    .sharedBounds(
-                        rememberSharedContentState(
-                            "$SHARED_CONTENT_KEY_WEEK_NUMBER$monthStartJdn-$weekNumber"
-                        ),
-                        animatedVisibilityScope = animatedContentScope,
-                    )
-                    .then(if (onWeekClick != null) Modifier.clickable(
-                        onClickLabel = stringResource(R.string.week_view),
-                        indication = ripple(bounded = false),
-                        interactionSource = null,
-                    ) {
-                        if (onlyWeek != null) return@clickable // row isn't compatible thus not supported
-                        val day = if (row == 0) monthStartJdn
-                        else monthStartJdn - applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay) + row * 7
-                        onWeekClick(when {
-                            selectedDay - day in 0..<7 -> selectedDay
-                            row == 0 -> day
-                            // Select first non weekend day of the week
-                            else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
-                        }, true)
-                    } else Modifier),
-                contentAlignment = Alignment.Center,
-            ) {
-                val formattedWeekNumber = formatNumber(weekNumber)
-                val description = stringResource(R.string.nth_week_of_year, formattedWeekNumber)
-                Text(
-                    formattedWeekNumber,
-                    fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
-                    modifier = Modifier
-                        .alpha(AppBlendAlpha)
-                        .semantics { this.contentDescription = description },
-                )
-            }
-        }
-    }
-
     // Report the actual height to the parent just in non week mode
     if (onlyWeek == null) Spacer(Modifier.height(height / 7 * (daysRowsCount + 1)))
 
@@ -249,7 +198,51 @@ fun SharedTransitionScope.DaysTable(
         val isBeforeMonth = dayOffset < startingWeekDay
         val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
         val column = dayOffset % 7
-        if (column == 0) WeekNumber(row)
+        if (column == 0) AnimatedVisibility(
+            isShowWeekOfYearEnabled,
+            modifier = Modifier
+                .offset(
+                    (16 - 4).dp, cellHeight * (1 + if (onlyWeek == null) row else 0)
+                )
+                .size((24 + 8).dp, cellHeight),
+            label = "week number",
+        ) {
+            val weekNumber = onlyWeek ?: (monthStartWeekOfYear + row)
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .sharedBounds(
+                        rememberSharedContentState(
+                            "$SHARED_CONTENT_KEY_WEEK_NUMBER$monthStartJdn-$weekNumber"
+                        ),
+                        animatedVisibilityScope = animatedContentScope,
+                    )
+                    .then(if (onWeekClick != null) Modifier.clickable(
+                        onClickLabel = stringResource(R.string.week_view),
+                        indication = ripple(bounded = false),
+                        interactionSource = null,
+                    ) {
+                        onWeekClick(when {
+                            selectedDay - day in 0..<7 -> selectedDay
+                            onlyWeek != null -> day
+                            row == 0 -> monthStartJdn
+                            // Select first non weekend day of the week
+                            else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
+                        }, true)
+                    } else Modifier),
+                contentAlignment = Alignment.Center,
+            ) {
+                val formattedWeekNumber = formatNumber(weekNumber)
+                val description = stringResource(R.string.nth_week_of_year, formattedWeekNumber)
+                Text(
+                    formattedWeekNumber,
+                    fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
+                    modifier = Modifier
+                        .alpha(AppBlendAlpha)
+                        .semantics { this.contentDescription = description },
+                )
+            }
+        }
         if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Canvas(
             modifier = cellsSizeModifier
                 .offset(
