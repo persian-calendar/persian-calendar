@@ -214,8 +214,8 @@ fun SharedTransitionScope.DaysTable(
         }
     }
 
-    // Just to report the height to the parent
-    Spacer(Modifier.height(height / 7 * if (onlyWeek != null) 2 else (daysRowsCount + 1)))
+    // Report the actual height to the parent just in non week mode
+    if (onlyWeek == null) Spacer(Modifier.height(height / 7 * (daysRowsCount + 1)))
 
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
 
