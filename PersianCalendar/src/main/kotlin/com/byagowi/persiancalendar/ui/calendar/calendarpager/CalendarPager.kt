@@ -32,7 +32,7 @@ fun SharedTransitionScope.CalendarPager(
     pagerState: PagerState,
     addEvent: (AddEventData) -> Unit,
     today: Jdn,
-    size: DpSize,
+    suggestedPagerSize: DpSize,
     navigateToDays: (Jdn, Boolean) -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
@@ -66,7 +66,7 @@ fun SharedTransitionScope.CalendarPager(
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         DaysTable(
             offset = -applyOffset(page),
-            suggestedPagerSize = size,
+            suggestedPagerSize = suggestedPagerSize,
             addEvent = addEvent,
             monthColors = monthColors,
             animatedContentScope = animatedContentScope,
