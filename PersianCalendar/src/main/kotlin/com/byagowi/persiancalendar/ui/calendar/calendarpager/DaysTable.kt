@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -174,8 +173,9 @@ fun SharedTransitionScope.DaysTable(
 
         val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
 
-        val arrowHeight = cellHeight + (if (language.isArabicScript) 4 else 0).dp
-        PagerArrow(arrowHeight, coroutineScope, pagerState, page, width, true, onlyWeek)
+        val arrowOffsetY =
+            (cellHeight + (if (language.isArabicScript) 4 else 0).dp - MaterialIconDimension.dp) / 2
+        PagerArrow(arrowOffsetY, coroutineScope, pagerState, page, width, true, onlyWeek)
 
         repeat(7) { column ->
             Box(
@@ -334,17 +334,17 @@ fun SharedTransitionScope.DaysTable(
             }
         }
 
-        PagerArrow(arrowHeight, coroutineScope, pagerState, page, width, false, onlyWeek)
+        PagerArrow(arrowOffsetY, coroutineScope, pagerState, page, width, false, onlyWeek)
     }
 }
 
-private const val pagerArrowSize = 40 // 24 + 8 + 8
+private const val pagerArrowSize = MaterialIconDimension + 8 * 2
 const val pagerArrowSizeAndPadding = pagerArrowSize + 4
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
 private fun PagerArrow(
-    arrowHeight: Dp,
+    arrowOffsetY: Dp,
     scope: CoroutineScope,
     pagerState: PagerState,
     index: Int,
@@ -352,46 +352,40 @@ private fun PagerArrow(
     isPrevious: Boolean,
     week: Int?,
 ) {
-    Box(
-        modifier = Modifier
-            .offset(if (isPrevious) 0.dp else width - pagerArrowSize.dp, 0.dp)
-            .size(pagerArrowSize.dp, arrowHeight),
-    ) {
-        val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
-        val contentDescription = if (week == null) {
+    val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
+    Icon(
+        if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
+        else Icons.AutoMirrored.Default.KeyboardArrowRight,
+        contentDescription = if (week == null) {
             stringResource(stringId, stringResource(R.string.month))
-        } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1)
-        Icon(
-            if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
-            else Icons.AutoMirrored.Default.KeyboardArrowRight,
-            contentDescription = contentDescription,
-            modifier = Modifier
-                .width(MaterialIconDimension.dp)
-                .then(if (week == null) Modifier.combinedClickable(
-                    indication = ripple(bounded = false),
-                    interactionSource = null,
-                    onClick = {
-                        scope.launch {
-                            pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
-                        }
-                    },
-                    onClickLabel = stringResource(R.string.select_month),
-                    onLongClick = {
-                        scope.launch {
-                            pagerState.scrollToPage(index + 12 * if (isPrevious) -1 else 1)
-                        }
-                    },
-                    onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
-                ) else Modifier.clickable(
-                    indication = ripple(bounded = false),
-                    interactionSource = null,
-                ) {
+        } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1),
+        modifier = Modifier
+            .offset(
+                if (isPrevious) 16.dp else (width - pagerArrowSize.dp), arrowOffsetY
+            )
+            .then(if (week == null) Modifier.combinedClickable(
+                indication = ripple(bounded = false),
+                interactionSource = null,
+                onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
                     }
-                })
-                .align(if (isPrevious) Alignment.CenterEnd else Alignment.CenterStart)
-                .alpha(.9f),
-        )
-    }
+                },
+                onClickLabel = stringResource(R.string.select_month),
+                onLongClick = {
+                    scope.launch {
+                        pagerState.scrollToPage(index + 12 * if (isPrevious) -1 else 1)
+                    }
+                },
+                onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
+            ) else Modifier.clickable(
+                indication = ripple(bounded = false),
+                interactionSource = null,
+            ) {
+                scope.launch {
+                    pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                }
+            })
+            .alpha(.9f),
+    )
 }
