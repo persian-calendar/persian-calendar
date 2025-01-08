@@ -110,6 +110,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_ICON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
@@ -145,6 +146,7 @@ import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -355,7 +357,7 @@ fun SharedTransitionScope.DaysScreen(
                                 it - applyWeekStartOffsetToWeekDay(it.weekDay)
                             }
                             val weekDeviceEvents = remember(
-                                refreshToken, isShowDeviceCalendarEvents, monthStartJdn
+                                refreshToken, isShowDeviceCalendarEvents, weekStart
                             ) {
                                 if (isShowDeviceCalendarEvents) {
                                     context.readWeekDeviceEvents(weekStart)
@@ -409,8 +411,8 @@ fun SharedTransitionScope.DaysScreen(
                                             setSelectedDay = setSelectedDayInWeekPager,
                                             addEvent = addEvent,
                                             refreshCalendar = calendarViewModel::refreshCalendar,
-                                            refreshToken = refreshToken,
                                             days = 7,
+                                            deviceEvents = weekDeviceEvents,
                                             now = calendarViewModel.now.collectAsState().value,
                                             isAddEventBoxEnabled = isAddEventBoxEnabled,
                                             setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
@@ -435,6 +437,7 @@ fun SharedTransitionScope.DaysScreen(
                             ) { page ->
                                 val isCurrentPage = dayPagerState.currentPage == page
                                 val pageDay = today + (page - daysLimit / 2)
+
                                 LaunchedEffect(isCurrentPage) {
                                     if (isCurrentPage) {
                                         selectedDay = pageDay
@@ -444,6 +447,15 @@ fun SharedTransitionScope.DaysScreen(
                                             weekPagerState.scrollToPage(destination)
                                         } else weekPagerState.animateScrollToPage(destination)
                                     }
+                                }
+
+                                val context = LocalContext.current
+                                val dayDeviceEvents = remember(
+                                    refreshToken, isShowDeviceCalendarEvents, pageDay
+                                ) {
+                                    if (isShowDeviceCalendarEvents) {
+                                        context.readDayDeviceEvents(pageDay)
+                                    } else EventsStore.empty()
                                 }
 
                                 DaysView(
@@ -458,14 +470,14 @@ fun SharedTransitionScope.DaysScreen(
                                     setSelectedDay = { selectedDay = it; isHighlighted = true },
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
-                                    refreshToken = refreshToken,
                                     days = 1,
                                     now = calendarViewModel.now.collectAsState().value,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
                                     calendarViewModel = calendarViewModel,
-                                    hasWeekPager = hasWeeksPager
+                                    hasWeekPager = hasWeeksPager,
+                                    deviceEvents = dayDeviceEvents,
                                 )
                             }
                         }
@@ -521,7 +533,6 @@ private fun DaysView(
     bottomPadding: Dp,
     addEvent: (AddEventData) -> Unit,
     refreshCalendar: () -> Unit,
-    refreshToken: Int,
     now: Long,
     days: Int,
     isAddEventBoxEnabled: Boolean,
@@ -529,6 +540,7 @@ private fun DaysView(
     snackbarHostState: SnackbarHostState,
     calendarViewModel: CalendarViewModel,
     hasWeekPager: Boolean,
+    deviceEvents: DeviceCalendarEventsStore,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -537,10 +549,10 @@ private fun DaysView(
     val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
     val scrollState = rememberScrollState(initialScroll)
     val events = (startingDay..(startingDay + days - 1)).toList()
-        .map { jdn -> readEvents(jdn, refreshToken, calendarViewModel) }
+        .map { jdn -> readEvents(jdn, calendarViewModel, deviceEvents) }
     val eventsWithTime = events.map { dayEvents ->
-        val deviceEvents = dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-        addDivisions(deviceEvents.filter { it.time != null }.sortedWith { x, y ->
+        addDivisions(dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
+            .filter { it.time != null }.sortedWith { x, y ->
             x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
                 if (it != 0) return@sortedWith it
             }

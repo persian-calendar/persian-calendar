@@ -60,6 +60,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
@@ -137,7 +138,9 @@ fun SharedTransitionScope.EventsTab(
         }
 
         Column(Modifier.padding(horizontal = 24.dp)) {
-            val events = readEvents(jdn, refreshToken, viewModel)
+            val context = LocalContext.current
+            val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
+            val events = readEvents(jdn, viewModel, deviceEvents)
             Spacer(Modifier.height(16.dp))
             AnimatedVisibility(events.isEmpty()) {
                 Text(
@@ -351,16 +354,17 @@ private val countDownTimeParts = listOf(
 )
 
 @Composable
-fun readEvents(jdn: Jdn, refreshToken: Int, viewModel: CalendarViewModel): List<CalendarEvent<*>> {
+fun readEvents(
+    jdn: Jdn,
+    viewModel: CalendarViewModel,
+    deviceEvents: DeviceCalendarEventsStore,
+): List<CalendarEvent<*>> {
     val context = LocalContext.current
-    val events = remember(jdn, refreshToken) {
-        (eventsRepository?.getEvents(jdn, context.readDayDeviceEvents(jdn))
-            ?: emptyList()).sortedBy {
-            when {
-                it.isHoliday -> 0L
-                it !is CalendarEvent.DeviceCalendarEvent -> 1L
-                else -> it.start.timeInMillis
-            }
+    val events = (eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList()).sortedBy {
+        when {
+            it.isHoliday -> 0L
+            it !is CalendarEvent.DeviceCalendarEvent -> 1L
+            else -> it.start.timeInMillis
         }
     }
 

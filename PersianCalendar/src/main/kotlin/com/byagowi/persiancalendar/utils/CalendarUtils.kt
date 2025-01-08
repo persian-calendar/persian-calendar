@@ -208,21 +208,21 @@ private fun readDeviceEvents(
 fun Context.readDayDeviceEvents(jdn: Jdn) =
     DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toGregorianCalendar(), DAY_IN_MILLIS))
 
-fun Context.readMonthDeviceEvents(jdn: Jdn) =
-    DeviceCalendarEventsStore(
-        readDeviceEvents(
-            this,
-            jdn.toGregorianCalendar(),
-            32L * DAY_IN_MILLIS
-        )
-    )
-
 fun Context.readWeekDeviceEvents(jdn: Jdn) =
     DeviceCalendarEventsStore(
         readDeviceEvents(
             this,
             jdn.toGregorianCalendar(),
             7 * DAY_IN_MILLIS
+        )
+    )
+
+fun Context.readMonthDeviceEvents(jdn: Jdn) =
+    DeviceCalendarEventsStore(
+        readDeviceEvents(
+            this,
+            jdn.toGregorianCalendar(),
+            32L * DAY_IN_MILLIS
         )
     )
 
