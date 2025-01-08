@@ -5,16 +5,18 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VectorConverter
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 
 @Composable
-fun SelectionIndicator(color: Color, radius: Float, center: Offset?) {
+fun SelectionIndicator(color: Color, radius: Float, center: Offset?, height: Dp) {
     val animatedCenter = remember { Animatable(Offset.Zero, Offset.VectorConverter) }
     val animatedRadius = remember { Animatable(if (center == null) 0f else 1f) }
 
@@ -36,7 +38,11 @@ fun SelectionIndicator(color: Color, radius: Float, center: Offset?) {
         )
     }
 
-    Canvas(Modifier.fillMaxSize()) {
+    Canvas(
+        Modifier
+            .height(height)
+            .fillMaxWidth()
+    ) {
         val radiusFraction = animatedRadius.value
         if (radiusFraction > 0f) drawCircle(
             color = color,

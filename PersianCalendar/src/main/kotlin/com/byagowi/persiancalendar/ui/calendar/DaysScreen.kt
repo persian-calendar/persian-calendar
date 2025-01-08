@@ -1120,7 +1120,7 @@ private fun SharedTransitionScope.WeekPager(
     today: Jdn,
     refreshToken: Int,
 ) {
-    Box(Modifier.height(pagerSize.height)) {
+    Box {
         val offset = page - weeksLimit / 2
         val sampleDay = today + 7 * offset
         val startOfYearJdn = Jdn(mainCalendar, selectedDayDate.year, 1, 1)

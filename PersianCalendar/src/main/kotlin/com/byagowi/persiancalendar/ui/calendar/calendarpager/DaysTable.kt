@@ -9,9 +9,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
@@ -111,6 +109,10 @@ fun SharedTransitionScope.DaysTable(
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
 
+    val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
+    // Report the actual height to the parent just in non week mode
+    val actualHeight = if (onlyWeek != null) height else height / 7 * (daysRowsCount + 1)
+
     run {
         val cellIndex = selectedDay - monthStartJdn + startingWeekDay
         val highlightedDayOfMonth = selectedDay - monthStartJdn
@@ -123,7 +125,7 @@ fun SharedTransitionScope.DaysTable(
         ) else null
         // Invalidate the indicator state on table size changes
         key(width, height) {
-            SelectionIndicator(color = monthColors.indicator, radius = cellRadius, center = center)
+            SelectionIndicator(monthColors.indicator, cellRadius, center, actualHeight)
         }
     }
 
@@ -159,12 +161,7 @@ fun SharedTransitionScope.DaysTable(
         cellWidthPx, cellHeightPx
     ) * 1 / 40
 
-    val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
-
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-
-    // Report the actual height to the parent just in non week mode
-    if (onlyWeek == null) Spacer(Modifier.height(height / 7 * (daysRowsCount + 1)))
 
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
 
