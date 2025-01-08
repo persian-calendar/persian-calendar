@@ -6,10 +6,14 @@ import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.entities.Jdn
 
 /**
  * Determines if a color should be considered light or dark.
@@ -46,6 +50,11 @@ fun materialCornerExtraLargeTop(): CornerBasedShape {
 fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
 }
+
+val JdnSaver = Saver<MutableState<Jdn>, Long>(
+    save = { it.value.value },
+    restore = { mutableStateOf(Jdn(it)) }
+)
 
 // When something needs to match with Material default theme corner sizes
 const val ExtraLargeShapeCornerSize = 28f

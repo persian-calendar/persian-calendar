@@ -19,7 +19,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,6 +30,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import kotlinx.coroutines.delay
@@ -41,9 +41,7 @@ fun DatePickerDialog(
     onDismissRequest: () -> Unit,
     onSuccess: (jdn: Jdn) -> Unit,
 ) {
-    var jdn by rememberSaveable(
-        saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
-    ) { mutableStateOf(initialJdn) }
+    var jdn by rememberSaveable(saver = JdnSaver) { mutableStateOf(initialJdn) }
     var today by remember { mutableStateOf(Jdn.today()) }
     LaunchedEffect(Unit) {
         while (true) {

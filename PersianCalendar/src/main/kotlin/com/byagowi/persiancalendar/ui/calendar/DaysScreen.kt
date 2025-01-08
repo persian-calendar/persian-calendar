@@ -72,7 +72,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -130,6 +129,7 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
+import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -160,9 +160,7 @@ fun SharedTransitionScope.DaysScreen(
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
 ) {
-    var selectedDay by rememberSaveable(
-        saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
-    ) { mutableStateOf(initiallySelectedDay) }
+    var selectedDay by rememberSaveable(saver = JdnSaver) { mutableStateOf(initiallySelectedDay) }
     val today by calendarViewModel.today.collectAsState()
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
     val date = selectedDay.inCalendar(mainCalendar)
