@@ -107,20 +107,14 @@ fun SharedTransitionScope.DaysTable(
     val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
     val monthStartWeekOfYear = monthStartJdn.getWeekOfYear(startOfYearJdn)
 
-    val columnsCount = 7
-    val rowsCount = if (onlyWeek != null) 2 else 7
-
     val density = LocalDensity.current
-    val (width, height) = suggestedPagerSize
-    val tableWidth = width - (pagerArrowSizeAndPadding * 2).dp
-    val tableWidthPx = with(density) { tableWidth.toPx() }
-    val heightPx = with(density) { height.toPx() }
-    val cellWidth = tableWidth / columnsCount
-    val cellWidthPx = tableWidthPx / columnsCount
-    val cellHeight = height / rowsCount
-    val cellHeightPx = heightPx / rowsCount
+    val (width, suggestedHeight) = suggestedPagerSize
+    val cellWidth = (width - (pagerArrowSizeAndPadding * 2).dp) / 7
+    val cellWidthPx = with(density) { cellWidth.toPx() }
+    val cellHeight = suggestedHeight / if (onlyWeek != null) 2 else 7
+    val cellHeightPx = with(density) { cellHeight.toPx() }
     val cellRadius =
-        min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5.dp.toPx() }
+        min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5f.dp.toPx() }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
 
@@ -128,7 +122,8 @@ fun SharedTransitionScope.DaysTable(
 
     Box(
         modifier.height(
-            if (onlyWeek != null) height + 8.dp else (cellHeight * (daysRowsCount + 1) + 12.dp)
+            if (onlyWeek != null) suggestedHeight + 8.dp
+            else (cellHeight * (daysRowsCount + 1) + 12.dp)
         )
     ) {
         run {
@@ -136,13 +131,15 @@ fun SharedTransitionScope.DaysTable(
             val highlightedDayOfMonth = selectedDay - monthStartJdn
             val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
                 x = (cellIndex % 7).let {
-                    if (isRtl) tableWidthPx - (it + 1) * cellWidthPx else it * cellWidthPx
+                    cellWidthPx * if (isRtl) 6 - it else it
                 } + pagerArrowSizeAndPaddingPx + cellWidthPx / 2f,
                 // +1 for weekday names initials row
                 y = ((if (onlyWeek != null) 0 else (cellIndex / 7)) + 1.5f) * cellHeightPx,
             ) else null
             // Invalidate the indicator state on table size changes
-            key(width, height) { SelectionIndicator(monthColors.indicator, cellRadius, center) }
+            key(width, suggestedHeight) {
+                SelectionIndicator(monthColors.indicator, cellRadius, center)
+            }
         }
 
         val context = LocalContext.current
@@ -151,8 +148,8 @@ fun SharedTransitionScope.DaysTable(
             else EventsStore.empty()
         }
 
-        val diameter = min(tableWidth / columnsCount, height / rowsCount)
-        val dayPainter = remember(tableWidth, height, refreshToken, monthColors) {
+        val diameter = min(cellWidth, cellHeight)
+        val dayPainter = remember(cellWidthPx, suggestedHeight, refreshToken, monthColors) {
             DayPainter(
                 resources = context.resources,
                 width = cellWidthPx,
