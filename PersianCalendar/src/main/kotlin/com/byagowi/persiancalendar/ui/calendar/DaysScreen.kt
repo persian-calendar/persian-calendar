@@ -37,7 +37,6 @@ import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -96,7 +95,6 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
@@ -114,14 +112,12 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTEN
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DaysTable
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -148,8 +144,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import io.github.persiancalendar.calendar.AbstractDate
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.GregorianCalendar
@@ -327,21 +321,40 @@ fun SharedTransitionScope.DaysScreen(
                         pageSpacing = 2.dp,
                     ) { page ->
                         Column {
+                            val offset = page - weeksLimit / 2
+                            val sampleDay = today + 7 * offset
+                            val startOfYearJdn = Jdn(mainCalendar, date.year, 1, 1)
+                            val week = sampleDay.getWeekOfYear(startOfYearJdn)
+
+                            val isCurrentPage = weekPagerState.currentPage == page
+                            LaunchedEffect(isCurrentPage) {
+                                if (isCurrentPage &&
+                                    selectedDay.getWeekOfYear(startOfYearJdn) != week
+                                ) {
+                                    setSelectedDayInWeekPager(
+                                        sampleDay + (selectedDay.weekDay - today.weekDay)
+                                    )
+                                }
+                            }
+
                             if (hasWeeksPager) Box(swipeDownModifier) {
-                                WeekPager(
-                                    pagerSize = pagerSize,
+                                DaysTable(
+                                    offset = mainCalendar.getMonthsDistance(today, selectedDay),
+                                    width = pagerSize.width,
+                                    height = pagerSize.height,
                                     addEvent = addEvent,
                                     monthColors = monthColors,
-                                    selectedDay = selectedDay,
-                                    selectedDayDate = date,
-                                    setSelectedDay = { jdn -> setSelectedDayInWeekPager(jdn) },
                                     animatedContentScope = animatedContentScope,
-                                    language = language,
-                                    coroutineScope = coroutineScope,
-                                    weekPagerState = weekPagerState,
-                                    page = page,
+                                    onlyWeek = week,
                                     today = today,
+                                    isHighlighted = true,
+                                    selectedDay = selectedDay,
                                     refreshToken = refreshToken,
+                                    setSelectedDay = setSelectedDayInWeekPager,
+                                    language = language,
+                                    pagerState = weekPagerState,
+                                    page = page,
+                                    coroutineScope = coroutineScope,
                                 )
                             }
                             if (isWeekViewState) {
@@ -1101,57 +1114,6 @@ private fun DaysView(
 }
 
 private enum class DragIntention { ExtendUp, ExtendDown, Move }
-
-@OptIn(ExperimentalSharedTransitionApi::class)
-@Composable
-private fun SharedTransitionScope.WeekPager(
-    pagerSize: DpSize,
-    addEvent: (AddEventData) -> Unit,
-    monthColors: MonthColors,
-    selectedDay: Jdn,
-    selectedDayDate: AbstractDate,
-    setSelectedDay: (Jdn) -> Unit,
-    animatedContentScope: AnimatedContentScope,
-    language: Language,
-    coroutineScope: CoroutineScope,
-    weekPagerState: PagerState,
-    page: Int,
-    today: Jdn,
-    refreshToken: Int,
-) {
-    Box {
-        val offset = page - weeksLimit / 2
-        val sampleDay = today + 7 * offset
-        val startOfYearJdn = Jdn(mainCalendar, selectedDayDate.year, 1, 1)
-        val week = sampleDay.getWeekOfYear(startOfYearJdn)
-
-        val isCurrentPage = weekPagerState.currentPage == page
-        LaunchedEffect(isCurrentPage) {
-            if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
-                setSelectedDay(sampleDay + (selectedDay.weekDay - today.weekDay))
-            }
-        }
-
-        DaysTable(
-            offset = mainCalendar.getMonthsDistance(today, selectedDay),
-            width = pagerSize.width,
-            height = pagerSize.height,
-            addEvent = addEvent,
-            monthColors = monthColors,
-            animatedContentScope = animatedContentScope,
-            onlyWeek = week,
-            today = today,
-            isHighlighted = true,
-            selectedDay = selectedDay,
-            refreshToken = refreshToken,
-            setSelectedDay = setSelectedDay,
-            language = language,
-            pagerState = weekPagerState,
-            page = page,
-            coroutineScope = coroutineScope,
-        )
-    }
-}
 
 private const val weeksLimit = 25000 // this should be an even number
 private const val daysLimit = 175000 // this should be an even number
