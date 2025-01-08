@@ -10,20 +10,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
+import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -62,10 +67,18 @@ fun SharedTransitionScope.CalendarPager(
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
     val isVazirEnabled by isVazirEnabled.collectAsState()
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+    val context = LocalContext.current
 
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
+        val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
+        val monthStartJdn = Jdn(monthStartDate)
+        val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
+            if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
+            else EventsStore.empty()
+        }
         DaysTable(
-            monthOffset = -applyOffset(page),
+            monthStartDate = monthStartDate,
+            monthStartJdn = monthStartJdn,
             suggestedPagerSize = suggestedPagerSize,
             addEvent = addEvent,
             monthColors = monthColors,
@@ -80,7 +93,7 @@ fun SharedTransitionScope.CalendarPager(
             coroutineScope = coroutineScope,
             pagerState = pagerState,
             page = page,
-            isShowDeviceCalendarEvents = isShowDeviceCalendarEvents,
+            monthDeviceEvents = monthDeviceEvents,
             isVazirEnabled = isVazirEnabled,
             isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         )

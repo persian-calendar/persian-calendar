@@ -65,8 +65,8 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
-import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
+import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -75,7 +75,6 @@ import kotlin.math.min
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.DaysTable(
-    monthOffset: Int,
     suggestedPagerSize: DpSize,
     addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
@@ -89,15 +88,15 @@ fun SharedTransitionScope.DaysTable(
     coroutineScope: CoroutineScope,
     pagerState: PagerState,
     page: Int,
-    isShowDeviceCalendarEvents: Boolean,
     isVazirEnabled: Boolean,
     isShowWeekOfYearEnabled: Boolean,
+    monthDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent>,
+    monthStartDate: AbstractDate,
+    monthStartJdn: Jdn,
     modifier: Modifier = Modifier,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     onlyWeek: Int? = null,
 ) {
-    val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, monthOffset)
-    val monthStartJdn = Jdn(monthStartDate)
     val previousMonthLength =
         if (onlyWeek == null) null else (monthStartJdn - 1).inCalendar(mainCalendar).dayOfMonth
 
@@ -142,11 +141,6 @@ fun SharedTransitionScope.DaysTable(
         }
 
         val context = LocalContext.current
-        val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
-            if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
-            else EventsStore.empty()
-        }
-
         val diameter = min(cellWidth, cellHeight)
         val dayPainter = remember(cellWidthPx, suggestedHeight, refreshToken, monthColors) {
             DayPainter(

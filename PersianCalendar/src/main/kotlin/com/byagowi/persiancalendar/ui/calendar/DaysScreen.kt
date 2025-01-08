@@ -110,6 +110,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_ICON
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -144,6 +145,7 @@ import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -344,9 +346,23 @@ fun SharedTransitionScope.DaysScreen(
                                 }
                             }
 
+                            val context = LocalContext.current
+                            val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(
+                                today, mainCalendar.getMonthsDistance(today, selectedDay)
+                            )
+                            val monthStartJdn = Jdn(monthStartDate)
+                            val monthDeviceEvents = remember(
+                                refreshToken, isShowDeviceCalendarEvents, selectedDay
+                            ) {
+                                if (isShowDeviceCalendarEvents) {
+                                    context.readMonthDeviceEvents(monthStartJdn)
+                                } else EventsStore.empty()
+                            }
+
                             if (hasWeeksPager) DaysTable(
                                 modifier = swipeDownModifier,
-                                monthOffset = mainCalendar.getMonthsDistance(today, selectedDay),
+                                monthStartDate = monthStartDate,
+                                monthStartJdn = monthStartJdn,
                                 suggestedPagerSize = pagerSize,
                                 addEvent = addEvent,
                                 monthColors = monthColors,
@@ -361,7 +377,7 @@ fun SharedTransitionScope.DaysScreen(
                                 pagerState = weekPagerState,
                                 page = page,
                                 coroutineScope = coroutineScope,
-                                isShowDeviceCalendarEvents = isShowDeviceCalendarEvents,
+                                monthDeviceEvents = monthDeviceEvents,
                                 isVazirEnabled = isVazirEnabled,
                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
