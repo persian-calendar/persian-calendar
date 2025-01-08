@@ -1133,9 +1133,10 @@ private fun SharedTransitionScope.WeekPager(
             }
         }
 
+        val width = pagerSize.width
         val height = pagerSize.height
         val arrowHeight = height / 2 + (if (language.isArabicScript) 4 else 0).dp
-        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, true, week)
+        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, width, true, week)
         DaysTable(
             offset = mainCalendar.getMonthsDistance(today, selectedDay),
             width = pagerSize.width - (pagerArrowSizeAndPadding * 2).dp,
@@ -1150,7 +1151,7 @@ private fun SharedTransitionScope.WeekPager(
             refreshToken = refreshToken,
             setSelectedDay = setSelectedDay,
         )
-        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, false, week)
+        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, width, false, week)
     }
 }
 

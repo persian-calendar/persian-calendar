@@ -7,7 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -81,7 +81,7 @@ fun SharedTransitionScope.CalendarPager(
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         Box {
             val arrowHeight = height / 7 + (if (language.isArabicScript) 4 else 0).dp
-            PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = true)
+            PagerArrow(arrowHeight, scope, pagerState, page, width, isPrevious = true)
             DaysTable(
                 offset = -applyOffset(page),
                 width = width - (pagerArrowSizeAndPadding * 2).dp,
@@ -96,7 +96,7 @@ fun SharedTransitionScope.CalendarPager(
                 setSelectedDay = { viewModel.changeSelectedDay(it) },
                 onWeekClick = navigateToDays,
             )
-            PagerArrow(arrowHeight, scope, pagerState, page, isPrevious = false)
+            PagerArrow(arrowHeight, scope, pagerState, page, width, isPrevious = false)
         }
     }
 }
@@ -131,17 +131,18 @@ const val pagerArrowSizeAndPadding = pagerArrowSize + 4
 
 @Composable
 @OptIn(ExperimentalFoundationApi::class)
-fun BoxScope.PagerArrow(
+fun PagerArrow(
     arrowHeight: Dp,
     scope: CoroutineScope,
     pagerState: PagerState,
     index: Int,
+    width: Dp,
     isPrevious: Boolean,
     week: Int? = null,
 ) {
     Box(
         modifier = Modifier
-            .align(if (isPrevious) Alignment.TopStart else Alignment.TopEnd)
+            .offset(if (isPrevious) 0.dp else width - pagerArrowSize.dp, 0.dp)
             .size(pagerArrowSize.dp, arrowHeight),
     ) {
         val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
