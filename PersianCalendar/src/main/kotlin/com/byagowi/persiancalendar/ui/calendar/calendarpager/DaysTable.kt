@@ -75,7 +75,7 @@ import kotlin.math.min
 @OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.DaysTable(
-    offset: Int,
+    monthOffset: Int,
     suggestedPagerSize: DpSize,
     addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
@@ -96,7 +96,7 @@ fun SharedTransitionScope.DaysTable(
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     onlyWeek: Int? = null,
 ) {
-    val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
+    val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, monthOffset)
     val monthStartJdn = Jdn(monthStartDate)
     val previousMonthLength =
         if (onlyWeek == null) null else (monthStartJdn - 1).inCalendar(mainCalendar).dayOfMonth

@@ -346,7 +346,7 @@ fun SharedTransitionScope.DaysScreen(
 
                             if (hasWeeksPager) DaysTable(
                                 modifier = swipeDownModifier,
-                                offset = mainCalendar.getMonthsDistance(today, selectedDay),
+                                monthOffset = mainCalendar.getMonthsDistance(today, selectedDay),
                                 suggestedPagerSize = pagerSize,
                                 addEvent = addEvent,
                                 monthColors = monthColors,
