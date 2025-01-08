@@ -217,6 +217,15 @@ fun Context.readMonthDeviceEvents(jdn: Jdn) =
         )
     )
 
+fun Context.readWeekDeviceEvents(jdn: Jdn) =
+    DeviceCalendarEventsStore(
+        readDeviceEvents(
+            this,
+            jdn.toGregorianCalendar(),
+            7 * DAY_IN_MILLIS
+        )
+    )
+
 fun Context.readYearDeviceEvents(jdn: Jdn) =
     DeviceCalendarEventsStore(
         readDeviceEvents(

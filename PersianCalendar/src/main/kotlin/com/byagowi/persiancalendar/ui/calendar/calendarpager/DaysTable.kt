@@ -49,6 +49,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_JDN
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_WEEK_NUMBER
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -90,7 +91,7 @@ fun SharedTransitionScope.DaysTable(
     page: Int,
     isVazirEnabled: Boolean,
     isShowWeekOfYearEnabled: Boolean,
-    monthDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent>,
+    deviceEvents: DeviceCalendarEventsStore,
     monthStartDate: AbstractDate,
     monthStartJdn: Jdn,
     modifier: Modifier = Modifier,
@@ -280,7 +281,7 @@ fun SharedTransitionScope.DaysTable(
                     }
                     .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
             ) {
-                val events = eventsRepository?.getEvents(day, monthDeviceEvents) ?: emptyList()
+                val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                 val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
                 val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
                 val shiftWorkTitle = getShiftWorkTitle(day, true)

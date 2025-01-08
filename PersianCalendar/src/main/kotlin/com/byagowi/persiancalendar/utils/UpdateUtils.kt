@@ -453,7 +453,7 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val canvas = Canvas(bitmap)
     val today = Jdn.today()
     val baseDate = mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
-    val monthDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+    val monthDeviceEvents: DeviceCalendarEventsStore =
         if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
         else EventsStore.empty()
     val isRtl =

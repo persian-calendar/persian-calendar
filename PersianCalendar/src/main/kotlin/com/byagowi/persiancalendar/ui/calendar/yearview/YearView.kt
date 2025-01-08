@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
@@ -178,7 +178,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
             Column(Modifier.fillMaxWidth()) {
                 if (scale.value > yearSelectionModeMaxScale) {
-                    val yearDeviceEvents: EventsStore<CalendarEvent.DeviceCalendarEvent> =
+                    val yearDeviceEvents: DeviceCalendarEventsStore =
                         remember(yearOffset, today) {
                             val yearStartJdn = Jdn(
                                 mainCalendar.createDate(

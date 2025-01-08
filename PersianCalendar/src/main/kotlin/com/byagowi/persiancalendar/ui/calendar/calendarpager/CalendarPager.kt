@@ -93,7 +93,7 @@ fun SharedTransitionScope.CalendarPager(
             coroutineScope = coroutineScope,
             pagerState = pagerState,
             page = page,
-            monthDeviceEvents = monthDeviceEvents,
+            deviceEvents = monthDeviceEvents,
             isVazirEnabled = isVazirEnabled,
             isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         )

@@ -145,7 +145,7 @@ import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
+import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -351,11 +351,14 @@ fun SharedTransitionScope.DaysScreen(
                                 today, mainCalendar.getMonthsDistance(today, selectedDay)
                             )
                             val monthStartJdn = Jdn(monthStartDate)
-                            val monthDeviceEvents = remember(
-                                refreshToken, isShowDeviceCalendarEvents, selectedDay
+                            val weekStart = (today + (page - weeksLimit / 2) * 7).let {
+                                it - applyWeekStartOffsetToWeekDay(it.weekDay)
+                            }
+                            val weekDeviceEvents = remember(
+                                refreshToken, isShowDeviceCalendarEvents, monthStartJdn
                             ) {
                                 if (isShowDeviceCalendarEvents) {
-                                    context.readMonthDeviceEvents(monthStartJdn)
+                                    context.readWeekDeviceEvents(weekStart)
                                 } else EventsStore.empty()
                             }
 
@@ -377,14 +380,11 @@ fun SharedTransitionScope.DaysScreen(
                                 pagerState = weekPagerState,
                                 page = page,
                                 coroutineScope = coroutineScope,
-                                monthDeviceEvents = monthDeviceEvents,
+                                deviceEvents = weekDeviceEvents,
                                 isVazirEnabled = isVazirEnabled,
                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
                             if (isWeekViewState) {
-                                val weekStart = (today + (page - weeksLimit / 2) * 7).let {
-                                    it - applyWeekStartOffsetToWeekDay(it.weekDay)
-                                }
                                 val isInitialWeek = initiallySelectedDay - weekStart in 0..<7
                                 ScreenSurface(
                                     animatedContentScope = animatedContentScope,
