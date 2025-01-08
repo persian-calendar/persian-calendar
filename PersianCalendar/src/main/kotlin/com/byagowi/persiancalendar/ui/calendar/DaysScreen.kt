@@ -337,26 +337,24 @@ fun SharedTransitionScope.DaysScreen(
                                 }
                             }
 
-                            if (hasWeeksPager) Box(swipeDownModifier) {
-                                DaysTable(
-                                    offset = mainCalendar.getMonthsDistance(today, selectedDay),
-                                    width = pagerSize.width,
-                                    height = pagerSize.height,
-                                    addEvent = addEvent,
-                                    monthColors = monthColors,
-                                    animatedContentScope = animatedContentScope,
-                                    onlyWeek = week,
-                                    today = today,
-                                    isHighlighted = true,
-                                    selectedDay = selectedDay,
-                                    refreshToken = refreshToken,
-                                    setSelectedDay = setSelectedDayInWeekPager,
-                                    language = language,
-                                    pagerState = weekPagerState,
-                                    page = page,
-                                    coroutineScope = coroutineScope,
-                                )
-                            }
+                            if (hasWeeksPager) DaysTable(
+                                modifier = swipeDownModifier,
+                                offset = mainCalendar.getMonthsDistance(today, selectedDay),
+                                suggestedPagerSize = pagerSize,
+                                addEvent = addEvent,
+                                monthColors = monthColors,
+                                animatedContentScope = animatedContentScope,
+                                onlyWeek = week,
+                                today = today,
+                                isHighlighted = true,
+                                selectedDay = selectedDay,
+                                refreshToken = refreshToken,
+                                setSelectedDay = setSelectedDayInWeekPager,
+                                language = language,
+                                pagerState = weekPagerState,
+                                page = page,
+                                coroutineScope = coroutineScope,
+                            )
                             if (isWeekViewState) {
                                 Spacer(Modifier.height(8.dp))
                                 val weekStart = (today + (page - weeksLimit / 2) * 7).let {

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -57,30 +56,25 @@ fun SharedTransitionScope.CalendarPager(
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
     val refreshToken by viewModel.refreshToken.collectAsState()
-    val width = size.width
-    val height = size.height
 
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
-        Box {
-            DaysTable(
-                offset = -applyOffset(page),
-                width = width,
-                height = height,
-                addEvent = addEvent,
-                monthColors = monthColors,
-                animatedContentScope = animatedContentScope,
-                today = today,
-                isHighlighted = isHighlighted,
-                refreshToken = refreshToken,
-                selectedDay = selectedDay,
-                setSelectedDay = { viewModel.changeSelectedDay(it) },
-                onWeekClick = navigateToDays,
-                language = language,
-                coroutineScope = coroutineScope,
-                pagerState = pagerState,
-                page = page,
-            )
-        }
+        DaysTable(
+            offset = -applyOffset(page),
+            suggestedPagerSize = size,
+            addEvent = addEvent,
+            monthColors = monthColors,
+            animatedContentScope = animatedContentScope,
+            today = today,
+            isHighlighted = isHighlighted,
+            refreshToken = refreshToken,
+            selectedDay = selectedDay,
+            setSelectedDay = { viewModel.changeSelectedDay(it) },
+            onWeekClick = navigateToDays,
+            language = language,
+            coroutineScope = coroutineScope,
+            pagerState = pagerState,
+            page = page,
+        )
     }
 }
 
