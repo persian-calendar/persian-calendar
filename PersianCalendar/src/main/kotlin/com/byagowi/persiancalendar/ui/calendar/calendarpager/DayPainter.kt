@@ -10,13 +10,13 @@ import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ZWJ
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -119,7 +119,8 @@ class DayPainter(
     private fun setAll(
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
-        jdn: Jdn? = null, header: String? = null, isWeekNumber: Boolean = false
+        jdn: Jdn? = null, header: String? = null, isWeekNumber: Boolean = false,
+        secondaryCalendar: Calendar? = null,
     ) {
         this.text = text
         this.today = isToday
@@ -127,7 +128,6 @@ class DayPainter(
         this.holiday = isHoliday
         this.jdn = jdn
         this.isWeekNumber = isWeekNumber
-        val secondaryCalendar = secondaryCalendar
         this.header = listOfNotNull(
             if (isAstronomicalExtraFeaturesEnabled && jdn != null && isMoonInScorpio(jdn))
                 paints.scorpioSign else null,
@@ -144,11 +144,12 @@ class DayPainter(
     fun setDayOfMonthItem(
         isToday: Boolean, isSelected: Boolean,
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        jdn: Jdn, dayOfMonth: String, header: String?
+        jdn: Jdn, dayOfMonth: String, header: String?, secondaryCalendar: Calendar?,
     ) = setAll(
         text = dayOfMonth, isToday = isToday,
         isSelected = isSelected, hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
-        header = header, isHoliday = isHoliday || jdn.isWeekEnd
+        header = header, isHoliday = isHoliday || jdn.isWeekEnd,
+        secondaryCalendar = secondaryCalendar,
     )
 
     fun setInitialOfWeekDay(text: String) = setAll(text)

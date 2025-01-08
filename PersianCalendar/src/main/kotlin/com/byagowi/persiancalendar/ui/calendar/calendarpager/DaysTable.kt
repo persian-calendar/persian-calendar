@@ -57,6 +57,7 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
@@ -296,6 +297,7 @@ fun SharedTransitionScope.DaysTable(
                     jdn = day,
                     dayOfMonth = "",
                     header = shiftWorkTitle,
+                    secondaryCalendar = secondaryCalendar,
                 )
                 drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
                 if (isToday) drawCircle(

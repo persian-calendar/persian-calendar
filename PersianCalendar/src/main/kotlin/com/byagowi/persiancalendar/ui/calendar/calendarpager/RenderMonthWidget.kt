@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.graphics.Canvas
 import androidx.core.graphics.withTranslation
+import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -9,6 +10,8 @@ import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
@@ -53,6 +56,8 @@ fun renderMonthWidget(
         }
         val monthRange = 0..<monthLength
         val rowsCount = 7
+        val secondaryCalendar =
+            if (OTHER_CALENDARS_KEY in whatToShowOnWidgets) secondaryCalendar else null
         (0..<rowsCount - 1).forEach { row ->
             (0..<7).forEach cell@{ column ->
                 val dayOffset = (column + row * 7) -
@@ -70,7 +75,8 @@ fun renderMonthWidget(
                     isHoliday = events.any { it.isHoliday },
                     jdn = day,
                     dayOfMonth = formatNumber(dayOffset + 1, mainCalendarDigits),
-                    header = getShiftWorkTitle(day, true)
+                    header = getShiftWorkTitle(day, true),
+                    secondaryCalendar = secondaryCalendar,
                 )
 
                 val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
