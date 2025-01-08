@@ -387,8 +387,7 @@ fun SharedTransitionScope.CalendarScreen(
                                     )
                                 }
 
-                                Spacer(Modifier.height(12.dp))
-                                val detailsMinHeight = maxHeight - calendarHeight - 12.dp
+                                val detailsMinHeight = maxHeight - calendarHeight
                                 ScreenSurface(animatedContentScope, workaroundClipBug = true) {
                                     Details(
                                         viewModel = viewModel,

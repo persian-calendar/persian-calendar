@@ -125,10 +125,12 @@ fun SharedTransitionScope.DaysTable(
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
 
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
-    // Report the actual height to the parent just in non week mode
-    val actualHeight = if (onlyWeek != null) height else height / 7 * (daysRowsCount + 1)
 
-    Box(modifier.height(actualHeight)) {
+    Box(
+        modifier.height(
+            if (onlyWeek != null) height + 8.dp else (cellHeight * (daysRowsCount + 1) + 12.dp)
+        )
+    ) {
         run {
             val cellIndex = selectedDay - monthStartJdn + startingWeekDay
             val highlightedDayOfMonth = selectedDay - monthStartJdn

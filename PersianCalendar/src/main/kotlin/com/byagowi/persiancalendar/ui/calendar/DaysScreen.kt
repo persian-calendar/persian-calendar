@@ -366,7 +366,6 @@ fun SharedTransitionScope.DaysScreen(
                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
                             if (isWeekViewState) {
-                                Spacer(Modifier.height(8.dp))
                                 val weekStart = (today + (page - weeksLimit / 2) * 7).let {
                                     it - applyWeekStartOffsetToWeekDay(it.weekDay)
                                 }
@@ -407,54 +406,51 @@ fun SharedTransitionScope.DaysScreen(
                             }
                         }
                     }
-                    if (!isWeekViewState) {
-                        Spacer(Modifier.height(8.dp))
-                        ScreenSurface(animatedContentScope) {
-                            Box(
-                                Modifier.sharedBounds(
-                                    rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
-                                    animatedVisibilityScope = this@AnimatedContent,
-                                )
-                            ) {
-                                HorizontalPager(
-                                    state = dayPagerState,
-                                    verticalAlignment = Alignment.Top,
-                                ) { page ->
-                                    val isCurrentPage = dayPagerState.currentPage == page
-                                    val pageDay = today + (page - daysLimit / 2)
-                                    LaunchedEffect(isCurrentPage) {
-                                        if (isCurrentPage) {
-                                            selectedDay = pageDay
-                                            if (today != pageDay) isHighlighted = true
-                                            val destination = weekPageFromJdn(pageDay, today)
-                                            if (abs(destination - weekPagerState.currentPage) > 1) {
-                                                weekPagerState.scrollToPage(destination)
-                                            } else weekPagerState.animateScrollToPage(destination)
-                                        }
+                    if (!isWeekViewState) ScreenSurface(animatedContentScope) {
+                        Box(
+                            Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
+                                animatedVisibilityScope = this@AnimatedContent,
+                            )
+                        ) {
+                            HorizontalPager(
+                                state = dayPagerState,
+                                verticalAlignment = Alignment.Top,
+                            ) { page ->
+                                val isCurrentPage = dayPagerState.currentPage == page
+                                val pageDay = today + (page - daysLimit / 2)
+                                LaunchedEffect(isCurrentPage) {
+                                    if (isCurrentPage) {
+                                        selectedDay = pageDay
+                                        if (today != pageDay) isHighlighted = true
+                                        val destination = weekPageFromJdn(pageDay, today)
+                                        if (abs(destination - weekPagerState.currentPage) > 1) {
+                                            weekPagerState.scrollToPage(destination)
+                                        } else weekPagerState.animateScrollToPage(destination)
                                     }
-
-                                    DaysView(
-                                        bottomPadding = bottomPadding,
-                                        setAddAction = {
-                                            if (dayPagerState.currentPage == page) {
-                                                addAction = it
-                                            }
-                                        },
-                                        startingDay = pageDay,
-                                        selectedDay = selectedDay,
-                                        setSelectedDay = { selectedDay = it; isHighlighted = true },
-                                        addEvent = addEvent,
-                                        refreshCalendar = calendarViewModel::refreshCalendar,
-                                        refreshToken = refreshToken,
-                                        days = 1,
-                                        now = calendarViewModel.now.collectAsState().value,
-                                        isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                        setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
-                                        snackbarHostState = snackbarHostState,
-                                        calendarViewModel = calendarViewModel,
-                                        hasWeekPager = hasWeeksPager
-                                    )
                                 }
+
+                                DaysView(
+                                    bottomPadding = bottomPadding,
+                                    setAddAction = {
+                                        if (dayPagerState.currentPage == page) {
+                                            addAction = it
+                                        }
+                                    },
+                                    startingDay = pageDay,
+                                    selectedDay = selectedDay,
+                                    setSelectedDay = { selectedDay = it; isHighlighted = true },
+                                    addEvent = addEvent,
+                                    refreshCalendar = calendarViewModel::refreshCalendar,
+                                    refreshToken = refreshToken,
+                                    days = 1,
+                                    now = calendarViewModel.now.collectAsState().value,
+                                    isAddEventBoxEnabled = isAddEventBoxEnabled,
+                                    setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
+                                    snackbarHostState = snackbarHostState,
+                                    calendarViewModel = calendarViewModel,
+                                    hasWeekPager = hasWeeksPager
+                                )
                             }
                         }
                     }
