@@ -122,7 +122,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DaysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.PagerArrow
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
@@ -981,7 +980,7 @@ private fun DaysView(
                                 val id = awaitFirstDown().id
                                 coroutineScope.launch { widthReduction.animateTo(0f) }
                                 drag(id) {
-                                    val offset_ = offset ?: return@drag
+                                    val position = offset ?: return@drag
                                     val delta = it.positionChange()
                                     if (intention == null) intention = when {
                                         abs(it.position.y - duration * scale.value) < cellHeightPx * scale.value * .2f -> DragIntention.ExtendDown
@@ -993,12 +992,12 @@ private fun DaysView(
                                         DragIntention.ExtendDown -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
-                                                maximumValue = (ySteps * 24 * 4) - offset_.y
+                                                maximumValue = (ySteps * 24 * 4) - position.y
                                             )
 
                                         DragIntention.ExtendUp -> {
-                                            val newValueY = offset_.y + delta.y / scale.value
-                                            offset = offset_.copy(
+                                            val newValueY = position.y + delta.y / scale.value
+                                            offset = position.copy(
                                                 y = newValueY.coerceIn(0f, cellHeightPx * 23)
                                             )
                                             duration =
@@ -1008,15 +1007,15 @@ private fun DaysView(
                                         }
 
                                         DragIntention.Move -> {
-                                            val newValueX = offset_.x + directionSign * delta.x
-                                            val newValueY = offset_.y + delta.y / scale.value
+                                            val newValueX = position.x + directionSign * delta.x
+                                            val newValueY = position.y + delta.y / scale.value
                                             offset = Offset(
                                                 newValueX.coerceIn(0f, tableWidthPx - cellWidthPx),
                                                 newValueY.coerceIn(0f, cellHeightPx * 24 - duration)
                                             )
 
                                             val effectiveColumn =
-                                                (offset_.x / cellWidthPx).roundToInt()
+                                                (position.x / cellWidthPx).roundToInt()
                                             setSelectedDay(startingDay + effectiveColumn)
                                         }
 
@@ -1133,14 +1132,10 @@ private fun SharedTransitionScope.WeekPager(
             }
         }
 
-        val width = pagerSize.width
-        val height = pagerSize.height
-        val arrowHeight = height / 2 + (if (language.isArabicScript) 4 else 0).dp
-        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, width, true, week)
         DaysTable(
             offset = mainCalendar.getMonthsDistance(today, selectedDay),
-            width = pagerSize.width - (pagerArrowSizeAndPadding * 2).dp,
-            height = height,
+            width = pagerSize.width,
+            height = pagerSize.height,
             addEvent = addEvent,
             monthColors = monthColors,
             animatedContentScope = animatedContentScope,
@@ -1150,8 +1145,11 @@ private fun SharedTransitionScope.WeekPager(
             selectedDay = selectedDay,
             refreshToken = refreshToken,
             setSelectedDay = setSelectedDay,
+            language = language,
+            pagerState = weekPagerState,
+            page = page,
+            coroutineScope = coroutineScope,
         )
-        PagerArrow(arrowHeight, coroutineScope, weekPagerState, page, width, false, week)
     }
 }
 

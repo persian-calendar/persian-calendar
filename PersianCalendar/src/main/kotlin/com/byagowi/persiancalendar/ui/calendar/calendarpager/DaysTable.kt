@@ -12,6 +12,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -55,6 +61,7 @@ import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
+import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -64,6 +71,8 @@ import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.min
 
@@ -81,6 +90,10 @@ fun SharedTransitionScope.DaysTable(
     selectedDay: Jdn,
     refreshToken: Int,
     setSelectedDay: (Jdn) -> Unit,
+    language: Language,
+    coroutineScope: CoroutineScope,
+    pagerState: PagerState,
+    page: Int,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     onlyWeek: Int? = null,
 ) {
@@ -98,10 +111,11 @@ fun SharedTransitionScope.DaysTable(
     val rowsCount = if (onlyWeek != null) 2 else 7
 
     val density = LocalDensity.current
-    val widthPx = with(density) { width.toPx() }
+    val tableWidth = width - (pagerArrowSizeAndPadding * 2).dp
+    val tableWidthPx = with(density) { tableWidth.toPx() }
     val heightPx = with(density) { height.toPx() }
-    val cellWidth = width / columnsCount
-    val cellWidthPx = widthPx / columnsCount
+    val cellWidth = tableWidth / columnsCount
+    val cellWidthPx = tableWidthPx / columnsCount
     val cellHeight = height / rowsCount
     val cellHeightPx = heightPx / rowsCount
     val cellRadius =
@@ -118,7 +132,7 @@ fun SharedTransitionScope.DaysTable(
         val highlightedDayOfMonth = selectedDay - monthStartJdn
         val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
             x = (cellIndex % 7).let {
-                if (isRtl) widthPx - (it + 1) * cellWidthPx else it * cellWidthPx
+                if (isRtl) tableWidthPx - (it + 1) * cellWidthPx else it * cellWidthPx
             } + pagerArrowSizeAndPaddingPx + cellWidthPx / 2f,
             // +1 for weekday names initials row
             y = ((if (onlyWeek != null) 0 else (cellIndex / 7)) + 1.5f) * cellHeightPx,
@@ -136,8 +150,8 @@ fun SharedTransitionScope.DaysTable(
         else EventsStore.empty()
     }
 
-    val diameter = min(width / columnsCount, height / rowsCount)
-    val dayPainter = remember(width, height, refreshToken, monthColors) {
+    val diameter = min(tableWidth / columnsCount, height / rowsCount)
+    val dayPainter = remember(tableWidth, height, refreshToken, monthColors) {
         DayPainter(
             resources = context.resources,
             width = cellWidthPx,
@@ -164,6 +178,9 @@ fun SharedTransitionScope.DaysTable(
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
 
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
+
+    val arrowHeight = cellHeight + (if (language.isArabicScript) 4 else 0).dp
+    PagerArrow(arrowHeight, coroutineScope, pagerState, page, width, true, onlyWeek)
 
     repeat(7) { column ->
         Box(
@@ -320,5 +337,65 @@ fun SharedTransitionScope.DaysTable(
                 ),
             )
         }
+    }
+
+    PagerArrow(arrowHeight, coroutineScope, pagerState, page, width, false, onlyWeek)
+}
+
+private const val pagerArrowSize = 40 // 24 + 8 + 8
+const val pagerArrowSizeAndPadding = pagerArrowSize + 4
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun PagerArrow(
+    arrowHeight: Dp,
+    scope: CoroutineScope,
+    pagerState: PagerState,
+    index: Int,
+    width: Dp,
+    isPrevious: Boolean,
+    week: Int?,
+) {
+    Box(
+        modifier = Modifier
+            .offset(if (isPrevious) 0.dp else width - pagerArrowSize.dp, 0.dp)
+            .size(pagerArrowSize.dp, arrowHeight),
+    ) {
+        val stringId = if (isPrevious) R.string.previous_x else R.string.next_x
+        val contentDescription = if (week == null) {
+            stringResource(stringId, stringResource(R.string.month))
+        } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1)
+        Icon(
+            if (isPrevious) Icons.AutoMirrored.Default.KeyboardArrowLeft
+            else Icons.AutoMirrored.Default.KeyboardArrowRight,
+            contentDescription = contentDescription,
+            modifier = Modifier
+                .width(MaterialIconDimension.dp)
+                .then(if (week == null) Modifier.combinedClickable(
+                    indication = ripple(bounded = false),
+                    interactionSource = null,
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                        }
+                    },
+                    onClickLabel = stringResource(R.string.select_month),
+                    onLongClick = {
+                        scope.launch {
+                            pagerState.scrollToPage(index + 12 * if (isPrevious) -1 else 1)
+                        }
+                    },
+                    onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
+                ) else Modifier.clickable(
+                    indication = ripple(bounded = false),
+                    interactionSource = null,
+                ) {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                    }
+                })
+                .align(if (isPrevious) Alignment.CenterEnd else Alignment.CenterStart)
+                .alpha(.9f),
+        )
     }
 }
