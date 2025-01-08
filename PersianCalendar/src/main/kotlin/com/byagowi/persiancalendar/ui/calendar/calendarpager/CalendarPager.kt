@@ -17,6 +17,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
+import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
@@ -56,6 +59,9 @@ fun SharedTransitionScope.CalendarPager(
     val isHighlighted by viewModel.isHighlighted.collectAsState()
     val selectedDay by viewModel.selectedDay.collectAsState()
     val refreshToken by viewModel.refreshToken.collectAsState()
+    val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
+    val isVazirEnabled by isVazirEnabled.collectAsState()
+    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
 
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         DaysTable(
@@ -74,6 +80,9 @@ fun SharedTransitionScope.CalendarPager(
             coroutineScope = coroutineScope,
             pagerState = pagerState,
             page = page,
+            isShowDeviceCalendarEvents = isShowDeviceCalendarEvents,
+            isVazirEnabled = isVazirEnabled,
+            isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         )
     }
 }

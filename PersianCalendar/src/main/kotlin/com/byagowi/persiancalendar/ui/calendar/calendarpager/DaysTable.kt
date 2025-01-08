@@ -24,8 +24,6 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -56,10 +54,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventsRepository
-import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
-import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -95,6 +90,9 @@ fun SharedTransitionScope.DaysTable(
     coroutineScope: CoroutineScope,
     pagerState: PagerState,
     page: Int,
+    isShowDeviceCalendarEvents: Boolean,
+    isVazirEnabled: Boolean,
+    isShowWeekOfYearEnabled: Boolean,
     modifier: Modifier = Modifier,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     onlyWeek: Int? = null,
@@ -146,7 +144,6 @@ fun SharedTransitionScope.DaysTable(
         }
 
         val context = LocalContext.current
-        val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
         val monthDeviceEvents = remember(refreshToken, isShowDeviceCalendarEvents) {
             if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
             else EventsStore.empty()
@@ -164,7 +161,6 @@ fun SharedTransitionScope.DaysTable(
         }
         val textMeasurer = rememberTextMeasurer()
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-        val isVazirEnabled by isVazirEnabled.collectAsState()
         val daysTextSize =
             diameter * (if (mainCalendarDigitsIsArabic || isVazirEnabled) 18 else 25) / 40
         val daysStyle = LocalTextStyle.current.copy(
@@ -176,8 +172,6 @@ fun SharedTransitionScope.DaysTable(
         val dayOffsetY = if (mainCalendarDigits === Language.ARABIC_DIGITS) 0f else min(
             cellWidthPx, cellHeightPx
         ) * 1 / 40
-
-        val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
 
         val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
 

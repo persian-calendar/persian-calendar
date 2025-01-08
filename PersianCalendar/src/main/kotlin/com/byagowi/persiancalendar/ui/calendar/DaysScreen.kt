@@ -112,7 +112,10 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
+import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
@@ -316,6 +319,9 @@ fun SharedTransitionScope.DaysScreen(
                 // Don't show weeks pager if there isn't enough space
                 Column {
                     val refreshToken by calendarViewModel.refreshToken.collectAsState()
+                    val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
+                    val isVazirEnabled by isVazirEnabled.collectAsState()
+                    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
                     HorizontalPager(
                         state = weekPagerState,
                         verticalAlignment = Alignment.Top,
@@ -355,6 +361,9 @@ fun SharedTransitionScope.DaysScreen(
                                 pagerState = weekPagerState,
                                 page = page,
                                 coroutineScope = coroutineScope,
+                                isShowDeviceCalendarEvents = isShowDeviceCalendarEvents,
+                                isVazirEnabled = isVazirEnabled,
+                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
                             if (isWeekViewState) {
                                 Spacer(Modifier.height(8.dp))
