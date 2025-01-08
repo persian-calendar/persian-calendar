@@ -155,20 +155,20 @@ import kotlin.math.roundToInt
 @Composable
 fun SharedTransitionScope.DaysScreen(
     calendarViewModel: CalendarViewModel,
-    initialSelectedDay: Jdn,
+    initiallySelectedDay: Jdn,
     animatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
 ) {
     var selectedDay by rememberSaveable(
         saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
-    ) { mutableStateOf(initialSelectedDay) }
-    var isHighlighted by rememberSaveable { mutableStateOf(false) }
-    val date = selectedDay.inCalendar(mainCalendar)
+    ) { mutableStateOf(initiallySelectedDay) }
     val today by calendarViewModel.today.collectAsState()
+    var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
+    val date = selectedDay.inCalendar(mainCalendar)
     calendarViewModel.changeDaysScreenSelectedDay(selectedDay)
     val coroutineScope = rememberCoroutineScope()
-    val weekInitialPage = remember(today) { weekPageFromJdn(initialSelectedDay, today) }
+    val weekInitialPage = remember(today) { weekPageFromJdn(initiallySelectedDay, today) }
     val weekPagerState = rememberPagerState(initialPage = weekInitialPage) { weeksLimit }
     val dayInitialPage = remember(today) { dayPageFromJdn(selectedDay, today) }
     val dayPagerState = rememberPagerState(initialPage = dayInitialPage) { daysLimit }
@@ -363,7 +363,7 @@ fun SharedTransitionScope.DaysScreen(
                                 val weekStart = (today + (page - weeksLimit / 2) * 7).let {
                                     it - applyWeekStartOffsetToWeekDay(it.weekDay)
                                 }
-                                val isInitialWeek = initialSelectedDay - weekStart in 0..<7
+                                val isInitialWeek = initiallySelectedDay - weekStart in 0..<7
                                 ScreenSurface(
                                     animatedContentScope = animatedContentScope,
                                     disableSharedContent = !isInitialWeek,
