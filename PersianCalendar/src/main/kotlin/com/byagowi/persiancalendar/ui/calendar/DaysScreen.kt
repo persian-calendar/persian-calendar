@@ -163,6 +163,7 @@ fun SharedTransitionScope.DaysScreen(
     var selectedDay by rememberSaveable(
         saver = Saver(save = { it.value.value }, restore = { mutableStateOf(Jdn(it)) })
     ) { mutableStateOf(initialSelectedDay) }
+    var isHighlighted by rememberSaveable { mutableStateOf(false) }
     val date = selectedDay.inCalendar(mainCalendar)
     val today by calendarViewModel.today.collectAsState()
     calendarViewModel.changeDaysScreenSelectedDay(selectedDay)
@@ -174,6 +175,7 @@ fun SharedTransitionScope.DaysScreen(
     var isWeekView by rememberSaveable { mutableStateOf(isInitiallyWeek) }
     val setSelectedDayInWeekPager = { jdn: Jdn ->
         selectedDay = jdn
+        isHighlighted = true
         if (!isWeekView) coroutineScope.launch {
             val destination = dayPageFromJdn(jdn, today)
             if (abs(destination - dayPagerState.currentPage) > 1) {
@@ -190,6 +192,7 @@ fun SharedTransitionScope.DaysScreen(
     val todayButtonAction = {
         isAddEventBoxEnabled = false
         selectedDay = today
+        isHighlighted = false
         coroutineScope.launch {
             // Don't change their order before testing
 
@@ -277,7 +280,7 @@ fun SharedTransitionScope.DaysScreen(
                     colors = appTopAppBarColors(),
                     navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
                     actions = {
-                        TodayActionButton(today != selectedDay || isAddEventBoxEnabled) {
+                        TodayActionButton(isHighlighted || isAddEventBoxEnabled) {
                             todayButtonAction()
                         }
                         IconButton(
@@ -331,9 +334,9 @@ fun SharedTransitionScope.DaysScreen(
                                 if (isCurrentPage &&
                                     selectedDay.getWeekOfYear(startOfYearJdn) != week
                                 ) {
-                                    setSelectedDayInWeekPager(
-                                        sampleDay + (selectedDay.weekDay - today.weekDay)
-                                    )
+                                    val pageDay = sampleDay + (selectedDay.weekDay - today.weekDay)
+                                    setSelectedDayInWeekPager(pageDay)
+                                    isHighlighted = today != pageDay
                                 }
                             }
 
@@ -346,7 +349,7 @@ fun SharedTransitionScope.DaysScreen(
                                 animatedContentScope = animatedContentScope,
                                 onlyWeek = week,
                                 today = today,
-                                isHighlighted = true,
+                                isHighlighted = isHighlighted,
                                 selectedDay = selectedDay,
                                 refreshToken = refreshToken,
                                 setSelectedDay = setSelectedDayInWeekPager,
@@ -415,6 +418,7 @@ fun SharedTransitionScope.DaysScreen(
                                     LaunchedEffect(isCurrentPage) {
                                         if (isCurrentPage) {
                                             selectedDay = pageDay
+                                            if (today != pageDay) isHighlighted = true
                                             val destination = weekPageFromJdn(pageDay, today)
                                             if (abs(destination - weekPagerState.currentPage) > 1) {
                                                 weekPagerState.scrollToPage(destination)
@@ -431,7 +435,7 @@ fun SharedTransitionScope.DaysScreen(
                                         },
                                         startingDay = pageDay,
                                         selectedDay = selectedDay,
-                                        setSelectedDay = { selectedDay = it },
+                                        setSelectedDay = { selectedDay = it; isHighlighted = true },
                                         addEvent = addEvent,
                                         refreshCalendar = calendarViewModel::refreshCalendar,
                                         refreshToken = refreshToken,
