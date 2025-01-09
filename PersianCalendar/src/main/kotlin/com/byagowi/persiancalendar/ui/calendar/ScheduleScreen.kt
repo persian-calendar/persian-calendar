@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+import android.content.res.Configuration
 import androidx.collection.mutableLongSetOf
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
@@ -9,9 +10,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -42,8 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -106,22 +103,11 @@ fun SharedTransitionScope.ScheduleScreen(
     val language by language.collectAsState()
 
     val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
-    val swipeDownModifier = Modifier.pointerInput(Unit) {
-        val threshold = 80.dp.toPx()
-        awaitEachGesture {
-            val id = awaitFirstDown(requireUnconsumed = false).id
-            var successful = false
-            var yAccumulation = 0f
-            verticalDrag(id) {
-                yAccumulation += it.positionChange().y
-                if (!successful && yAccumulation > threshold) {
-                    when (preferredSwipeUpAction) {
-                        SwipeUpAction.Schedule -> navigateUp()
-                        else -> {}
-                    }
-                    successful = true
-                }
-            }
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val swipeDownModifier = Modifier.detectSwipeDown {
+        if (!isLandscape) when (preferredSwipeUpAction) {
+            SwipeUpAction.Schedule -> navigateUp()
+            else -> {}
         }
     }
 

@@ -322,7 +322,7 @@ fun SharedTransitionScope.CalendarScreen(
                                     .clip(materialCornerExtraLargeTop())
                                     .verticalScroll(scrollState)
                                     .pointerInput(Unit) {
-                                        val threshold = 80.dp.toPx()
+                                        val threshold = defaultSwipeThreshold.toPx()
                                         awaitEachGesture {
                                             // Don't inline id into verticalDrag, the order matters
                                             val id = awaitFirstDown(requireUnconsumed = false).id

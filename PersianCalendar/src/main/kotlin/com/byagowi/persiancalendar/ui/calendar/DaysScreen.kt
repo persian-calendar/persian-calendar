@@ -21,7 +21,6 @@ import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.drag
-import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -223,22 +222,11 @@ fun SharedTransitionScope.DaysScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
-    val swipeDownModifier = Modifier.pointerInput(Unit) {
-        val threshold = 80.dp.toPx()
-        awaitEachGesture {
-            val id = awaitFirstDown(requireUnconsumed = false).id
-            var successful = false
-            var yAccumulation = 0f
-            verticalDrag(id) {
-                yAccumulation += it.positionChange().y
-                if (!successful && yAccumulation > threshold) {
-                    when (preferredSwipeUpAction) {
-                        SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
-                        else -> {}
-                    }
-                    successful = true
-                }
-            }
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val swipeDownModifier = Modifier.detectSwipeDown {
+        if (!isLandscape) when (preferredSwipeUpAction) {
+            SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
+            else -> {}
         }
     }
 
