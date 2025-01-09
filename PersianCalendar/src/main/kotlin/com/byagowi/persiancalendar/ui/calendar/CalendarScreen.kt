@@ -319,29 +319,23 @@ fun SharedTransitionScope.CalendarScreen(
                                         val wasAtTop = scrollState.value == 0
                                         val wasAtEnd = scrollState.value == scrollState.maxValue
                                         { isUp: Boolean ->
-                                            if (isUp && wasAtEnd) {
-                                                when (preferredSwipeUpAction.value) {
-                                                    SwipeUpAction.Schedule -> navigateToSchedule()
-                                                    SwipeUpAction.DayView -> {
-                                                        val selectedDay = viewModel.selectedDay
-                                                        navigateToDays(selectedDay.value, false)
-                                                    }
-
-                                                    SwipeUpAction.WeekView -> {
-                                                        val selectedDay = viewModel.selectedDay
-                                                        navigateToDays(selectedDay.value, true)
-                                                    }
-
-                                                    SwipeUpAction.None -> {}
+                                            if (isUp && wasAtEnd) when (preferredSwipeUpAction.value) {
+                                                SwipeUpAction.Schedule -> navigateToSchedule()
+                                                SwipeUpAction.DayView -> {
+                                                    val selectedDay = viewModel.selectedDay
+                                                    navigateToDays(selectedDay.value, false)
                                                 }
-                                                true
-                                            } else if (!isUp && wasAtTop) {
-                                                when (preferredSwipeDownAction.value) {
-                                                    SwipeDownAction.YearView -> viewModel.openYearView()
-                                                    SwipeDownAction.None -> {}
+
+                                                SwipeUpAction.WeekView -> {
+                                                    val selectedDay = viewModel.selectedDay
+                                                    navigateToDays(selectedDay.value, true)
                                                 }
-                                                true
-                                            } else false
+
+                                                SwipeUpAction.None -> {}
+                                            } else if (!isUp && wasAtTop) when (preferredSwipeDownAction.value) {
+                                                SwipeDownAction.YearView -> viewModel.openYearView()
+                                                SwipeDownAction.None -> {}
+                                            }
                                         }
                                     },
                             ) {

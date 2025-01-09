@@ -12,29 +12,21 @@ import kotlin.math.abs
 
 fun Modifier.detectSwipe(
     threshold: Dp = 80.dp,
-    detector: () -> ((isUp: Boolean) -> Boolean)
+    detector: () -> ((isUp: Boolean) -> Unit),
 ) = this then Modifier.pointerInput(Unit) {
     val thresholdPx = threshold.toPx()
     awaitEachGesture {
         // Don't inline id into verticalDrag, detector should be instanced after the first down
         val id = awaitFirstDown(requireUnconsumed = false).id
         val detectorInstance = detector()
-        var successful = false
+        var disable = false
         var yAccumulation = 0f
         verticalDrag(id) {
             yAccumulation += it.positionChange().y
-            if (!successful && abs(yAccumulation) > thresholdPx) {
-                successful = detectorInstance(yAccumulation < 0f)
+            if (!disable && abs(yAccumulation) > thresholdPx) {
+                detectorInstance(yAccumulation < 0f)
+                disable = true
             }
         }
-    }
-}
-
-fun Modifier.detectSwipeDown(onSwipeDown: () -> Unit) = this then Modifier.detectSwipe {
-    { isUp ->
-        if (!isUp) {
-            onSwipeDown()
-            true
-        } else false
     }
 }

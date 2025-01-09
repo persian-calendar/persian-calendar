@@ -104,10 +104,12 @@ fun SharedTransitionScope.ScheduleScreen(
 
     val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val swipeDownModifier = Modifier.detectSwipeDown {
-        if (!isLandscape) when (preferredSwipeUpAction) {
-            SwipeUpAction.Schedule -> navigateUp()
-            else -> {}
+    val swipeDownModifier = Modifier.detectSwipe {
+        { isUp ->
+            if (!isLandscape && !isUp) when (preferredSwipeUpAction) {
+                SwipeUpAction.Schedule -> navigateUp()
+                else -> {}
+            }
         }
     }
 
