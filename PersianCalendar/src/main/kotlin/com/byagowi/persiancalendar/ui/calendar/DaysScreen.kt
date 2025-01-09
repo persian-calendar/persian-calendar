@@ -19,7 +19,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -98,7 +97,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -557,16 +555,10 @@ private fun DaysView(
     Column(
         Modifier
             .fillMaxSize()
-            .pointerInput(Unit) {
-                awaitEachGesture {
-                    awaitFirstDown(requireUnconsumed = false)
-                    do {
-                        val event = awaitPointerEvent()
-                        coroutineScope.launch {
-                            val value = scale.value * event.calculateZoom()
-                            scale.snapTo(value.coerceIn(.5f, 2f))
-                        }
-                    } while (event.changes.fastAny { it.pressed })
+            .detectZoom {
+                coroutineScope.launch {
+                    val value = scale.value * it
+                    scale.snapTo(value.coerceIn(.5f, 2f))
                 }
             },
     ) {

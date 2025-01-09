@@ -6,9 +6,6 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +41,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -55,7 +51,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastAny
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -69,6 +64,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
+import com.byagowi.persiancalendar.ui.calendar.detectZoom
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -156,19 +152,12 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     val coroutineScope = rememberCoroutineScope()
 
-    val detectZoom = Modifier.pointerInput(Unit) {
-        /** This is reduced from [androidx.compose.foundation.gestures.detectTransformGestures] */
-        awaitEachGesture {
-            awaitFirstDown(requireUnconsumed = false)
-            do {
-                val event = awaitPointerEvent()
-                coroutineScope.launch {
-                    val value = scale.value * event.calculateZoom()
-                    scale.snapTo(
-                        value.coerceIn(yearSelectionModeMaxScale, horizontalDivisions.toFloat())
-                    )
-                }
-            } while (event.changes.fastAny { it.pressed })
+    val detectZoom = Modifier.detectZoom {
+        coroutineScope.launch {
+            val value = scale.value * it
+            scale.snapTo(
+                value.coerceIn(yearSelectionModeMaxScale, horizontalDivisions.toFloat())
+            )
         }
     }
 
