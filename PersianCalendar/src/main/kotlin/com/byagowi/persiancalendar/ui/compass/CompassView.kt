@@ -80,7 +80,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF009000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
-        it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
+        val dashSize = 4 * dp
+        it.pathEffect = DashPathEffect(floatArrayOf(dashSize, dashSize / 2), 0f)
     }
     private val kaaba = resources.getDrawable(R.drawable.kaaba, null)
         .toBitmap((32 * dp).toInt(), (32 * dp).toInt())

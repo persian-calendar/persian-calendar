@@ -955,7 +955,8 @@ private fun DaysView(
                     val coordinates = coordinates.collectAsState().value ?: return@let
                     val circleRadius = with(density) { (size / 4).dp.toPx() }
                     val pathEffect = with(density) {
-                        PathEffect.dashPathEffect(floatArrayOf(2.dp.toPx(), 2.dp.toPx()))
+                        val dashSize = 4.dp.toPx()
+                        PathEffect.dashPathEffect(floatArrayOf(dashSize, dashSize / 2))
                     }
                     (0..<days).map { offsetDay ->
                         val date = (startingDay + offsetDay).toGregorianCalendar()

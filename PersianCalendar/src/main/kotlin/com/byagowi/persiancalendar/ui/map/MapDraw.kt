@@ -371,10 +371,12 @@ class MapDraw(
         66.566667, // https://en.wikipedia.org/wiki/Arctic_Circle
         -66.566667, // https://en.wikipedia.org/wiki/Antarctic_Circle
     ).map { (90 - it.toFloat()) * mapScaleFactor }
+    private val dp = resources.dp
     private val parallelsPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80800000.toInt()
-        it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)
+        val dashSize = 4 * dp
+        it.pathEffect = DashPathEffect(floatArrayOf(dashSize, dashSize / 2), 0f)
     }
 
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -383,7 +385,6 @@ class MapDraw(
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
     }
-    private val dp = resources.dp
     private val miscPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 5 * dp
