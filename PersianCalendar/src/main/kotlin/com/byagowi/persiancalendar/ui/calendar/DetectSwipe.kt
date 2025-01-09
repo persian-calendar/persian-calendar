@@ -13,8 +13,8 @@ import kotlin.math.abs
 fun Modifier.detectSwipe(
     threshold: Dp = 80.dp,
     // Detector has a two step execution, right after the drag start and after pass of the
-    // threshold, this is needed for a with its own scrollable content and state.
-    // Maybe this could be implemented based on Modifier.nestedScroll also.
+    // threshold, this is needed for a screen with its own scrollable content and state.
+    // In retrospect maybe this could be implemented based on Modifier.nestedScroll also.
     detector: () -> ((isUp: Boolean) -> Unit),
 ) = this then Modifier.pointerInput(Unit) {
     val thresholdPx = threshold.toPx()
