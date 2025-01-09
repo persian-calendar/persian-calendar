@@ -127,15 +127,17 @@ fun SharedTransitionScope.DaysTable(
         )
     ) {
         run {
-            val cellIndex = selectedDay - monthStartJdn + startingWeekDay
             val highlightedDayOfMonth = selectedDay - monthStartJdn
-            val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) Offset(
-                x = (cellIndex % 7).let {
-                    cellWidthPx * if (isRtl) 6 - it else it
-                } + pagerArrowSizeAndPaddingPx + cellWidthPx / 2f,
-                // +1 for weekday names initials row
-                y = ((if (onlyWeek != null) 0 else (cellIndex / 7)) + 1.5f) * cellHeightPx,
-            ) else null
+            val center = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) {
+                val cellIndex = selectedDay - monthStartJdn + startingWeekDay
+                Offset(
+                    x = (cellIndex % 7).let {
+                        cellWidthPx * (.5f + if (isRtl) 6 - it else it)
+                    } + pagerArrowSizeAndPaddingPx,
+                    // +1 for weekday names initials row, .5f for center of the circle
+                    y = (1.5f + if (onlyWeek == null) cellIndex / 7 else 0) * cellHeightPx,
+                )
+            } else null
             // Invalidate the indicator state on table size changes
             key(width, suggestedHeight) {
                 SelectionIndicator(monthColors.indicator, cellRadius, center)
