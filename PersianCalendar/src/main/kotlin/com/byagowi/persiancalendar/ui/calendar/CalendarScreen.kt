@@ -29,9 +29,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -96,8 +93,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -189,7 +184,6 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
-import kotlin.math.abs
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -321,46 +315,33 @@ fun SharedTransitionScope.CalendarScreen(
                                 modifier = Modifier
                                     .clip(materialCornerExtraLargeTop())
                                     .verticalScroll(scrollState)
-                                    .pointerInput(Unit) {
-                                        val threshold = defaultSwipeThreshold.toPx()
-                                        awaitEachGesture {
-                                            // Don't inline id into verticalDrag, the order matters
-                                            val id = awaitFirstDown(requireUnconsumed = false).id
-                                            val wasAtTop = scrollState.value == 0
-                                            val wasAtEnd = scrollState.value == scrollState.maxValue
-                                            var successful = false
-                                            var yAccumulation = 0f
-                                            verticalDrag(id) {
-                                                yAccumulation += it.positionChange().y
-                                                if (abs(yAccumulation) < threshold) return@verticalDrag
-                                                if (successful) return@verticalDrag
-                                                if (wasAtEnd && yAccumulation < 0) {
-                                                    when (preferredSwipeUpAction.value) {
-                                                        SwipeUpAction.Schedule -> navigateToSchedule()
-                                                        SwipeUpAction.DayView -> {
-                                                            navigateToDays(
-                                                                viewModel.selectedDay.value, false
-                                                            )
-                                                        }
-
-                                                        SwipeUpAction.WeekView -> {
-                                                            navigateToDays(
-                                                                viewModel.selectedDay.value, true
-                                                            )
-                                                        }
-
-                                                        SwipeUpAction.None -> {}
+                                    .detectSwipe {
+                                        val wasAtTop = scrollState.value == 0
+                                        val wasAtEnd = scrollState.value == scrollState.maxValue
+                                        { isUp: Boolean ->
+                                            if (isUp && wasAtEnd) {
+                                                when (preferredSwipeUpAction.value) {
+                                                    SwipeUpAction.Schedule -> navigateToSchedule()
+                                                    SwipeUpAction.DayView -> {
+                                                        val selectedDay = viewModel.selectedDay
+                                                        navigateToDays(selectedDay.value, false)
                                                     }
-                                                    successful = true
-                                                } else if (wasAtTop && yAccumulation > 0) {
-                                                    when (preferredSwipeDownAction.value) {
-                                                        SwipeDownAction.YearView -> viewModel.openYearView()
 
-                                                        SwipeDownAction.None -> {}
+                                                    SwipeUpAction.WeekView -> {
+                                                        val selectedDay = viewModel.selectedDay
+                                                        navigateToDays(selectedDay.value, true)
                                                     }
-                                                    successful = true
+
+                                                    SwipeUpAction.None -> {}
                                                 }
-                                            }
+                                                true
+                                            } else if (!isUp && wasAtTop) {
+                                                when (preferredSwipeDownAction.value) {
+                                                    SwipeDownAction.YearView -> viewModel.openYearView()
+                                                    SwipeDownAction.None -> {}
+                                                }
+                                                true
+                                            } else false
                                         }
                                     },
                             ) {
