@@ -80,8 +80,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val todayDate = today.inCalendar(mainCalendar)
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val yearOffsetInMonths = run {
-        val selectedMonth =
-            mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
+        val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
         selectedMonth.year - todayDate.year
     }
 

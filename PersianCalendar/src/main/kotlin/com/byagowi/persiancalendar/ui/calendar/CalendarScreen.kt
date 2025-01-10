@@ -322,13 +322,13 @@ fun SharedTransitionScope.CalendarScreen(
                                             if (isUp && wasAtEnd) when (preferredSwipeUpAction.value) {
                                                 SwipeUpAction.Schedule -> navigateToSchedule()
                                                 SwipeUpAction.DayView -> {
-                                                    val selectedDay = viewModel.selectedDay
-                                                    navigateToDays(selectedDay.value, false)
+                                                    val day = viewModel.selectedDay.value
+                                                    navigateToDays(day, false)
                                                 }
 
                                                 SwipeUpAction.WeekView -> {
-                                                    val selectedDay = viewModel.selectedDay
-                                                    navigateToDays(selectedDay.value, true)
+                                                    val day = viewModel.selectedDay.value
+                                                    navigateToDays(day, true)
                                                 }
 
                                                 SwipeUpAction.None -> {}
@@ -381,8 +381,8 @@ fun SharedTransitionScope.CalendarScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        if (mainCalendar == Calendar.SHAMSI && isIranHolidaysEnabled && Jdn.today()
+    LaunchedEffect(today) {
+        if (mainCalendar == Calendar.SHAMSI && isIranHolidaysEnabled && today
                 .toPersianDate().year > supportedYearOfIranCalendar
         ) {
             if (snackbarHostState.showSnackbar(
@@ -418,10 +418,11 @@ fun bringDate(
 ) {
     viewModel.changeSelectedDay(jdn)
     if (!highlight) viewModel.clearHighlightedDay()
-    viewModel.changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(Jdn.today(), jdn))
+    val today = Jdn.today()
+    viewModel.changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
 
     // a11y
-    if (isTalkBackEnabled && jdn != Jdn.today()) Toast.makeText(
+    if (isTalkBackEnabled && jdn != today) Toast.makeText(
         context, getA11yDaySummary(
             context.resources,
             jdn,
