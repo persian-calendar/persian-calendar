@@ -310,6 +310,7 @@ fun SharedTransitionScope.DaysScreen(
                     calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
                 // Don't show weeks pager if there isn't enough space
                 Column {
+                    val now by calendarViewModel.now.collectAsState()
                     val refreshToken by calendarViewModel.refreshToken.collectAsState()
                     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
                     val isVazirEnabled by isVazirEnabled.collectAsState()
@@ -401,7 +402,7 @@ fun SharedTransitionScope.DaysScreen(
                                             refreshCalendar = calendarViewModel::refreshCalendar,
                                             days = 7,
                                             deviceEvents = weekDeviceEvents,
-                                            now = calendarViewModel.now.collectAsState().value,
+                                            now = now,
                                             isAddEventBoxEnabled = isAddEventBoxEnabled,
                                             setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                             snackbarHostState = snackbarHostState,
@@ -459,7 +460,7 @@ fun SharedTransitionScope.DaysScreen(
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
                                     days = 1,
-                                    now = calendarViewModel.now.collectAsState().value,
+                                    now = now,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
@@ -541,12 +542,12 @@ private fun DaysView(
     val eventsWithTime = events.map { dayEvents ->
         addDivisions(dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
             .filter { it.time != null }.sortedWith { x, y ->
-            x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
-                if (it != 0) return@sortedWith it
-            }
-            // If both start at the same time, put bigger events first, better for interval graphs
-            y.start.timeInMillis.compareTo(x.end.timeInMillis)
-        })
+                x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
+                    if (it != 0) return@sortedWith it
+                }
+                // If both start at the same time, put bigger events first, better for interval graphs
+                y.start.timeInMillis.compareTo(x.end.timeInMillis)
+            })
     }
     val eventsWithoutTime = events.map { dayEvents ->
         dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
