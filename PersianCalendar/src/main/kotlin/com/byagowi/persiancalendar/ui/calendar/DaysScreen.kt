@@ -74,6 +74,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -709,13 +710,11 @@ private fun DaysView(
                         Clock.fromMinutesCount(minutes).toBasicFormatString()
                     })
                 }
-                Box(Modifier.fillMaxWidth()) {
-                    val outlineVariant = MaterialTheme.colorScheme.outlineVariant
-                    Canvas(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(cellHeight * 24 + bottomPadding),
-                    ) {
+
+                // Time cells and table
+                val outlineVariant = MaterialTheme.colorScheme.outlineVariant
+                Row(
+                    Modifier.drawBehind {
                         val topLineY = 2.dp.toPx()
                         val paintCellWidthPx = if (days == 1) oneDayTableWidthPx else cellWidthPx
                         (0..days).forEach { i ->
@@ -725,54 +724,53 @@ private fun DaysView(
                             val y = this.size.height
                             drawLine(outlineVariant, Offset(x, topLineY), Offset(x, y))
                         }
-                        val x1 = firstColumnPx.let {
-                            if (isRtl) this.size.width - it else it
-                        } - 8.dp.toPx() * directionSign
+                        val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
                         val x2 = (firstColumnPx + paintCellWidthPx * days).let {
                             if (isRtl) this.size.width - it else it
                         }
+                        val extraLineWidth = 8.dp.toPx() * directionSign
                         (0..23).forEach {
-                            val y = if (it == 0) topLineY else cellHeightPx * it
-                            drawLine(outlineVariant, Offset(x1, y), Offset(x2, y))
+                            val x = x1 - if (it != 0) extraLineWidth else 0f
+                            val y = if (it != 0) cellHeightPx * it else topLineY
+                            drawLine(outlineVariant, Offset(x, y), Offset(x2, y))
                         }
-                    }
-                    Row(Modifier.fillMaxWidth()) {
-                        repeat(9) { column ->
-                            Column {
-                                if (column == 0) Spacer(Modifier.height(cellHeight / 2))
-                                repeat(24) { row ->
-                                    Box(
-                                        when (column) {
-                                            0, days + 1 -> Modifier
-                                            else -> Modifier
-                                                .clickable(
-                                                    indication = null,
-                                                    interactionSource = null,
-                                                ) {
-                                                    offset = Offset(
-                                                        cellWidthPx * (column - 1),
-                                                        cellHeightPx * row / scale.value
-                                                    )
-                                                    setAddEventBoxEnabled()
-                                                    duration = cellHeightPx / scale.value
-                                                    setSelectedDay(startingDay + column - 1)
-                                                }
-                                                .then(if (isTalkBackEnabled) Modifier.semantics {
-                                                    this.contentDescription =
-                                                        (startingDay + (column - 1)).weekDayName + " " + clockCache[row * 60] + " " + clockCache[(row + 1) * 60]
-                                                } else Modifier)
-                                        }.size(
-                                            if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
-                                            else cellWidth,
-                                            if (column == 0 && row == 23) 0.dp else cellHeight,
-                                        ),
-                                        contentAlignment = Alignment.Center,
-                                    ) {
-                                        if (column == 0 && row != 23) Text(
-                                            clockCache[(row + 1) * 60],
-                                            style = MaterialTheme.typography.bodySmall,
-                                        )
-                                    }
+                    },
+                ) {
+                    repeat(9) { column ->
+                        Column {
+                            if (column == 0) Spacer(Modifier.height(cellHeight / 2))
+                            repeat(24) { row ->
+                                Box(
+                                    when (column) {
+                                        0, days + 1 -> Modifier
+                                        else -> Modifier
+                                            .clickable(
+                                                indication = null,
+                                                interactionSource = null,
+                                            ) {
+                                                offset = Offset(
+                                                    cellWidthPx * (column - 1),
+                                                    cellHeightPx * row / scale.value
+                                                )
+                                                setAddEventBoxEnabled()
+                                                duration = cellHeightPx / scale.value
+                                                setSelectedDay(startingDay + column - 1)
+                                            }
+                                            .then(if (isTalkBackEnabled) Modifier.semantics {
+                                                this.contentDescription =
+                                                    (startingDay + (column - 1)).weekDayName + " " + clockCache[row * 60] + " " + clockCache[(row + 1) * 60]
+                                            } else Modifier)
+                                    }.size(
+                                        if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
+                                        else cellWidth,
+                                        if (column == 0 && row == 23) 0.dp else cellHeight,
+                                    ),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    if (column == 0 && row != 23) Text(
+                                        clockCache[(row + 1) * 60],
+                                        style = MaterialTheme.typography.bodySmall,
+                                    )
                                 }
                             }
                         }
