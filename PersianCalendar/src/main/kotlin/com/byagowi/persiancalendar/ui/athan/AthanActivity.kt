@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.athan
 
 import android.app.KeyguardManager
-import android.app.NotificationManager
 import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
@@ -86,7 +85,6 @@ class AthanActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         if (intent?.action == CANCEL_ATHAN_NOTIFICATION) {
-            lastNotificationId?.let { getSystemService<NotificationManager>()?.cancel(it) }
             runCatching {
                 stopService(Intent(this, AthanNotification::class.java))
             }.onFailure(logException)
@@ -182,6 +180,5 @@ class AthanActivity : ComponentActivity() {
 
     companion object {
         const val CANCEL_ATHAN_NOTIFICATION = "CANCEL_ATHAN_NOTIFICATION"
-        var lastNotificationId: Int? = 0
     }
 }

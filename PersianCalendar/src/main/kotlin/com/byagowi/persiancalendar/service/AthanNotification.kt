@@ -59,7 +59,6 @@ class AthanNotification : Service() {
             if (notificationAthan) (if (athanVibration) 3000 else 3002)
             else (if (athanVibration) 3001 else 3003)
         }
-        AthanActivity.lastNotificationId = notificationId
         val notificationChannelId = notificationId.toString()
 
         val notificationManager = getSystemService<NotificationManager>()
@@ -170,18 +169,23 @@ class AthanNotification : Service() {
 
         notificationManager?.notify(notificationId, notificationBuilder.build())
 
-        var stop = {}
         val preventPhoneCallIntervention =
-            if (notificationAthan) PreventPhoneCallIntervention(stop) else null
-        stop = {
+            if (notificationAthan) PreventPhoneCallIntervention(cleanUp) else null
+        cleanUp = {
             preventPhoneCallIntervention?.stopListener?.invoke()
             notificationManager?.cancel(notificationId)
-            stopSelf()
         }
 
         preventPhoneCallIntervention?.startListener(this)
-        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) { stop() }
+        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) { cleanUp() }
 
         return super.onStartCommand(intent, flags, startId)
     }
+
+    override fun onDestroy() {
+        cleanUp()
+        super.onDestroy()
+    }
+
+    private var cleanUp = {}
 }
