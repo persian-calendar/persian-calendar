@@ -46,7 +46,6 @@ import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -726,7 +725,9 @@ private fun DaysView(
                             val y = this.size.height
                             drawLine(outlineVariant, Offset(x, topLineY), Offset(x, y))
                         }
-                        val x1 = firstColumnPx.let { if (isRtl) this.size.width - it else it }
+                        val x1 = firstColumnPx.let {
+                            if (isRtl) this.size.width - it else it
+                        } - 8.dp.toPx() * directionSign
                         val x2 = (firstColumnPx + paintCellWidthPx * days).let {
                             if (isRtl) this.size.width - it else it
                         }
@@ -767,18 +768,10 @@ private fun DaysView(
                                         ),
                                         contentAlignment = Alignment.Center,
                                     ) {
-                                        if (column == 0 && row != 23) {
-                                            Text(
-                                                clockCache[(row + 1) * 60],
-                                                style = MaterialTheme.typography.bodySmall,
-                                            )
-                                            HorizontalDivider(
-                                                Modifier
-                                                    .width(8.dp)
-                                                    .align(Alignment.CenterEnd),
-                                                Dp.Hairline,
-                                            )
-                                        }
+                                        if (column == 0 && row != 23) Text(
+                                            clockCache[(row + 1) * 60],
+                                            style = MaterialTheme.typography.bodySmall,
+                                        )
                                     }
                                 }
                             }
