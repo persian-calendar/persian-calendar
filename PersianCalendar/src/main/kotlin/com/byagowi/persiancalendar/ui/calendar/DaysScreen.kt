@@ -692,19 +692,18 @@ private fun DaysView(
             }
         }
         Box {
-            val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
-            val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
-            val tableWidthPx = with(density) { tableWidth.toPx() }
-            val cellWidthPx = tableWidthPx / days
-            val cellHeightPx = with(density) { cellHeight.toPx() }
-            var offset by remember(tableWidthPx) { mutableStateOf<Offset?>(null) }
-            var duration by remember { mutableFloatStateOf(cellHeightPx) }
-            val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-            val directionSign = if (isRtl) -1 else 1
-            val heightSizeReduction = 3.dp
-            val heightSizeReductionPx = with(density) { heightSizeReduction.toPx() }
-
             Box(Modifier.verticalScroll(scrollState)) {
+                val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
+                val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
+                val tableWidthPx = with(density) { tableWidth.toPx() }
+                val cellWidthPx = tableWidthPx / days
+                val cellHeightPx = with(density) { cellHeight.toPx() }
+                var offset by remember(tableWidthPx) { mutableStateOf<Offset?>(null) }
+                var duration by remember { mutableFloatStateOf(cellHeightPx) }
+                val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+                val directionSign = if (isRtl) -1 else 1
+                val heightSizeReduction = 3.dp
+                val heightSizeReductionPx = with(density) { heightSizeReduction.toPx() }
                 val clockCache = remember {
                     lruCache(1024, create = { minutes: Int ->
                         Clock.fromMinutesCount(minutes).toBasicFormatString()
