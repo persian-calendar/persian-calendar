@@ -41,6 +41,7 @@ enum class Language(val code: String, val nativeName: String) {
     JA("ja", "日本語"),
     KMR("kmr", "Kurdî"),
     NE("ne", "नेपाली"),
+    PT("pt", "Português"),
     RU("ru", "Русский"),
     TG("tg", "Тоҷикӣ"),
     TR("tr", "Türkçe"),
@@ -103,13 +104,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, EN_IR, JA, ZH_CN, FR, ES, AR, TR, TG, RU, CKB -> true
+            EN_US, EN_IR, JA, ZH_CN, FR, ES, PT, AR, TR, TG, RU, CKB -> true
             else -> false
         }
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, TR, KMR, TG, NE, RU -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, PT, TR, KMR, TG, NE, RU -> true
             else -> false
         }
 
@@ -134,21 +135,21 @@ enum class Language(val code: String, val nativeName: String) {
 
     val showIranTimeOption
         get() = when (this) {
-            FA, AZB, CKB, EN_IR, EN_US, ES, FR, GLK, JA, ZH_CN, KMR -> true
+            FA, AZB, CKB, EN_IR, EN_US, GLK -> true
             else -> false
         }
 
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, RU, TR, KMR, EN_IR, TG, NE -> false
+            EN_US, JA, ZH_CN, FR, ES, PT, RU, TR, KMR, EN_IR, TG, NE -> false
             else -> true
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalDigits: Boolean
         get() = when (this) {
-            UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, RU, TR, KMR, TG -> false
+            UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, PT, RU, TR, KMR, TG -> false
             else -> true
         }
 
@@ -187,7 +188,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, RU, UR, TR, KMR, TG -> true
+            EN_US, JA, ZH_CN, FR, ES, PT, RU, UR, TR, KMR, TG -> true
             else -> false
         }
 

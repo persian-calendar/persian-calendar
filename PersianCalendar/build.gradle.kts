@@ -33,9 +33,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // It lowers the APK size and prevents crash in AboutScreen in API 21-23
         vectorDrawables.useSupportLibrary = true
-        resourceConfigurations += listOf(
+        androidResources.localeFilters += listOf(
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
-            "ne", "zh-rCN", "ru"
+            "ne", "zh-rCN", "ru", "pt"
         )
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitInfo")
     }

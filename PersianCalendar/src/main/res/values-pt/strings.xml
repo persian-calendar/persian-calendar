@@ -132,7 +132,7 @@
     <string name="nth_week_of_year">%1$s semana do ano</string>
     <string name="july">Julho</string>
     <string name="tuesday">Terça-Feira</string>
-    <string name="spaced_and">" . e . "</string>
+    <string name="spaced_and">" e "</string>
     <string name="shift_work_days_head">Duração</string>
     <string name="other_holidays">Outros</string>
     <string name="february">Fevereiro</string>
