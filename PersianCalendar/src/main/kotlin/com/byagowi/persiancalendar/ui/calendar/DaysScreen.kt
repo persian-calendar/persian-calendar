@@ -306,6 +306,7 @@ fun SharedTransitionScope.DaysScreen(
             val monthColors = appMonthColors()
             val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
             BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+                val screenWidth = this.maxWidth
                 val pagerSize =
                     calendarPagerSize(false, this.maxWidth, this.maxHeight, bottomPadding, true)
                 // Don't show weeks pager if there isn't enough space
@@ -407,6 +408,7 @@ fun SharedTransitionScope.DaysScreen(
                                             setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                             snackbarHostState = snackbarHostState,
                                             calendarViewModel = calendarViewModel,
+                                            screenWidth = screenWidth,
                                         )
                                     }
                                 }
@@ -467,6 +469,7 @@ fun SharedTransitionScope.DaysScreen(
                                     calendarViewModel = calendarViewModel,
                                     hasWeekPager = hasWeeksPager,
                                     deviceEvents = dayDeviceEvents,
+                                    screenWidth = screenWidth,
                                 )
                             }
                         }
@@ -530,6 +533,7 @@ private fun DaysView(
     calendarViewModel: CalendarViewModel,
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
+    screenWidth: Dp,
 ) {
     val scale = remember { Animatable(1f) }
     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -577,6 +581,11 @@ private fun DaysView(
         val context = LocalContext.current
         val defaultWidthReduction = 2.dp
         val defaultWidthReductionPx = with(density) { defaultWidthReduction.toPx() }
+        val tableWidth = screenWidth - when (days) {
+            1 -> pagerArrowSizeAndPadding.dp + 24.dp - defaultWidthReduction
+            else -> pagerArrowSizeAndPadding.dp * 2
+        }
+        val cellWidth = tableWidth / days
         AnimatedVisibility(hasHeader) {
             var isExpanded by rememberSaveable { mutableStateOf(false) }
             val clickToExpandModifier = Modifier.clickable(
@@ -608,98 +617,90 @@ private fun DaysView(
                     ExpandArrow(isExpanded = isExpanded)
                     Spacer(Modifier.height(8.dp))
                 } else Spacer(Modifier.height(12.dp))
-            } else BoxWithConstraints {
-                val cellWidth = (this.maxWidth - pagerArrowSizeAndPadding.dp * 2) / days
-                Row(
-                    verticalAlignment = Alignment.Bottom,
-                    modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier
+            } else Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier
+            ) {
+                Box(
+                    Modifier
+                        .width(pagerArrowSizeAndPadding.dp)
+                        .align(Alignment.Bottom),
                 ) {
-                    Box(
+                    if (maxDayAllDayEvents > 3) Box(
                         Modifier
                             .width(pagerArrowSizeAndPadding.dp)
-                            .align(Alignment.Bottom),
-                    ) {
-                        if (maxDayAllDayEvents > 3) Box(
-                            Modifier
-                                .width(pagerArrowSizeAndPadding.dp)
-                                .padding(bottom = 2.dp),
-                            contentAlignment = Alignment.BottomCenter,
-                        ) { ExpandArrow(isExpanded = isExpanded) }
-                    }
-                    Row(
-                        Modifier
-                            .padding(end = pagerArrowSizeAndPadding.dp)
-                            .animateContentSize(),
-                    ) {
-                        val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
-                            lineHeight = 24.sp
-                        )
-                        eventsWithoutTime.forEachIndexed { i, dayEvents ->
-                            Column(Modifier.weight(1f)) {
-                                if (!hasWeekPager) {
-                                    val weekDayPosition = revertWeekStartOffsetFromWeekDay(i)
-                                    val weekDayName = getWeekDayName(weekDayPosition)
-                                    val isLandscape =
-                                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                            .padding(bottom = 2.dp),
+                        contentAlignment = Alignment.BottomCenter,
+                    ) { ExpandArrow(isExpanded = isExpanded) }
+                }
+                Row(
+                    Modifier
+                        .padding(end = pagerArrowSizeAndPadding.dp)
+                        .animateContentSize(),
+                ) {
+                    val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
+                        lineHeight = 24.sp
+                    )
+                    eventsWithoutTime.forEachIndexed { i, dayEvents ->
+                        Column(Modifier.weight(1f)) {
+                            if (!hasWeekPager) {
+                                val weekDayPosition = revertWeekStartOffsetFromWeekDay(i)
+                                val weekDayName = getWeekDayName(weekDayPosition)
+                                val isLandscape =
+                                    LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                                Text(
+                                    text = if (isLandscape) weekDayName else {
+                                        getInitialOfWeekDay(weekDayPosition)
+                                    },
+                                    maxLines = 1,
+                                    textAlign = TextAlign.Center,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    modifier = Modifier
+                                        .width(cellWidth)
+                                        .semantics { this.contentDescription = weekDayName },
+                                )
+                            }
+                            dayEvents.forEachIndexed { i, event ->
+                                if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
+                                    val color = eventColor(event)
                                     Text(
-                                        text = if (isLandscape) weekDayName else {
-                                            getInitialOfWeekDay(weekDayPosition)
-                                        },
-                                        maxLines = 1,
-                                        textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.bodySmall,
-                                        modifier = Modifier
-                                            .width(cellWidth)
-                                            .semantics { this.contentDescription = weekDayName },
-                                    )
-                                }
-                                dayEvents.forEachIndexed { i, event ->
-                                    if (isExpanded || i < 2 || (i == 2 && dayEvents.size == 3)) {
-                                        val color = eventColor(event)
-                                        Text(
-                                            " " + event.title,
-                                            maxLines = 1,
-                                            style = headerTextStyle,
-                                            color = eventTextColor(color),
-                                            modifier = Modifier
-                                                .requiredWidth(cellWidth - defaultWidthReduction)
-                                                .padding(
-                                                    top = if (i == 0) 2.dp else 0.dp,
-                                                    bottom = 2.dp,
-                                                )
-                                                .clip(MaterialTheme.shapes.small)
-                                                .background(eventColor(event))
-                                                .clickable {
-                                                    if (event is CalendarEvent.DeviceCalendarEvent) {
-                                                        launcher.viewEvent(event, context)
-                                                    } else coroutineScope.launch {
-                                                        snackbarHostState.showSnackbar(event.title)
-                                                    }
-                                                },
-                                        )
-                                    }
-                                    if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
-                                        " +" + formatNumber(dayEvents.size - 3),
-                                        modifier = Modifier.padding(bottom = 4.dp),
+                                        " " + event.title,
                                         maxLines = 1,
                                         style = headerTextStyle,
+                                        color = eventTextColor(color),
+                                        modifier = Modifier
+                                            .requiredWidth(cellWidth - defaultWidthReduction)
+                                            .padding(
+                                                top = if (i == 0) 2.dp else 0.dp,
+                                                bottom = 2.dp,
+                                            )
+                                            .clip(MaterialTheme.shapes.small)
+                                            .background(eventColor(event))
+                                            .clickable {
+                                                if (event is CalendarEvent.DeviceCalendarEvent) {
+                                                    launcher.viewEvent(event, context)
+                                                } else coroutineScope.launch {
+                                                    snackbarHostState.showSnackbar(event.title)
+                                                }
+                                            },
                                     )
                                 }
+                                if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
+                                    " +" + formatNumber(dayEvents.size - 3),
+                                    modifier = Modifier.padding(bottom = 4.dp),
+                                    maxLines = 1,
+                                    style = headerTextStyle,
+                                )
                             }
                         }
                     }
                 }
             }
         }
-        BoxWithConstraints {
+        Box {
             val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
-            val tableWidth = this@BoxWithConstraints.maxWidth - when (days) {
-                1 -> pagerArrowSizeAndPadding.dp + 24.dp - defaultWidthReduction
-                else -> pagerArrowSizeAndPadding.dp * 2
-            }
             val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
             val tableWidthPx = with(density) { tableWidth.toPx() }
-            val cellWidth = tableWidth / days
             val cellWidthPx = tableWidthPx / days
             val cellHeightPx = with(density) { cellHeight.toPx() }
             var offset by remember(tableWidthPx) { mutableStateOf<Offset?>(null) }
