@@ -624,15 +624,9 @@ private fun DaysView(
                 Box(
                     Modifier
                         .width(pagerArrowSizeAndPadding.dp)
-                        .align(Alignment.Bottom),
-                ) {
-                    if (maxDayAllDayEvents > 3) Box(
-                        Modifier
-                            .width(pagerArrowSizeAndPadding.dp)
-                            .padding(bottom = 2.dp),
-                        contentAlignment = Alignment.BottomCenter,
-                    ) { ExpandArrow(isExpanded = isExpanded) }
-                }
+                        .padding(bottom = 2.dp),
+                    contentAlignment = Alignment.BottomCenter,
+                ) { if (maxDayAllDayEvents > 3) ExpandArrow(isExpanded = isExpanded) }
                 Row(
                     Modifier
                         .padding(end = pagerArrowSizeAndPadding.dp)
