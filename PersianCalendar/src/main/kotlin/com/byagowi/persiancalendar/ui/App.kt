@@ -278,7 +278,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                     DaysScreen(
                         calendarViewModel = viewModel,
                         initiallySelectedDay = jdn,
-                        animatedContentScope = this,
+                        appAnimatedContentScope = this,
                         isInitiallyWeek = isWeek,
                         navigateUp = { navigateUp(daysRoute) },
                     )

@@ -160,7 +160,7 @@ import kotlin.math.roundToInt
 fun SharedTransitionScope.DaysScreen(
     calendarViewModel: CalendarViewModel,
     initiallySelectedDay: Jdn,
-    animatedContentScope: AnimatedContentScope,
+    appAnimatedContentScope: AnimatedContentScope,
     navigateUp: () -> Unit,
     isInitiallyWeek: Boolean,
 ) {
@@ -361,7 +361,7 @@ fun SharedTransitionScope.DaysScreen(
                                 suggestedPagerSize = pagerSize,
                                 addEvent = addEvent,
                                 monthColors = monthColors,
-                                animatedContentScope = animatedContentScope,
+                                animatedContentScope = appAnimatedContentScope,
                                 onlyWeek = week,
                                 today = today,
                                 isHighlighted = isHighlighted,
@@ -376,102 +376,95 @@ fun SharedTransitionScope.DaysScreen(
                                 isVazirEnabled = isVazirEnabled,
                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
-                            if (isWeekViewState) {
-                                val isInitialWeek = initiallySelectedDay - weekStart in 0..<7
-                                ScreenSurface(
-                                    animatedContentScope = animatedContentScope,
-                                    disableSharedContent = !isInitialWeek,
-                                ) {
-                                    Box(
-                                        if (weekPagerState.currentPage == page) Modifier.sharedBounds(
-                                            rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
-                                            animatedVisibilityScope = this@AnimatedContent,
-                                        ) else Modifier
-                                    ) {
-                                        DaysView(
-                                            bottomPadding = bottomPadding,
-                                            setAddAction = {
-                                                if (weekPagerState.currentPage == page) {
-                                                    addAction = it
-                                                }
-                                            },
-                                            hasWeekPager = hasWeeksPager,
-                                            startingDay = weekStart,
-                                            selectedDay = selectedDay,
-                                            setSelectedDay = setSelectedDayInWeekPager,
-                                            addEvent = addEvent,
-                                            refreshCalendar = calendarViewModel::refreshCalendar,
-                                            days = 7,
-                                            deviceEvents = weekDeviceEvents,
-                                            now = now,
-                                            isAddEventBoxEnabled = isAddEventBoxEnabled,
-                                            setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
-                                            snackbarHostState = snackbarHostState,
-                                            calendarViewModel = calendarViewModel,
-                                            screenWidth = screenWidth,
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if (!isWeekViewState) ScreenSurface(animatedContentScope) {
-                        Box(
-                            Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
-                                animatedVisibilityScope = this@AnimatedContent,
-                            )
-                        ) {
-                            HorizontalPager(
-                                state = dayPagerState,
-                                verticalAlignment = Alignment.Top,
-                            ) { page ->
-                                val isCurrentPage = dayPagerState.currentPage == page
-                                val pageDay = today + (page - daysLimit / 2)
 
-                                LaunchedEffect(isCurrentPage) {
-                                    if (isCurrentPage) {
-                                        selectedDay = pageDay
-                                        if (today != pageDay) isHighlighted = true
-                                        val destination = weekPageFromJdn(pageDay, today)
-                                        if (abs(destination - weekPagerState.currentPage) > 1) {
-                                            weekPagerState.scrollToPage(destination)
-                                        } else weekPagerState.animateScrollToPage(destination)
-                                    }
-                                }
-
-                                val context = LocalContext.current
-                                val dayDeviceEvents = remember(
-                                    refreshToken, isShowDeviceCalendarEvents, pageDay
-                                ) {
-                                    if (isShowDeviceCalendarEvents) {
-                                        context.readDayDeviceEvents(pageDay)
-                                    } else EventsStore.empty()
-                                }
-
+                            if (isWeekViewState) ScreenSurface(
+                                animatedContentScope = appAnimatedContentScope,
+                                disableSharedContent = initiallySelectedDay - weekStart !in 0..<7,
+                            ) {
                                 DaysView(
+                                    modifier = if (weekPagerState.currentPage == page) Modifier.sharedBounds(
+                                        rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
+                                        animatedVisibilityScope = this@AnimatedContent,
+                                    ) else Modifier,
                                     bottomPadding = bottomPadding,
                                     setAddAction = {
-                                        if (dayPagerState.currentPage == page) {
+                                        if (weekPagerState.currentPage == page) {
                                             addAction = it
                                         }
                                     },
-                                    startingDay = pageDay,
+                                    hasWeekPager = hasWeeksPager,
+                                    startingDay = weekStart,
                                     selectedDay = selectedDay,
-                                    setSelectedDay = { selectedDay = it; isHighlighted = true },
+                                    setSelectedDay = setSelectedDayInWeekPager,
                                     addEvent = addEvent,
                                     refreshCalendar = calendarViewModel::refreshCalendar,
-                                    days = 1,
+                                    days = 7,
+                                    deviceEvents = weekDeviceEvents,
                                     now = now,
                                     isAddEventBoxEnabled = isAddEventBoxEnabled,
                                     setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
                                     snackbarHostState = snackbarHostState,
                                     calendarViewModel = calendarViewModel,
-                                    hasWeekPager = hasWeeksPager,
-                                    deviceEvents = dayDeviceEvents,
                                     screenWidth = screenWidth,
                                 )
                             }
+                        }
+                    }
+
+                    if (!isWeekViewState) ScreenSurface(appAnimatedContentScope) {
+                        HorizontalPager(
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
+                                animatedVisibilityScope = this@AnimatedContent,
+                            ),
+                            state = dayPagerState,
+                            verticalAlignment = Alignment.Top,
+                        ) { page ->
+                            val isCurrentPage = dayPagerState.currentPage == page
+                            val pageDay = today + (page - daysLimit / 2)
+
+                            LaunchedEffect(isCurrentPage) {
+                                if (isCurrentPage) {
+                                    selectedDay = pageDay
+                                    if (today != pageDay) isHighlighted = true
+                                    val destination = weekPageFromJdn(pageDay, today)
+                                    if (abs(destination - weekPagerState.currentPage) > 1) {
+                                        weekPagerState.scrollToPage(destination)
+                                    } else weekPagerState.animateScrollToPage(destination)
+                                }
+                            }
+
+                            val context = LocalContext.current
+                            val dayDeviceEvents = remember(
+                                refreshToken, isShowDeviceCalendarEvents, pageDay
+                            ) {
+                                if (isShowDeviceCalendarEvents) {
+                                    context.readDayDeviceEvents(pageDay)
+                                } else EventsStore.empty()
+                            }
+
+                            DaysView(
+                                bottomPadding = bottomPadding,
+                                setAddAction = {
+                                    if (dayPagerState.currentPage == page) {
+                                        addAction = it
+                                    }
+                                },
+                                startingDay = pageDay,
+                                selectedDay = selectedDay,
+                                setSelectedDay = { selectedDay = it; isHighlighted = true },
+                                addEvent = addEvent,
+                                refreshCalendar = calendarViewModel::refreshCalendar,
+                                days = 1,
+                                now = now,
+                                isAddEventBoxEnabled = isAddEventBoxEnabled,
+                                setAddEventBoxEnabled = { isAddEventBoxEnabled = true },
+                                snackbarHostState = snackbarHostState,
+                                calendarViewModel = calendarViewModel,
+                                hasWeekPager = hasWeeksPager,
+                                deviceEvents = dayDeviceEvents,
+                                screenWidth = screenWidth,
+                            )
                         }
                     }
                 }
@@ -534,31 +527,12 @@ private fun DaysView(
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
     screenWidth: Dp,
+    modifier: Modifier = Modifier,
 ) {
     val scale = remember { Animatable(1f) }
-    val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
     val coroutineScope = rememberCoroutineScope()
-    val density = LocalDensity.current
-    val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
-    val scrollState = rememberScrollState(initialScroll)
-    val events = (startingDay..<startingDay + days).toList()
-        .map { jdn -> readEvents(jdn, calendarViewModel, deviceEvents) }
-    val eventsWithTime = events.map { dayEvents ->
-        addDivisions(dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-            .filter { it.time != null }.sortedWith { x, y ->
-                x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
-                    if (it != 0) return@sortedWith it
-                }
-                // If both start at the same time, put bigger events first, better for interval graphs
-                y.start.timeInMillis.compareTo(x.end.timeInMillis)
-            })
-    }
-    val eventsWithoutTime = events.map { dayEvents ->
-        dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
-    }
-
     Column(
-        Modifier
+        modifier
             .fillMaxSize()
             .detectZoom {
                 coroutineScope.launch {
@@ -567,6 +541,26 @@ private fun DaysView(
                 }
             },
     ) {
+        val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
+        val density = LocalDensity.current
+        val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
+        val scrollState = rememberScrollState(initialScroll)
+        val events = (startingDay..<startingDay + days).toList().map { jdn ->
+            readEvents(jdn, calendarViewModel, deviceEvents)
+        }
+        val eventsWithTime = events.map { dayEvents ->
+            addDivisions(dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
+                .filter { it.time != null }.sortedWith { x, y ->
+                    x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
+                        if (it != 0) return@sortedWith it
+                    }
+                    // If both start at the same time, put bigger events first, better for interval graphs
+                    y.start.timeInMillis.compareTo(x.end.timeInMillis)
+                })
+        }
+        val eventsWithoutTime = events.map { dayEvents ->
+            dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
+        }
         val maxDayAllDayEvents = eventsWithoutTime.maxOf { it.size }
         val hasHeader by remember(events) {
             val needsHeader =
@@ -586,6 +580,8 @@ private fun DaysView(
             else -> pagerArrowSizeAndPadding.dp * 2
         }
         val cellWidth = tableWidth / days
+
+        // Header
         AnimatedVisibility(hasHeader) {
             var isExpanded by rememberSaveable { mutableStateOf(false) }
             val clickToExpandModifier = Modifier.clickable(
@@ -691,6 +687,8 @@ private fun DaysView(
                 }
             }
         }
+
+        // Time cells, table and indicators
         Box {
             Box(Modifier.verticalScroll(scrollState)) {
                 val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
