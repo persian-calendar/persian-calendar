@@ -73,7 +73,7 @@ class ReorderableListState internal constructor(
     spacing: Float = 0f,
     private val onMove: () -> Unit,
     private val onSettle: (fromIndex: Int, toIndex: Int) -> Unit,
-    scope: CoroutineScope
+    coroutineScope: CoroutineScope
 ) {
     internal val itemIntervals = MutableList(listSize) { ItemInterval() }
     internal val itemOffsets = List(listSize) {
@@ -85,7 +85,7 @@ class ReorderableListState internal constructor(
         DraggableState {
             if (!isItemDragging(i).value) return@DraggableState
 
-            scope.launch {
+            coroutineScope.launch {
                 itemOffsets[i].snapTo(itemOffsets[i].targetValue + it)
             }
 
@@ -109,7 +109,7 @@ class ReorderableListState internal constructor(
                         }
 
                     if (itemOffsets[j].targetValue != targetOffset) {
-                        scope.launch {
+                        coroutineScope.launch {
                             itemOffsets[j].animateTo(targetOffset, animationSpec)
                         }
                         moved = true

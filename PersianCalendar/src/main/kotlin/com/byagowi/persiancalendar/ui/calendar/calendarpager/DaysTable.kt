@@ -344,10 +344,10 @@ const val pagerArrowSizeAndPadding = pagerArrowSize + 4
 @OptIn(ExperimentalFoundationApi::class)
 private fun PagerArrow(
     arrowOffsetY: Dp,
-    scope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     pagerState: PagerState,
-    index: Int,
-    width: Dp,
+    page: Int,
+    screenWidth: Dp,
     isPrevious: Boolean,
     week: Int?,
 ) {
@@ -360,20 +360,20 @@ private fun PagerArrow(
         } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1),
         modifier = Modifier
             .offset(
-                if (isPrevious) 16.dp else (width - pagerArrowSize.dp), arrowOffsetY
+                if (isPrevious) 16.dp else (screenWidth - pagerArrowSize.dp), arrowOffsetY
             )
             .then(if (week == null) Modifier.combinedClickable(
                 indication = ripple(bounded = false),
                 interactionSource = null,
                 onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
                     }
                 },
                 onClickLabel = stringResource(R.string.select_month),
                 onLongClick = {
-                    scope.launch {
-                        pagerState.scrollToPage(index + 12 * if (isPrevious) -1 else 1)
+                    coroutineScope.launch {
+                        pagerState.scrollToPage(page + 12 * if (isPrevious) -1 else 1)
                     }
                 },
                 onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
@@ -381,8 +381,8 @@ private fun PagerArrow(
                 indication = ripple(bounded = false),
                 interactionSource = null,
             ) {
-                scope.launch {
-                    pagerState.animateScrollToPage(index + 1 * if (isPrevious) -1 else 1)
+                coroutineScope.launch {
+                    pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
                 }
             })
             .alpha(.9f),
