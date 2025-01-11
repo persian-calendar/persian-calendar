@@ -763,7 +763,11 @@ private fun DaysView(
                                     }.size(
                                         if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
                                         else cellWidth,
-                                        if (column == 0 && row == 23) 0.dp else cellHeight,
+                                        when {
+                                            row != 23 -> cellHeight
+                                            column != 0 -> cellHeight + bottomPadding
+                                            else -> 0.dp
+                                        },
                                     ),
                                     contentAlignment = Alignment.Center,
                                 ) {
