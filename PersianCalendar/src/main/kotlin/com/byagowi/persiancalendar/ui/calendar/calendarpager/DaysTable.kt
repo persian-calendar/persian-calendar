@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -54,6 +55,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventsRepository
+import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
@@ -305,7 +307,7 @@ fun SharedTransitionScope.DaysTable(
                 if (isToday) drawCircle(
                     monthColors.currentDay,
                     radius = cellRadius,
-                    style = Stroke(width = 1.dp.toPx()),
+                    style = Stroke(width = (if (isHighTextContrastEnabled) 3 else 1).dp.toPx()),
                 )
                 val textLayoutResult = textMeasurer.measure(
                     text = formatNumber(
@@ -317,6 +319,9 @@ fun SharedTransitionScope.DaysTable(
                         mainCalendarDigits,
                     ),
                     style = daysStyle,
+                )
+                if (isHighTextContrastEnabled && (isHoliday || day.isWeekEnd)) drawCircle(
+                    monthColors.holidays.copy(alpha = .25f), radius = cellRadius, style = Fill,
                 )
                 drawText(
                     textLayoutResult,
