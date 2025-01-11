@@ -388,9 +388,7 @@ fun SharedTransitionScope.DaysScreen(
                                     ) else Modifier,
                                     bottomPadding = bottomPadding,
                                     setAddAction = {
-                                        if (weekPagerState.currentPage == page) {
-                                            addAction = it
-                                        }
+                                        if (weekPagerState.currentPage == page) addAction = it
                                     },
                                     hasWeekPager = hasWeeksPager,
                                     startingDay = weekStart,
@@ -446,9 +444,7 @@ fun SharedTransitionScope.DaysScreen(
                             DaysView(
                                 bottomPadding = bottomPadding,
                                 setAddAction = {
-                                    if (dayPagerState.currentPage == page) {
-                                        addAction = it
-                                    }
+                                    if (dayPagerState.currentPage == page) addAction = it
                                 },
                                 startingDay = pageDay,
                                 selectedDay = selectedDay,
