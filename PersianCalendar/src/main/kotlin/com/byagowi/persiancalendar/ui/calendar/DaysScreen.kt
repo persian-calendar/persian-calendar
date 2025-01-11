@@ -777,6 +777,7 @@ private fun DaysView(
                     }
                 }
 
+                // Already available events boxes
                 eventsWithTime.mapIndexed { i, it ->
                     it.map { (event, column, columnsCount) ->
                         val start = hoursFractionOfDay(event.start)
@@ -804,89 +805,8 @@ private fun DaysView(
                     }
                 }
 
-                val x = offset?.let { (it.x / cellWidthPx).roundToInt() } ?: 0
-                LaunchedEffect(selectedDay) {
-                    val selectedDayIndex = selectedDay - startingDay
-                    offset?.let {
-                        if (selectedDayIndex != x)
-                            offset = it.copy(x = selectedDayIndex * cellWidthPx)
-                    }
-                }
-                val ySteps = (cellHeightPx / 4).roundToInt()
-                val y = offset?.let { (it.y * scale.value / ySteps).roundToInt() } ?: 0
-                val animatedOffset = if (offset == null) Offset.Zero
-                else animateOffsetAsState(
-                    Offset(x * cellWidthPx, y * ySteps.toFloat()),
-                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
-                    label = "offset"
-                ).value
-                val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
-                val animatedDuration by animateFloatAsState(
-                    targetValue = dy * (cellHeightPx / 4),
-                    label = "duration"
-                )
-
-                var resetOnNextRefresh by remember { mutableStateOf(false) }
-                val addAction = {
-                    val cellHeightScaledPx = cellHeightPx * scale.value
-                    if (offset == null) {
-                        offset = Offset(
-                            cellWidthPx * (selectedDay - startingDay),
-                            ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
-                        )
-                        setAddEventBoxEnabled()
-                    } else {
-                        val time = selectedDay.toGregorianCalendar()
-                        run {
-                            val minutes = y * 15
-                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
-                            time[GregorianCalendar.MINUTE] = minutes % 60
-                        }
-                        time[GregorianCalendar.SECOND] = 0
-                        val beginTime = time.time
-                        run {
-                            val minutes = (y + dy) * 15
-                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
-                            time[GregorianCalendar.MINUTE] = minutes % 60
-                        }
-                        val endTime = time.time
-                        addEvent(
-                            AddEventData(
-                                beginTime = beginTime,
-                                endTime = endTime,
-                                allDay = false,
-                                description = dayTitleSummary(
-                                    selectedDay,
-                                    selectedDay.inCalendar(mainCalendar),
-                                ),
-                            )
-                        )
-                        resetOnNextRefresh = true
-                    }
-                }
-                setAddAction(addAction)
-
-                val lifecycleOwner = LocalLifecycleOwner.current
-                DisposableEffect(lifecycleOwner) {
-                    val observer = LifecycleEventObserver { _, event ->
-                        if (event == Lifecycle.Event.ON_RESUME && resetOnNextRefresh) {
-                            duration = cellHeightPx / 4 * 4f
-                            offset = null
-                            resetOnNextRefresh = false
-                        }
-                    }
-                    lifecycleOwner.lifecycle.addObserver(observer)
-                    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-                }
-
-                LaunchedEffect(isAddEventBoxEnabled) {
-                    if (!isAddEventBoxEnabled && offset != null) offset = null
-                }
-
-                val widthReduction = remember { Animatable(defaultWidthReductionPx) }
-                val radius = with(density) { 4.dp.toPx() }
-
                 // Time indicator
+                val radius = with(density) { 4.dp.toPx() }
                 run {
                     val time = GregorianCalendar().also { it.timeInMillis = now }
                     val offsetDay = Jdn(time.toCivilDate()) - startingDay
@@ -913,6 +833,7 @@ private fun DaysView(
                     }
                 }
 
+                // Enabled times indicator
                 getEnabledAlarms(context).takeIf { it.isNotEmpty() }?.let { enabledTimes ->
                     val middayColor = Color(0xffbe923b)
                     val strokeWidth = with(density) { 1.dp.toPx() }
@@ -965,9 +886,84 @@ private fun DaysView(
                     }
                 }
 
-                var intention by remember { mutableStateOf<DragIntention?>(null) }
-
                 // Add event box
+                val x = offset?.let { (it.x / cellWidthPx).roundToInt() } ?: 0
+                LaunchedEffect(selectedDay) {
+                    val selectedDayIndex = selectedDay - startingDay
+                    offset?.let {
+                        if (selectedDayIndex != x)
+                            offset = it.copy(x = selectedDayIndex * cellWidthPx)
+                    }
+                }
+                val ySteps = (cellHeightPx / 4).roundToInt()
+                val y = offset?.let { (it.y * scale.value / ySteps).roundToInt() } ?: 0
+                val animatedOffset = if (offset == null) Offset.Zero
+                else animateOffsetAsState(
+                    Offset(x * cellWidthPx, y * ySteps.toFloat()),
+                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
+                    label = "offset"
+                ).value
+                val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
+                val animatedDuration by animateFloatAsState(
+                    targetValue = dy * (cellHeightPx / 4),
+                    label = "duration"
+                )
+                val lifecycleOwner = LocalLifecycleOwner.current
+                val widthReduction = remember { Animatable(defaultWidthReductionPx) }
+                var resetOnNextRefresh by remember { mutableStateOf(false) }
+                var intention by remember { mutableStateOf<DragIntention?>(null) }
+                val addAction = {
+                    val cellHeightScaledPx = cellHeightPx * scale.value
+                    if (offset == null) {
+                        offset = Offset(
+                            cellWidthPx * (selectedDay - startingDay),
+                            ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
+                        )
+                        setAddEventBoxEnabled()
+                    } else {
+                        val time = selectedDay.toGregorianCalendar()
+                        run {
+                            val minutes = y * 15
+                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
+                            time[GregorianCalendar.MINUTE] = minutes % 60
+                        }
+                        time[GregorianCalendar.SECOND] = 0
+                        val beginTime = time.time
+                        run {
+                            val minutes = (y + dy) * 15
+                            time[GregorianCalendar.HOUR_OF_DAY] = minutes / 60
+                            time[GregorianCalendar.MINUTE] = minutes % 60
+                        }
+                        val endTime = time.time
+                        addEvent(
+                            AddEventData(
+                                beginTime = beginTime,
+                                endTime = endTime,
+                                allDay = false,
+                                description = dayTitleSummary(
+                                    selectedDay,
+                                    selectedDay.inCalendar(mainCalendar),
+                                ),
+                            )
+                        )
+                        resetOnNextRefresh = true
+                    }
+                }
+                setAddAction(addAction)
+                DisposableEffect(lifecycleOwner) {
+                    val observer = LifecycleEventObserver { _, event ->
+                        if (event == Lifecycle.Event.ON_RESUME && resetOnNextRefresh) {
+                            duration = cellHeightPx / 4 * 4f
+                            offset = null
+                            resetOnNextRefresh = false
+                        }
+                    }
+                    lifecycleOwner.lifecycle.addObserver(observer)
+                    onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+                }
+                LaunchedEffect(isAddEventBoxEnabled) {
+                    if (!isAddEventBoxEnabled && offset != null) offset = null
+                }
                 Box(
                     Modifier
                         .offset {
@@ -1046,14 +1042,14 @@ private fun DaysView(
                             }
                         },
                     contentAlignment = Alignment.Center,
-                ) addEventRectangle@{
+                ) addEventBox@{
                     val alpha by animateFloatAsState(
                         if (offset == null) 0f else 1f,
                         animationSpec = spring(
                             Spring.DampingRatioNoBouncy, Spring.StiffnessLow
                         ), label = "alpha"
                     )
-                    if (offset == null) return@addEventRectangle
+                    if (offset == null) return@addEventBox
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
                     val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
                     val primaryWithAlpha = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
