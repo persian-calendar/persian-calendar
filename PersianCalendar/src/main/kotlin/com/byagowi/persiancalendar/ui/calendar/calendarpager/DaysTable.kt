@@ -307,7 +307,7 @@ fun SharedTransitionScope.DaysTable(
                 if (isToday) drawCircle(
                     monthColors.currentDay,
                     radius = cellRadius,
-                    style = Stroke(width = (if (isHighTextContrastEnabled) 3 else 1).dp.toPx()),
+                    style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 1).dp.toPx()),
                 )
                 val textLayoutResult = textMeasurer.measure(
                     text = formatNumber(
