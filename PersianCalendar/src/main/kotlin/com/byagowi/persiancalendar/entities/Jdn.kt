@@ -70,6 +70,9 @@ value class Jdn(val value: Long) {
     operator fun rangeTo(that: Jdn): Sequence<Jdn> =
         (this.value..that.value).asSequence().map(::Jdn)
 
+    operator fun rangeUntil(that: Jdn): Sequence<Jdn> =
+        (this.value..<that.value).asSequence().map(::Jdn)
+
     companion object {
         fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
     }

@@ -541,7 +541,7 @@ private fun DaysView(
     val density = LocalDensity.current
     val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
     val scrollState = rememberScrollState(initialScroll)
-    val events = (startingDay..(startingDay + days - 1)).toList()
+    val events = (startingDay..<startingDay + days).toList()
         .map { jdn -> readEvents(jdn, calendarViewModel, deviceEvents) }
     val eventsWithTime = events.map { dayEvents ->
         addDivisions(dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
