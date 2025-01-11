@@ -527,16 +527,12 @@ private fun DaysView(
 ) {
     val scale = remember { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
-    Column(
-        modifier
-            .fillMaxSize()
-            .detectZoom {
-                coroutineScope.launch {
-                    val value = scale.value * it
-                    scale.snapTo(value.coerceIn(.5f, 2f))
-                }
-            },
-    ) {
+    Column(modifier.detectZoom {
+        coroutineScope.launch {
+            val value = scale.value * it
+            scale.snapTo(value.coerceIn(.5f, 2f))
+        }
+    }) {
         val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
         val density = LocalDensity.current
         val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
@@ -910,11 +906,10 @@ private fun DaysView(
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
                 var intention by remember { mutableStateOf<DragIntention?>(null) }
                 val addAction = {
-                    val cellHeightScaledPx = cellHeightPx * scale.value
                     if (offset == null) {
                         offset = Offset(
                             cellWidthPx * (selectedDay - startingDay),
-                            ceil(scrollState.value / cellHeightScaledPx) * cellHeightScaledPx
+                            ceil(scrollState.value / cellHeightPx) * cellHeightPx / scale.value
                         )
                         setAddEventBoxEnabled()
                     } else {
