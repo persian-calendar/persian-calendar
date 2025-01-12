@@ -13,6 +13,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -527,12 +528,14 @@ private fun DaysView(
 ) {
     val scale = remember { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
-    Column(modifier.detectZoom {
-        coroutineScope.launch {
+    var interaction by remember { mutableStateOf<Interaction?>(null) }
+    Column(modifier.detectZoom(onZoom = {
+        if (interaction == null) interaction = Interaction.Zoom
+        if (interaction == Interaction.Zoom) coroutineScope.launch {
             val value = scale.value * it
             scale.snapTo(value.coerceIn(.5f, 2f))
         }
-    }) {
+    }, onRelease = { if (interaction == Interaction.Zoom) interaction = null })) {
         val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
         val density = LocalDensity.current
         val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
@@ -893,18 +896,20 @@ private fun DaysView(
                 val animatedOffset = if (offset == null) Offset.Zero
                 else animateOffsetAsState(
                     Offset(x * cellWidthPx, y * ySteps.toFloat()),
-                    animationSpec = spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow),
+                    animationSpec = if (interaction == Interaction.Zoom) snap() else {
+                        spring(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
+                    },
                     label = "offset"
                 ).value
                 val dy = (duration / (cellHeightPx / 4) * scale.value).roundToInt()
                 val animatedDuration by animateFloatAsState(
                     targetValue = dy * (cellHeightPx / 4),
+                    animationSpec = if (interaction == Interaction.Zoom) snap() else spring(),
                     label = "duration"
                 )
                 val lifecycleOwner = LocalLifecycleOwner.current
                 val widthReduction = remember { Animatable(defaultWidthReductionPx) }
                 var resetOnNextRefresh by remember { mutableStateOf(false) }
-                var intention by remember { mutableStateOf<DragIntention?>(null) }
                 val addAction = {
                     if (offset == null) {
                         offset = Offset(
@@ -961,7 +966,7 @@ private fun DaysView(
                         .offset {
                             IntOffset(
                                 (animatedOffset.x + firstColumnPx).roundToInt(),
-                                (animatedOffset.y + if (intention == DragIntention.ExtendUp) {
+                                (animatedOffset.y + if (interaction == Interaction.ExtendUp) {
                                     duration * scale.value - animatedDuration
                                 } else 0f).roundToInt(),
                             )
@@ -969,7 +974,7 @@ private fun DaysView(
                         .size(
                             with(density) { cellWidthPx.toDp() - 1.dp },
                             with(density) {
-                                (animatedDuration + if (intention == DragIntention.ExtendUp) {
+                                (animatedDuration + if (interaction == Interaction.ExtendUp) {
                                     (offset?.y ?: 0f) * scale.value - animatedOffset.y
                                 } else 0f).toDp()
                             },
@@ -986,20 +991,20 @@ private fun DaysView(
                                 drag(id) {
                                     val position = offset ?: return@drag
                                     val delta = it.positionChange()
-                                    if (intention == null) intention = when {
-                                        abs(it.position.y - duration * scale.value) < cellHeightPx * scale.value * .2f -> DragIntention.ExtendDown
+                                    if (interaction == null) interaction = when {
+                                        abs(it.position.y - duration * scale.value) < cellHeightPx * scale.value * .2f -> Interaction.ExtendDown
 
-                                        abs(it.position.y) < cellHeightPx * scale.value * .2f -> DragIntention.ExtendUp
-                                        else -> DragIntention.Move
+                                        abs(it.position.y) < cellHeightPx * scale.value * .2f -> Interaction.ExtendUp
+                                        else -> Interaction.Move
                                     }
-                                    when (intention) {
-                                        DragIntention.ExtendDown -> duration =
+                                    when (interaction) {
+                                        Interaction.ExtendDown -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
                                                 maximumValue = (ySteps * 24 * 4) - position.y
                                             )
 
-                                        DragIntention.ExtendUp -> {
+                                        Interaction.ExtendUp -> {
                                             val newValueY = position.y + delta.y / scale.value
                                             offset = position.copy(
                                                 y = newValueY.coerceIn(0f, cellHeightPx * 23)
@@ -1010,7 +1015,7 @@ private fun DaysView(
                                                 )
                                         }
 
-                                        DragIntention.Move -> {
+                                        Interaction.Move -> {
                                             val newValueX = position.x + directionSign * delta.x
                                             val newValueY = position.y + delta.y / scale.value
                                             offset = Offset(
@@ -1023,11 +1028,13 @@ private fun DaysView(
                                             setSelectedDay(startingDay + effectiveColumn)
                                         }
 
+                                        Interaction.Zoom -> {}
+
                                         else -> null.debugAssertNotNull
                                     }
                                     it.consume()
                                 }
-                                intention = null
+                                interaction = null
                                 coroutineScope.launch {
                                     widthReduction.animateTo(defaultWidthReductionPx)
                                 }
@@ -1104,7 +1111,7 @@ private fun DaysView(
     }
 }
 
-private enum class DragIntention { ExtendUp, ExtendDown, Move }
+private enum class Interaction { ExtendUp, ExtendDown, Move, Zoom }
 
 private const val weeksLimit = 25000 // this should be an even number
 private const val daysLimit = 175000 // this should be an even number
