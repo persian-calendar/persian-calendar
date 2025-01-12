@@ -1097,15 +1097,15 @@ private fun DaysView(
                         drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)
                     }
-                    val compat = dy < 3 / scale.value
+                    val compact = dy < 3 / scale.value
                     Text(
                         text = clockCache[y * 15] + when {
-                            !compat -> "\n"
+                            !compact -> "\n"
                             days == 7 -> " "
                             else -> " $EN_DASH "
                         } + clockCache[(y + dy) * 15],
                         color = contentColor,
-                        style = if (days == 7 && compat) MaterialTheme.typography.bodySmall
+                        style = if (days == 7 && compact) MaterialTheme.typography.bodySmall
                         else LocalTextStyle.current,
                         textAlign = TextAlign.Center,
                         overflow = TextOverflow.Visible,
