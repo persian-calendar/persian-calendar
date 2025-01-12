@@ -95,4 +95,12 @@
     <string name="return_to_today">Ritorna ad oggi</string>
     <string name="end_of_year_diff">%1$s giorni (~%2$s settimane o %3$s mesi) alla fine dell\'anno</string>
     <string name="calibrate_compass_summary">Per migliorare la sensibilità della bussola allontanate il telefono da ogni oggetto magnetico, ruotate ed inclinatelo avanti ed indietro su ogni asse.</string>
+    <string name="moon">Luna</string>
+    <string name="chinese_calendar">Calendario Cinese</string>
+    <string name="chinese">Cinese</string>
+    <string name="live_wallpaper_settings">Impostazioni dello sfondo animato</string>
+    <string name="screensaver_settings">Impostazioni salvaschermo</string>
+    <string name="calculator">calcolatore</string>
+    <string name="tropical">Anno tropico</string>
+    <string name="enable_notification">Vuoi abilitare la notifica della data?</string>
 </resources>
