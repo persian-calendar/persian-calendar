@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="code">pt</string>
     <string name="pref_widget">Widget</string>
     <string name="events_summary">Eventos a mostrar</string>
     <string name="notification_athan">Notificação Athan</string>
