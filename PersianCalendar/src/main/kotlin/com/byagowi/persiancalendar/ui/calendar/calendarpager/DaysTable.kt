@@ -115,8 +115,7 @@ fun SharedTransitionScope.DaysTable(
     val cellWidthPx = with(density) { cellWidth.toPx() }
     val cellHeight = suggestedHeight / if (onlyWeek != null) 2 else 7
     val cellHeightPx = with(density) { cellHeight.toPx() }
-    val cellRadius =
-        min(cellWidthPx, cellHeightPx) / 2 - with(LocalDensity.current) { .5f.dp.toPx() }
+    val cellRadius = min(cellWidthPx, cellHeightPx) / 2 - with(density) { .5f.dp.toPx() }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
 
@@ -162,7 +161,7 @@ fun SharedTransitionScope.DaysTable(
         val daysTextSize =
             diameter * (if (mainCalendarDigitsIsArabic || isVazirEnabled) 18 else 25) / 40
         val daysStyle = LocalTextStyle.current.copy(
-            fontSize = with(LocalDensity.current) { daysTextSize.toSp() },
+            fontSize = with(density) { daysTextSize.toSp() },
         )
         val contentColor = LocalContentColor.current
 
@@ -191,7 +190,7 @@ fun SharedTransitionScope.DaysTable(
                 )
                 Text(
                     getInitialOfWeekDay(weekDayPosition),
-                    fontSize = with(LocalDensity.current) { (diameter * .5f).toSp() },
+                    fontSize = with(density) { (diameter * .5f).toSp() },
                     modifier = Modifier
                         .alpha(AppBlendAlpha)
                         .semantics { this.contentDescription = description },
@@ -245,7 +244,7 @@ fun SharedTransitionScope.DaysTable(
                     val description = stringResource(R.string.nth_week_of_year, formattedWeekNumber)
                     Text(
                         formattedWeekNumber,
-                        fontSize = with(LocalDensity.current) { (daysTextSize * .625f).toSp() },
+                        fontSize = with(density) { (daysTextSize * .625f).toSp() },
                         modifier = Modifier
                             .alpha(AppBlendAlpha)
                             .semantics { this.contentDescription = description },
