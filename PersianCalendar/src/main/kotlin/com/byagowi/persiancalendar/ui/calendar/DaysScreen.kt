@@ -49,6 +49,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Scaffold
@@ -92,6 +94,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.LayoutDirection
@@ -1052,6 +1055,7 @@ private fun DaysView(
                     val circleBorder = MaterialTheme.colorScheme.surface.copy(alpha = alpha)
                     val background = MaterialTheme.colorScheme.surface.copy(alpha = AppBlendAlpha)
                     val primaryWithAlpha = MaterialTheme.colorScheme.primary.copy(alpha = alpha)
+                    val contentColor = LocalContentColor.current.copy(alpha = alpha)
                     Canvas(
                         Modifier
                             .align(Alignment.BottomCenter)
@@ -1093,15 +1097,18 @@ private fun DaysView(
                         drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)
                     }
-                    val from = clockCache[y * 15]
-                    val to = clockCache[(y + dy) * 15]
+                    val compat = dy < 3 / scale.value
                     Text(
-                        from + when {
-                            dy >= 3 -> "\n"
+                        text = clockCache[y * 15] + when {
+                            !compat -> "\n"
                             days == 7 -> " "
                             else -> " $EN_DASH "
-                        } + to,
+                        } + clockCache[(y + dy) * 15],
+                        color = contentColor,
+                        style = if (days == 7 && compat) MaterialTheme.typography.bodySmall
+                        else LocalTextStyle.current,
                         textAlign = TextAlign.Center,
+                        overflow = TextOverflow.Visible,
                     )
                 }
             }
