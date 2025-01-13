@@ -345,6 +345,15 @@
         "longitude": 68.41,
         "elevation": 2190.846
       },
+      "GHOR": {
+        "en": "Ghor",
+        "fa": "غور",
+        "ckb": "غۆر",
+        "ar": "غور",
+        "latitude": 34,
+        "longitude": 65,
+        "elevation": 2500
+      },
       "HELMAND": {
         "en": "Helmand",
         "fa": "هلمند",
