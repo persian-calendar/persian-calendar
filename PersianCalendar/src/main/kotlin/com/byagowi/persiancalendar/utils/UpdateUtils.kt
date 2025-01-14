@@ -18,6 +18,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
+import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
@@ -28,6 +29,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
+import androidx.collection.IntIntPair
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
@@ -86,6 +88,7 @@ import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
@@ -207,31 +210,31 @@ fun update(context: Context, updateDate: Boolean) {
 
     // Widgets
     AppWidgetManager.getInstance(context).run {
-        updateFromRemoteViews<AgeWidget>(context, now) { width, height, widgetId ->
+        updateFromRemoteViews<AgeWidget>(context, now) { width, height, _, widgetId ->
             createAgeRemoteViews(context, width, height, widgetId, jdn)
         }
-        updateFromRemoteViews<Widget1x1>(context, now) { width, height, _ ->
+        updateFromRemoteViews<Widget1x1>(context, now) { width, height, _, _ ->
             create1x1RemoteViews(context, width, height, date)
         }
-        updateFromRemoteViews<Widget4x1>(context, now) { width, height, _ ->
+        updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, _ ->
             create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle)
         }
-        updateFromRemoteViews<Widget2x2>(context, now) { width, height, _ ->
+        updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, _ ->
             create2x2RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, owghat)
         }
-        updateFromRemoteViews<Widget4x2>(context, now) { width, height, _ ->
+        updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, _ ->
             create4x2RemoteViews(context, width, height, jdn, date, nowClock, prayTimes)
         }
-        updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _ ->
+        updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _, _ ->
             createSunViewRemoteViews(context, width, height, prayTimes)
         }
-        updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, _ ->
-            createMonthViewRemoteViews(context, width, height)
+        updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, hasSize, _ ->
+            createMonthViewRemoteViews(context, width, height, hasSize)
         }
-        updateFromRemoteViews<WidgetMap>(context, now) { width, height, _ ->
+        updateFromRemoteViews<WidgetMap>(context, now) { width, height, _, _ ->
             createMapRemoteViews(context, width, height, now)
         }
-        updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _ ->
+        updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _, _ ->
             createMoonRemoteViews(context, width, height)
         }
     }
@@ -261,7 +264,7 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
     }
 }
 
-fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): Pair<Int, Int> {
+fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntPair? {
     // https://stackoverflow.com/a/69080699
     val isLandscape = resources.isLandscape
     val (width, height) = listOf(
@@ -271,18 +274,19 @@ fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): Pair<In
         else AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
     ).map { (getAppWidgetOptions(widgetId).getInt(it, 0) * resources.dp).toInt() }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
-    return if (width > 10 && height > 10) width to height else 250 to 250
+    return if (width > 10 && height > 10) IntIntPair(width, height) else null
 }
 
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     context: Context, now: Long,
-    widgetUpdateAction: (width: Int, height: Int, widgetId: Int) -> RemoteViews
+    widgetUpdateAction: (width: Int, height: Int, hasSize: Boolean, widgetId: Int) -> RemoteViews
 ) {
     runCatching {
         getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
             latestAnyWidgetUpdate = now
-            val (width, height) = getWidgetSize(context.resources, widgetId)
-            updateAppWidget(widgetId, widgetUpdateAction(width, height, widgetId))
+            val size = getWidgetSize(context.resources, widgetId)
+            val (width, height) = size ?: IntIntPair(250, 250)
+            updateAppWidget(widgetId, widgetUpdateAction(width, height, size != null, widgetId))
         }
     }.onFailure(logException).onFailure {
         if (BuildConfig.DEVELOPMENT) {
@@ -423,7 +427,12 @@ private fun createSunViewRemoteViews(
     return remoteViews
 }
 
-private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+private fun createMonthViewRemoteViews(
+    context: Context,
+    width: Int,
+    height: Int,
+    hasSize: Boolean,
+): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
 
@@ -459,11 +468,13 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val isRtl =
         language.value.isLessKnownRtl || language.value.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
+    val cellWidth = width / if (isShowWeekOfYearEnabled) 8f else 7f
+    val cellHeight = height.toFloat() / 7f
+    val cellRadius = min(cellWidth, cellHeight) / 2
+    val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
     val contentDescription = renderMonthWidget(
         dayPainter = DayPainter(
-            resources = context.resources,
-            width = width.toFloat() / if (isShowWeekOfYearEnabled) 8 else 7,
-            height = height.toFloat() / 7/* row count*/,
+            resources = context.resources, width = cellWidth, height = cellHeight,
             isRtl = isRtl,
             colors = colors,
             isWidget = true
@@ -476,6 +487,22 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
         isRtl = isRtl,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         selectedDay = null,
+        setText = if (hasSize && prefersWidgetsDynamicColors) { i, text, isHoliday ->
+            val id = monthWidgetCells[i]
+            remoteViews.setTextViewText(id, text)
+            val textSizePx =
+                cellRadius * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f) * (if (mainCalendarDigitsIsArabic) .8f else 1f)
+            remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, textSizePx)
+            when {
+                isHoliday -> android.R.attr.colorAccent
+                else -> android.R.attr.colorForeground
+            }.also { remoteViews.setDynamicTextColor(id, it) }
+            when {
+                i < 7 -> .5f
+                isHoliday -> .5f
+                else -> 1f
+            }.also { remoteViews.setAlpha(id, it) }
+        } else null
     )
     canvas.also {
         val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
@@ -497,8 +524,15 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
     val monthStart = Jdn(baseDate)
     val weekStart = applyWeekStartOffsetToWeekDay(Jdn(baseDate).weekDay)
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
-    monthWidgetCells.subList(weekStart, weekStart + monthLength).forEachIndexed { i, id ->
-        val jdn = monthStart + i
+    monthWidgetCells.forEachIndexed { i, id ->
+        if (i !in weekStart + 7..<weekStart + 7 + monthLength) {
+            if (i >= 7) {
+                remoteViews.setTextViewText(id, "")
+                remoteViews.setOnClickPendingIntent(id, null)
+            }
+            return@forEachIndexed
+        }
+        val jdn = monthStart + i - weekStart - 7
         val action = jdnActionKey + jdn.value
         remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
         if (isTalkBackEnabled) {
@@ -515,6 +549,9 @@ private fun createMonthViewRemoteViews(context: Context, width: Int, height: Int
 const val jdnActionKey = "JDN"
 
 private val monthWidgetCells = listOf(
+    R.id.month_grid_cell0x1, R.id.month_grid_cell0x2, R.id.month_grid_cell0x3,
+    R.id.month_grid_cell0x4, R.id.month_grid_cell0x5, R.id.month_grid_cell0x6,
+    R.id.month_grid_cell0x7,
     R.id.month_grid_cell1x1, R.id.month_grid_cell1x2, R.id.month_grid_cell1x3,
     R.id.month_grid_cell1x4, R.id.month_grid_cell1x5, R.id.month_grid_cell1x6,
     R.id.month_grid_cell1x7,

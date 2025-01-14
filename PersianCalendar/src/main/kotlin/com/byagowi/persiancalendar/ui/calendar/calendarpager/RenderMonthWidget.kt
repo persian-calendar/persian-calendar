@@ -30,6 +30,7 @@ fun renderMonthWidget(
     isRtl: Boolean,
     isShowWeekOfYearEnabled: Boolean,
     selectedDay: Jdn?,
+    setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
     val startingWeekDay = monthStartJdn.weekDay
@@ -48,9 +49,8 @@ fun renderMonthWidget(
                 else cellWidth * column + xStart,
                 0f
             ) {
-                dayPainter.setInitialOfWeekDay(
-                    getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(column))
-                )
+                val text = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(column))
+                setText?.invoke(column, text, false) ?: dayPainter.setInitialOfWeekDay(text)
                 dayPainter.drawDay(this)
             }
         }
@@ -67,16 +67,21 @@ fun renderMonthWidget(
                 val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                 val isToday = day == today
 
+                val text = formatNumber(dayOffset + 1, mainCalendarDigits)
+                val isHoliday = events.any { it.isHoliday }
                 dayPainter.setDayOfMonthItem(
                     isToday = isToday,
                     isSelected = day == selectedDay,
                     hasEvent = events.any { it !is CalendarEvent.DeviceCalendarEvent },
                     hasAppointment = events.any { it is CalendarEvent.DeviceCalendarEvent },
-                    isHoliday = events.any { it.isHoliday },
+                    isHoliday = isHoliday,
                     jdn = day,
-                    dayOfMonth = formatNumber(dayOffset + 1, mainCalendarDigits),
+                    dayOfMonth = if (setText == null) text else "",
                     header = getShiftWorkTitle(day, true),
                     secondaryCalendar = secondaryCalendar,
+                )
+                if (setText != null) setText(
+                    (row + 1) * 7 + column, text, isHoliday || day.isWeekEnd,
                 )
 
                 val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
