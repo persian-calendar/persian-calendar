@@ -199,18 +199,17 @@ fun SharedTransitionScope.DaysScreen(
         isAddEventBoxEnabled = false
         selectedDay = today
         isHighlighted = false
-        coroutineScope.launch {
-            // Don't change their order before testing
 
+        coroutineScope.launch {
             if (abs(weekPagerState.currentPage - weeksLimit / 2) == 1) {
                 weekPagerState.animateScrollToPage(weeksLimit / 2)
             } else weekPagerState.scrollToPage(weeksLimit / 2)
+        }
 
-            if (!isWeekView) {
-                if (abs(dayPagerState.currentPage - daysLimit / 2) == 1) {
-                    dayPagerState.animateScrollToPage(daysLimit / 2)
-                } else dayPagerState.scrollToPage(daysLimit / 2)
-            }
+        if (!isWeekView) coroutineScope.launch {
+            if (abs(dayPagerState.currentPage - daysLimit / 2) == 1) {
+                dayPagerState.animateScrollToPage(daysLimit / 2)
+            } else dayPagerState.scrollToPage(daysLimit / 2)
         }
     }
 
