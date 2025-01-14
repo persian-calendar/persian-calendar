@@ -515,14 +515,22 @@ private fun createMonthViewRemoteViews(
             }.also { remoteViews.setAlpha(id, it) }
         } else null
     )
-    canvas.also {
+    val footerSize = min(width, height) / 7f * 20 / 40
+    if (hasSize && prefersWidgetsDynamicColors) {
+        remoteViews.setTextViewText(R.id.month_year, contentDescription)
+        remoteViews.setTextViewTextSize(R.id.month_year, TypedValue.COMPLEX_UNIT_PX, footerSize)
+        remoteViews.setAlpha(R.id.month_year, 0.5f)
+        remoteViews.setDynamicTextColor(R.id.month_year, android.R.attr.colorForeground)
+        remoteViews.setViewPadding(R.id.month_year, 0, 0, 0, (height * .02f).roundToInt())
+    } else {
+        remoteViews.setTextViewText(R.id.month_year, "")
         val footerPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
             paint.textAlign = Paint.Align.CENTER
-            paint.textSize = min(width, height) / 7f * 20 / 40
+            paint.textSize = footerSize
             paint.color = colors.contentColor.toArgb()
             paint.alpha = 90
         }
-        it.drawText(contentDescription, width / 2f, height * .95f, footerPaint)
+        canvas.drawText(contentDescription, width / 2f, height * .95f, footerPaint)
     }
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, contentDescription)

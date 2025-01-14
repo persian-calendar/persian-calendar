@@ -24,12 +24,11 @@
         android:scaleType="centerInside" />
 
     <TextView
-        android:id="@+id/message"
+        android:id="@+id/month_year"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textColor="@android:color/white" />
+        android:gravity="bottom|center"
+        android:textAlignment="center" />
 
     <LinearLayout
         android:id="@+id/month_grid_parent"
