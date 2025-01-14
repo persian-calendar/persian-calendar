@@ -30,6 +30,7 @@ fun renderMonthWidget(
     isRtl: Boolean,
     isShowWeekOfYearEnabled: Boolean,
     selectedDay: Jdn?,
+    setWeekNumberText: ((i: Int, text: String) -> Unit)? = null,
     setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
@@ -97,13 +98,18 @@ fun renderMonthWidget(
             val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
             val weeksCount = (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
                     weekOfYearStart + 1
-            (1..weeksCount).forEach { week ->
-                val weekNumber = formatNumber(weekOfYearStart + week - 1)
-                dayPainter.setWeekNumber(weekNumber)
+            (1..6).forEach { week ->
+                val weekNumber = if (week > weeksCount) ""
+                else formatNumber(weekOfYearStart + week - 1)
+                if (setWeekNumberText != null) {
+                    setWeekNumberText(week, weekNumber)
+                } else if (weekNumber.isNotEmpty()) {
+                    dayPainter.setWeekNumber(weekNumber)
 
-                it.withTranslation(
-                    if (isRtl) width - cellWidth else 0f, cellHeight * week,
-                ) { dayPainter.drawDay(this) }
+                    it.withTranslation(
+                        if (isRtl) width - cellWidth else 0f, cellHeight * week,
+                    ) { dayPainter.drawDay(this) }
+                }
             }
         }
     }

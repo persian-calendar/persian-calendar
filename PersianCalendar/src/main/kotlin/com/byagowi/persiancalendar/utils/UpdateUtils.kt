@@ -487,13 +487,22 @@ private fun createMonthViewRemoteViews(
         isRtl = isRtl,
         isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         selectedDay = null,
+        setWeekNumberText = if (hasSize && prefersWidgetsDynamicColors) { i, text ->
+            val id = monthWidgetWeeks[i]
+            remoteViews.setTextViewText(id, text)
+            cellRadius.let {
+                it * if (mainCalendarDigitsIsArabic) .8f else 1f
+            }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it * .8f) }
+            remoteViews.setAlpha(id, .5f)
+            remoteViews.setDynamicTextColor(id, android.R.attr.colorForeground)
+        } else null,
         setText = if (hasSize && prefersWidgetsDynamicColors) { i, text, isHoliday ->
             val id = monthWidgetCells[i]
             remoteViews.setTextViewText(id, text)
             cellRadius.let {
-                it * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f)
+                it * if (isShowWeekOfYearEnabled) 1.2f else 1.1f
             }.let {
-                it * (if (mainCalendarDigitsIsArabic) .8f else 1f)
+                it * if (mainCalendarDigitsIsArabic) .8f else 1f
             }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it) }
             when {
                 isHoliday -> android.R.attr.colorAccent
@@ -527,15 +536,15 @@ private fun createMonthViewRemoteViews(
     val weekStart = applyWeekStartOffsetToWeekDay(Jdn(baseDate).weekDay)
     val monthLength = baseDate.calendar.getMonthLength(baseDate.year, baseDate.month)
     monthWidgetCells.forEachIndexed { i, id ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
+            remoteViews.setTextViewText(id, "")
+        }
         if (i !in weekStart + 7..<weekStart + 7 + monthLength) {
             if (i >= 7) {
                 remoteViews.setTextViewText(id, "")
                 remoteViews.setOnClickPendingIntent(id, null)
             }
             return@forEachIndexed
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
-            remoteViews.setTextViewText(id, "")
         }
         val jdn = monthStart + i - weekStart - 7
         val action = jdnActionKey + jdn.value
@@ -552,6 +561,11 @@ private fun createMonthViewRemoteViews(
 }
 
 const val jdnActionKey = "JDN"
+
+private val monthWidgetWeeks = listOf(
+    R.id.month_grid_week0, R.id.month_grid_week1, R.id.month_grid_week2, R.id.month_grid_week3,
+    R.id.month_grid_week4, R.id.month_grid_week5, R.id.month_grid_week6,
+)
 
 private val monthWidgetCells = listOf(
     R.id.month_grid_cell0x1, R.id.month_grid_cell0x2, R.id.month_grid_cell0x3,
