@@ -490,9 +490,11 @@ private fun createMonthViewRemoteViews(
         setText = if (hasSize && prefersWidgetsDynamicColors) { i, text, isHoliday ->
             val id = monthWidgetCells[i]
             remoteViews.setTextViewText(id, text)
-            val textSizePx =
-                cellRadius * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f) * (if (mainCalendarDigitsIsArabic) .8f else 1f)
-            remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, textSizePx)
+            cellRadius.let {
+                it * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f)
+            }.let {
+                it * (if (mainCalendarDigitsIsArabic) .8f else 1f)
+            }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it) }
             when {
                 isHoliday -> android.R.attr.colorAccent
                 else -> android.R.attr.colorForeground
@@ -531,6 +533,9 @@ private fun createMonthViewRemoteViews(
                 remoteViews.setOnClickPendingIntent(id, null)
             }
             return@forEachIndexed
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !prefersWidgetsDynamicColors) {
+            remoteViews.setTextViewText(id, "")
         }
         val jdn = monthStart + i - weekStart - 7
         val action = jdnActionKey + jdn.value
