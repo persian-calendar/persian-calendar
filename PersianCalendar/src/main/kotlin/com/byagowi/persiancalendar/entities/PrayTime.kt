@@ -53,7 +53,7 @@ enum class PrayTime(
         }
     }
 
-    fun getClock(prayTimes: PrayTimes): Clock = Clock.fromHoursFraction(getFraction(prayTimes))
+    fun getClock(prayTimes: PrayTimes) = Clock.fromHoursFraction(getFraction(prayTimes))
 
     companion object {
         // As SUNSET and MAGHRIB are the same in non Jafari methods

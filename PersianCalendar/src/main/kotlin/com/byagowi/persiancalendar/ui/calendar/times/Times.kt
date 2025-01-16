@@ -82,16 +82,9 @@ private fun PrayTimes.getNextTime(
 ): PrayTime {
     val clock = Clock(Date(now).toGregorianCalendar()).toHoursFraction()
     return timeIds.firstOrNull {
-        when (it) {
-            PrayTime.IMSAK -> imsak > clock && isExpanded
-            PrayTime.FAJR -> fajr > clock
-            PrayTime.SUNRISE -> sunrise > clock && isExpanded
-            PrayTime.DHUHR -> dhuhr > clock
-            PrayTime.ASR -> asr > clock && isExpanded
-            PrayTime.SUNSET -> sunset > clock && isExpanded
-            PrayTime.MAGHRIB -> maghrib > clock
-            PrayTime.ISHA -> isha > clock && isExpanded
-            PrayTime.MIDNIGHT -> midnight > clock && isExpanded
-        }
-    } ?: if (isExpanded) PrayTime.IMSAK else PrayTime.FAJR
+        (isExpanded || it.alwaysShown) && it.getFraction(this) > clock
+    } ?: run {
+        if (isExpanded) PrayTime.entries[0]
+        else PrayTime.entries.firstOrNull { it.alwaysShown } ?: PrayTime.FAJR
+    }
 }
