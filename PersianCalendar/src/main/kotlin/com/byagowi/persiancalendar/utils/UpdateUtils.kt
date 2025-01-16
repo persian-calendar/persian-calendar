@@ -857,7 +857,7 @@ private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<PrayTime> {
         val isha = Clock.fromHoursFraction(prayTimes.isha).toMinutes()
         if (nowMinutes in dhuhr..isha) PrayTime.timesBetweenDhuhrAndIshaForJafari
         else PrayTime.timesNotBetweenDhuhrAndIshaForJafari
-    } else PrayTime.timesNotJafari
+    } else PrayTime.athans
 }
 
 private fun setEventsInWidget(
