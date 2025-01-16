@@ -82,7 +82,7 @@ class AthanNotification : Service() {
                 it.lightColor = Color.GREEN
                 if (athanVibration) it.vibrationPattern = LongArray(2) { 500 }
                 it.enableVibration(athanVibration)
-                it.setBypassDnd(prayTime.isByPassDnd)
+                it.setBypassDnd(prayTime.isBypassDnd)
                 if (soundUri == null) it.setSound(null, null) else it.setSound(
                     soundUri, AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)

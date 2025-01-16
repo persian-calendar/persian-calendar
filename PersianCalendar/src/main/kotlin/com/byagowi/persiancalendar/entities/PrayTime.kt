@@ -21,7 +21,8 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
     ISHA(R.string.isha, tint = Color(0xFF283593)),
     MIDNIGHT(R.string.midnight);
 
-    val isByPassDnd get() = this == FAJR
+    // Is the time can even bypass silent device or do not disturb device settings
+    val isBypassDnd get() = this == FAJR
 
     // Used in days view
     val imageVector
