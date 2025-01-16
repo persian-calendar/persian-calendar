@@ -31,6 +31,7 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
             it[GregorianCalendar.HOUR_OF_DAY] = 0
             it[GregorianCalendar.MINUTE] = 0
             it[GregorianCalendar.SECOND] = 1
+            it[GregorianCalendar.MILLISECOND] = 0
         }.timeInMillis + DAY_IN_MILLIS - System.currentTimeMillis()
         val dayIsChangedWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)

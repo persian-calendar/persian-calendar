@@ -41,6 +41,7 @@ import com.byagowi.persiancalendar.variants.debugLog
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 // https://stackoverflow.com/a/69505596
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
@@ -119,10 +120,11 @@ fun scheduleAlarms(context: Context) {
     enabledAlarms.forEachIndexed { i, prayTime ->
         scheduleAlarm(context, prayTime, GregorianCalendar().also {
             // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
-            val alarmTime = prayTime.getClock(prayTimes)
-            it[GregorianCalendar.HOUR_OF_DAY] = alarmTime.hours
-            it[GregorianCalendar.MINUTE] = alarmTime.minutes
+            it[GregorianCalendar.HOUR_OF_DAY] = 0
+            it[GregorianCalendar.MINUTE] = 0
             it[GregorianCalendar.SECOND] = 0
+            it[GregorianCalendar.MILLISECOND] = 0
+            it.timeInMillis += (prayTime.getFraction(prayTimes) * DAY_IN_MILLIS).roundToInt()
         }.timeInMillis - athanGap, i)
     }
 }

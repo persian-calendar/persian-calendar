@@ -922,6 +922,7 @@ private fun DaysView(
                             time[GregorianCalendar.MINUTE] = minutes % 60
                         }
                         time[GregorianCalendar.SECOND] = 0
+                        time[GregorianCalendar.MILLISECOND] = 0
                         val beginTime = time.time
                         run {
                             val minutes = (y + dy) * 15

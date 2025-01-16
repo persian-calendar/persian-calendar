@@ -22,7 +22,7 @@ class AthanActivityContentTest {
         var isClicked = false
         composeTestRule.setContent {
             athanName = stringResource(PrayTime.FAJR.stringRes)
-            AthanActivityContent(prayTime = PrayTime.FAJR) { isClicked = true }
+            AthanActivityContent(PrayTime.FAJR) { isClicked = true }
         }
         assert(!isClicked)
         composeTestRule.onNodeWithText(athanName).performClick()
