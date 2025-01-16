@@ -2,7 +2,7 @@
 agp = "8.8.0"
 android-test = "1.6.1"
 android-test-runner = "1.6.2"
-androidx-activity = "1.9.3"
+androidx-activity = "1.10.0"
 androidx-core = "1.15.0"
 androidx-navigation = "2.8.5"
 androidx-test-ext-junit = "1.2.1"
