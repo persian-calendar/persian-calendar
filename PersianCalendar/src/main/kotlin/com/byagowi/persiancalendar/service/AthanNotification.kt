@@ -102,20 +102,8 @@ class AthanNotification : Service() {
             else "$prayTimeName$spacedComma${getString(R.string.in_city_time, cityName)}"
 
         val prayTimes = coordinates.value?.calculatePrayTimes()
-        val subtitle = when (prayTime) {
-            PrayTime.FAJR -> listOf(PrayTime.SUNRISE)
-            PrayTime.DHUHR ->
-                if (calculationMethod.value.isJafari) listOf(PrayTime.SUNSET)
-                else listOf(PrayTime.ASR, PrayTime.MAGHRIB)
-
-            PrayTime.ASR -> listOf(PrayTime.MAGHRIB)
-            PrayTime.MAGHRIB ->
-                if (calculationMethod.value.isJafari) listOf(PrayTime.MIDNIGHT)
-                else listOf(PrayTime.ISHA, PrayTime.MIDNIGHT)
-
-            PrayTime.ISHA -> listOf(PrayTime.MIDNIGHT)
-            else -> listOf(PrayTime.MIDNIGHT)
-        }.joinToString(" - ") {
+        val isJafari = calculationMethod.value.isJafari
+        val subtitle = prayTime.upcomingTimes(isJafari).joinToString(" - ") {
             "${getString(it.stringRes)}: ${prayTimes?.let(it::getClock)?.toFormattedString() ?: ""}"
         }
 

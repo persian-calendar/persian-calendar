@@ -246,21 +246,8 @@ fun update(context: Context, updateDate: Boolean) {
 private fun PrayTimes.getNextPrayTime(current: Clock): PrayTime {
     val clock = current.toHoursFraction()
     val isJafari = calculationMethod.value.isJafari
-    return when {
-        fajr > clock -> PrayTime.FAJR
-        sunrise > clock -> PrayTime.SUNRISE
-        dhuhr > clock -> PrayTime.DHUHR
-        // No need to show Asr for Jafari calculation methods
-        !isJafari && asr > clock -> PrayTime.ASR
-        // Sunset and Maghrib are different only in Jafari, skip if isn't Jafari
-        isJafari && sunset > clock -> PrayTime.SUNSET
-        maghrib > clock -> PrayTime.MAGHRIB
-        // No need to show Isha for Jafari calculation methods
-        !isJafari && isha > clock -> PrayTime.ISHA
-        midnight > clock -> PrayTime.MIDNIGHT
-        // TODO: this is today's, not tomorrow
-        else -> PrayTime.FAJR
-    }
+    val times = if (isJafari) PrayTime.jafariImportantTimes else PrayTime.nonJafariImportantTimes
+    return times.firstOrNull { it.getFraction(this) > clock } ?: PrayTime.FAJR
 }
 
 fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntPair? {

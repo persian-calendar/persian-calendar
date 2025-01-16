@@ -23,12 +23,14 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
 
     val isByPassDnd get() = this == FAJR
 
+    // Used in days view
     val imageVector
         get() = when (this) {
             DHUHR, ASR -> Icons.Default.Brightness7
             else -> Icons.Default.Brightness4
         }
 
+    // Used in Athan notification
     val drawable
         get() = when (this) {
             DHUHR, ASR -> R.drawable.brightness7
@@ -51,6 +53,7 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
 
     fun getClock(prayTimes: PrayTimes) = Clock.fromHoursFraction(getFraction(prayTimes))
 
+    // Used in times tab for items that are always shown
     fun isAlwaysShown(isJafari: Boolean): Boolean {
         return when (this) {
             FAJR, DHUHR, MAGHRIB -> true
@@ -58,6 +61,18 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
                 ASR, ISHA -> true
                 else -> false
             }
+        }
+    }
+
+    // Used in Athan notification
+    fun upcomingTimes(isJafari: Boolean): List<PrayTime> {
+        return when (this) {
+            FAJR -> listOf(SUNRISE)
+            DHUHR -> if (isJafari) listOf(SUNSET) else listOf(ASR, MAGHRIB)
+            ASR -> listOf(MAGHRIB)
+            MAGHRIB -> if (isJafari) listOf(MIDNIGHT) else listOf(ISHA, MIDNIGHT)
+            ISHA -> listOf(MIDNIGHT)
+            else -> listOf(MIDNIGHT)
         }
     }
 
@@ -80,6 +95,10 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
         }
 
         val athans = listOf(FAJR, DHUHR, ASR, MAGHRIB, ISHA)
+
+        // Used in widget to show upcoming important time
+        val jafariImportantTimes = listOf(FAJR, SUNRISE, DHUHR, SUNSET, MAGHRIB, MIDNIGHT)
+        val nonJafariImportantTimes = listOf(FAJR, SUNRISE, DHUHR, ASR, MAGHRIB, ISHA, MIDNIGHT)
 
         // 4x2 related times to show
         val timesNotBetweenDhuhrAndIshaForJafari = listOf(FAJR, SUNRISE, DHUHR, MAGHRIB, MIDNIGHT)

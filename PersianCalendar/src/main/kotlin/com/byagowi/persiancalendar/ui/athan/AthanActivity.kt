@@ -108,7 +108,7 @@ class AthanActivity : ComponentActivity() {
             if (athanVolume != DEFAULT_ATHAN_VOLUME) // Don't change alarm volume if isn't set in-app
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanVolume, 0)
             // Mute if system alarm is set to lowest, ringer mode is silent/vibration and it isn't Fajr
-            if (originalVolume == 1 && prayTime != PrayTime.FAJR &&
+            if (originalVolume == 1 && !prayTime.isByPassDnd &&
                 audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL
             ) goMute = true
         }
