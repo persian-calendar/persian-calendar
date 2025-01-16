@@ -41,8 +41,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Brightness4
-import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.CalendarViewDay
 import androidx.compose.material.icons.filled.CalendarViewWeek
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -114,6 +112,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -142,9 +141,7 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
-import com.byagowi.persiancalendar.utils.getFractionFromStringId
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
-import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
@@ -839,7 +836,6 @@ private fun DaysView(
                     val centerOffset = with(density) {
                         IntOffset((size / 2).dp.roundToPx(), (size / 2).dp.roundToPx())
                     }
-                    val timesNames = enabledTimes.map(::getPrayTimeName)
                     val coordinates = coordinates.collectAsState().value ?: return@let
                     val circleRadius = with(density) { (size / 4).dp.toPx() }
                     val pathEffect = with(density) {
@@ -849,10 +845,10 @@ private fun DaysView(
                     (0..<days).map { offsetDay ->
                         val date = (startingDay + offsetDay).toGregorianCalendar()
                         val prayTimes = coordinates.calculatePrayTimes(date)
-                        timesNames.forEach {
+                        enabledTimes.forEach { prayTime ->
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (prayTimes.getFractionFromStringId(it) * cellHeightPx).roundToInt()
+                                (prayTime.getFraction(prayTimes) * cellHeightPx).roundToInt()
                             )
                             Canvas(
                                 Modifier
@@ -872,8 +868,7 @@ private fun DaysView(
                                 )
                             }
                             if (offsetDay == 0) Icon(
-                                if (it in listOf(R.string.dhuhr, R.string.asr))
-                                    Icons.Default.Brightness7 else Icons.Default.Brightness4,
+                                prayTime.imageVector,
                                 null,
                                 Modifier
                                     .offset { position - centerOffset }

@@ -20,8 +20,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
-import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
@@ -97,8 +97,9 @@ class AthanActivity : ComponentActivity() {
                 WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
         }
 
-        val prayerKey = intent?.getStringExtra(KEY_EXTRA_PRAYER).debugAssertNotNull ?: ""
-        val isFajr = prayerKey == FAJR_KEY
+        val prayTime = PrayTime.fromName(
+            intent?.getStringExtra(KEY_EXTRA_PRAYER)
+        ).debugAssertNotNull ?: PrayTime.FAJR
         var goMute = false
 
         getSystemService<AudioManager>()?.let { audioManager ->
@@ -107,7 +108,7 @@ class AthanActivity : ComponentActivity() {
             if (athanVolume != DEFAULT_ATHAN_VOLUME) // Don't change alarm volume if isn't set in-app
                 audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanVolume, 0)
             // Mute if system alarm is set to lowest, ringer mode is silent/vibration and it isn't Fajr
-            if (originalVolume == 1 && !isFajr &&
+            if (originalVolume == 1 && prayTime != PrayTime.FAJR &&
                 audioManager.ringerMode != AudioManager.RINGER_MODE_NORMAL
             ) goMute = true
         }
@@ -150,7 +151,7 @@ class AthanActivity : ComponentActivity() {
 
         setContent {
             BackHandler { stop() }
-            SystemTheme { AthanActivityContent(prayerKey, ::stop) }
+            SystemTheme { AthanActivityContent(prayTime, ::stop) }
         }
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)

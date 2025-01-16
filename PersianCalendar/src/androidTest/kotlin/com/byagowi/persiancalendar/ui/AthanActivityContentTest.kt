@@ -5,9 +5,8 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.byagowi.persiancalendar.FAJR_KEY
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.athan.AthanActivityContent
-import com.byagowi.persiancalendar.utils.getPrayTimeName
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,8 +21,8 @@ class AthanActivityContentTest {
         var athanName = ""
         var isClicked = false
         composeTestRule.setContent {
-            athanName = stringResource(getPrayTimeName(FAJR_KEY))
-            AthanActivityContent(prayerKey = FAJR_KEY) { isClicked = true }
+            athanName = stringResource(PrayTime.FAJR.stringRes)
+            AthanActivityContent(prayTime = PrayTime.FAJR) { isClicked = true }
         }
         assert(!isClicked)
         composeTestRule.onNodeWithText(athanName).performClick()

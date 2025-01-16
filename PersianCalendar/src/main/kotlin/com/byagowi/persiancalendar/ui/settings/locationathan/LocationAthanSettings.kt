@@ -44,6 +44,7 @@ import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.athanSoundName
@@ -261,13 +262,7 @@ private fun getMidnightMethodPreferenceSummary(context: Context): String {
 }
 
 private fun midnightMethodToString(resources: Resources, method: MidnightMethod): String {
-    return when (method) {
-        MidnightMethod.MidSunsetToSunrise -> listOf(R.string.sunset, R.string.sunrise)
-
-        MidnightMethod.MidSunsetToFajr -> listOf(R.string.sunset, R.string.fajr)
-
-        MidnightMethod.MidMaghribToSunrise -> listOf(R.string.maghrib, R.string.sunrise)
-
-        MidnightMethod.MidMaghribToFajr -> listOf(R.string.maghrib, R.string.fajr)
-    }.joinToString(EN_DASH) { resources.getString(it) }
+    return PrayTime.pairFromMidnightMethod(method).joinToString(EN_DASH) {
+        resources.getString(it.stringRes)
+    }
 }

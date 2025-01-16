@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -19,20 +18,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.nextTimeColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
-import com.byagowi.persiancalendar.utils.getFromStringId
-import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
@@ -48,15 +47,13 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        val timeIds = getTimeNames()
+        val calculationMethod by calculationMethod.collectAsState()
+        val times = PrayTime.allTimes(calculationMethod.isJafari)
         val nextTimeColor = nextTimeColor()
-        val nextTimeId = if (isToday) prayTimes.getNextTimeId(now, timeIds, isExpanded) else null
-        timeIds.forEach { timeId ->
+        val nextPrayTime = if (isToday) prayTimes.getNextTime(now, times, isExpanded) else null
+        times.forEach { prayTime ->
             AnimatedVisibility(
-                visible = isExpanded || when (timeId) {
-                    R.string.fajr, R.string.dhuhr, R.string.maghrib -> true
-                    else -> false
-                },
+                visible = isExpanded || prayTime.alwaysShown,
                 enter = fadeIn() + expandHorizontally(),
                 exit = fadeOut() + shrinkHorizontally(),
             ) {
@@ -65,11 +62,11 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     val textColor by animateColor(
-                        if (nextTimeId == timeId) nextTimeColor else LocalContentColor.current
+                        if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current
                     )
-                    Text(stringResource(timeId), color = textColor)
+                    Text(stringResource(prayTime.stringRes), color = textColor)
                     AnimatedContent(
-                        targetState = prayTimes.getFromStringId(timeId).toFormattedString(),
+                        targetState = prayTime.getClock(prayTimes).toFormattedString(),
                         label = "time",
                         transitionSpec = appCrossfadeSpec,
                     ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
@@ -80,21 +77,21 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
     }
 }
 
-@StringRes
-private fun PrayTimes.getNextTimeId(now: Long, timeIds: List<Int>, isExpanded: Boolean): Int {
+private fun PrayTimes.getNextTime(
+    now: Long, timeIds: List<PrayTime>, isExpanded: Boolean
+): PrayTime {
     val clock = Clock(Date(now).toGregorianCalendar()).toHoursFraction()
     return timeIds.firstOrNull {
         when (it) {
-            R.string.imsak -> imsak > clock && isExpanded
-            R.string.fajr -> fajr > clock
-            R.string.sunrise -> sunrise > clock && isExpanded
-            R.string.dhuhr -> dhuhr > clock
-            R.string.asr -> asr > clock && isExpanded
-            R.string.sunset -> sunset > clock && isExpanded
-            R.string.maghrib -> maghrib > clock
-            R.string.isha -> isha > clock && isExpanded
-            R.string.midnight -> midnight > clock && isExpanded
-            else -> false
+            PrayTime.IMSAK -> imsak > clock && isExpanded
+            PrayTime.FAJR -> fajr > clock
+            PrayTime.SUNRISE -> sunrise > clock && isExpanded
+            PrayTime.DHUHR -> dhuhr > clock
+            PrayTime.ASR -> asr > clock && isExpanded
+            PrayTime.SUNSET -> sunset > clock && isExpanded
+            PrayTime.MAGHRIB -> maghrib > clock
+            PrayTime.ISHA -> isha > clock && isExpanded
+            PrayTime.MIDNIGHT -> midnight > clock && isExpanded
         }
-    } ?: if (isExpanded) R.string.imsak else R.string.fajr
+    } ?: if (isExpanded) PrayTime.IMSAK else PrayTime.FAJR
 }

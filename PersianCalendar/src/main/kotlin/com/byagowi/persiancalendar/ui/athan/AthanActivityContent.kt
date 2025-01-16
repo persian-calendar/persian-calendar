@@ -42,19 +42,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.getPrayTimeName
 
 @Composable
-fun AthanActivityContent(prayerKey: String, onClick: () -> Unit) {
+fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
     val dpAsPx = with(LocalDensity.current) { 1.dp.toPx() }
     val darkBaseColor = isSystemInDarkTheme()
     val patternDrawable = remember {
         // We like to reuse our drawable for now but can reconsider in future
-        PatternDrawable(prayerKey, darkBaseColor = darkBaseColor, dp = dpAsPx)
+        PatternDrawable(prayTime, darkBaseColor = darkBaseColor, dp = dpAsPx)
     }
     Box(
         modifier = Modifier
@@ -73,7 +72,7 @@ fun AthanActivityContent(prayerKey: String, onClick: () -> Unit) {
                 color = Color.White, fontWeight = FontWeight.Bold,
                 shadow = Shadow(color = Color.Black, blurRadius = 2f, offset = Offset(1f, 1f))
             )
-            Text(stringResource(getPrayTimeName(prayerKey)), fontSize = 36.sp, style = textStyle)
+            Text(stringResource(prayTime.stringRes), fontSize = 36.sp, style = textStyle)
             val cityName = cityName.collectAsState().value
             if (cityName != null) {
                 var visible by remember { mutableStateOf(false) }
@@ -121,4 +120,4 @@ private fun DrawBackground(
 
 @Preview
 @Composable
-private fun AthanActivityContentPreview() = AthanActivityContent(FAJR_KEY) {}
+private fun AthanActivityContentPreview() = AthanActivityContent(PrayTime.FAJR) {}

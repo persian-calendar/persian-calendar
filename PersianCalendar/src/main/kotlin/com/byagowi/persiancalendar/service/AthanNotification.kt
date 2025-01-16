@@ -17,14 +17,10 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
-import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.DHUHR_KEY
-import com.byagowi.persiancalendar.FAJR_KEY
-import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
-import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.athanVibration
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
@@ -38,11 +34,10 @@ import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.getAthanUri
-import com.byagowi.persiancalendar.utils.getFromStringId
-import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.startAthanActivity
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlin.random.Random
 
 class AthanNotification : Service() {
@@ -63,8 +58,10 @@ class AthanNotification : Service() {
 
         val notificationManager = getSystemService<NotificationManager>()
 
-        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
-        if (!notificationAthan) startAthanActivity(this, athanKey)
+        val prayTime = PrayTime.fromName(
+            intent.getStringExtra(KEY_EXTRA_PRAYER)
+        ).debugAssertNotNull ?: PrayTime.FAJR
+        if (!notificationAthan) startAthanActivity(this, prayTime)
 
         val soundUri = if (notificationAthan) getAthanUri(this) else null
         if (soundUri != null) runCatching {
@@ -85,7 +82,7 @@ class AthanNotification : Service() {
                 it.lightColor = Color.GREEN
                 if (athanVibration) it.vibrationPattern = LongArray(2) { 500 }
                 it.enableVibration(athanVibration)
-                it.setBypassDnd(athanKey == FAJR_KEY)
+                it.setBypassDnd(prayTime.isByPassDnd)
                 if (soundUri == null) it.setSound(null, null) else it.setSound(
                     soundUri, AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -99,36 +96,33 @@ class AthanNotification : Service() {
         }
 
         val cityName = cityName.value
-        val prayTimeName = getString(getPrayTimeName(athanKey))
+        val prayTimeName = getString(prayTime.stringRes)
         val title =
             if (cityName == null) prayTimeName
             else "$prayTimeName$spacedComma${getString(R.string.in_city_time, cityName)}"
 
         val prayTimes = coordinates.value?.calculatePrayTimes()
-        val subtitle = when (athanKey) {
-            FAJR_KEY -> listOf(R.string.sunrise)
-            DHUHR_KEY ->
-                if (calculationMethod.value.isJafari) listOf(R.string.sunset)
-                else listOf(R.string.asr, R.string.maghrib)
+        val subtitle = when (prayTime) {
+            PrayTime.FAJR -> listOf(PrayTime.SUNRISE)
+            PrayTime.DHUHR ->
+                if (calculationMethod.value.isJafari) listOf(PrayTime.SUNSET)
+                else listOf(PrayTime.ASR, PrayTime.MAGHRIB)
 
-            ASR_KEY -> listOf(R.string.maghrib)
-            MAGHRIB_KEY ->
-                if (calculationMethod.value.isJafari) listOf(R.string.midnight)
-                else listOf(R.string.isha, R.string.midnight)
+            PrayTime.ASR -> listOf(PrayTime.MAGHRIB)
+            PrayTime.MAGHRIB ->
+                if (calculationMethod.value.isJafari) listOf(PrayTime.MIDNIGHT)
+                else listOf(PrayTime.ISHA, PrayTime.MIDNIGHT)
 
-            ISHA_KEY -> listOf(R.string.midnight)
-            else -> listOf(R.string.midnight)
+            PrayTime.ISHA -> listOf(PrayTime.MIDNIGHT)
+            else -> listOf(PrayTime.MIDNIGHT)
         }.joinToString(" - ") {
-            "${getString(it)}: ${prayTimes?.getFromStringId(it)?.toFormattedString() ?: ""}"
+            "${getString(it.stringRes)}: ${prayTimes?.let(it::getClock)?.toFormattedString() ?: ""}"
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)
         notificationBuilder.setAutoCancel(true)
             .setWhen(System.currentTimeMillis())
-            .setSmallIcon(
-                if (athanKey in listOf(DHUHR_KEY, ASR_KEY)) R.drawable.brightness7
-                else R.drawable.brightness4
-            )
+            .setSmallIcon(prayTime.drawable)
             .setContentTitle(title)
             .setContentText(subtitle)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
@@ -137,7 +131,7 @@ class AthanNotification : Service() {
                     this, 0,
                     Intent(this, AthanActivity::class.java)
                         .setAction(CANCEL_ATHAN_NOTIFICATION)
-                        .putExtra(KEY_EXTRA_PRAYER, athanKey)
+                        .putExtra(KEY_EXTRA_PRAYER, prayTime)
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
                     PendingIntent.FLAG_UPDATE_CURRENT or
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0

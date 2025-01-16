@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
 import androidx.annotation.ColorInt
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
 import androidx.core.graphics.applyCanvas
@@ -17,11 +18,7 @@ import androidx.core.graphics.plus
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.graphics.xor
-import com.byagowi.persiancalendar.ASR_KEY
-import com.byagowi.persiancalendar.DHUHR_KEY
-import com.byagowi.persiancalendar.FAJR_KEY
-import com.byagowi.persiancalendar.ISHA_KEY
-import com.byagowi.persiancalendar.MAGHRIB_KEY
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.utils.rotateBy
 import com.byagowi.persiancalendar.ui.utils.toPath
 import com.byagowi.persiancalendar.ui.utils.translateBy
@@ -33,20 +30,13 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 class PatternDrawable(
-    prayerKey: String = listOf(FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY).random(),
-    preferredTintColor: Int? = null,
+    prayerKey: PrayTime = PrayTime.athans.random(),
+    preferredTintColor: Int? = prayerKey.tint.toArgb(),
     var rotationDegree: Float = 0f,
     private val darkBaseColor: Boolean = false,
     private val dp: Float,
 ) {
-    private val tintColor = preferredTintColor ?: when (prayerKey) {
-        FAJR_KEY -> 0xFF009788
-        DHUHR_KEY -> 0xFFF1A42A
-        ASR_KEY -> 0xFFF57C01
-        MAGHRIB_KEY -> 0xFF5E35B1
-        ISHA_KEY -> 0xFF283593
-        else -> 0xFF283593
-    }.toInt()
+    private val tintColor = preferredTintColor ?: prayerKey.tint.toArgb()
 
     private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)

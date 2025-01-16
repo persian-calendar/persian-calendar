@@ -4,6 +4,7 @@ import android.content.res.Resources
 import androidx.annotation.CheckResult
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -13,8 +14,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getFromStringId
-import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.calendar.AbstractDate
@@ -63,10 +62,11 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                 ).joinToString(spacedComma)
             }
             table {
+                val prayTimeList = PrayTime.allTimes(calculationMethod.value.isJafari)
                 thead {
                     tr {
                         th { +resources.getString(R.string.day) }
-                        getTimeNames().forEach { th { +resources.getString(it) } }
+                        prayTimeList.forEach { th { +resources.getString(it.stringRes) } }
                     }
                 }
                 tbody {
@@ -78,8 +78,8 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                                 ).toGregorianCalendar()
                             )
                             th { +formatNumber(day + 1) }
-                            getTimeNames().forEach {
-                                td { +prayTimes.getFromStringId(it).toBasicFormatString() }
+                            prayTimeList.forEach {
+                                td { +it.getClock(prayTimes).toBasicFormatString() }
                             }
                         }
                     }

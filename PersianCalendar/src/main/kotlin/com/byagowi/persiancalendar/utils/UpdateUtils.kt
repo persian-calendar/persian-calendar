@@ -28,7 +28,6 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.RequiresApi
-import androidx.annotation.StringRes
 import androidx.collection.IntIntPair
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
@@ -71,6 +70,7 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.clockIn24
@@ -185,18 +185,18 @@ fun update(context: Context, updateDate: Boolean) {
 
     val preferences = context.preferences
 
-    // region owghat calculations
+    // region upcoming pray time text
     val nowClock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
     val prayTimes = coordinates.value?.calculatePrayTimes()
 
-    @StringRes
-    val nextOwghatId = prayTimes?.getNextOwghatTimeId(nowClock)
-    val owghat = if (nextOwghatId == null) "" else buildString {
-        append(context.getString(nextOwghatId))
-        append(": ")
-        append(prayTimes.getFromStringId(nextOwghatId).toFormattedString())
-        if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
-    }
+    val owghat = prayTimes?.getNextPrayTime(nowClock)?.let {
+        buildString {
+            append(context.getString(it.stringRes))
+            append(": ")
+            append(it.getClock(prayTimes).toFormattedString())
+            if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
+        }
+    } ?: ""
     // endregion
 
     selectedWidgetTextColor = getWidgetTextColor(preferences)
@@ -243,24 +243,23 @@ fun update(context: Context, updateDate: Boolean) {
     updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, nowClock)
 }
 
-@StringRes
-private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
+private fun PrayTimes.getNextPrayTime(current: Clock): PrayTime {
     val clock = current.toHoursFraction()
     val isJafari = calculationMethod.value.isJafari
     return when {
-        fajr > clock -> R.string.fajr
-        sunrise > clock -> R.string.sunrise
-        dhuhr > clock -> R.string.dhuhr
+        fajr > clock -> PrayTime.FAJR
+        sunrise > clock -> PrayTime.SUNRISE
+        dhuhr > clock -> PrayTime.DHUHR
         // No need to show Asr for Jafari calculation methods
-        !isJafari && asr > clock -> R.string.asr
+        !isJafari && asr > clock -> PrayTime.ASR
         // Sunset and Maghrib are different only in Jafari, skip if isn't Jafari
-        isJafari && sunset > clock -> R.string.sunset
-        maghrib > clock -> R.string.maghrib
+        isJafari && sunset > clock -> PrayTime.SUNSET
+        maghrib > clock -> PrayTime.MAGHRIB
         // No need to show Isha for Jafari calculation methods
-        !isJafari && isha > clock -> R.string.isha
-        midnight > clock -> R.string.midnight
+        !isJafari && isha > clock -> PrayTime.ISHA
+        midnight > clock -> PrayTime.MIDNIGHT
         // TODO: this is today's, not tomorrow
-        else -> R.string.fajr
+        else -> PrayTime.FAJR
     }
 }
 
@@ -813,14 +812,14 @@ private fun create4x2RemoteViews(
         val nowMinutes = nowClock.toMinutes()
         val owghats = widget4x2TimesViewsIds.zip(
             timesToShow(nowMinutes, prayTimes)
-        ) { textHolderViewId, owghatStringId ->
-            val timeClock = prayTimes.getFromStringId(owghatStringId)
+        ) { textHolderViewId, prayTime ->
+            val timeClock = prayTime.getClock(prayTimes)
             remoteViews.setTextViewText(
-                textHolderViewId, context.getString(owghatStringId) + "\n" +
+                textHolderViewId, context.getString(prayTime.stringRes) + "\n" +
                         timeClock.toFormattedString(printAmPm = false)
             )
             remoteViews.setupForegroundTextColors(textHolderViewId)
-            Triple(textHolderViewId, owghatStringId, timeClock)
+            Triple(textHolderViewId, prayTime.stringRes, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
             timeClock.toMinutes() > nowMinutes
@@ -866,19 +865,18 @@ private fun create4x2RemoteViews(
 }
 
 private val timesToShowNotBetweenDhuhrAndIshaForJafari = listOf(
-    R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.maghrib, R.string.midnight
+    PrayTime.FAJR, PrayTime.SUNRISE, PrayTime.DHUHR, PrayTime.MAGHRIB, PrayTime.MIDNIGHT
 )
 
 private val timesToShowBetweenDhuhrAndIshaForJafari = listOf(
-    R.string.fajr, R.string.dhuhr, R.string.sunset, R.string.maghrib, R.string.midnight
+    PrayTime.FAJR, PrayTime.DHUHR, PrayTime.SUNSET, PrayTime.MAGHRIB, PrayTime.MIDNIGHT
 )
 
 private val timesToShowNotJafari = listOf(
-    R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha
+    PrayTime.FAJR, PrayTime.DHUHR, PrayTime.ASR, PrayTime.MAGHRIB, PrayTime.ISHA
 )
 
-@StringRes
-private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<Int> {
+private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<PrayTime> {
     return if (calculationMethod.value.isJafari) {
         if (
             nowMinutes < Clock.fromHoursFraction(prayTimes.dhuhr).toMinutes() ||
@@ -930,14 +928,14 @@ private fun updateNotification(
         timesToShow(nowMinutes, prayTimes)
     } else null
 
-    val nextTimeId = if (prayTimes == null || timesToShow == null) null else timesToShow
-        .map { it to prayTimes.getFromStringId(it) }
+    val nextPrayTime = if (prayTimes == null || timesToShow == null) null else timesToShow
+        .map { it to it.getClock(prayTimes) }
         .firstOrNull { (_, timeClock) -> timeClock.toMinutes() > nowMinutes }
         ?.first ?: timesToShow[0]
 
     val notificationData = NotificationData(
         title = title, subtitle = subtitle, jdn = jdn, date = date,
-        owghat = owghat, prayTimes = prayTimes, nextTimeId = nextTimeId,
+        owghat = owghat, prayTimes = prayTimes, nextPrayTime = nextPrayTime,
         timesToShow = timesToShow,
         isRtl = context.resources.isRtl,
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
@@ -971,8 +969,8 @@ private data class NotificationData(
     private val date: AbstractDate,
     private val owghat: String,
     private val prayTimes: PrayTimes?,
-    @StringRes private val nextTimeId: Int?,
-    @StringRes private val timesToShow: List<Int>?,
+    private val nextPrayTime: PrayTime?,
+    private val timesToShow: List<PrayTime>?,
     private val isRtl: Boolean,
     private val events: List<CalendarEvent<*>>,
     private val isTalkBackEnabled: Boolean,
@@ -1091,15 +1089,14 @@ private data class NotificationData(
                         )
                         if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
                             timesToShow,
-                        ) { (headViewId, timeViewId), timeId ->
-                            it.setTextViewText(headViewId, context.getString(timeId))
+                        ) { (headViewId, timeViewId), prayTime ->
+                            it.setTextViewText(headViewId, context.getString(prayTime.stringRes))
                             it.setTextViewText(
                                 timeViewId,
-                                prayTimes.getFromStringId(timeId)
-                                    .toFormattedString(printAmPm = false)
+                                prayTime.getClock(prayTimes).toFormattedString(printAmPm = false)
                             )
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                val alpha = if (timeId == nextTimeId) 1f else .6f
+                                val alpha = if (prayTime == nextPrayTime) 1f else .6f
                                 it.setAlpha(headViewId, alpha)
                                 it.setAlpha(timeViewId, alpha)
                             }
