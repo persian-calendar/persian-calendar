@@ -48,12 +48,14 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         val calculationMethod by calculationMethod.collectAsState()
-        val times = PrayTime.allTimes(calculationMethod.isJafari)
+        val isJafari = calculationMethod.isJafari
+        val times = PrayTime.allTimes(isJafari)
         val nextTimeColor = nextTimeColor()
-        val nextPrayTime = if (isToday) prayTimes.getNextTime(now, times, isExpanded) else null
+        val nextPrayTime = if (isToday) prayTimes.getNextTime(now, times, isExpanded, isJafari)
+        else null
         times.forEach { prayTime ->
             AnimatedVisibility(
-                visible = isExpanded || prayTime.alwaysShown,
+                visible = isExpanded || prayTime.isAlwaysShown(isJafari),
                 enter = fadeIn() + expandHorizontally(),
                 exit = fadeOut() + shrinkHorizontally(),
             ) {
@@ -78,13 +80,13 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
 }
 
 private fun PrayTimes.getNextTime(
-    now: Long, timeIds: List<PrayTime>, isExpanded: Boolean
+    now: Long, timeIds: List<PrayTime>, isExpanded: Boolean, isJafari: Boolean,
 ): PrayTime {
     val clock = Clock(Date(now).toGregorianCalendar()).toHoursFraction()
     return timeIds.firstOrNull {
-        (isExpanded || it.alwaysShown) && it.getFraction(this) > clock
+        (isExpanded || it.isAlwaysShown(isJafari)) && it.getFraction(this) > clock
     } ?: run {
         if (isExpanded) PrayTime.entries[0]
-        else PrayTime.entries.firstOrNull { it.alwaysShown } ?: PrayTime.FAJR
+        else PrayTime.entries.firstOrNull { it.isAlwaysShown(isJafari) } ?: PrayTime.FAJR
     }
 }

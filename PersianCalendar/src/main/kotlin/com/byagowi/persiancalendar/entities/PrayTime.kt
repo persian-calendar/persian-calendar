@@ -9,19 +9,15 @@ import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
 
-enum class PrayTime(
-    @StringRes val stringRes: Int,
-    val alwaysShown: Boolean = false,
-    val tint: Color = Color.Gray
-) {
+enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray) {
     // Don't ever change name of these, they are stored in preferences
     IMSAK(R.string.imsak),
-    FAJR(R.string.fajr, alwaysShown = true, tint = Color(0xFF009788)),
+    FAJR(R.string.fajr, tint = Color(0xFF009788)),
     SUNRISE(R.string.sunrise),
-    DHUHR(R.string.dhuhr, alwaysShown = true, tint = Color(0xFFF1A42A)),
+    DHUHR(R.string.dhuhr, tint = Color(0xFFF1A42A)),
     ASR(R.string.asr, tint = Color(0xFFF57C01)),
     SUNSET(R.string.sunset),
-    MAGHRIB(R.string.maghrib, alwaysShown = true, tint = Color(0xFF5E35B1)),
+    MAGHRIB(R.string.maghrib, tint = Color(0xFF5E35B1)),
     ISHA(R.string.isha, tint = Color(0xFF283593)),
     MIDNIGHT(R.string.midnight);
 
@@ -54,6 +50,16 @@ enum class PrayTime(
     }
 
     fun getClock(prayTimes: PrayTimes) = Clock.fromHoursFraction(getFraction(prayTimes))
+
+    fun isAlwaysShown(isJafari: Boolean): Boolean {
+        return when (this) {
+            FAJR, DHUHR, MAGHRIB -> true
+            else -> if (isJafari) false else when (this) {
+                ASR, ISHA -> true
+                else -> false
+            }
+        }
+    }
 
     companion object {
         // As SUNSET and MAGHRIB are the same in non Jafari methods
