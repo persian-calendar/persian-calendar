@@ -864,25 +864,13 @@ private fun create4x2RemoteViews(
     return remoteViews
 }
 
-private val timesToShowNotBetweenDhuhrAndIshaForJafari = listOf(
-    PrayTime.FAJR, PrayTime.SUNRISE, PrayTime.DHUHR, PrayTime.MAGHRIB, PrayTime.MIDNIGHT
-)
-
-private val timesToShowBetweenDhuhrAndIshaForJafari = listOf(
-    PrayTime.FAJR, PrayTime.DHUHR, PrayTime.SUNSET, PrayTime.MAGHRIB, PrayTime.MIDNIGHT
-)
-
-private val timesToShowNotJafari = listOf(
-    PrayTime.FAJR, PrayTime.DHUHR, PrayTime.ASR, PrayTime.MAGHRIB, PrayTime.ISHA
-)
-
 private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<PrayTime> {
     return if (calculationMethod.value.isJafari) {
-        if (
-            nowMinutes < Clock.fromHoursFraction(prayTimes.dhuhr).toMinutes() ||
-            nowMinutes > Clock.fromHoursFraction(prayTimes.isha).toMinutes()
-        ) timesToShowNotBetweenDhuhrAndIshaForJafari else timesToShowBetweenDhuhrAndIshaForJafari
-    } else timesToShowNotJafari
+        val dhuhr = Clock.fromHoursFraction(prayTimes.dhuhr).toMinutes()
+        val isha = Clock.fromHoursFraction(prayTimes.isha).toMinutes()
+        if (nowMinutes in dhuhr..isha) PrayTime.timesBetweenDhuhrAndIshaForJafari
+        else PrayTime.timesNotBetweenDhuhrAndIshaForJafari
+    } else PrayTime.timesNotJafari
 }
 
 private fun setEventsInWidget(

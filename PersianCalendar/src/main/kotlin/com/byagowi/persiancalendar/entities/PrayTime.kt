@@ -80,5 +80,10 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
         }
 
         val athans = listOf(FAJR, DHUHR, ASR, MAGHRIB, ISHA)
+
+        // 4x2 related times to show
+        val timesNotBetweenDhuhrAndIshaForJafari = listOf(FAJR, SUNRISE, DHUHR, MAGHRIB, MIDNIGHT)
+        val timesBetweenDhuhrAndIshaForJafari = listOf(FAJR, DHUHR, SUNSET, MAGHRIB, MIDNIGHT)
+        val timesNotJafari = listOf(FAJR, DHUHR, ASR, MAGHRIB, ISHA)
     }
 }
