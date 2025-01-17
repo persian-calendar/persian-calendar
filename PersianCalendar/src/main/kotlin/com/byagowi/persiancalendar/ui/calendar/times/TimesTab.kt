@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,6 +38,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
@@ -82,7 +84,12 @@ fun SharedTransitionScope.TimesTab(
         )
         Spacer(Modifier.height(bottomPadding))
     }
-    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    var isExpanded by rememberSaveable {
+        mutableStateOf(context.preferences.getBoolean(EXPANDED_TIME_STATE_KEY, false))
+    }
+    DisposableEffect(Unit) {
+        onDispose { context.preferences.edit { putBoolean(EXPANDED_TIME_STATE_KEY, isExpanded) } }
+    }
 
     val jdn by viewModel.selectedDay.collectAsState()
     val prayTimes = coordinates.calculatePrayTimes(jdn.toGregorianCalendar())

@@ -6,6 +6,7 @@ import android.os.Build
 const val LOG_TAG = "PersianCalendar"
 
 const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
+const val EXPANDED_TIME_STATE_KEY = "ExpandedTimeState"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"
 const val PREF_OTHER_CALENDARS_KEY = "otherCalendarTypes"
