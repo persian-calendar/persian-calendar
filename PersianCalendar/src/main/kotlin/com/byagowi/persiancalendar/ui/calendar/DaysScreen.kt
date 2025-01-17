@@ -112,7 +112,6 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -830,7 +829,6 @@ private fun DaysView(
 
                 // Enabled times indicator
                 getEnabledAlarms(context).takeIf { it.isNotEmpty() }?.let { enabledTimes ->
-                    val middayColor = Color(0xffbe923b)
                     val strokeWidth = with(density) { 1.dp.toPx() }
                     val size = 12
                     val centerOffset = with(density) {
@@ -855,9 +853,9 @@ private fun DaysView(
                                     .offset { position }
                                     .size(1.dp),
                             ) {
-                                if (offsetDay != 0) drawCircle(middayColor, circleRadius)
+                                if (offsetDay != 0) drawCircle(prayTime.tint, circleRadius)
                                 drawLine(
-                                    color = middayColor,
+                                    color = prayTime.tint,
                                     start = Offset(if (isRtl) this.size.width else 0f, 0f),
                                     end = Offset(
                                         directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
@@ -873,7 +871,7 @@ private fun DaysView(
                                 Modifier
                                     .offset { position - centerOffset }
                                     .size(size.dp),
-                                middayColor,
+                                prayTime.tint,
                             )
                         }
                     }

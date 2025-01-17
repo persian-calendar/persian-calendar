@@ -1065,7 +1065,10 @@ private data class NotificationData(
                         if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
                             timesToShow,
                         ) { (headViewId, timeViewId), prayTime ->
-                            it.setTextViewText(headViewId, context.getString(prayTime.stringRes))
+                            it.setTextViewText(
+                                headViewId,
+                                context.getString(prayTime.stringRes)
+                            )
                             it.setTextViewText(
                                 timeViewId,
                                 prayTime.getClock(prayTimes).toFormattedString(printAmPm = false)
