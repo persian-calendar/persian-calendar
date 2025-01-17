@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.entities
 
 import android.content.res.Resources
 import androidx.annotation.PluralsRes
+import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.amString
 import com.byagowi.persiancalendar.global.clockIn24
@@ -12,7 +13,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
 
-data class Clock(val hours: Int, val minutes: Int) {
+data class Clock @VisibleForTesting constructor(val hours: Int, val minutes: Int) {
     constructor(date: GregorianCalendar) :
             this(date[GregorianCalendar.HOUR_OF_DAY], date[GregorianCalendar.MINUTE])
 

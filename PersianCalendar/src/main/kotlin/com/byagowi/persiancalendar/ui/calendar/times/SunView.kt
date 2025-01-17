@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.MINUTES_PER_DAY
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
@@ -220,7 +221,7 @@ class SunView(context: Context) : View(context) {
         current = when {
             now <= sunrise -> now.safeDiv(sunrise) * .17f
             now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
-            else -> (now - sunset).safeDiv(fullDay - sunset) * .17f + .17f + .66f
+            else -> (now - sunset).safeDiv(MINUTES_PER_DAY - sunset) * .17f + .17f + .66f
         }
 
         val dayLength = Clock.fromMinutesCount((sunset - sunrise).toInt())
@@ -250,9 +251,5 @@ class SunView(context: Context) : View(context) {
     fun startAnimate() {
         initiate()
         animator.start()
-    }
-
-    companion object {
-        private val fullDay = Clock(24, 0).toMinutes().toFloat()
     }
 }
