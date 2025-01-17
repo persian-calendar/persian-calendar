@@ -38,7 +38,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) {
         (context.preferences.getString(PREF_ATHAN_ALARM, null) ?: "")
-            .splitFilterNotEmpty(",").toMutableStateList()
+            .splitFilterNotEmpty(",").mapNotNull(PrayTime::fromName).toMutableStateList()
     }
     AppDialog(
         onDismissRequest = onDismissRequest,
@@ -54,16 +54,15 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
         },
     ) {
         PrayTime.athans.forEach {
-            val key = it.name
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .clickable { if (key in alarms) alarms.remove(key) else alarms.add(key) }
+                    .clickable { if (it in alarms) alarms.remove(it) else alarms.add(it) }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     .height(SettingsItemHeight.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Checkbox(checked = key in alarms, onCheckedChange = null)
+                Checkbox(checked = it in alarms, onCheckedChange = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(stringResource(it.stringRes), Modifier.weight(1f, fill = true))
             }
