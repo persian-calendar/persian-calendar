@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.entities.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -124,7 +125,7 @@ fun scheduleAlarms(context: Context) {
             it[GregorianCalendar.MINUTE] = 0
             it[GregorianCalendar.SECOND] = 0
             it[GregorianCalendar.MILLISECOND] = 0
-            it.timeInMillis += (prayTime.getFraction(prayTimes) * ONE_HOUR_IN_MILLIS).roundToInt()
+            it.timeInMillis += (prayTimes[prayTime] * ONE_HOUR_IN_MILLIS).roundToInt()
         }.timeInMillis - athanGap, i)
     }
 }

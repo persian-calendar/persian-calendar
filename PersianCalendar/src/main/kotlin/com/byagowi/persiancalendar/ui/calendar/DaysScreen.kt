@@ -112,6 +112,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -848,7 +849,7 @@ private fun DaysView(
                             val tint = prayTime.tint.copy(alpha = AppBlendAlpha)
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (prayTime.getFraction(prayTimes) * cellHeightPx).roundToInt()
+                                (prayTimes[prayTime] * cellHeightPx).roundToInt()
                             )
                             Canvas(
                                 Modifier

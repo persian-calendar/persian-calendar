@@ -71,6 +71,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.entities.get
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.clockIn24
@@ -193,7 +194,7 @@ fun update(context: Context, updateDate: Boolean) {
         buildString {
             append(context.getString(it.stringRes))
             append(": ")
-            append(it.getClock(prayTimes).toFormattedString())
+            append(Clock(prayTimes[it]).toFormattedString())
             if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
         }
     } ?: ""
@@ -246,7 +247,7 @@ fun update(context: Context, updateDate: Boolean) {
 private fun PrayTimes.getNextPrayTime(clock: Clock): PrayTime {
     val isJafari = calculationMethod.value.isJafari
     val times = if (isJafari) PrayTime.jafariImportantTimes else PrayTime.nonJafariImportantTimes
-    return times.firstOrNull { it.getClock(this) > clock } ?: PrayTime.FAJR
+    return times.firstOrNull { Clock(this[it]) > clock } ?: PrayTime.FAJR
 }
 
 fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntPair? {
@@ -798,7 +799,7 @@ private fun create4x2RemoteViews(
         val owghats = widget4x2TimesViewsIds.zip(
             timesToShow(clock, prayTimes)
         ) { textHolderViewId, prayTime ->
-            val timeClock = prayTime.getClock(prayTimes)
+            val timeClock = Clock(prayTimes[prayTime])
             remoteViews.setTextViewText(
                 textHolderViewId, context.getString(prayTime.stringRes) + "\n" +
                         timeClock.toFormattedString(printAmPm = false)
@@ -900,7 +901,7 @@ private fun updateNotification(
     } else null
 
     val nextPrayTime = if (prayTimes == null || timesToShow == null) null else timesToShow
-        .map { it to it.getClock(prayTimes) }
+        .map { it to Clock(prayTimes[it]) }
         .firstOrNull { (_, timeClock) -> timeClock > clock }
         ?.first ?: timesToShow[0]
 
@@ -1067,7 +1068,7 @@ private data class NotificationData(
                             )
                             it.setTextViewText(
                                 timeViewId,
-                                prayTime.getClock(prayTimes).toFormattedString(printAmPm = false)
+                                Clock(prayTimes[prayTime]).toFormattedString(printAmPm = false)
                             )
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                                 val alpha = if (prayTime == nextPrayTime) 1f else .6f

@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.entities.get
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -84,7 +85,7 @@ fun SharedTransitionScope.Times(
                             )
                             Text(stringResource(prayTime.stringRes), color = textColor)
                             AnimatedContent(
-                                targetState = prayTime.getClock(prayTimes).toFormattedString(),
+                                targetState = Clock(prayTimes[prayTime]).toFormattedString(),
                                 label = "time",
                                 transitionSpec = appCrossfadeSpec,
                             ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
@@ -102,7 +103,7 @@ private fun PrayTimes.getNextTime(
 ): PrayTime {
     val clock = Clock(Date(now).toGregorianCalendar())
     return timeIds.firstOrNull {
-        (isExpanded || it.isAlwaysShown(isJafari)) && it.getClock(this) > clock
+        (isExpanded || it.isAlwaysShown(isJafari)) && Clock(this[it]) > clock
     } ?: run {
         if (isExpanded) PrayTime.entries[0]
         else PrayTime.entries.firstOrNull { it.isAlwaysShown(isJafari) } ?: PrayTime.FAJR

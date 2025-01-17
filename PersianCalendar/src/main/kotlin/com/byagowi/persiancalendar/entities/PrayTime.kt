@@ -38,22 +38,6 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
             else -> R.drawable.brightness4
         }
 
-    fun getFraction(prayTimes: PrayTimes): Double {
-        return when (this) {
-            IMSAK -> prayTimes.imsak
-            FAJR -> prayTimes.fajr
-            SUNRISE -> prayTimes.sunrise
-            DHUHR -> prayTimes.dhuhr
-            ASR -> prayTimes.asr
-            SUNSET -> prayTimes.sunset
-            MAGHRIB -> prayTimes.maghrib
-            ISHA -> prayTimes.isha
-            MIDNIGHT -> prayTimes.midnight
-        }
-    }
-
-    fun getClock(prayTimes: PrayTimes) = Clock(getFraction(prayTimes))
-
     // Used in times tab for items that are always shown
     fun isAlwaysShown(isJafari: Boolean): Boolean {
         return when (this) {
@@ -104,5 +88,19 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
         // 4x2 related times to show
         val timesNotBetweenDhuhrAndIshaForJafari = listOf(FAJR, SUNRISE, DHUHR, MAGHRIB, MIDNIGHT)
         val timesBetweenDhuhrAndIshaForJafari = listOf(FAJR, DHUHR, SUNSET, MAGHRIB, MIDNIGHT)
+    }
+}
+
+operator fun PrayTimes.get(prayTime: PrayTime): Double {
+    return when (prayTime) {
+        PrayTime.IMSAK -> imsak
+        PrayTime.FAJR -> fajr
+        PrayTime.SUNRISE -> sunrise
+        PrayTime.DHUHR -> dhuhr
+        PrayTime.ASR -> asr
+        PrayTime.SUNSET -> sunset
+        PrayTime.MAGHRIB -> maghrib
+        PrayTime.ISHA -> isha
+        PrayTime.MIDNIGHT -> midnight
     }
 }
