@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.content.Context
+import android.content.res.Configuration
 import android.provider.Settings
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
@@ -12,6 +13,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Jdn
 
@@ -71,4 +75,11 @@ const val SettingsItemHeight = SettingsHorizontalPaddingItem * 2
 const val AppBlendAlpha = .75f
 
 // analogous to compat's listPreferredItemPaddingLeft/Right, it's in .dp
-const val ItemWidth = 100f
+private const val ItemWidth = 100f
+
+@Composable
+fun itemWidth(width: Dp): Dp {
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    return if (isLandscape) ItemWidth.dp
+    else ((width.value - ItemWidth + 10) / 3).coerceIn(ItemWidth, ItemWidth * 2).dp
+}

@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -31,7 +32,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.nextTimeColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.ui.utils.itemWidth
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
@@ -39,40 +40,43 @@ import java.util.Date
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            // Make tab's footer moves smooth
-            .animateContentSize(),
-        horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        val calculationMethod by calculationMethod.collectAsState()
-        val isJafari = calculationMethod.isJafari
-        val times = PrayTime.allTimes(isJafari)
-        val nextTimeColor = nextTimeColor()
-        val nextPrayTime = if (isToday) prayTimes.getNextTime(now, times, isExpanded, isJafari)
-        else null
-        times.forEach { prayTime ->
-            AnimatedVisibility(
-                visible = isExpanded || prayTime.isAlwaysShown(isJafari),
-                enter = fadeIn() + expandHorizontally(),
-                exit = fadeOut() + shrinkHorizontally(),
-            ) {
-                Column(
-                    modifier = Modifier.defaultMinSize(minWidth = ItemWidth.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+    BoxWithConstraints {
+        val itemWidth = itemWidth(this.maxWidth)
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                // Make tab's footer moves smooth
+                .animateContentSize(),
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            val calculationMethod by calculationMethod.collectAsState()
+            val isJafari = calculationMethod.isJafari
+            val times = PrayTime.allTimes(isJafari)
+            val nextTimeColor = nextTimeColor()
+            val nextPrayTime = if (isToday) prayTimes.getNextTime(now, times, isExpanded, isJafari)
+            else null
+            times.forEach { prayTime ->
+                AnimatedVisibility(
+                    visible = isExpanded || prayTime.isAlwaysShown(isJafari),
+                    enter = fadeIn() + expandHorizontally(),
+                    exit = fadeOut() + shrinkHorizontally(),
                 ) {
-                    val textColor by animateColor(
-                        if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current
-                    )
-                    Text(stringResource(prayTime.stringRes), color = textColor)
-                    AnimatedContent(
-                        targetState = prayTime.getClock(prayTimes).toFormattedString(),
-                        label = "time",
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
-                    Spacer(Modifier.height(8.dp))
+                    Column(
+                        modifier = Modifier.defaultMinSize(minWidth = itemWidth),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        val textColor by animateColor(
+                            if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current
+                        )
+                        Text(stringResource(prayTime.stringRes), color = textColor)
+                        AnimatedContent(
+                            targetState = prayTime.getClock(prayTimes).toFormattedString(),
+                            label = "time",
+                            transitionSpec = appCrossfadeSpec,
+                        ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
+                        Spacer(Modifier.height(8.dp))
+                    }
                 }
             }
         }

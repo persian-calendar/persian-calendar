@@ -12,6 +12,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -58,7 +59,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
-import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.ui.utils.itemWidth
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -304,36 +305,39 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, context: Context): Pair<String, Lo
 
 @Composable
 private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
-    @OptIn(ExperimentalLayoutApi::class) FlowRow(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        calendarsToShow.forEach { calendar ->
-            val date = jdn.inCalendar(calendar)
-            Column(
-                modifier = Modifier.defaultMinSize(minWidth = ItemWidth.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                val clipboardManager = LocalClipboardManager.current
+    BoxWithConstraints {
+        val itemWidth = itemWidth(this.maxWidth)
+        @OptIn(ExperimentalLayoutApi::class) FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            calendarsToShow.forEach { calendar ->
+                val date = jdn.inCalendar(calendar)
                 Column(
+                    modifier = Modifier.defaultMinSize(minWidth = itemWidth),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .clickable(
-                            interactionSource = null,
-                            indication = ripple(bounded = false),
-                        ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
-                        .semantics { this.contentDescription = formatDate(date) },
                 ) {
-                    Text(
-                        formatNumber(date.dayOfMonth),
-                        style = MaterialTheme.typography.displayMedium,
-                        modifier = Modifier.animateContentSize(),
-                    )
-                    Text(date.monthName, modifier = Modifier.animateContentSize())
-                }
-                SelectionContainer {
-                    Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
+                    val clipboardManager = LocalClipboardManager.current
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        modifier = Modifier
+                            .clickable(
+                                interactionSource = null,
+                                indication = ripple(bounded = false),
+                            ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
+                            .semantics { this.contentDescription = formatDate(date) },
+                    ) {
+                        Text(
+                            formatNumber(date.dayOfMonth),
+                            style = MaterialTheme.typography.displayMedium,
+                            modifier = Modifier.animateContentSize(),
+                        )
+                        Text(date.monthName, modifier = Modifier.animateContentSize())
+                    }
+                    SelectionContainer {
+                        Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
+                    }
                 }
             }
         }
