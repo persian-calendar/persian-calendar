@@ -70,6 +70,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -524,7 +525,9 @@ private fun DaysView(
     screenWidth: Dp,
     modifier: Modifier = Modifier,
 ) {
-    val scale = remember { Animatable(1f) }
+    val scale = rememberSaveable(
+        saver = Saver(save = { it.value }, restore = { Animatable(it) })
+    ) { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
     var interaction by remember { mutableStateOf<Interaction?>(null) }
     Column(modifier.detectZoom(onZoom = {
@@ -536,7 +539,7 @@ private fun DaysView(
     }, onRelease = { if (interaction == Interaction.Zoom) interaction = null })) {
         val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
         val density = LocalDensity.current
-        val initialScroll = with(density) { (cellHeight * 7 - 16.dp).roundToPx() }
+        val initialScroll = with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
         val scrollState = rememberScrollState(initialScroll)
         val events = (startingDay..<startingDay + days).toList().map { jdn ->
             readEvents(jdn, calendarViewModel, deviceEvents)
