@@ -124,7 +124,7 @@ fun scheduleAlarms(context: Context) {
             it[GregorianCalendar.MINUTE] = 0
             it[GregorianCalendar.SECOND] = 0
             it[GregorianCalendar.MILLISECOND] = 0
-            it.timeInMillis += (prayTime.getFraction(prayTimes) * DAY_IN_MILLIS).roundToInt()
+            it.timeInMillis += (prayTime.getFraction(prayTimes) * ONE_HOUR_IN_MILLIS).roundToInt()
         }.timeInMillis - athanGap, i)
     }
 }
