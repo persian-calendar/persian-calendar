@@ -85,7 +85,7 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.ui.utils.shareText
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
+import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -544,10 +544,10 @@ private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, 
                     else viewModel.changeSecondTimeZone(zones[it])
                 },
                 label = {
-                    val minutes = zones[it].rawOffset / ONE_MINUTE_IN_MILLIS.toInt()
-                    val (h, m) = Clock.fromMinutesCount(abs(minutes))
-                    val sign = if (minutes < 0) "-" else "+"
-                    val offset = "%s%02d:%02d".format(Locale.ENGLISH, sign, h, m)
+                    val hoursFraction = zones[it].rawOffset / ONE_HOUR_IN_MILLIS.toDouble()
+                    val (h, m) = Clock(abs(hoursFraction)).toHoursAndMinutesPair()
+                    val sign = if (hoursFraction < 0) "-" else "+"
+                    val offset = sign + "%s%02d:%02d".format(Locale.ENGLISH, sign, h, m)
                     val id = zones[it].id.replace("_", " ").replace(Regex(".*/"), "")
                     "$id ($offset)"
                 },

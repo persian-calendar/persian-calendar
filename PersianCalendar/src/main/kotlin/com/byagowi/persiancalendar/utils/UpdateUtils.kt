@@ -186,10 +186,10 @@ fun update(context: Context, updateDate: Boolean) {
     val preferences = context.preferences
 
     // region upcoming pray time text
-    val nowClock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
+    val clock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
     val prayTimes = coordinates.value?.calculatePrayTimes()
 
-    val owghat = prayTimes?.getNextPrayTime(nowClock)?.let {
+    val owghat = prayTimes?.getNextPrayTime(clock)?.let {
         buildString {
             append(context.getString(it.stringRes))
             append(": ")
@@ -223,7 +223,7 @@ fun update(context: Context, updateDate: Boolean) {
             create2x2RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, owghat)
         }
         updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, _ ->
-            create4x2RemoteViews(context, width, height, jdn, date, nowClock, prayTimes)
+            create4x2RemoteViews(context, width, height, jdn, date, clock, prayTimes)
         }
         updateFromRemoteViews<WidgetSunView>(context, now) { width, height, _, _ ->
             createSunViewRemoteViews(context, width, height, prayTimes)
@@ -240,14 +240,13 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, nowClock)
+    updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
 }
 
-private fun PrayTimes.getNextPrayTime(current: Clock): PrayTime {
-    val clock = current.toHoursFraction()
+private fun PrayTimes.getNextPrayTime(clock: Clock): PrayTime {
     val isJafari = calculationMethod.value.isJafari
     val times = if (isJafari) PrayTime.jafariImportantTimes else PrayTime.nonJafariImportantTimes
-    return times.firstOrNull { it.getFraction(this) > clock } ?: PrayTime.FAJR
+    return times.firstOrNull { it.getClock(this) > clock } ?: PrayTime.FAJR
 }
 
 fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntPair? {
@@ -765,7 +764,7 @@ private val widget4x2TimesViewsIds = listOf(
 )
 
 private fun create4x2RemoteViews(
-    context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, nowClock: Clock,
+    context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, clock: Clock,
     prayTimes: PrayTimes?
 ): RemoteViews {
     val weekDayName = jdn.weekDayName
@@ -796,9 +795,8 @@ private fun create4x2RemoteViews(
 
     if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
-        val nowMinutes = nowClock.toMinutes()
         val owghats = widget4x2TimesViewsIds.zip(
-            timesToShow(nowMinutes, prayTimes)
+            timesToShow(clock, prayTimes)
         ) { textHolderViewId, prayTime ->
             val timeClock = prayTime.getClock(prayTimes)
             remoteViews.setTextViewText(
@@ -809,7 +807,7 @@ private fun create4x2RemoteViews(
             Triple(textHolderViewId, prayTime.stringRes, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
-            timeClock.toMinutes() > nowMinutes
+            timeClock > clock
         } ?: owghats[0]
 
         owghats.forEach { (viewId) ->
@@ -825,11 +823,11 @@ private fun create4x2RemoteViews(
             } else remoteViews.setupForegroundTextColors(viewId)
         }
 
-        val difference = timeClock.toMinutes() - nowClock.toMinutes()
+        val difference = timeClock - clock
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2, context.getString(
                 R.string.n_till,
-                Clock.fromMinutesCount(if (difference > 0) difference else difference + 60 * 24)
+                (if (difference.value < .0) difference + Clock(24.0) else difference)
                     .asRemainingTime(context.resources), context.getString(nextOwghatId)
             )
         )
@@ -851,12 +849,11 @@ private fun create4x2RemoteViews(
     return remoteViews
 }
 
-private fun timesToShow(nowMinutes: Int, prayTimes: PrayTimes): List<PrayTime> {
+private fun timesToShow(clock: Clock, prayTimes: PrayTimes): List<PrayTime> {
     return if (calculationMethod.value.isJafari) {
-        val dhuhr = Clock.fromHoursFraction(prayTimes.dhuhr).toMinutes()
-        val isha = Clock.fromHoursFraction(prayTimes.isha).toMinutes()
-        if (nowMinutes in dhuhr..isha) PrayTime.timesBetweenDhuhrAndIshaForJafari
-        else PrayTime.timesNotBetweenDhuhrAndIshaForJafari
+        if (clock.value in prayTimes.dhuhr..prayTimes.isha) {
+            PrayTime.timesBetweenDhuhrAndIshaForJafari
+        } else PrayTime.timesNotBetweenDhuhrAndIshaForJafari
     } else PrayTime.athans
 }
 
@@ -889,7 +886,7 @@ private var latestPostedNotification: NotificationData? = null
 
 private fun updateNotification(
     context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String,
-    prayTimes: PrayTimes?, nowClock: Clock,
+    prayTimes: PrayTimes?, clock: Clock,
 ) {
     if (!isNotifyDate.value) {
         val notificationManager = context.getSystemService<NotificationManager>()
@@ -898,14 +895,13 @@ private fun updateNotification(
         return
     }
 
-    val nowMinutes = nowClock.toMinutes()
     val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
-        timesToShow(nowMinutes, prayTimes)
+        timesToShow(clock, prayTimes)
     } else null
 
     val nextPrayTime = if (prayTimes == null || timesToShow == null) null else timesToShow
         .map { it to it.getClock(prayTimes) }
-        .firstOrNull { (_, timeClock) -> timeClock.toMinutes() > nowMinutes }
+        .firstOrNull { (_, timeClock) -> timeClock > clock }
         ?.first ?: timesToShow[0]
 
     val notificationData = NotificationData(

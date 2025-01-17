@@ -19,7 +19,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.utils.MINUTES_PER_DAY
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
@@ -213,29 +212,28 @@ class SunView(context: Context) : View(context) {
     fun initiate() {
         val prayTimes = prayTimes ?: return
 
-        val sunset = Clock.fromHoursFraction(prayTimes.sunset).toMinutes().toFloat()
-        val sunrise = Clock.fromHoursFraction(prayTimes.sunrise).toMinutes().toFloat()
-        val now = Clock(GregorianCalendar()).toMinutes().toFloat()
+        val sunset = prayTimes.sunset
+        val sunrise = prayTimes.sunrise
+        val now = Clock(GregorianCalendar()).value
 
-        fun Float.safeDiv(other: Float) = if (other == 0f) 0f else this / other
+        fun Double.safeDiv(other: Double): Float = if (other == .0) 0f else (this / other).toFloat()
         current = when {
             now <= sunrise -> now.safeDiv(sunrise) * .17f
             now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
-            else -> (now - sunset).safeDiv(MINUTES_PER_DAY - sunset) * .17f + .17f + .66f
+            else -> (now - sunset).safeDiv(24 - sunset) * .17f + .17f + .66f
         }
 
-        val dayLength = Clock.fromMinutesCount((sunset - sunrise).toInt())
-        val remaining = Clock.fromMinutesCount(
-            if (now > sunset || now < sunrise) 0 else (sunset - now).toInt()
-        )
+        val dayLength = Clock(sunset - sunrise)
         dayLengthString = context.getString(R.string.length_of_day) + spacedColon +
                 dayLength.asRemainingTime(resources, short = true)
-        remainingString = if (remaining.toMinutes() == 0) "" else
+
+        val remaining = if (now > sunset || now < sunrise) null else Clock(sunset - now)
+        remainingString = if (remaining == null) "" else
             context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(resources, short = true)
         // a11y
         contentDescription = context.getString(R.string.length_of_day) + spacedColon +
-                dayLength.asRemainingTime(resources) + if (remaining.toMinutes() == 0) "" else
+                dayLength.asRemainingTime(resources) + if (remaining == null) "" else
             ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(resources))
 

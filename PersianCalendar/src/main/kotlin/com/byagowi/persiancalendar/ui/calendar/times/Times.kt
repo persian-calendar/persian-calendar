@@ -86,9 +86,9 @@ fun Times(isExpanded: Boolean, prayTimes: PrayTimes, now: Long, isToday: Boolean
 private fun PrayTimes.getNextTime(
     now: Long, timeIds: List<PrayTime>, isExpanded: Boolean, isJafari: Boolean,
 ): PrayTime {
-    val clock = Clock(Date(now).toGregorianCalendar()).toHoursFraction()
+    val clock = Clock(Date(now).toGregorianCalendar())
     return timeIds.firstOrNull {
-        (isExpanded || it.isAlwaysShown(isJafari)) && it.getFraction(this) > clock
+        (isExpanded || it.isAlwaysShown(isJafari)) && it.getClock(this) > clock
     } ?: run {
         if (isExpanded) PrayTime.entries[0]
         else PrayTime.entries.firstOrNull { it.isAlwaysShown(isJafari) } ?: PrayTime.FAJR

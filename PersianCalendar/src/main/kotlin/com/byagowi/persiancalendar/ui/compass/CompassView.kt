@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.utils.MINUTES_PER_DAY
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
@@ -95,13 +94,13 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val observer = coordinates.value?.toObserver()
     private var astronomyState = observer?.let { AstronomyState(it, GregorianCalendar()) }
 
-    private var sunProgress = Clock(GregorianCalendar()).toMinutes() / MINUTES_PER_DAY.toFloat()
+    private var sunProgress = (Clock(GregorianCalendar()).value / 24).toFloat()
 
     private val enableShade = false
 
     fun setTime(time: GregorianCalendar) {
         astronomyState = observer?.let { AstronomyState(it, time) }
-        sunProgress = Clock(time).toMinutes() / MINUTES_PER_DAY.toFloat()
+        sunProgress = (Clock(time).value / 24).toFloat()
         invalidate()
     }
 

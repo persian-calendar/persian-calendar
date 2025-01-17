@@ -697,7 +697,7 @@ private fun DaysView(
                 val heightSizeReductionPx = with(density) { heightSizeReduction.toPx() }
                 val clockCache = remember {
                     lruCache(1024, create = { minutes: Int ->
-                        Clock.fromMinutesCount(minutes).toBasicFormatString()
+                        Clock(minutes / 60.0).toBasicFormatString()
                     })
                 }
 

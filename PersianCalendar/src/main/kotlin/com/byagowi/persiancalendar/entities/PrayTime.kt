@@ -52,7 +52,7 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
         }
     }
 
-    fun getClock(prayTimes: PrayTimes) = Clock.fromHoursFraction(getFraction(prayTimes))
+    fun getClock(prayTimes: PrayTimes) = Clock(getFraction(prayTimes))
 
     // Used in times tab for items that are always shown
     fun isAlwaysShown(isJafari: Boolean): Boolean {
