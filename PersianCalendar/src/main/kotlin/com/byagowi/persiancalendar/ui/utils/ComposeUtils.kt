@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.ui.utils
 import android.content.Context
 import android.content.res.Configuration
 import android.provider.Settings
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
@@ -58,6 +60,11 @@ fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
 val JdnSaver = Saver<MutableState<Jdn>, Long>(
     save = { it.value.value },
     restore = { mutableStateOf(Jdn(it)) }
+)
+
+val AnimatableFloatSaver = Saver<Animatable<Float, AnimationVector1D>, Float>(
+    save = { it.value },
+    restore = { Animatable(it) }
 )
 
 // When something needs to match with Material default theme corner sizes

@@ -70,7 +70,6 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -133,6 +132,7 @@ import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
+import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
@@ -525,9 +525,7 @@ private fun DaysView(
     screenWidth: Dp,
     modifier: Modifier = Modifier,
 ) {
-    val scale = rememberSaveable(
-        saver = Saver(save = { it.value }, restore = { Animatable(it) })
-    ) { Animatable(1f) }
+    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
     var interaction by remember { mutableStateOf<Interaction?>(null) }
     Column(modifier.detectZoom(onZoom = {
