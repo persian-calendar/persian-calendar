@@ -81,5 +81,5 @@ private const val ItemWidth = 100f
 fun itemWidth(width: Dp): Dp {
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     return if (isLandscape) ItemWidth.dp
-    else ((width.value - ItemWidth + 10) / 3).coerceIn(ItemWidth, ItemWidth * 2).dp
+    else ((width.value - ItemWidth + 8) / 3).coerceIn(ItemWidth, ItemWidth * 2).dp
 }
