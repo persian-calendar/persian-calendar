@@ -844,6 +844,7 @@ private fun DaysView(
                         val date = (startingDay + offsetDay).toGregorianCalendar()
                         val prayTimes = coordinates.calculatePrayTimes(date)
                         enabledTimes.forEach { prayTime ->
+                            val tint = prayTime.tint.copy(alpha = AppBlendAlpha)
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
                                 (prayTime.getFraction(prayTimes) * cellHeightPx).roundToInt()
@@ -853,9 +854,9 @@ private fun DaysView(
                                     .offset { position }
                                     .size(1.dp),
                             ) {
-                                if (offsetDay != 0) drawCircle(prayTime.tint, circleRadius)
+                                if (offsetDay != 0) drawCircle(tint, circleRadius)
                                 drawLine(
-                                    color = prayTime.tint,
+                                    color = tint,
                                     start = Offset(if (isRtl) this.size.width else 0f, 0f),
                                     end = Offset(
                                         directionSign * if (days == 1) oneDayTableWidthPx else cellWidthPx,
@@ -871,7 +872,7 @@ private fun DaysView(
                                 Modifier
                                     .offset { position - centerOffset }
                                     .size(size.dp),
-                                prayTime.tint,
+                                tint,
                             )
                         }
                     }
