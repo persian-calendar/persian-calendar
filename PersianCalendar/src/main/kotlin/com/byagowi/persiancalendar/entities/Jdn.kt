@@ -35,6 +35,8 @@ value class Jdn(val value: Long) {
         Calendar.NEPALI -> toNepaliDate()
     }
 
+    infix fun of(calendar: Calendar): AbstractDate = inCalendar(calendar)
+
     fun toIslamicDate() = IslamicDate(value)
     fun toCivilDate() = CivilDate(value)
     fun toPersianDate() = PersianDate(value)

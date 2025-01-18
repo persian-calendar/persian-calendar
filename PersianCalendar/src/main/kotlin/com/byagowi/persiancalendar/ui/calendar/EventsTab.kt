@@ -360,13 +360,7 @@ fun readEvents(
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
     val context = LocalContext.current
-    val events = (eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList()).sortedBy {
-        when {
-            it.isHoliday -> 0L
-            it !is CalendarEvent.DeviceCalendarEvent -> 1L
-            else -> it.start.timeInMillis
-        }
-    }
+    val events = sortEvents(eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList())
 
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
@@ -380,6 +374,16 @@ fun readEvents(
         }
     }
     return events
+}
+
+fun sortEvents(events: List<CalendarEvent<*>>): List<CalendarEvent<*>> {
+    return events.sortedBy {
+        when {
+            it.isHoliday -> 0L
+            it !is CalendarEvent.DeviceCalendarEvent -> 1L
+            else -> it.start.timeInMillis
+        }
+    }
 }
 
 class ViewEventContract : ActivityResultContract<Long, Void?>() {
