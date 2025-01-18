@@ -39,6 +39,7 @@ class WidgetMap : WidgetProvider()
 class WidgetMoon : WidgetProvider()
 class WidgetSunView : WidgetProvider()
 class WidgetMonthView : WidgetProvider()
+class WidgetSchedule : WidgetProvider()
 
 class AgeWidget : WidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {

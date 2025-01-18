@@ -64,6 +64,7 @@
     <string name="moon_in_scorpio">Moon is in Scorpio</string>
     <string name="events">Events</string>
     <string name="no_event">No event or appointment for this day</string>
+    <string name="nothing_scheduled">Nothing scheduled</string>
     <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
     <string name="ask_for_calendar_permission">"Would you like to enable your personal events from your device's calendar?"</string>
     <string name="sunrise_sun_view">Sunrise</string>

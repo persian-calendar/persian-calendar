@@ -299,6 +299,20 @@
                 android:value="com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActivity" />
         </receiver>
 
+        <receiver
+            android:name=".WidgetSchedule"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/schedule">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/schedule_widget" />
+        </receiver>
+
         <service
             android:name=".service.ApplicationService"
             android:enabled="true"
@@ -354,6 +368,10 @@
                 android:name="android.service.dream"
                 android:resource="@xml/dream" />
         </service>
+
+        <service
+            android:name=".utils.WidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
 

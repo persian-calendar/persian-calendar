@@ -17,10 +17,13 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.net.Uri
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import android.widget.RemoteViewsService
+import android.widget.RemoteViewsService.RemoteViewsFactory
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
@@ -38,6 +41,7 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.withClip
+import androidx.core.os.bundleOf
 import androidx.core.text.layoutDirection
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
@@ -63,6 +67,7 @@ import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.WidgetMap
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetMoon
+import com.byagowi.persiancalendar.WidgetSchedule
 import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
@@ -116,6 +121,7 @@ import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.min
 import kotlin.math.roundToInt
+
 
 private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
@@ -237,6 +243,9 @@ fun update(context: Context, updateDate: Boolean) {
         }
         updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _, _ ->
             createMoonRemoteViews(context, width, height)
+        }
+        updateFromRemoteViews<WidgetSchedule>(context, now) { width, height, hasSize, widgetId ->
+            createScheduleRemoteViews(context, width, height, hasSize, jdn, date, widgetId)
         }
     }
 
@@ -411,6 +420,130 @@ private fun createSunViewRemoteViews(
         context.launchAppPendingIntent()
     )
     return remoteViews
+}
+
+private fun createScheduleRemoteViews(
+    context: Context,
+    width: Int,
+    height: Int,
+    hasSize: Boolean,
+    today: Jdn,
+    date: AbstractDate,
+    widgetId: Int,
+): RemoteViews {
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_schedule)
+    remoteViews.setDirection(R.id.widget_schedule, context.resources)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        remoteViews.setImageViewResource(R.id.widget_background, R.drawable.widget_background)
+        remoteViews.setInt(
+            R.id.add_event, "setBackgroundResource", R.drawable.widget_add_event
+        )
+        remoteViews.setViewOutlinePreferredRadiusDimen(
+            R.id.widget_schedule,
+            android.R.dimen.system_app_widget_background_radius
+        )
+        remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
+        remoteViews.setOnClickPendingIntent(R.id.add_event, context.launchAppPendingIntent())
+        val adapterBuilder = RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(false)
+        repeat(10) {
+            val item = if (it % 2 == 0) {
+                val day = RemoteViews(context.packageName, R.layout.widget_schedule_day)
+                day.setTextViewText(R.id.widget_schedule_weekday_name, today.weekDayName)
+                day.setTextViewText(
+                    R.id.widget_schedule_day_of_month, formatNumber(date.dayOfMonth)
+                )
+                if (it == 0) {
+                    day.setInt(
+                        R.id.widget_schedule_weekday_name,
+                        "setBackgroundResource",
+                        R.drawable.widget_nothing_scheduled
+                    )
+                    day.setColorAttr(
+                        R.id.widget_schedule_weekday_name,
+                        "setTextColor",
+                        android.R.attr.colorAccent
+                    )
+                }
+                day
+            } else if (it == 1) {
+                val nothingScheduled =
+                    RemoteViews(context.packageName, R.layout.widget_schedule_nothing_scheduled)
+                nothingScheduled.setColorAttr(R.id.event_title, "setTextColor", android.R.attr.colorAccent)
+                nothingScheduled
+            } else {
+                val event = RemoteViews(context.packageName, R.layout.widget_schedule_event)
+                event.setColorInt(R.id.event_title, "setBackgroundColor", Color.RED, Color.RED)
+                event.setColorInt(R.id.event_title, "setTextColor", Color.WHITE, Color.WHITE)
+                event.setTextViewText(R.id.event_title, "Some event")
+                event.setViewOutlinePreferredRadius(
+                    R.id.event_title,
+                    12f,
+                    TypedValue.COMPLEX_UNIT_DIP
+                )
+                event.setBoolean(R.id.event_title, "setClipToOutline", true)
+                event
+            }
+            adapterBuilder.addItem(View.generateViewId().toLong(), item)
+        }
+//        remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterBuilder.build())
+
+        val svcIntent = Intent(context, WidgetService::class.java)
+        svcIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        svcIntent.setData(Uri.parse(svcIntent.toUri(Intent.URI_INTENT_SCHEME)))
+        remoteViews.setRemoteAdapter(R.id.widget_schedule_content, svcIntent)
+    } else {
+        val roundBackground = createRoundedBitmap(width, height, Color.WHITE, roundPixelSize)
+        remoteViews.setImageViewBitmap(R.id.widget_background, roundBackground)
+        remoteViews.setViewVisibility(R.id.add_event, View.GONE)
+    }
+    return remoteViews
+}
+
+class WidgetService : RemoteViewsService() {
+    override fun onGetViewFactory(intent: Intent): RemoteViewsFactory =
+        LoremViewsFactory(this.applicationContext, intent)
+}
+
+private val EXTRA_EVENT_ID = "event.WORD"
+
+class LoremViewsFactory(val context: Context, intent: Intent) : RemoteViewsFactory {
+    private val appWidgetId: Int = intent.getIntExtra(
+        AppWidgetManager.EXTRA_APPWIDGET_ID,
+        AppWidgetManager.INVALID_APPWIDGET_ID
+    )
+
+    override fun onCreate() = Unit
+    override fun onDestroy() = Unit
+    override fun getCount(): Int = items.size
+
+    override fun getViewAt(position: Int): RemoteViews {
+        val row = RemoteViews(context.packageName, R.layout.widget_schedule_event)
+        row.setTextViewText(R.id.event_title, items[position])
+        val i = Intent().putExtras(
+            bundleOf(
+                EXTRA_EVENT_ID to items[position],
+                AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId
+            )
+        )
+        row.setOnClickFillInIntent(android.R.id.text1, i)
+        return row
+    }
+
+    override fun getLoadingView(): RemoteViews? = null
+    override fun getViewTypeCount(): Int = 1
+    override fun getItemId(position: Int): Long = position.toLong()
+    override fun hasStableIds(): Boolean = true
+    override fun onDataSetChanged() = Unit
+
+    companion object {
+        private val items = listOf(
+            "lorem", "ipsum", "dolor",
+            "sit", "amet", "consectetuer", "adipiscing", "elit", "morbi",
+            "vel", "ligula", "vitae", "arcu", "aliquet", "mollis", "etiam",
+            "vel", "erat", "placerat", "ante", "porttitor", "sodales",
+            "pellentesque", "augue", "purus"
+        )
+    }
 }
 
 private fun createMonthViewRemoteViews(
