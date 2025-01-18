@@ -60,6 +60,7 @@
     <string name="libra">Libra</string>
     <string name="scorpio">Scorpio</string>
     <string name="sagittarius">Sagittarius</string>
+    <!-- https://en.wikipedia.org/wiki/Lunar_station#Arabic_manzil -->
     <string name="moon_in_scorpio">Moon is in Scorpio</string>
     <string name="events">Events</string>
     <string name="no_event">No event or appointment for this day</string>
