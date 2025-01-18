@@ -338,9 +338,8 @@ else language.value.dmy.format(
     formatNumber(date.year)
 )
 
-fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) = "%s/%s/%s".format(
-    formatNumber(year, digits), formatNumber(month, digits), formatNumber(dayOfMonth, digits)
-)
+fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) =
+    language.value.allNumericsDateFormat(year, month, dayOfMonth, digits)
 
 fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calendar): String {
     val mainCalendar = date.calendar

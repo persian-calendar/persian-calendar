@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import com.byagowi.persiancalendar.utils.logException
@@ -365,6 +366,39 @@ enum class Language(val code: String, val nativeName: String) {
         EN_US, EN_IR -> "Enable vibrator in the beginning of athan"
         FA, FA_AF -> "فعال‌سازی لرزش در ابتدای پخش اذان"
         else -> null
+    }
+
+    // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
+    fun allNumericsDateFormat(year: Int, month: Int, dayOfMonth: Int, digits: CharArray): String {
+        val sep = when (this) {
+            PS, NE -> '-'
+            KMR, RU, TR -> '.'
+            else -> '/'
+        }
+        val needsZeroPad = when (this) {
+            FR, IT, NE, PT, RU, TR, KMR -> true
+            else -> false
+        }
+        val format = when (this) {
+            // Year major
+            FA, AZB, GLK, FA_AF, EN_IR, PS, JA, NE, ZH_CN -> "%1\$s$sep%2\$s$sep%3\$s"
+            // Month major
+            EN_US -> "%2\$s$sep%3\$s$sep%1\$s"
+            // Day major, most likely everything else goes here but check via JS'
+            // new Date().toLocaleDateString('XX')
+            AR, CKB, ES, FR, IT, KMR, PT, RU, TG, TR, UR -> "%3\$s$sep%2\$s$sep%1\$s"
+        }
+        return format.format(
+            formatNumber(year, digits),
+            formatNumber(
+                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it },
+                digits
+            ),
+            formatNumber(
+                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it },
+                digits
+            )
+        )
     }
 
     companion object {
