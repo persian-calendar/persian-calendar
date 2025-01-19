@@ -91,8 +91,8 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
     }
 }
 
-operator fun PrayTimes.get(prayTime: PrayTime): Double {
-    return when (prayTime) {
+operator fun PrayTimes.get(prayTime: PrayTime): Clock {
+    val value = when (prayTime) {
         PrayTime.IMSAK -> imsak
         PrayTime.FAJR -> fajr
         PrayTime.SUNRISE -> sunrise
@@ -103,4 +103,5 @@ operator fun PrayTimes.get(prayTime: PrayTime): Double {
         PrayTime.ISHA -> isha
         PrayTime.MIDNIGHT -> midnight
     }
+    return Clock(value)
 }

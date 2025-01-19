@@ -194,7 +194,7 @@ fun update(context: Context, updateDate: Boolean) {
         buildString {
             append(context.getString(it.stringRes))
             append(": ")
-            append(Clock(prayTimes[it]).toFormattedString())
+            append(prayTimes[it].toFormattedString())
             if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
         }
     } ?: ""
@@ -247,7 +247,7 @@ fun update(context: Context, updateDate: Boolean) {
 private fun PrayTimes.getNextPrayTime(clock: Clock): PrayTime {
     val isJafari = calculationMethod.value.isJafari
     val times = if (isJafari) PrayTime.jafariImportantTimes else PrayTime.nonJafariImportantTimes
-    return times.firstOrNull { Clock(this[it]) > clock } ?: PrayTime.FAJR
+    return times.firstOrNull { this[it] > clock } ?: PrayTime.FAJR
 }
 
 fun AppWidgetManager.getWidgetSize(resources: Resources, widgetId: Int): IntIntPair? {
@@ -799,7 +799,7 @@ private fun create4x2RemoteViews(
         val owghats = widget4x2TimesViewsIds.zip(
             timesToShow(clock, prayTimes)
         ) { textHolderViewId, prayTime ->
-            val timeClock = Clock(prayTimes[prayTime])
+            val timeClock = prayTimes[prayTime]
             remoteViews.setTextViewText(
                 textHolderViewId, context.getString(prayTime.stringRes) + "\n" +
                         timeClock.toFormattedString(printAmPm = false)
@@ -901,7 +901,7 @@ private fun updateNotification(
     } else null
 
     val nextPrayTime = if (prayTimes == null || timesToShow == null) null else timesToShow
-        .map { it to Clock(prayTimes[it]) }
+        .map { it to prayTimes[it] }
         .firstOrNull { (_, timeClock) -> timeClock > clock }
         ?.first ?: timesToShow[0]
 
@@ -1068,7 +1068,7 @@ private data class NotificationData(
                             )
                             it.setTextViewText(
                                 timeViewId,
-                                Clock(prayTimes[prayTime]).toFormattedString(printAmPm = false)
+                                prayTimes[prayTime].toFormattedString(printAmPm = false)
                             )
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                                 val alpha = if (prayTime == nextPrayTime) 1f else .6f

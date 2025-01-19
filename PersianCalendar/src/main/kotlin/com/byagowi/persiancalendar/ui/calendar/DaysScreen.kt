@@ -849,7 +849,7 @@ private fun DaysView(
                             val tint = prayTime.tint.copy(alpha = AppBlendAlpha)
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (prayTimes[prayTime] * cellHeightPx).roundToInt()
+                                (prayTimes[prayTime].value * cellHeightPx).roundToInt()
                             )
                             Canvas(
                                 Modifier

@@ -17,6 +17,7 @@ import java.util.GregorianCalendar
 import java.util.Locale
 import kotlin.math.floor
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 @JvmInline
 value class Clock(val value: Double/*A real number, usually [0-24), portion of a day*/) {
@@ -26,6 +27,8 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
                 date[GregorianCalendar.SECOND] * ONE_SECOND_IN_MILLIS +
                 date[GregorianCalendar.MILLISECOND]) / ONE_HOUR_IN_MILLIS.toDouble()
     )
+
+    fun toMillis() = (value * ONE_HOUR_IN_MILLIS).roundToLong()
 
     fun toHoursAndMinutesPair(): IntIntPair {
         val rounded = (value * 60).roundToInt()

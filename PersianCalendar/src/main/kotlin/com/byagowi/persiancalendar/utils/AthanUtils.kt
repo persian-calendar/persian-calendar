@@ -42,7 +42,6 @@ import com.byagowi.persiancalendar.variants.debugLog
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 // https://stackoverflow.com/a/69505596
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
@@ -125,7 +124,7 @@ fun scheduleAlarms(context: Context) {
             it[GregorianCalendar.MINUTE] = 0
             it[GregorianCalendar.SECOND] = 0
             it[GregorianCalendar.MILLISECOND] = 0
-            it.timeInMillis += (prayTimes[prayTime] * ONE_HOUR_IN_MILLIS).roundToInt()
+            it.timeInMillis += prayTimes[prayTime].toMillis()
         }.timeInMillis - athanGap, i)
     }
 }

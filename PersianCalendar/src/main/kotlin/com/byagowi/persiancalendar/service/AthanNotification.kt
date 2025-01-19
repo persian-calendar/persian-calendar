@@ -20,7 +20,6 @@ import androidx.core.os.postDelayed
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.get
 import com.byagowi.persiancalendar.global.athanVibration
@@ -106,9 +105,7 @@ class AthanNotification : Service() {
         val prayTimes = coordinates.value?.calculatePrayTimes()
         val isJafari = calculationMethod.value.isJafari
         val subtitle = prayTime.upcomingTimes(isJafari).joinToString(" - ") {
-            "${getString(it.stringRes)}: ${
-                prayTimes?.let { times -> Clock(times[it]) }?.toFormattedString() ?: ""
-            }"
+            "${getString(it.stringRes)}: ${prayTimes?.get(it)?.toFormattedString() ?: ""}"
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)

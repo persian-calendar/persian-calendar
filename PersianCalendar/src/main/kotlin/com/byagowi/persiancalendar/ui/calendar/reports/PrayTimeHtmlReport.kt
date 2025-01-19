@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar.reports
 import android.content.res.Resources
 import androidx.annotation.CheckResult
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.get
@@ -81,7 +80,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                             )
                             th { +formatNumber(day + 1) }
                             prayTimeList.forEach {
-                                td { +Clock(prayTimes[it]).toBasicFormatString() }
+                                td { +prayTimes[it].toBasicFormatString() }
                             }
                         }
                     }

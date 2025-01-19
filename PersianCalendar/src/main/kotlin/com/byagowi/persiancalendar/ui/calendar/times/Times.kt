@@ -85,7 +85,7 @@ fun SharedTransitionScope.Times(
                             )
                             Text(stringResource(prayTime.stringRes), color = textColor)
                             AnimatedContent(
-                                targetState = Clock(prayTimes[prayTime]).toFormattedString(),
+                                targetState = prayTimes[prayTime].toFormattedString(),
                                 label = "time",
                                 transitionSpec = appCrossfadeSpec,
                             ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
@@ -103,7 +103,7 @@ private fun PrayTimes.getNextTime(
 ): PrayTime {
     val clock = Clock(Date(now).toGregorianCalendar())
     return timeIds.firstOrNull {
-        (isExpanded || it.isAlwaysShown(isJafari)) && Clock(this[it]) > clock
+        (isExpanded || it.isAlwaysShown(isJafari)) && this[it] > clock
     } ?: run {
         if (isExpanded) PrayTime.entries[0]
         else PrayTime.entries.firstOrNull { it.isAlwaysShown(isJafari) } ?: PrayTime.FAJR
