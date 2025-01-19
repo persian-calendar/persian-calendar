@@ -31,7 +31,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.entities.get
+import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.service.AlarmWorker

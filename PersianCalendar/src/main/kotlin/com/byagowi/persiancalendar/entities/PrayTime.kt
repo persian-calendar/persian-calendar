@@ -88,20 +88,20 @@ enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray)
         // 4x2 related times to show
         val timesNotBetweenDhuhrAndIshaForJafari = listOf(FAJR, SUNRISE, DHUHR, MAGHRIB, MIDNIGHT)
         val timesBetweenDhuhrAndIshaForJafari = listOf(FAJR, DHUHR, SUNSET, MAGHRIB, MIDNIGHT)
-    }
-}
 
-operator fun PrayTimes.get(prayTime: PrayTime): Clock {
-    val value = when (prayTime) {
-        PrayTime.IMSAK -> imsak
-        PrayTime.FAJR -> fajr
-        PrayTime.SUNRISE -> sunrise
-        PrayTime.DHUHR -> dhuhr
-        PrayTime.ASR -> asr
-        PrayTime.SUNSET -> sunset
-        PrayTime.MAGHRIB -> maghrib
-        PrayTime.ISHA -> isha
-        PrayTime.MIDNIGHT -> midnight
+        operator fun PrayTimes.get(prayTime: PrayTime): Clock {
+            val value = when (prayTime) {
+                IMSAK -> imsak
+                FAJR -> fajr
+                SUNRISE -> sunrise
+                DHUHR -> dhuhr
+                ASR -> asr
+                SUNSET -> sunset
+                MAGHRIB -> maghrib
+                ISHA -> isha
+                MIDNIGHT -> midnight
+            }
+            return Clock(value)
+        }
     }
-    return Clock(value)
 }

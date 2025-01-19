@@ -112,7 +112,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.get
+import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled

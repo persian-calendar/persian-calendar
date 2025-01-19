@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.entities.get
+import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
