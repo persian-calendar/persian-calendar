@@ -32,9 +32,10 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean = false): String? {
     if (shiftWorkRecurs && abbreviated && (type == "r" || type == shiftWorkTitles["r"])) return null
 
     val title = shiftWorkTitles[type] ?: type
-    return if (abbreviated && title.isNotEmpty()) title.split("/").map { it.trim() }
-        .filter { it.isNotEmpty() }.joinToString("/") { it.substring(0, 1) }
-    else title
+    return if (abbreviated && title.isNotEmpty() && title.length > 2) {
+        title.split("/").map { it.trim() }.filter { it.isNotEmpty() }
+            .joinToString("/") { it.substring(0, 1) }
+    } else title
 }
 
 @Composable
