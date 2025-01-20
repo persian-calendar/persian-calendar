@@ -1,14 +1,9 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.expandHorizontally
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -65,32 +60,27 @@ fun SharedTransitionScope.Times(
                     if (isToday) prayTimes.getNextTime(now, times, isExpanded, isJafari)
                     else null
                 times.forEach { prayTime ->
-                    AnimatedVisibility(
-                        modifier = Modifier.sharedBounds(
-                            rememberSharedContentState(
-                                key = SHARED_CONTENT_KEY_TIME + prayTime.name
+                    if (isExpandedState || prayTime.isAlwaysShown(isJafari)) Column(
+                        modifier = Modifier
+                            .defaultMinSize(minWidth = itemWidth)
+                            .sharedBounds(
+                                rememberSharedContentState(
+                                    key = SHARED_CONTENT_KEY_TIME + prayTime.name
+                                ),
+                                animatedVisibilityScope = this@AnimatedContent,
                             ),
-                            animatedVisibilityScope = this@AnimatedContent,
-                        ),
-                        visible = isExpandedState || prayTime.isAlwaysShown(isJafari),
-                        enter = fadeIn() + expandHorizontally(),
-                        exit = fadeOut() + shrinkHorizontally(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Column(
-                            modifier = Modifier.defaultMinSize(minWidth = itemWidth),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            val textColor by animateColor(
-                                if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current
-                            )
-                            Text(stringResource(prayTime.stringRes), color = textColor)
-                            AnimatedContent(
-                                targetState = prayTimes[prayTime].toFormattedString(),
-                                label = "time",
-                                transitionSpec = appCrossfadeSpec,
-                            ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
-                            Spacer(Modifier.height(8.dp))
-                        }
+                        val textColor by animateColor(
+                            if (nextPrayTime == prayTime) nextTimeColor else LocalContentColor.current
+                        )
+                        Text(stringResource(prayTime.stringRes), color = textColor)
+                        AnimatedContent(
+                            targetState = prayTimes[prayTime].toFormattedString(),
+                            label = "time",
+                            transitionSpec = appCrossfadeSpec,
+                        ) { state -> Text(state, color = textColor.copy(AppBlendAlpha)) }
+                        Spacer(Modifier.height(8.dp))
                     }
                 }
             }
