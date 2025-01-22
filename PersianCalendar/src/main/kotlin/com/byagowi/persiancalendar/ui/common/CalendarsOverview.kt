@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.content.Context
-import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -40,7 +39,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -310,9 +308,6 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalArrangement = Arrangement.SpaceEvenly,
-        maxItemsInEachRow = if (
-            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-        ) Int.MAX_VALUE else 3
     ) {
         calendarsToShow.forEach { calendar ->
             val date = jdn.inCalendar(calendar)
