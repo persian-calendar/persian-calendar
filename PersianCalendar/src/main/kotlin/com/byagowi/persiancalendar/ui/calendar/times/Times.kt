@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -44,10 +43,7 @@ fun SharedTransitionScope.Times(
 ) {
     AnimatedContent(isExpanded) { isExpandedState ->
         FlowRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                // Make tab's footer moves smooth
-                .animateContentSize(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalArrangement = Arrangement.SpaceEvenly,
             maxItemsInEachRow = if (
