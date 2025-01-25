@@ -5,6 +5,8 @@ import android.os.PowerManager
 import android.view.View
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.snap
@@ -194,8 +196,12 @@ private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
 val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { crossfadeSpec }
 
 // This works better than (Enter|Exit)Transition.None in days screen switches for some reason
-private val noTransition = fadeIn(snap()) togetherWith fadeOut(snap())
-val noTransitionSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { noTransition }
+private val noEnterTransition = fadeIn(snap())
+val noEnterTransitionSpec: Any.() -> EnterTransition = { noEnterTransition }
+private val noExitTransition = fadeOut(snap())
+val noExitTransitionSpec: Any.() -> ExitTransition = { noExitTransition }
+private val noTransition = noEnterTransition togetherWith noExitTransition
+val noTransitionSpec: Any.() -> ContentTransform = { noTransition }
 
 @Composable
 fun isDynamicGrayscale(): Boolean {

@@ -116,6 +116,8 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.theme.noEnterTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.noExitTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
@@ -177,7 +179,14 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
                 }
             },
         ) {
-            NavHost(navController = navController, startDestination = startDestination) {
+            NavHost(
+                navController = navController,
+                startDestination = startDestination,
+                enterTransition = noEnterTransitionSpec,
+                exitTransition = noExitTransitionSpec,
+                popEnterTransition = noEnterTransitionSpec,
+                popExitTransition = noExitTransitionSpec,
+            ) {
 
                 fun navigateToSettingsLocationTab() {
                     navController.graph.findNode(settingsRoute)?.let { destination ->
