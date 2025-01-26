@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.AutoSize
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,7 +27,6 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -250,7 +251,15 @@ private fun getItemIndexForOffset(
 @Composable
 private fun Label(text: String, modifier: Modifier) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
-        Text(maxLines = 1, text = text)
+        BasicText(
+            text = text,
+            maxLines = 1,
+            softWrap = false,
+            autoSize = AutoSize.StepBased(
+                minFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                maxFontSize = LocalTextStyle.current.fontSize,
+            )
+        )
     }
 }
 

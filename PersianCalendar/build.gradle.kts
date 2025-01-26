@@ -125,6 +125,8 @@ dependencies {
 
     val composeBom = platform(libs.compose.bom)
     implementation(composeBom)
+    // Temporarily till bom reaches to it
+    implementation("androidx.compose.foundation:foundation-layout:1.8.0-alpha07")
     androidTestImplementation(composeBom)
     implementation(libs.compose.activity)
     implementation(libs.compose.ui)
