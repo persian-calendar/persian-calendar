@@ -131,7 +131,6 @@ fun SharedTransitionScope.CompassScreen(
             isTimeShiftAnimate = false
         }
     }
-    val preferences = remember { context.preferences }
     val cityName by cityName.collectAsState()
     val coordinates by coordinates.collectAsState()
     val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
@@ -208,10 +207,14 @@ fun SharedTransitionScope.CompassScreen(
                         } else isTimeShiftAnimate = true
                     }
                     var showTrueNorth by rememberSaveable {
-                        mutableStateOf(preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false))
+                        mutableStateOf(
+                            context.preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
+                        )
                     }
                     var showQibla by rememberSaveable {
-                        mutableStateOf(preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
+                        mutableStateOf(
+                            context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
+                        )
                     }
                     if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu(
                         animatedContentScope
@@ -227,7 +230,7 @@ fun SharedTransitionScope.CompassScreen(
                             showQibla = it
                             closeMenu()
                             compassView?.isShowQibla = it
-                            preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
+                            context.preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
                         if (BuildConfig.DEVELOPMENT) {
                             AppDropdownMenuItem({ Text("Do a rotation") }) {
