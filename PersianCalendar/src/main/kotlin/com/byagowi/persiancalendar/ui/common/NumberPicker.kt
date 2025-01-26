@@ -42,7 +42,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.semantics.invisibleToUser
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -141,7 +141,7 @@ fun NumberPicker(
                     text = label(range.first + indexOfElement - 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics { this.invisibleToUser() }
+                        .semantics { this.hideFromAccessibility() }
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
@@ -218,7 +218,7 @@ fun NumberPicker(
                     text = label(range.first + indexOfElement + 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics { this.invisibleToUser() }
+                        .semantics { this.hideFromAccessibility() }
                         .offset(y = halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
