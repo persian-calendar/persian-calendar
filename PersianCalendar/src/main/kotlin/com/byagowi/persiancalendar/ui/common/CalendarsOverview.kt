@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.AutoSize
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -131,13 +133,18 @@ fun CalendarsOverview(
         }
         AnimatedVisibility(visible = equinox != null) {
             SelectionContainer {
-                Text(
+                BasicText(
                     equinox ?: "",
-                    textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 4.dp)
+                        .padding(horizontal = 24.dp, vertical = 4.dp),
+                    maxLines = 1,
+                    softWrap = false,
+                    autoSize = AutoSize.StepBased(
+                        minFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                        maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    ),
                 )
             }
         }
@@ -151,7 +158,7 @@ fun CalendarsOverview(
                 contentAlignment = Alignment.Center,
             ) {
                 SelectionContainer {
-                    Text(
+                    BasicText(
                         listOf(
                             stringResource(R.string.days_distance),
                             spacedColon,
@@ -159,6 +166,12 @@ fun CalendarsOverview(
                         ).joinToString(""),
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.animateContentSize(),
+                        maxLines = 1,
+                        softWrap = false,
+                        autoSize = AutoSize.StepBased(
+                            minFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        ),
                     )
                 }
             }
@@ -254,27 +267,59 @@ fun CalendarsOverview(
         }
 
         AnimatedVisibility(isExpanded) {
-            SelectionContainer {
-                val startOfYearText = stringResource(
-                    R.string.start_of_year_diff,
-                    formatNumber(jdn - startOfYearJdn + 1),
-                    formatNumber(currentWeek),
-                    formatNumber(date.month)
-                )
-                val endOfYearText = stringResource(
-                    R.string.end_of_year_diff,
-                    formatNumber(endOfYearJdn - jdn),
-                    formatNumber(weeksCount - currentWeek),
-                    formatNumber(12 - date.month)
-                )
-                Text(
-                    "$startOfYearText\n$endOfYearText",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 4.dp),
-                )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp, top = 4.dp)
+                    .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center,
+            ) {
+                SelectionContainer {
+                    BasicText(
+                        stringResource(
+                            R.string.start_of_year_diff,
+                            formatNumber(jdn - startOfYearJdn + 1),
+                            formatNumber(currentWeek),
+                            formatNumber(date.month)
+                        ),
+                        modifier = Modifier.animateContentSize(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        softWrap = false,
+                        autoSize = AutoSize.StepBased(
+                            minFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        ),
+                    )
+                }
+            }
+        }
+        AnimatedVisibility(isExpanded) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp)
+                    .align(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center,
+            ) {
+                SelectionContainer {
+                    BasicText(
+                        stringResource(
+                            R.string.end_of_year_diff,
+                            formatNumber(endOfYearJdn - jdn),
+                            formatNumber(weeksCount - currentWeek),
+                            formatNumber(12 - date.month)
+                        ),
+                        modifier = Modifier.animateContentSize(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1,
+                        softWrap = false,
+                        autoSize = AutoSize.StepBased(
+                            minFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                            maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        ),
+                    )
+                }
             }
         }
 
