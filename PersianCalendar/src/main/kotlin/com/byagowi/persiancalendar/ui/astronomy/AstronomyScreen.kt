@@ -25,8 +25,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.AutoSize
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -480,7 +480,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         softWrap = false,
-                        autoSize = AutoSize.StepBased(
+                        autoSize = TextAutoSize.StepBased(
                             minFontSize = 9.sp,
                             maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
                         ),
@@ -602,7 +602,7 @@ private fun Cell(modifier: Modifier, color: Color, label: String, value: String)
                 modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                 maxLines = 1,
                 softWrap = false,
-                autoSize = AutoSize.StepBased(
+                autoSize = TextAutoSize.StepBased(
                     minFontSize = 9.sp,
                     maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
                 ),

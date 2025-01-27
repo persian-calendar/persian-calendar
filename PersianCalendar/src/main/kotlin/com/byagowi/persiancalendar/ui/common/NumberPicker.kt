@@ -18,11 +18,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.AutoSize
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -255,7 +255,7 @@ private fun Label(text: String, modifier: Modifier) {
             text = text,
             maxLines = 1,
             softWrap = false,
-            autoSize = AutoSize.StepBased(
+            autoSize = TextAutoSize.StepBased(
                 minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                 maxFontSize = LocalTextStyle.current.fontSize,
             )

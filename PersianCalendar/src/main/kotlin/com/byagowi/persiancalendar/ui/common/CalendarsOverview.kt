@@ -22,8 +22,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.AutoSize
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -141,7 +141,7 @@ fun CalendarsOverview(
                         .padding(horizontal = 24.dp, vertical = 4.dp),
                     maxLines = 1,
                     softWrap = false,
-                    autoSize = AutoSize.StepBased(
+                    autoSize = TextAutoSize.StepBased(
                         minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                         maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     ),
@@ -168,7 +168,7 @@ fun CalendarsOverview(
                         modifier = Modifier.animateContentSize(),
                         maxLines = 1,
                         softWrap = false,
-                        autoSize = AutoSize.StepBased(
+                        autoSize = TextAutoSize.StepBased(
                             minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                             maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
                         ),
@@ -286,7 +286,7 @@ fun CalendarsOverview(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         softWrap = false,
-                        autoSize = AutoSize.StepBased(
+                        autoSize = TextAutoSize.StepBased(
                             minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                             maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
                         ),
@@ -314,7 +314,7 @@ fun CalendarsOverview(
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         softWrap = false,
-                        autoSize = AutoSize.StepBased(
+                        autoSize = TextAutoSize.StepBased(
                             minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                             maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
                         ),
