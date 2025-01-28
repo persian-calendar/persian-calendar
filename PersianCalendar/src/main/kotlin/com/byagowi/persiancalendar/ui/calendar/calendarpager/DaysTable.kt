@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
@@ -38,8 +39,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.drawText
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
@@ -155,7 +154,6 @@ fun SharedTransitionScope.DaysTable(
                 colors = monthColors
             )
         }
-        val textMeasurer = rememberTextMeasurer()
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
         val daysTextSize =
             diameter * (if (mainCalendarDigitsIsArabic || isVazirEnabled) 18 else 25) / 40
@@ -163,11 +161,6 @@ fun SharedTransitionScope.DaysTable(
             fontSize = with(density) { daysTextSize.toSp() },
         )
         val contentColor = LocalContentColor.current
-
-        // Slight fix for the particular font we use for native digits in Persian and so
-        val dayOffsetY = if (mainCalendarDigits === Language.ARABIC_DIGITS) 0f else min(
-            cellWidthPx, cellHeightPx
-        ) * 1 / 40
 
         val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
 
@@ -250,7 +243,8 @@ fun SharedTransitionScope.DaysTable(
                     )
                 }
             }
-            if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Canvas(
+            if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Box(
+                contentAlignment = Alignment.Center,
                 modifier = cellsSizeModifier
                     .offset(
                         pagerArrowSizeAndPadding.dp + cellWidth * column, cellHeight * (row + 1)
@@ -271,7 +265,7 @@ fun SharedTransitionScope.DaysTable(
                         },
                     )
                     .semantics {
-                        this.contentDescription = if (isTalkBackEnabled) getA11yDaySummary(
+                        if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
                             context.resources,
                             day,
                             isToday,
@@ -280,34 +274,39 @@ fun SharedTransitionScope.DaysTable(
                             withOtherCalendars = false,
                             withTitle = true,
                             withWeekOfYear = false,
-                        ) else (dayOffset + 1 - startingWeekDay).toString()
+                        )
                     }
                     .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
             ) {
-                val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
-                val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
-                val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
-                val shiftWorkTitle = getShiftWorkTitle(day, true)
                 val isSelected = isHighlighted && selectedDay == day
+                val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                 val isHoliday = events.any { it.isHoliday }
-                dayPainter.setDayOfMonthItem(
-                    isToday = false,
-                    isSelected = isSelected,
-                    hasEvent = hasEvents,
-                    hasAppointment = hasAppointments,
-                    isHoliday = isHoliday,
-                    jdn = day,
-                    dayOfMonth = "",
-                    header = shiftWorkTitle,
-                    secondaryCalendar = secondaryCalendar,
-                )
-                drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
-                if (isToday) drawCircle(
-                    monthColors.currentDay,
-                    radius = cellRadius,
-                    style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
-                )
-                val textLayoutResult = textMeasurer.measure(
+                Canvas(cellsSizeModifier) {
+                    val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
+                    val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
+                    val shiftWorkTitle = getShiftWorkTitle(day, true)
+                    dayPainter.setDayOfMonthItem(
+                        isToday = false,
+                        isSelected = isSelected,
+                        hasEvent = hasEvents,
+                        hasAppointment = hasAppointments,
+                        isHoliday = isHoliday,
+                        jdn = day,
+                        dayOfMonth = "",
+                        header = shiftWorkTitle,
+                        secondaryCalendar = secondaryCalendar,
+                    )
+                    drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
+                    if (isToday) drawCircle(
+                        monthColors.currentDay,
+                        radius = cellRadius,
+                        style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
+                    )
+                    if (isHighTextContrastEnabled && (isHoliday || day.isWeekEnd)) drawCircle(
+                        monthColors.holidays.copy(alpha = .25f), radius = cellRadius, style = Fill,
+                    )
+                }
+                Text(
                     text = formatNumber(
                         if (previousMonthLength != null && isBeforeMonth) {
                             previousMonthLength - (startingWeekDay - dayOffset) + 1
@@ -316,22 +315,13 @@ fun SharedTransitionScope.DaysTable(
                         } else dayOffset + 1 - startingWeekDay,
                         mainCalendarDigits,
                     ),
-                    style = daysStyle,
-                )
-                if (isHighTextContrastEnabled && (isHoliday || day.isWeekEnd)) drawCircle(
-                    monthColors.holidays.copy(alpha = .25f), radius = cellRadius, style = Fill,
-                )
-                drawText(
-                    textLayoutResult,
                     color = when {
                         isSelected -> monthColors.textDaySelected
                         isHoliday || day.isWeekEnd -> monthColors.holidays
                         else -> contentColor
                     },
-                    topLeft = Offset(
-                        x = this.center.x - textLayoutResult.size.width / 2,
-                        y = this.center.y - textLayoutResult.size.height / 2 + dayOffsetY,
-                    ),
+                    style = daysStyle,
+                    modifier = Modifier.padding(top = cellHeight / 15),
                 )
             }
         }
