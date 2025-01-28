@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.content.ClipData
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -36,16 +37,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.ClipEntry
+import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -73,6 +75,7 @@ import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.launch
 import java.util.Date
 
 @Composable
@@ -360,14 +363,21 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
                 modifier = Modifier.defaultMinSize(minWidth = ItemWidth.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val clipboardManager = LocalClipboardManager.current
+                val clipboard = LocalClipboard.current
+                val coroutineScope = rememberCoroutineScope()
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .clickable(
                             interactionSource = null,
                             indication = ripple(bounded = false),
-                        ) { clipboardManager.setText(AnnotatedString(formatDate(date))) }
+                        ) {
+                            coroutineScope.launch {
+                                clipboard.setClipEntry(
+                                    ClipEntry(ClipData.newPlainText("date", formatDate(date)))
+                                )
+                            }
+                        }
                         .semantics { this.contentDescription = formatDate(date) },
                 ) {
                     Text(
