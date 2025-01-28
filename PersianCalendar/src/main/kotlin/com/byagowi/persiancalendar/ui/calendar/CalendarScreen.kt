@@ -1063,6 +1063,12 @@ data class AddEventData(
     val allDay: Boolean,
     val description: String,
 ) {
+    fun asIntent() = Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
+        .putExtra(CalendarContract.Events.DESCRIPTION, description)
+        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
+        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
+        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, allDay)
+
     companion object {
         fun fromJdn(jdn: Jdn): AddEventData {
             val time = jdn.toGregorianCalendar().time
@@ -1078,13 +1084,7 @@ data class AddEventData(
 
 private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
     override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-    override fun createIntent(context: Context, input: AddEventData): Intent {
-        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
-            .putExtra(CalendarContract.Events.DESCRIPTION, input.description)
-            .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, input.beginTime.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, input.endTime.time)
-            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, input.allDay)
-    }
+    override fun createIntent(context: Context, input: AddEventData) = input.asIntent()
 }
 
 @Composable

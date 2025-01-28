@@ -101,6 +101,7 @@ import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
+import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
@@ -441,7 +442,13 @@ private fun createScheduleRemoteViews(
             R.id.add_event, "setBackgroundResource", R.drawable.widget_add_event
         )
     } else remoteViews.setViewVisibility(R.id.add_event, View.GONE)
-    remoteViews.setOnClickPendingIntent(R.id.add_event, context.launchAppPendingIntent())
+    val addEventPendingIntent = PendingIntent.getActivity(
+        context, 0,
+        AddEventData.fromJdn(today).asIntent(),
+        PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+    )
+    remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
 
     if (false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         remoteViews.setImageViewResource(R.id.widget_background, R.drawable.widget_background)
