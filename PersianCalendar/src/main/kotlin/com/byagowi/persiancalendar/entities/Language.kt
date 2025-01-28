@@ -125,7 +125,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val isHanafiMajority: Boolean
         get() = when (this) {
-            TR, FA_AF, PS, TG, NE -> true
+            TR, FA_AF, PS, TG, NE, TA -> true
             else -> false
         }
 
