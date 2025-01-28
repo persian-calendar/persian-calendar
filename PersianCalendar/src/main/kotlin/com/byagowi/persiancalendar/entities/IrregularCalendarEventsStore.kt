@@ -85,7 +85,7 @@ fun getDateInstance(event: Map<String, String>, year: Int, type: Calendar): Abst
             val nth = event["nth"]?.toIntOrNull().debugAssertNotNull ?: return null
             val day = event["day"]?.toIntOrNull().debugAssertNotNull ?: return null
             val month = event["month"]?.toIntOrNull().debugAssertNotNull ?: return null
-            (Jdn(type, year, month, day) + nth - 1).inCalendar(type)
+            (Jdn(type, year, month, day) + nth - 1) on type
         }
 
         "end of month" -> {

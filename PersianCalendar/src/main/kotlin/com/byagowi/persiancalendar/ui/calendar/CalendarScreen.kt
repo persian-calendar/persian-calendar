@@ -731,7 +731,7 @@ private fun Search(viewModel: CalendarViewModel) {
 private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, context: Context) {
     val date = event.date
     val type = date.calendar
-    val today = Jdn.today().inCalendar(type)
+    val today = Jdn.today() on type
     bringDate(
         viewModel,
         Jdn(
@@ -756,7 +756,7 @@ private fun SharedTransitionScope.Toolbar(
     val context = LocalContext.current
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
-    val todayDate = remember(today, mainCalendar) { today.inCalendar(mainCalendar) }
+    val todayDate = remember(today, mainCalendar) { today on mainCalendar }
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
     val yearViewOffset by viewModel.yearViewOffset.collectAsState()
@@ -1070,7 +1070,7 @@ data class AddEventData(
                 beginTime = time,
                 endTime = time,
                 allDay = true,
-                description = dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
+                description = dayTitleSummary(jdn, jdn on mainCalendar),
             )
         }
     }

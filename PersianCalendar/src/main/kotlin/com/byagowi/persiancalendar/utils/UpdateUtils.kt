@@ -174,7 +174,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     val jdn = Jdn.today()
-    val date = jdn.inCalendar(mainCalendar)
+    val date = jdn on mainCalendar
 
     if (pastDate != date || updateDate) {
         debugLog("UpdateUtils: date has changed")
@@ -531,9 +531,9 @@ class EventsViewFactory(val context: Context) : RemoteViewsFactory {
     override fun onDataSetChanged() = Unit
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_plain_item)
-        val firstDay = weekEvents[0].first of mainCalendar
+        val firstDay = weekEvents[0].first on mainCalendar
         val (jdn, events) = weekEvents[position]
-        val day = jdn of mainCalendar
+        val day = jdn on mainCalendar
         val title = jdn.weekDayName + if (position == 0 || day.month != firstDay.month) {
             "\n" + language.value.dm.format(formatNumber(day.dayOfMonth), day.monthName)
         } else (spacedComma + formatNumber(day.dayOfMonth))

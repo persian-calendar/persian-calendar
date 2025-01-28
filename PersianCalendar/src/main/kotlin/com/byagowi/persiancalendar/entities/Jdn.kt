@@ -28,14 +28,12 @@ value class Jdn(val value: Long) {
 
     val isWeekEnd: Boolean get() = weekEnds[this.weekDay]
 
-    fun inCalendar(calendar: Calendar): AbstractDate = when (calendar) {
+    infix fun on(calendar: Calendar): AbstractDate = when (calendar) {
         Calendar.ISLAMIC -> toIslamicDate()
         Calendar.GREGORIAN -> toCivilDate()
         Calendar.SHAMSI -> toPersianDate()
         Calendar.NEPALI -> toNepaliDate()
     }
-
-    infix fun of(calendar: Calendar): AbstractDate = inCalendar(calendar)
 
     fun toIslamicDate() = IslamicDate(value)
     fun toCivilDate() = CivilDate(value)

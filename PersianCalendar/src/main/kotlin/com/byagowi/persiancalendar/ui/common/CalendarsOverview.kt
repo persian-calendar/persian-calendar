@@ -128,7 +128,7 @@ fun CalendarsOverview(
         CalendarsFlow(shownCalendars, jdn)
         Spacer(Modifier.height(4.dp))
 
-        val date = jdn.inCalendar(selectedCalendar)
+        val date = jdn on selectedCalendar
         val equinox = remember(selectedCalendar, jdn) {
             if (date !is PersianDate) return@remember null
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1)
@@ -358,7 +358,7 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
         verticalArrangement = Arrangement.SpaceEvenly,
     ) {
         calendarsToShow.forEach { calendar ->
-            val date = jdn.inCalendar(calendar)
+            val date = jdn on calendar
             Column(
                 modifier = Modifier.defaultMinSize(minWidth = ItemWidth.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,

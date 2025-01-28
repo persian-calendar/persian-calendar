@@ -244,7 +244,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                 val jdn = viewModel.selectedDate.value
                 context.shareText(
                     listOf(
-                        dayTitleSummary(jdn, jdn.inCalendar(mainCalendar)),
+                        dayTitleSummary(jdn, jdn on mainCalendar),
                         context.getString(R.string.equivalent_to),
                         dateStringOfOtherCalendars(jdn, spacedComma)
                     ).joinToString(" "),
@@ -263,8 +263,8 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                             secondJdn,
                             calendar = viewModel.calendar.value,
                         ),
-                        formatDate(jdn.inCalendar(viewModel.calendar.value)),
-                        formatDate(secondJdn.inCalendar(viewModel.calendar.value)),
+                        formatDate(jdn on viewModel.calendar.value),
+                        formatDate(secondJdn on viewModel.calendar.value),
                     ).joinToString("\n"),
                     chooserTitle,
                 )

@@ -119,7 +119,7 @@ fun SharedTransitionScope.ScheduleScreen(
             @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                 modifier = swipeDownModifier,
                 title = {
-                    val date = firstVisibleItemJdn.inCalendar(mainCalendar)
+                    val date = firstVisibleItemJdn on mainCalendar
                     val screenTitle = stringResource(R.string.schedule)
                     Column(Modifier.semantics { this.contentDescription = screenTitle }) {
                         Crossfade(date.monthName, label = "title") { state ->
@@ -166,7 +166,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         val context = LocalContext.current
                         fun showPrintReport(isWholeYear: Boolean = false) {
                             closeMenu()
-                            val date = firstVisibleItemJdn.inCalendar(mainCalendar)
+                            val date = firstVisibleItemJdn on mainCalendar
                             runCatching {
                                 context.openHtmlInBrowser(
                                     monthHtmlReport(context, date, wholeYear = isWholeYear)
@@ -226,7 +226,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             }
                             val events = eventsCache(jdn)
                             Column {
-                                val date = jdn.inCalendar(mainCalendar)
+                                val date = jdn on mainCalendar
                                 if (events.isNotEmpty()) Row(
                                     Modifier.padding(start = 24.dp, end = 24.dp, top = 20.dp),
                                 ) {

@@ -81,7 +81,7 @@ fun getA11yDaySummary(
 
     if (isToday) appendLine(resources.getString(R.string.today))
 
-    val mainDate = jdn.inCalendar(mainCalendar)
+    val mainDate = jdn on mainCalendar
 
     if (withTitle) appendLine().append(dayTitleSummary(jdn, mainDate))
 
@@ -148,7 +148,7 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
 fun GregorianCalendar.formatDateAndTime(): String {
     return language.value.timeAndDateFormat.format(
         Clock(this).toFormattedString(forcedIn12 = true),
-        formatDate(Jdn(this.toCivilDate()).inCalendar(mainCalendar), forceNonNumerical = true)
+        formatDate(Jdn(this.toCivilDate()) on mainCalendar, forceNonNumerical = true)
     )
 }
 
@@ -295,8 +295,8 @@ fun calculateDaysDifference(
     calendar: Calendar = mainCalendar,
     isInWidget: Boolean = false
 ): String {
-    val baseDate = baseJdn.inCalendar(calendar)
-    val date = jdn.inCalendar(calendar)
+    val baseDate = baseJdn on calendar
+    val date = jdn on calendar
     val (years, months, daysOfMonth) = calculateDatePartsDifference(
         if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendar
     )
@@ -345,13 +345,13 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
     val mainCalendar = date.calendar
     val from = Jdn(
         mainCalendar.createDate(date.year, date.month, 1)
-    ).inCalendar(secondaryCalendar)
+    ) on secondaryCalendar
     val to = Jdn(
         mainCalendar.createDate(
             date.year, date.month,
             date.calendar.getMonthLength(date.year, date.month)
         )
-    ).inCalendar(secondaryCalendar)
+    ) on secondaryCalendar
     return when {
         from.month == to.month -> language.value.my.format(from.monthName, formatNumber(from.year))
         from.year != to.year -> listOf(
@@ -381,10 +381,10 @@ fun yearViewYearFormat(mainCalendarYear: Int, secondaryCalendar: Calendar?): Str
 }
 
 fun otherCalendarFormat(mainCalendarYear: Int, calendar: Calendar): String {
-    val startOfYear = Jdn(mainCalendar.createDate(mainCalendarYear, 1, 1)).inCalendar(calendar).year
+    val startOfYear = Jdn(mainCalendar.createDate(mainCalendarYear, 1, 1)).on(calendar).year
     val endOfYear = (Jdn(
         mainCalendar.createDate(mainCalendarYear + 1, 1, 1)
-    ) - 1).inCalendar(calendar).year
+    ) - 1).on(calendar).year
     return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) { formatNumber(it) }
 }
 
@@ -392,5 +392,5 @@ private fun getCalendarNameAbbr(date: AbstractDate) =
     calendarsTitlesAbbr.getOrNull(date.calendar.ordinal) ?: ""
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
-    enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.inCalendar(it)) }
+    enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn on it) }
 

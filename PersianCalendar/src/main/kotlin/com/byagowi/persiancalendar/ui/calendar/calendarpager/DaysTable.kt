@@ -102,7 +102,7 @@ fun SharedTransitionScope.DaysTable(
     onlyWeek: Int? = null,
 ) {
     val previousMonthLength =
-        if (onlyWeek == null) null else (monthStartJdn - 1).inCalendar(mainCalendar).dayOfMonth
+        if (onlyWeek == null) null else (monthStartJdn - 1).on(mainCalendar).dayOfMonth
 
     val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)

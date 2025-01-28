@@ -173,7 +173,7 @@ class MapDraw(
 
             MapType.YALLOP, MapType.ODEH -> {
                 maskFormattedTime = formatDate(
-                    Jdn(maskDateSink.toCivilDate()).inCalendar(mainCalendar),
+                    Jdn(maskDateSink.toCivilDate()) on mainCalendar,
                     forceNonNumerical = true
                 )
                 maskMapCrescentVisibility.eraseColor(Color.TRANSPARENT)

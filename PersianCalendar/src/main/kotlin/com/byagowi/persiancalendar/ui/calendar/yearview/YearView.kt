@@ -79,7 +79,7 @@ import kotlin.math.floor
 @Composable
 fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
     val today by viewModel.today.collectAsState()
-    val todayDate = today.inCalendar(mainCalendar)
+    val todayDate = today on mainCalendar
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val yearOffsetInMonths = run {
         val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
@@ -172,7 +172,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                         remember(yearOffset, today) {
                             val yearStartJdn = Jdn(
                                 mainCalendar.createDate(
-                                    today.inCalendar(mainCalendar).year + yearOffset, 1, 1
+                                    today.on(mainCalendar).year + yearOffset, 1, 1
                                 )
                             )
                             if (isShowDeviceCalendarEvents.value) {

@@ -126,7 +126,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                         }
                         listOfNotNull(
                             secondaryCalendar?.let {
-                                val secondaryDateDay = jdn.inCalendar(it).dayOfMonth
+                                val secondaryDateDay = jdn.on(it).dayOfMonth
                                 val digits = secondaryCalendarDigits
                                 formatNumber(secondaryDateDay, digits)
                             }, getShiftWorkTitle(jdn)
@@ -149,7 +149,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                     it.forEach { (jdn, title) ->
                         div {
                             span(generateDayClasses(jdn, false)) {
-                                +formatNumber(jdn.inCalendar(mainCalendar).dayOfMonth)
+                                +formatNumber(jdn.on(mainCalendar).dayOfMonth)
                             }
                             +spacedColon
                             +title.toString()

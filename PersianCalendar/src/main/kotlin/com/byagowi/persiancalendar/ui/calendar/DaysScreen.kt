@@ -169,7 +169,7 @@ fun SharedTransitionScope.DaysScreen(
     var selectedDay by rememberSaveable(saver = JdnSaver) { mutableStateOf(initiallySelectedDay) }
     val today by calendarViewModel.today.collectAsState()
     var isHighlighted by rememberSaveable { mutableStateOf(selectedDay != today) }
-    val date = selectedDay.inCalendar(mainCalendar)
+    val date = selectedDay on mainCalendar
     calendarViewModel.changeDaysScreenSelectedDay(selectedDay)
     val coroutineScope = rememberCoroutineScope()
     val weekInitialPage = remember(today) { weekPageFromJdn(initiallySelectedDay, today) }
@@ -938,7 +938,7 @@ private fun DaysView(
                                 allDay = false,
                                 description = dayTitleSummary(
                                     selectedDay,
-                                    selectedDay.inCalendar(mainCalendar),
+                                    selectedDay on mainCalendar,
                                 ),
                             )
                         )

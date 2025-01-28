@@ -38,7 +38,7 @@ class PersianCalendarTileService : TileService() {
         runCatching {
             val tile = qsTile ?: return@runCatching
             val jdn = Jdn.today()
-            val today = jdn.inCalendar(mainCalendar)
+            val today = jdn on mainCalendar
             tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
             tile.label = jdn.weekDayName
             tile.contentDescription = today.monthName

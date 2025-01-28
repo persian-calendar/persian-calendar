@@ -33,7 +33,7 @@ fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxSize()
         ) {
-            val date = remember(jdn.value, state) { jdn.inCalendar(state) }
+            val date = remember(jdn.value, state) { jdn on state }
             val daysFormat = remember(state, date.year, date.month) {
                 val monthStart = Jdn(state, date.year, date.month, 1);
                 { item: Int -> (monthStart + item - 1).weekDayName + " / " + formatNumber(item) }
@@ -48,7 +48,7 @@ fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
                 val months = date.calendar.monthsNames
                 { item: Int -> months[item - 1] + " / " + formatNumber(item) }
             }
-            val todayYear = remember(state) { Jdn.today().inCalendar(state).year }
+            val todayYear = remember(state) { Jdn.today().on(state).year }
             val startYear = remember(state) { todayYear - 200 }
             var monthChangeToken by remember { mutableIntStateOf(0) }
             var previousMonth by remember { mutableIntStateOf(0) }

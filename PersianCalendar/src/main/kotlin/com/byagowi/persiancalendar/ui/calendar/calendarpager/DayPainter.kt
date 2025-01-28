@@ -132,7 +132,7 @@ class DayPainter(
             if (isAstronomicalExtraFeaturesEnabled && jdn != null && isMoonInScorpio(jdn))
                 paints.scorpioSign else null,
             if (secondaryCalendar == null || jdn == null) null else
-                formatNumber(jdn.inCalendar(secondaryCalendar).dayOfMonth, secondaryCalendarDigits),
+                formatNumber(jdn.on(secondaryCalendar).dayOfMonth, secondaryCalendarDigits),
             header,
         ).joinToString(" ")
         this.indicators = listOf(
