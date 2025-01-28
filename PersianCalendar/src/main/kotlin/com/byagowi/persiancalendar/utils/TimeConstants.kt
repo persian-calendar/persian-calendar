@@ -12,6 +12,7 @@ val THIRTY_SECONDS_IN_MILLIS = TimeUnit.SECONDS.toMillis(30)
 val ONE_MINUTE_IN_MILLIS = TimeUnit.MINUTES.toMillis(1)
 val SIX_MINUTES_IN_MILLIS = TimeUnit.MINUTES.toMillis(6)
 val FIFTEEN_MINUTES_IN_MILLIS = TimeUnit.MINUTES.toMillis(15)
+val HALF_HOUR_IN_MILLIS = TimeUnit.MINUTES.toMillis(30)
 val ONE_HOUR_IN_MILLIS = TimeUnit.HOURS.toMillis(1)
 val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 

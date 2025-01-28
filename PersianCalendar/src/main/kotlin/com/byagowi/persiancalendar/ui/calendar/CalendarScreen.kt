@@ -166,6 +166,8 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.utils.HALF_HOUR_IN_MILLIS
+import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -184,6 +186,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
+import java.util.GregorianCalendar
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -1061,13 +1064,18 @@ data class AddEventData(
     val beginTime: Date,
     val endTime: Date,
     val allDay: Boolean,
-    val description: String,
+    val description: String?,
 ) {
-    fun asIntent() = Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
-        .putExtra(CalendarContract.Events.DESCRIPTION, description)
-        .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
-        .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
-        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, allDay)
+    fun asIntent(): Intent {
+        return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).also {
+            if (description != null) it.putExtra(
+                CalendarContract.Events.DESCRIPTION,
+                description
+            )
+        }.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
+            .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
+            .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, allDay)
+    }
 
     companion object {
         fun fromJdn(jdn: Jdn): AddEventData {
@@ -1077,6 +1085,24 @@ data class AddEventData(
                 endTime = time,
                 allDay = true,
                 description = dayTitleSummary(jdn, jdn on mainCalendar),
+            )
+        }
+
+        // Used in widget, turns 5:45 to 6:00-7:00 and 6:05 to 6:30-7:30
+        fun upcoming(): AddEventData {
+            val begin = GregorianCalendar()
+            val wasAtFirstHalf = begin[GregorianCalendar.MINUTE] < 30
+            begin[GregorianCalendar.MINUTE] = 0
+            begin[GregorianCalendar.SECOND] = 0
+            begin[GregorianCalendar.MILLISECOND] = 0
+            begin.timeInMillis += if (wasAtFirstHalf) HALF_HOUR_IN_MILLIS else ONE_HOUR_IN_MILLIS
+            val end = Date(begin.time.time)
+            end.time += ONE_HOUR_IN_MILLIS
+            return AddEventData(
+                beginTime = begin.time,
+                endTime = end,
+                allDay = false,
+                description = null,
             )
         }
     }

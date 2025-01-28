@@ -444,7 +444,7 @@ private fun createScheduleRemoteViews(
     } else remoteViews.setViewVisibility(R.id.add_event, View.GONE)
     val addEventPendingIntent = PendingIntent.getActivity(
         context, 0,
-        AddEventData.fromJdn(today).asIntent(),
+        AddEventData.upcoming().asIntent(),
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
