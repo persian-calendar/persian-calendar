@@ -12,7 +12,6 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -341,7 +340,7 @@ fun SharedTransitionScope.MapScreen(
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
-            @OptIn(ExperimentalFoundationApi::class) Row(
+            Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .padding(all = 16.dp)
@@ -379,7 +378,6 @@ fun SharedTransitionScope.MapScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TimeArrow(mapDraw: MapDraw, viewModel: MapViewModel, isPrevious: Boolean) {
     val hapticFeedback = LocalHapticFeedback.current

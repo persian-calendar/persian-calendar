@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
@@ -76,7 +75,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.min
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.DaysTable(
     suggestedPagerSize: DpSize,
@@ -345,7 +344,6 @@ private const val pagerArrowSize = MaterialIconDimension + 8 * 2
 const val pagerArrowSizeAndPadding = pagerArrowSize + 4
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 private fun PagerArrow(
     arrowOffsetY: Dp,
     coroutineScope: CoroutineScope,
