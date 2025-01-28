@@ -481,6 +481,10 @@ private fun createScheduleRemoteViews(
             } else if (it == 1) {
                 val nothingScheduled =
                     RemoteViews(context.packageName, R.layout.widget_schedule_nothing_scheduled)
+                nothingScheduled.setTextViewText(
+                    R.id.event_title,
+                    context.getString(R.string.nothing_scheduled)
+                )
                 nothingScheduled.setColorAttr(R.id.event_title, "setTextColor", android.R.attr.colorAccent)
                 nothingScheduled
             } else {
@@ -505,6 +509,7 @@ private fun createScheduleRemoteViews(
         val adapterIntent = Intent(context, WidgetService::class.java)
         adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         adapterIntent.setData(Uri.parse(adapterIntent.toUri(Intent.URI_INTENT_SCHEME)))
+        @Suppress("DEPRECATION")
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterIntent)
     }
 
