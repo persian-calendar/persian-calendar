@@ -255,7 +255,7 @@
         <item quantity="one">%1$s ஆண்டு</item>
         <item quantity="other">%1$s ஆண்டுகள்</item>
     </plurals>
-    <string name="code">என்</string>
+    <string name="code">ta</string>
     <string name="app_name">பாரசீக நாட்காட்டி</string>
     <string name="widget_name">பாரசீக நாட்காட்டி</string>
     <string name="widget_mini_name">பாரசீக நாட்காட்டி (மினி)</string>

@@ -45,6 +45,7 @@ enum class Language(val code: String, val nativeName: String) {
     NE("ne", "नेपाली"),
     PT("pt", "Português"),
     RU("ru", "Русский"),
+    TA("ta", "தமிழ்"),
     TG("tg", "Тоҷикӣ"),
     TR("tr", "Türkçe"),
     UR("ur", "اردو"),
@@ -112,13 +113,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, PT, IT, TR, KMR, TG, NE, RU -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, PT, IT, TR, KMR, TA, TG, NE, RU -> true
             else -> false
         }
 
     val preferredCalculationMethod: CalculationMethod
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, TR, KMR, TG, NE -> CalculationMethod.MWL
+            FA_AF, PS, UR, AR, CKB, TR, KMR, TG, NE, TA -> CalculationMethod.MWL
             else -> CalculationMethod.Tehran
         }
 
@@ -144,7 +145,7 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, TR, KMR, EN_IR, TG, NE -> false
+            EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, TR, KMR, EN_IR, TG, NE, TA -> false
             else -> true
         }
 
@@ -190,7 +191,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, UR, TR, KMR, TG -> true
+            EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, UR, TR, KMR, TG, TA -> true
             else -> false
         }
 
@@ -386,7 +387,7 @@ enum class Language(val code: String, val nativeName: String) {
             EN_US -> "%2\$s$sep%3\$s$sep%1\$s"
             // Day major, most likely everything else goes here but check via JS'
             // new Date().toLocaleDateString('XX')
-            AR, CKB, ES, FR, IT, KMR, PT, RU, TG, TR, UR -> "%3\$s$sep%2\$s$sep%1\$s"
+            AR, CKB, ES, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> "%3\$s$sep%2\$s$sep%1\$s"
         }
         return format.format(
             formatNumber(year, digits),

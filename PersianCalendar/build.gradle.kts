@@ -35,7 +35,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         androidResources.localeFilters += listOf(
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
-            "ne", "zh-rCN", "ru", "pt", "it"
+            "ne", "zh-rCN", "ru", "pt", "it", "ta",
         )
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitInfo")
     }
