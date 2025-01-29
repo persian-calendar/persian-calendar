@@ -253,6 +253,7 @@ private fun Label(text: String, modifier: Modifier) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
         BasicText(
             text = text,
+            style = LocalTextStyle.current,
             maxLines = 1,
             softWrap = false,
             autoSize = TextAutoSize.StepBased(

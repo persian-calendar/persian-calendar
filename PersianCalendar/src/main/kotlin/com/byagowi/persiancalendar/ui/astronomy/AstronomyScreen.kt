@@ -35,6 +35,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
@@ -599,6 +600,7 @@ private fun Cell(modifier: Modifier, color: Color, label: String, value: String)
         SelectionContainer {
             BasicText(
                 value,
+                style = LocalTextStyle.current,
                 modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                 maxLines = 1,
                 softWrap = false,
