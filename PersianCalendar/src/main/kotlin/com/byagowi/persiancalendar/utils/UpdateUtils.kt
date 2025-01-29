@@ -438,10 +438,11 @@ private fun createScheduleRemoteViews(
 
     // Add event
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        remoteViews.setViewVisibility(R.id.add_event, View.VISIBLE)
         remoteViews.setInt(
             R.id.add_event, "setBackgroundResource", R.drawable.widget_add_event
         )
-    } else remoteViews.setViewVisibility(R.id.add_event, View.GONE)
+    }
     val addEventPendingIntent = PendingIntent.getActivity(
         context, 0,
         AddEventData.upcoming().asIntent(),

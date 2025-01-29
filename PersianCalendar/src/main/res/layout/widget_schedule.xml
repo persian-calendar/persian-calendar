@@ -28,6 +28,7 @@
         android:layout_gravity="top|end"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
+        android:visibility="gone"
         android:contentDescription="@string/add_event"
         android:src="@drawable/widget_add_event_icon" />
 
