@@ -473,11 +473,13 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 
     Column(modifier) {
         val jdn by remember { derivedStateOf { Jdn(state.date.toCivilDate()) } }
+        val contentColor = LocalContentColor.current
         headerCache[jdn].fastForEach { line ->
             AnimatedContent(targetState = line, label = "line", transitionSpec = appCrossfadeSpec) {
                 SelectionContainer {
                     BasicText(
                         it,
+                        color = { contentColor },
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         softWrap = false,
@@ -598,9 +600,11 @@ private fun Cell(modifier: Modifier, color: Color, label: String, value: String)
             color = Color.White,
         )
         SelectionContainer {
+            val contentColor = LocalContentColor.current
             BasicText(
                 value,
                 style = LocalTextStyle.current,
+                color = { contentColor },
                 modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                 maxLines = 1,
                 softWrap = false,

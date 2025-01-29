@@ -27,6 +27,7 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
@@ -134,11 +135,14 @@ fun CalendarsOverview(
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1)
                 equinoxTitle(date, jdn, context).first else null
         }
+        val contextColor = LocalContentColor.current
+
         AnimatedVisibility(visible = equinox != null) {
             SelectionContainer {
                 BasicText(
                     equinox ?: "",
                     style = MaterialTheme.typography.bodyMedium,
+                    color = { contextColor },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 4.dp),
@@ -167,6 +171,7 @@ fun CalendarsOverview(
                             spacedColon,
                             calculateDaysDifference(context.resources, jdn, today)
                         ).joinToString(""),
+                        color = { contextColor },
                         style = MaterialTheme.typography.bodyMedium,
                         modifier = Modifier.animateContentSize(),
                         maxLines = 1,
@@ -285,6 +290,7 @@ fun CalendarsOverview(
                             formatNumber(currentWeek),
                             formatNumber(date.month)
                         ),
+                        color = { contextColor },
                         modifier = Modifier.animateContentSize(),
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
@@ -313,6 +319,7 @@ fun CalendarsOverview(
                             formatNumber(weeksCount - currentWeek),
                             formatNumber(12 - date.month)
                         ),
+                        color = { contextColor },
                         modifier = Modifier.animateContentSize(),
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
