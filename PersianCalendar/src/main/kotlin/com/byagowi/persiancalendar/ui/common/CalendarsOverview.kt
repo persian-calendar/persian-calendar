@@ -43,9 +43,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipEntry
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -379,11 +379,8 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
                             interactionSource = null,
                             indication = ripple(bounded = false),
                         ) {
-                            coroutineScope.launch {
-                                clipboard.setClipEntry(
-                                    ClipEntry(ClipData.newPlainText("date", formatDate(date)))
-                                )
-                            }
+                            val entry = ClipData.newPlainText("date", formatDate(date))
+                            coroutineScope.launch { clipboard.setClipEntry(entry.toClipEntry()) }
                         }
                         .semantics { this.contentDescription = formatDate(date) },
                 ) {
