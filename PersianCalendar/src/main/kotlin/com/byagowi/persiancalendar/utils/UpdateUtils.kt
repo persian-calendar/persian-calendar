@@ -105,6 +105,7 @@ import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
+import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
@@ -238,7 +239,7 @@ fun update(context: Context, updateDate: Boolean) {
             createSunViewRemoteViews(context, width, height, prayTimes)
         }
         updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, hasSize, _ ->
-            createMonthViewRemoteViews(context, width, height, hasSize)
+            createMonthViewRemoteViews(context, width, height, hasSize, jdn)
         }
         updateFromRemoteViews<WidgetMap>(context, now) { width, height, _, _ ->
             createMapRemoteViews(context, width, height, now)
@@ -330,7 +331,7 @@ fun createAgeRemoteViews(
     val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
     val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
     val subtitle =
-        calculateDaysDifference(context.resources, primary, Jdn.today(), isInWidget = true)
+        calculateDaysDifference(context.resources, primary, today, isInWidget = true)
     val textColor = getWidgetTextColor(preferences, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(
         preferences, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
@@ -424,6 +425,7 @@ private fun createSunViewRemoteViews(
     return remoteViews
 }
 
+// We don't want to use Jetpack Glance as it's size bloat so this is the hard way…
 private fun createScheduleRemoteViews(
     context: Context,
     width: Int,
@@ -451,57 +453,109 @@ private fun createScheduleRemoteViews(
     )
     remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
 
-    if (false && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         remoteViews.setImageViewResource(R.id.widget_background, R.drawable.widget_background)
         remoteViews.setViewOutlinePreferredRadiusDimen(
             R.id.widget_schedule,
             android.R.dimen.system_app_widget_background_radius
         )
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
-        val adapterBuilder = RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(false)
-        repeat(10) {
-            val item = if (it % 2 == 0) {
-                val day = RemoteViews(context.packageName, R.layout.widget_schedule_day)
-                day.setTextViewText(R.id.widget_schedule_weekday_name, today.weekDayName)
-                day.setTextViewText(
-                    R.id.widget_schedule_day_of_month, formatNumber(date.dayOfMonth)
+        val adapterBuilder = RemoteViews.RemoteCollectionItems.Builder()
+        val weekEvents = getWeekEvents(context, today)
+        weekEvents.forEachIndexed { index, (day, events) ->
+            val dayDate = day on mainCalendar
+            if (index == 0 || events.isNotEmpty()) {
+                val dayView = RemoteViews(context.packageName, R.layout.widget_schedule_day)
+                dayView.setTextViewText(R.id.widget_schedule_weekday_name, day.weekDayName)
+                dayView.setTextViewText(
+                    R.id.widget_schedule_day_of_month, formatNumber(dayDate.dayOfMonth)
                 )
-                if (it == 0) {
-                    day.setInt(
+                if (index == 0) {
+                    dayView.setInt(
                         R.id.widget_schedule_weekday_name,
                         "setBackgroundResource",
-                        R.drawable.widget_nothing_scheduled
+                        R.drawable.widget_secondary_bubble
                     )
-                    day.setColorAttr(
+                    dayView.setColorAttr(
                         R.id.widget_schedule_weekday_name,
                         "setTextColor",
                         android.R.attr.colorAccent
                     )
                 }
-                day
-            } else if (it == 1) {
-                val nothingScheduled =
-                    RemoteViews(context.packageName, R.layout.widget_schedule_nothing_scheduled)
-                nothingScheduled.setTextViewText(
-                    R.id.event_title,
-                    context.getString(R.string.nothing_scheduled)
-                )
-                nothingScheduled.setColorAttr(R.id.event_title, "setTextColor", android.R.attr.colorAccent)
-                nothingScheduled
-            } else {
-                val event = RemoteViews(context.packageName, R.layout.widget_schedule_event)
-                event.setColorInt(R.id.event_title, "setBackgroundColor", Color.RED, Color.RED)
-                event.setColorInt(R.id.event_title, "setTextColor", Color.WHITE, Color.WHITE)
-                event.setTextViewText(R.id.event_title, "Some event")
-                event.setViewOutlinePreferredRadius(
-                    R.id.event_title,
-                    12f,
-                    TypedValue.COMPLEX_UNIT_DIP
-                )
-                event.setBoolean(R.id.event_title, "setClipToOutline", true)
-                event
+                if (dayDate.month != date.month) {
+                    dayView.setInt(
+                        R.id.widget_schedule_month_name,
+                        "setBackgroundResource",
+                        R.drawable.widget_secondary_bubble
+                    )
+                    dayView.setColorAttr(
+                        R.id.widget_schedule_month_name,
+                        "setTextColor",
+                        android.R.attr.colorAccent
+                    )
+                    dayView.setViewVisibility(R.id.widget_schedule_month_name, View.VISIBLE)
+                    dayView.setTextViewText(R.id.widget_schedule_month_name, dayDate.monthName)
+                } else dayView.setViewVisibility(R.id.widget_schedule_month_name, View.GONE)
+                // But it doesn't work right now :/
+                val clickIntent = Intent().putExtra(jdnActionKey, day.value)
+                dayView.setOnClickFillInIntent(R.id.widget_schedule_day_root, Intent().putExtra(jdnActionKey, day.value))
+                adapterBuilder.addItem(View.generateViewId().toLong(), dayView)
+                if (events.isEmpty()) {
+                    val nothingScheduled =
+                        RemoteViews(context.packageName, R.layout.widget_schedule_nothing_scheduled)
+                    nothingScheduled.setTextViewText(
+                        android.R.id.text1,
+                        context.getString(R.string.nothing_scheduled)
+                    )
+                    nothingScheduled.setColorAttr(
+                        android.R.id.text1,
+                        "setTextColor",
+                        android.R.attr.colorAccent
+                    )
+                    nothingScheduled.setOnClickFillInIntent(android.R.id.text1, clickIntent)
+                    adapterBuilder.addItem(View.generateViewId().toLong(), nothingScheduled)
+                } else events.forEach { event ->
+                    val eventView = RemoteViews(context.packageName, R.layout.widget_schedule_event)
+                    if (event is CalendarEvent.DeviceCalendarEvent) {
+                        val background =
+                            if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
+                        eventView.setColorInt(
+                            android.R.id.text1, "setBackgroundColor", background, background
+                        )
+                        val foreground =
+                            eventTextColor(androidx.compose.ui.graphics.Color(background)).toArgb()
+                        eventView.setColorInt(
+                            android.R.id.text1,
+                            "setTextColor",
+                            foreground,
+                            foreground
+                        )
+                    } else {
+                        eventView.setColorAttr(
+                            android.R.id.text1,
+                            "setBackgroundColor",
+                            if (event.isHoliday) android.R.attr.colorAccent
+                            else android.R.attr.colorButtonNormal,
+                        )
+                        eventView.setColorAttr(
+                            android.R.id.text1,
+                            "setTextColor",
+                            if (event.isHoliday) android.R.attr.colorForegroundInverse
+                            else android.R.attr.colorForeground,
+                        )
+                    }
+                    eventView.setTextViewText(android.R.id.text1, event.oneLinerTitleWithTime)
+                    eventView.setViewOutlinePreferredRadius(
+                        android.R.id.text1,
+                        12f,
+                        TypedValue.COMPLEX_UNIT_DIP
+                    )
+                    eventView.setBoolean(android.R.id.text1, "setClipToOutline", true)
+                    // Do something more meaningful here
+                    eventView.setOnClickFillInIntent(android.R.id.text1, clickIntent)
+                    adapterBuilder.addItem(View.generateViewId().toLong(), eventView)
+                }
             }
-            adapterBuilder.addItem(View.generateViewId().toLong(), item)
         }
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterBuilder.build())
     } else {
@@ -513,16 +567,18 @@ private fun createScheduleRemoteViews(
         @Suppress("DEPRECATION")
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterIntent)
     }
+    remoteViews.setPendingIntentTemplate(
+        R.id.widget_schedule_content, context.launchAppPendingIntent("CALENDAR")
+    )
 
     return remoteViews
 }
 
-private fun getWeekEvents(context: Context): List<Pair<Jdn, List<CalendarEvent<*>>>> {
-    val today = Jdn.today()
+private fun getWeekEvents(context: Context, today: Jdn): List<Pair<Jdn, List<CalendarEvent<*>>>> {
     val deviceEvents = if (isShowDeviceCalendarEvents.value) {
         context.readWeekDeviceEvents(today)
     } else EventsStore.empty()
-    return Jdn.today().let { (it..it + 6) }.map {
+    return today.let { (it..it + 6) }.map {
         it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
     }.toList()
 }
@@ -533,7 +589,7 @@ class WidgetService : RemoteViewsService() {
 }
 
 class EventsViewFactory(val context: Context) : RemoteViewsFactory {
-    private val weekEvents = getWeekEvents(context)
+    private val weekEvents = getWeekEvents(context, Jdn.today())
     override fun onCreate() = Unit
     override fun onDestroy() = Unit
     override fun getCount(): Int = weekEvents.size
@@ -557,6 +613,9 @@ class EventsViewFactory(val context: Context) : RemoteViewsFactory {
             else it.title
         }
         row.setTextViewText(android.R.id.text2, subtitle)
+        // But it doesn't work right now :/
+        val clickIntent = Intent().putExtra(jdnActionKey, jdn.value)
+        row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
         return row
     }
 }
@@ -566,6 +625,7 @@ private fun createMonthViewRemoteViews(
     width: Int,
     height: Int,
     hasSize: Boolean,
+    today: Jdn,
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
@@ -594,8 +654,7 @@ private fun createMonthViewRemoteViews(
     )
     val bitmap = createBitmap(width, height)
     val canvas = Canvas(bitmap)
-    val today = Jdn.today()
-    val baseDate = mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
+    val baseDate = mainCalendar.getMonthStartFromMonthsDistance(today, 0)
     val monthDeviceEvents: DeviceCalendarEventsStore =
         if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
         else EventsStore.empty()

@@ -12,12 +12,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
+import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
@@ -41,6 +43,10 @@ class MainActivity : ComponentActivity() {
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
+        val initialJdn =
+            (intent.getLongExtra(jdnActionKey, -1).takeIf { it != -1L } ?: intent.action?.takeIf {
+                it.startsWith(jdnActionKey)
+            }?.replace(jdnActionKey, "")?.toLongOrNull())?.let(::Jdn)
         setContent {
             AppTheme {
                 val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
@@ -57,7 +63,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                App(intent?.action, ::finish)
+                App(intent?.action, initialJdn, ::finish)
             }
         }
 

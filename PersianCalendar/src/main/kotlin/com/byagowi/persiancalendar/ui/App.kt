@@ -119,7 +119,6 @@ import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
-import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -128,7 +127,7 @@ import java.util.Date
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun App(intentStartDestination: String?, finish: () -> Unit) {
+fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> Unit) {
     // See xml/shortcuts.xml
     val startDestination = when (intentStartDestination) {
         "COMPASS" -> compassRoute
@@ -138,11 +137,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
         "MAP" -> mapRoute
         else -> calendarRoute
     }
-    var initialJdn by remember {
-        mutableStateOf(intentStartDestination?.takeIf { it.startsWith(jdnActionKey) }?.let {
-            it.replace(jdnActionKey, "").toLongOrNull()?.let(::Jdn)
-        })
-    }
+    var appInitialJdn by remember { mutableStateOf(initialJdn) }
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
@@ -199,7 +194,7 @@ fun App(intentStartDestination: String?, finish: () -> Unit) {
 
                 composable(calendarRoute) {
                     val viewModel = viewModel<CalendarViewModel>()
-                    initialJdn?.let { viewModel.changeSelectedDay(it); initialJdn = null }
+                    appInitialJdn?.let { viewModel.changeSelectedDay(it); appInitialJdn = null }
                     CalendarScreen(
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToHolidaysSettings = {
