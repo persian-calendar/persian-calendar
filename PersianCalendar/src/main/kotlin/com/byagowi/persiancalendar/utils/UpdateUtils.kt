@@ -462,6 +462,7 @@ private fun createScheduleRemoteViews(
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
         val adapterBuilder = RemoteViews.RemoteCollectionItems.Builder()
         val weekEvents = getWeekEvents(context, today)
+        var monthChanged = false
         weekEvents.forEachIndexed { index, (day, events) ->
             val dayDate = day on mainCalendar
             if (index == 0 || events.isNotEmpty()) {
@@ -482,7 +483,8 @@ private fun createScheduleRemoteViews(
                         android.R.attr.colorAccent
                     )
                 }
-                if (dayDate.month != date.month) {
+                if (dayDate.month != date.month && !monthChanged) {
+                    monthChanged = true
                     dayView.setInt(
                         R.id.widget_schedule_month_name,
                         "setBackgroundResource",
@@ -600,10 +602,9 @@ class EventsViewFactory(val context: Context) : RemoteViewsFactory {
     override fun onDataSetChanged() = Unit
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_plain_item)
-        val firstDay = weekEvents[0].first on mainCalendar
         val (jdn, events) = weekEvents[position]
         val day = jdn on mainCalendar
-        val title = jdn.weekDayName + if (position == 0 || day.month != firstDay.month) {
+        val title = jdn.weekDayName + if (position == 0 || day.dayOfMonth == 1) {
             "\n" + language.value.dm.format(formatNumber(day.dayOfMonth), day.monthName)
         } else (spacedComma + formatNumber(day.dayOfMonth))
         row.setTextViewText(android.R.id.text1, title)
