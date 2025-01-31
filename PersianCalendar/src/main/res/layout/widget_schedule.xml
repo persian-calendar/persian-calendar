@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:importantForAccessibility="no"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:src="@drawable/widget_schedule_background" />
 
     <ListView
         android:id="@+id/widget_schedule_content"
@@ -28,8 +29,10 @@
         android:layout_gravity="top|end"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
+        android:background="@drawable/widget_add_event"
         android:contentDescription="@string/add_event"
         android:src="@drawable/widget_add_event_icon"
+        android:tint="@color/widget_add_event_icon"
         android:visibility="gone" />
 
 </FrameLayout>

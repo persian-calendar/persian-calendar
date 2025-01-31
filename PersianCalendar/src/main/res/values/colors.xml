@@ -2,6 +2,11 @@
 <resources>
     <color name="shortcut_color">#00796b</color>
 
+    <color name="widget_add_event_icon">#FFFFFF</color>
+    <color name="widget_add_event">#4444FF</color>
+    <color name="widget_schedule_background">#FFFFFF</color>
+    <color name="widget_schedule_plain_title">#000000</color>
+
     <color name="splash_icon_color_1">#23a79b</color>
     <color name="splash_icon_color_2">#2d6d68</color>
     <color name="splash_icon_color_3">#00695c</color>

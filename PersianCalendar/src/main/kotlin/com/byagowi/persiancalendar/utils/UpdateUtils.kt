@@ -439,12 +439,7 @@ private fun createScheduleRemoteViews(
     remoteViews.setDirection(R.id.widget_schedule, context.resources)
 
     // Add event
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        remoteViews.setViewVisibility(R.id.add_event, View.VISIBLE)
-        remoteViews.setInt(
-            R.id.add_event, "setBackgroundResource", R.drawable.widget_add_event
-        )
-    }
+    remoteViews.setViewVisibility(R.id.add_event, View.VISIBLE)
     val addEventPendingIntent = PendingIntent.getActivity(
         context, 0,
         AddEventData.upcoming().asIntent(),
@@ -562,8 +557,6 @@ private fun createScheduleRemoteViews(
         }
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterBuilder.build())
     } else {
-        val roundBackground = createRoundedBitmap(width, height, Color.WHITE, roundPixelSize)
-        remoteViews.setImageViewBitmap(R.id.widget_background, roundBackground)
         val adapterIntent = Intent(context, WidgetService::class.java)
         adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         adapterIntent.setData(Uri.parse(adapterIntent.toUri(Intent.URI_INTENT_SCHEME)))
