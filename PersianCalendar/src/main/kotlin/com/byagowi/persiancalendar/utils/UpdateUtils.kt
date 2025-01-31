@@ -498,9 +498,8 @@ private fun createScheduleRemoteViews(
                     dayView.setViewVisibility(R.id.widget_schedule_month_name, View.VISIBLE)
                     dayView.setTextViewText(R.id.widget_schedule_month_name, dayDate.monthName)
                 } else dayView.setViewVisibility(R.id.widget_schedule_month_name, View.GONE)
-                // But it doesn't work right now :/
                 val clickIntent = Intent().putExtra(jdnActionKey, day.value)
-                dayView.setOnClickFillInIntent(R.id.widget_schedule_day_root, Intent().putExtra(jdnActionKey, day.value))
+                dayView.setOnClickFillInIntent(R.id.widget_schedule_day_root, clickIntent)
                 adapterBuilder.addItem(View.generateViewId().toLong(), dayView)
                 if (events.isEmpty()) {
                     val nothingScheduled =
@@ -553,8 +552,10 @@ private fun createScheduleRemoteViews(
                         TypedValue.COMPLEX_UNIT_DIP
                     )
                     eventView.setBoolean(android.R.id.text1, "setClipToOutline", true)
-                    // Do something more meaningful here
-                    eventView.setOnClickFillInIntent(android.R.id.text1, clickIntent)
+                    val eventIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
+                        Intent().putExtra(eventKey, event.id)
+                    } else clickIntent
+                    eventView.setOnClickFillInIntent(android.R.id.text1, eventIntent)
                     adapterBuilder.addItem(View.generateViewId().toLong(), eventView)
                 }
             }
@@ -570,7 +571,7 @@ private fun createScheduleRemoteViews(
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterIntent)
     }
     remoteViews.setPendingIntentTemplate(
-        R.id.widget_schedule_content, context.launchAppPendingIntent("CALENDAR")
+        R.id.widget_schedule_content, context.launchAppPendingIntent("CALENDAR", true)
     )
 
     return remoteViews
@@ -614,7 +615,6 @@ class EventsViewFactory(val context: Context) : RemoteViewsFactory {
             else it.title
         }
         row.setTextViewText(android.R.id.text2, subtitle)
-        // But it doesn't work right now :/
         val clickIntent = Intent().putExtra(jdnActionKey, jdn.value)
         row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
         return row
@@ -763,6 +763,7 @@ private fun createMonthViewRemoteViews(
 }
 
 const val jdnActionKey = "JDN"
+const val eventKey = "EVENT"
 
 private val monthWidgetWeeks = listOf(
     R.id.month_grid_week0, R.id.month_grid_week1, R.id.month_grid_week2, R.id.month_grid_week3,
@@ -1373,15 +1374,20 @@ private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequ
     }
 }
 
-fun Context.launchAppPendingIntent(action: String? = null): PendingIntent? {
+fun Context.launchAppPendingIntent(
+    action: String? = null,
+    isMutable: Boolean = false,
+): PendingIntent? {
     return PendingIntent.getActivity(
         this, 0,
         Intent(this, MainActivity::class.java).setAction(action)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
                 if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
             }),
-        PendingIntent.FLAG_UPDATE_CURRENT or
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) (
+                if (isMutable) PendingIntent.FLAG_MUTABLE
+                else PendingIntent.FLAG_IMMUTABLE)
+        else 0
     )
 }
 

@@ -1,9 +1,12 @@
 package com.byagowi.persiancalendar.ui
 
+import android.content.ContentUris
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.provider.CalendarContract
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -19,7 +22,9 @@ import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyLanguageToConfiguration
+import com.byagowi.persiancalendar.utils.eventKey
 import com.byagowi.persiancalendar.utils.jdnActionKey
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
@@ -36,6 +41,14 @@ class MainActivity : ComponentActivity() {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
 
+        intent.getLongExtra(eventKey, -1L).takeIf { it != -1L }?.let { eventId ->
+            val intent = Intent(Intent.ACTION_VIEW).setData(
+                ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId)
+            )
+            runCatching { startActivity(intent) }.onFailure(logException)
+            return finish()
+        }
+
         initGlobal(this)
 
         startWorker(this)
@@ -44,7 +57,7 @@ class MainActivity : ComponentActivity() {
         update(applicationContext, false)
 
         val initialJdn =
-            (intent.getLongExtra(jdnActionKey, -1).takeIf { it != -1L } ?: intent.action?.takeIf {
+            (intent.getLongExtra(jdnActionKey, -1L).takeIf { it != -1L } ?: intent.action?.takeIf {
                 it.startsWith(jdnActionKey)
             }?.replace(jdnActionKey, "")?.toLongOrNull())?.let(::Jdn)
         setContent {
