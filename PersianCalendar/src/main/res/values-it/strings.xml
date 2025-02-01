@@ -57,7 +57,7 @@
     <string name="events">Eventi</string>
     <string name="no_event">Nessun evento o appuntamento per questo giorno</string>
     <string name="warn_if_events_not_set">Per selezionare e vedere le festività e gli eventi preferiti, controllate le Impostazioni</string>
-    <string name="length_of_day">Orario del giorno</string>
+    <string name="length_of_day">Dì</string>
     <string name="remaining_daylight">Rimanente</string>
     <string name="times">Orari</string>
     <string name="sunrise">Alba</string>
