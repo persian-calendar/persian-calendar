@@ -23,7 +23,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -320,7 +319,6 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun HelpItems() {
     val sections = remember {
@@ -438,7 +436,7 @@ private fun Developers() {
     ) {
         SharedTransitionLayout {
             AnimatedContent(targetState = developers, label = "developers") { state ->
-                @OptIn(ExperimentalLayoutApi::class) FlowRow(
+                FlowRow(
                     Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),

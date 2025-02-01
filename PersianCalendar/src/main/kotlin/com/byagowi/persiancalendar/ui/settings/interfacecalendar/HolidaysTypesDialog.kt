@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -143,7 +142,6 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
 @Composable
 private fun HolidaysTypesDialogPreview() = HolidaysTypesDialog {}
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 @VisibleForTesting
 fun CountryEvents(
