@@ -6,6 +6,7 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
+import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
@@ -20,7 +21,9 @@ class PrayTimeTests {
         Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             method,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            method.defaultMidnight,
         )
     }
 
@@ -30,7 +33,9 @@ class PrayTimeTests {
         var prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.MWL,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.MWL.defaultMidnight,
         )
 
         assertEquals(IntIntPair(5, 9), Clock(prayTimes.fajr).toHoursAndMinutesPair())
@@ -43,7 +48,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.ISNA,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.ISNA.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 27), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
@@ -55,7 +62,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.Egypt,
-            AsrMethod.Hanafi
+            AsrMethod.Hanafi,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.Egypt.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 0), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
@@ -67,7 +76,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.Makkah,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.Makkah.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 6), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
@@ -79,7 +90,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.Karachi,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.Karachi.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 9), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
@@ -91,7 +104,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.Jafari,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.Jafari.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 21), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
@@ -103,7 +118,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
             CalculationMethod.Tehran,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.Tehran.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 11), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
@@ -115,7 +132,9 @@ class PrayTimeTests {
         prayTimes = Coordinates(3.147778, 101.695278, 0.0).calculatePrayTimes(
             createCalendar("GMT+8:00", 2019, 6, 9),
             CalculationMethod.Tehran,
-            AsrMethod.Standard
+            AsrMethod.Standard,
+            HighLatitudesMethod.NightMiddle,
+            CalculationMethod.Tehran.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 49), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(7, 3), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
