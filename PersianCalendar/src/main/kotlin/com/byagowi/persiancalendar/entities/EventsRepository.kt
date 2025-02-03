@@ -23,7 +23,7 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.jetbrains.annotations.VisibleForTesting
 
-class EventsRepository(
+data class EventsRepository(
     private val enabledTypes: Set<String> = emptySet(),
     private val language: Language
 ) {

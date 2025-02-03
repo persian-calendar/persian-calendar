@@ -23,7 +23,6 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import android.widget.RemoteViewsService.RemoteViewsFactory
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
@@ -559,6 +558,10 @@ private fun createScheduleRemoteViews(
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterBuilder.build())
     } else {
         val adapterIntent = Intent(context, WidgetService::class.java)
+        // Update conditions
+        adapterIntent.putExtra("updateToken", System.currentTimeMillis() / ONE_HOUR_IN_MILLIS)
+        adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
+        adapterIntent.putExtra("events", eventsRepository?.hashCode() ?: 0)
         adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
         adapterIntent.setData(Uri.parse(adapterIntent.toUri(Intent.URI_INTENT_SCHEME)))
         @Suppress("DEPRECATION")
@@ -585,9 +588,8 @@ class WidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent) = EventsViewFactory(this.applicationContext)
 }
 
-class EventsViewFactory(val context: Context) : RemoteViewsFactory {
-    private val weekEvents = getWeekEvents(context, Jdn.today())
-    private val items = weekEvents.flatMap { (day, events) ->
+class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFactory {
+    private val items = getWeekEvents(context, Jdn.today()).flatMap { (day, events) ->
         listOf(day) + events.map { day to it }.ifEmpty { listOf(day to null) }
     }
 
