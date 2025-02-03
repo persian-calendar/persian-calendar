@@ -72,13 +72,6 @@ fun Context.shareText(text: String, chooserTitle: String) {
     }.onFailure(logException)
 }
 
-fun Context.shareLink(plusLink: String, chooserTitle: String?) {
-    runCatching {
-        ShareCompat.IntentBuilder(this).setType("text/plain").setChooserTitle(chooserTitle)
-            .setText(plusLink).startChooser()
-    }.onFailure(logException)
-}
-
 private fun Context.shareUriFile(uri: Uri, mime: String) {
     runCatching {
         startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {

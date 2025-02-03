@@ -45,7 +45,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
-import com.byagowi.persiancalendar.ui.utils.shareLink
+import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
@@ -249,7 +249,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                             textDecoration = TextDecoration.Underline
                         )
                     )
-                ) { context.shareLink(geoLink, cityName) }
+                ) { context.shareText(geoLink, cityName ?: "") }
             ) { appendLine(geoLink) }
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
             cityName?.also(::appendLine)
@@ -265,7 +265,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                             textDecoration = TextDecoration.Underline
                         )
                     )
-                ) { context.shareLink(plusLink, cityName) }
+                ) { context.shareText(plusLink, cityName ?: "") }
             ) { append(plusLink) }
         }
         SelectionContainer { Text(text, modifier = textModifier, textAlign = TextAlign.Center) }
