@@ -4,16 +4,9 @@
     android:id="@+id/widget_schedule"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/widget_schedule_background"
     android:theme="@style/WidgetTheme"
     tools:context=".WidgetSchedule">
-
-    <ImageView
-        android:id="@+id/widget_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:importantForAccessibility="no"
-        android:scaleType="fitXY"
-        android:src="@drawable/widget_schedule_background" />
 
     <ListView
         android:id="@+id/widget_schedule_content"

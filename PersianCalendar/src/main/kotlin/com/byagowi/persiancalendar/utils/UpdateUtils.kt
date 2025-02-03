@@ -450,7 +450,6 @@ private fun createScheduleRemoteViews(
     remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        remoteViews.setImageViewResource(R.id.widget_background, R.drawable.widget_background)
         remoteViews.setViewOutlinePreferredRadiusDimen(
             R.id.widget_schedule,
             android.R.dimen.system_app_widget_background_radius
