@@ -43,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.pluralStringResource
@@ -221,6 +222,7 @@ fun ManagedActivityResultLauncher<Long, Void?>.viewEvent(
         .onFailure(logException)
 }
 
+fun eventTextColor(color: Int): Int = eventTextColor(Color(color)).toArgb()
 fun eventTextColor(color: Color): Color = if (color.isLight) Color.Black else Color.White
 
 @Composable

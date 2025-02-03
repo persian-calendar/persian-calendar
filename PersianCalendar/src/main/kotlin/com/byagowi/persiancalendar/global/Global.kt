@@ -298,6 +298,8 @@ var spacedColon = ": "
     private set
 var spacedComma = "، "
     private set
+var nothingScheduledString = ""
+    private set
 var holidayString = DEFAULT_HOLIDAY
     private set
 var numericalDatePreferred = false
@@ -364,6 +366,7 @@ fun loadLanguageResources(resources: Resources) {
         language.isDari -> "رخصتی"
         else -> resources.getString(R.string.holiday)
     }
+    nothingScheduledString = resources.getString(R.string.nothing_scheduled)
     spacedOr = resources.getString(R.string.spaced_or)
     spacedAndInDates = if (language.languagePrefersHalfSpaceAndInDates) " "
     else resources.getString(R.string.spaced_and)

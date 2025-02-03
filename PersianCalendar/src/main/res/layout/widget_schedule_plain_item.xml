@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_schedule_plain_item_root"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@android:id/text1"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:textAlignment="center"
         android:textColor="@color/widget_schedule_plain_title"
         android:textSize="15sp" />
 
@@ -17,11 +17,18 @@
         android:id="@android:id/text2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:alpha=".75"
-        android:ellipsize="end"
-        android:scrollHorizontally="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="2dp"
+        android:ellipsize="middle"
+        android:paddingStart="8dp"
+        android:paddingTop="4dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:singleLine="true"
         android:textAlignment="viewStart"
-        android:textColor="@color/widget_schedule_plain_title"
-        android:textSize="12sp" />
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
 
-</LinearLayout>
+</FrameLayout>

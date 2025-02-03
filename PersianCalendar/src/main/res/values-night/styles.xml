@@ -5,7 +5,9 @@
     <style name="BaseDayNightTheme" parent="android:Theme.Material.NoActionBar" />
 
     <color name="widget_add_event_icon">#000000</color>
-    <color name="widget_add_event">#D7D7FF</color>
+    <color name="widget_add_event">#D3E3FD</color>
     <color name="widget_schedule_background">#000000</color>
     <color name="widget_schedule_plain_title">#FFFFFF</color>
+    <color name="widget_schedule_plain_event">#000000</color>
+    <color name="widget_nothing_scheduled">#DCE2F9</color>
 </resources>

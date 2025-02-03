@@ -3,9 +3,11 @@
     <color name="shortcut_color">#00796b</color>
 
     <color name="widget_add_event_icon">#FFFFFF</color>
-    <color name="widget_add_event">#4444FF</color>
+    <color name="widget_add_event">#1565C0</color>
     <color name="widget_schedule_background">#FFFFFF</color>
     <color name="widget_schedule_plain_title">#000000</color>
+    <color name="widget_schedule_plain_event">#FFFFFF</color>
+    <color name="widget_nothing_scheduled">#8D95AD</color>
 
     <color name="splash_icon_color_1">#23a79b</color>
     <color name="splash_icon_color_2">#2d6d68</color>

@@ -95,6 +95,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
@@ -117,6 +118,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -518,8 +520,7 @@ private fun createScheduleRemoteViews(
                         eventView.setColorInt(
                             android.R.id.text1, "setBackgroundColor", background, background
                         )
-                        val foreground =
-                            eventTextColor(androidx.compose.ui.graphics.Color(background)).toArgb()
+                        val foreground = eventTextColor(background)
                         eventView.setColorInt(
                             android.R.id.text1,
                             "setTextColor",
@@ -586,30 +587,56 @@ class WidgetService : RemoteViewsService() {
 
 class EventsViewFactory(val context: Context) : RemoteViewsFactory {
     private val weekEvents = getWeekEvents(context, Jdn.today())
+    private val items = weekEvents.flatMap { (day, events) ->
+        listOf(day) + events.map { day to it }.ifEmpty { listOf(day to null) }
+    }
+
     override fun onCreate() = Unit
     override fun onDestroy() = Unit
-    override fun getCount(): Int = weekEvents.size
     override fun getLoadingView(): RemoteViews? = null
     override fun getViewTypeCount(): Int = 1
     override fun getItemId(position: Int): Long = position.toLong()
     override fun hasStableIds(): Boolean = true
     override fun onDataSetChanged() = Unit
+    override fun getCount(): Int = items.size
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_plain_item)
-        val (jdn, events) = weekEvents[position]
-        val day = jdn on mainCalendar
-        val title = jdn.weekDayName + if (position == 0 || day.dayOfMonth == 1) {
-            "\n" + language.value.dm.format(formatNumber(day.dayOfMonth), day.monthName)
-        } else (spacedComma + formatNumber(day.dayOfMonth))
-        row.setTextViewText(android.R.id.text1, title)
-        val subtitle = if (events.isEmpty()) context.getString(R.string.nothing_scheduled)
-        else events.joinToString("\n") {
-            if (it.isHoliday) language.value.inParentheses.format(it.title, holidayString)
-            else it.title
+        val item = items[position]
+        if (item is Jdn) {
+            val day = item on mainCalendar
+            val title = item.weekDayName + "\n" +
+                    language.value.dm.format(formatNumber(day.dayOfMonth), day.monthName)
+            row.setTextViewText(android.R.id.text1, title)
+            row.setViewVisibility(android.R.id.text1, View.VISIBLE)
+            row.setViewVisibility(android.R.id.text2, View.GONE)
+            val clickIntent = Intent().putExtra(jdnActionKey, item.value)
+            row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
+        } else if (item is Pair<*, *>) {
+            val day = (item.first as? Jdn).debugAssertNotNull ?: Jdn.today()
+            val event = item.second as? CalendarEvent<*>
+            val title = when {
+                event?.isHoliday == true ->
+                    language.value.inParentheses.format(event.title, holidayString)
+
+                event is CalendarEvent<*> -> event.oneLinerTitleWithTime
+                else -> nothingScheduledString
+            }
+            val background = when {
+                event?.isHoliday == true -> R.drawable.widget_schedule_plain_item_holiday
+                event is CalendarEvent.DeviceCalendarEvent ->
+                    R.drawable.widget_schedule_plain_item_event
+
+                else -> R.drawable.widget_schedule_plain_item_default
+            }
+            row.setInt(android.R.id.text2, "setBackgroundResource", background)
+            row.setTextViewText(android.R.id.text2, title)
+            row.setViewVisibility(android.R.id.text1, View.GONE)
+            row.setViewVisibility(android.R.id.text2, View.VISIBLE)
+            val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
+                Intent().putExtra(eventKey, event.id)
+            } else Intent().putExtra(jdnActionKey, day.value)
+            row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
         }
-        row.setTextViewText(android.R.id.text2, subtitle)
-        val clickIntent = Intent().putExtra(jdnActionKey, jdn.value)
-        row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
         return row
     }
 }
