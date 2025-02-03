@@ -31,4 +31,8 @@
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
+    <include
+        android:id="@+id/spacer"
+        layout="@layout/widget_schedule_spacer" />
+
 </FrameLayout>

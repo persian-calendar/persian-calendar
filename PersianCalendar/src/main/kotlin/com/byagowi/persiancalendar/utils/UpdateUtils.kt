@@ -554,6 +554,8 @@ private fun createScheduleRemoteViews(
                 }
             }
         }
+        val spacer = RemoteViews(context.packageName, R.layout.widget_schedule_spacer)
+        adapterBuilder.addItem(View.generateViewId().toLong(), spacer)
         remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterBuilder.build())
     } else {
         val adapterIntent = Intent(context, WidgetService::class.java)
@@ -588,8 +590,10 @@ class WidgetService : RemoteViewsService() {
 }
 
 class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFactory {
+    private object Spacer
+
     private val items = getWeekEvents(context, Jdn.today()).flatMap { (day, events) ->
-        listOf(day) + events.map { day to it }.ifEmpty { listOf(day to null) }
+        listOf(day) + events.map { day to it }.ifEmpty { listOf(day to null) } + listOf(Spacer)
     }
 
     override fun onCreate() = Unit
@@ -608,6 +612,7 @@ class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFa
             val title = item.weekDayName + "\n" +
                     language.value.dm.format(formatNumber(day.dayOfMonth), day.monthName)
             row.setTextViewText(android.R.id.text1, title)
+            row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(android.R.id.text1, View.VISIBLE)
             row.setViewVisibility(android.R.id.text2, View.GONE)
             val clickIntent = Intent().putExtra(jdnActionKey, item.value)
@@ -631,12 +636,17 @@ class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFa
             }
             row.setInt(android.R.id.text2, "setBackgroundResource", background)
             row.setTextViewText(android.R.id.text2, title)
+            row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(android.R.id.text1, View.GONE)
             row.setViewVisibility(android.R.id.text2, View.VISIBLE)
             val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
                 Intent().putExtra(eventKey, event.id)
             } else Intent().putExtra(jdnActionKey, day.value)
             row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
+        } else if (item == Spacer) {
+            row.setViewVisibility(R.id.spacer, View.VISIBLE)
+            row.setViewVisibility(android.R.id.text1, View.GONE)
+            row.setViewVisibility(android.R.id.text2, View.GONE)
         }
         return row
     }
