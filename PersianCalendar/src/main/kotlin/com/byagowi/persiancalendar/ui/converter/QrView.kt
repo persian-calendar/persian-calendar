@@ -19,7 +19,7 @@ import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.ui.utils.shareBinaryFile
-import com.byagowi.persiancalendar.ui.utils.toByteArray
+import com.byagowi.persiancalendar.ui.utils.toPngByteArray
 import com.byagowi.persiancalendar.utils.logException
 import io.github.persiancalendar.qr.qr
 import kotlin.math.min
@@ -112,7 +112,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
                 drawQr(this, size.toInt(), 1f, qr, qr)
             }
         }
-        context.shareBinaryFile(bitmap.toByteArray(), "result.png", "image/png")
+        context.shareBinaryFile(bitmap.toPngByteArray(), "result.png", "image/png")
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

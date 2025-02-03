@@ -42,7 +42,7 @@ fun Context.bringMarketPage() {
     }
 }
 
-fun Bitmap.toByteArray(): ByteArray {
+fun Bitmap.toPngByteArray(): ByteArray {
     val buffer = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.PNG, 100, buffer)
     return buffer.toByteArray()
