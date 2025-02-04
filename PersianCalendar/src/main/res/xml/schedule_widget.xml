@@ -3,6 +3,7 @@
     android:initialLayout="@layout/widget_schedule"
     android:minWidth="110dp"
     android:minHeight="110dp"
+    android:previewImage="@drawable/widget_schedule_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="600000"
     android:widgetCategory="keyguard|home_screen" />
