@@ -461,7 +461,7 @@ private fun createScheduleRemoteViews(
         val adapterBuilder = RemoteViews.RemoteCollectionItems.Builder()
         val weekEvents = getWeekEvents(context, today)
         var monthChanged = false
-        val (nextTimeTitle, nextTimeColor) = getNextEnabledTime(getEnabledAlarms(context), context)
+        val (nextTimeTitle, nextTimeColor) = getNextEnabledTime(getEnabledAlarms(context))
         weekEvents.forEachIndexed { index, (day, events) ->
             val dayDate = day on mainCalendar
             if (index == 0 || events.isNotEmpty()) {
@@ -608,7 +608,7 @@ private fun getWeekEvents(context: Context, today: Jdn): List<Pair<Jdn, List<Cal
     }.toList()
 }
 
-private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>, context: Context): Pair<String, Int> {
+private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>): Pair<String, Int> {
     if (enabledAlarms.isEmpty()) return "" to 0
     val time = GregorianCalendar()
     val now = Clock(time)
@@ -670,7 +670,7 @@ class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFa
 
                 event is CalendarEvent<*> -> event.oneLinerTitleWithTime
                 item.second == NothingScheduled -> nothingScheduledString
-                item.second == NextTime -> getNextEnabledTime(enabledAlarms, context).first
+                item.second == NextTime -> getNextEnabledTime(enabledAlarms).first
 
                 else -> ""
             }
