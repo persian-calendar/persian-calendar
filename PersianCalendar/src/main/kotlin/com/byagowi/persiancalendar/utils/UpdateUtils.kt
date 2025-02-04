@@ -636,7 +636,7 @@ class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFa
         buildList {
             add(day)
             if (enabledAlarms.isNotEmpty() && i == 0) add(day to NextTime)
-            addAll(events.map { day to it }.ifEmpty { listOf(day to null) })
+            addAll(events.map { day to it }.ifEmpty { listOf(day to NothingScheduled) })
         }
     } + listOf(Spacer)
 
