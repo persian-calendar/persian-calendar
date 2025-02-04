@@ -4,10 +4,12 @@
     <color name="widget_add_event_icon">@android:color/system_accent1_50</color>
     <color name="widget_add_event">@android:color/system_accent1_600</color>
     <color name="widget_nothing_scheduled">@android:color/system_accent2_100</color>
-    <color name="widget_secondary_bubble">@android:color/system_accent2_100</color>
+    <color name="widget_schedule_highlight">@android:color/system_accent2_100</color>
+    <color name="widget_schedule_highlight_text">@android:color/system_accent2_600</color>
     <color name="widget_divider">@android:color/system_accent2_200</color>
     <color name="widget_refresh_icon_color">@android:color/system_neutral2_700</color>
     <dimen name="widget_schedule_add_event_end_padding">12dip</dimen>
+    <dimen name="widget_schedule_horizontal_padding">4dip</dimen>
 
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
 

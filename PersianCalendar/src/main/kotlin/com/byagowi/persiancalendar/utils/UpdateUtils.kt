@@ -22,7 +22,6 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
-import android.widget.RemoteViewsService
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
@@ -80,7 +79,6 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
-import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isCenterAlignWidgets
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
@@ -94,21 +92,17 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.global.nothingScheduledString
-import com.byagowi.persiancalendar.global.prayTimesTitles
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
-import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
+import com.byagowi.persiancalendar.service.ScheduleWidgetService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
-import com.byagowi.persiancalendar.ui.calendar.eventTextColor
-import com.byagowi.persiancalendar.ui.calendar.sortEvents
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -120,7 +114,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -128,7 +121,6 @@ import java.util.Date
 import java.util.GregorianCalendar
 import kotlin.math.min
 import kotlin.math.roundToInt
-
 
 private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
@@ -251,8 +243,8 @@ fun update(context: Context, updateDate: Boolean) {
         updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _, _ ->
             createMoonRemoteViews(context, width, height)
         }
-        updateFromRemoteViews<WidgetSchedule>(context, now) { width, height, hasSize, widgetId ->
-            createScheduleRemoteViews(context, width, height, hasSize, jdn, date, widgetId)
+        updateFromRemoteViews<WidgetSchedule>(context, now) { _, _, _, widgetId ->
+            createScheduleRemoteViews(context, widgetId)
         }
     }
 
@@ -430,20 +422,26 @@ private fun createSunViewRemoteViews(
 }
 
 // We don't want to use Jetpack Glance as it's size bloat so this is the hard way…
-private fun createScheduleRemoteViews(
-    context: Context,
-    width: Int,
-    height: Int,
-    hasSize: Boolean,
-    today: Jdn,
-    date: AbstractDate,
-    widgetId: Int,
-): RemoteViews {
+private fun createScheduleRemoteViews(context: Context, widgetId: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_schedule)
     remoteViews.setDirection(R.id.widget_schedule, context.resources)
 
-    // Add event
-    remoteViews.setViewVisibility(R.id.add_event, View.VISIBLE)
+    // Initiate the list view
+    val adapterIntent = Intent(context, ScheduleWidgetService::class.java)
+    // Update conditions
+    adapterIntent.putExtra("updateToken", System.currentTimeMillis() / ONE_HOUR_IN_MILLIS)
+    adapterIntent.putExtra("appOpenCount", resumeToken.value)
+    adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
+    adapterIntent.putExtra("events", eventsRepository?.hashCode() ?: 0)
+    adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+    adapterIntent.setData(Uri.parse(adapterIntent.toUri(Intent.URI_INTENT_SCHEME)))
+    @Suppress("DEPRECATION")
+    remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterIntent)
+    remoteViews.setPendingIntentTemplate(
+        R.id.widget_schedule_content, context.launchAppPendingIntent("CALENDAR", true)
+    )
+
+    // Add event button
     val addEventPendingIntent = PendingIntent.getActivity(
         context, 0,
         AddEventData.upcoming().asIntent(),
@@ -452,252 +450,16 @@ private fun createScheduleRemoteViews(
     )
     remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
 
+    // Round the background better
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         remoteViews.setViewOutlinePreferredRadiusDimen(
             R.id.widget_schedule,
             android.R.dimen.system_app_widget_background_radius
         )
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
-        val adapterBuilder = RemoteViews.RemoteCollectionItems.Builder()
-        val weekEvents = getWeekEvents(context, today)
-        var monthChanged = false
-        val (nextTimeTitle, nextTimeColor) = getNextEnabledTime(getEnabledAlarms(context))
-        weekEvents.forEachIndexed { index, (day, events) ->
-            val dayDate = day on mainCalendar
-            if (index == 0 || events.isNotEmpty()) {
-                val dayView = RemoteViews(context.packageName, R.layout.widget_schedule_day)
-                dayView.setTextViewText(R.id.widget_schedule_weekday_name, day.weekDayName)
-                dayView.setTextViewText(
-                    R.id.widget_schedule_day_of_month, formatNumber(dayDate.dayOfMonth)
-                )
-                if (index == 0) {
-                    dayView.setInt(
-                        R.id.widget_schedule_weekday_name,
-                        "setBackgroundResource",
-                        R.drawable.widget_secondary_bubble
-                    )
-                    dayView.setColorAttr(
-                        R.id.widget_schedule_weekday_name,
-                        "setTextColor",
-                        android.R.attr.colorAccent
-                    )
-                }
-                if (dayDate.month != date.month && !monthChanged) {
-                    monthChanged = true
-                    dayView.setInt(
-                        R.id.widget_schedule_month_name,
-                        "setBackgroundResource",
-                        R.drawable.widget_secondary_bubble
-                    )
-                    dayView.setColorAttr(
-                        R.id.widget_schedule_month_name,
-                        "setTextColor",
-                        android.R.attr.colorAccent
-                    )
-                    dayView.setViewVisibility(R.id.widget_schedule_month_name, View.VISIBLE)
-                    dayView.setTextViewText(R.id.widget_schedule_month_name, dayDate.monthName)
-                } else dayView.setViewVisibility(R.id.widget_schedule_month_name, View.GONE)
-                val clickIntent = Intent().putExtra(jdnActionKey, day.value)
-                dayView.setOnClickFillInIntent(R.id.widget_schedule_day_root, clickIntent)
-                adapterBuilder.addItem(View.generateViewId().toLong(), dayView)
-                if (index == 0 && nextTimeTitle.isNotEmpty()) {
-                    val nextTime =
-                        RemoteViews(context.packageName, R.layout.widget_schedule_event)
-                    nextTime.setBoolean(android.R.id.text1, "setClipToOutline", true)
-                    nextTime.setViewOutlinePreferredRadius(
-                        android.R.id.text1,
-                        12f,
-                        TypedValue.COMPLEX_UNIT_DIP
-                    )
-                    nextTime.setTextViewText(
-                        android.R.id.text1,
-                        nextTimeTitle
-                    )
-                    nextTime.setInt(
-                        android.R.id.text1,
-                        "setBackgroundColor",
-                        nextTimeColor,
-                    )
-                    nextTime.setInt(
-                        android.R.id.text1,
-                        "setTextColor",
-                        eventTextColor(nextTimeColor),
-                    )
-                    nextTime.setOnClickFillInIntent(android.R.id.text1, clickIntent)
-                    adapterBuilder.addItem(View.generateViewId().toLong(), nextTime)
-                }
-                if (events.isEmpty()) {
-                    val nothingScheduled =
-                        RemoteViews(context.packageName, R.layout.widget_schedule_nothing_scheduled)
-                    nothingScheduled.setTextViewText(
-                        android.R.id.text1,
-                        context.getString(R.string.nothing_scheduled)
-                    )
-                    nothingScheduled.setColorAttr(
-                        android.R.id.text1,
-                        "setTextColor",
-                        android.R.attr.colorAccent
-                    )
-                    nothingScheduled.setOnClickFillInIntent(android.R.id.text1, clickIntent)
-                    adapterBuilder.addItem(View.generateViewId().toLong(), nothingScheduled)
-                } else events.forEach { event ->
-                    val eventView = RemoteViews(context.packageName, R.layout.widget_schedule_event)
-                    if (event is CalendarEvent.DeviceCalendarEvent) {
-                        val background =
-                            if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
-                        eventView.setInt(android.R.id.text1, "setBackgroundColor", background)
-                        val foreground = eventTextColor(background)
-                        eventView.setInt(android.R.id.text1, "setTextColor", foreground)
-                    } else {
-                        eventView.setColorAttr(
-                            android.R.id.text1,
-                            "setBackgroundColor",
-                            if (event.isHoliday) android.R.attr.colorAccent
-                            else android.R.attr.colorButtonNormal,
-                        )
-                        eventView.setColorAttr(
-                            android.R.id.text1,
-                            "setTextColor",
-                            if (event.isHoliday) android.R.attr.colorForegroundInverse
-                            else android.R.attr.colorForeground,
-                        )
-                    }
-                    eventView.setTextViewText(android.R.id.text1, event.oneLinerTitleWithTime)
-                    eventView.setViewOutlinePreferredRadius(
-                        android.R.id.text1,
-                        12f,
-                        TypedValue.COMPLEX_UNIT_DIP
-                    )
-                    eventView.setBoolean(android.R.id.text1, "setClipToOutline", true)
-                    val eventIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
-                        Intent().putExtra(eventKey, event.id)
-                    } else clickIntent
-                    eventView.setOnClickFillInIntent(android.R.id.text1, eventIntent)
-                    adapterBuilder.addItem(View.generateViewId().toLong(), eventView)
-                }
-            }
-        }
-        val spacer = RemoteViews(context.packageName, R.layout.widget_schedule_spacer)
-        adapterBuilder.addItem(View.generateViewId().toLong(), spacer)
-        remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterBuilder.build())
-    } else {
-        val adapterIntent = Intent(context, WidgetService::class.java)
-        // Update conditions
-        adapterIntent.putExtra("updateToken", System.currentTimeMillis() / ONE_HOUR_IN_MILLIS)
-        adapterIntent.putExtra("appOpenCount", resumeToken.value)
-        adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
-        adapterIntent.putExtra("events", eventsRepository?.hashCode() ?: 0)
-        adapterIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        adapterIntent.setData(Uri.parse(adapterIntent.toUri(Intent.URI_INTENT_SCHEME)))
-        @Suppress("DEPRECATION")
-        remoteViews.setRemoteAdapter(R.id.widget_schedule_content, adapterIntent)
     }
-    remoteViews.setPendingIntentTemplate(
-        R.id.widget_schedule_content, context.launchAppPendingIntent("CALENDAR", true)
-    )
 
     return remoteViews
-}
-
-private fun getWeekEvents(context: Context, today: Jdn): List<Pair<Jdn, List<CalendarEvent<*>>>> {
-    val deviceEvents = if (isShowDeviceCalendarEvents.value) {
-        context.readWeekDeviceEvents(today)
-    } else EventsStore.empty()
-    return today.let { (it..it + 6) }.map {
-        it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
-    }.toList()
-}
-
-private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>): Pair<String, Int> {
-    if (enabledAlarms.isEmpty()) return "" to 0
-    val time = GregorianCalendar()
-    val now = Clock(time)
-    return coordinates.value?.calculatePrayTimes(time)?.let { times ->
-        val next = enabledAlarms.firstOrNull { times[it] > now }
-            ?: enabledAlarms.first()
-        (prayTimesTitles[next] ?: "") + spacedColon + times[next].toBasicFormatString() to
-                next.tint.toArgb()
-    } ?: ("" to 0)
-}
-
-// Pre-S only service
-class WidgetService : RemoteViewsService() {
-    override fun onGetViewFactory(intent: Intent) = EventsViewFactory(this.applicationContext)
-}
-
-class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFactory {
-    private object Spacer
-    private object NextTime
-    private object NothingScheduled
-
-    private val enabledAlarms = getEnabledAlarms(context)
-    private val items = getWeekEvents(context, Jdn.today()).flatMapIndexed { i, (day, events) ->
-        if (i != 0 && events.isEmpty()) return@flatMapIndexed emptyList()
-        buildList {
-            add(day)
-            if (enabledAlarms.isNotEmpty() && i == 0) add(day to NextTime)
-            addAll(events.map { day to it }.ifEmpty { listOf(day to NothingScheduled) })
-        }
-    } + listOf(Spacer)
-
-    override fun onCreate() = Unit
-    override fun onDestroy() = Unit
-    override fun getLoadingView(): RemoteViews? = null
-    override fun getViewTypeCount(): Int = 1
-    override fun getItemId(position: Int): Long = position.toLong()
-    override fun hasStableIds(): Boolean = true
-    override fun onDataSetChanged() = Unit
-    override fun getCount(): Int = items.size
-    override fun getViewAt(position: Int): RemoteViews {
-        val row = RemoteViews(context.packageName, R.layout.widget_schedule_plain_item)
-        val item = items[position]
-        if (item is Jdn) {
-            val day = item on mainCalendar
-            val title = item.weekDayName + "\n" +
-                    language.value.dm.format(formatNumber(day.dayOfMonth), day.monthName)
-            row.setTextViewText(android.R.id.text1, title)
-            row.setViewVisibility(R.id.spacer, View.GONE)
-            row.setViewVisibility(android.R.id.text1, View.VISIBLE)
-            row.setViewVisibility(android.R.id.text2, View.GONE)
-            val clickIntent = Intent().putExtra(jdnActionKey, item.value)
-            row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
-        } else if (item is Pair<*, *>) {
-            val day = (item.first as? Jdn).debugAssertNotNull ?: Jdn.today()
-            val event = item.second as? CalendarEvent<*>
-            val title = when {
-                event?.isHoliday == true ->
-                    language.value.inParentheses.format(event.title, holidayString)
-
-                event is CalendarEvent<*> -> event.oneLinerTitleWithTime
-                item.second == NothingScheduled -> nothingScheduledString
-                item.second == NextTime -> getNextEnabledTime(enabledAlarms).first
-
-                else -> ""
-            }
-            val background = when {
-                event?.isHoliday == true -> R.drawable.widget_schedule_plain_item_holiday
-                event is CalendarEvent.DeviceCalendarEvent ->
-                    R.drawable.widget_schedule_plain_item_event
-
-                item.second == NextTime -> R.drawable.widget_schedule_plain_item_time
-                else -> R.drawable.widget_schedule_plain_item_default
-            }
-            row.setInt(android.R.id.text2, "setBackgroundResource", background)
-            row.setTextViewText(android.R.id.text2, title)
-            row.setViewVisibility(R.id.spacer, View.GONE)
-            row.setViewVisibility(android.R.id.text1, View.GONE)
-            row.setViewVisibility(android.R.id.text2, View.VISIBLE)
-            val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
-                Intent().putExtra(eventKey, event.id)
-            } else Intent().putExtra(jdnActionKey, day.value)
-            row.setOnClickFillInIntent(R.id.widget_schedule_plain_item_root, clickIntent)
-        } else if (item == Spacer) {
-            row.setViewVisibility(R.id.spacer, View.VISIBLE)
-            row.setViewVisibility(android.R.id.text1, View.GONE)
-            row.setViewVisibility(android.R.id.text2, View.GONE)
-        }
-        return row
-    }
 }
 
 private fun createMonthViewRemoteViews(

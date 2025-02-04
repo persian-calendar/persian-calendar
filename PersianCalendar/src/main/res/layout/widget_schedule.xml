@@ -25,7 +25,6 @@
         android:background="@drawable/widget_add_event"
         android:contentDescription="@string/add_event"
         android:src="@drawable/widget_add_event_icon"
-        android:tint="@color/widget_add_event_icon"
-        android:visibility="gone" />
+        android:tint="@color/widget_add_event_icon" />
 
 </FrameLayout>

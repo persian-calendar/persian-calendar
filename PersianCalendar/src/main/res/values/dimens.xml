@@ -5,7 +5,8 @@
     <dimen name="level_border_width">5dip</dimen>
     <dimen name="level_border_height">0dip</dimen>
     <dimen name="marker_thickness">3dip</dimen>
-    <dimen name="widget_schedule_add_event_end_padding">8dip</dimen>
+    <dimen name="widget_schedule_add_event_end_padding">10dip</dimen>
+    <dimen name="widget_schedule_horizontal_padding">8dip</dimen>
     <dimen name="bubble_padding">2dip</dimen>
     <dimen name="bubble_padding_top">0dip</dimen>
     <dimen name="bubble_padding_bottom">4dip</dimen>

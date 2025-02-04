@@ -370,7 +370,7 @@
         </service>
 
         <service
-            android:name=".utils.WidgetService"
+            android:name=".service.ScheduleWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
     </application>
