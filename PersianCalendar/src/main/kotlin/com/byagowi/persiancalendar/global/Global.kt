@@ -91,6 +91,7 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
@@ -298,6 +299,10 @@ var spacedColon = ": "
     private set
 var spacedComma = "، "
     private set
+
+// Otherwise WidgetService might use untranslated messages
+var prayTimesTitles: Map<PrayTime, String> = emptyMap()
+    private set
 var nothingScheduledString = ""
     private set
 var holidayString = DEFAULT_HOLIDAY
@@ -367,6 +372,7 @@ fun loadLanguageResources(resources: Resources) {
         else -> resources.getString(R.string.holiday)
     }
     nothingScheduledString = resources.getString(R.string.nothing_scheduled)
+    prayTimesTitles = PrayTime.entries.associateWith { resources.getString(it.stringRes) }
     spacedOr = resources.getString(R.string.spaced_or)
     spacedAndInDates = if (language.languagePrefersHalfSpaceAndInDates) " "
     else resources.getString(R.string.spaced_and)
