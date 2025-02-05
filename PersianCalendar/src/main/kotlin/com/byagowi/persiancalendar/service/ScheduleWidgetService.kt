@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.prayTimesTitles
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
@@ -101,13 +102,17 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
         val day = (item.first as? Jdn).debugAssertNotNull ?: Jdn.today()
 
         (item.second as? Header)?.let { header ->
+            val weekDayName = secondaryCalendar?.let {
+                val secondaryDayOfMonth = formatNumber((day on it).dayOfMonth, it.preferredDigits)
+                "${day.weekDayNameInitials}($secondaryDayOfMonth)"
+            } ?: day.weekDayName
             if (position == 0) {
-                row.setTextViewText(R.id.highlight, day.weekDayName)
+                row.setTextViewText(R.id.highlight, weekDayName)
                 row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
                 row.setViewVisibility(R.id.top_space, View.VISIBLE)
             } else {
-                row.setTextViewText(R.id.weekday_name, day.weekDayName)
+                row.setTextViewText(R.id.weekday_name, weekDayName)
                 row.setViewVisibility(R.id.weekday_name, View.VISIBLE)
                 row.setViewVisibility(R.id.top_space, View.GONE)
                 if (header is Header.WithMonthName) {
