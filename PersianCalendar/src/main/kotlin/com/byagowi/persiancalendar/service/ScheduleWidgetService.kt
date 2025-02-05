@@ -33,7 +33,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.readWeekDeviceEvents
+import com.byagowi.persiancalendar.utils.readTwoWeekDeviceEvents
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import java.util.GregorianCalendar
@@ -43,47 +43,43 @@ class ScheduleWidgetService : RemoteViewsService() {
         EventsViewFactory(this.applicationContext)
 }
 
-private fun getWeekEvents(context: Context, today: Jdn): List<Pair<Jdn, List<CalendarEvent<*>>>> {
-    val deviceEvents = if (isShowDeviceCalendarEvents.value) {
-        context.readWeekDeviceEvents(today)
-    } else EventsStore.empty()
-    return today.let { (it..it + 6) }.map {
-        it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
-    }.toList()
-}
-
-private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>): Pair<String, Int> {
-    if (enabledAlarms.isEmpty()) return "" to 0
-    val time = GregorianCalendar()
-    val now = Clock(time)
-    return coordinates.value?.calculatePrayTimes(time)?.let { times ->
-        val next = enabledAlarms.firstOrNull { times[it] > now }
-            ?: enabledAlarms.first()
-        (prayTimesTitles[next] ?: "") + spacedColon + times[next].toBasicFormatString() to
-                next.tint.toArgb()
-    } ?: ("" to 0)
-}
-
 private class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFactory {
     private object Spacer
     private object NextTime
     private object NothingScheduled
+    private sealed class Header(val date: AbstractDate) {
+        class WithMonthName(date: AbstractDate) : Header(date)
+        class WithoutMonthName(date: AbstractDate) : Header(date)
+    }
 
     private val enabledAlarms = getEnabledAlarms(context)
-    private val items = getWeekEvents(context, Jdn.today()).flatMapIndexed { i, (day, events) ->
-        if (i != 0 && events.isEmpty()) return@flatMapIndexed emptyList()
-        buildList {
-            add(day to (day on mainCalendar))
-            if (enabledAlarms.isNotEmpty() && i == 0) add(day to NextTime)
-            addAll(events.map { day to it }.ifEmpty { listOf(day to NothingScheduled) })
-        }
+    private val items = run {
+        val today = Jdn.today()
+        val deviceEvents = if (isShowDeviceCalendarEvents.value) {
+            context.readTwoWeekDeviceEvents(today)
+        } else EventsStore.empty()
+        val days = today..<today + 14
+        val dates = days.map { it on mainCalendar }.toList()
+        var monthChange = false
+        days.map {
+            it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
+        }.flatMapIndexed { i, (day, events) ->
+            if (i != 0 && events.isEmpty()) emptyList() else buildList {
+                if (dates[0].month != dates[i].month && !monthChange) {
+                    add(day to Header.WithMonthName(dates[i]))
+                    monthChange = true
+                } else add(day to Header.WithoutMonthName(dates[i]))
+                if (enabledAlarms.isNotEmpty() && i == 0) add(day to NextTime)
+                addAll(events.map { day to it }.ifEmpty { listOf(day to NothingScheduled) })
+            }
+        }.toList()
     } + listOf(Spacer)
 
     override fun onCreate() = Unit
     override fun onDestroy() = Unit
     override fun getLoadingView(): RemoteViews? = null
     override fun getViewTypeCount(): Int = 1
-    override fun getItemId(position: Int): Long = items[position].hashCode().toLong()
+    override fun getItemId(position: Int): Long = position.toLong()
     override fun hasStableIds(): Boolean = true
     override fun onDataSetChanged() = Unit
     override fun getCount(): Int = items.size
@@ -105,7 +101,7 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
         }
         val day = (item.first as? Jdn).debugAssertNotNull ?: Jdn.today()
 
-        (item.second as? AbstractDate)?.let { date ->
+        (item.second as? Header)?.let { header ->
             if (position == 0) {
                 row.setTextViewText(R.id.weekday_name_today, day.weekDayName)
                 row.setViewVisibility(R.id.weekday_name_today, View.VISIBLE)
@@ -117,12 +113,11 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
                 row.setViewVisibility(R.id.weekday_name, View.VISIBLE)
                 row.setViewVisibility(R.id.top_space, View.GONE)
             }
-            row.setTextViewText(R.id.day_of_month, formatNumber(date.dayOfMonth))
-            val firstDayMonth = ((items[0] as? Pair<*, *>)?.second as? AbstractDate)?.month
-            if (position != 0 && date.month != firstDayMonth) {
-                row.setTextViewText(R.id.month_name, date.monthName)
+            if (header is Header.WithMonthName) {
+                row.setTextViewText(R.id.month_name, header.date.monthName)
                 row.setViewVisibility(R.id.month_name, View.VISIBLE)
             } else row.setViewVisibility(R.id.month_name, View.GONE)
+            row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
             row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(R.id.header, View.VISIBLE)
             row.setViewVisibility(R.id.event, View.GONE)
@@ -162,8 +157,7 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
                 } else if (event is CalendarEvent<*>) {
                     if (event is CalendarEvent.DeviceCalendarEvent) {
                         val background =
-                            if (event.color.isEmpty()) Color.GRAY else event.color.toLong()
-                                .toInt()
+                            if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
                         row.setInt(R.id.event, "setBackgroundColor", background)
                         val foreground = eventTextColor(background)
                         row.setInt(R.id.event, "setTextColor", foreground)
@@ -215,5 +209,17 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
         } else Intent().putExtra(jdnActionKey, day.value)
         row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
         return row
+    }
+
+    private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>): Pair<String, Int> {
+        if (enabledAlarms.isEmpty()) return "" to 0
+        val time = GregorianCalendar()
+        val now = Clock(time)
+        return coordinates.value?.calculatePrayTimes(time)?.let { times ->
+            val next = enabledAlarms.firstOrNull { times[it] > now }
+                ?: enabledAlarms.first()
+            (prayTimesTitles[next] ?: "") + spacedColon + times[next].toBasicFormatString() to
+                    next.tint.toArgb()
+        } ?: ("" to 0)
     }
 }

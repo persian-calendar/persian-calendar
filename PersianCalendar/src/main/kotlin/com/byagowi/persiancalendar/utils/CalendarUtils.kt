@@ -205,35 +205,20 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun Context.readDayDeviceEvents(jdn: Jdn) =
-    DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toGregorianCalendar(), DAY_IN_MILLIS))
-
-fun Context.readWeekDeviceEvents(jdn: Jdn) =
+private fun Context.readDaysDeviceEvents(jdn: Jdn, days: Int) =
     DeviceCalendarEventsStore(
         readDeviceEvents(
             this,
             jdn.toGregorianCalendar(),
-            7 * DAY_IN_MILLIS
+            days * DAY_IN_MILLIS
         )
     )
 
-fun Context.readMonthDeviceEvents(jdn: Jdn) =
-    DeviceCalendarEventsStore(
-        readDeviceEvents(
-            this,
-            jdn.toGregorianCalendar(),
-            32L * DAY_IN_MILLIS
-        )
-    )
-
-fun Context.readYearDeviceEvents(jdn: Jdn) =
-    DeviceCalendarEventsStore(
-        readDeviceEvents(
-            this,
-            jdn.toGregorianCalendar(),
-            366 * DAY_IN_MILLIS
-        )
-    )
+fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1)
+fun Context.readWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 7)
+fun Context.readTwoWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 14)
+fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32)
+fun Context.readYearDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 366)
 
 fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
