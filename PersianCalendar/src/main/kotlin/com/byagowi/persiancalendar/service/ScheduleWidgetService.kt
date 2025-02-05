@@ -52,9 +52,10 @@ private class EventsViewFactory(
     private object Spacer
     private object NextTime
     private object NothingScheduled
-    private data class Header(val date: AbstractDate, val withMonth: Boolean)
+    private data class Header(val date: AbstractDate, val day: Jdn, val withMonth: Boolean)
     private data class Item(
         val item: Any,
+        val day: Jdn,
         val date: AbstractDate,
         val today: Boolean,
         val first: Boolean
@@ -74,13 +75,13 @@ private class EventsViewFactory(
         }.flatMapIndexed { i, (day, events) ->
             if (i != 0 && events.isEmpty()) emptyList() else buildList {
                 if (dates[0].month != dates[i].month && !monthChange) {
-                    add(day to Header(dates[i], true))
+                    add(Header(dates[i], day, true))
                     monthChange = true
-                } else add(day to Header(dates[i], false))
+                } else add(Header(dates[i], day, false))
             } + buildList {
-                if (enabledAlarms.isNotEmpty() && i == 0) add(day to NextTime)
-                addAll(events.map { day to it }.ifEmpty { listOf(day to NothingScheduled) })
-            }.mapIndexed { j, (first, second) -> first to Item(second, dates[i], i == 0, j == 0) }
+                if (enabledAlarms.isNotEmpty() && i == 0) add(NextTime)
+                addAll(events.ifEmpty { listOf(NothingScheduled) })
+            }.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) }
         }.toList()
     } + listOf(Spacer)
 
@@ -110,16 +111,17 @@ private class EventsViewFactory(
         }
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
 
-        if (entry !is Pair<*, *>) {
+        if (entry !is Header && entry !is Item) {
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, Intent())
             row.setViewVisibility(R.id.spacer, View.VISIBLE)
             row.setViewVisibility(R.id.header, View.GONE)
             row.setViewVisibility(R.id.event_parent, View.GONE)
             return row
         }
-        val day = (entry.first as? Jdn).debugAssertNotNull ?: Jdn.today()
+        val day =
+            ((entry as? Header)?.day ?: (entry as? Item)?.day).debugAssertNotNull ?: Jdn.today()
 
-        (entry.second as? Header)?.let { header ->
+        (entry as? Header)?.let { header ->
             val weekDayName = secondaryCalendar?.let {
                 val secondaryDayOfMonth = formatNumber(header.date.dayOfMonth, it.preferredDigits)
                 "${day.weekDayNameInitials}($secondaryDayOfMonth)"
@@ -163,7 +165,7 @@ private class EventsViewFactory(
             return row
         }
 
-        val item = (entry.second as? Item).debugAssertNotNull ?: return row
+        val item = (entry as? Item).debugAssertNotNull ?: return row
         val event = item.item as? CalendarEvent<*>
         if (item.item == NextTime) {
             val (title, color) = getNextEnabledTime(enabledAlarms)
