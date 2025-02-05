@@ -20,7 +20,6 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.prayTimesTitles
@@ -186,9 +185,7 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
                 row.setInt(R.id.event, "setBackgroundResource", background)
             }
             val title = when {
-                event?.isHoliday == true ->
-                    language.value.inParentheses.format(event.title, holidayString)
-
+                event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.oneLinerTitleWithTime
                 item.second == NothingScheduled -> nothingScheduledString
 

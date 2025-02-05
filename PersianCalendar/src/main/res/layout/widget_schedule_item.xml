@@ -57,7 +57,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="@dimen/widget_schedule_horizontal_padding"
         android:layout_marginBottom="2dp"
-        android:ellipsize="middle"
+        android:ellipsize="none"
         android:paddingStart="8dp"
         android:paddingTop="4dp"
         android:paddingEnd="8dp"
