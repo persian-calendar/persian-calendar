@@ -15,16 +15,40 @@
         android:divider="@null"
         android:dividerHeight="0dp" />
 
-    <ImageButton
-        android:id="@+id/add_event"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="top|end"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="@dimen/widget_schedule_add_event_end_padding"
-        android:background="@drawable/widget_add_event"
-        android:contentDescription="@string/add_event"
-        android:src="@drawable/widget_add_event_icon"
-        android:tint="@color/widget_add_event_icon" />
+        android:layoutDirection="inherit"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/add_event"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/widget_add_event"
+            android:contentDescription="@string/add_event"
+            android:src="@drawable/widget_add_event_icon"
+            android:tint="@color/widget_add_event_icon" />
+
+        <FrameLayout
+            android:id="@+id/end_padding1"
+            android:layout_width="@dimen/widget_schedule_add_event_end_padding"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/end_padding2"
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/end_padding3"
+            android:layout_width="8dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+    </LinearLayout>
 
 </FrameLayout>

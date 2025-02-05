@@ -40,17 +40,25 @@ import java.util.GregorianCalendar
 
 class ScheduleWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory =
-        EventsViewFactory(this.applicationContext)
+        EventsViewFactory(this.applicationContext, intent.getIntExtra(widgetWidthCellKey, -1))
 }
 
-private class EventsViewFactory(val context: Context) : RemoteViewsService.RemoteViewsFactory {
+const val widgetWidthCellKey = "width"
+
+private class EventsViewFactory(
+    val context: Context,
+    val widthCells: Int,
+) : RemoteViewsService.RemoteViewsFactory {
     private object Spacer
     private object NextTime
     private object NothingScheduled
-    private sealed class Header(val date: AbstractDate) {
-        class WithMonthName(date: AbstractDate) : Header(date)
-        class WithoutMonthName(date: AbstractDate) : Header(date)
-    }
+    private data class Header(val date: AbstractDate, val withMonth: Boolean)
+    private data class Item(
+        val item: Any,
+        val date: AbstractDate,
+        val today: Boolean,
+        val first: Boolean
+    )
 
     private val enabledAlarms = getEnabledAlarms(context)
     private val items = run {
@@ -66,12 +74,13 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
         }.flatMapIndexed { i, (day, events) ->
             if (i != 0 && events.isEmpty()) emptyList() else buildList {
                 if (dates[0].month != dates[i].month && !monthChange) {
-                    add(day to Header.WithMonthName(dates[i]))
+                    add(day to Header(dates[i], true))
                     monthChange = true
-                } else add(day to Header.WithoutMonthName(dates[i]))
+                } else add(day to Header(dates[i], false))
+            } + buildList {
                 if (enabledAlarms.isNotEmpty() && i == 0) add(day to NextTime)
                 addAll(events.map { day to it }.ifEmpty { listOf(day to NothingScheduled) })
-            }
+            }.mapIndexed { j, (first, second) -> first to Item(second, dates[i], i == 0, j == 0) }
         }.toList()
     } + listOf(Spacer)
 
@@ -85,52 +94,79 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
     override fun getCount(): Int = items.size
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_item)
-        val item = items[position]
+        if (widthCells > 3) {
+            row.setViewVisibility(R.id.start_padding, View.VISIBLE)
+            row.setViewVisibility(R.id.middle_padding, View.VISIBLE)
+            row.setViewVisibility(R.id.end_padding, View.VISIBLE)
+        } else {
+            row.setViewVisibility(R.id.start_padding, View.GONE)
+            row.setViewVisibility(R.id.middle_padding, View.GONE)
+            row.setViewVisibility(R.id.end_padding, View.GONE)
+        }
+        val entry = items[position]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             row.setBoolean(R.id.event, "setClipToOutline", true)
             row.setViewOutlinePreferredRadius(R.id.event, 12f, TypedValue.COMPLEX_UNIT_DIP)
         }
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
 
-        if (item !is Pair<*, *>) {
+        if (entry !is Pair<*, *>) {
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, Intent())
             row.setViewVisibility(R.id.spacer, View.VISIBLE)
             row.setViewVisibility(R.id.header, View.GONE)
-            row.setViewVisibility(R.id.event, View.GONE)
+            row.setViewVisibility(R.id.event_parent, View.GONE)
             return row
         }
-        val day = (item.first as? Jdn).debugAssertNotNull ?: Jdn.today()
+        val day = (entry.first as? Jdn).debugAssertNotNull ?: Jdn.today()
 
-        (item.second as? Header)?.let { header ->
+        (entry.second as? Header)?.let { header ->
             val weekDayName = secondaryCalendar?.let {
-                val secondaryDayOfMonth = formatNumber((day on it).dayOfMonth, it.preferredDigits)
+                val secondaryDayOfMonth = formatNumber(header.date.dayOfMonth, it.preferredDigits)
                 "${day.weekDayNameInitials}($secondaryDayOfMonth)"
             } ?: day.weekDayName
-            if (position == 0) {
+            if (position == 0 && widthCells < 3) {
+                row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
                 row.setTextViewText(R.id.highlight, weekDayName)
                 row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
                 row.setViewVisibility(R.id.top_space, View.VISIBLE)
+                row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
+                row.setViewVisibility(R.id.bottom_space, View.GONE)
+            } else if (widthCells > 2) {
+                row.setViewVisibility(R.id.weekday_name, View.GONE)
+                row.setViewVisibility(R.id.top_space, View.VISIBLE)
+                row.setViewVisibility(R.id.highlight, View.GONE)
+                if (header.withMonth || position == 0) {
+                    row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
+                    row.setTextViewText(R.id.day_of_month, header.date.monthName)
+                    row.setViewVisibility(R.id.bottom_space, View.VISIBLE)
+                } else {
+                    row.setViewVisibility(R.id.day_of_month, View.GONE)
+                    row.setViewVisibility(R.id.bottom_space, View.GONE)
+                }
             } else {
+                row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
                 row.setTextViewText(R.id.weekday_name, weekDayName)
                 row.setViewVisibility(R.id.weekday_name, View.VISIBLE)
                 row.setViewVisibility(R.id.top_space, View.GONE)
-                if (header is Header.WithMonthName) {
+                row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
+                if (header.withMonth) {
                     row.setTextViewText(R.id.highlight, header.date.monthName)
                     row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 } else row.setViewVisibility(R.id.highlight, View.GONE)
+                row.setViewVisibility(R.id.bottom_space, View.GONE)
             }
-            row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
             row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(R.id.header, View.VISIBLE)
-            row.setViewVisibility(R.id.event, View.GONE)
+            row.setViewVisibility(R.id.event_parent, View.GONE)
             val clickIntent = Intent().putExtra(jdnActionKey, day.value)
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
             return row
         }
 
-        val event = item.second as? CalendarEvent<*>
-        if (item.second == NextTime) {
+        val item = (entry.second as? Item).debugAssertNotNull ?: return row
+        val event = item.item as? CalendarEvent<*>
+        if (item.item == NextTime) {
             val (title, color) = getNextEnabledTime(enabledAlarms)
             row.setTextViewText(R.id.event, title)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -146,7 +182,7 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (item.second == NothingScheduled) {
+                if (item.item == NothingScheduled) {
                     row.setColorAttr(
                         R.id.event,
                         "setTextColor",
@@ -182,8 +218,7 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
             } else {
                 val background = when {
                     event?.isHoliday == true -> R.drawable.widget_schedule_item_holiday
-                    event is CalendarEvent.DeviceCalendarEvent ->
-                        R.drawable.widget_schedule_item_event
+                    event is CalendarEvent.DeviceCalendarEvent -> R.drawable.widget_schedule_item_event
 
                     else -> R.drawable.widget_schedule_item_default
                 }
@@ -192,7 +227,7 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.oneLinerTitleWithTime
-                item.second == NothingScheduled -> nothingScheduledString
+                item.item == NothingScheduled -> nothingScheduledString
 
                 else -> ""
             }
@@ -201,7 +236,25 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
 
         row.setViewVisibility(R.id.spacer, View.GONE)
         row.setViewVisibility(R.id.header, View.GONE)
-        row.setViewVisibility(R.id.event, View.VISIBLE)
+        row.setViewVisibility(R.id.event_parent, View.VISIBLE)
+        if (widthCells > 2) {
+            if (item.first) {
+                if (item.today) {
+                    row.setViewVisibility(R.id.today, View.VISIBLE)
+                    row.setViewVisibility(R.id.day, View.GONE)
+                } else {
+                    row.setViewVisibility(R.id.today, View.GONE)
+                    row.setViewVisibility(R.id.day, View.VISIBLE)
+                }
+                row.setTextViewText(
+                    if (item.today) R.id.today else R.id.day,
+                    day.weekDayNameInitials + "\n" + formatNumber(item.date.dayOfMonth)
+                )
+            } else {
+                row.setViewVisibility(R.id.day, View.GONE)
+                row.setViewVisibility(R.id.today, View.GONE)
+            }
+        } else row.setViewVisibility(R.id.day_wrapper, View.GONE)
         val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
             Intent().putExtra(eventKey, event.id)
         } else Intent().putExtra(jdnActionKey, day.value)
@@ -214,10 +267,9 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
         val time = GregorianCalendar()
         val now = Clock(time)
         return coordinates.value?.calculatePrayTimes(time)?.let { times ->
-            val next = enabledAlarms.firstOrNull { times[it] > now }
-                ?: enabledAlarms.first()
-            (prayTimesTitles[next] ?: "") + spacedColon + times[next].toBasicFormatString() to
-                    next.tint.toArgb()
+            val next = enabledAlarms.firstOrNull { times[it] > now } ?: enabledAlarms.first()
+            (prayTimesTitles[next]
+                ?: "") + spacedColon + times[next].toBasicFormatString() to next.tint.toArgb()
         } ?: ("" to 0)
     }
 }

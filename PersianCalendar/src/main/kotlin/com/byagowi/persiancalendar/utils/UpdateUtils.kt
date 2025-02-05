@@ -97,6 +97,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
+import com.byagowi.persiancalendar.service.widgetWidthCellKey
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -243,8 +244,8 @@ fun update(context: Context, updateDate: Boolean) {
         updateFromRemoteViews<WidgetMoon>(context, now) { width, height, _, _ ->
             createMoonRemoteViews(context, width, height)
         }
-        updateFromRemoteViews<WidgetSchedule>(context, now) { _, _, _, widgetId ->
-            createScheduleRemoteViews(context, widgetId)
+        updateFromRemoteViews<WidgetSchedule>(context, now) { width, _, hasSize, widgetId ->
+            createScheduleRemoteViews(context, width.takeIf { hasSize }, widgetId)
         }
     }
 
@@ -422,12 +423,16 @@ private fun createSunViewRemoteViews(
 }
 
 // We don't want to use Jetpack Glance as it's size bloat so this is the hard way…
-private fun createScheduleRemoteViews(context: Context, widgetId: Int): RemoteViews {
+private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_schedule)
     remoteViews.setDirection(R.id.widget_schedule, context.resources)
 
+    // Estimation per https://developer.android.com/guide/practices/ui_guidelines/widget_design.html
+    val widthCells = width?.let { (((it / context.resources.dp) + 16) / 96).roundToInt() } ?: 2
+
     // Initiate the list view
     val adapterIntent = Intent(context, ScheduleWidgetService::class.java)
+    adapterIntent.putExtra(widgetWidthCellKey, widthCells)
     // Update conditions
     adapterIntent.putExtra("updateToken", System.currentTimeMillis() / ONE_HOUR_IN_MILLIS)
     adapterIntent.putExtra("appOpenCount", resumeToken.value)
@@ -457,6 +462,22 @@ private fun createScheduleRemoteViews(context: Context, widgetId: Int): RemoteVi
             android.R.dimen.system_app_widget_background_radius
         )
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
+    }
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        if (widthCells > 3) {
+            remoteViews.setViewVisibility(R.id.end_padding1, View.GONE)
+            remoteViews.setViewVisibility(R.id.end_padding2, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.end_padding3, View.VISIBLE)
+        } else if (widthCells > 2) {
+            remoteViews.setViewVisibility(R.id.end_padding1, View.GONE)
+            remoteViews.setViewVisibility(R.id.end_padding2, View.GONE)
+            remoteViews.setViewVisibility(R.id.end_padding3, View.VISIBLE)
+        } else {
+            remoteViews.setViewVisibility(R.id.end_padding1, View.VISIBLE)
+            remoteViews.setViewVisibility(R.id.end_padding2, View.GONE)
+            remoteViews.setViewVisibility(R.id.end_padding3, View.GONE)
+        }
     }
 
     return remoteViews
