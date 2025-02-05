@@ -131,7 +131,7 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
                 row.setViewVisibility(R.id.top_space, View.VISIBLE)
                 row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
-                row.setViewVisibility(R.id.bottom_space, View.GONE)
+                row.setViewVisibility(R.id.bigger_month_name, View.GONE)
             } else if (widthCells > 2) {
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
                 row.setViewVisibility(R.id.top_space, View.VISIBLE)
@@ -140,10 +140,8 @@ private class EventsViewFactory(
                 if (header.withMonth || position == 0) {
                     row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
                     row.setTextViewText(R.id.bigger_month_name, header.date.monthName)
-                    row.setViewVisibility(R.id.bottom_space, View.VISIBLE)
                 } else {
                     row.setViewVisibility(R.id.bigger_month_name, View.GONE)
-                    row.setViewVisibility(R.id.bottom_space, View.GONE)
                 }
             } else {
                 row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
@@ -155,7 +153,7 @@ private class EventsViewFactory(
                     row.setTextViewText(R.id.highlight, header.date.monthName)
                     row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 } else row.setViewVisibility(R.id.highlight, View.GONE)
-                row.setViewVisibility(R.id.bottom_space, View.GONE)
+                row.setViewVisibility(R.id.bigger_month_name, View.GONE)
             }
             row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(R.id.header, View.VISIBLE)
