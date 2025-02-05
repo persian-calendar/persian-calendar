@@ -159,19 +159,18 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
                         val background =
                             if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
                         row.setInt(R.id.event, "setBackgroundColor", background)
-                        val foreground = eventTextColor(background)
-                        row.setInt(R.id.event, "setTextColor", foreground)
+                        row.setInt(R.id.event, "setTextColor", eventTextColor(background))
                     } else {
                         row.setColorAttr(
                             R.id.event,
                             "setBackgroundColor",
-                            if (event.isHoliday == true) android.R.attr.colorAccent
+                            if (event.isHoliday) android.R.attr.colorAccent
                             else android.R.attr.colorButtonNormal,
                         )
                         row.setColorAttr(
                             R.id.event,
                             "setTextColor",
-                            if (event.isHoliday == true) android.R.attr.colorForegroundInverse
+                            if (event.isHoliday) android.R.attr.colorForegroundInverse
                             else android.R.attr.colorForeground,
                         )
                     }
@@ -187,18 +186,16 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
                 }
                 row.setInt(R.id.event, "setBackgroundResource", background)
             }
-            run {
-                val title = when {
-                    event?.isHoliday == true ->
-                        language.value.inParentheses.format(event.title, holidayString)
+            val title = when {
+                event?.isHoliday == true ->
+                    language.value.inParentheses.format(event.title, holidayString)
 
-                    event is CalendarEvent<*> -> event.oneLinerTitleWithTime
-                    item.second == NothingScheduled -> nothingScheduledString
+                event is CalendarEvent<*> -> event.oneLinerTitleWithTime
+                item.second == NothingScheduled -> nothingScheduledString
 
-                    else -> ""
-                }
-                row.setTextViewText(R.id.event, title)
+                else -> ""
             }
+            row.setTextViewText(R.id.event, title)
         }
 
         row.setViewVisibility(R.id.spacer, View.GONE)
