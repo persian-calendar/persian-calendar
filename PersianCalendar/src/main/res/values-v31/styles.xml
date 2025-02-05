@@ -9,6 +9,7 @@
     <color name="widget_divider">@android:color/system_accent2_200</color>
     <color name="widget_refresh_icon_color">@android:color/system_neutral2_700</color>
     <dimen name="widget_schedule_add_event_end_padding">12dip</dimen>
+    <dimen name="widget_schedule_item_end_padding">12dip</dimen>
     <dimen name="widget_schedule_horizontal_padding">4dip</dimen>
 
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />

@@ -28,7 +28,7 @@
             <FrameLayout
                 android:id="@+id/top_space"
                 android:layout_width="wrap_content"
-                android:layout_height="6dp" />
+                android:layout_height="16dp" />
 
             <TextView
                 android:id="@+id/highlight"
@@ -59,10 +59,17 @@
                 android:textColor="@color/widget_schedule_title"
                 android:textSize="24sp" />
 
+            <TextView
+                android:id="@+id/bigger_month_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/widget_schedule_title"
+                android:textSize="20sp" />
+
             <FrameLayout
                 android:id="@+id/bottom_space"
                 android:layout_width="wrap_content"
-                android:layout_height="16dp" />
+                android:layout_height="20dp" />
 
         </LinearLayout>
 
@@ -138,7 +145,7 @@
 
     <FrameLayout
         android:id="@+id/end_padding"
-        android:layout_width="8dp"
+        android:layout_width="@dimen/widget_schedule_item_end_padding"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

@@ -136,12 +136,13 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
                 row.setViewVisibility(R.id.top_space, View.VISIBLE)
                 row.setViewVisibility(R.id.highlight, View.GONE)
+                row.setViewVisibility(R.id.day_of_month, View.GONE)
                 if (header.withMonth || position == 0) {
-                    row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
-                    row.setTextViewText(R.id.day_of_month, header.date.monthName)
+                    row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
+                    row.setTextViewText(R.id.bigger_month_name, header.date.monthName)
                     row.setViewVisibility(R.id.bottom_space, View.VISIBLE)
                 } else {
-                    row.setViewVisibility(R.id.day_of_month, View.GONE)
+                    row.setViewVisibility(R.id.bigger_month_name, View.GONE)
                     row.setViewVisibility(R.id.bottom_space, View.GONE)
                 }
             } else {
