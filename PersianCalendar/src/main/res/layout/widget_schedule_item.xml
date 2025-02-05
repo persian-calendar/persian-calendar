@@ -19,17 +19,7 @@
             android:layout_height="6dp" />
 
         <TextView
-            android:id="@+id/month_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/widget_schedule_highlight"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:textColor="@color/widget_schedule_highlight_text"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/weekday_name_today"
+            android:id="@+id/highlight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/widget_schedule_highlight"

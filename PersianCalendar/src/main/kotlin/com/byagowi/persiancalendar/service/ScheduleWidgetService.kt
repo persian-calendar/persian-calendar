@@ -103,20 +103,19 @@ private class EventsViewFactory(val context: Context) : RemoteViewsService.Remot
 
         (item.second as? Header)?.let { header ->
             if (position == 0) {
-                row.setTextViewText(R.id.weekday_name_today, day.weekDayName)
-                row.setViewVisibility(R.id.weekday_name_today, View.VISIBLE)
+                row.setTextViewText(R.id.highlight, day.weekDayName)
+                row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
                 row.setViewVisibility(R.id.top_space, View.VISIBLE)
             } else {
                 row.setTextViewText(R.id.weekday_name, day.weekDayName)
-                row.setViewVisibility(R.id.weekday_name_today, View.GONE)
                 row.setViewVisibility(R.id.weekday_name, View.VISIBLE)
                 row.setViewVisibility(R.id.top_space, View.GONE)
+                if (header is Header.WithMonthName) {
+                    row.setTextViewText(R.id.highlight, header.date.monthName)
+                    row.setViewVisibility(R.id.highlight, View.VISIBLE)
+                } else row.setViewVisibility(R.id.highlight, View.GONE)
             }
-            if (header is Header.WithMonthName) {
-                row.setTextViewText(R.id.month_name, header.date.monthName)
-                row.setViewVisibility(R.id.month_name, View.VISIBLE)
-            } else row.setViewVisibility(R.id.month_name, View.GONE)
             row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
             row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(R.id.header, View.VISIBLE)
