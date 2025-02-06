@@ -54,7 +54,7 @@ private class EventsViewFactory(
     private object NothingScheduled
     private data class Header(val date: AbstractDate, val day: Jdn, val withMonth: Boolean)
     private data class Item(
-        val item: Any,
+        val value: Any,
         val day: Jdn,
         val date: AbstractDate,
         val today: Boolean,
@@ -114,7 +114,7 @@ private class EventsViewFactory(
         }
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
 
-        if (entry !is Header && entry !is Item) {
+        if (entry == Spacer) {
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, Intent())
             row.setViewVisibility(R.id.spacer, View.VISIBLE)
             row.setViewVisibility(R.id.header, View.GONE)
@@ -169,8 +169,8 @@ private class EventsViewFactory(
         }
 
         val item = (entry as? Item).debugAssertNotNull ?: return row
-        val event = item.item as? CalendarEvent<*>
-        if (item.item == NextTime) {
+        val event = item.value as? CalendarEvent<*>
+        if (item.value == NextTime) {
             val (title, color) = getNextEnabledTime(enabledAlarms)
             row.setTextViewText(R.id.event, title)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -186,7 +186,7 @@ private class EventsViewFactory(
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (item.item == NothingScheduled) {
+                if (item.value == NothingScheduled) {
                     row.setColorAttr(
                         R.id.event,
                         "setTextColor",
@@ -231,7 +231,7 @@ private class EventsViewFactory(
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.oneLinerTitleWithTime
-                item.item == NothingScheduled -> nothingScheduledString
+                item.value == NothingScheduled -> nothingScheduledString
 
                 else -> ""
             }
