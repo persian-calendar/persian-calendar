@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.eventKey
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
+import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readTwoWeekDeviceEvents
@@ -51,7 +52,6 @@ private class EventsViewFactory(
 ) : RemoteViewsService.RemoteViewsFactory {
     private object Spacer
     private object NextTime
-    private object NothingScheduled
     private data class Header(val date: AbstractDate, val day: Jdn, val withMonth: Boolean)
     private data class Item(
         val value: Any,
@@ -73,18 +73,23 @@ private class EventsViewFactory(
         days.map {
             it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
         }.toList().flatMapIndexed { i, (day, events) ->
+            val items = buildList {
+                val shiftWorkTitle = getShiftWorkTitle(day)
+                if (shiftWorkTitle != null) add(shiftWorkTitle)
+                if (events.isEmpty() && shiftWorkTitle == null && i == 0) {
+                    add(nothingScheduledString)
+                } else addAll(events)
+                if (enabledAlarms.isNotEmpty() && i == 0) add(NextTime)
+            }
             when {
-                i != 0 && events.isEmpty() -> listOf()
+                i != 0 && items.isEmpty() -> listOf()
                 dates[0].month != dates[i].month && !monthChange -> {
                     monthChange = true
                     listOf(Header(dates[i], day, true))
                 }
 
                 else -> listOf(Header(dates[i], day, false))
-            } + run {
-                (if (enabledAlarms.isNotEmpty() && i == 0) listOf(NextTime) else emptyList()) +
-                        events.ifEmpty { if (i == 0) listOf(NothingScheduled) else emptyList() }
-            }.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) }
+            } + items.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) }
         }
     } + listOf(Spacer)
 
@@ -186,7 +191,7 @@ private class EventsViewFactory(
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (item.value == NothingScheduled) {
+                if (item.value is String) {
                     row.setColorAttr(
                         R.id.event,
                         "setTextColor",
@@ -231,7 +236,7 @@ private class EventsViewFactory(
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.oneLinerTitleWithTime
-                item.value == NothingScheduled -> nothingScheduledString
+                item.value is String -> item.value.toString()
 
                 else -> ""
             }
