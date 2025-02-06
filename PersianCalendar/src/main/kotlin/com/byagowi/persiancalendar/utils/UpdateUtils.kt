@@ -41,6 +41,7 @@ import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.withClip
 import androidx.core.text.layoutDirection
 import androidx.core.view.drawToBitmap
+import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -96,11 +97,11 @@ import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
+import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
 import com.byagowi.persiancalendar.service.widgetWidthCellKey
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
-import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
@@ -447,11 +448,12 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     )
 
     // Add event button
-    val addEventPendingIntent = PendingIntent.getActivity(
+    val addEventPendingIntent = PendingIntent.getBroadcast(
         context, 0,
-        AddEventData.upcoming().asIntent(),
-        PendingIntent.FLAG_UPDATE_CURRENT or
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        Intent(context, BroadcastReceivers::class.java)
+            .setAction(ADD_EVENT)
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+        PendingIntent.FLAG_IMMUTABLE
     )
     remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
 
