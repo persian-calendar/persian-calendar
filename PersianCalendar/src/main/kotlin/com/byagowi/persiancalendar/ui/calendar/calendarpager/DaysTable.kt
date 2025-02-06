@@ -280,7 +280,7 @@ fun SharedTransitionScope.DaysTable(
             ) {
                 val isSelected = isHighlighted && selectedDay == day
                 val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
-                val isHoliday = events.any { it.isHoliday }
+                val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
                 Canvas(cellsSizeModifier) {
                     val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
                     val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
@@ -302,7 +302,7 @@ fun SharedTransitionScope.DaysTable(
                         radius = cellRadius,
                         style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
                     )
-                    if (isHighTextContrastEnabled && (isHoliday || day.isWeekEnd)) drawCircle(
+                    if (isHighTextContrastEnabled && isHoliday) drawCircle(
                         monthColors.holidays.copy(alpha = .25f), radius = cellRadius, style = Fill,
                     )
                 }
@@ -317,7 +317,7 @@ fun SharedTransitionScope.DaysTable(
                     ),
                     color = when {
                         isSelected -> monthColors.textDaySelected
-                        isHoliday || day.isWeekEnd -> monthColors.holidays
+                        isHoliday -> monthColors.holidays
                         else -> contentColor
                     },
                     style = daysStyle,

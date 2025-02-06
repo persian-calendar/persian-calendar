@@ -69,7 +69,7 @@ fun renderMonthWidget(
                 val isToday = day == today
 
                 val text = formatNumber(dayOffset + 1, mainCalendarDigits)
-                val isHoliday = events.any { it.isHoliday }
+                val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
                 dayPainter.setDayOfMonthItem(
                     isToday = isToday,
                     isSelected = day == selectedDay,
@@ -81,9 +81,7 @@ fun renderMonthWidget(
                     header = getShiftWorkTitle(day, true),
                     secondaryCalendar = secondaryCalendar,
                 )
-                if (setText != null) setText(
-                    (row + 1) * 7 + column, text, isHoliday || day.isWeekEnd,
-                )
+                if (setText != null) setText((row + 1) * 7 + column, text, isHoliday)
 
                 val xStart = cellWidth * if (isShowWeekOfYearEnabled) 1 else 0
                 it.withTranslation(
