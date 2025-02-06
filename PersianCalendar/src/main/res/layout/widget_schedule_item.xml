@@ -111,8 +111,8 @@
                 android:layout_width="2dp"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/event"
+            <LinearLayout
+                android:id="@+id/event_background"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
@@ -120,16 +120,31 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="@dimen/widget_schedule_horizontal_padding"
                 android:layout_marginBottom="2dp"
-                android:layout_weight="1"
-                android:ellipsize="none"
+                android:orientation="vertical"
                 android:paddingStart="8dp"
                 android:paddingTop="4dp"
                 android:paddingEnd="8dp"
-                android:paddingBottom="4dp"
-                android:singleLine="true"
-                android:textAlignment="viewStart"
-                android:textColor="@android:color/white"
-                android:textSize="14sp" />
+                android:paddingBottom="4dp">
+
+                <TextView
+                    android:id="@+id/event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="none"
+                    android:singleLine="true"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/event_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAlignment="viewStart"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 

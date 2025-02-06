@@ -109,10 +109,16 @@ private class EventsViewFactory(
         }
         val entry = items[position]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            row.setBoolean(R.id.event, "setClipToOutline", true)
-            row.setViewOutlinePreferredRadius(R.id.event, 12f, TypedValue.COMPLEX_UNIT_DIP)
+            row.setBoolean(R.id.event_background, "setClipToOutline", true)
+            row.setViewOutlinePreferredRadius(
+                R.id.event_background,
+                12f,
+                TypedValue.COMPLEX_UNIT_DIP
+            )
         }
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
+        row.setInt(R.id.event_time, "setTextColor", Color.WHITE)
+        row.setViewVisibility(R.id.event_time, View.GONE)
 
         if (entry == Spacer) {
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, Intent())
@@ -174,15 +180,15 @@ private class EventsViewFactory(
             val (title, color) = getNextEnabledTime(enabledAlarms)
             row.setTextViewText(R.id.event, title)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                row.setInt(R.id.event, "setBackgroundColor", color)
                 row.setInt(R.id.event, "setTextColor", eventTextColor(color))
-                row.setBoolean(R.id.event, "setClipToOutline", true)
+                row.setInt(R.id.event_background, "setBackgroundColor", color)
+                row.setBoolean(R.id.event_background, "setClipToOutline", true)
                 row.setViewOutlinePreferredRadius(
                     R.id.event, 12f, TypedValue.COMPLEX_UNIT_DIP
                 )
             } else {
                 val background = R.drawable.widget_schedule_item_time
-                row.setInt(R.id.event, "setBackgroundResource", background)
+                row.setInt(R.id.event_background, "setBackgroundResource", background)
             }
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -193,7 +199,7 @@ private class EventsViewFactory(
                         android.R.attr.colorAccent,
                     )
                     row.setInt(
-                        R.id.event,
+                        R.id.event_background,
                         "setBackgroundResource",
                         R.drawable.widget_nothing_scheduled,
                     )
@@ -201,11 +207,12 @@ private class EventsViewFactory(
                     if (event is CalendarEvent.DeviceCalendarEvent) {
                         val background =
                             if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
-                        row.setInt(R.id.event, "setBackgroundColor", background)
+                        row.setInt(R.id.event_background, "setBackgroundColor", background)
                         row.setInt(R.id.event, "setTextColor", eventTextColor(background))
+                        row.setInt(R.id.event_time, "setTextColor", eventTextColor(background))
                     } else {
                         row.setColorAttr(
-                            R.id.event,
+                            R.id.event_background,
                             "setBackgroundColor",
                             if (event.isHoliday) android.R.attr.colorAccent
                             else android.R.attr.colorButtonNormal,
@@ -217,7 +224,6 @@ private class EventsViewFactory(
                             else android.R.attr.colorForeground,
                         )
                     }
-                    row.setTextViewText(R.id.event, event.oneLinerTitleWithTime ?: "")
                 }
             } else {
                 val background = when {
@@ -226,16 +232,20 @@ private class EventsViewFactory(
 
                     else -> R.drawable.widget_schedule_item_default
                 }
-                row.setInt(R.id.event, "setBackgroundResource", background)
+                row.setInt(R.id.event_background, "setBackgroundResource", background)
             }
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
-                event is CalendarEvent<*> -> event.oneLinerTitleWithTime
+                event is CalendarEvent<*> -> event.title
                 item.value == NothingScheduled -> nothingScheduledString
 
                 else -> ""
             }
             row.setTextViewText(R.id.event, title)
+            (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let {
+                row.setTextViewText(R.id.event_time, it)
+                row.setViewVisibility(R.id.event_time, View.VISIBLE)
+            }
         }
 
         row.setViewVisibility(R.id.spacer, View.GONE)
