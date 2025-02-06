@@ -72,17 +72,20 @@ private class EventsViewFactory(
         var monthChange = false
         days.map {
             it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
-        }.flatMapIndexed { i, (day, events) ->
-            if (i != 0 && events.isEmpty()) emptyList() else buildList {
-                if (dates[0].month != dates[i].month && !monthChange) {
-                    add(Header(dates[i], day, true))
+        }.toList().flatMapIndexed { i, (day, events) ->
+            when {
+                i != 0 && events.isEmpty() -> listOf()
+                dates[0].month != dates[i].month && !monthChange -> {
                     monthChange = true
-                } else add(Header(dates[i], day, false))
-            } + buildList {
-                if (enabledAlarms.isNotEmpty() && i == 0) add(NextTime)
-                addAll(events.ifEmpty { listOf(NothingScheduled) })
-            }.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) }
-        }.toList()
+                    listOf<Any>(Header(dates[i], day, true))
+                }
+
+                else -> listOf<Any>(Header(dates[i], day, false))
+            } + run {
+                (if (enabledAlarms.isNotEmpty() && i == 0) listOf(NextTime) else emptyList()) +
+                        events.ifEmpty { listOf(NothingScheduled) }
+            }.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) as Any }
+        }
     } + listOf(Spacer)
 
     override fun onCreate() = Unit
