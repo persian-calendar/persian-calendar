@@ -273,7 +273,7 @@ private class EventsViewFactory(
         return coordinates.value?.calculatePrayTimes(time)?.let { times ->
             val next = enabledAlarms.firstOrNull { times[it] > now } ?: enabledAlarms.first()
             (prayTimesTitles[next]
-                ?: "") + spacedColon + times[next].toBasicFormatString() to next.tint.toArgb()
+                ?: "") + spacedColon + times[next].toFormattedString() to next.tint.toArgb()
         } ?: ("" to 0)
     }
 }
