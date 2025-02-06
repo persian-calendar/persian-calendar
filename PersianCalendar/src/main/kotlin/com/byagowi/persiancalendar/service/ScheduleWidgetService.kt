@@ -222,7 +222,6 @@ private class EventsViewFactory(
                             else android.R.attr.colorForeground,
                         )
                     }
-                    row.setTextViewText(R.id.event, event.oneLinerTitleWithTime ?: "")
                 }
             } else {
                 val background = when {
