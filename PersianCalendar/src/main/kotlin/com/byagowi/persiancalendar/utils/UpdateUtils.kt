@@ -621,6 +621,7 @@ private fun createMonthViewRemoteViews(
         val jdn = monthStart + i - weekStart - 7
         val action = jdnActionKey + jdn.value
         remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
+        remoteViews.setInt(id, "setBackgroundResource", R.drawable.widget_month_day_ripple)
         if (isTalkBackEnabled) {
             val daySummary = getA11yDaySummary(
                 context.resources, jdn, jdn == today, monthDeviceEvents,
