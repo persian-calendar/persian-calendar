@@ -83,8 +83,8 @@ private class EventsViewFactory(
                 else -> listOf(Header(dates[i], day, false))
             } + run {
                 (if (enabledAlarms.isNotEmpty() && i == 0) listOf(NextTime) else emptyList()) +
-                        events.ifEmpty { listOf(NothingScheduled) }
-            }.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) as Any }
+                        events.ifEmpty { if (i == 0) listOf(NothingScheduled) else emptyList() }
+            }.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) }
         }
     } + listOf(Spacer)
 
