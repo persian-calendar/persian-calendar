@@ -77,10 +77,10 @@ private class EventsViewFactory(
                 i != 0 && events.isEmpty() -> listOf()
                 dates[0].month != dates[i].month && !monthChange -> {
                     monthChange = true
-                    listOf<Any>(Header(dates[i], day, true))
+                    listOf(Header(dates[i], day, true))
                 }
 
-                else -> listOf<Any>(Header(dates[i], day, false))
+                else -> listOf(Header(dates[i], day, false))
             } + run {
                 (if (enabledAlarms.isNotEmpty() && i == 0) listOf(NextTime) else emptyList()) +
                         events.ifEmpty { listOf(NothingScheduled) }
