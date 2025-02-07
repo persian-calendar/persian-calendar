@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.eventKey
@@ -41,6 +42,7 @@ import com.byagowi.persiancalendar.utils.readTwoWeekDeviceEvents
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import java.util.GregorianCalendar
+import kotlin.math.roundToInt
 
 class ScheduleWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory =
@@ -158,12 +160,6 @@ private class EventsViewFactory(
                 val secondaryDayOfMonth = formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
                 "${header.day.weekDayNameInitials}($secondaryDayOfMonth)"
             } ?: header.day.weekDayName
-            val monthTitle = buildSpannedString {
-                if (header.withMonth || (widthCells > 2 && position == 0)) {
-                    append(header.date.monthName)
-                    header.secondaryDate?.let { scale(.75f) { append(" (${it.monthName})") } }
-                }
-            }
             if (position == 0 && widthCells < 3) {
                 row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
                 row.setTextViewText(R.id.highlight, weekDayName)
@@ -178,8 +174,18 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.highlight, View.GONE)
                 row.setViewVisibility(R.id.day_of_month, View.GONE)
                 if (header.withMonth || position == 0) {
-                    row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
+                    val dp = context.resources.dp
+                    val topSpacePx = (if (header.secondaryDate == null) 12 else 6)
+                        .let { (it * dp).roundToInt() }
+                    val bottomSpacePx = (if (header.secondaryDate == null) 4 else 12)
+                        .let { (it * dp).roundToInt() }
+                    val monthTitle = buildSpannedString {
+                        append(header.date.monthName + "\n")
+                        header.secondaryDate?.let { scale(.9f) { append(it.monthName) } }
+                    }
                     row.setTextViewText(R.id.bigger_month_name, monthTitle)
+                    row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
+                    row.setViewPadding(R.id.bigger_month_name, 0, topSpacePx, 0, bottomSpacePx)
                 } else {
                     row.setViewVisibility(R.id.bigger_month_name, View.GONE)
                 }
@@ -190,6 +196,10 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.top_space, View.GONE)
                 row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
                 if (header.withMonth) {
+                    val monthTitle = buildSpannedString {
+                        append(header.date.monthName)
+                        header.secondaryDate?.let { scale(.9f) { append(" (${it.monthName})") } }
+                    }
                     row.setTextViewText(R.id.highlight, monthTitle)
                     row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 } else row.setViewVisibility(R.id.highlight, View.GONE)

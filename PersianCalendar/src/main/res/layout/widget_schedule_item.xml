@@ -63,9 +63,8 @@
                 android:id="@+id/bigger_month_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="24dp"
                 android:alpha=".9"
+                android:lineSpacingMultiplier="1.1"
                 android:textColor="@color/widget_schedule_title"
                 android:textSize="18sp" />
 
