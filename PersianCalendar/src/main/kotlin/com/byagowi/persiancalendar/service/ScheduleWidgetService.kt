@@ -25,9 +25,11 @@ import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.prayTimesTitles
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
+import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.eventKey
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
@@ -52,11 +54,18 @@ private class EventsViewFactory(
 ) : RemoteViewsService.RemoteViewsFactory {
     private object Spacer
     private object NextTime
-    private data class Header(val date: AbstractDate, val day: Jdn, val withMonth: Boolean)
+    private data class Header(
+        val date: AbstractDate,
+        val secondaryDate: AbstractDate?,
+        val day: Jdn,
+        val withMonth: Boolean
+    )
+
     private data class Item(
         val value: Any,
         val day: Jdn,
         val date: AbstractDate,
+        val secondaryDate: AbstractDate?,
         val today: Boolean,
         val first: Boolean
     )
@@ -67,12 +76,14 @@ private class EventsViewFactory(
         val deviceEvents = if (isShowDeviceCalendarEvents.value) {
             context.readTwoWeekDeviceEvents(today)
         } else EventsStore.empty()
-        val days = today..<today + 14
-        val dates = days.map { it on mainCalendar }.toList()
+        val days = (today..<today + 14).toList()
+        val dates = days.map { it on mainCalendar }
+        val secondaryDates = secondaryCalendar?.let { calendar -> days.map { it on calendar } }
         var monthChange = false
+        var secondaryMonthChange = false
         days.map {
             it to sortEvents(eventsRepository?.getEvents(it, deviceEvents) ?: emptyList())
-        }.toList().flatMapIndexed { i, (day, events) ->
+        }.flatMapIndexed { i, (day, events) ->
             val items = buildList {
                 val shiftWorkTitle = getShiftWorkTitle(day)
                 if (shiftWorkTitle != null) add(shiftWorkTitle)
@@ -81,15 +92,22 @@ private class EventsViewFactory(
                 } else addAll(events)
                 if (enabledAlarms.isNotEmpty() && i == 0) add(NextTime)
             }
+            val date = dates[i]
+            val secondaryDate = secondaryDates?.let { it[i] }
             when {
                 i != 0 && items.isEmpty() -> listOf()
-                dates[0].month != dates[i].month && !monthChange -> {
+                dates[0].month != date.month && !monthChange -> {
                     monthChange = true
-                    listOf(Header(dates[i], day, true))
+                    listOf(Header(date, secondaryDate, day, true))
                 }
 
-                else -> listOf(Header(dates[i], day, false))
-            } + items.mapIndexed { j, item -> Item(item, day, dates[i], i == 0, j == 0) }
+                secondaryDates?.get(0)?.month != secondaryDate?.month && !secondaryMonthChange -> {
+                    secondaryMonthChange = true
+                    listOf(Header(date, secondaryDate, day, true))
+                }
+
+                else -> listOf(Header(date, secondaryDate, day, false))
+            } + items.mapIndexed { j, item -> Item(item, day, date, secondaryDate, i == 0, j == 0) }
         }
     } + listOf(Spacer)
 
@@ -130,8 +148,8 @@ private class EventsViewFactory(
             ((entry as? Header)?.day ?: (entry as? Item)?.day).debugAssertNotNull ?: Jdn.today()
 
         (entry as? Header)?.let { header ->
-            val weekDayName = secondaryCalendar?.let {
-                val secondaryDayOfMonth = formatNumber(header.date.dayOfMonth, it.preferredDigits)
+            val weekDayName = header.secondaryDate?.let {
+                val secondaryDayOfMonth = formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
                 "${day.weekDayNameInitials}($secondaryDayOfMonth)"
             } ?: day.weekDayName
             if (position == 0 && widthCells < 3) {
@@ -149,7 +167,11 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.day_of_month, View.GONE)
                 if (header.withMonth || position == 0) {
                     row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
-                    row.setTextViewText(R.id.bigger_month_name, header.date.monthName)
+                    val name = buildString {
+                        append(header.date.monthName)
+                        header.secondaryDate?.let { append(spacedComma + it.monthName) }
+                    }
+                    row.setTextViewText(R.id.bigger_month_name, name)
                 } else {
                     row.setViewVisibility(R.id.bigger_month_name, View.GONE)
                 }
@@ -254,9 +276,12 @@ private class EventsViewFactory(
                     row.setViewVisibility(R.id.today, View.GONE)
                     row.setViewVisibility(R.id.day, View.VISIBLE)
                 }
+                val firstLine = day.weekDayNameInitials + (item.secondaryDate?.let {
+                    formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
+                } ?: "")
                 row.setTextViewText(
                     if (item.today) R.id.today else R.id.day,
-                    day.weekDayNameInitials + "\n" + formatNumber(item.date.dayOfMonth)
+                    firstLine + "\n" + formatNumber(item.date.dayOfMonth)
                 )
             } else {
                 row.setViewVisibility(R.id.day, View.GONE)
