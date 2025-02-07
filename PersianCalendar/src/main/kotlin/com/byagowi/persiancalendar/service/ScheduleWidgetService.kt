@@ -182,7 +182,11 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.top_space, View.GONE)
                 row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
                 if (header.withMonth) {
-                    row.setTextViewText(R.id.highlight, header.date.monthName)
+                    val name = buildString {
+                        append(header.date.monthName)
+                        header.secondaryDate?.let { append(spacedComma + it.monthName) }
+                    }
+                    row.setTextViewText(R.id.highlight, name)
                     row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 } else row.setViewVisibility(R.id.highlight, View.GONE)
                 row.setViewVisibility(R.id.bigger_month_name, View.GONE)
