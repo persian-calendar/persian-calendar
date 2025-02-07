@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.prayTimesTitles
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -98,6 +97,9 @@ private class EventsViewFactory(
                 i != 0 && items.isEmpty() -> listOf()
                 dates[0].month != date.month && !monthChange -> {
                     monthChange = true
+                    if (secondaryDates?.get(0)?.month != secondaryDate?.month) {
+                        secondaryMonthChange = true
+                    }
                     listOf(Header(date, secondaryDate, day, true))
                 }
 
@@ -280,14 +282,11 @@ private class EventsViewFactory(
                     row.setViewVisibility(R.id.today, View.GONE)
                     row.setViewVisibility(R.id.day, View.VISIBLE)
                 }
-                val firstLine = day.weekDayNameInitials + (item.secondaryDate?.let {
+                val title = day.weekDayNameInitials + (item.secondaryDate?.let {
                     formatNumber(item.date.dayOfMonth) +
                             "\n(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})"
                 } ?: "\n${formatNumber(item.date.dayOfMonth)}")
-                row.setTextViewText(
-                    if (item.today) R.id.today else R.id.day,
-                    firstLine + "\n" + formatNumber(item.date.dayOfMonth)
-                )
+                row.setTextViewText(if (item.today) R.id.today else R.id.day, title)
             } else {
                 row.setViewVisibility(R.id.day, View.GONE)
                 row.setViewVisibility(R.id.today, View.GONE)
