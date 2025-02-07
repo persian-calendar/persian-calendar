@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.text.buildSpannedString
+import androidx.core.text.scale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
@@ -154,6 +156,12 @@ private class EventsViewFactory(
                 val secondaryDayOfMonth = formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
                 "${day.weekDayNameInitials}($secondaryDayOfMonth)"
             } ?: day.weekDayName
+            val monthTitle = buildSpannedString {
+                if (header.withMonth || (widthCells > 2 && position == 0)) {
+                    append(header.date.monthName)
+                    header.secondaryDate?.let { scale(.75f) { append(" (${it.monthName})") } }
+                }
+            }
             if (position == 0 && widthCells < 3) {
                 row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
                 row.setTextViewText(R.id.highlight, weekDayName)
@@ -169,11 +177,7 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.day_of_month, View.GONE)
                 if (header.withMonth || position == 0) {
                     row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
-                    val name = buildString {
-                        append(header.date.monthName)
-                        header.secondaryDate?.let { append(" (${it.monthName})") }
-                    }
-                    row.setTextViewText(R.id.bigger_month_name, name)
+                    row.setTextViewText(R.id.bigger_month_name, monthTitle)
                 } else {
                     row.setViewVisibility(R.id.bigger_month_name, View.GONE)
                 }
@@ -184,11 +188,7 @@ private class EventsViewFactory(
                 row.setViewVisibility(R.id.top_space, View.GONE)
                 row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
                 if (header.withMonth) {
-                    val name = buildString {
-                        append(header.date.monthName)
-                        header.secondaryDate?.let { append(" (${it.monthName})") }
-                    }
-                    row.setTextViewText(R.id.highlight, name)
+                    row.setTextViewText(R.id.highlight, monthTitle)
                     row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 } else row.setViewVisibility(R.id.highlight, View.GONE)
                 row.setViewVisibility(R.id.bigger_month_name, View.GONE)
@@ -237,11 +237,14 @@ private class EventsViewFactory(
                         row.setInt(R.id.event, "setBackgroundColor", background)
                         row.setInt(R.id.event, "setTextColor", eventTextColor(background))
                     } else {
-                        row.setColorAttr(
+                        if (event.isHoliday) row.setColorAttr(
                             R.id.event,
                             "setBackgroundColor",
-                            if (event.isHoliday) android.R.attr.colorAccent
-                            else android.R.attr.colorButtonNormal,
+                            android.R.attr.colorAccent,
+                        ) else row.setInt(
+                            R.id.event,
+                            "setBackgroundResource",
+                            R.drawable.widget_nothing_scheduled,
                         )
                         row.setColorAttr(
                             R.id.event,
@@ -282,10 +285,15 @@ private class EventsViewFactory(
                     row.setViewVisibility(R.id.today, View.GONE)
                     row.setViewVisibility(R.id.day, View.VISIBLE)
                 }
-                val title = day.weekDayNameInitials + (item.secondaryDate?.let {
-                    formatNumber(item.date.dayOfMonth) +
-                            "\n(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})"
-                } ?: "\n${formatNumber(item.date.dayOfMonth)}")
+                val title = buildSpannedString {
+                    append(day.weekDayNameInitials)
+                    item.secondaryDate?.let {
+                        append(formatNumber(item.date.dayOfMonth) + "\n")
+                        scale(.75f) {
+                            append("(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})")
+                        }
+                    } ?: append("\n${formatNumber(item.date.dayOfMonth)}")
+                }
                 row.setTextViewText(if (item.today) R.id.today else R.id.day, title)
             } else {
                 row.setViewVisibility(R.id.day, View.GONE)
