@@ -136,8 +136,12 @@ private class EventsViewFactory(
         }
         val entry = items[position]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            row.setBoolean(R.id.event, "setClipToOutline", true)
-            row.setViewOutlinePreferredRadius(R.id.event, 12f, TypedValue.COMPLEX_UNIT_DIP)
+            row.setBoolean(R.id.event_background, "setClipToOutline", true)
+            row.setViewOutlinePreferredRadius(
+                R.id.event_background,
+                12f,
+                TypedValue.COMPLEX_UNIT_DIP
+            )
         }
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
 
@@ -205,16 +209,18 @@ private class EventsViewFactory(
             val (title, color) = getNextEnabledTime(enabledAlarms)
             row.setTextViewText(R.id.event, title)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                row.setInt(R.id.event, "setBackgroundColor", color)
+                row.setInt(R.id.event_background, "setBackgroundColor", color)
                 row.setInt(R.id.event, "setTextColor", eventTextColor(color))
-                row.setBoolean(R.id.event, "setClipToOutline", true)
+                row.setInt(R.id.event_time, "setTextColor", eventTextColor(color))
+                row.setBoolean(R.id.event_background, "setClipToOutline", true)
                 row.setViewOutlinePreferredRadius(
-                    R.id.event, 12f, TypedValue.COMPLEX_UNIT_DIP
+                    R.id.event_background, 12f, TypedValue.COMPLEX_UNIT_DIP
                 )
             } else {
                 val background = R.drawable.widget_schedule_item_time
-                row.setInt(R.id.event, "setBackgroundResource", background)
+                row.setInt(R.id.event_background, "setBackgroundResource", background)
             }
+            row.setViewVisibility(R.id.event_time, View.GONE)
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (item.value is String) {
@@ -223,8 +229,13 @@ private class EventsViewFactory(
                         "setTextColor",
                         android.R.attr.colorAccent,
                     )
+                    row.setColorAttr(
+                        R.id.event_time,
+                        "setTextColor",
+                        android.R.attr.colorAccent,
+                    )
                     row.setInt(
-                        R.id.event,
+                        R.id.event_background,
                         "setBackgroundResource",
                         R.drawable.widget_nothing_scheduled,
                     )
@@ -232,24 +243,23 @@ private class EventsViewFactory(
                     if (event is CalendarEvent.DeviceCalendarEvent) {
                         val background =
                             if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
-                        row.setInt(R.id.event, "setBackgroundColor", background)
+                        row.setInt(R.id.event_background, "setBackgroundColor", background)
                         row.setInt(R.id.event, "setTextColor", eventTextColor(background))
+                        row.setInt(R.id.event_time, "setTextColor", eventTextColor(background))
                     } else {
                         if (event.isHoliday) row.setColorAttr(
-                            R.id.event,
+                            R.id.event_background,
                             "setBackgroundColor",
                             android.R.attr.colorAccent,
                         ) else row.setInt(
-                            R.id.event,
+                            R.id.event_background,
                             "setBackgroundResource",
                             R.drawable.widget_nothing_scheduled,
                         )
-                        row.setColorAttr(
-                            R.id.event,
-                            "setTextColor",
-                            if (event.isHoliday) android.R.attr.colorForegroundInverse
-                            else android.R.attr.colorForeground,
-                        )
+                        val textColor = if (event.isHoliday) android.R.attr.colorForegroundInverse
+                        else android.R.attr.colorForeground
+                        row.setColorAttr(R.id.event, "setTextColor", textColor)
+                        row.setColorAttr(R.id.event_time, "setTextColor", textColor)
                     }
                 }
             } else {
@@ -259,15 +269,19 @@ private class EventsViewFactory(
 
                     else -> R.drawable.widget_schedule_item_default
                 }
-                row.setInt(R.id.event, "setBackgroundResource", background)
+                row.setInt(R.id.event_background, "setBackgroundResource", background)
             }
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
-                event is CalendarEvent<*> -> event.oneLinerTitleWithTime
+                event is CalendarEvent<*> -> event.title
                 item.value is String -> item.value.toString()
                 else -> ""
             }
             row.setTextViewText(R.id.event, title)
+            (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let {
+                row.setTextViewText(R.id.event_time, it)
+                row.setViewVisibility(R.id.event_time, View.VISIBLE)
+            } ?: row.setViewVisibility(R.id.event_time, View.GONE)
         }
 
         row.setViewVisibility(R.id.spacer, View.GONE)
