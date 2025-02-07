@@ -428,8 +428,15 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_schedule)
     remoteViews.setDirection(R.id.widget_schedule, context.resources)
 
-    // Estimation per https://developer.android.com/guide/practices/ui_guidelines/widget_design.html
-    val widthCells = width?.let { (((it / context.resources.dp) + 16) / 96).roundToInt() } ?: 2
+    // An estimation, https://developer.android.com/guide/practices/ui_guidelines/widget_design.html
+    val widthCells = width?.let {
+        val widthDp = it / context.resources.dp
+        when {
+            widthDp < 180 -> 2
+            widthDp < 310 -> 3
+            else -> 4
+        }
+    } ?: 3
 
     // Initiate the list view
     val adapterIntent = Intent(context, ScheduleWidgetService::class.java)
