@@ -169,7 +169,7 @@ private class EventsViewFactory(
                     row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
                     val name = buildString {
                         append(header.date.monthName)
-                        header.secondaryDate?.let { append(spacedComma + it.monthName) }
+                        header.secondaryDate?.let { append(" (${it.monthName})") }
                     }
                     row.setTextViewText(R.id.bigger_month_name, name)
                 } else {
@@ -184,7 +184,7 @@ private class EventsViewFactory(
                 if (header.withMonth) {
                     val name = buildString {
                         append(header.date.monthName)
-                        header.secondaryDate?.let { append(spacedComma + it.monthName) }
+                        header.secondaryDate?.let { append(" (${it.monthName})") }
                     }
                     row.setTextViewText(R.id.highlight, name)
                     row.setViewVisibility(R.id.highlight, View.VISIBLE)
@@ -281,8 +281,9 @@ private class EventsViewFactory(
                     row.setViewVisibility(R.id.day, View.VISIBLE)
                 }
                 val firstLine = day.weekDayNameInitials + (item.secondaryDate?.let {
-                    formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
-                } ?: "")
+                    formatNumber(item.date.dayOfMonth) +
+                            "\n(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})"
+                } ?: "\n${formatNumber(item.date.dayOfMonth)}")
                 row.setTextViewText(
                     if (item.today) R.id.today else R.id.day,
                     firstLine + "\n" + formatNumber(item.date.dayOfMonth)
