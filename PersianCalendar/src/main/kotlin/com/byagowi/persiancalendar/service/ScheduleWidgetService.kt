@@ -56,9 +56,9 @@ private class EventsViewFactory(
     private object Spacer
     private object NextTime
     private data class Header(
+        val day: Jdn,
         val date: AbstractDate,
         val secondaryDate: AbstractDate?,
-        val day: Jdn,
         val withMonth: Boolean
     )
 
@@ -102,15 +102,15 @@ private class EventsViewFactory(
                     if (secondaryDates?.get(0)?.month != secondaryDate?.month) {
                         secondaryMonthChange = true
                     }
-                    listOf(Header(date, secondaryDate, day, true))
+                    listOf(Header(day, date, secondaryDate, true))
                 }
 
                 secondaryDates?.get(0)?.month != secondaryDate?.month && !secondaryMonthChange -> {
                     secondaryMonthChange = true
-                    listOf(Header(date, secondaryDate, day, true))
+                    listOf(Header(day, date, secondaryDate, true))
                 }
 
-                else -> listOf(Header(date, secondaryDate, day, false))
+                else -> listOf(Header(day, date, secondaryDate, false))
             } + items.mapIndexed { j, item -> Item(item, day, date, secondaryDate, i == 0, j == 0) }
         }
     } + listOf(Spacer)
@@ -148,14 +148,12 @@ private class EventsViewFactory(
             row.setViewVisibility(R.id.event_parent, View.GONE)
             return row
         }
-        val day =
-            ((entry as? Header)?.day ?: (entry as? Item)?.day).debugAssertNotNull ?: Jdn.today()
 
         (entry as? Header)?.let { header ->
             val weekDayName = header.secondaryDate?.let {
                 val secondaryDayOfMonth = formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
-                "${day.weekDayNameInitials}($secondaryDayOfMonth)"
-            } ?: day.weekDayName
+                "${header.day.weekDayNameInitials}($secondaryDayOfMonth)"
+            } ?: header.day.weekDayName
             val monthTitle = buildSpannedString {
                 if (header.withMonth || (widthCells > 2 && position == 0)) {
                     append(header.date.monthName)
@@ -196,7 +194,7 @@ private class EventsViewFactory(
             row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(R.id.header, View.VISIBLE)
             row.setViewVisibility(R.id.event_parent, View.GONE)
-            val clickIntent = Intent().putExtra(jdnActionKey, day.value)
+            val clickIntent = Intent().putExtra(jdnActionKey, header.day.value)
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
             return row
         }
@@ -267,7 +265,6 @@ private class EventsViewFactory(
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.oneLinerTitleWithTime
                 item.value is String -> item.value.toString()
-
                 else -> ""
             }
             row.setTextViewText(R.id.event, title)
@@ -286,7 +283,7 @@ private class EventsViewFactory(
                     row.setViewVisibility(R.id.day, View.VISIBLE)
                 }
                 val title = buildSpannedString {
-                    append(day.weekDayNameInitials)
+                    append(item.day.weekDayNameInitials)
                     item.secondaryDate?.let {
                         append(formatNumber(item.date.dayOfMonth) + "\n")
                         scale(.75f) {
@@ -302,7 +299,7 @@ private class EventsViewFactory(
         } else row.setViewVisibility(R.id.day_wrapper, View.GONE)
         val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
             Intent().putExtra(eventKey, event.id)
-        } else Intent().putExtra(jdnActionKey, day.value)
+        } else Intent().putExtra(jdnActionKey, item.day.value)
         row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
         return row
     }
