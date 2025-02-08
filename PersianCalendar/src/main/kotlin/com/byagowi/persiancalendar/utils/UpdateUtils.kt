@@ -57,7 +57,6 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
@@ -1045,11 +1044,6 @@ private data class NotificationData(
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Prepend a right-to-left mark character to Android with sane text rendering stack
-        // to resolve a bug seems some Samsung devices have with characters with weak direction,
-        // digits being at the first of string on
-        val toPrepend = if (isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) RLM else ""
-
         val builder = NotificationCompat.Builder(context, notificationId.toString())
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
@@ -1061,7 +1055,7 @@ private data class NotificationData(
                 else
                     NotificationCompat.VISIBILITY_SECRET
             )
-            .setContentTitle(toPrepend + title)
+            .setContentTitle(title)
             .setContentText(
                 when {
                     isTalkBackEnabled -> getA11yDaySummary(
@@ -1071,8 +1065,7 @@ private data class NotificationData(
                         withOtherCalendars = true, withTitle = false
                     ) + if (owghat.isEmpty()) "" else spacedComma + owghat
 
-                    subtitle.isEmpty() -> subtitle
-                    else -> toPrepend + subtitle
+                    else -> subtitle
                 }
             )
 
