@@ -43,7 +43,7 @@
     <color name="widget_add_event">#0B57D0</color>
     <color name="widget_schedule_today_text">#FFFFFF</color>
     <color name="widget_schedule_today">#0B57D0</color>
-    <color name="widget_schedule_background">#FFFFFF</color>
+    <color name="widget_modern_background">#FFFFFF</color>
     <color name="widget_schedule_title">#000000</color>
     <color name="widget_schedule_event">#FFFFFF</color>
     <color name="widget_nothing_scheduled">#8D95AD</color>

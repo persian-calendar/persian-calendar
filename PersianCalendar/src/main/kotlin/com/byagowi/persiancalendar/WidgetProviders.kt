@@ -38,6 +38,7 @@ class Widget4x2 : WidgetProvider()
 class WidgetMap : WidgetProvider()
 class WidgetMoon : WidgetProvider()
 class WidgetSunView : WidgetProvider()
+class WidgetMonth : WidgetProvider()
 class WidgetMonthView : WidgetProvider()
 class WidgetSchedule : WidgetProvider()
 

@@ -216,6 +216,20 @@
         </receiver>
 
         <receiver
+            android:name=".WidgetMonth"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/month_overview">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/persiancalendar_provider_month" />
+        </receiver>
+
+        <receiver
             android:name=".WidgetMonthView"
             android:exported="false"
             android:icon="@mipmap/ic_launcher"

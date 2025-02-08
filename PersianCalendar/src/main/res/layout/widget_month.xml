@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_month"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_modern_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".WidgetMonth">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/month_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:alpha=".9"
+            android:textColor="@color/widget_schedule_title"
+            android:textSize="16sp" />
+
+        <ImageButton
+            android:id="@+id/previous_month"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:alpha=".8"
+            android:background="@drawable/widget_month_button"
+            android:contentDescription="@string/previous_x"
+            android:src="@drawable/ic_navigate_before"
+            android:tint="@color/widget_add_event" />
+
+        <ImageButton
+            android:id="@+id/next_month"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:alpha=".8"
+            android:background="@drawable/widget_month_button"
+            android:contentDescription="@string/next_x"
+            android:src="@drawable/ic_navigate_next"
+            android:tint="@color/widget_add_event" />
+
+        <ImageButton
+            android:id="@+id/add_event"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/widget_add_event"
+            android:contentDescription="@string/add_event"
+            android:src="@drawable/widget_add_event_icon"
+            android:tint="@color/widget_add_event_icon" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -4,8 +4,7 @@
     android:id="@+id/widget_schedule"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/widget_schedule_background"
-    android:theme="@style/WidgetTheme"
+    android:background="@drawable/widget_modern_background"
     tools:context=".WidgetSchedule">
 
     <ListView

@@ -39,7 +39,9 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.withClip
+import androidx.core.text.buildSpannedString
 import androidx.core.text.layoutDirection
+import androidx.core.text.scale
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.AgeWidget
@@ -47,6 +49,8 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
+import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
@@ -62,6 +66,7 @@ import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
 import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.WidgetMap
+import com.byagowi.persiancalendar.WidgetMonth
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetMoon
 import com.byagowi.persiancalendar.WidgetSchedule
@@ -93,6 +98,7 @@ import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
@@ -237,6 +243,9 @@ fun update(context: Context, updateDate: Boolean) {
         }
         updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, hasSize, _ ->
             createMonthViewRemoteViews(context, width, height, hasSize, jdn)
+        }
+        updateFromRemoteViews<WidgetMonth>(context, now) { width, height, _, widgetId ->
+            createMonthRemoteViews(context, width, height, widgetId)
         }
         updateFromRemoteViews<WidgetMap>(context, now) { width, height, _, _ ->
             createMapRemoteViews(context, width, height, now)
@@ -422,7 +431,90 @@ private fun createSunViewRemoteViews(
     return remoteViews
 }
 
-// We don't want to use Jetpack Glance as it's size bloat so this is the hard way…
+class StoredMonthOffset(val offset: Int) {
+    private val lastInteraction = System.currentTimeMillis()
+
+    // Not expired by time
+    val isExpired: Boolean
+        get() = System.currentTimeMillis() - lastInteraction > FIFTEEN_MINUTES_IN_MILLIS
+}
+
+private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
+
+fun updateMonthWidget(context: Context, widgetId: Int, offsetCommand: Int) {
+    val appWidgetManager = AppWidgetManager.getInstance(context)
+    val size = appWidgetManager.getWidgetSize(context.resources, widgetId) ?: IntIntPair(250, 250)
+    monthWidgetOffsets[widgetId] = StoredMonthOffset(
+        (monthWidgetOffsets[widgetId]?.offset ?: 0) + offsetCommand
+    )
+    val views = createMonthRemoteViews(context, size.first, size.second, widgetId)
+    appWidgetManager.updateAppWidget(widgetId, views)
+}
+
+private fun createMonthRemoteViews(
+    context: Context,
+    width: Int,
+    height: Int,
+    widgetId: Int
+): RemoteViews {
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_month)
+    remoteViews.setDirection(R.id.widget_schedule, context.resources)
+    val today = Jdn.today()
+    val offset = monthWidgetOffsets[widgetId]?.let {
+        if (it.isExpired) {
+            monthWidgetOffsets.remove(widgetId)
+            0
+        } else it.offset
+    } ?: 0
+    val date = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
+    remoteViews.setTextViewText(R.id.month_name, buildSpannedString {
+        append(
+            if (date.year == (today on mainCalendar).year) date.monthName
+            else language.value.my.format(date.monthName, formatNumber(date.year))
+        )
+        secondaryCalendar?.let {
+            scale(.7f) { append("\n" + monthFormatForSecondaryCalendar(date, it)) }
+        }
+    })
+
+    run {
+        val addEventPendingIntent = PendingIntent.getBroadcast(
+            context, 0,
+            Intent(context, BroadcastReceivers::class.java)
+                .setAction(ADD_EVENT)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
+        val previousPendingIntent = PendingIntent.getBroadcast(
+            context, 0,
+            Intent(context, BroadcastReceivers::class.java)
+                .setAction(MONTH_PREV_COMMAND)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        remoteViews.setOnClickPendingIntent(R.id.previous_month, previousPendingIntent)
+        remoteViews.setContentDescription(
+            R.id.previous_month,
+            context.getString(R.string.previous_x, context.getString(R.string.month))
+        )
+        val nextPendingIntent = PendingIntent.getBroadcast(
+            context, 0,
+            Intent(context, BroadcastReceivers::class.java)
+                .setAction(MONTH_NEXT_COMMAND)
+                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        remoteViews.setOnClickPendingIntent(R.id.next_month, nextPendingIntent)
+        remoteViews.setContentDescription(
+            R.id.next_month,
+            context.getString(R.string.next_x, context.getString(R.string.month))
+        )
+    }
+
+    return remoteViews
+}
+
 private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_schedule)
     remoteViews.setDirection(R.id.widget_schedule, context.resources)

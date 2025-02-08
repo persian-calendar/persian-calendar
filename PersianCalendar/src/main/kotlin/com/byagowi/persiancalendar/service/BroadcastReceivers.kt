@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.service
 
+import android.appwidget.AppWidgetManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,6 +12,8 @@ import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
 import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
+import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
+import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -18,6 +21,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.utils.updateMonthWidget
 import com.byagowi.persiancalendar.variants.debugLog
 
 class BroadcastReceivers : BroadcastReceiver() {
@@ -38,6 +42,18 @@ class BroadcastReceivers : BroadcastReceiver() {
             }.onFailure(logException).onFailure {
                 Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
             }
+
+            MONTH_PREV_COMMAND -> intent
+                .getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+                ).takeIf { it != AppWidgetManager.INVALID_APPWIDGET_ID }
+                ?.let { updateMonthWidget(context, it, -1) }
+
+            MONTH_NEXT_COMMAND -> intent
+                .getIntExtra(
+                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+                ).takeIf { it != AppWidgetManager.INVALID_APPWIDGET_ID }
+                ?.let { updateMonthWidget(context, it, 1) }
 
             BROADCAST_ALARM -> {
                 val key = PrayTime.fromName(intent.getStringExtra(KEY_EXTRA_PRAYER)) ?: return
