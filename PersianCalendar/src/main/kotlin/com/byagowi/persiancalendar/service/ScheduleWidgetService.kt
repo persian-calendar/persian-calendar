@@ -127,15 +127,6 @@ private class EventsViewFactory(
     override fun getCount(): Int = items.size
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_item)
-        if (widthCells > 3) {
-            row.setViewVisibility(R.id.start_padding, View.VISIBLE)
-            row.setViewVisibility(R.id.middle_padding, View.VISIBLE)
-            row.setViewVisibility(R.id.end_padding, View.VISIBLE)
-        } else {
-            row.setViewVisibility(R.id.start_padding, View.GONE)
-            row.setViewVisibility(R.id.middle_padding, View.GONE)
-            row.setViewVisibility(R.id.end_padding, View.GONE)
-        }
         val entry = items[position]
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             row.setBoolean(R.id.event_background, "setClipToOutline", true)
@@ -149,11 +140,13 @@ private class EventsViewFactory(
 
         if (entry == Spacer) {
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, Intent())
-            row.setViewVisibility(R.id.spacer, View.VISIBLE)
             row.setViewVisibility(R.id.header, View.GONE)
             row.setViewVisibility(R.id.event_parent, View.GONE)
             return row
         }
+
+        val dp = context.resources.dp
+        fun Int.dp() = (this * dp).roundToInt()
 
         (entry as? Header)?.let { header ->
             val weekDayName = header.secondaryDate?.let {
@@ -165,27 +158,31 @@ private class EventsViewFactory(
                 row.setTextViewText(R.id.highlight, weekDayName)
                 row.setViewVisibility(R.id.highlight, View.VISIBLE)
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
-                row.setViewVisibility(R.id.top_space, View.VISIBLE)
                 row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
                 row.setViewVisibility(R.id.bigger_month_name, View.GONE)
             } else if (widthCells > 2) {
                 row.setViewVisibility(R.id.weekday_name, View.GONE)
-                row.setViewVisibility(R.id.top_space, View.VISIBLE)
                 row.setViewVisibility(R.id.highlight, View.GONE)
                 row.setViewVisibility(R.id.day_of_month, View.GONE)
                 if (header.withMonth || position == 0) {
-                    val dp = context.resources.dp
-                    val topSpacePx = (if (header.secondaryDate == null) 12 else 6)
-                        .let { (it * dp).roundToInt() }
-                    val bottomSpacePx = (if (header.secondaryDate == null) 4 else 12)
-                        .let { (it * dp).roundToInt() }
+                    val topSpace = when (position) {
+                        0 -> if (header.secondaryDate == null) 12 else 2
+                        else -> if (header.secondaryDate == null) 4 else 0
+                    }.dp()
+                    val bottomSpace = when (position) {
+                        0 -> if (header.secondaryDate == null) 18 else 8
+                        else -> if (header.secondaryDate == null) 12 else 4
+                    }.dp()
+                    val startSpace = (if (widthCells > 3) 8 else 4).dp()
                     val monthTitle = buildSpannedString {
-                        append(header.date.monthName + "\n")
-                        header.secondaryDate?.let { scale(.9f) { append(it.monthName) } }
+                        append(header.date.monthName)
+                        header.secondaryDate?.let { scale(.9f) { append("\n" + it.monthName) } }
                     }
                     row.setTextViewText(R.id.bigger_month_name, monthTitle)
                     row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
-                    row.setViewPadding(R.id.bigger_month_name, 0, topSpacePx, 0, bottomSpacePx)
+                    row.setViewPadding(
+                        R.id.bigger_month_name, startSpace, topSpace, startSpace, bottomSpace
+                    )
                 } else {
                     row.setViewVisibility(R.id.bigger_month_name, View.GONE)
                 }
@@ -193,7 +190,6 @@ private class EventsViewFactory(
                 row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
                 row.setTextViewText(R.id.weekday_name, weekDayName)
                 row.setViewVisibility(R.id.weekday_name, View.VISIBLE)
-                row.setViewVisibility(R.id.top_space, View.GONE)
                 row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
                 if (header.withMonth) {
                     val monthTitle = buildSpannedString {
@@ -205,12 +201,34 @@ private class EventsViewFactory(
                 } else row.setViewVisibility(R.id.highlight, View.GONE)
                 row.setViewVisibility(R.id.bigger_month_name, View.GONE)
             }
-            row.setViewVisibility(R.id.spacer, View.GONE)
             row.setViewVisibility(R.id.header, View.VISIBLE)
             row.setViewVisibility(R.id.event_parent, View.GONE)
             val clickIntent = Intent().putExtra(jdnActionKey, header.day.value)
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
             return row
+        }
+
+        run {
+            val startPadding = when {
+                widthCells > 3 -> 12
+                widthCells == 3 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 6
+                else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 8
+            }.dp()
+            row.setViewPadding(R.id.event_start_padding, startPadding, 0, 0, 0)
+
+            val betweenPadding = when {
+                widthCells > 3 -> 8
+                widthCells == 3 -> 4
+                else -> 0
+            }.dp()
+            row.setViewPadding(R.id.event_middle_padding, betweenPadding, 0, 0, 0)
+
+            val endPadding = when {
+                widthCells > 3 -> 16
+                widthCells == 3 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 8
+                else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 8
+            }.dp()
+            row.setViewPadding(R.id.event_end_padding, endPadding, 0, 0, 0)
         }
 
         val item = (entry as? Item).debugAssertNotNull ?: return row
@@ -294,7 +312,6 @@ private class EventsViewFactory(
             } ?: row.setViewVisibility(R.id.event_time, View.GONE)
         }
 
-        row.setViewVisibility(R.id.spacer, View.GONE)
         row.setViewVisibility(R.id.header, View.GONE)
         row.setViewVisibility(R.id.event_parent, View.VISIBLE)
         if (widthCells > 2) {
