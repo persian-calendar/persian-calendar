@@ -16,7 +16,6 @@
     <color name="sun_view_dynamic_night_color">@android:color/system_accent1_700</color>
     <color name="remote_view_holiday_color">@android:color/system_accent1_500</color>
 
-    <dimen name="widget_schedule_add_event_end_padding">12dip</dimen>
     <dimen name="widget_schedule_item_end_padding">12dip</dimen>
     <dimen name="widget_schedule_horizontal_padding">4dip</dimen>
 

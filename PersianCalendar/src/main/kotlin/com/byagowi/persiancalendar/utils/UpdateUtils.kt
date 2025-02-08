@@ -473,27 +473,13 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
     }
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        if (widthCells > 3) {
-            remoteViews.setViewVisibility(R.id.end_padding4, View.VISIBLE)
-            remoteViews.setViewVisibility(R.id.add_even_extra_top_padding, View.VISIBLE)
-        } else {
-            remoteViews.setViewVisibility(R.id.end_padding4, View.GONE)
-            remoteViews.setViewVisibility(R.id.add_even_extra_top_padding, View.GONE)
-        }
-    } else if (widthCells > 3) {
-        remoteViews.setViewVisibility(R.id.end_padding1, View.GONE)
-        remoteViews.setViewVisibility(R.id.end_padding2, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.end_padding3, View.VISIBLE)
-    } else if (widthCells > 2) {
-        remoteViews.setViewVisibility(R.id.end_padding1, View.GONE)
-        remoteViews.setViewVisibility(R.id.end_padding2, View.GONE)
-        remoteViews.setViewVisibility(R.id.end_padding3, View.VISIBLE)
-    } else {
-        remoteViews.setViewVisibility(R.id.end_padding1, View.VISIBLE)
-        remoteViews.setViewVisibility(R.id.end_padding2, View.GONE)
-        remoteViews.setViewVisibility(R.id.end_padding3, View.GONE)
-    }
+    val topPadding = ((if (widthCells > 2) 16 else 12) * context.resources.dp).roundToInt()
+    val endPadding = (when {
+        widthCells > 3 -> 16
+        widthCells == 3 -> 8
+        else -> 12
+    } * context.resources.dp).roundToInt()
+    remoteViews.setViewPadding(R.id.add_event_parent, endPadding, topPadding, endPadding, 0)
 
     return remoteViews
 }

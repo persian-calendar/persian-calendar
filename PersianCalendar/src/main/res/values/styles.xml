@@ -70,7 +70,6 @@
     <color name="sun_view_dynamic_day_color">@color/sun_view_day_color</color>
     <color name="sun_view_dynamic_midday_color">@color/sun_view_midday_color</color>
 
-    <dimen name="widget_schedule_add_event_end_padding">10dip</dimen>
     <dimen name="widget_schedule_item_end_padding">8dip</dimen>
     <dimen name="widget_schedule_horizontal_padding">8dip</dimen>
 
