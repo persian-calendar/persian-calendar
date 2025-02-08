@@ -288,7 +288,7 @@ private fun SharedTransitionScope.SliderBar(
         viewModel.animateToRelativeDayOffset(days)
     }
 
-    @OptIn(ExperimentalFoundationApi::class) Column(Modifier.fillMaxWidth()) {
+    Column(Modifier.fillMaxWidth()) {
         Text(
             state.date.formatDateAndTime(),
             textAlign = TextAlign.Center,

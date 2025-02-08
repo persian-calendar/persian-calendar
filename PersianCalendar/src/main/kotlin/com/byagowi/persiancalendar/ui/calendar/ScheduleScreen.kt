@@ -6,7 +6,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -177,7 +176,7 @@ fun SharedTransitionScope.ScheduleScreen(
                             text = { Text(stringResource(R.string.print)) },
                             trailingIcon = {
                                 Box(
-                                    @OptIn(ExperimentalFoundationApi::class) Modifier
+                                    Modifier
                                         .minimumInteractiveComponentSize()
                                         .size(24.dp)
                                         .combinedClickable(

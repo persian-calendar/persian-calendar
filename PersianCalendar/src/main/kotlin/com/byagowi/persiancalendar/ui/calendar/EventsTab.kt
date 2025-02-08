@@ -13,7 +13,6 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -243,7 +242,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
             },
         ) { title ->
             Row(
-                @OptIn(ExperimentalFoundationApi::class) Modifier
+                Modifier
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
                     .clip(MaterialTheme.shapes.medium)
