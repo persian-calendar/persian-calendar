@@ -126,6 +126,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
 import java.util.GregorianCalendar
+import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -466,27 +467,53 @@ private fun createMonthRemoteViews(
             0
         } else it.offset
     } ?: 0
-    val date = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
+    val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     remoteViews.setTextViewText(R.id.month_name, buildSpannedString {
-        val firstLine = if (date.year == (today on mainCalendar).year) date.monthName
-        else language.value.my.format(date.monthName, formatNumber(date.year))
+        val firstLine =
+            if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
+            else language.value.my.format(
+                monthStartDate.monthName,
+                formatNumber(monthStartDate.year)
+            )
         secondaryCalendar?.let {
             scale(.9f) {
                 append(firstLine + "\n")
-                scale(.625f) { append(monthFormatForSecondaryCalendar(date, it, true)) }
+                scale(.625f) { append(monthFormatForSecondaryCalendar(monthStartDate, it, true)) }
             }
         } ?: append(firstLine)
     })
 
     val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
     remoteViews.setViewVisibility(
-        R.id.weekday_week_number_placeholder,
+        R.id.month_grid_week0,
         if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
     )
 
-    monthWeekDayNames.forEachIndexed { i, id ->
-        val text = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(i))
-        remoteViews.setTextViewText(id, text)
+    monthWidgetCells.take(7).forEachIndexed { i, id ->
+        remoteViews.setTextViewText(id, getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(i)))
+    }
+
+    val monthStartJdn = Jdn(monthStartDate)
+    run {
+        val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
+        val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
+        monthWidgetWeeks.forEachIndexed { i, id ->
+            remoteViews.setViewVisibility(
+                id, if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
+            )
+            if (i > 0 && isShowWeekOfYearEnabled) {
+                remoteViews.setTextViewText(id, formatNumber(weekOfYearStart + i - 1))
+            }
+        }
+    }
+
+    run {
+        val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
+        val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
+        val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
+        remoteViews.setViewVisibility(
+            R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
+        )
     }
 
     run {
@@ -522,7 +549,7 @@ private fun createMonthRemoteViews(
             R.id.next_month,
             context.getString(R.string.next_x, context.getString(R.string.month))
         )
-        val action = jdnActionKey + Jdn(date).value
+        val action = jdnActionKey + monthStartJdn.value
         remoteViews.setOnClickPendingIntent(
             R.id.month_name_wrapper, context.launchAppPendingIntent(action)
         )
@@ -735,11 +762,6 @@ private fun createMonthViewRemoteViews(
 
 const val jdnActionKey = "JDN"
 const val eventKey = "EVENT"
-
-private val monthWeekDayNames = listOf(
-    R.id.weekday_name_1, R.id.weekday_name_2, R.id.weekday_name_3, R.id.weekday_name_4,
-    R.id.weekday_name_5, R.id.weekday_name_6, R.id.weekday_name_7,
-)
 
 private val monthWidgetWeeks = listOf(
     R.id.month_grid_week0, R.id.month_grid_week1, R.id.month_grid_week2, R.id.month_grid_week3,

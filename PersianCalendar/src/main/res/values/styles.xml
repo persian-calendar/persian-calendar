@@ -48,6 +48,7 @@
     <color name="widget_schedule_title">#000000</color>
     <color name="widget_schedule_event">#FFFFFF</color>
     <color name="widget_nothing_scheduled">#8D95AD</color>
+    <color name="widget_month_week_number">#C2E7FF</color>
     <color name="widget_schedule_highlight">#C2E7FF</color>
     <color name="widget_schedule_highlight_text">#55758E</color>
 
@@ -84,7 +85,7 @@
     <dimen name="bubble_padding_bottom">4dp</dimen>
     <dimen name="bubble_padding_right">2dp</dimen>
     <dimen name="bubble_padding_left">2dp</dimen>
-    <dimen name="widget_month_weeknumber_width">36dp</dimen>
+    <dimen name="widget_month_week_number_width">32dp</dimen>
     <!-- Color -->
     <color name="black_reflect">#FF666666</color>
     <color name="level_liquid_reflect">#FFE9DF00</color>
