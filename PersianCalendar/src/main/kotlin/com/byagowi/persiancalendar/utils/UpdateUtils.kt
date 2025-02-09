@@ -458,7 +458,7 @@ private fun createMonthRemoteViews(
     widgetId: Int
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month)
-    remoteViews.setDirection(R.id.widget_schedule, context.resources)
+    remoteViews.setDirection(R.id.widget_month, context.resources)
     val today = Jdn.today()
     val offset = monthWidgetOffsets[widgetId]?.let {
         if (it.isExpired) {
