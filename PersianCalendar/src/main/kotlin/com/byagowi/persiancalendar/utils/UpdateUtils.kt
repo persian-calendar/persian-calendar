@@ -468,13 +468,14 @@ private fun createMonthRemoteViews(
     } ?: 0
     val date = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     remoteViews.setTextViewText(R.id.month_name, buildSpannedString {
-        append(
-            if (date.year == (today on mainCalendar).year) date.monthName
-            else language.value.my.format(date.monthName, formatNumber(date.year))
-        )
+        val firstLine = if (date.year == (today on mainCalendar).year) date.monthName
+        else language.value.my.format(date.monthName, formatNumber(date.year))
         secondaryCalendar?.let {
-            scale(.7f) { append("\n" + monthFormatForSecondaryCalendar(date, it)) }
-        }
+            scale(.9f) {
+                append(firstLine + "\n")
+                scale(.625f) { append(monthFormatForSecondaryCalendar(date, it, true)) }
+            }
+        } ?: append(firstLine)
     })
 
     run {
@@ -509,6 +510,10 @@ private fun createMonthRemoteViews(
         remoteViews.setContentDescription(
             R.id.next_month,
             context.getString(R.string.next_x, context.getString(R.string.month))
+        )
+        val action = jdnActionKey + Jdn(date).value
+        remoteViews.setOnClickPendingIntent(
+            R.id.month_name_wrapper, context.launchAppPendingIntent(action)
         )
     }
 

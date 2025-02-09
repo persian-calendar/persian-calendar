@@ -11,23 +11,37 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:layout_height="72dp"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/month_name"
+        <FrameLayout
+            android:id="@+id/month_name_wrapper"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:alpha=".9"
-            android:textColor="@color/widget_schedule_title"
-            android:textSize="16sp" />
+            android:background="@drawable/widget_month_view_name">
+
+            <TextView
+                android:id="@+id/month_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:alpha=".9"
+                android:lineSpacingMultiplier="1.1"
+                android:paddingStart="16dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="0dp"
+                android:paddingBottom="8dp"
+                android:textColor="@color/widget_schedule_title"
+                android:textSize="18sp" />
+
+        </FrameLayout>
 
         <ImageButton
             android:id="@+id/previous_month"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginTop="16dp"
             android:alpha=".8"
             android:background="@drawable/widget_month_button"
             android:contentDescription="@string/previous_x"
@@ -39,6 +53,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
             android:alpha=".8"
             android:background="@drawable/widget_month_button"
             android:contentDescription="@string/next_x"
@@ -50,6 +65,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/widget_add_event"
             android:contentDescription="@string/add_event"
             android:src="@drawable/widget_add_event_icon"

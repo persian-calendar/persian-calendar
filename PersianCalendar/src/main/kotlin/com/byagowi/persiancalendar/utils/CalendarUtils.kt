@@ -326,7 +326,11 @@ else language.value.dmy.format(
 fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) =
     language.value.allNumericsDateFormat(year, month, dayOfMonth, digits)
 
-fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calendar): String {
+fun monthFormatForSecondaryCalendar(
+    date: AbstractDate,
+    secondaryCalendar: Calendar,
+    spaced: Boolean = false,
+): String {
     val mainCalendar = date.calendar
     val from = Jdn(
         mainCalendar.createDate(date.year, date.month, 1)
@@ -337,19 +341,20 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
             date.calendar.getMonthLength(date.year, date.month)
         )
     ) on secondaryCalendar
+    val separator = if (spaced) " $EN_DASH " else EN_DASH
     return when {
         from.month == to.month -> language.value.my.format(from.monthName, formatNumber(from.year))
         from.year != to.year -> listOf(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
             to.year to 1..to.month
-        ).joinToString(EN_DASH) { (year, months) ->
-            language.value.my.format(months.joinToString(EN_DASH) {
+        ).joinToString(separator) { (year, months) ->
+            language.value.my.format(months.joinToString(separator) {
                 from.calendar.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
             }, formatNumber(year))
         }
 
         else -> language.value.my.format(
-            (from.month..to.month).joinToString(EN_DASH) {
+            (from.month..to.month).joinToString(separator) {
                 from.calendar.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
             },
             formatNumber(from.year)
