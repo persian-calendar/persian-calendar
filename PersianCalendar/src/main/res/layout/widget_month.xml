@@ -26,13 +26,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
-                android:alpha=".9"
                 android:lineSpacingMultiplier="1.1"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="0dp"
                 android:paddingBottom="8dp"
-                android:textColor="@color/widget_schedule_title"
+                android:textColor="@color/widget_modern_text"
                 android:textSize="18sp" />
 
         </FrameLayout>
@@ -74,8 +73,82 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:id="@+id/weekday_week_number_placeholder"
+            android:layout_width="@dimen/widget_month_weeknumber_width"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/weekday_name_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/weekday_name_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/weekday_name_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/weekday_name_4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/weekday_name_5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/weekday_name_6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/weekday_name_7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:textColor="@color/widget_modern_text"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
     <TextView
-        android:id="@+id/test"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

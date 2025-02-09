@@ -30,10 +30,9 @@
             android:id="@+id/weekday_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha=".75"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:textColor="@color/widget_schedule_title"
+            android:textColor="@color/widget_modern_text"
             android:textSize="14sp" />
 
         <TextView
@@ -42,16 +41,15 @@
             android:layout_height="wrap_content"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
-            android:textColor="@color/widget_schedule_title"
+            android:textColor="@color/widget_modern_text"
             android:textSize="24sp" />
 
         <TextView
             android:id="@+id/bigger_month_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:alpha=".9"
             android:lineSpacingMultiplier="1.1"
-            android:textColor="@color/widget_schedule_title"
+            android:textColor="@color/widget_modern_text"
             android:textSize="18sp" />
 
     </LinearLayout>
@@ -91,7 +89,7 @@
                 android:lineSpacingMultiplier=".75"
                 android:padding="1dp"
                 android:textAlignment="center"
-                android:textColor="@color/widget_schedule_title"
+                android:textColor="@color/widget_modern_text"
                 android:textSize="14sp" />
 
         </FrameLayout>

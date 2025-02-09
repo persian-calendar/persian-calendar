@@ -44,6 +44,7 @@
     <color name="widget_schedule_today_text">#FFFFFF</color>
     <color name="widget_schedule_today">#0B57D0</color>
     <color name="widget_modern_background">#FFFFFF</color>
+    <color name="widget_modern_text">#202122</color>
     <color name="widget_schedule_title">#000000</color>
     <color name="widget_schedule_event">#FFFFFF</color>
     <color name="widget_nothing_scheduled">#8D95AD</color>
@@ -74,15 +75,16 @@
 
     <!-- == Level == -->
     <!-- Dimen -->
-    <dimen name="display_border">1dip</dimen>
-    <dimen name="level_border_width">5dip</dimen>
-    <dimen name="level_border_height">0dip</dimen>
-    <dimen name="marker_thickness">3dip</dimen>
-    <dimen name="bubble_padding">2dip</dimen>
-    <dimen name="bubble_padding_top">0dip</dimen>
-    <dimen name="bubble_padding_bottom">4dip</dimen>
-    <dimen name="bubble_padding_right">2dip</dimen>
-    <dimen name="bubble_padding_left">2dip</dimen>
+    <dimen name="display_border">1dp</dimen>
+    <dimen name="level_border_width">5dp</dimen>
+    <dimen name="level_border_height">0dp</dimen>
+    <dimen name="marker_thickness">3dp</dimen>
+    <dimen name="bubble_padding">2dp</dimen>
+    <dimen name="bubble_padding_top">0dp</dimen>
+    <dimen name="bubble_padding_bottom">4dp</dimen>
+    <dimen name="bubble_padding_right">2dp</dimen>
+    <dimen name="bubble_padding_left">2dp</dimen>
+    <dimen name="widget_month_weeknumber_width">36dp</dimen>
     <!-- Color -->
     <color name="black_reflect">#FF666666</color>
     <color name="level_liquid_reflect">#FFE9DF00</color>

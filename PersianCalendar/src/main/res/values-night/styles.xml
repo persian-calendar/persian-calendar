@@ -9,6 +9,7 @@
     <color name="widget_schedule_today_text">#072E6F</color>
     <color name="widget_schedule_today">#A8C7FA</color>
     <color name="widget_modern_background">#131314</color>
+    <color name="widget_modern_text">#EAECF0</color>
     <color name="widget_schedule_title">#FFFFFF</color>
     <color name="widget_schedule_event">#000000</color>
     <color name="widget_nothing_scheduled">#DCE2F9</color>

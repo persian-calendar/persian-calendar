@@ -478,6 +478,17 @@ private fun createMonthRemoteViews(
         } ?: append(firstLine)
     })
 
+    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
+    remoteViews.setViewVisibility(
+        R.id.weekday_week_number_placeholder,
+        if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
+    )
+
+    monthWeekDayNames.forEachIndexed { i, id ->
+        val text = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(i))
+        remoteViews.setTextViewText(id, text)
+    }
+
     run {
         val addEventPendingIntent = PendingIntent.getBroadcast(
             context, 0,
@@ -724,6 +735,11 @@ private fun createMonthViewRemoteViews(
 
 const val jdnActionKey = "JDN"
 const val eventKey = "EVENT"
+
+private val monthWeekDayNames = listOf(
+    R.id.weekday_name_1, R.id.weekday_name_2, R.id.weekday_name_3, R.id.weekday_name_4,
+    R.id.weekday_name_5, R.id.weekday_name_6, R.id.weekday_name_7,
+)
 
 private val monthWidgetWeeks = listOf(
     R.id.month_grid_week0, R.id.month_grid_week1, R.id.month_grid_week2, R.id.month_grid_week3,
