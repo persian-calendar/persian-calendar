@@ -49,6 +49,7 @@
     <color name="widget_schedule_event">#FFFFFF</color>
     <color name="widget_nothing_scheduled">#8D95AD</color>
     <color name="widget_month_week_number">#C2E7FF</color>
+    <color name="widget_month_line">#E1E3E1</color>
     <color name="widget_schedule_highlight">#C2E7FF</color>
     <color name="widget_schedule_highlight_text">#55758E</color>
 

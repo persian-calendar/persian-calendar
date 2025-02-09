@@ -78,7 +78,9 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="4dp"
+        android:background="@drawable/widget_month_bottom_border"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -157,8 +159,10 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
+        android:background="@drawable/widget_month_bottom_border"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -184,6 +188,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -191,6 +196,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -198,6 +204,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -205,6 +212,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -212,6 +220,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -219,6 +228,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -226,6 +236,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -233,10 +244,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="2dp"
-        android:paddingEnd="4dp">
+        android:background="@drawable/widget_month_bottom_border"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="@dimen/widget_month_week_number_width"
@@ -261,6 +274,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -268,6 +282,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -275,6 +290,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -282,6 +298,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -289,6 +306,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -296,6 +314,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -303,6 +322,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -310,10 +330,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="2dp"
-        android:paddingEnd="4dp">
+        android:background="@drawable/widget_month_bottom_border"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="@dimen/widget_month_week_number_width"
@@ -338,6 +360,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -345,6 +368,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -352,6 +376,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -359,6 +384,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -366,6 +392,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -373,6 +400,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -380,6 +408,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -387,10 +416,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="2dp"
-        android:paddingEnd="4dp">
+        android:background="@drawable/widget_month_bottom_border"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="@dimen/widget_month_week_number_width"
@@ -415,6 +446,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -422,6 +454,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -429,6 +462,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -436,6 +470,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -443,6 +478,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -450,6 +486,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -457,6 +494,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -464,10 +502,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="2dp"
-        android:paddingEnd="4dp">
+        android:background="@drawable/widget_month_bottom_border"
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="@dimen/widget_month_week_number_width"
@@ -492,6 +532,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -499,6 +540,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -506,6 +548,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -513,6 +556,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -520,6 +564,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -527,6 +572,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -534,6 +580,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -542,10 +589,11 @@
         android:id="@+id/week6"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="4dp"
         android:layout_weight="1"
-        android:orientation="horizontal"
-        android:paddingStart="2dp"
-        android:paddingEnd="4dp">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="@dimen/widget_month_week_number_width"
@@ -570,6 +618,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -577,6 +626,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -584,6 +634,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -591,6 +642,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -598,6 +650,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -605,6 +658,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
@@ -612,6 +666,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textAlignment="center"
             android:textSize="12sp" />
 
     </LinearLayout>
