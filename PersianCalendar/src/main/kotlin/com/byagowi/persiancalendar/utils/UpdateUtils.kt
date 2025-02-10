@@ -635,8 +635,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val previousPendingIntent = PendingIntent.getBroadcast(
             context, 0,
             Intent(context, BroadcastReceivers::class.java)
-                .setAction(MONTH_PREV_COMMAND)
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+                .setAction(MONTH_PREV_COMMAND + widgetId),
             PendingIntent.FLAG_IMMUTABLE
         )
         remoteViews.setOnClickPendingIntent(R.id.previous_month, previousPendingIntent)
@@ -647,8 +646,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val nextPendingIntent = PendingIntent.getBroadcast(
             context, 0,
             Intent(context, BroadcastReceivers::class.java)
-                .setAction(MONTH_NEXT_COMMAND)
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+                .setAction(MONTH_NEXT_COMMAND + widgetId),
             PendingIntent.FLAG_IMMUTABLE
         )
         remoteViews.setOnClickPendingIntent(R.id.next_month, nextPendingIntent)

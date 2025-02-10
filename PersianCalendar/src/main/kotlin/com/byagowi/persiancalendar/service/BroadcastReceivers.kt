@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.service
 
-import android.appwidget.AppWidgetManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -27,7 +26,7 @@ import com.byagowi.persiancalendar.variants.debugLog
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         context ?: return
-        when (intent?.action) {
+        when (val action = intent?.action) {
             Intent.ACTION_BOOT_COMPLETED,
             TelephonyManager.ACTION_PHONE_STATE_CHANGED,
             BROADCAST_RESTART_APP -> startWorker(context)
@@ -43,23 +42,24 @@ class BroadcastReceivers : BroadcastReceiver() {
                 Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
             }
 
-            MONTH_PREV_COMMAND -> intent
-                .getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
-                ).takeIf { it != AppWidgetManager.INVALID_APPWIDGET_ID }
-                ?.let { updateMonthWidget(context, it, -1) }
-
-            MONTH_NEXT_COMMAND -> intent
-                .getIntExtra(
-                    AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
-                ).takeIf { it != AppWidgetManager.INVALID_APPWIDGET_ID }
-                ?.let { updateMonthWidget(context, it, 1) }
-
             BROADCAST_ALARM -> {
                 val key = PrayTime.fromName(intent.getStringExtra(KEY_EXTRA_PRAYER)) ?: return
                 val intendedTime = intent.getLongExtra(KEY_EXTRA_PRAYER_TIME, 0).takeIf { it != 0L }
                 debugLog("Alarms: AlarmManager for $key")
                 startAthan(context, key, intendedTime)
+            }
+
+            null -> Unit
+            else -> {
+                if (action.startsWith(MONTH_PREV_COMMAND)) {
+                    action.replace(MONTH_PREV_COMMAND, "").toIntOrNull()?.let { id ->
+                        updateMonthWidget(context, id, -1)
+                    }
+                } else if (action.startsWith(MONTH_NEXT_COMMAND)) {
+                    action.replace(MONTH_NEXT_COMMAND, "").toIntOrNull()?.let { id ->
+                        updateMonthWidget(context, id, 1)
+                    }
+                }
             }
         }
     }
