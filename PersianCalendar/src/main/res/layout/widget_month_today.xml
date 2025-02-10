@@ -11,12 +11,12 @@
         android:layout_height="15dp"
         android:background="@drawable/widget_month_today"
         android:textAlignment="center"
-        android:textColor="@color/widget_add_event_icon"
-        android:textSize="12sp" />
+        android:textColor="@color/widget_add_event_icon" />
 
     <TextView
         android:id="@+id/secondary_day"
         android:layout_width="wrap_content"
-        android:layout_height="14dp" />
+        android:layout_height="14dp"
+        android:textColor="@color/widget_modern_text" />
 
 </LinearLayout>

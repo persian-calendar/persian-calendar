@@ -9,7 +9,6 @@
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
-        android:alpha=".6"
         android:textColor="@color/widget_modern_text"
         android:textSize="12sp" />
 
@@ -17,6 +16,7 @@
         android:id="@+id/secondary_day"
         android:layout_width="wrap_content"
         android:layout_height="18dp"
-        android:layout_marginStart="4dp" />
+        android:layout_marginStart="4dp"
+        android:textColor="@color/widget_modern_text" />
 
 </LinearLayout>

@@ -97,6 +97,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -511,11 +512,20 @@ private fun createMonthRemoteViews(
         val dayView = RemoteViews(context.packageName, viewId)
         dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
         secondaryCalendar?.let {
-            dayView.setTextViewTextSize(R.id.day, TypedValue.COMPLEX_UNIT_SP, 9f)
+            dayView.setTextViewTextSize(
+                R.id.day, TypedValue.COMPLEX_UNIT_SP,
+                if (preferredDigits === Language.ARABIC_DIGITS) 9f else 11f
+            )
             dayView.setTextViewTextSize(R.id.secondary_day, TypedValue.COMPLEX_UNIT_SP, 9f)
             val text = formatNumber((day on it).dayOfMonth, it.preferredDigits)
             dayView.setTextViewText(R.id.secondary_day, "($text)")
-        } ?: dayView.setViewVisibility(R.id.secondary_day, View.GONE)
+        } ?: run {
+            dayView.setTextViewTextSize(
+                R.id.day, TypedValue.COMPLEX_UNIT_SP,
+                if (preferredDigits === Language.ARABIC_DIGITS) 12f else 14f
+            )
+            dayView.setViewVisibility(R.id.secondary_day, View.GONE)
+        }
         remoteViews.addView(id, dayView)
     }
 
