@@ -17,4 +17,5 @@
     <color name="widget_month_line">#454746</color>
     <color name="widget_schedule_highlight">#004A76</color>
     <color name="widget_schedule_highlight_text">#73A8C8</color>
+    <color name="ripple_color">#40FFFFFF</color>
 </resources>

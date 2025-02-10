@@ -53,6 +53,8 @@
     <color name="widget_schedule_highlight">#C2E7FF</color>
     <color name="widget_schedule_highlight_text">#55758E</color>
 
+    <color name="ripple_color">#40000000</color>
+
     <color name="splash_icon_color_1">#23a79b</color>
     <color name="splash_icon_color_2">#2d6d68</color>
     <color name="splash_icon_color_3">#00695c</color>
