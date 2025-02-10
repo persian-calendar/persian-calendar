@@ -205,7 +205,7 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-private fun Context.readDaysDeviceEvents(jdn: Jdn, days: Int) =
+fun Context.readDaysDeviceEvents(jdn: Jdn, days: Int) =
     DeviceCalendarEventsStore(
         readDeviceEvents(
             this,

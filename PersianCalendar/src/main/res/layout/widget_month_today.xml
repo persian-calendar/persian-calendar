@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="20dp"
+    android:layout_height="14dp"
     android:gravity="center"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/day"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:background="@drawable/widget_month_today"
         android:textAlignment="center"
         android:textColor="@color/widget_add_event_icon" />

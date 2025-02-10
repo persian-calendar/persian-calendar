@@ -111,6 +111,8 @@ import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayPainter
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthColors
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.renderMonthWidget
+import com.byagowi.persiancalendar.ui.calendar.eventTextColor
+import com.byagowi.persiancalendar.ui.calendar.sortEvents
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -488,10 +490,14 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     remoteViews.setViewVisibility(
         R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
     )
-//    val eventsCountToShow = height?.let {
-//        val bottomSpace = it / context.resources.dp - 72 - 20
-//        ((bottomSpace / daysRowsCount) / 20).toInt() - 1
-//    } ?: 3
+    val eventsCountToShow = height?.let {
+        val bottomSpace = it / context.resources.dp - 72 - 20
+        ((bottomSpace / daysRowsCount - 14) / 14).toInt()
+    } ?: 3
+
+    val deviceEvents = if (isShowDeviceCalendarEvents.value) {
+        context.readDaysDeviceEvents(monthStartJdn - startingWeekDay, daysRowsCount * 7)
+    } else EventsStore.empty()
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
@@ -502,31 +508,106 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
         remoteViews.removeAllViews(id)
         val day = monthStartJdn + i - 7 - startingWeekDay
+        val events = sortEvents(eventsRepository?.getEvents(day, deviceEvents) ?: emptyList())
         val date = day on mainCalendar
-        val viewId = when {
-            date.month != monthStartDate.month -> R.layout.widget_month_other_month_day
-            day == today -> R.layout.widget_month_today
-            else -> R.layout.widget_month_day
+        run {
+            val viewId = when {
+                date.month != monthStartDate.month -> R.layout.widget_month_other_month_day
+                day == today -> R.layout.widget_month_today
+                else -> R.layout.widget_month_day
+            }
+            val dayView = RemoteViews(context.packageName, viewId)
+            dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
+            secondaryCalendar?.let {
+                dayView.setTextViewTextSize(
+                    R.id.day, TypedValue.COMPLEX_UNIT_SP,
+                    if (preferredDigits === Language.ARABIC_DIGITS) 9f else 11f
+                )
+                dayView.setTextViewTextSize(R.id.secondary_day, TypedValue.COMPLEX_UNIT_SP, 9f)
+                val text = formatNumber((day on it).dayOfMonth, it.preferredDigits)
+                dayView.setTextViewText(R.id.secondary_day, "($text)")
+            } ?: run {
+                dayView.setTextViewTextSize(
+                    R.id.day, TypedValue.COMPLEX_UNIT_SP,
+                    if (preferredDigits === Language.ARABIC_DIGITS) 12f else 14f
+                )
+                dayView.setViewVisibility(R.id.secondary_day, View.GONE)
+            }
+            // TODO: Consider use of addStableView
+            remoteViews.addView(id, dayView)
         }
-        val dayView = RemoteViews(context.packageName, viewId)
-        dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
-        secondaryCalendar?.let {
-            dayView.setTextViewTextSize(
-                R.id.day, TypedValue.COMPLEX_UNIT_SP,
-                if (preferredDigits === Language.ARABIC_DIGITS) 9f else 11f
-            )
-            dayView.setTextViewTextSize(R.id.secondary_day, TypedValue.COMPLEX_UNIT_SP, 9f)
-            val text = formatNumber((day on it).dayOfMonth, it.preferredDigits)
-            dayView.setTextViewText(R.id.secondary_day, "($text)")
-        } ?: run {
-            dayView.setTextViewTextSize(
-                R.id.day, TypedValue.COMPLEX_UNIT_SP,
-                if (preferredDigits === Language.ARABIC_DIGITS) 12f else 14f
-            )
-            dayView.setViewVisibility(R.id.secondary_day, View.GONE)
+        val shiftWork = getShiftWorkTitle(day)
+        shiftWork?.let {
+            val shiftWorkView = RemoteViews(context.packageName, R.layout.widget_month_shift_work)
+            shiftWorkView.setTextViewText(R.id.title, it)
+            remoteViews.addView(id, shiftWorkView)
         }
-        // TODO: Consider use of addStableView
-        remoteViews.addView(id, dayView)
+        val dayEventsCountToShow = eventsCountToShow - if (shiftWork == null) 0 else 1
+        val overflows = events.size > dayEventsCountToShow
+        events.take(dayEventsCountToShow - if (overflows) 1 else 0).forEach {
+            val eventView = RemoteViews(context.packageName, R.layout.widget_month_event)
+            eventView.setTextViewText(R.id.title, it.title)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                eventView.setViewOutlinePreferredRadius(
+                    R.id.title, 3f, TypedValue.COMPLEX_UNIT_DIP
+                )
+                eventView.setBoolean(R.id.title, "setClipToOutline", true)
+            }
+            when {
+                it is CalendarEvent.DeviceCalendarEvent -> {
+                    val background =
+                        if (it.color.isEmpty()) Color.GRAY else it.color.toLong().toInt()
+                    eventView.setInt(R.id.title, "setBackgroundColor", background)
+                    eventView.setInt(R.id.title, "setTextColor", eventTextColor(background))
+                }
+
+                it.isHoliday -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        eventView.setColorAttr(
+                            R.id.title,
+                            "setBackgroundColor",
+                            android.R.attr.colorAccent,
+                        )
+                        eventView.setColorInt(
+                            R.id.title,
+                            "setTextColor",
+                            Color.WHITE,
+                            Color.WHITE
+                        )
+                    } else {
+                        eventView.setInt(
+                            R.id.title,
+                            "setBackgroundColor",
+                            0xFFFF8A65.toInt(),
+                        )
+                        eventView.setInt(
+                            R.id.title,
+                            "setTextColor",
+                            Color.WHITE,
+                        )
+                    }
+                }
+
+                else -> {
+                    eventView.setInt(
+                        R.id.title,
+                        "setBackgroundColor",
+                        0xFF8D95AD.toInt(),
+                    )
+                    eventView.setInt(
+                        R.id.title,
+                        "setTextColor",
+                        Color.WHITE,
+                    )
+                }
+            }
+
+            remoteViews.addView(id, eventView)
+        }
+        if (overflows) {
+            val moreIconView = RemoteViews(context.packageName, R.layout.widget_month_more_icon)
+            remoteViews.addView(id, moreIconView)
+        }
         val action = jdnActionKey + day.value
         remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
     }

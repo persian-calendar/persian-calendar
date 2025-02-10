@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="4dp"
+    android:layout_marginStart="3dp"
+    android:layout_marginTop="3dp"
+    android:contentDescription="@string/more"
+    android:src="@drawable/ic_more_horiz"
+    android:tint="@color/widget_modern_text" />
