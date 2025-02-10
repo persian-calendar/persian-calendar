@@ -246,8 +246,8 @@ fun update(context: Context, updateDate: Boolean) {
         updateFromRemoteViews<WidgetMonthView>(context, now) { width, height, hasSize, _ ->
             createMonthViewRemoteViews(context, width, height, hasSize, jdn)
         }
-        updateFromRemoteViews<WidgetMonth>(context, now) { width, height, _, widgetId ->
-            createMonthRemoteViews(context, width, height, widgetId)
+        updateFromRemoteViews<WidgetMonth>(context, now) { _, height, hasSize, widgetId ->
+            createMonthRemoteViews(context, height.takeIf { hasSize }, widgetId)
         }
         updateFromRemoteViews<WidgetMap>(context, now) { width, height, _, _ ->
             createMapRemoteViews(context, width, height, now)
@@ -445,20 +445,15 @@ private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
 
 fun updateMonthWidget(context: Context, widgetId: Int, offsetCommand: Int) {
     val appWidgetManager = AppWidgetManager.getInstance(context)
-    val size = appWidgetManager.getWidgetSize(context.resources, widgetId) ?: IntIntPair(250, 250)
+    val size = appWidgetManager.getWidgetSize(context.resources, widgetId)
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
         (monthWidgetOffsets[widgetId]?.offset ?: 0) + offsetCommand
     )
-    val views = createMonthRemoteViews(context, size.first, size.second, widgetId)
+    val views = createMonthRemoteViews(context, size?.second, widgetId)
     appWidgetManager.updateAppWidget(widgetId, views)
 }
 
-private fun createMonthRemoteViews(
-    context: Context,
-    width: Int,
-    height: Int,
-    widgetId: Int
-): RemoteViews {
+private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month)
     remoteViews.setDirection(R.id.widget_month, context.resources)
     val today = Jdn.today()
@@ -493,6 +488,10 @@ private fun createMonthRemoteViews(
     remoteViews.setViewVisibility(
         R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
     )
+//    val eventsCountToShow = height?.let {
+//        val bottomSpace = it / context.resources.dp - 72 - 20
+//        ((bottomSpace / daysRowsCount) / 20).toInt() - 1
+//    } ?: 3
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
@@ -526,7 +525,10 @@ private fun createMonthRemoteViews(
             )
             dayView.setViewVisibility(R.id.secondary_day, View.GONE)
         }
+        // TODO: Consider use of addStableView
         remoteViews.addView(id, dayView)
+        val action = jdnActionKey + day.value
+        remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
     }
 
     run {
