@@ -67,6 +67,7 @@
 
     <!-- override of these exist in values-v31/colors.xml -->
     <color name="remote_view_holiday_color">#ff8a65</color>
+    <color name="remote_view_holiday_color_washed">#44ff8a65</color>
 
     <!-- == SunView == -->
     <color name="sun_view_night_color">#383C7C</color>

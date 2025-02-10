@@ -517,6 +517,11 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
                 else -> R.layout.widget_month_day
             }
             val dayView = RemoteViews(context.packageName, viewId)
+            if (day.isWeekEnd || events.any { it.isHoliday }) dayView.setInt(
+                R.id.day_root,
+                "setBackgroundResource",
+                R.drawable.widget_month_holiday,
+            )
             dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
             secondaryCalendar?.let {
                 dayView.setTextViewTextSize(
