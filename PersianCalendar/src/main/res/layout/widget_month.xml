@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".WidgetMonth"
-    tools:ignore="NestedWeights">
+    tools:ignore="TooManyViews,NestedWeights">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,7 +99,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -120,7 +120,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x2"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -135,7 +135,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -156,7 +156,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x4"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -171,7 +171,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x5"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -192,7 +192,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x6"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -207,7 +207,7 @@
             <TextView
                 android:id="@+id/month_grid_cell0x7"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="12sp" />
@@ -224,9 +224,11 @@
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
         android:background="@drawable/widget_month_bottom_border"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/month_grid_week1_parent"
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -244,49 +246,39 @@
 
         </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:textSize="12sp" />
+            android:layout_weight="1" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/widget_month_vertical_border"
-            android:textAlignment="center"
-            android:textSize="12sp" />
+            android:background="@drawable/widget_month_vertical_border" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:textSize="12sp" />
+            android:layout_weight="1" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/widget_month_vertical_border"
-            android:textAlignment="center"
-            android:textSize="12sp" />
+            android:background="@drawable/widget_month_vertical_border" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textAlignment="center"
-            android:textSize="12sp" />
+            android:layout_weight="1" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -295,7 +287,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell1x7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -313,9 +305,11 @@
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
         android:background="@drawable/widget_month_bottom_border"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/month_grid_week2_parent"
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -333,7 +327,7 @@
 
         </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -341,7 +335,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -350,7 +344,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -358,7 +352,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -367,7 +361,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -375,7 +369,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -384,7 +378,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell2x7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -402,9 +396,11 @@
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
         android:background="@drawable/widget_month_bottom_border"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/month_grid_week3_parent"
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -422,7 +418,7 @@
 
         </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -430,7 +426,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -439,7 +435,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -447,7 +443,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -456,7 +452,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -464,7 +460,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -473,7 +469,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell3x7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -491,9 +487,11 @@
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
         android:background="@drawable/widget_month_bottom_border"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/month_grid_week4_parent"
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -511,7 +509,7 @@
 
         </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -519,7 +517,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -528,7 +526,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -536,7 +534,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -545,7 +543,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -553,7 +551,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -562,7 +560,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell4x7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -580,9 +578,11 @@
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
         android:background="@drawable/widget_month_bottom_border"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/month_grid_week5_parent"
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -600,7 +600,7 @@
 
         </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -608,7 +608,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -617,7 +617,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -625,7 +625,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -634,7 +634,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -642,7 +642,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -651,7 +651,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell5x7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -669,9 +669,11 @@
         android:layout_marginTop="1dp"
         android:layout_marginEnd="4dp"
         android:layout_weight="1"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
+            android:id="@+id/month_grid_week6_parent"
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
@@ -689,7 +691,7 @@
 
         </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -697,7 +699,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -706,7 +708,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -714,7 +716,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x4"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -723,7 +725,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x5"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -731,7 +733,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x6"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -740,7 +742,7 @@
             android:textAlignment="center"
             android:textSize="12sp" />
 
-        <TextView
+        <FrameLayout
             android:id="@+id/month_grid_cell6x7"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -467,6 +467,8 @@ private fun createMonthRemoteViews(
             0
         } else it.offset
     } ?: 0
+    val mainCalendar = mainCalendar
+    val secondaryCalendar = secondaryCalendar
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     remoteViews.setTextViewText(R.id.month_name, buildSpannedString {
         val firstLine =
@@ -483,37 +485,49 @@ private fun createMonthRemoteViews(
         } ?: append(firstLine)
     })
 
-    val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
+    val monthStartJdn = Jdn(monthStartDate)
+    val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
+    val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
+    val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     remoteViews.setViewVisibility(
-        R.id.month_grid_week0,
-        if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
+        R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
     )
 
-    monthWidgetCells.take(7).forEachIndexed { i, id ->
-        remoteViews.setTextViewText(id, getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(i)))
+    monthWidgetCells.forEachIndexed { i, id ->
+        if (i < 7) {
+            val text = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(i))
+            remoteViews.setTextViewText(id, text)
+            return@forEachIndexed
+        }
+        if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
+        remoteViews.removeAllViews(id)
+        val day = monthStartJdn + i - 7 - startingWeekDay
+        val date = day on mainCalendar
+        val viewId = when {
+            date.month != monthStartDate.month -> R.layout.widget_month_other_month_day
+            day == today -> R.layout.widget_month_today
+            else -> R.layout.widget_month_day
+        }
+        val dayView = RemoteViews(context.packageName, viewId)
+        dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
+        secondaryCalendar?.let {
+            dayView.setTextViewTextSize(R.id.day, TypedValue.COMPLEX_UNIT_SP, 9f)
+            dayView.setTextViewTextSize(R.id.secondary_day, TypedValue.COMPLEX_UNIT_SP, 9f)
+            val text = formatNumber((day on it).dayOfMonth, it.preferredDigits)
+            dayView.setTextViewText(R.id.secondary_day, "($text)")
+        } ?: dayView.setViewVisibility(R.id.secondary_day, View.GONE)
+        remoteViews.addView(id, dayView)
     }
 
-    val monthStartJdn = Jdn(monthStartDate)
     run {
         val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
         val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
-        monthWidgetWeeks.forEachIndexed { i, id ->
-            remoteViews.setViewVisibility(
-                id, if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
-            )
-            if (i > 0 && isShowWeekOfYearEnabled) {
-                remoteViews.setTextViewText(id, formatNumber(weekOfYearStart + i - 1))
-            }
+        val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
+        if (isShowWeekOfYearEnabled) monthWidgetWeeks.drop(1).forEachIndexed { i, id ->
+            remoteViews.setTextViewText(id, formatNumber(weekOfYearStart + i))
         }
-    }
-
-    run {
-        val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
-        val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
-        val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
-        remoteViews.setViewVisibility(
-            R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
-        )
+        val visibility = if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
+        monthWidgetWeeksParents.forEach { remoteViews.setViewVisibility(it, visibility) }
     }
 
     run {
@@ -766,6 +780,11 @@ const val eventKey = "EVENT"
 private val monthWidgetWeeks = listOf(
     R.id.month_grid_week0, R.id.month_grid_week1, R.id.month_grid_week2, R.id.month_grid_week3,
     R.id.month_grid_week4, R.id.month_grid_week5, R.id.month_grid_week6,
+)
+private val monthWidgetWeeksParents = listOf(
+    R.id.month_grid_week0, R.id.month_grid_week1_parent, R.id.month_grid_week2_parent,
+    R.id.month_grid_week3_parent, R.id.month_grid_week4_parent, R.id.month_grid_week5_parent,
+    R.id.month_grid_week6_parent,
 )
 
 private val monthWidgetCells = listOf(
