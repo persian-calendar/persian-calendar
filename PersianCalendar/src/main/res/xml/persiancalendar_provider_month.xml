@@ -5,6 +5,7 @@
     android:minHeight="250dp"
     android:minResizeWidth="250dp"
     android:minResizeHeight="250dp"
+    android:previewImage="@drawable/widget_month_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="600000"
     android:widgetCategory="keyguard|home_screen" />

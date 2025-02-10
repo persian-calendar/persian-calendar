@@ -296,7 +296,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/schedule_widget" />
+                android:resource="@xml/persiancalendar_provider_schedule" />
         </receiver>
 
         <service
