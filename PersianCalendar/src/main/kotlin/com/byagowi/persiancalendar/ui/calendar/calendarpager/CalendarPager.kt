@@ -48,9 +48,9 @@ fun SharedTransitionScope.CalendarPager(
         if (viewModel.daysScreenSelectedDay.value == null) {
             pagerState.animateScrollToPage(page)
         } else {
+            viewModel.changeDaysScreenSelectedDay(null)
             // Apply immediately if we're just coming back from days screen
             pagerState.scrollToPage(page)
-            viewModel.changeDaysScreenSelectedDay(null)
         }
         viewModel.changeSelectedMonthOffsetCommand(null)
     }
