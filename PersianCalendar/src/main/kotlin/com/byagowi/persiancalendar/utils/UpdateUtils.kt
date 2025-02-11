@@ -551,7 +551,8 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
             shiftWorkView.setTextViewText(R.id.title, it)
             remoteViews.addView(id, shiftWorkView)
         }
-        val dayEventsCountToShow = eventsCountToShow - if (shiftWork == null) 0 else 1
+        val dayEventsCountToShow = (eventsCountToShow - if (shiftWork == null) 0 else 1)
+            .coerceAtLeast(1)
         val overflows = events.size > dayEventsCountToShow
         events.take(dayEventsCountToShow - if (overflows) 1 else 0).forEach {
             val eventView = RemoteViews(context.packageName, R.layout.widget_month_event)
