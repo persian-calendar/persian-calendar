@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
 import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
+import com.byagowi.persiancalendar.MONTH_RESET_COMMAND
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
@@ -445,11 +446,11 @@ class StoredMonthOffset(val offset: Int) {
 
 private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
 
-fun updateMonthWidget(context: Context, widgetId: Int, offsetCommand: Int) {
+fun updateMonthWidget(context: Context, widgetId: Int, command: Int) {
     val appWidgetManager = AppWidgetManager.getInstance(context)
     val size = appWidgetManager.getWidgetSize(context.resources, widgetId)
     monthWidgetOffsets[widgetId] = StoredMonthOffset(
-        (monthWidgetOffsets[widgetId]?.offset ?: 0) + offsetCommand
+        if (command == 0) 0 else ((monthWidgetOffsets[widgetId]?.offset ?: 0) + command)
     )
     val views = createMonthRemoteViews(context, size?.second, widgetId)
     appWidgetManager.updateAppWidget(widgetId, views)
@@ -622,11 +623,20 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val addEventPendingIntent = PendingIntent.getBroadcast(
             context, 0,
             Intent(context, BroadcastReceivers::class.java)
-                .setAction(ADD_EVENT)
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+                .setAction(if (offset == 0) ADD_EVENT else (MONTH_RESET_COMMAND + widgetId)),
             PendingIntent.FLAG_IMMUTABLE
         )
         remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
+        remoteViews.setContentDescription(
+            R.id.add_event,
+            context.getString(if (offset == 0) R.string.add_event else R.string.return_to_today)
+        )
+        remoteViews.setImageViewResource(
+            R.id.add_event,
+            if (offset == 0) R.drawable.widget_add_event_icon else R.drawable.ic_restore
+        )
+    }
+    run {
         val previousPendingIntent = PendingIntent.getBroadcast(
             context, 0,
             Intent(context, BroadcastReceivers::class.java)

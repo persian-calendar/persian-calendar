@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
 import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
 import com.byagowi.persiancalendar.MONTH_PREV_COMMAND
+import com.byagowi.persiancalendar.MONTH_RESET_COMMAND
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -58,6 +59,10 @@ class BroadcastReceivers : BroadcastReceiver() {
                 } else if (action.startsWith(MONTH_NEXT_COMMAND)) {
                     action.replace(MONTH_NEXT_COMMAND, "").toIntOrNull()?.let { id ->
                         updateMonthWidget(context, id, 1)
+                    }
+                } else if (action.startsWith(MONTH_RESET_COMMAND)) {
+                    action.replace(MONTH_RESET_COMMAND, "").toIntOrNull()?.let { id ->
+                        updateMonthWidget(context, id, 0)
                     }
                 }
             }
