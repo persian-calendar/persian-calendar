@@ -7,6 +7,7 @@
     android:layout_marginStart="3dp"
     android:layout_marginEnd="3dp"
     android:layout_marginBottom="2dp"
+    android:elegantTextHeight="false"
     android:ellipsize="none"
     android:paddingStart="3dp"
     android:paddingEnd="0dp"

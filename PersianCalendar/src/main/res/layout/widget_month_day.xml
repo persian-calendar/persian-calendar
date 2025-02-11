@@ -11,6 +11,7 @@
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="14dp"
+        android:elegantTextHeight="false"
         android:textColor="@color/widget_modern_text"
         android:textSize="12sp" />
 
@@ -19,6 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="14dp"
         android:layout_marginStart="4dp"
+        android:elegantTextHeight="false"
         android:textColor="@color/widget_modern_text" />
 
 </LinearLayout>

@@ -14,6 +14,7 @@
         android:layout_width="14dp"
         android:layout_height="14dp"
         android:background="@drawable/widget_month_today"
+        android:elegantTextHeight="false"
         android:textAlignment="center"
         android:textColor="@color/widget_add_event_icon" />
 
@@ -21,6 +22,7 @@
         android:id="@+id/secondary_day"
         android:layout_width="wrap_content"
         android:layout_height="14dp"
+        android:elegantTextHeight="false"
         android:textColor="@color/widget_add_event" />
 
 </LinearLayout>
