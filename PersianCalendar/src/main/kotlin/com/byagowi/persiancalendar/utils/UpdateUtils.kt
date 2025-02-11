@@ -501,8 +501,11 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
 
     monthWidgetCells.forEachIndexed { i, id ->
         if (i < 7) {
-            val text = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(i))
-            remoteViews.setTextViewText(id, text)
+            val position = revertWeekStartOffsetFromWeekDay(i)
+            remoteViews.setTextViewText(id, getInitialOfWeekDay(position))
+            val contentDescription =
+                context.getString(R.string.week_days_name_column, getWeekDayName(position))
+            remoteViews.setContentDescription(id, contentDescription)
             return@forEachIndexed
         }
         if (i >= (daysRowsCount + 1) * 7) return@forEachIndexed
@@ -580,30 +583,14 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
                             Color.WHITE
                         )
                     } else {
-                        eventView.setInt(
-                            R.id.title,
-                            "setBackgroundColor",
-                            0xFFFF8A65.toInt(),
-                        )
-                        eventView.setInt(
-                            R.id.title,
-                            "setTextColor",
-                            Color.WHITE,
-                        )
+                        eventView.setInt(R.id.title, "setBackgroundColor", 0xFFFF8A65.toInt())
+                        eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                     }
                 }
 
                 else -> {
-                    eventView.setInt(
-                        R.id.title,
-                        "setBackgroundColor",
-                        0xFF8D95AD.toInt(),
-                    )
-                    eventView.setInt(
-                        R.id.title,
-                        "setTextColor",
-                        Color.WHITE,
-                    )
+                    eventView.setInt(R.id.title, "setBackgroundColor", 0xFF8D95AD.toInt())
+                    eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                 }
             }
 
@@ -622,7 +609,10 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
         val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
         if (isShowWeekOfYearEnabled) monthWidgetWeeks.drop(1).forEachIndexed { i, id ->
-            remoteViews.setTextViewText(id, formatNumber(weekOfYearStart + i))
+            val weekNumber = formatNumber(weekOfYearStart + i)
+            remoteViews.setTextViewText(id, weekNumber)
+            val contentDescription = context.getString(R.string.nth_week_of_year, weekNumber)
+            remoteViews.setContentDescription(id, contentDescription)
         }
         val visibility = if (isShowWeekOfYearEnabled) View.VISIBLE else View.GONE
         monthWidgetWeeksParents.forEach { remoteViews.setViewVisibility(it, visibility) }
@@ -791,6 +781,8 @@ private fun createMonthViewRemoteViews(
         setWeekNumberText = if (hasSize && prefersWidgetsDynamicColors) { i, text ->
             val id = monthWidgetWeeks[i]
             remoteViews.setTextViewText(id, text)
+            val contentDescription = context.getString(R.string.nth_week_of_year, text)
+            remoteViews.setContentDescription(id, contentDescription)
             cellRadius.let {
                 it * if (mainCalendarDigitsIsArabic) .8f else 1f
             }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it * .8f) }
