@@ -317,26 +317,53 @@ private class EventsViewFactory(
         if (widthCells > 2) {
             if (item.first) {
                 if (item.today) {
-                    row.setViewVisibility(R.id.today, View.VISIBLE)
-                    row.setViewVisibility(R.id.day, View.GONE)
+                    if (item.secondaryDate == null) {
+                        row.setViewVisibility(R.id.today_first_line, View.VISIBLE)
+                        row.setViewVisibility(R.id.today_second_line, View.VISIBLE)
+                        row.setViewVisibility(R.id.today_with_secondary_first_line, View.GONE)
+                        row.setViewVisibility(R.id.today_with_secondary_second_line, View.GONE)
+                        row.setViewVisibility(R.id.day_first_line, View.GONE)
+                        row.setViewVisibility(R.id.day_second_line, View.GONE)
+                        row.setInt(
+                            R.id.day_wrapper, "setBackgroundResource",
+                            R.drawable.widget_schedule_day_today
+                        )
+                    } else {
+                        row.setViewVisibility(R.id.today_first_line, View.GONE)
+                        row.setViewVisibility(R.id.today_second_line, View.GONE)
+                        row.setViewVisibility(R.id.today_with_secondary_first_line, View.VISIBLE)
+                        row.setViewVisibility(R.id.today_with_secondary_second_line, View.VISIBLE)
+                        row.setViewVisibility(R.id.day_first_line, View.GONE)
+                        row.setViewVisibility(R.id.day_second_line, View.GONE)
+                        row.setInt(R.id.day_wrapper, "setBackgroundResource", 0)
+                    }
                 } else {
-                    row.setViewVisibility(R.id.today, View.GONE)
-                    row.setViewVisibility(R.id.day, View.VISIBLE)
+                    row.setViewVisibility(R.id.today_first_line, View.GONE)
+                    row.setViewVisibility(R.id.today_second_line, View.GONE)
+                    row.setViewVisibility(R.id.today_with_secondary_first_line, View.GONE)
+                    row.setViewVisibility(R.id.today_with_secondary_second_line, View.GONE)
+                    row.setViewVisibility(R.id.day_first_line, View.VISIBLE)
+                    row.setViewVisibility(R.id.day_second_line, View.VISIBLE)
+                    row.setInt(R.id.day_wrapper, "setBackgroundResource", 0)
                 }
-                val title = buildSpannedString {
-                    append(item.day.weekDayNameInitials)
-                    item.secondaryDate?.let {
-                        append(formatNumber(item.date.dayOfMonth) + "\n")
-                        scale(.75f) {
-                            append("(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})")
-                        }
-                    } ?: append("\n${formatNumber(item.date.dayOfMonth)}")
-                }
-                row.setTextViewText(if (item.today) R.id.today else R.id.day, title)
-            } else {
-                row.setViewVisibility(R.id.day, View.GONE)
-                row.setViewVisibility(R.id.today, View.GONE)
-            }
+                row.setViewVisibility(R.id.day_wrapper, View.VISIBLE)
+                row.setTextViewText(
+                    if (item.today) {
+                        if (item.secondaryDate == null) R.id.today_first_line
+                        else R.id.today_with_secondary_first_line
+                    } else R.id.day_first_line,
+                    item.day.weekDayNameInitials + (item.secondaryDate?.let {
+                        "(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})"
+                    } ?: ""),
+                )
+                row.setTextViewText(
+                    if (item.today) {
+                        if (item.secondaryDate == null) R.id.today_second_line
+                        else R.id.today_with_secondary_second_line
+                    } else R.id.day_second_line,
+                    formatNumber(item.date.dayOfMonth)
+                )
+            } else row.setViewVisibility(R.id.day_wrapper, View.INVISIBLE)
         } else row.setViewVisibility(R.id.day_wrapper, View.GONE)
         val clickIntent = if (event is CalendarEvent.DeviceCalendarEvent) {
             Intent().putExtra(eventKey, event.id)

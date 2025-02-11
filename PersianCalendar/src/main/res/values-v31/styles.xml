@@ -3,7 +3,8 @@
     <color name="widget_background">@android:color/system_accent2_50</color>
     <color name="widget_add_event_icon">@android:color/system_accent1_50</color>
     <color name="widget_add_event">@android:color/system_accent1_600</color>
-    <color name="widget_schedule_today_text">@android:color/system_accent1_50</color>
+    <color name="widget_schedule_day_first_line">@android:color/system_accent3_700</color>
+    <color name="widget_schedule_today_text">@android:color/system_accent1_10</color>
     <color name="widget_schedule_today">@android:color/system_accent1_600</color>
     <color name="widget_nothing_scheduled">@android:color/system_accent2_100</color>
     <color name="widget_month_week_number">@android:color/system_accent2_100</color>

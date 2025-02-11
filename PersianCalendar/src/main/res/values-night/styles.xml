@@ -6,6 +6,7 @@
 
     <color name="widget_add_event_icon">#062E6F</color>
     <color name="widget_add_event">#D3E3FD</color>
+    <color name="widget_schedule_day_first_line">#6CD58B</color>
     <color name="widget_schedule_today_text">#072E6F</color>
     <color name="widget_schedule_today">#A8C7FA</color>
     <color name="widget_modern_background">#131314</color>
