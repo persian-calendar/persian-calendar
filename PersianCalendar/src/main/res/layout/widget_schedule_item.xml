@@ -111,7 +111,6 @@
                 android:layout_marginTop="16dp"
                 android:background="@drawable/schedule_today_with_secondary"
                 android:elegantTextHeight="false"
-                android:padding="2dp"
                 android:textAlignment="center"
                 android:textColor="@color/widget_schedule_highlight_text"
                 android:textSize="14sp" />
