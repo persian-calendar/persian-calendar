@@ -28,9 +28,10 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
                 date[GregorianCalendar.MILLISECOND]) / ONE_HOUR_IN_MILLIS.toDouble()
     )
 
-    fun toMillis() = (value * ONE_HOUR_IN_MILLIS).roundToLong()
+    fun toMillis() = if (value.isNaN()) 0L else (value * ONE_HOUR_IN_MILLIS).roundToLong()
 
     fun toHoursAndMinutesPair(): IntIntPair {
+        if (value.isNaN()) return IntIntPair(0, 0)
         val rounded = (value * 60).roundToInt()
         return IntIntPair(floor(rounded / 60.0).toInt(), floor(rounded % 60.0).toInt())
     }
