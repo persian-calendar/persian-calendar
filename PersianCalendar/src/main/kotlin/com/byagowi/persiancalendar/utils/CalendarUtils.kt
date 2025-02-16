@@ -49,6 +49,8 @@ import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
@@ -156,7 +158,7 @@ fun GregorianCalendar.formatDateAndTime(): String {
 private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
 
 private fun readDeviceEvents(
-    context: Context, startingDate: GregorianCalendar, rangeInMillis: Long
+    context: Context, startingDate: GregorianCalendar, duration: Duration
 ): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents.value ||
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
@@ -164,8 +166,11 @@ private fun readDeviceEvents(
 ) emptyList() else runCatching {
     context.contentResolver.query(
         CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
-            ContentUris.appendId(this, startingDate.timeInMillis - DAY_IN_MILLIS)
-            ContentUris.appendId(this, startingDate.timeInMillis + rangeInMillis + DAY_IN_MILLIS)
+            ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
+            ContentUris.appendId(
+                this,
+                startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds
+            )
         }.build(), arrayOf(
             CalendarContract.Instances.EVENT_ID, // 0
             CalendarContract.Instances.TITLE, // 1
@@ -205,20 +210,20 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun Context.readDaysDeviceEvents(jdn: Jdn, days: Int) =
+fun Context.readDaysDeviceEvents(jdn: Jdn, duration: Duration) =
     DeviceCalendarEventsStore(
         readDeviceEvents(
             this,
             jdn.toGregorianCalendar(),
-            days * DAY_IN_MILLIS
+            duration
         )
     )
 
-fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1)
-fun Context.readWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 7)
-fun Context.readTwoWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 14)
-fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32)
-fun Context.readYearDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 366)
+fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days)
+fun Context.readWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 7.days)
+fun Context.readTwoWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 14.days)
+fun Context.readMonthDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 32.days)
+fun Context.readYearDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 366.days)
 
 fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
@@ -229,7 +234,7 @@ fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<C
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
     this, GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
-    365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
+    (365L * 2L).days // all the events of previous and next year from today
 )
 
 fun getEventsTitle(

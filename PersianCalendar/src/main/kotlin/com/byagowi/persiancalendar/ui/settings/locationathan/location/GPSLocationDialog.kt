@@ -46,8 +46,6 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.shareText
-import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
@@ -59,6 +57,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 private fun AskForLocationPermissionDialog(setGranted: (Boolean) -> Unit) {
@@ -118,8 +117,8 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
     run {
         var showPhoneSettingsDialog by remember { mutableStateOf(false) }
         LaunchedEffect(Unit) {
-            delay(TWO_SECONDS_IN_MILLIS)
-            if (isOneProviderEnabled) delay(TEN_SECONDS_IN_MILLIS)
+            delay(2.seconds)
+            if (isOneProviderEnabled) delay(10.seconds)
             runCatching {
                 if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                     showPhoneSettingsDialog = true

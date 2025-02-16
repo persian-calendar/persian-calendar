@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +13,7 @@ import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.time.Duration.Companion.seconds
 
 class ConverterViewModel : ViewModel() {
     private val _calendar = MutableStateFlow(mainCalendar)
@@ -75,7 +75,7 @@ class ConverterViewModel : ViewModel() {
         }
         viewModelScope.launch {
             while (true) {
-                delay(THIRTY_SECONDS_IN_MILLIS)
+                delay(30.seconds)
                 val today = Jdn.today()
                 if (_today.value != today) _today.value = today
             }

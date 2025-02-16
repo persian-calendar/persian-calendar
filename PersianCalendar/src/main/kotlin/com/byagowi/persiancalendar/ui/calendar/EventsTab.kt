@@ -76,9 +76,6 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
@@ -86,6 +83,10 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import io.github.persiancalendar.calendar.PersianDate
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -288,11 +289,11 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                             .51f to contentColor,
                         )
 
-                        var remainedTime = event.remainingMillis
-                        if (remainedTime < 0 || remainedTime > DAY_IN_MILLIS * 356) return@equinox
+                        var remainedTime = event.remainingMillis.milliseconds
+                        if (remainedTime < 0.milliseconds || remainedTime > 356.days) return@equinox
                         countDownTimeParts.map { (pluralId, interval) ->
                             val x = (remainedTime / interval).toInt()
-                            remainedTime -= x * interval
+                            remainedTime -= interval * x
                             pluralStringResource(pluralId, x, formatNumber(x))
                         }.forEachIndexed { i, x ->
                             if (i != 0) Spacer(Modifier.width(8.dp))
@@ -349,9 +350,9 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
 }
 
 private val countDownTimeParts = listOf(
-    R.plurals.days to DAY_IN_MILLIS,
-    R.plurals.hours to ONE_HOUR_IN_MILLIS,
-    R.plurals.minutes to ONE_MINUTE_IN_MILLIS,
+    R.plurals.days to 1.days,
+    R.plurals.hours to 1.hours,
+    R.plurals.minutes to 1.minutes,
 )
 
 @Composable

@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.ui.theme.appFabElevation
-import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ShrinkingFloatingActionButton(
@@ -44,7 +44,8 @@ fun ShrinkingFloatingActionButton(
             ) {
                 Icon(icon, contentDescription = title)
                 LaunchedEffect(Unit) {
-                    delay(THREE_SECONDS_AND_HALF_IN_MILLIS)
+                    // Matches https://github.com/aosp-mirror/platform_frameworks_base/blob/1dcde70/services/core/java/com/android/server/notification/NotificationManagerService.java#L382
+                    delay(3.5.seconds)
                     showLabel = false
                 }
                 AnimatedVisibility(showLabel) { Text(title) }

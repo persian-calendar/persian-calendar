@@ -85,8 +85,6 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
-import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.variants.debugLog
@@ -98,6 +96,7 @@ import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -123,7 +122,7 @@ fun SharedTransitionScope.CompassScreen(
     var isTimeShiftAnimate by remember { mutableStateOf(false) }
     val timeShiftAnimate by animateFloatAsState(
         if (isTimeShiftAnimate) 24f else 0f,
-        animationSpec = tween(durationMillis = if (isTimeShiftAnimate) TEN_SECONDS_IN_MILLIS.toInt() else 0),
+        animationSpec = tween(durationMillis = if (isTimeShiftAnimate) 10.seconds.inWholeMilliseconds.toInt() else 0),
         label = "time shift",
     ) {
         if (isTimeShiftAnimate) {
@@ -138,7 +137,7 @@ fun SharedTransitionScope.CompassScreen(
     var baseTime by remember { mutableStateOf(Date()) }
     LaunchedEffect(Unit) {
         while (true) {
-            delay(THIRTY_SECONDS_IN_MILLIS)
+            delay(30.seconds)
             baseTime = Date()
         }
     }
@@ -237,7 +236,7 @@ fun SharedTransitionScope.CompassScreen(
                                 closeMenu()
                                 // Ugly, but is test only
                                 val animator = ValueAnimator.ofFloat(0f, 1f)
-                                animator.duration = TEN_SECONDS_IN_MILLIS
+                                animator.duration = 10.seconds.inWholeMilliseconds
                                 animator.addUpdateListener {
                                     compassView?.angle = it.animatedFraction * 360
                                 }

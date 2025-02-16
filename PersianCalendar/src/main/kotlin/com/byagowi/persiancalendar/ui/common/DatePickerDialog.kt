@@ -31,9 +31,9 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
-import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import kotlinx.coroutines.delay
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun DatePickerDialog(
@@ -45,7 +45,7 @@ fun DatePickerDialog(
     var today by remember { mutableStateOf(Jdn.today()) }
     LaunchedEffect(Unit) {
         while (true) {
-            delay(THIRTY_SECONDS_IN_MILLIS)
+            delay(30.seconds)
             today = Jdn.today()
         }
     }

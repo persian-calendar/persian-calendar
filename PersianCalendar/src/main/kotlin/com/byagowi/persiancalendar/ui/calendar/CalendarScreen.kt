@@ -166,9 +166,6 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
-import com.byagowi.persiancalendar.utils.HALF_HOUR_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -187,6 +184,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
 import java.util.GregorianCalendar
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -666,7 +665,7 @@ private fun Search(viewModel: CalendarViewModel) {
     LaunchedEffect(Unit) {
         launch {
             // 2s timeout, give up if took too much time
-            withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
+            withTimeoutOrNull(2.seconds) { viewModel.initializeEventsRepository() }
         }
     }
     var query by rememberSaveable { mutableStateOf("") }
@@ -1095,9 +1094,9 @@ data class AddEventData(
             begin[GregorianCalendar.MINUTE] = 0
             begin[GregorianCalendar.SECOND] = 0
             begin[GregorianCalendar.MILLISECOND] = 0
-            begin.timeInMillis += if (wasAtFirstHalf) HALF_HOUR_IN_MILLIS else ONE_HOUR_IN_MILLIS
+            begin.timeInMillis += (if (wasAtFirstHalf) .5 else 1.0).hours.inWholeMilliseconds
             val end = Date(begin.time.time)
-            end.time += ONE_HOUR_IN_MILLIS
+            end.time += 1.hours.inWholeMilliseconds
             return AddEventData(
                 beginTime = begin.time,
                 endTime = end,

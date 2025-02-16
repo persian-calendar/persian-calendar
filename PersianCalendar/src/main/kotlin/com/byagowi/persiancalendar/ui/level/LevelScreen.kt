@@ -69,8 +69,8 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getActivity
-import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.variants.debugLog
+import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -118,7 +118,7 @@ fun SharedTransitionScope.LevelScreen(
     if (isFullscreen) DisposableEffect(Unit) {
         val lock = context.getSystemService<PowerManager>()
             ?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "persiancalendar:level")
-        lock?.acquire(FIFTEEN_MINUTES_IN_MILLIS)
+        lock?.acquire(15.minutes.inWholeMilliseconds)
 
         val activity = context.getActivity() ?: return@DisposableEffect onDispose {}
         val windowInsetsController =

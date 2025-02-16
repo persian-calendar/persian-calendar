@@ -9,26 +9,26 @@ import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.pmString
 import com.byagowi.persiancalendar.global.spacedAndInDates
-import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
 import kotlin.math.floor
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @JvmInline
 value class Clock(val value: Double/*A real number, usually [0-24), portion of a day*/) {
     constructor(date: GregorianCalendar) : this(
-        (date[GregorianCalendar.HOUR_OF_DAY] * ONE_HOUR_IN_MILLIS +
-                date[GregorianCalendar.MINUTE] * ONE_MINUTE_IN_MILLIS +
-                date[GregorianCalendar.SECOND] * ONE_SECOND_IN_MILLIS +
-                date[GregorianCalendar.MILLISECOND]) / ONE_HOUR_IN_MILLIS.toDouble()
+        (date[GregorianCalendar.HOUR_OF_DAY].hours +
+                date[GregorianCalendar.MINUTE].minutes +
+                date[GregorianCalendar.SECOND].seconds +
+                date[GregorianCalendar.MILLISECOND].milliseconds) / 1.hours
     )
 
-    fun toMillis() = if (value.isNaN()) 0L else (value * ONE_HOUR_IN_MILLIS).roundToLong()
+    fun toMillis() = if (value.isNaN()) 0L else value.hours.inWholeMilliseconds
 
     fun toHoursAndMinutesPair(): IntIntPair {
         if (value.isNaN()) return IntIntPair(0, 0)

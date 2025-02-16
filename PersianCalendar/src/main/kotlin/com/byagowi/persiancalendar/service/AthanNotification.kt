@@ -31,7 +31,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN_NOTIFICATION
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
-import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.getAthanUri
@@ -40,6 +39,7 @@ import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.startAthanActivity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlin.random.Random
+import kotlin.time.Duration.Companion.minutes
 
 class AthanNotification : Service() {
 
@@ -160,7 +160,7 @@ class AthanNotification : Service() {
         }
 
         preventPhoneCallIntervention?.startListener(this)
-        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) { cleanUp() }
+        Handler(Looper.getMainLooper()).postDelayed(6.minutes.inWholeMilliseconds) { cleanUp() }
 
         return super.onStartCommand(intent, flags, startId)
     }

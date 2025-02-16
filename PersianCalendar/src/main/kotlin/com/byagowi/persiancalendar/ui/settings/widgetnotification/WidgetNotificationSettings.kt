@@ -51,12 +51,12 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
-import com.byagowi.persiancalendar.utils.QUARTER_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.debounce
 import java.util.TimeZone
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ColumnScope.WidgetNotificationSettings() {
@@ -195,7 +195,7 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
             widgetTransparencyFlow
                 // Debounce to not spam preferences much but specially is needed for
                 // map widget as its expensive calculations
-                .debounce(QUARTER_SECOND_IN_MILLIS)
+                .debounce(.25.seconds)
                 .collect { context.preferences.edit { putFloat(PREF_WIDGET_TRANSPARENCY, it) } }
         }
         val widgetTransparency by widgetTransparencyFlow.collectAsState()

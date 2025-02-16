@@ -25,11 +25,12 @@ import com.byagowi.persiancalendar.global.wallpaperDark
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
     /**
@@ -56,13 +57,11 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
                     val accentColor =
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) resources.getColor(
                             if (isNightMode) android.R.color.system_accent1_500
-                            else android.R.color.system_accent1_300,
-                            null
+                            else android.R.color.system_accent1_300, null
                         ) else null
                     patternDrawable = PatternDrawable(
                         preferredTintColor = accentColor,
-                        darkBaseColor =
-                        if (wallpaperAutomatic.value) isNightMode else wallpaperDark.value,
+                        darkBaseColor = if (wallpaperAutomatic.value) isNightMode else wallpaperDark.value,
                         dp = resources.dp
                     )
                 }
@@ -113,7 +112,7 @@ class PersianCalendarWallpaperService : WallpaperService(), LifecycleOwner {
         private fun draw() {
             val surfaceHolder = surfaceHolder
             val fasterUpdate =
-                fasterUpdateTimestamp != 0L && fasterUpdateTimestamp + TWO_SECONDS_IN_MILLIS > System.currentTimeMillis()
+                fasterUpdateTimestamp != 0L && fasterUpdateTimestamp.milliseconds + 2.seconds > System.currentTimeMillis().milliseconds
             if (!fasterUpdate) rotationDegree += .05f * direction
             handler.removeCallbacks(drawRunner)
             runCatching {

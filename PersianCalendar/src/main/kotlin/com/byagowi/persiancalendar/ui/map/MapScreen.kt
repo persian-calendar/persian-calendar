@@ -89,7 +89,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocatio
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -98,6 +97,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -115,7 +115,7 @@ fun SharedTransitionScope.MapScreen(
 
     LaunchedEffect(Unit) {
         while (true) {
-            delay(ONE_MINUTE_IN_MILLIS)
+            delay(1.minutes)
             viewModel.addOneMinute()
         }
     }

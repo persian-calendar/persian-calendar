@@ -26,16 +26,14 @@ import com.byagowi.persiancalendar.global.ascendingAthan
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.theme.SystemTheme
 import com.byagowi.persiancalendar.ui.utils.isSystemInDarkTheme
-import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 class AthanActivity : ComponentActivity() {
     private val ascendingVolumeStep = 6
@@ -52,7 +50,7 @@ class AthanActivity : ComponentActivity() {
                 spentSeconds += 5
                 if (ringtone == null || ringtone?.isPlaying == false || spentSeconds > 360 ||
                     (stopAtHalfMinute && spentSeconds > 30)
-                ) finish() else handler.postDelayed(this, FIVE_SECONDS_IN_MILLIS)
+                ) finish() else handler.postDelayed(this, 5.seconds.inWholeMilliseconds)
             }.onFailure(logException).onFailure { finish() }
         }
     }
@@ -63,7 +61,7 @@ class AthanActivity : ComponentActivity() {
             currentVolumeSteps++
             getSystemService<AudioManager>()
                 ?.setStreamVolume(AudioManager.STREAM_ALARM, currentVolumeSteps, 0)
-            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(ascendingVolumeStep.toLong()))
+            handler.postDelayed(this, ascendingVolumeStep.seconds.inWholeMilliseconds)
             if (currentVolumeSteps == 10) handler.removeCallbacks(this)
         }
     }
@@ -116,11 +114,11 @@ class AthanActivity : ComponentActivity() {
         if (!goMute) runCatching {
             val athanUri = getAthanUri(this)
             runCatching {
-                MediaPlayer.create(this, athanUri).duration // is in milliseconds
+                MediaPlayer.create(this, athanUri).duration.milliseconds
             }.onFailure(logException).onSuccess {
                 // if the URIs duration is less than half a minute, it is probably a looping one
                 // so stop on half a minute regardless
-                if (it < THIRTY_SECONDS_IN_MILLIS) stopAtHalfMinute = true
+                if (it < 30.seconds) stopAtHalfMinute = true
             }
             ringtone = RingtoneManager.getRingtone(this, athanUri).also {
                 it.audioAttributes = AudioAttributes.Builder()
@@ -154,7 +152,7 @@ class AthanActivity : ComponentActivity() {
             SystemTheme { AthanActivityContent(prayTime, ::stop) }
         }
 
-        handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
+        handler.postDelayed(stopTask, 10.seconds.inWholeMilliseconds)
 
         if (ascendingAthan.value) handler.post(ascendVolume)
 

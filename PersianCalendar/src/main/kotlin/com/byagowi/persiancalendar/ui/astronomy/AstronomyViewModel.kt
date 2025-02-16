@@ -3,11 +3,12 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.lifecycle.ViewModel
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.GregorianCalendar
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 
 class AstronomyViewModel : ViewModel() {
     private val _mode = MutableStateFlow(AstronomyMode.entries[0])
@@ -38,7 +39,8 @@ class AstronomyViewModel : ViewModel() {
     // Commands
 
     private fun setAstronomyState(value: Int) {
-        dateSink.timeInMillis = System.currentTimeMillis() + value * ONE_MINUTE_IN_MILLIS
+        dateSink.timeInMillis =
+            (System.currentTimeMillis().milliseconds + value.minutes).inWholeMilliseconds
         _astronomyState.value = AstronomyState(dateSink)
     }
 
@@ -94,7 +96,7 @@ class AstronomyViewModel : ViewModel() {
     // have them in sync
     fun changeToTime(time: Long) {
         _minutesOffset.value =
-            ((time - System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS).toFloat().roundToInt()
+            ((time - System.currentTimeMillis()).milliseconds / 1.minutes).roundToInt()
         setAstronomyState(_minutesOffset.value)
     }
 

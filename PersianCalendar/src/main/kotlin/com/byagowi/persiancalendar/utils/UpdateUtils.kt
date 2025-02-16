@@ -133,6 +133,11 @@ import java.util.GregorianCalendar
 import kotlin.math.ceil
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen.value
@@ -161,7 +166,7 @@ private var latestFiredUpdate = 0L
 private var latestAnyWidgetUpdate = 0L
 
 fun hasAnyWidgetUpdateRecently(): Boolean =
-    (System.currentTimeMillis() - latestAnyWidgetUpdate) < FIFTEEN_MINUTES_IN_MILLIS
+    (System.currentTimeMillis() - latestAnyWidgetUpdate).milliseconds < 15.minutes
 
 // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
 // Apply a round corner which is the default in Android 12
@@ -170,7 +175,7 @@ private var roundPixelSize = 0f
 
 fun update(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
-    if (!updateDate && now - latestFiredUpdate < HALF_SECOND_IN_MILLIS) {
+    if (!updateDate && (now - latestFiredUpdate).milliseconds < .5.seconds) {
         debugLog("UpdateUtils: skip update")
         return
     }
@@ -441,7 +446,7 @@ class StoredMonthOffset(val offset: Int) {
 
     // Not expired by time
     val isExpired: Boolean
-        get() = System.currentTimeMillis() - lastInteraction > FIFTEEN_MINUTES_IN_MILLIS
+        get() = (System.currentTimeMillis() - lastInteraction).milliseconds > 15.minutes
 }
 
 private val monthWidgetOffsets = mutableMapOf<Int, StoredMonthOffset>()
@@ -497,7 +502,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     } ?: 3
 
     val deviceEvents = if (isShowDeviceCalendarEvents.value) {
-        context.readDaysDeviceEvents(monthStartJdn - startingWeekDay, daysRowsCount * 7)
+        context.readDaysDeviceEvents(monthStartJdn - startingWeekDay, (daysRowsCount * 7).days)
     } else EventsStore.empty()
 
     monthWidgetCells.forEachIndexed { i, id ->
@@ -687,7 +692,10 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     val adapterIntent = Intent(context, ScheduleWidgetService::class.java)
     adapterIntent.putExtra(widgetWidthCellKey, widthCells)
     // Update conditions
-    adapterIntent.putExtra("updateToken", System.currentTimeMillis() / ONE_HOUR_IN_MILLIS)
+    adapterIntent.putExtra(
+        "updateToken",
+        (System.currentTimeMillis().milliseconds / 1.hours).roundToInt()
+    )
     adapterIntent.putExtra("appOpenCount", resumeToken.value)
     adapterIntent.putExtra("deviceEvents", deviceCalendarEvents.hashCode())
     adapterIntent.putExtra("events", eventsRepository?.hashCode() ?: 0)

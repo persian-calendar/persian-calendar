@@ -99,7 +99,6 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
-import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -111,6 +110,7 @@ import kotlinx.coroutines.delay
 import java.util.Date
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -127,7 +127,7 @@ fun SharedTransitionScope.AstronomyScreen(
         }
 
         while (true) {
-            delay(TEN_SECONDS_IN_MILLIS)
+            delay(10.seconds)
             // Ugly, just to make the offset
             viewModel.addMinutesOffset(1)
             viewModel.addMinutesOffset(-1)

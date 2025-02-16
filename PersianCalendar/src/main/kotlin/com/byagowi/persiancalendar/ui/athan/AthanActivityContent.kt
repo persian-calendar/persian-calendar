@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.global.cityName
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
@@ -82,10 +82,14 @@ fun AthanActivityContent(prayTime: PrayTime, onClick: () -> Unit) {
                 AnimatedVisibility(
                     visible = visible,
                     enter = slideInVertically(
-                        animationSpec = keyframes { durationMillis = TWO_SECONDS_IN_MILLIS.toInt() }
+                        animationSpec = keyframes {
+                            durationMillis = 2.seconds.inWholeMilliseconds.toInt()
+                        }
                     ) { with(density) { -20.dp.roundToPx() } } + fadeIn(
                         initialAlpha = 0f,
-                        animationSpec = keyframes { durationMillis = TWO_SECONDS_IN_MILLIS.toInt() }
+                        animationSpec = keyframes {
+                            durationMillis = 2.seconds.inWholeMilliseconds.toInt()
+                        }
                     ),
                 ) {
                     Text(

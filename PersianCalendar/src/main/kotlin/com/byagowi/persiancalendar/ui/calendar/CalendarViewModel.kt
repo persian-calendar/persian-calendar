@@ -11,8 +11,6 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepositor
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
 import com.byagowi.persiancalendar.ui.resumeToken
-import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
-import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.preferences
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +19,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 class CalendarViewModel(application: Application) : AndroidViewModel(application) {
     private val _selectedDay = MutableStateFlow(Jdn.today())
@@ -193,7 +192,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             while (true) {
-                delay(THIRTY_SECONDS_IN_MILLIS)
+                delay(30.seconds)
                 _now.value = System.currentTimeMillis()
                 val today = Jdn.today()
                 if (_today.value != today) {
@@ -205,9 +204,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         }
         viewModelScope.launch {
             resumeToken.collect {
-                delay(HALF_SECOND_IN_MILLIS)
+                delay(.5.seconds)
                 refreshCalendar()
-                delay(HALF_SECOND_IN_MILLIS)
+                delay(.5.seconds)
                 refreshCalendar()
             }
         }

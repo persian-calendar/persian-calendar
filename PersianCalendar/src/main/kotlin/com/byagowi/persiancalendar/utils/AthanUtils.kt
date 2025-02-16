@@ -42,6 +42,9 @@ import com.byagowi.persiancalendar.variants.debugLog
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 // https://stackoverflow.com/a/69505596
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
@@ -59,7 +62,7 @@ fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
     debugLog("Alarms: startAthan for $prayTime")
     if (intendedTime == null) return startAthanBody(context, prayTime)
     // if alarm is off by 15 minutes, just skip
-    if (abs(System.currentTimeMillis() - intendedTime) > FIFTEEN_MINUTES_IN_MILLIS) return
+    if (abs(System.currentTimeMillis() - intendedTime).milliseconds > 15.minutes) return
 
     // If at the of being is disabled by user, skip
     if (prayTime !in getEnabledAlarms(context)) return
@@ -80,7 +83,7 @@ private fun startAthanBody(context: Context, prayTime: PrayTime) {
             context.getSystemService<PowerManager>()?.newWakeLock(
                 PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
                 "persiancalendar:alarm"
-            )?.acquire(THIRTY_SECONDS_IN_MILLIS)
+            )?.acquire(30.seconds.inWholeMilliseconds)
         }.onFailure(logException)
 
         if (notificationAthan.value || ActivityCompat.checkSelfPermission(

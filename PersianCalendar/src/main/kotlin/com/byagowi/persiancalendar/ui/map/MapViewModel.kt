@@ -1,14 +1,14 @@
 package com.byagowi.persiancalendar.ui.map
 
 import androidx.lifecycle.ViewModel
-import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import java.util.Date
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 class MapViewModel : ViewModel() {
     private val _state = MutableStateFlow(MapState())
@@ -16,19 +16,19 @@ class MapViewModel : ViewModel() {
 
     // Commands
     fun subtractOneHour() {
-        _state.update { it.copy(time = it.time - ONE_HOUR_IN_MILLIS) }
+        _state.update { it.copy(time = it.time - 1.hours.inWholeMilliseconds) }
     }
 
     fun addOneHour() {
-        _state.update { it.copy(time = it.time + ONE_HOUR_IN_MILLIS) }
+        _state.update { it.copy(time = it.time + 1.hours.inWholeMilliseconds) }
     }
 
     fun addOneMinute() {
-        _state.update { it.copy(time = it.time + ONE_MINUTE_IN_MILLIS) }
+        _state.update { it.copy(time = it.time + 1.minutes.inWholeMilliseconds) }
     }
 
     fun addDays(days: Int) {
-        _state.update { it.copy(time = it.time + DAY_IN_MILLIS * days) }
+        _state.update { it.copy(time = it.time + days.days.inWholeMilliseconds) }
     }
 
     fun changeToTime(time: Date) {

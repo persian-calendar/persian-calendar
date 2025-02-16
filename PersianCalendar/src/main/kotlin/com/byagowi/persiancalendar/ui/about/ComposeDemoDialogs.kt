@@ -48,6 +48,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun ColorSchemeDemoDialog(onDismissRequest: () -> Unit) {
@@ -264,7 +265,7 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
             val value = seconds.toIntOrNull() ?: return@onClick
             val alarmWorker =
                 OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
-                    TimeUnit.SECONDS.toMillis(value.toLong()), TimeUnit.MILLISECONDS
+                    value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS
                 ).build()
             WorkManager.getInstance(context).beginUniqueWork(
                 "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
