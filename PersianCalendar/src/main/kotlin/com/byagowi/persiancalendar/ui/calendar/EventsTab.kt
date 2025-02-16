@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import io.github.persiancalendar.calendar.PersianDate
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
@@ -290,7 +291,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         )
 
                         var remainedTime = event.remainingMillis.milliseconds
-                        if (remainedTime < 0.milliseconds || remainedTime > 356.days) return@equinox
+                        if (remainedTime < Duration.ZERO || remainedTime > 356.days) return@equinox
                         countDownTimeParts.map { (pluralId, interval) ->
                             val x = (remainedTime / interval).toInt()
                             remainedTime -= interval * x
