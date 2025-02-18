@@ -90,17 +90,19 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun applyEdgeToEdge(isBackgroundColorLight: Boolean, isSurfaceColorLight: Boolean) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) enableEdgeToEdge(
-            if (isBackgroundColorLight)
-                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-            else SystemBarStyle.dark(Color.TRANSPARENT),
-            if (isSurfaceColorLight)
-                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
-            else SystemBarStyle.dark(Color.TRANSPARENT),
-        ) else enableEdgeToEdge( // Just don't tweak navigation bar in older Android versions
-            if (isBackgroundColorLight)
-                SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+        // Don't even call enableEdgeToEdge in Android 15 and later, it doesn't have any effect
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) return
+
+        val statusBarStyle =
+            if (isBackgroundColorLight) SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
             else SystemBarStyle.dark(Color.TRANSPARENT)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) enableEdgeToEdge(
+            statusBarStyle,
+            if (isSurfaceColorLight) SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
+            else SystemBarStyle.dark(Color.TRANSPARENT),
+        ) else enableEdgeToEdge(
+            statusBarStyle,
+            // Just don't tweak navigation bar in older Android versions, leave it to default
         )
     }
 
