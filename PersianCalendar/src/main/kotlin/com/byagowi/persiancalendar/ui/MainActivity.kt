@@ -90,9 +90,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun applyEdgeToEdge(isBackgroundColorLight: Boolean, isSurfaceColorLight: Boolean) {
-        // Don't even call enableEdgeToEdge in Android 15 and later, it doesn't have any effect
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) return
-
         val statusBarStyle =
             if (isBackgroundColorLight) SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
             else SystemBarStyle.dark(Color.TRANSPARENT)
