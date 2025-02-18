@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.level
 import android.content.pm.ActivityInfo
 import android.os.PowerManager
 import android.view.Surface
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
@@ -68,7 +69,6 @@ import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.variants.debugLog
 import kotlin.time.Duration.Companion.minutes
 
@@ -85,10 +85,11 @@ fun SharedTransitionScope.LevelScreen(
     var cmInchFlip by remember { mutableStateOf(false) }
     var isFullscreen by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val activity = LocalActivity.current
 
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
-        val activity = context.getActivity() ?: return@DisposableEffect onDispose {}
+        activity ?: return@DisposableEffect onDispose {}
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("level: ON_RESUME")
@@ -120,7 +121,7 @@ fun SharedTransitionScope.LevelScreen(
             ?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "persiancalendar:level")
         lock?.acquire(15.minutes.inWholeMilliseconds)
 
-        val activity = context.getActivity() ?: return@DisposableEffect onDispose {}
+        activity ?: return@DisposableEffect onDispose {}
         val windowInsetsController =
             WindowCompat.getInsetsController(activity.window, activity.window.decorView)
         windowInsetsController.systemBarsBehavior =
@@ -197,7 +198,7 @@ fun SharedTransitionScope.LevelScreen(
                             ),
                         factory = {
                             val levelView = LevelView(it)
-                            context.getActivity()?.let { activity ->
+                            activity?.let { activity ->
                                 orientationProvider = OrientationProvider(activity, levelView)
                             }
                             levelView

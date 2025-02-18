@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
@@ -91,7 +92,6 @@ import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotifica
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -305,9 +305,10 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         AppDropdownMenuItem({ Text("Shapes") }) { showDialog = true }
         if (showDialog) ShapesDemoDialog { showDialog = false }
     }
+    val activity = LocalActivity.current
     AppDropdownMenuItem({ Text("Clear preferences store and exit") }) {
         context.preferences.edit { clear() }
-        context.getActivity()?.finish()
+        activity?.finish()
     }
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }

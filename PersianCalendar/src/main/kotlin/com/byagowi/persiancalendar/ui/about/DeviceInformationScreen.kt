@@ -14,7 +14,7 @@ import android.os.Build
 import android.view.InputDevice
 import android.view.RoundedCorner
 import android.widget.Toast
-import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -81,7 +81,6 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
@@ -111,8 +110,9 @@ fun SharedTransitionScope.DeviceInformationScreen(
     Column(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)) {
         val context = LocalContext.current
         val primaryColor = MaterialTheme.colorScheme.primary
+        val activity = LocalActivity.current
         val items = remember(primaryColor) {
-            createItemsList(context.getActivity() ?: return@remember emptyList(), primaryColor)
+            createItemsList(activity ?: return@remember emptyList(), primaryColor)
         }
         LargeTopAppBar(
             scrollBehavior = scrollBehavior,
@@ -134,8 +134,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                     runCatching {
                         context.startActivity(
                             Intent(Intent.ACTION_MAIN).setClassName(
-                                "com.android.systemui",
-                                "com.android.systemui.egg.MLandActivity"
+                                "com.android.systemui", "com.android.systemui.egg.MLandActivity"
                             ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         )
                     }.onFailure(logException).onFailure {
@@ -192,7 +191,7 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
     if (showScheduleDialog) ScheduleAlarm { showScheduleDialog = false }
     Row(modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
         val keyItems = remember {
-            listOf<Triple<ImageVector, String, (ComponentActivity) -> Unit>>(
+            listOf<Triple<ImageVector, String, (Activity) -> Unit>>(
                 Triple(Icons.Default.Android, Build.VERSION.RELEASE) { showScheduleDialog = true },
                 Triple(
                     Icons.Default.Settings, "API " + Build.VERSION.SDK_INT, ::showSensorTestDialog
@@ -207,13 +206,13 @@ private fun OverviewTopBar(modifier: Modifier = Modifier) {
         }
         var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
         keyItems.forEachIndexed { i, (icon, title, action) ->
-            val context = LocalContext.current
+            val activity = LocalActivity.current
             val clickHandler = remember { createEasterEggClickHandler(action) }
             NavigationRailItem(
                 selected = i == selectedIndex,
                 onClick = {
                     selectedIndex = i
-                    clickHandler(context.getActivity())
+                    clickHandler(activity)
                 },
                 label = { Text(title) },
                 icon = {
@@ -402,10 +401,8 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                 "Safe Inset Left" to cutout.safeInsetLeft,
                 "Rects" to cutout.boundingRects.joinToString(",")
             ).joinToString("\n") { (key, value) -> "$key: $value" }
-        } else "None"
-    ),
-    Item(
-        "Display Rounded Corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
+        } else "None"),
+        Item("Display Rounded Corners", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) run {
             val insets = activity.window?.decorView?.rootWindowInsets ?: return@run "None"
             listOf(
                 "Top Left Corner" to RoundedCorner.POSITION_TOP_LEFT,

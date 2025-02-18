@@ -1,7 +1,8 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.app.Activity
 import android.os.Build
-import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -48,7 +49,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -60,7 +60,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.getActivity
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -112,7 +111,7 @@ private fun Sidebar(modifier: Modifier = Modifier) {
         windowInsets = WindowInsets(0, 0, 0, 0),
         containerColor = Color.Transparent,
     ) {
-        listOf<Triple<String, @Composable () -> Unit, (ComponentActivity) -> Unit>>(
+        listOf<Triple<String, @Composable () -> Unit, (Activity) -> Unit>>(
             Triple(
                 "GPLv3",
                 { Icon(imageVector = Icons.Default.Info, contentDescription = "License") },
@@ -133,12 +132,12 @@ private fun Sidebar(modifier: Modifier = Modifier) {
             ),
         ).forEachIndexed { i, (title, icon, action) ->
             val clickHandler = remember { createEasterEggClickHandler(action) }
-            val context = LocalContext.current
+            val activity = LocalActivity.current
             NavigationRailItem(
                 selected = selectedItem == i,
                 onClick = {
                     selectedItem = i
-                    clickHandler(context.getActivity())
+                    clickHandler(activity)
                 },
                 icon = icon,
                 label = { Text(title) },

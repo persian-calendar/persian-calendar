@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.AnimatedContent
@@ -103,7 +104,6 @@ import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
-import com.byagowi.persiancalendar.ui.utils.getActivity
 import com.byagowi.persiancalendar.ui.utils.isOnCI
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -210,14 +210,14 @@ private fun Header() {
                 )
             }
         }
-        val context = LocalContext.current
+        val activity = LocalActivity.current
         Box(
             Modifier
                 .weight(1f)
                 .semantics { this.hideFromAccessibility() }
                 .clickable(indication = null, interactionSource = interactionSource) {
                     logoAnimationAtEnd = !logoAnimationAtEnd
-                    clickHandlerDialog(context.getActivity())
+                    clickHandlerDialog(activity)
                     logoEffect = effectsGenerator
                         ?.invoke()
                         ?.asComposeRenderEffect()

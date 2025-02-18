@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -13,7 +12,6 @@ import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
-import androidx.activity.ComponentActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.ui.hapticfeedback.HapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -86,11 +84,6 @@ fun Context.shareTextFile(text: String, fileName: String, mime: String) =
 
 fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
     shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
-
-// https://stackoverflow.com/a/58249983
-// Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
-tailrec fun Context.getActivity(): ComponentActivity? =
-    this as? ComponentActivity ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 fun createFlingDetector(
     context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean
