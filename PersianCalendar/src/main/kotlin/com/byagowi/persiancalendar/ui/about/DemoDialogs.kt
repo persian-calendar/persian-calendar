@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
@@ -196,9 +197,9 @@ fun showShaderSandboxDialog(activity: Activity) {
         .setView(frame)
         .show()
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
-    (activity as? ComponentActivity)?.lifecycle?.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
-    })
+    (activity as? ComponentActivity).debugAssertNotNull?.lifecycle?.addObserver(
+        LifecycleEventObserver { _, event -> if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel() }
+    )
 }
 
 fun showColorPickerDialog(activity: Activity) {
@@ -426,7 +427,7 @@ fun showFlingDemoDialog(activity: Activity) {
 
         private val diatonicScale = listOf(0, 2, 4, 5, 7, 9, 11, 12, 11, 9, 7, 5, 4, 2)
 
-        private val lifecycle = (activity as? ComponentActivity)?.lifecycleScope
+        private val lifecycle = (activity as? ComponentActivity).debugAssertNotNull?.lifecycleScope
 
         private val flingDetector = createFlingDetector(context) { velocityX, velocityY ->
             horizontalFling.setStartVelocity(velocityX).start()
@@ -1005,7 +1006,7 @@ fun showSpringDemoDialog(activity: Activity) {
             return true
         }
 
-        private val lifecycle = (activity as? ComponentActivity)?.lifecycleScope
+        private val lifecycle = (activity as? ComponentActivity).debugAssertNotNull?.lifecycleScope
     }
 
     val dialog = AlertDialog.Builder(activity)
