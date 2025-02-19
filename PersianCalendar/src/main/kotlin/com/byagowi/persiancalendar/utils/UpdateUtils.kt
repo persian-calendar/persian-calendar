@@ -489,12 +489,25 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         } ?: append(firstLine)
     })
 
+    // Round the background better
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        remoteViews.setViewOutlinePreferredRadiusDimen(
+            R.id.widget_month, android.R.dimen.system_app_widget_background_radius
+        )
+        remoteViews.setBoolean(R.id.widget_month, "setClipToOutline", true)
+    }
+
     val monthStartJdn = Jdn(monthStartDate)
     val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
     val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
     remoteViews.setViewVisibility(
         R.id.week6, if (daysRowsCount > 5) View.VISIBLE else View.GONE
+    )
+    remoteViews.setInt(
+        R.id.week5,
+        "setBackgroundResource",
+        if (daysRowsCount > 5) R.drawable.widget_month_bottom_border else 0
     )
     val eventsCountToShow = height?.let {
         val bottomSpace = it / context.resources.dp - 72 - 20
