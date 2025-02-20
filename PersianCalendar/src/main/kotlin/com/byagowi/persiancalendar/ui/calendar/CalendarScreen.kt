@@ -28,6 +28,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -59,6 +61,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.twotone.SwipeDown
 import androidx.compose.material.icons.twotone.SwipeUp
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -157,7 +160,6 @@ import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
-import com.byagowi.persiancalendar.ui.common.ShrinkingFloatingActionButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -235,17 +237,20 @@ fun SharedTransitionScope.CalendarScreen(
         },
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
-            ShrinkingFloatingActionButton(
+            AnimatedVisibility(
+                visible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .renderInSharedTransitionScopeOverlay(
                         renderInOverlay = { isCurrentDestination && isTransitionActive },
                     ),
-                isVisible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
-                action = { addEvent(AddEventData.fromJdn(viewModel.selectedDay.value)) },
-                icon = Icons.Default.Add,
-                title = stringResource(R.string.add_event),
-            )
+                enter = scaleIn(),
+                exit = scaleOut(),
+            ) {
+                FloatingActionButton(
+                    onClick = { addEvent(AddEventData.fromJdn(viewModel.selectedDay.value)) },
+                ) { Icon(Icons.Default.Add, stringResource(R.string.add_event)) }
+            }
         },
     ) { paddingValues ->
         // Refresh the calendar on resume
