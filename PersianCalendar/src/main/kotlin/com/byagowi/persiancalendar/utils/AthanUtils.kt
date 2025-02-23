@@ -19,7 +19,7 @@ import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.ALARMS_BASE_ID
 import com.byagowi.persiancalendar.ALARM_TAG
@@ -147,7 +147,7 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
     run { // Schedule in both alarmmanager and workmanager, startAthan has the logic to skip duplicated calls
         val workerInputData = Data.Builder().putLong(KEY_EXTRA_PRAYER_TIME, timeInMillis)
             .putString(KEY_EXTRA_PRAYER, prayTime.name).build()
-        val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
+        val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>()
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
             .setInputData(workerInputData)
             .build()

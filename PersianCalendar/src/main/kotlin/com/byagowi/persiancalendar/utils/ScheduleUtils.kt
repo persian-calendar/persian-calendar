@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.UPDATE_TAG
 import com.byagowi.persiancalendar.service.UpdateWorker
@@ -14,7 +14,7 @@ fun startWorker(context: Context) {
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             UPDATE_TAG, ExistingPeriodicWorkPolicy.UPDATE,
             // An hourly task to call UpdateWorker.doWork
-            PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS).build()
+            PeriodicWorkRequestBuilder<UpdateWorker>(1L, TimeUnit.HOURS).build()
         )
     }.onFailure(logException).getOrNull().debugAssertNotNull
 }

@@ -40,7 +40,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -263,10 +263,9 @@ fun ScheduleAlarm(onDismissRequest: () -> Unit) {
         TextButton(onClick = onClick@{
             onDismissRequest()
             val value = seconds.toIntOrNull() ?: return@onClick
-            val alarmWorker =
-                OneTimeWorkRequest.Builder(AlarmWorker::class.java).setInitialDelay(
-                    value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS
-                ).build()
+            val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>().setInitialDelay(
+                value.seconds.inWholeMilliseconds, TimeUnit.MILLISECONDS
+            ).build()
             WorkManager.getInstance(context).beginUniqueWork(
                 "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
             ).enqueue()

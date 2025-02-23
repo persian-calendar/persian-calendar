@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.service
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.ExistingWorkPolicy
-import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.CHANGE_DATE_TAG
@@ -34,7 +34,7 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
             it[GregorianCalendar.SECOND] = 1
             it[GregorianCalendar.MILLISECOND] = 0
         }.timeInMillis.milliseconds + 1.days - System.currentTimeMillis().milliseconds
-        val dayIsChangedWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
+        val dayIsChangedWorker = OneTimeWorkRequestBuilder<UpdateWorker>()
             .setInitialDelay(remainedMillis.inWholeMilliseconds, TimeUnit.MILLISECONDS)
             .build()
         WorkManager.getInstance(applicationContext)
