@@ -132,6 +132,9 @@ const val CHANGE_DATE_TAG = "changeDate"
 const val ALARM_TAG = "alarmTag"
 const val UPDATE_TAG = "update"
 
+const val LAST_PLAYED_ATHAN_KEY = "LAST_PLAYED_ATHAN_KEY"
+const val LAST_PLAYED_ATHAN_JDN = "LAST_PLAYED_ATHAN_JDN"
+
 const val OTHER_CALENDARS_KEY = "other_calendars"
 const val NON_HOLIDAYS_EVENTS_KEY = "non_holiday_events"
 const val OWGHAT_KEY = "owghat"

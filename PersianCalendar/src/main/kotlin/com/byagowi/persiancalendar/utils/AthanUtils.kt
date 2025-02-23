@@ -14,6 +14,7 @@ import android.os.PowerManager
 import androidx.annotation.RawRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AlarmManagerCompat
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.work.Data
@@ -25,6 +26,8 @@ import com.byagowi.persiancalendar.ALARM_TAG
 import com.byagowi.persiancalendar.BROADCAST_ALARM
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
+import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_JDN
+import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
@@ -56,8 +59,6 @@ fun getAthanUri(context: Context): Uri =
     (context.preferences.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }
         ?: context.resources.getRawUri(R.raw.special)).toUri()
 
-private var lastAthanKey: PrayTime? = null
-private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
     debugLog("Alarms: startAthan for $prayTime")
     if (intendedTime == null) return startAthanBody(context, prayTime)
@@ -68,9 +69,15 @@ fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
     if (prayTime !in getEnabledAlarms(context)) return
 
     // skips if already called through either WorkManager or AlarmManager
+    val preferences = context.preferences
+    val lastPlayedAthanKey = preferences.getString(LAST_PLAYED_ATHAN_KEY, null)
+    val lastPlayedAthanJdn = preferences.getJdnOrNull(LAST_PLAYED_ATHAN_JDN)
     val today = Jdn.today()
-    if (lastAthanJdn == today && lastAthanKey == prayTime) return
-    lastAthanJdn = today; lastAthanKey = prayTime
+    if (lastPlayedAthanJdn == today && lastPlayedAthanKey == prayTime.name) return
+    preferences.edit {
+        putString(LAST_PLAYED_ATHAN_KEY, prayTime.name)
+        putJdn(LAST_PLAYED_ATHAN_JDN, today)
+    }
 
     startAthanBody(context, prayTime)
 }
