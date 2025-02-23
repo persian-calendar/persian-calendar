@@ -275,35 +275,35 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
-                    if (event is CalendarEvent.EquinoxCalendarEvent) Row equinox@{
-                        val isGradient by isGradient.collectAsState()
-                        val foldedCardBrush = if (isGradient) Brush.verticalGradient(
-                            .25f to contentColor,
-                            .499f to contentColor.copy(
-                                alpha = if (contentColor.isLight) .75f else .5f
-                            ),
-                            .5f to contentColor,
-                        ) else Brush.verticalGradient(
-                            .49f to contentColor,
-                            .491f to Color.Transparent,
-                            .509f to Color.Transparent,
-                            .51f to contentColor,
-                        )
+                    if (event is CalendarEvent.EquinoxCalendarEvent) CompositionLocalProvider(
+                        LocalLayoutDirection provides LayoutDirection.Ltr
+                    ) {
+                        Row equinox@{
+                            val isGradient by isGradient.collectAsState()
+                            val foldedCardBrush = if (isGradient) Brush.verticalGradient(
+                                .25f to contentColor,
+                                .499f to contentColor.copy(
+                                    alpha = if (contentColor.isLight) .75f else .5f
+                                ),
+                                .5f to contentColor,
+                            ) else Brush.verticalGradient(
+                                .49f to contentColor,
+                                .491f to Color.Transparent,
+                                .509f to Color.Transparent,
+                                .51f to contentColor,
+                            )
 
-                        var remainedTime = event.remainingMillis.milliseconds
-                        if (remainedTime < Duration.ZERO || remainedTime > 356.days) return@equinox
-                        countDownTimeParts.map { (pluralId, interval) ->
-                            val x = (remainedTime / interval).toInt()
-                            remainedTime -= interval * x
-                            pluralStringResource(pluralId, x, formatNumber(x))
-                        }.forEachIndexed { i, x ->
-                            if (i != 0) Spacer(Modifier.width(8.dp))
-                            val parts = x.split(" ")
-                            if (parts.size == 2 && parts[0].length <= 2 && !isTalkBackEnabled) {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    CompositionLocalProvider(
-                                        LocalLayoutDirection provides LayoutDirection.Ltr
-                                    ) {
+                            var remainedTime = event.remainingMillis.milliseconds
+                            if (remainedTime < Duration.ZERO || remainedTime > 356.days) return@equinox
+                            countDownTimeParts.map { (pluralId, interval) ->
+                                val x = (remainedTime / interval).toInt()
+                                remainedTime -= interval * x
+                                pluralStringResource(pluralId, x, formatNumber(x))
+                            }.forEachIndexed { i, x ->
+                                if (i != 0) Spacer(Modifier.width(8.dp))
+                                val parts = x.split(" ")
+                                if (parts.size == 2 && parts[0].length <= 2 && !isTalkBackEnabled) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         Row {
                                             parts[0].padStart(2, formatNumber(0)[0])
                                                 .forEachIndexed { i, c ->
@@ -322,17 +322,17 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                                                     if (i == 0) Spacer(Modifier.width(2.dp))
                                                 }
                                         }
+                                        Text(
+                                            parts[1], color = contentColor,
+                                            style = MaterialTheme.typography.bodyMedium,
+                                        )
                                     }
-                                    Text(
-                                        parts[1], color = contentColor,
-                                        style = MaterialTheme.typography.bodyMedium,
-                                    )
-                                }
-                            } else Text(
-                                x,
-                                color = contentColor,
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
+                                } else Text(
+                                    x,
+                                    color = contentColor,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                )
+                            }
                         }
                     }
                 }
