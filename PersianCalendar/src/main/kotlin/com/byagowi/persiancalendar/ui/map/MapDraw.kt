@@ -343,22 +343,22 @@ class MapDraw(
         it.strokeWidth = gridLinesWidth * 2
         it.style = Paint.Style.STROKE
     }
-    private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.BLACK
         it.textSize = gridLinesWidth * 10
         it.textAlign = Paint.Align.CENTER
     }
-    private val emojiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+    private val emojiPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.BLACK
         it.textSize = 1.5f
         it.textAlign = Paint.Align.CENTER
     }
-    private val emojiRedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+    private val emojiRedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
         it.textSize = 1.5f
         it.textAlign = Paint.Align.CENTER
     }
-    private val biggerEmojiPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+    private val biggerEmojiPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.BLACK
         it.textSize = 10f
         it.textAlign = Paint.Align.CENTER
