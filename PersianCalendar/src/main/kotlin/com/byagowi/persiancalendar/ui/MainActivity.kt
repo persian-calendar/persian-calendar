@@ -60,9 +60,18 @@ class MainActivity : ComponentActivity() {
         update(applicationContext, false)
 
         val initialJdn = run {
-            intent?.data?.toString()?.takeIf {
-                "content://com.android.calendar/time/" in it
-            }?.split("/")?.last()?.toLongOrNull()?.let {
+            // Follows https://github.com/FossifyOrg/Calendar/blob/fb56145d/app/src/main/kotlin/org/fossify/calendar/activities/MainActivity.kt#L531-L554
+            // Receives content://com.android.calendar/time/1740774600000 or content://0@com.android.calendar/time/1740774600000
+            intent?.data?.takeIf {
+                when (CalendarContract.AUTHORITY) {
+                    it.authority, it.authority?.substringAfter("@") -> true
+                    else -> false
+                } && when {
+                    it.path?.startsWith("/time") == true -> true
+                    intent?.extras?.getBoolean("DETAIL_VIEW", false) == true -> true
+                    else -> false
+                }
+            }?.pathSegments?.last()?.toLongOrNull()?.let {
                 Jdn(Date(it).toGregorianCalendar().toCivilDate())
             } ?: (intent.getLongExtra(jdnActionKey, -1L).takeIf { it != -1L }
                 ?: intent.action?.takeIf {
