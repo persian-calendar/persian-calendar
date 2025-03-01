@@ -27,9 +27,12 @@ import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startWorker
+import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,10 +59,16 @@ class MainActivity : ComponentActivity() {
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        val initialJdn =
-            (intent.getLongExtra(jdnActionKey, -1L).takeIf { it != -1L } ?: intent.action?.takeIf {
+        val initialJdn = run {
+            intent?.data?.toString()?.takeIf {
+                "content://com.android.calendar/time/" in it
+            }?.split("/")?.last()?.toLongOrNull()?.let {
+                Jdn(Date(it).toGregorianCalendar().toCivilDate())
+            } ?: (intent.getLongExtra(jdnActionKey, -1L).takeIf { it != -1L }
+                ?: intent.action?.takeIf {
                 it.startsWith(jdnActionKey)
             }?.replace(jdnActionKey, "")?.toLongOrNull())?.let(::Jdn)
+        }
         setContent {
             AppTheme {
                 val isBackgroundColorLight = MaterialTheme.colorScheme.background.isLight
