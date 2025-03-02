@@ -134,6 +134,11 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
                 enabledTypes,
                 EventsRepository.internationalKey,
             )
+            IndentedCheckBox(
+                stringResource(R.string.turkey),
+                enabledTypes,
+                EventsRepository.turkeyKey,
+            )
         }
     }
 }

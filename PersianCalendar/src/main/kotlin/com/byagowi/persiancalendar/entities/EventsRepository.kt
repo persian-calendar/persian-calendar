@@ -40,6 +40,7 @@ data class EventsRepository(
     val nepalHolidays = nepalHolidaysKey in enabledTypes
     val nepalOthers = nepalOthersKey in enabledTypes
     val international = internationalKey in enabledTypes
+    val turkey = turkeyKey in enabledTypes
     val isEmpty get() = enabledTypes.isEmpty()
     val onlyIranHolidaysIsEnabled get() = enabledTypes.size == 1 && iranHolidays
     val onlyAfghanistanHolidaysIsEnabled get() = enabledTypes.size == 1 && afghanistanHolidays
@@ -56,6 +57,8 @@ data class EventsRepository(
             record.type == EventType.International && international -> false
             // Enable Iranian events of Gregorian calendar even if itself isn't enabled
             record.type == EventType.Iran && international && calendar == Calendar.GREGORIAN ->
+                false
+            record.type == EventType.Turkey && turkey ->
                 false
 
             else -> true
@@ -188,6 +191,7 @@ data class EventsRepository(
         const val nepalOthersKey = "nepal_others"
         const val iranAncientKey = "iran_ancient"
         const val internationalKey = "international"
+        const val turkeyKey = "turkey"
         val iranDefault = setOf(iranHolidaysKey)
         val afghanistanDefault = setOf(afghanistanHolidaysKey)
         val nepalDefault = setOf(nepalHolidaysKey)
