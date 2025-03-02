@@ -4,7 +4,8 @@
     "Iran": "https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1404.pdf",
     "AncientIran": "~https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "International": "~https://www.un.org/en/sections/observances/international-days/",
-    "Nepal": ""
+    "Nepal": "",
+    "Turkey": ""
   },
 
   "#meta": [
@@ -1324,7 +1325,15 @@
     { "holiday": false, "month": 12, "day": 24, "type": "Iran",
       "title": "روز مباهلهٔ پیامبر اسلام (ص) (۱۰ ه‍.ق)" },
     { "holiday": false, "month": 12, "day": 25, "type": "Iran",
-      "title": "روز خانواده و تکریم بازنشستگان" }
+      "title": "روز خانواده و تکریم بازنشستگان" },
+
+    { "holiday": true, "month": 10, "day": 1, "title": "روز اول عید فطر", "type": "Turkey" },
+    { "holiday": true, "month": 10, "day": 2, "title": "روز دوم عید فطر", "type": "Turkey" },
+    { "holiday": true, "month": 10, "day": 3, "title": "روز سوم عید فطر", "type": "Turkey" },
+    { "holiday": true, "month": 12, "day": 10, "title": "روز اول عید قربان", "type": "Turkey" },
+    { "holiday": true, "month": 12, "day": 11, "title": "روز دوم عید قربان", "type": "Turkey" },
+    { "holiday": true, "month": 12, "day": 12, "title": "روز سوم عید قربان", "type": "Turkey" },
+    { "holiday": true, "month": 12, "day": 13, "title": "روز چهارم عید قربان", "type": "Turkey" }
   ],
 
   "Gregorian Calendar": [
@@ -1469,7 +1478,14 @@
     { "holiday": false, "month": 12, "day": 5, "title": "روز جهانی داوطلبان پیشرفت اجتماعی", "type": "International" },
     { "holiday": false, "month": 12, "day": 9, "title": "روز جهانی مبارزه با فساد", "type": "International" },
     { "holiday": false, "month": 12, "day": 10, "title": "روز جهانی حقوق بشر", "type": "International" },
-    { "holiday": false, "month": 12, "day": 11, "title": "روز جهانی کوهستان", "type": "International" }
+    { "holiday": false, "month": 12, "day": 11, "title": "روز جهانی کوهستان", "type": "International" },
+    { "holiday": true, "month": 1, "day": 1, "title": "روز سال نوی میلادی", "type": "Turkey" },
+    { "holiday": true, "month": 4, "day": 23, "title": "روز حاکمیت ملی و کودکان", "type": "Turkey" },
+    { "holiday": true, "month": 5, "day": 1, "title": "روز کار و همبستگی", "type": "Turkey" },
+    { "holiday": true, "month": 5, "day": 19, "title": "روز بزرگداشت آتاتورک، جوانان و ورزش", "type": "Turkey" },
+    { "holiday": true, "month": 7, "day": 15, "title": "روز دموکراسی و وحدت ملی", "type": "Turkey" },
+    { "holiday": true, "month": 8, "day": 30, "title": "روز پیروزی", "type": "Turkey" },
+    { "holiday": true, "month": 10, "day": 29, "title": "روز جمهوری", "type": "Turkey" },
   ],
 
   "Nepali Calendar": [

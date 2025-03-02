@@ -276,6 +276,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="iran_ancient">Ancient Iran (in Persian)</string>
     <string name="iran_others">Other Iran events</string>
     <string name="international">International events (in Persian)</string>
+    <string name="turkey">Turkey events (in Persian)</string>
     <string name="afghanistan_holidays">Holidays in Afghanistan</string>
     <string name="afghanistan_others">Other Afghanistan events</string>
     <string name="iran_official_events">Iran, official (in Persian)</string>
