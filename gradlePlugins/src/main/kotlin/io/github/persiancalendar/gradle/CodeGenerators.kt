@@ -19,8 +19,10 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
+import org.gradle.api.Project
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -43,25 +45,59 @@ abstract class CodeGenerators : DefaultTask() {
     @InputDirectory
     abstract fun getGeneratedAppSrcDir(): Property<File>
 
+    @Input
+    abstract fun getIsEventsOnly(): Property<Boolean>
+
     @get:Inject
     abstract val pl: ProjectLayout
+
+    fun execute(target: Project, isEventsOnly: Boolean = false) {
+        val projectDir = project.projectDir
+        val generatedAppSrcDir =
+            target.layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
+        generatedAppSrcDir.mkdirs()
+        setProperty("generatedAppSrcDir", generatedAppSrcDir)
+        setProperty("isEventsOnly", isEventsOnly)
+        val generateDir = generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
+
+        listOfNotNull(
+            "events",
+            "cities".takeIf { !isEventsOnly },
+            "districts".takeIf { !isEventsOnly },
+        ).forEach { name ->
+            val input = projectDir / "data" / "$name.json"
+            inputs.file(input)
+            val output = generateDir / "$name.kt"
+            outputs.file(output)
+        }
+
+        if (!isEventsOnly) {
+            inputs.file(project.rootDir / "THANKS.md")
+            inputs.file(project.rootDir / "FAQ.fa.md")
+            inputs.file(projectDir / "shaders" / "common.vert")
+            inputs.file(projectDir / "shaders" / "globe.frag")
+            inputs.file(projectDir / "shaders" / "sandbox.frag")
+            outputs.file(generateDir / "TextStore.kt")
+        }
+    }
 
     @TaskAction
     fun action() {
         val generatedAppSrcDir = getGeneratedAppSrcDir().get()
         generatedAppSrcDir.mkdirs()
         val projectDir = pl.projectDirectory.asFile
-        listOf(
+        val notEventsOnly = !getIsEventsOnly().get()
+        listOfNotNull(
             "events" to ::generateEventsCode,
-            "cities" to ::generateCitiesCode,
-            "districts" to ::generateDistrictsCode
+            ("cities" to ::generateCitiesCode).takeIf { notEventsOnly },
+            ("districts" to ::generateDistrictsCode).takeIf { notEventsOnly },
         ).forEach { (name, generator) ->
             val input = projectDir / "data" / "$name.json"
             val builder = FileSpec.builder(packageName, name)
             generator(input, builder)
             builder.build().writeTo(generatedAppSrcDir)
         }
-        createTextStore(generatedAppSrcDir)
+        if (notEventsOnly) createTextStore(generatedAppSrcDir)
     }
 
     private fun createTextStore(generatedAppSrcDir: File) {
