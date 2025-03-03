@@ -28,6 +28,17 @@ persiancalendar-praytimes = "0e619dfd2683acc0c6f0b53568ed78336a17057a"
 persiancalendar-qr = "4ef9d44178046f8704edbc8964fca968f75b08d5"
 truth = "1.4.4"
 work-manager = "2.10.0"
+compose-material = "1.4.1"
+compose-foundation = "1.4.1"
+wear-tooling-preview = "1.0.0"
+core-splashscreen = "1.0.1"
+tiles = "1.4.1"
+tiles-material = "1.4.1"
+tiles-tooling = "1.4.1"
+tiles-tooling-preview = "1.4.1"
+horologist-compose-tools = "0.6.17"
+horologist-tiles = "0.6.17"
+watchface-complications-data-source-ktx = "1.2.1"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -72,6 +83,18 @@ test-rules = { group = "androidx.test", name = "rules", version.ref = "android-t
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "compose-material" }
+androidx-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "compose-foundation" }
+androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "core-splashscreen" }
+androidx-tiles = { group = "androidx.wear.tiles", name = "tiles", version.ref = "tiles" }
+androidx-tiles-material = { group = "androidx.wear.tiles", name = "tiles-material", version.ref = "tiles-material" }
+androidx-tiles-tooling = { group = "androidx.wear.tiles", name = "tiles-tooling", version.ref = "tiles-tooling" }
+androidx-tiles-tooling-preview = { group = "androidx.wear.tiles", name = "tiles-tooling-preview", version.ref = "tiles-tooling-preview" }
+horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist-compose-tools" }
+horologist-tiles = { group = "com.google.android.horologist", name = "horologist-tiles", version.ref = "horologist-tiles" }
+androidx-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

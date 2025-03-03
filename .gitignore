@@ -131,6 +131,7 @@ Temporary Items
 /app/src/main/res/values/secret_info.xml
 
 PersianCalendar/release/
+wear/release/
 *.hprof
 
 captures/
