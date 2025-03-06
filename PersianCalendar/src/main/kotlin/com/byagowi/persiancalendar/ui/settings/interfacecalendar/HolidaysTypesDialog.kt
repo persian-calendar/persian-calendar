@@ -56,16 +56,20 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
     val enabledTypes = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) { EventsRepository.getEnabledTypes(context.preferences, language).toMutableStateList() }
-    AppDialog(title = { Text(stringResource(R.string.events)) }, dismissButton = {
-        TextButton(onClick = onDismissRequest) {
-            Text(stringResource(R.string.cancel))
-        }
-    }, confirmButton = {
-        TextButton(onClick = {
-            onDismissRequest()
-            context.preferences.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
-        }) { Text(stringResource(R.string.accept)) }
-    }, onDismissRequest = onDismissRequest
+    AppDialog(
+        title = { Text(stringResource(R.string.events)) },
+        dismissButton = {
+            TextButton(onClick = onDismissRequest) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                onDismissRequest()
+                context.preferences.edit { putStringSet(PREF_HOLIDAY_TYPES, enabledTypes.toSet()) }
+            }) { Text(stringResource(R.string.accept)) }
+        },
+        onDismissRequest = onDismissRequest,
     ) {
         CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.bodyMedium

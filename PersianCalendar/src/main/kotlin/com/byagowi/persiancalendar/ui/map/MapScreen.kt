@@ -185,7 +185,8 @@ fun SharedTransitionScope.MapScreen(
             showGlobeDialog(context, bitmap, lifecycleOwner.lifecycle)
             // DO NOT use bitmap after this
         },
-        MenuItem(Icons.Default.SocialDistance,
+        MenuItem(
+            Icons.Default.SocialDistance,
             R.string.show_direct_path_label,
             { state.isDirectPathMode }) {
             if (state.coordinates == null) showGpsDialog = true
@@ -197,7 +198,8 @@ fun SharedTransitionScope.MapScreen(
         MenuItem(Icons.Default.MyLocation, R.string.show_my_location_label) {
             showGpsDialog = true
         },
-        MenuItem(Icons.Default.LocationOn,
+        MenuItem(
+            Icons.Default.LocationOn,
             R.string.show_location_label,
             { state.coordinates != null && state.displayLocation }) {
             if (state.coordinates == null) showGpsDialog = true

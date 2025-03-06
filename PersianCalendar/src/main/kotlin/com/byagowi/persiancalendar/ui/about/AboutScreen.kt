@@ -425,10 +425,12 @@ private fun Developers() {
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier
             .padding(start = 24.dp, end = 12.dp, top = 12.dp)
-            .then(if (isTalkBackEnabled) Modifier else Modifier.clickable(
-                interactionSource = null,
-                indication = ripple(bounded = false),
-            ) { ++refreshToken }),
+            .then(
+                if (isTalkBackEnabled) Modifier else Modifier.clickable(
+                    interactionSource = null,
+                    indication = ripple(bounded = false),
+                ) { ++refreshToken },
+            ),
     )
     CompositionLocalProvider(
         LocalLayoutDirection provides LayoutDirection.Ltr,

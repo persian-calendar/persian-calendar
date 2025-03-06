@@ -560,9 +560,12 @@ fun showPeriodicTableDialog(activity: Activity) {
                 .setView(EditText(activity).also {
                     it.layoutDirection = View.LAYOUT_DIRECTION_LTR
                     it.textDirection = View.TEXT_DIRECTION_LTR
-                    it.setText(elements.reversed()
-                        .mapIndexed { index, s -> "${elements.size - index},$s" }
-                        .joinToString("\n"))
+                    it.setText(
+                        elements
+                            .reversed()
+                            .mapIndexed { index, s -> "${elements.size - index},$s" }
+                            .joinToString("\n"),
+                    )
                 })
                 .show()
         } else if (index == 144) {

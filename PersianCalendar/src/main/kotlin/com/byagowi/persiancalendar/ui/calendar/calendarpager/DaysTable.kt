@@ -217,19 +217,25 @@ fun SharedTransitionScope.DaysTable(
                             ),
                             animatedVisibilityScope = animatedContentScope,
                         )
-                        .then(if (onWeekClick != null) Modifier.clickable(
-                            onClickLabel = stringResource(R.string.week_view),
-                            indication = ripple(bounded = false),
-                            interactionSource = null,
-                        ) {
-                            onWeekClick(when {
-                                selectedDay - day in 0..<7 -> selectedDay
-                                onlyWeek != null -> day
-                                row == 0 -> monthStartJdn
-                                // Select first non weekend day of the week
-                                else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd } ?: 0)
-                            }, true)
-                        } else Modifier),
+                        .then(
+                            if (onWeekClick != null) Modifier.clickable(
+                                onClickLabel = stringResource(R.string.week_view),
+                                indication = ripple(bounded = false),
+                                interactionSource = null,
+                            ) {
+                                onWeekClick(
+                                    when {
+                                        selectedDay - day in 0..<7 -> selectedDay
+                                        onlyWeek != null -> day
+                                        row == 0 -> monthStartJdn
+                                        // Select first non weekend day of the week
+                                        else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd }
+                                            ?: 0)
+                                    },
+                                    true,
+                                )
+                            } else Modifier,
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
                     val formattedWeekNumber = formatNumber(weekNumber)
@@ -354,29 +360,31 @@ private fun PagerArrow(
             .offset(
                 if (isPrevious) 16.dp else (screenWidth - pagerArrowSize.dp), arrowOffsetY
             )
-            .then(if (week == null) Modifier.combinedClickable(
-                indication = ripple(bounded = false),
-                interactionSource = null,
-                onClick = {
+            .then(
+                if (week == null) Modifier.combinedClickable(
+                    indication = ripple(bounded = false),
+                    interactionSource = null,
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
+                        }
+                    },
+                    onClickLabel = stringResource(R.string.select_month),
+                    onLongClick = {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(page + 12 * if (isPrevious) -1 else 1)
+                        }
+                    },
+                    onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
+                ) else Modifier.clickable(
+                    indication = ripple(bounded = false),
+                    interactionSource = null,
+                ) {
                     coroutineScope.launch {
                         pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
                     }
                 },
-                onClickLabel = stringResource(R.string.select_month),
-                onLongClick = {
-                    coroutineScope.launch {
-                        pagerState.scrollToPage(page + 12 * if (isPrevious) -1 else 1)
-                    }
-                },
-                onLongClickLabel = stringResource(stringId, stringResource(R.string.year)),
-            ) else Modifier.clickable(
-                indication = ripple(bounded = false),
-                interactionSource = null,
-            ) {
-                coroutineScope.launch {
-                    pagerState.animateScrollToPage(page + 1 * if (isPrevious) -1 else 1)
-                }
-            })
+            )
             .alpha(.9f),
     )
 }

@@ -75,8 +75,8 @@ class MainActivity : ComponentActivity() {
                 Jdn(Date(it).toGregorianCalendar().toCivilDate())
             } ?: (intent.getLongExtra(jdnActionKey, -1L).takeIf { it != -1L }
                 ?: intent.action?.takeIf {
-                it.startsWith(jdnActionKey)
-            }?.replace(jdnActionKey, "")?.toLongOrNull())?.let(::Jdn)
+                    it.startsWith(jdnActionKey)
+                }?.replace(jdnActionKey, "")?.toLongOrNull())?.let(::Jdn)
         }
         setContent {
             AppTheme {

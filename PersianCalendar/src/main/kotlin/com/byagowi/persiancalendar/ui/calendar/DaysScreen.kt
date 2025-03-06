@@ -253,13 +253,15 @@ fun SharedTransitionScope.DaysScreen(
                 @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
                     modifier = swipeDownModifier,
                     title = {
-                        Column(Modifier.clickable(
-                            interactionSource = null,
-                            indication = ripple(bounded = false),
-                            onClickLabel = stringResource(
-                                if (!isWeekView) R.string.week_view else R.string.calendar
-                            )
-                        ) { if (!isWeekView) isWeekView = true else navigateUp() }) {
+                        Column(
+                            Modifier.clickable(
+                                interactionSource = null,
+                                indication = ripple(bounded = false),
+                                onClickLabel = stringResource(
+                                    if (!isWeekView) R.string.week_view else R.string.calendar
+                                )
+                            ) { if (!isWeekView) isWeekView = true else navigateUp() },
+                        ) {
                             Crossfade(
                                 if (hasWeeksPager) date.monthName
                                 else language.dm.format(
@@ -331,9 +333,7 @@ fun SharedTransitionScope.DaysScreen(
 
                             val isCurrentPage = weekPagerState.currentPage == page
                             LaunchedEffect(isCurrentPage) {
-                                if (isCurrentPage &&
-                                    selectedDay.getWeekOfYear(startOfYearJdn) != week
-                                ) {
+                                if (isCurrentPage && selectedDay.getWeekOfYear(startOfYearJdn) != week) {
                                     val pageDay = sampleDay + (selectedDay.weekDay - today.weekDay)
                                     setSelectedDayInWeekPager(pageDay)
                                     isHighlighted = today != pageDay
@@ -530,16 +530,17 @@ private fun DaysView(
     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
     var interaction by remember { mutableStateOf<Interaction?>(null) }
-    Column(modifier.detectZoom(
-        onZoom = {
-            if (interaction == null) interaction = Interaction.Zoom
-            if (interaction == Interaction.Zoom) coroutineScope.launch {
-                val value = scale.value * it
-                scale.snapTo(value.coerceIn(.5f, 2f))
-            }
-        },
-        onRelease = { if (interaction == Interaction.Zoom) interaction = null },
-    )
+    Column(
+        modifier.detectZoom(
+            onZoom = {
+                if (interaction == null) interaction = Interaction.Zoom
+                if (interaction == Interaction.Zoom) coroutineScope.launch {
+                    val value = scale.value * it
+                    scale.snapTo(value.coerceIn(.5f, 2f))
+                }
+            },
+            onRelease = { if (interaction == Interaction.Zoom) interaction = null },
+        )
     ) {
         val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
         val density = LocalDensity.current
@@ -549,14 +550,16 @@ private fun DaysView(
             readEvents(jdn, calendarViewModel, deviceEvents)
         }
         val eventsWithTime = events.map { dayEvents ->
-            addDivisions(dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-                .filter { it.time != null }.sortedWith { x, y ->
-                    x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
-                        if (it != 0) return@sortedWith it
-                    }
-                    // If both start at the same time, put bigger events first, better for interval graphs
-                    y.start.timeInMillis.compareTo(x.end.timeInMillis)
-                })
+            addDivisions(
+                dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
+                    .filter { it.time != null }.sortedWith { x, y ->
+                        x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
+                            if (it != 0) return@sortedWith it
+                        }
+                        // If both start at the same time, put bigger events first, better for interval graphs
+                        y.start.timeInMillis.compareTo(x.end.timeInMillis)
+                    },
+            )
         }
         val eventsWithoutTime = events.map { dayEvents ->
             dayEvents.filter { it !is CalendarEvent.DeviceCalendarEvent || it.time == null }
@@ -801,7 +804,7 @@ private fun DaysView(
                                     with(density) { ((end - start) * cellHeightPx).toDp() - heightSizeReduction },
                                 )
                                 .clickable { launcher.viewEvent(event, context) }
-                                .background(color, MaterialTheme.shapes.small)
+                                .background(color, MaterialTheme.shapes.small),
                         )
                     }
                 }
@@ -812,14 +815,15 @@ private fun DaysView(
                     val time = GregorianCalendar().also { it.timeInMillis = now }
                     val offsetDay = Jdn(time.toCivilDate()) - startingDay
                     val primary = MaterialTheme.colorScheme.primary
-                    if (offsetDay in 0..<days) Canvas(Modifier
-                        .offset {
-                            IntOffset(
-                                (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
-                            )
-                        }
-                        .size(1.dp)
+                    if (offsetDay in 0..<days) Canvas(
+                        Modifier
+                            .offset {
+                                IntOffset(
+                                    (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
+                                    (hoursFractionOfDay(time) * cellHeightPx).roundToInt()
+                                )
+                            }
+                            .size(1.dp),
                     ) {
                         drawCircle(primary, radius)
                         drawLine(
@@ -890,8 +894,8 @@ private fun DaysView(
                 LaunchedEffect(selectedDay) {
                     val selectedDayIndex = selectedDay - startingDay
                     offset?.let {
-                        if (selectedDayIndex != x)
-                            offset = it.copy(x = selectedDayIndex * cellWidthPx)
+                        if (selectedDayIndex != x) offset =
+                            it.copy(x = selectedDayIndex * cellWidthPx)
                     }
                 }
                 val ySteps = (cellHeightPx / 4).roundToInt()
@@ -1047,8 +1051,7 @@ private fun DaysView(
                     contentAlignment = Alignment.Center,
                 ) addEventBox@{
                     val alpha by animateFloatAsState(
-                        if (offset == null) 0f else 1f,
-                        animationSpec = spring(
+                        if (offset == null) 0f else 1f, animationSpec = spring(
                             Spring.DampingRatioNoBouncy, Spring.StiffnessLow
                         ), label = "alpha"
                     )
