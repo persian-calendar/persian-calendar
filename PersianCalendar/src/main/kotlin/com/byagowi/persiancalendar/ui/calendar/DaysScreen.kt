@@ -88,6 +88,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -189,7 +190,7 @@ fun SharedTransitionScope.DaysScreen(
     }
 
     val addEvent = addEvent(calendarViewModel)
-    val hasWeeksPager = LocalConfiguration.current.screenHeightDp > 600
+    val hasWeeksPager = LocalWindowInfo.current.containerSize.height > 600
     val language by language.collectAsState()
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
 
@@ -529,13 +530,17 @@ private fun DaysView(
     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
     var interaction by remember { mutableStateOf<Interaction?>(null) }
-    Column(modifier.detectZoom(onZoom = {
-        if (interaction == null) interaction = Interaction.Zoom
-        if (interaction == Interaction.Zoom) coroutineScope.launch {
-            val value = scale.value * it
-            scale.snapTo(value.coerceIn(.5f, 2f))
-        }
-    }, onRelease = { if (interaction == Interaction.Zoom) interaction = null })) {
+    Column(modifier.detectZoom(
+        onZoom = {
+            if (interaction == null) interaction = Interaction.Zoom
+            if (interaction == Interaction.Zoom) coroutineScope.launch {
+                val value = scale.value * it
+                scale.snapTo(value.coerceIn(.5f, 2f))
+            }
+        },
+        onRelease = { if (interaction == Interaction.Zoom) interaction = null },
+    )
+    ) {
         val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
         val density = LocalDensity.current
         val initialScroll = with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
