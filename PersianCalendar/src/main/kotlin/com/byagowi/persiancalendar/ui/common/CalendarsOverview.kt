@@ -136,15 +136,16 @@ fun CalendarsOverview(
         }
         val contextColor = LocalContentColor.current
 
-        AnimatedVisibility(visible = equinox != null) {
+        AnimatedVisibility(
+            visible = equinox != null,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        ) {
             SelectionContainer {
                 BasicText(
                     equinox ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     color = { contextColor },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 24.dp, vertical = 4.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
                     maxLines = 1,
                     softWrap = false,
                     autoSize = TextAutoSize.StepBased(
