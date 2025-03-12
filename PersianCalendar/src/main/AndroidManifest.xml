@@ -88,9 +88,14 @@
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="time/epoch" />
                 <data android:host="com.android.calendar" />
                 <data android:scheme="content" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
             </intent-filter>
 
             <meta-data
@@ -121,8 +126,8 @@
         <activity
             android:name=".ui.settings.widgetnotification.WidgetConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -132,8 +137,8 @@
             android:name=".ui.settings.agewidget.AgeWidgetConfigureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
-            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -143,15 +148,15 @@
             android:name=".ui.settings.wallpaper.WallpaperSettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
-            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar" />
 
         <activity
             android:name=".ui.settings.wallpaper.DreamSettingsActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
-            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Material.Wallpaper.NoTitleBar" />
 
         <receiver
             android:name=".Widget1x1"
@@ -323,7 +328,8 @@
             android:exported="true"
             android:icon="@drawable/day19"
             android:label="@string/app_name"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            tools:targetApi="24">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>

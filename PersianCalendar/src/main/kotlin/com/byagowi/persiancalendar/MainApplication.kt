@@ -26,6 +26,7 @@ class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChang
 
     override fun onSharedPreferenceChanged(preferences: SharedPreferences?, key: String?) {
         when (key) {
+            PREF_TILE_STATE -> return // tile service is self contained, nothing needs to be updated
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             EXPANDED_TIME_STATE_KEY -> return // nothing needs to be updated
             LAST_PLAYED_ATHAN_JDN, LAST_PLAYED_ATHAN_KEY -> return // nothing needs to be updated
