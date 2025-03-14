@@ -13,6 +13,6 @@ plugins {
     alias(libs.plugins.kotlin.plugin.serialization) apply false
 }
 
-task("clean") {
+tasks.register("clean") {
     delete(rootProject.layout.buildDirectory)
 }
