@@ -25,7 +25,6 @@ fun generateEntries(days: Int): List<Entry> {
     val monthDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.MONTH_DAY, locale)
     val oneDayInMillis = 1.days.inWholeMilliseconds
     val javaCalendar = java.util.Calendar.getInstance()
-    javaCalendar.timeInMillis += 4.days.inWholeMilliseconds
     return (0..<days).flatMap { day ->
         javaCalendar.timeInMillis += oneDayInMillis
         val date = javaCalendar.time
