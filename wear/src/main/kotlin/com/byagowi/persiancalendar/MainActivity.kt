@@ -106,8 +106,6 @@ private fun WearApp() {
     }
 }
 
-private val twoSecondsInMillis = 2.seconds.inWholeSeconds.toInt()
-
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun DefaultPreview() = WearApp()
