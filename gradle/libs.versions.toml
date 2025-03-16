@@ -33,7 +33,9 @@ compose-foundation = "1.4.1"
 glance-wear-tiles = "1.0.0-alpha05"
 wear-tooling-preview = "1.0.0"
 watchface-complications-data-source-ktx = "1.2.1"
-compose-material3 = "1.0.0-alpha34"
+compose-wear-material3 = "1.0.0-alpha34"
+protolayout-proto = "1.2.1"
+tiles-proto = "1.4.1"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -84,7 +86,9 @@ androidx-compose-foundation = { group = "androidx.wear.compose", name = "compose
 androidx-glance-wear-tiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "glance-wear-tiles" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
 androidx-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
-androidx-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-material3" }
+androidx-wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-wear-material3" }
+androidx-protolayout-proto = { module = "androidx.wear.protolayout:protolayout-proto", version.ref = "protolayout-proto" }
+androidx-tiles-proto = { module = "androidx.wear.tiles:tiles-proto", version.ref = "tiles-proto" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
