@@ -86,7 +86,7 @@ androidx-compose-foundation = { group = "androidx.wear.compose", name = "compose
 androidx-glance-wear-tiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "glance-wear-tiles" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
 androidx-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
-androidx-wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-wear-material3" }
+androidx-compose-wear-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-wear-material3" }
 androidx-protolayout-proto = { module = "androidx.wear.protolayout:protolayout-proto", version.ref = "protolayout-proto" }
 androidx-tiles-proto = { module = "androidx.wear.tiles:tiles-proto", version.ref = "tiles-proto" }
 
