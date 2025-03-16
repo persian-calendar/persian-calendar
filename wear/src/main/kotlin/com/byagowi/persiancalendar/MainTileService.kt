@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.Button
@@ -24,10 +25,12 @@ class MainTileService : GlanceTileService() {
     @GlanceComposable
     override fun Content() {
         Box(contentAlignment = Alignment.Center) {
+            // LocalConfiguration doesn't work here
+            val screenHeightDp = resources.configuration.screenHeightDp
             val todayEntries = generateEntries(1)
             Text(
                 todayEntries[0].title,
-                GlanceModifier.padding(bottom = 132.dp),
+                GlanceModifier.padding(bottom = (screenHeightDp / 1.7).dp),
                 style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
             )
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -48,7 +51,7 @@ class MainTileService : GlanceTileService() {
             }
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = GlanceModifier.padding(top = 172.dp),
+                modifier = GlanceModifier.padding(top = (screenHeightDp / 1.4).dp),
             ) {
                 Button(
                     "تقویم",
