@@ -6,7 +6,9 @@ import android.icu.util.ULocale
 import androidx.collection.IntIntPair
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
+import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -48,10 +50,10 @@ private val groupedPersianEvents by lazy(LazyThreadSafetyMode.NONE) {
     persianEvents.groupBy { IntIntPair(it.month, it.day) }
 }
 private val groupedIslamicEvents by lazy(LazyThreadSafetyMode.NONE) {
-    persianEvents.groupBy { IntIntPair(it.month, it.day) }
+    islamicEvents.groupBy { IntIntPair(it.month, it.day) }
 }
 private val groupedGregorianEvents by lazy(LazyThreadSafetyMode.NONE) {
-    persianEvents.groupBy { IntIntPair(it.month, it.day) }
+    gregorianEvents.groupBy { IntIntPair(it.month, it.day) }
 }
 
 private fun MutableList<Entry>.eventsOfCalendar(
