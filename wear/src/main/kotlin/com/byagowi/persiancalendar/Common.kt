@@ -27,7 +27,6 @@ fun generateEntries(days: Int): List<Entry> {
     val oneDayInMillis = 1.days.inWholeMilliseconds
     val javaCalendar = java.util.Calendar.getInstance()
     return (0..<days).flatMap { day ->
-        javaCalendar.timeInMillis += oneDayInMillis
         val date = javaCalendar.time
         val civilDate = CivilDate(
             javaCalendar[Calendar.YEAR],
@@ -35,6 +34,7 @@ fun generateEntries(days: Int): List<Entry> {
             javaCalendar[Calendar.DAY_OF_MONTH]
         )
         val events = getEventsOfDay(civilDate)
+        javaCalendar.timeInMillis += oneDayInMillis
         if (events.isNotEmpty() || day == 0) {
             val dateTitle = weekDayFormat.format(date) + spacedComma + monthDayFormat.format(date)
             listOf(
