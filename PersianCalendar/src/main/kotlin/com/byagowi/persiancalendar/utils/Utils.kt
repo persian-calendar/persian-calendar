@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
+import android.os.Build
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
@@ -46,7 +47,11 @@ fun Coordinates.calculatePrayTimes(
     val day = calendar[GregorianCalendar.DAY_OF_MONTH]
     val offset = (calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0))
         // This turns GMT+4:30 to GMT+3:30 as Iran has abandoned summer but older devices aren't unaware
-        .let { if (it == 4.5 && calendar.timeZone.id == IRAN_TIMEZONE_ID) 3.5 else it }
+        .let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                it == 4.5 && calendar.timeZone.id == IRAN_TIMEZONE_ID
+            ) 3.5 else it
+        }
     return PrayTimes(
         calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod,
         midnightMethod
