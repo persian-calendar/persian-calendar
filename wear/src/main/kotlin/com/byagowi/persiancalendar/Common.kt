@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar;
 import android.icu.text.DateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import androidx.collection.IntIntPair
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
@@ -43,24 +44,22 @@ fun generateEntries(days: Int): List<Entry> {
     }
 }
 
-private fun hashDay(month: Int, day: Int) = month * 32 + day
-
 private val groupedPersianEvents by lazy(LazyThreadSafetyMode.NONE) {
-    persianEvents.groupBy { hashDay(it.month, it.day) }
+    persianEvents.groupBy { IntIntPair(it.month, it.day) }
 }
 private val groupedIslamicEvents by lazy(LazyThreadSafetyMode.NONE) {
-    persianEvents.groupBy { hashDay(it.month, it.day) }
+    persianEvents.groupBy { IntIntPair(it.month, it.day) }
 }
 private val groupedGregorianEvents by lazy(LazyThreadSafetyMode.NONE) {
-    persianEvents.groupBy { hashDay(it.month, it.day) }
+    persianEvents.groupBy { IntIntPair(it.month, it.day) }
 }
 
 private fun MutableList<Entry>.eventsOfCalendar(
-    groupedEvents: Map<Int, List<CalendarRecord>>,
+    groupedEvents: Map<IntIntPair, List<CalendarRecord>>,
     date: AbstractDate,
 ) {
-    groupedEvents[hashDay(date.month, date.dayOfMonth)]?.forEach {
-        if (it.day == date.dayOfMonth && it.month == date.month && it.type == EventType.Iran) {
+    groupedEvents[IntIntPair(date.month, date.dayOfMonth)]?.forEach {
+        if (it.type == EventType.Iran) {
             add(Entry(it.title, if (it.isHoliday) EntryType.Holiday else EntryType.NonHoliday))
         }
     }
