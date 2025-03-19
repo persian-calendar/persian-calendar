@@ -4,15 +4,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.glance.Button
-import androidx.glance.ButtonColors
 import androidx.glance.GlanceComposable
 import androidx.glance.GlanceModifier
+import androidx.glance.Image
+import androidx.glance.ImageProvider
 import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -50,22 +52,18 @@ class MainTileService : GlanceTileService() {
             }
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = GlanceModifier.padding(top = (screenHeightDp / 1.4).dp),
+                modifier = GlanceModifier.padding(top = (screenHeightDp / 1.35).dp),
             ) {
-                Button(
+                Image(
+                    provider = ImageProvider(R.drawable.button),
+                    contentDescription = "تقویم",
+                    modifier = GlanceModifier
+                        .size(56.dp, 32.dp)
+                        .clickable(actionStartActivity<MainActivity>())
+                )
+                Text(
                     "تقویم",
-                    actionStartActivity<MainActivity>(),
-                    style = TextStyle(fontSize = 14.sp),
-                    modifier = GlanceModifier.padding(
-                        start = 10.dp,
-                        end = 10.dp,
-                        top = 4.dp,
-                        bottom = 6.dp,
-                    ),
-                    colors = ButtonColors(
-                        ColorProvider(Color(0xffafcbfa)),
-                        ColorProvider(Color(0xff303133)),
-                    )
+                    style = TextStyle(fontSize = 14.sp, color = ColorProvider(Color(0xff303133)))
                 )
             }
         }
