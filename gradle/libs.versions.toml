@@ -28,14 +28,14 @@ persiancalendar-praytimes = "0e619dfd2683acc0c6f0b53568ed78336a17057a"
 persiancalendar-qr = "4ef9d44178046f8704edbc8964fca968f75b08d5"
 truth = "1.4.4"
 work-manager = "2.10.0"
-compose-material = "1.4.1"
-compose-foundation = "1.4.1"
-glance-wear-tiles = "1.0.0-alpha05"
-wear-tooling-preview = "1.0.0"
 watchface-complications-data-source-ktx = "1.2.1"
-compose-wear-material3 = "1.0.0-alpha34"
-protolayout-proto = "1.2.1"
-tiles-proto = "1.4.1"
+wear-compose-material = "1.4.1"
+wear-compose-foundation = "1.4.1"
+wear-compose-material3 = "1.0.0-alpha34"
+wear-glance-tiles = "1.0.0-alpha05"
+wear-tooling-preview = "1.0.0"
+wear-protolayout-proto = "1.2.1"
+wear-tiles-proto = "1.4.1"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -80,15 +80,14 @@ test-rules = { group = "androidx.test", name = "rules", version.ref = "android-t
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
-androidx-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "compose-material" }
-androidx-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "compose-foundation" }
-androidx-glance-wear-tiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "glance-wear-tiles" }
-androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
-androidx-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
-androidx-compose-wear-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "compose-wear-material3" }
-androidx-protolayout-proto = { module = "androidx.wear.protolayout:protolayout-proto", version.ref = "protolayout-proto" }
-androidx-tiles-proto = { module = "androidx.wear.tiles:tiles-proto", version.ref = "tiles-proto" }
+wear-glance-tiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "wear-glance-tiles" }
+wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
+wear-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
+wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wear-compose-foundation" }
+wear-compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "wear-compose-material" }
+wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wear-compose-material3" }
+wear-protolayout-proto = { module = "androidx.wear.protolayout:protolayout-proto", version.ref = "wear-protolayout-proto" }
+wear-tiles-proto = { module = "androidx.wear.tiles:tiles-proto", version.ref = "wear-tiles-proto" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
