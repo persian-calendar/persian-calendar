@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.global
 
 import android.content.Context
 import android.content.res.Resources
+import android.os.Build
 import android.view.accessibility.AccessibilityManager
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
@@ -548,7 +549,9 @@ fun updateStoredPreference(context: Context) {
     // https://stackoverflow.com/a/61599809
     isHighTextContrastEnabled = runCatching {
         context.getSystemService<AccessibilityManager>()?.let {
-            it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
+            if (Build.VERSION.SDK_INT >= 36) {
+                it.isHighContrastTextEnabled
+            } else it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
         }
     }.onFailure(logException).getOrNull() == true
 }
