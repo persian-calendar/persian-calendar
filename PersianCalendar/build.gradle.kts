@@ -13,7 +13,7 @@ android {
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
-    compileSdk = 35
+    compileSdk = 36
 
     buildFeatures {
         buildConfig = true
@@ -27,7 +27,7 @@ android {
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 970
         versionName = "9.7.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
