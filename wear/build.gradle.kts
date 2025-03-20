@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.persiancalendar.calendar)
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.activity)
+    implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.wear.tiles.proto)
