@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.PREF_TILE_STATE
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.utils.getDayIconResource
-import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.preferences
 
@@ -35,16 +34,14 @@ class PersianCalendarTileService : TileService() {
     }
 
     private fun updateTile() {
-        runCatching {
-            val tile = qsTile ?: return
-            val jdn = Jdn.today()
-            val today = jdn on mainCalendar
-            tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
-            tile.label = jdn.weekDayName
-            tile.contentDescription = today.monthName
-            // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
-            tile.state = preferredState
-            tile.updateTile()
-        }.onFailure(logException)
+        val tile = qsTile ?: return
+        val jdn = Jdn.today()
+        val today = jdn on mainCalendar
+        tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
+        tile.label = jdn.weekDayName
+        tile.contentDescription = today.monthName
+        // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
+        tile.state = preferredState
+        tile.updateTile()
     }
 }
