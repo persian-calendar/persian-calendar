@@ -322,8 +322,8 @@ private fun EquinoxCountDown(
     countDownTimeParts.map { (pluralId, interval) ->
         val x = (remainedTime / interval).toInt()
         remainedTime -= interval * x
-        pluralStringResource(pluralId, x, formatNumber(x))
-    }.forEachIndexed { i, x ->
+        x to pluralStringResource(pluralId, x, formatNumber(x))
+    }.dropWhile { it.first == 0 }.forEachIndexed { i, (_, x) ->
         if (i != 0) Spacer(Modifier.width(8.dp))
         val parts = x.split(" ")
         if (parts.size == 2 && parts[0].length <= 2 && !isTalkBackEnabled) Column(
