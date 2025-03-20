@@ -3,7 +3,13 @@ package com.byagowi.persiancalendar
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -70,6 +76,9 @@ private fun WearApp() {
     }
 }
 
+/** This is similar to what [androidx.compose.animation.Crossfade] uses */
+private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
+
 @Composable
 private fun SettingsScreen() {
     ScreenScaffold {
@@ -77,6 +86,65 @@ private fun SettingsScreen() {
             item { Text("نمایش رویدادها") }
             item { EventsSwitch("غیرتعطیل رسمی\nدانشگاه تهران") }
             item { EventsSwitch("بین‌المللی") }
+            item { Text("تنظیمات") }
+            item {
+                var checked by remember { mutableStateOf(false) }
+                SwitchButton(
+                    checked,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    label = {
+                        Column {
+                            Text("خلاصهٔ نام روز")
+                            AnimatedContent(
+                                if (checked) "۴شنبه" else "چهارشنبه",
+                                transitionSpec = { crossfadeSpec }
+                            ) { Text(it) }
+                        }
+                    },
+                    onCheckedChange = { checked = it }
+                )
+            }
+            item {
+                var checked by remember { mutableStateOf(false) }
+                SwitchButton(
+                    checked,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    label = {
+                        Column {
+                            Text("نمایش عددی ماه")
+                            AnimatedContent(
+                                if (checked) "۱۲/۲۰" else "۲۰ اسفند",
+                                transitionSpec = { crossfadeSpec }
+                            ) { Text(it) }
+                        }
+                    },
+                    onCheckedChange = { checked = it }
+                )
+            }
+            item { Text("صفحهٔ اصلی") }
+            item {
+                var checked by remember { mutableStateOf(false) }
+                SwitchButton(
+                    checked,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 8.dp),
+                    label = {
+                        Column {
+                            Text("نمایش شمارهٔ هفته")
+                            AnimatedContent(
+                                if (checked) "هفتهٔ ۳" else "۱/۱۸",
+                                transitionSpec = { crossfadeSpec }
+                            ) { Text(it) }
+                        }
+                    },
+                    onCheckedChange = { checked = it }
+                )
+            }
         }
     }
 }
@@ -112,7 +180,7 @@ private fun MainScreen(navigateToSettings: () -> Unit) {
 //        },
     ) {
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
-            items(items = generateEntries(days = 31)) { EntryView(it) }
+            items(items = generateEntries(days = 14)) { EntryView(it) }
         }
     }
 }
