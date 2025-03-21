@@ -3,24 +3,16 @@ package com.byagowi.persiancalendar
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Construction
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -37,7 +29,6 @@ import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
-import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.dynamicColorScheme
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
@@ -76,111 +67,27 @@ private fun WearApp() {
     }
 }
 
-/** This is similar to what [androidx.compose.animation.Crossfade] uses */
-private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
-
-@Composable
-private fun SettingsScreen() {
-    ScreenScaffold {
-        ScalingLazyColumn {
-            item { Text("نمایش رویدادها") }
-            item { EventsSwitch("غیرتعطیل رسمی\nدانشگاه تهران") }
-            item { EventsSwitch("بین‌المللی") }
-            item { Text("تنظیمات") }
-            item {
-                var checked by remember { mutableStateOf(false) }
-                SwitchButton(
-                    checked,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    label = {
-                        Column {
-                            Text("خلاصهٔ نام روز")
-                            AnimatedContent(
-                                if (checked) "۴شنبه" else "چهارشنبه",
-                                transitionSpec = { crossfadeSpec }
-                            ) { Text(it) }
-                        }
-                    },
-                    onCheckedChange = { checked = it }
-                )
-            }
-            item {
-                var checked by remember { mutableStateOf(false) }
-                SwitchButton(
-                    checked,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    label = {
-                        Column {
-                            Text("نمایش عددی ماه")
-                            AnimatedContent(
-                                if (checked) "۱۲/۲۰" else "۲۰ اسفند",
-                                transitionSpec = { crossfadeSpec }
-                            ) { Text(it) }
-                        }
-                    },
-                    onCheckedChange = { checked = it }
-                )
-            }
-            item { Text("صفحهٔ اصلی") }
-            item {
-                var checked by remember { mutableStateOf(false) }
-                SwitchButton(
-                    checked,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp),
-                    label = {
-                        Column {
-                            Text("نمایش شمارهٔ هفته")
-                            AnimatedContent(
-                                if (checked) "هفتهٔ ۳" else "۱/۱۸",
-                                transitionSpec = { crossfadeSpec }
-                            ) { Text(it) }
-                        }
-                    },
-                    onCheckedChange = { checked = it }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun EventsSwitch(title: String) {
-    var checked by remember { mutableStateOf(false) }
-    SwitchButton(
-        checked,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
-        label = { Text(title) },
-        onCheckedChange = { checked = it }
-    )
-}
-
 @Composable
 private fun MainScreen(navigateToSettings: () -> Unit) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
         scrollState = scrollState,
-//        edgeButton = {
-//            EdgeButton(
-//                onClick = navigateToSettings,
-//                buttonSize = EdgeButtonSize.Medium,
-//            ) {
-//                Icon(
-//                    Icons.Default.Settings,
-//                    contentDescription = "تنظیمات"
-//                )
-//            }
-//        },
+        edgeButton = {
+            EdgeButton(
+                onClick = navigateToSettings,
+                buttonSize = EdgeButtonSize.Medium,
+            ) {
+                Icon(
+                    Icons.Default.Construction,
+                    contentDescription = "تنظیمات"
+                )
+            }
+        },
     ) {
+        val preferences by preferences.collectAsState()
+        val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
-            items(items = generateEntries(days = 14)) { EntryView(it) }
+            items(items = generateEntries(enabledEvents, days = 14)) { EntryView(it) }
         }
     }
 }

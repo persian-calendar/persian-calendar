@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -35,7 +36,11 @@ class MainTileService : GlanceTileService() {
         Box(contentAlignment = Alignment.Center) {
             // LocalConfiguration doesn't work here
             val screenHeightDp = resources.configuration.screenHeightDp
-            val todayEntries = generateEntries(1)
+            val todayEntries = run {
+                @SuppressLint("StateFlowValueCalledInComposition")
+                val enabledEvents = preferences.value?.get(enabledEventsKey) ?: emptySet()
+                generateEntries(enabledEvents, 1)
+            }
             Text(
                 todayEntries[0].title,
                 GlanceModifier.padding(bottom = (screenHeightDp / 1.7).dp),

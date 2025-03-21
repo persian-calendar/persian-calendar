@@ -9,26 +9,32 @@ import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
-import androidx.wear.watchface.complications.datasource.ComplicationDataSourceService
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
+import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
+import kotlinx.coroutines.flow.first
 import java.util.Date
 
-class MainComplicationService : ComplicationDataSourceService() {
+class MainComplicationService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? =
         if (type != ComplicationType.SHORT_TEXT) null
         else createComplicationData("شنبه", "۱ مهر").build()
 
-    override fun onComplicationRequest(
-        request: ComplicationRequest,
-        listener: ComplicationRequestListener,
-    ) {
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
         val locale = ULocale("fa_IR@calendar=persian")
         val calendar = Calendar.getInstance(locale)
         val date = Date()
-        val title =
-            DateFormat.getPatternInstance(calendar, DateFormat.ABBR_WEEKDAY, locale).format(date)
-        val body =
-            DateFormat.getPatternInstance(calendar, DateFormat.ABBR_MONTH_DAY, locale).format(date)
+        val preferences = preferences.first()
+        val title = run {
+            val format = if (preferences?.get(complicationWeekdayInitial) == true) "EEEEE"
+            else DateFormat.WEEKDAY
+            DateFormat.getPatternInstance(calendar, format, locale).format(date)
+        }
+        val body = run {
+            val format =
+                if (preferences?.get(complicationMonthNumber) == true) DateFormat.NUM_MONTH_DAY
+                else DateFormat.ABBR_MONTH_DAY
+            DateFormat.getPatternInstance(calendar, format, locale).format(date)
+        }
         val dataBuilder = createComplicationData(title, body).setTapAction(
             PendingIntent.getActivity(
                 this,
@@ -37,7 +43,7 @@ class MainComplicationService : ComplicationDataSourceService() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
-        listener.onComplicationData(dataBuilder.build())
+        return dataBuilder.build()
     }
 
     private fun createComplicationData(

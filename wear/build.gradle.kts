@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.lifecycle.process)
+    implementation(libs.datastore.preferences)
     implementation(libs.wear.tiles.proto)
     implementation(libs.wear.protolayout.proto)
     implementation(libs.wear.compose.foundation)

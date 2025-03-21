@@ -4,6 +4,7 @@ import android.icu.text.DateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 import androidx.collection.IntIntPair
+import androidx.datastore.preferences.core.Preferences
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.generated.gregorianEvents
@@ -21,7 +22,7 @@ class Entry(val title: String, val type: EntryType)
 
 private const val spacedComma = "، "
 
-fun generateEntries(days: Int): List<Entry> {
+fun generateEntries(enabledEvents: Set<String>, days: Int): List<Entry> {
     val locale = ULocale("fa_IR@calendar=persian")
     val calendar = Calendar.getInstance(locale)
     val weekDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.ABBR_WEEKDAY, locale)
@@ -35,7 +36,7 @@ fun generateEntries(days: Int): List<Entry> {
             javaCalendar[Calendar.MONTH] + 1,
             javaCalendar[Calendar.DAY_OF_MONTH]
         )
-        val events = getEventsOfDay(civilDate)
+        val events = getEventsOfDay(enabledEvents, civilDate)
         javaCalendar.timeInMillis += oneDayInMillis
         if (events.isNotEmpty() || day == 0) {
             val dateTitle = weekDayFormat.format(date) + spacedComma + monthDayFormat.format(date)
@@ -59,27 +60,35 @@ private val groupedGregorianEvents by lazy(LazyThreadSafetyMode.NONE) {
 private fun MutableList<Entry>.eventsOfCalendar(
     groupedEvents: Map<IntIntPair, List<CalendarRecord>>,
     date: AbstractDate,
+    enabledEvents: Set<String>,
 ) {
     groupedEvents[IntIntPair(date.month, date.dayOfMonth)]?.forEach {
-        if (it.type == EventType.Iran) {
-            add(Entry(it.title, if (it.isHoliday) EntryType.Holiday else EntryType.NonHoliday))
-        }
+        if (when (it.type) {
+                EventType.Iran -> it.isHoliday || iranNonHolidaysKey in enabledEvents
+                EventType.International -> internationalKey in enabledEvents
+                else -> false
+            }
+        ) add(Entry(it.title, if (it.isHoliday) EntryType.Holiday else EntryType.NonHoliday))
     }
 }
 
-private fun getEventsOfDay(civilDate: CivilDate): List<Entry> {
+const val iranNonHolidaysKey = "iranNonHolidays"
+const val internationalKey = "international"
+
+private fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry> {
     val jdn = civilDate.toJdn()
     val persianDate = PersianDate(jdn)
     val islamicDate = IslamicDate(jdn)
     val events = buildList {
-        eventsOfCalendar(groupedPersianEvents, persianDate)
-        eventsOfCalendar(groupedIslamicEvents, islamicDate)
+        eventsOfCalendar(groupedPersianEvents, persianDate, enabledEvents)
+        eventsOfCalendar(groupedIslamicEvents, islamicDate, enabledEvents)
         if (islamicDate.dayOfMonth >= 29) {
             irregularRecurringEvents.forEach {
                 if (it["type"] == "Iran" && it["calendar"] == "Hijri" &&
                     it["rule"] == "end of month" &&
                     it["month"]?.toIntOrNull() == islamicDate.month &&
-                    IslamicDate(jdn + 1).month != islamicDate.month
+                    IslamicDate(jdn + 1).month != islamicDate.month &&
+                    (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
                         it["title"] ?: "",
@@ -88,7 +97,7 @@ private fun getEventsOfDay(civilDate: CivilDate): List<Entry> {
                 )
             }
         }
-        eventsOfCalendar(groupedGregorianEvents, civilDate)
+        eventsOfCalendar(groupedGregorianEvents, civilDate, enabledEvents)
     }
     return events.filter { it.type == EntryType.Holiday } + events.filter { it.type == EntryType.NonHoliday }
 }
