@@ -19,7 +19,7 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
         if (type != ComplicationType.SHORT_TEXT) null
         else createComplicationData("شنبه", "۱ مهر").build()
 
-    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData? {
+    override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val locale = ULocale("fa_IR@calendar=persian")
         val calendar = Calendar.getInstance(locale)
         val date = Date()

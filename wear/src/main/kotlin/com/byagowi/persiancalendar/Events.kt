@@ -1,10 +1,9 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar
 
 import android.icu.text.DateFormat
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 import androidx.collection.IntIntPair
-import androidx.datastore.preferences.core.Preferences
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.generated.gregorianEvents
@@ -22,9 +21,11 @@ class Entry(val title: String, val type: EntryType)
 
 private const val spacedComma = "، "
 
+val persianLocal by lazy(LazyThreadSafetyMode.NONE) { ULocale("fa_IR@calendar=persian") }
+
 fun generateEntries(enabledEvents: Set<String>, days: Int): List<Entry> {
-    val locale = ULocale("fa_IR@calendar=persian")
-    val calendar = Calendar.getInstance(locale)
+    val locale = persianLocal
+    val calendar = Calendar.getInstance(persianLocal)
     val weekDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.ABBR_WEEKDAY, locale)
     val monthDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.MONTH_DAY, locale)
     val oneDayInMillis = 1.days.inWholeMilliseconds

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import android.icu.util.Calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.style.TextOverflow
@@ -19,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
@@ -27,6 +32,7 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
 fun MainScreen(navigateToSettings: () -> Unit) {
@@ -47,6 +53,16 @@ fun MainScreen(navigateToSettings: () -> Unit) {
     ) {
         val preferences by preferences.collectAsState()
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
+        var showWarnDialog by remember {
+            val currentYear = Calendar.getInstance(persianLocal).get(Calendar.YEAR)
+            val isOutDated = currentYear != IranianIslamicDateConverter.latestSupportedYearOfIran
+            mutableStateOf(isOutDated)
+        }
+        AlertDialog(
+            showWarnDialog,
+            { showWarnDialog = false },
+            title = { Text("برنامه قدیمی است\n\nمناسبت‌های دقیق نیست") },
+            edgeButton = { EdgeButton({ showWarnDialog = false }) { Text("متوجه شدم") } })
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
             items(items = generateEntries(enabledEvents, days = 14)) { EntryView(it) }
         }

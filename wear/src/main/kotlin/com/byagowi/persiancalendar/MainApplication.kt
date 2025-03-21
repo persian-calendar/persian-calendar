@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar
 
 import android.app.Application
 import android.content.ComponentName
