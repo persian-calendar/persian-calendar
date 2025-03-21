@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Construction
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -78,7 +78,7 @@ private fun MainScreen(navigateToSettings: () -> Unit) {
                 buttonSize = EdgeButtonSize.Medium,
             ) {
                 Icon(
-                    Icons.Default.Construction,
+                    Icons.Default.Settings, // Icons.Default.Construction,
                     contentDescription = "تنظیمات"
                 )
             }
