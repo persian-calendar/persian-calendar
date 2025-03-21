@@ -70,7 +70,10 @@ class MainTileService : GlanceTileService() {
                 )
                 Text(
                     "تقویم",
-                    style = TextStyle(fontSize = 14.sp, color = ColorProvider(Color(0xff303133)))
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = ColorProvider(R.color.tile_on_button_color)
+                    )
                 )
             }
         }

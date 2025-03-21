@@ -1,3 +1,4 @@
 <resources>
     <color name="tile_button_color">@android:color/system_primary_fixed</color>
+    <color name="tile_on_button_color">@android:color/system_on_primary_fixed</color>
 </resources>
