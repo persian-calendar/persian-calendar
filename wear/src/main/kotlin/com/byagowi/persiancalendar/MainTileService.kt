@@ -20,8 +20,15 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
+import androidx.wear.tiles.EventBuilders
 
 class MainTileService : GlanceTileService() {
+
+    override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {
+        super.onTileEnterEvent(requestParams)
+        getUpdater(this).requestUpdate(MainTileService::class.java)
+    }
+
     @Composable
     @GlanceComposable
     override fun Content() {
