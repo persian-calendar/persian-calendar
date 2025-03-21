@@ -61,7 +61,7 @@ fun MainScreen(navigateToSettings: () -> Unit) {
         AlertDialog(
             showWarnDialog,
             { showWarnDialog = false },
-            title = { Text("برنامه قدیمی است\n\nمناسبت‌های دقیق نیست") },
+            title = { Text("برنامه قدیمی است\n\nمناسبت‌ها دقیق نیست") },
             edgeButton = { EdgeButton({ showWarnDialog = false }) { Text("متوجه شدم") } })
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
             items(items = generateEntries(enabledEvents, days = 14)) { EntryView(it) }
