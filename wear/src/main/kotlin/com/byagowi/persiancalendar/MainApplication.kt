@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.wear.tiles.TileService.getUpdater
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,15 +22,22 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         val dataStore = dataStore
-        val context = this
         ProcessLifecycleOwner.get().lifecycleScope.launch {
             dataStore.data.collect {
                 preferences_.value = it
-                val component = ComponentName(context, MainComplicationService::class.java)
-                ComplicationDataSourceUpdateRequester.create(context, component).requestUpdateAll()
+                requestComplicationUpdate()
             }
         }
     }
+}
+
+fun Context.requestComplicationUpdate() {
+    val component = ComponentName(this, MainComplicationService::class.java)
+    ComplicationDataSourceUpdateRequester.create(this, component).requestUpdateAll()
+}
+
+fun Context.requestTileUpdate() {
+    getUpdater(this).requestUpdate(MainTileService::class.java)
 }
 
 private val preferences_ = MutableStateFlow<Preferences?>(null)

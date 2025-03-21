@@ -18,6 +18,11 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        run {
+            // Request update of both on activity just in case
+            requestComplicationUpdate()
+            requestTileUpdate()
+        }
         setContent { WearApp() }
     }
 }
