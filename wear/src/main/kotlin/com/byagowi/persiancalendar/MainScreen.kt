@@ -55,7 +55,7 @@ fun MainScreen(navigateToSettings: () -> Unit) {
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
             val currentYear = Calendar.getInstance(persianLocal).get(Calendar.YEAR)
-            val isOutDated = currentYear != IranianIslamicDateConverter.latestSupportedYearOfIran
+            val isOutDated = currentYear > IranianIslamicDateConverter.latestSupportedYearOfIran
             mutableStateOf(isOutDated)
         }
         AlertDialog(
