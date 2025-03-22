@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar
+package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -26,6 +26,13 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.byagowi.persiancalendar.complicationMonthNumber
+import com.byagowi.persiancalendar.complicationWeekdayInitial
+import com.byagowi.persiancalendar.editPreferences
+import com.byagowi.persiancalendar.enabledEventsKey
+import com.byagowi.persiancalendar.internationalKey
+import com.byagowi.persiancalendar.iranNonHolidaysKey
+import com.byagowi.persiancalendar.preferences
 import kotlinx.coroutines.launch
 
 /** This is similar to what [androidx.compose.animation.Crossfade] uses */

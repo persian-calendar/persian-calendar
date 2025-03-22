@@ -22,6 +22,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
 import androidx.wear.tiles.EventBuilders
+import com.byagowi.persiancalendar.ui.MainActivity
 
 class MainTileService : GlanceTileService() {
 

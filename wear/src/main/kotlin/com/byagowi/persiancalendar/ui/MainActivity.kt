@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar
+package com.byagowi.persiancalendar.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -14,6 +14,8 @@ import androidx.wear.compose.material3.dynamicColorScheme
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.byagowi.persiancalendar.requestComplicationUpdate
+import com.byagowi.persiancalendar.requestTileUpdate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

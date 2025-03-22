@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar
+package com.byagowi.persiancalendar.ui
 
 import android.icu.util.Calendar
 import androidx.compose.foundation.background
@@ -32,6 +32,12 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.byagowi.persiancalendar.Entry
+import com.byagowi.persiancalendar.EntryType
+import com.byagowi.persiancalendar.enabledEventsKey
+import com.byagowi.persiancalendar.generateEntries
+import com.byagowi.persiancalendar.persianLocal
+import com.byagowi.persiancalendar.preferences
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
