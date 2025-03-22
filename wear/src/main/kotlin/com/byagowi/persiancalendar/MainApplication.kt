@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar
 
 import android.app.Application
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
@@ -14,9 +16,13 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.wear.tiles.TileService.getUpdater
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -29,6 +35,27 @@ class MainApplication : Application() {
             }
         }
     }
+}
+
+class BroadcastReceivers : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+            context.applicationContext.run {
+                requestTileUpdate()
+                requestComplicationUpdate()
+                enqueueUpdateWorker()
+            }
+        }
+    }
+}
+
+fun Context.enqueueUpdateWorker() {
+    val workRequest = PeriodicWorkRequestBuilder<UpdateWorker>(15, TimeUnit.MINUTES).build()
+    WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+        "PeriodicUpdateWork",
+        ExistingPeriodicWorkPolicy.KEEP,
+        workRequest
+    )
 }
 
 fun Context.requestComplicationUpdate() {

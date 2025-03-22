@@ -59,6 +59,7 @@ dependencies {
     implementation(libs.wear.tooling.preview)
     implementation(libs.wear.glance.tiles)
     implementation(libs.wear.watchface.complications.data.source.ktx)
+    implementation(libs.work.manager.ktx)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.tooling)

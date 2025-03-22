@@ -42,6 +42,14 @@
                 android:resource="@drawable/tile_preview" />
         </service>
 
+        <receiver
+            android:name=".BroadcastReceivers"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <uses-library
             android:name="com.google.android.wearable"
             android:required="true" />
