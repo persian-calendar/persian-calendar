@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
@@ -28,6 +29,7 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
 import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.ListSubHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
@@ -78,11 +80,9 @@ fun MainScreen(navigateToSettings: () -> Unit) {
 
 @Composable
 private fun EntryView(it: Entry) {
-    if (it.type == EntryType.Date) Text(
-        text = it.title,
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
-    ) else {
+    if (it.type == EntryType.Date) ListSubHeader {
+        Text(text = it.title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+    } else {
         val isHoliday = it.type == EntryType.Holiday
         Text(
             it.title,

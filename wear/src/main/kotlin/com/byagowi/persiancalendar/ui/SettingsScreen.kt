@@ -16,12 +16,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.ListSubHeader
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
@@ -81,10 +83,18 @@ fun SettingsScreen() {
         }
 
         ScalingLazyColumn {
-            item { Text("نمایش رویدادها") }
+            item {
+                ListSubHeader {
+                    Text("نمایش رویدادها", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                }
+            }
             item { EventsSwitch(iranNonHolidaysKey, "غیرتعطیل رسمی\nدانشگاه تهران") }
             item { EventsSwitch(internationalKey, "بین‌المللی") }
-            item { Text("صفحهٔ ساعت", modifier = Modifier.padding(top = 12.dp)) }
+            item {
+                ListSubHeader {
+                    Text("صفحهٔ ساعت", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                }
+            }
             item {
                 PreferenceSwitch(complicationWeekdayInitial) { checked ->
                     Column {
