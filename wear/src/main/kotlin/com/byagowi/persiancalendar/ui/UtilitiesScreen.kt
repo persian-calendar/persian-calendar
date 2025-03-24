@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
-import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.ScreenScaffold
@@ -29,7 +29,7 @@ fun UtilitiesScreen(navigateToSettings: () -> Unit, navigateToConverter: () -> U
                     Triple(navigateToSettings, Icons.Default.Settings, "تنظیمات"),
                 )
             ) { (action, icon, title) ->
-                Button(
+                FilledTonalButton(
                     action,
                     modifier = Modifier
                         .fillMaxWidth()
