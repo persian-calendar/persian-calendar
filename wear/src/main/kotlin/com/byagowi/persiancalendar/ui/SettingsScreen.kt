@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -36,9 +38,6 @@ import com.byagowi.persiancalendar.internationalKey
 import com.byagowi.persiancalendar.iranNonHolidaysKey
 import com.byagowi.persiancalendar.preferences
 import kotlinx.coroutines.launch
-
-/** This is similar to what [androidx.compose.animation.Crossfade] uses */
-private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
 
 @Composable
 fun SettingsScreen() {
@@ -101,7 +100,7 @@ fun SettingsScreen() {
                         Text("روز هفتهٔ کوتاه")
                         AnimatedContent(
                             if (checked) "چ" else "چهارشنبه",
-                            transitionSpec = { crossfadeSpec }
+                            transitionSpec = appCrossfadeSpec
                         ) { Text(it) }
                     }
                 }
@@ -112,7 +111,7 @@ fun SettingsScreen() {
                         Text("نمایش عددی ماه")
                         AnimatedContent(
                             if (checked) "۱/۳۱" else "۳۱ فروردین",
-                            transitionSpec = { crossfadeSpec }
+                            transitionSpec = appCrossfadeSpec
                         ) { Text(it) }
                     }
                 }
@@ -120,6 +119,14 @@ fun SettingsScreen() {
         }
     }
 }
+
+/** This is similar to what [androidx.compose.animation.Crossfade] uses */
+private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
+
+// Our own cross fade spec where AnimatedContent() has nicer effect
+// than Crossfade() (usually on non binary changes) but we need a crossfade effect also
+private val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
+    { crossfadeSpec }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable

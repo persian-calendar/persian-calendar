@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Construction
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
@@ -38,31 +38,26 @@ import com.byagowi.persiancalendar.Entry
 import com.byagowi.persiancalendar.EntryType
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.generateEntries
-import com.byagowi.persiancalendar.persianLocal
+import com.byagowi.persiancalendar.persianLocale
 import com.byagowi.persiancalendar.preferences
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
-fun MainScreen(navigateToSettings: () -> Unit) {
+fun MainScreen(navigateToUtilities: () -> Unit) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
         scrollState = scrollState,
         edgeButton = {
             EdgeButton(
-                onClick = navigateToSettings,
+                onClick = navigateToUtilities,
                 buttonSize = EdgeButtonSize.Medium,
-            ) {
-                Icon(
-                    Icons.Default.Settings, // Icons.Default.Construction,
-                    contentDescription = "تنظیمات"
-                )
-            }
+            ) { Icon(Icons.Default.Construction, contentDescription = "تنظیمات") }
         },
     ) {
         val preferences by preferences.collectAsState()
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
-            val currentYear = Calendar.getInstance(persianLocal).get(Calendar.YEAR)
+            val currentYear = Calendar.getInstance(persianLocale).get(Calendar.YEAR)
             val isOutDated = currentYear > IranianIslamicDateConverter.latestSupportedYearOfIran
             mutableStateOf(isOutDated)
         }

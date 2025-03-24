@@ -14,6 +14,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 
 enum class EntryType { Date, NonHoliday, Holiday }
@@ -21,24 +22,26 @@ class Entry(val title: String, val type: EntryType)
 
 private const val spacedComma = "، "
 
-val persianLocal by lazy(LazyThreadSafetyMode.NONE) { ULocale("fa_IR@calendar=persian") }
+val persianLocale by lazy(LazyThreadSafetyMode.NONE) { ULocale("fa_IR@calendar=persian") }
 
 fun generateEntries(enabledEvents: Set<String>, days: Int): List<Entry> {
-    val locale = persianLocal
-    val calendar = Calendar.getInstance(persianLocal)
+    val locale = persianLocale
+    val calendar = Calendar.getInstance(persianLocale)
     val weekDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.ABBR_WEEKDAY, locale)
     val monthDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.MONTH_DAY, locale)
     val oneDayInMillis = 1.days.inWholeMilliseconds
-    val javaCalendar = java.util.Calendar.getInstance()
+    val gregorianCalendar = GregorianCalendar.getInstance()
     return (0..<days).flatMap { day ->
-        val date = javaCalendar.time
-        val civilDate = CivilDate(
-            javaCalendar[Calendar.YEAR],
-            javaCalendar[Calendar.MONTH] + 1,
-            javaCalendar[Calendar.DAY_OF_MONTH]
+        val date = gregorianCalendar.time
+        val events = getEventsOfDay(
+            enabledEvents,
+            CivilDate(
+                gregorianCalendar[Calendar.YEAR],
+                gregorianCalendar[Calendar.MONTH] + 1,
+                gregorianCalendar[Calendar.DAY_OF_MONTH]
+            ),
         )
-        val events = getEventsOfDay(enabledEvents, civilDate)
-        javaCalendar.timeInMillis += oneDayInMillis
+        gregorianCalendar.timeInMillis += oneDayInMillis
         if (events.isNotEmpty() || day == 0) {
             val dateTitle = weekDayFormat.format(date) + spacedComma + monthDayFormat.format(date)
             listOf(
@@ -85,11 +88,9 @@ private fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): Li
         eventsOfCalendar(groupedIslamicEvents, islamicDate, enabledEvents)
         if (islamicDate.dayOfMonth >= 29) {
             irregularRecurringEvents.forEach {
-                if (it["type"] == "Iran" && it["calendar"] == "Hijri" &&
-                    it["rule"] == "end of month" &&
-                    it["month"]?.toIntOrNull() == islamicDate.month &&
-                    IslamicDate(jdn + 1).month != islamicDate.month &&
-                    (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
+                if (it["type"] == "Iran" && it["calendar"] == "Hijri" && it["rule"] == "end of month" && it["month"]?.toIntOrNull() == islamicDate.month && IslamicDate(
+                        jdn + 1
+                    ).month != islamicDate.month && (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
                         it["title"] ?: "",
