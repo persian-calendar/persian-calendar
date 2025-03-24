@@ -5,12 +5,16 @@ import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.material3.AppScaffold
@@ -49,7 +53,7 @@ fun ConverterScreen() {
         listOf(PersianDate(civilDate), civilDate, IslamicDate(civilDate))
     }
 
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(1) }
     val typePickerState = rememberPickerState(3, 0, false)
     val yearOptions = 200
     val typeIndex = typePickerState.selectedOptionIndex
@@ -121,6 +125,8 @@ fun ConverterScreen() {
                                         - yearOptions / 2
                             )
                         },
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.defaultMinSize(minWidth = 40.dp),
                         fontSize = MaterialTheme.typography.displayMedium.fontSize,
                         color = if (pickerSelected) DatePickerDefaults.datePickerColors().activePickerContentColor
                         else DatePickerDefaults.datePickerColors().inactivePickerContentColor,
@@ -128,7 +134,7 @@ fun ConverterScreen() {
                 }
             }
         }
-        val style = MaterialTheme.typography.arcSmall
+        val style = MaterialTheme.typography.arcMedium
         run {
             val civilDate = CivilDate(currentJdn)
             val text = persianDigitsFormatter.format(civilDate.dayOfMonth) + " " +
