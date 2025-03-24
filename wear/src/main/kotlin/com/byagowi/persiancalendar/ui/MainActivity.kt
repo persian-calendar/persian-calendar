@@ -43,7 +43,7 @@ private fun WearApp() {
                 val converterRoute = "converter"
                 SwipeDismissableNavHost(
                     navController = navController,
-                    startDestination = converterRoute
+                    startDestination = mainRoute
                 ) {
                     composable(mainRoute) {
                         MainScreen(navigateToUtilities = { navController.navigate(utilitiesRoute) })
