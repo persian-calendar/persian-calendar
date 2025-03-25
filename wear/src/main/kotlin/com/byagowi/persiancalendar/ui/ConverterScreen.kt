@@ -25,9 +25,10 @@ import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.DatePickerDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.PickerGroup
+import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
-import androidx.wear.compose.material3.rememberPickerState
+import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -58,24 +59,24 @@ fun ConverterScreen() {
     }
 
     var selectedIndex by remember { mutableIntStateOf(1) }
-    val typePickerState = rememberPickerState(3, 0, false)
-    val yearOptions = 200
-    val typeIndex = typePickerState.selectedOptionIndex
-    val yearPickerState = key(typeIndex) {
-        rememberPickerState(yearOptions, yearOptions / 2)
+    val calendarPickerState = remember { PickerState(3, 0, false) }
+    val calendarIndex = calendarPickerState.selectedOptionIndex
+    val yearsLimit = 200
+    val yearPickerState = remember(calendarIndex, yearsLimit) {
+        PickerState(yearsLimit, yearsLimit / 2)
     }
-    val monthPickerState = key(typeIndex) {
-        rememberPickerState(12, today[typeIndex].month - 1)
+    val monthPickerState = remember(calendarIndex, today[calendarIndex].month) {
+        PickerState(12, today[calendarIndex].month - 1)
     }
     var daysOnMonth by remember { mutableIntStateOf(31) }
-    val dayPickerState = key(typeIndex, daysOnMonth) {
-        rememberPickerState(daysOnMonth, today[typeIndex].dayOfMonth - 1)
+    val dayPickerState = remember(calendarIndex, daysOnMonth, today[calendarIndex].dayOfMonth) {
+        PickerState(daysOnMonth, today[calendarIndex].dayOfMonth - 1)
     }
     val currentJdn = run {
-        val year = yearPickerState.selectedOptionIndex - yearOptions / 2 + today[typeIndex].year
+        val year = yearPickerState.selectedOptionIndex - yearsLimit / 2 + today[calendarIndex].year
         val month = monthPickerState.selectedOptionIndex + 1
         val day = dayPickerState.selectedOptionIndex + 1
-        val date = when (typeIndex) {
+        val date = when (calendarIndex) {
             0 -> PersianDate(year, month, day)
             1 -> CivilDate(year, month, day)
             else -> IslamicDate(year, month, day)
@@ -99,57 +100,74 @@ fun ConverterScreen() {
     AppScaffold {
         PickerGroup {
             listOf(
-                typePickerState,
+                calendarPickerState,
                 dayPickerState,
                 monthPickerState,
                 yearPickerState,
             ).forEachIndexed { i, pickerState ->
-                PickerGroupItem(
-                    pickerState,
-                    selected = selectedIndex == i, { selectedIndex = i },
-                ) { optionIndex, pickerSelected ->
-                    Text(
-                        when (i) {
-                            0 -> when (optionIndex) {
-                                0 -> "شمسی"
-                                1 -> "میلادی"
-                                else -> "قمری"
-                            }
+                key(if (i == 0) 0 else calendarIndex) {
+                    PickerGroupItem(
+                        pickerState,
+                        selected = selectedIndex == i, { selectedIndex = i },
+                    ) { optionIndex, pickerSelected ->
+                        Text(
+                            when (i) {
+                                0 -> when (optionIndex) {
+                                    0 -> "شمسی"
+                                    1 -> "میلادی"
+                                    else -> "قمری"
+                                }
 
-                            1 -> persianDigitsFormatter.format(optionIndex + 1)
+                                1 -> persianDigitsFormatter.format(optionIndex + 1)
 
-                            2 -> when (typeIndex) {
-                                0 -> persianMonths
-                                1 -> gregorianMonths
-                                else -> islamicMonths
-                            }[optionIndex]
+                                2 -> when (calendarIndex) {
+                                    0 -> persianMonths
+                                    1 -> gregorianMonths
+                                    else -> islamicMonths
+                                }[optionIndex]
 
-                            else -> persianDigitsFormatter.format(
-                                optionIndex + today[typeIndex].year
-                                        - yearOptions / 2
-                            )
-                        },
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.defaultMinSize(minWidth = 40.dp),
-                        fontSize = MaterialTheme.typography.displayMedium.fontSize,
-                        color = if (pickerSelected) DatePickerDefaults.datePickerColors().activePickerContentColor
-                        else DatePickerDefaults.datePickerColors().inactivePickerContentColor,
-                    )
+                                else -> persianDigitsFormatter.format(
+                                    optionIndex + today[calendarIndex].year
+                                            - yearsLimit / 2
+                                )
+                            },
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.defaultMinSize(minWidth = 40.dp),
+                            fontSize = MaterialTheme.typography.displayMedium.fontSize,
+                            color = if (pickerSelected) DatePickerDefaults.datePickerColors().activePickerContentColor
+                            else DatePickerDefaults.datePickerColors().inactivePickerContentColor,
+                        )
+                    }
                 }
             }
         }
         val weekDayName = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
-        val gregorianText = run {
-            val civilDate = CivilDate(currentJdn)
-            persianDigitsFormatter.format(civilDate.dayOfMonth) + " " +
-                    gregorianMonths[civilDate.month - 1] + " " +
-                    persianDigitsFormatter.format(civilDate.year)
+
+        fun monthsFromDate(date: AbstractDate) = when (date) {
+            is PersianDate -> persianMonths
+            is CivilDate -> gregorianMonths
+            else -> islamicMonths
         }
-        val islamicText = run {
-            val islamicDate = IslamicDate(currentJdn)
-            persianDigitsFormatter.format(islamicDate.dayOfMonth) + " " +
-                    gregorianMonths[islamicDate.month - 1] + " " +
-                    persianDigitsFormatter.format(islamicDate.year)
+
+        val firstText = run {
+            val date = when (calendarIndex) {
+                0 -> CivilDate(currentJdn)
+                1 -> PersianDate(currentJdn)
+                else -> PersianDate(currentJdn)
+            }
+            persianDigitsFormatter.format(date.dayOfMonth) + " " +
+                    monthsFromDate(date)[date.month - 1] + " " +
+                    persianDigitsFormatter.format(date.year)
+        }
+        val secondText = run {
+            val date = when (calendarIndex) {
+                0 -> IslamicDate(currentJdn)
+                1 -> IslamicDate(currentJdn)
+                else -> CivilDate(currentJdn)
+            }
+            persianDigitsFormatter.format(date.dayOfMonth) + " " +
+                    monthsFromDate(date)[date.month - 1] + " " +
+                    persianDigitsFormatter.format(date.year)
         }
         if (LocalConfiguration.current.isScreenRound) {
             val style = MaterialTheme.typography.arcMedium
@@ -160,11 +178,11 @@ fun ConverterScreen() {
             CurvedLayout(
                 anchor = 45f,
                 angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = gregorianText, style = style) }
+            ) { curvedText(text = firstText, style = style) }
             CurvedLayout(
                 anchor = 135f,
                 angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = islamicText, style = style) }
+            ) { curvedText(text = secondText, style = style) }
         } else {
             Text(
                 weekDayName,
@@ -176,8 +194,8 @@ fun ConverterScreen() {
                 Modifier.align(Alignment.BottomCenter),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text(gregorianText)
-                Text(islamicText)
+                Text(firstText)
+                Text(secondText)
             }
         }
     }
