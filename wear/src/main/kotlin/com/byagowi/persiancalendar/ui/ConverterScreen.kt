@@ -5,14 +5,18 @@ import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.CurvedDirection
@@ -134,33 +138,47 @@ fun ConverterScreen() {
                 }
             }
         }
-        val style = MaterialTheme.typography.arcMedium
-        run {
+        val weekDayName = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
+        val gregorianText = run {
             val civilDate = CivilDate(currentJdn)
-            val text = persianDigitsFormatter.format(civilDate.dayOfMonth) + " " +
+            persianDigitsFormatter.format(civilDate.dayOfMonth) + " " +
                     gregorianMonths[civilDate.month - 1] + " " +
                     persianDigitsFormatter.format(civilDate.year)
-            CurvedLayout(
-                anchor = 45f,
-                angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = text, style = style) }
         }
-        run {
-            val text = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
+        val islamicText = run {
+            val islamicDate = IslamicDate(currentJdn)
+            persianDigitsFormatter.format(islamicDate.dayOfMonth) + " " +
+                    gregorianMonths[islamicDate.month - 1] + " " +
+                    persianDigitsFormatter.format(islamicDate.year)
+        }
+        if (LocalConfiguration.current.isScreenRound) {
+            val style = MaterialTheme.typography.arcMedium
             CurvedLayout(
                 anchor = 90f,
                 angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = text, style = style) }
-        }
-        run {
-            val islamicDate = IslamicDate(currentJdn)
-            val text = persianDigitsFormatter.format(islamicDate.dayOfMonth) + " " +
-                    gregorianMonths[islamicDate.month - 1] + " " +
-                    persianDigitsFormatter.format(islamicDate.year)
+            ) { curvedText(text = weekDayName, style = style) }
+            CurvedLayout(
+                anchor = 45f,
+                angularDirection = CurvedDirection.Angular.CounterClockwise,
+            ) { curvedText(text = gregorianText, style = style) }
             CurvedLayout(
                 anchor = 135f,
                 angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = text, style = style) }
+            ) { curvedText(text = islamicText, style = style) }
+        } else {
+            Text(
+                weekDayName,
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = 20.dp),
+            )
+            Column(
+                Modifier.align(Alignment.BottomCenter),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(gregorianText)
+                Text(islamicText)
+            }
         }
     }
 }
