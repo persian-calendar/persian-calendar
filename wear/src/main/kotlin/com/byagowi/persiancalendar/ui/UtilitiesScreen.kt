@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.runtime.Composable
@@ -19,13 +20,18 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 
 @Composable
-fun UtilitiesScreen(navigateToSettings: () -> Unit, navigateToConverter: () -> Unit) {
+fun UtilitiesScreen(
+    navigateToSettings: () -> Unit,
+    navigateToCalendar: () -> Unit,
+    navigateToConverter: () -> Unit,
+) {
     ScreenScaffold {
         ScalingLazyColumn {
             item { ListHeader { Text("ابزارها") } }
             items(
                 listOf(
                     Triple(navigateToConverter, Icons.Default.SwapVerticalCircle, "مبدل"),
+                    Triple(navigateToCalendar, Icons.Default.CalendarMonth, "تقویم"),
                     Triple(navigateToSettings, Icons.Default.Settings, "تنظیمات"),
                 )
             ) { (action, icon, title) ->
@@ -33,7 +39,7 @@ fun UtilitiesScreen(navigateToSettings: () -> Unit, navigateToConverter: () -> U
                     action,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
+                        .padding(horizontal = 8.dp),
                 ) { Icon(icon, null); Spacer(Modifier.width(4.dp)); Text(title) }
             }
         }

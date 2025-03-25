@@ -79,7 +79,7 @@ private fun MutableList<Entry>.eventsOfCalendar(
 const val iranNonHolidaysKey = "iranNonHolidays"
 const val internationalKey = "international"
 
-private fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry> {
+fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry> {
     val jdn = civilDate.toJdn()
     val persianDate = PersianDate(jdn)
     val islamicDate = IslamicDate(jdn)

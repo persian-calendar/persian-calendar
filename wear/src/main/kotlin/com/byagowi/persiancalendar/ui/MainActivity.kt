@@ -41,9 +41,10 @@ private fun WearApp() {
                 val settingsRoute = "settings"
                 val utilitiesRoute = "utilities"
                 val converterRoute = "converter"
+                val calendarRoute = "calendar"
                 SwipeDismissableNavHost(
                     navController = navController,
-                    startDestination = mainRoute
+                    startDestination = mainRoute,
                 ) {
                     composable(mainRoute) {
                         MainScreen(navigateToUtilities = { navController.navigate(utilitiesRoute) })
@@ -51,10 +52,12 @@ private fun WearApp() {
                     composable(utilitiesRoute) {
                         UtilitiesScreen(
                             navigateToConverter = { navController.navigate(converterRoute) },
+                            navigateToCalendar = { navController.navigate(calendarRoute) },
                             navigateToSettings = { navController.navigate(settingsRoute) },
                         )
                     }
                     composable(converterRoute) { ConverterScreen() }
+                    composable(calendarRoute) { CalendarScreen() }
                     composable(settingsRoute) { SettingsScreen() }
                 }
             }
