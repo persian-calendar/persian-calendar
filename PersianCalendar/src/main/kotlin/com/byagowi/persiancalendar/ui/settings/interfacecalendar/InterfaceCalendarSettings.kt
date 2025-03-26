@@ -42,10 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.database.getIntOrNull
+import com.byagowi.persiancalendar.DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
+import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -59,6 +61,7 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.holidayString
@@ -108,6 +111,14 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
             "السنة الميلادية بالاسماء الشرقية",
             "كانون الثاني، شباط، آذار، …"
+        )
+    }
+    AnimatedVisibility(language == Language.AZB) {
+        SettingsSwitchWithInnerState(
+            PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
+            DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
+            "آذربایجان دیلینده ایل آیلار",
+            "آغلار‌گۆلر، گۆلن، قیزاران، …"
         )
     }
     AnimatedVisibility(language.isPersian) {

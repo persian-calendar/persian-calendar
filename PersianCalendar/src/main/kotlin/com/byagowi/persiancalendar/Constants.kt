@@ -48,6 +48,7 @@ const val PREF_ASCENDING_ATHAN_VOLUME = "AscendingAthanVolume"
 const val PREF_APP_LANGUAGE = "AppLanguage"
 const val PREF_EASTERN_GREGORIAN_ARABIC_MONTHS = "EasternGregorianArabicMonths"
 const val PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS = "EnglishGregorianPersianMonths"
+const val PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS = "AzeriAlternativePersianMonths"
 const val PREF_SELECTED_WIDGET_TEXT_COLOR = "SelectedWidgetTextColor"
 const val PREF_SELECTED_WIDGET_BACKGROUND_COLOR = "SelectedWidgetBackgroundColor"
 const val PREF_SELECTED_DATE_AGE_WIDGET = "SelectedDateForAgeWidget"
@@ -102,6 +103,7 @@ const val DEFAULT_WALLPAPER_DARK = true
 const val DEFAULT_WALLPAPER_AUTOMATIC = false
 const val DEFAULT_DREAM_NOISE = false
 const val DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS = false
+const val DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS = false
 const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
 const val DEFAULT_WIDGET_TRANSPARENCY = 0f
 

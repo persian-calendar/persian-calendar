@@ -254,9 +254,15 @@ enum class Language(val code: String, val nativeName: String) {
             else -> emptyList()
         }
 
-    fun getPersianMonths(resources: Resources): List<String> = when (this) {
+    fun getPersianMonths(
+        resources: Resources,
+        alternativeMonthsInAzeri: Boolean,
+    ): List<String> = when (this) {
         FA -> persianCalendarMonthsInPersian
         FA_AF -> persianCalendarMonthsInDari
+        AZB -> if (alternativeMonthsInAzeri) persianCalendarMonthsInAzeriAlternative
+        else persianCalendarMonths.map(resources::getString)
+
         AR -> if (userTimeZoneId == IRAN_TIMEZONE_ID) persianCalendarMonthsInArabicIran
         else persianCalendarMonths.map(resources::getString)
 
@@ -513,6 +519,11 @@ enum class Language(val code: String, val nativeName: String) {
         private val persianCalendarMonthsInArabicIran = listOf12Items(
             "فروردین", "أرديبهشت", "خرداد", "تير", "مرداد",
             "شهريور", "مهر", "آبان", "آذر", "دي", "بهمن", "إسفند",
+        )
+        private val persianCalendarMonthsInAzeriAlternative = listOf12Items(
+            "آغلار‌گۆلر", "گۆلن", "قیزاران", "قوْرا پیشیرن",
+            "قۇیروق دوْغان", "زۇمار", "خزل", "قیروو",
+            "آذر", "چیلله", "دوْندوران", "بایرام",
         )
         private val islamicCalendarMonthsInPersian = listOf12Items(
             "مُحَرَّم", "صَفَر", "ربیع‌الاول", "ربیع‌الثانی", "جمادى‌الاولى", "جمادی‌الثانیه",
