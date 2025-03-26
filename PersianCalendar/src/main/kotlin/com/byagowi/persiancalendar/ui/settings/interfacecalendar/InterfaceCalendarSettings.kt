@@ -118,7 +118,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
             DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
             "آذربایجان دیلینده ایل آیلار",
-            "آغلار‌گۆلر، گۆلن، قیزاران، …"
+            "آغلارگۆلر، گۆلن، قیزاران، …"
         )
     }
     AnimatedVisibility(language.isPersian) {

@@ -521,7 +521,7 @@ enum class Language(val code: String, val nativeName: String) {
             "شهريور", "مهر", "آبان", "آذر", "دي", "بهمن", "إسفند",
         )
         private val persianCalendarMonthsInAzeriAlternative = listOf12Items(
-            "آغلار‌گۆلر", "گۆلن", "قیزاران", "قوْرا پیشیرن",
+            "آغلارگۆلر", "گۆلن", "قیزاران", "قوْرا پیشیرن",
             "قۇیروق دوْغان", "زۇمار", "خزل", "قیروو",
             "آذر", "چیلله", "دوْندوران", "بایرام",
         )
