@@ -26,10 +26,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
-import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.LocalContentColor
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.EntryType
 import com.byagowi.persiancalendar.getEventsOfDay
@@ -58,7 +58,7 @@ fun CalendarScreen() {
         ).toJdn()
     }
     val weekStartJdn = todayJdn - ((todayJdn + 2) % 7)
-    AppScaffold {
+    ScreenScaffold {
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
         val focusedPersianDate = PersianDate(todayJdn + (state.centerItemIndex - initialItem) * 7)

@@ -21,11 +21,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
-import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.DatePickerDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.PickerGroup
 import androidx.wear.compose.material3.PickerState
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
 import io.github.persiancalendar.calendar.AbstractDate
@@ -97,7 +97,7 @@ fun ConverterScreen() {
         date.toJdn()
     }
 
-    AppScaffold {
+    ScreenScaffold {
         PickerGroup {
             listOf(
                 calendarPickerState,
