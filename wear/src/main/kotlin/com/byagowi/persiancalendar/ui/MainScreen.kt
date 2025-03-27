@@ -1,10 +1,9 @@
 package com.byagowi.persiancalendar.ui
 
 import android.icu.util.Calendar
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Construction
 import androidx.compose.runtime.Composable
@@ -26,11 +25,12 @@ import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.EdgeButton
 import androidx.wear.compose.material3.EdgeButtonSize
+import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListSubHeader
-import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
@@ -78,24 +78,38 @@ private fun EntryView(it: Entry) {
     if (it.type == EntryType.Date) ListSubHeader {
         Text(text = it.title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
     } else {
+        var isExpanded by remember { mutableStateOf(false) }
         val isHoliday = it.type == EntryType.Holiday
-        Text(
-            it.title,
-            color = if (isHoliday) MaterialTheme.colorScheme.onPrimary
-            else MaterialTheme.colorScheme.onSurface,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+        EventButton(
+            onClick = { isExpanded = !isExpanded },
+            isHoliday = isHoliday,
             modifier = Modifier
-                .padding(top = 4.dp, start = 8.dp, end = 8.dp)
-                .background(
-                    if (isHoliday) MaterialTheme.colorScheme.primary
-                    else MaterialTheme.colorScheme.surfaceContainer,
-                    RoundedCornerShape(24.dp),
-                )
+                .padding(horizontal = 8.dp)
                 .fillMaxWidth()
-                .padding(12.dp)
-        )
+        ) {
+            AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
+                Text(
+                    it.title,
+                    maxLines = if (state) Int.MAX_VALUE else 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxWidth()
+                )
+            }
+        }
     }
+}
+
+@Composable
+private fun EventButton(
+    onClick: () -> Unit,
+    isHoliday: Boolean,
+    modifier: Modifier,
+    content: @Composable () -> Unit
+) {
+    if (isHoliday) Button(onClick, modifier) { content() }
+    else FilledTonalButton(onClick, modifier) { content() }
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
