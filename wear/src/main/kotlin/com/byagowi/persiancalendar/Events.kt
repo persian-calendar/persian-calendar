@@ -18,7 +18,7 @@ import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 
 enum class EntryType { Date, NonHoliday, Holiday }
-class Entry(val title: String, val type: EntryType)
+class Entry(val title: String, val type: EntryType, val jdn: Long? = null)
 
 private const val spacedComma = "، "
 
@@ -33,19 +33,18 @@ fun generateEntries(enabledEvents: Set<String>, days: Int): List<Entry> {
     val gregorianCalendar = GregorianCalendar.getInstance()
     return (0..<days).flatMap { day ->
         val date = gregorianCalendar.time
-        val events = getEventsOfDay(
-            enabledEvents,
-            CivilDate(
-                gregorianCalendar[Calendar.YEAR],
-                gregorianCalendar[Calendar.MONTH] + 1,
-                gregorianCalendar[Calendar.DAY_OF_MONTH]
-            ),
+        val civilDate = CivilDate(
+            gregorianCalendar[Calendar.YEAR],
+            gregorianCalendar[Calendar.MONTH] + 1,
+            gregorianCalendar[Calendar.DAY_OF_MONTH]
         )
+        val jdn = civilDate.toJdn()
+        val events = getEventsOfDay(enabledEvents, civilDate)
         gregorianCalendar.timeInMillis += oneDayInMillis
         if (events.isNotEmpty() || day == 0) {
             val dateTitle = weekDayFormat.format(date) + spacedComma + monthDayFormat.format(date)
             listOf(
-                Entry(dateTitle, EntryType.Date)
+                Entry(dateTitle, EntryType.Date, jdn)
             ) + events.ifEmpty { listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday)) }
         } else emptyList()
     }

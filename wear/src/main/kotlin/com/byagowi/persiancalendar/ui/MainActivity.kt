@@ -8,6 +8,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.core.os.bundleOf
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.dynamicColorScheme
@@ -16,6 +17,8 @@ import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.byagowi.persiancalendar.requestComplicationUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
+import io.github.persiancalendar.calendar.CivilDate
+import java.util.GregorianCalendar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,12 +59,32 @@ private fun WearApp() {
                 val utilitiesRoute = "utilities"
                 val converterRoute = "converter"
                 val calendarRoute = "calendar"
+                val dayRoute = "day"
+                val dayJdnKey = "dayJdnKey"
+                // This shouldn't be needed by just in case
+                val todayJdn = run {
+                    val calendar = GregorianCalendar.getInstance()
+                    CivilDate(
+                        calendar[GregorianCalendar.YEAR],
+                        calendar[GregorianCalendar.MONTH] + 1,
+                        calendar[GregorianCalendar.DAY_OF_MONTH],
+                    ).toJdn()
+                }
                 SwipeDismissableNavHost(
                     navController = navController,
                     startDestination = mainRoute,
                 ) {
                     composable(mainRoute) {
-                        MainScreen(navigateToUtilities = { navController.navigate(utilitiesRoute) })
+                        MainScreen(
+                            navigateToUtilities = { navController.navigate(utilitiesRoute) },
+                            navigateToDay = { jdn ->
+                                navController.graph.findNode(dayRoute)?.let { destination ->
+                                    navController.navigate(
+                                        destination.id, bundleOf(dayJdnKey to jdn)
+                                    )
+                                }
+                            }
+                        )
                     }
                     composable(utilitiesRoute) {
                         UtilitiesScreen(
@@ -71,7 +94,20 @@ private fun WearApp() {
                         )
                     }
                     composable(converterRoute) { ConverterScreen() }
-                    composable(calendarRoute) { CalendarScreen() }
+                    composable(calendarRoute) {
+                        CalendarScreen { jdn ->
+                            navController.graph.findNode(dayRoute)?.let { destination ->
+                                navController.navigate(
+                                    destination.id, bundleOf(dayJdnKey to jdn)
+                                )
+                            }
+                        }
+                    }
+                    composable(dayRoute) { backStackEntry ->
+                        DayScreen(
+                            backStackEntry.arguments?.getLong(dayJdnKey, todayJdn) ?: todayJdn
+                        )
+                    }
                     composable(settingsRoute) { SettingsScreen() }
                 }
             }

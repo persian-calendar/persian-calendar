@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui
 
 import android.icu.util.Calendar
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -43,7 +44,7 @@ import com.byagowi.persiancalendar.preferences
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
-fun MainScreen(navigateToUtilities: () -> Unit) {
+fun MainScreen(navigateToUtilities: () -> Unit, navigateToDay: (Long) -> Unit) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
         scrollState = scrollState,
@@ -68,15 +69,23 @@ fun MainScreen(navigateToUtilities: () -> Unit) {
             edgeButton = { EdgeButton({ showWarnDialog = false }) { Text("متوجه شدم") } },
         )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
-            items(items = generateEntries(enabledEvents, days = 14)) { EntryView(it) }
+            items(items = generateEntries(enabledEvents, days = 14)) {
+                EntryView(it, navigateToDay)
+            }
         }
     }
 }
 
 @Composable
-private fun EntryView(it: Entry) {
+fun EntryView(it: Entry, navigateToDay: (Long) -> Unit = {}) {
     if (it.type == EntryType.Date) ListSubHeader {
-        Text(text = it.title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        Text(
+            text = it.title,
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { it.jdn?.let(navigateToDay) },
+            textAlign = TextAlign.Center,
+        )
     } else {
         var isExpanded by remember { mutableStateOf(false) }
         val isHoliday = it.type == EntryType.Holiday
@@ -116,6 +125,6 @@ private fun EventButton(
 @Composable
 fun MainPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { MainScreen {} }
+        AppScaffold { MainScreen({}, {}) }
     }
 }
