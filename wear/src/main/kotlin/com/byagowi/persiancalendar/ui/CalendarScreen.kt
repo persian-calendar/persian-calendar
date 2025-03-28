@@ -114,10 +114,10 @@ private fun SharedTransitionScope.DayView(
             color = MaterialTheme.colorScheme.primaryDim,
             modifier = Modifier
                 .padding(top = 16.dp)
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_DAY + jdn),
-                    animatedVisibilityScope = animatedContentScope,
-                )
+//                .sharedBounds(
+//                    rememberSharedContentState(key = SHARED_CONTENT_DAY + jdn),
+//                    animatedVisibilityScope = animatedContentScope,
+//                )
         )
         FadingExpandingLabel(text, textAlign = TextAlign.Center)
     }
@@ -221,10 +221,10 @@ private fun SharedTransitionScope.CalendarTable(
                             color = if (isHoliday) MaterialTheme.colorScheme.onPrimaryContainer
                             else LocalContentColor.current,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.sharedBounds(
-                                rememberSharedContentState(key = SHARED_CONTENT_DAY + jdn),
-                                animatedVisibilityScope = animatedContentScope,
-                            ),
+//                            modifier = Modifier.sharedBounds(
+//                                rememberSharedContentState(key = SHARED_CONTENT_DAY + jdn),
+//                                animatedVisibilityScope = animatedContentScope,
+//                            ),
                         )
                     }
                 }

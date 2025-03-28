@@ -194,13 +194,12 @@ fun BoxScope.OtherCalendars(
             else -> CivilDate(currentJdn)
         }
     )
-    val weekDayColor = MaterialTheme.colorScheme.secondaryDim
     if (LocalConfiguration.current.isScreenRound) {
         val curvedStyle = MaterialTheme.typography.arcMedium
         CurvedLayout(
             anchor = 90f,
             angularDirection = CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = weekDayName, style = curvedStyle, color = weekDayColor) }
+        ) { curvedText(text = weekDayName, style = curvedStyle) }
         CurvedLayout(
             anchor = if (onTop) 315f else 45f,
             angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
@@ -214,7 +213,6 @@ fun BoxScope.OtherCalendars(
     } else {
         Text(
             weekDayName,
-            color = weekDayColor,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 20.dp),
