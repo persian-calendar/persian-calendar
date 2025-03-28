@@ -12,6 +12,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -51,18 +53,16 @@ import com.byagowi.persiancalendar.getEventsOfDay
 import com.byagowi.persiancalendar.persianLocale
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
-import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun CalendarScreen() {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
-    val weekdays = formatSymbols.getWeekdays(DateFormatSymbols.STANDALONE, DateFormatSymbols.NARROW)
-        .toList()
+    val weekdays =
+        formatSymbols.getWeekdays(DateFormatSymbols.STANDALONE, DateFormatSymbols.NARROW).toList()
     val persianMonths = formatSymbols.months.toList()
     val persianDigitsFormatter = run {
         val symbols = DecimalFormatSymbols.getInstance(persianLocale)
@@ -111,6 +111,7 @@ private fun SharedTransitionScope.DayView(
         Text(
             persianDigitsFormatter.format(persianDate.dayOfMonth),
             style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.primaryDim,
             modifier = Modifier
                 .padding(top = 16.dp)
                 .sharedBounds(
@@ -127,7 +128,10 @@ private fun SharedTransitionScope.DayView(
         val islamicMonths =
             DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
 
-        AnimatedVisibility(showOtherCalendars, enter = fadeIn()) {
+        AnimatedVisibility(
+            showOtherCalendars,
+            enter = fadeIn(spring(stiffness = Spring.StiffnessVeryLow)),
+        ) {
             OtherCalendars(
                 weekDayNames = weekDayNames,
                 persianMonths = persianMonths,
@@ -135,19 +139,18 @@ private fun SharedTransitionScope.DayView(
                 islamicMonths = islamicMonths,
                 persianDigitsFormatter = persianDigitsFormatter,
                 currentJdn = jdn,
+                onTop = true,
             )
         }
     }
 
     LaunchedEffect(Unit) {
-        delay(200.milliseconds)
-        text = persianMonths[persianDate.month - 1]
-        delay(200.milliseconds)
-        text += "\n" + persianDigitsFormatter.format(persianDate.year) + "/" +
-                persianDigitsFormatter.format(persianDate.month) + "/" +
-                persianDigitsFormatter.format(persianDate.dayOfMonth)
-        delay(500.milliseconds)
         showOtherCalendars = true
+        text = persianMonths[persianDate.month - 1] + "\n" + run {
+            persianDigitsFormatter.format(persianDate.year)
+        } + "/" + run {
+            persianDigitsFormatter.format(persianDate.month)
+        } + "/" + persianDigitsFormatter.format(persianDate.dayOfMonth)
     }
 }
 
@@ -186,21 +189,18 @@ private fun SharedTransitionScope.CalendarTable(
                     val jdn = weekStartJdn + weekDay + (row - initialItem) * 7
                     val persianDate = PersianDate(jdn)
                     val civilDate = CivilDate(jdn)
-                    val isFocusedMonth = persianDate.year == focusedPersianDate.year &&
-                            persianDate.month == focusedPersianDate.month
-                    val isHoliday = weekDay == 6 || getEventsOfDay(
-                        emptySet(),
-                        civilDate
-                    ).any { it.type == EntryType.Holiday }
+                    val isFocusedMonth =
+                        persianDate.year == focusedPersianDate.year && persianDate.month == focusedPersianDate.month
+                    val isHoliday = weekDay == 6 || run {
+                        getEventsOfDay(emptySet(), civilDate).any { it.type == EntryType.Holiday }
+                    }
                     Box(
                         Modifier
                             .weight(1f)
                             .aspectRatio(1f)
                             .border(
-                                2.dp,
-                                if (todayJdn == jdn) MaterialTheme.colorScheme.primary
-                                else Color.Transparent,
-                                RoundedCornerShape(50)
+                                2.dp, if (todayJdn == jdn) MaterialTheme.colorScheme.primary
+                                else Color.Transparent, RoundedCornerShape(50)
                             )
                             .alpha(if (isFocusedMonth) 1f else .5f),
                         contentAlignment = Alignment.Center
@@ -209,12 +209,12 @@ private fun SharedTransitionScope.CalendarTable(
                             Modifier
                                 .fillParentMaxSize()
                                 .background(
-                                    if (isHoliday)
+                                    if (isHoliday) {
                                         MaterialTheme.colorScheme.primaryContainer.copy(alpha = .7f)
-                                    else Color.Transparent,
-                                    RoundedCornerShape(50)
+                                    } else Color.Transparent,
+                                    RoundedCornerShape(50),
                                 )
-                                .clickable { setDate(jdn) }
+                                .clickable { setDate(jdn) },
                         )
                         Text(
                             persianDigitsFormatter.format(persianDate.dayOfMonth),
@@ -224,7 +224,7 @@ private fun SharedTransitionScope.CalendarTable(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_DAY + jdn),
                                 animatedVisibilityScope = animatedContentScope,
-                            )
+                            ),
                         )
                     }
                 }

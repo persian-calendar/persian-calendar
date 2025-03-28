@@ -164,6 +164,7 @@ fun BoxScope.OtherCalendars(
     islamicMonths: List<String>,
     persianDigitsFormatter: DecimalFormat,
     currentJdn: Long,
+    onTop: Boolean = false,
     calendarIndex: Int = 0,
 ) {
     val weekDayName = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
@@ -193,23 +194,27 @@ fun BoxScope.OtherCalendars(
             else -> CivilDate(currentJdn)
         }
     )
+    val weekDayColor = MaterialTheme.colorScheme.secondaryDim
     if (LocalConfiguration.current.isScreenRound) {
-        val style = MaterialTheme.typography.arcMedium
+        val curvedStyle = MaterialTheme.typography.arcMedium
         CurvedLayout(
             anchor = 90f,
             angularDirection = CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = weekDayName, style = style) }
+        ) { curvedText(text = weekDayName, style = curvedStyle, color = weekDayColor) }
         CurvedLayout(
-            anchor = 45f,
-            angularDirection = CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = firstText, style = style) }
+            anchor = if (onTop) 315f else 45f,
+            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
+                CurvedDirection.Angular.CounterClockwise,
+        ) { curvedText(text = firstText, style = curvedStyle) }
         CurvedLayout(
-            anchor = 135f,
-            angularDirection = CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = secondText, style = style) }
+            anchor = if (onTop) 225f else 135f,
+            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
+                CurvedDirection.Angular.CounterClockwise,
+        ) { curvedText(text = secondText, style = curvedStyle) }
     } else {
         Text(
             weekDayName,
+            color = weekDayColor,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 20.dp),
