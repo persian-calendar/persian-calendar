@@ -5,6 +5,7 @@ import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
 import android.icu.util.Calendar
 import android.icu.util.ULocale
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
@@ -43,10 +44,12 @@ fun ConverterScreen() {
         DecimalFormat("#", symbols)
     }
     val persianSymbols = DateFormatSymbols.getInstance(persianLocale)
-    val weekDayNames = persianSymbols.weekdays
-    val persianMonths = persianSymbols.months
-    val gregorianMonths = DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months
-    val islamicMonths = DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months
+    val weekDayNames = persianSymbols.weekdays.toList()
+    val persianMonths = persianSymbols.months.toList()
+    val gregorianMonths =
+        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months.toList()
+    val islamicMonths =
+        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
 
     val today = run {
         val gregorianCalendar = GregorianCalendar.getInstance()
@@ -141,63 +144,82 @@ fun ConverterScreen() {
                 }
             }
         }
-        val weekDayName = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
-
-        fun monthsFromDate(date: AbstractDate) = when (date) {
-            is PersianDate -> persianMonths
-            is CivilDate -> gregorianMonths
-            else -> islamicMonths
-        }
-
-        val firstText = run {
-            val date = when (calendarIndex) {
-                0 -> CivilDate(currentJdn)
-                1 -> PersianDate(currentJdn)
-                else -> PersianDate(currentJdn)
-            }
-            persianDigitsFormatter.format(date.dayOfMonth) + " " +
-                    monthsFromDate(date)[date.month - 1] + " " +
-                    persianDigitsFormatter.format(date.year)
-        }
-        val secondText = run {
-            val date = when (calendarIndex) {
-                0 -> IslamicDate(currentJdn)
-                1 -> IslamicDate(currentJdn)
-                else -> CivilDate(currentJdn)
-            }
-            persianDigitsFormatter.format(date.dayOfMonth) + " " +
-                    monthsFromDate(date)[date.month - 1] + " " +
-                    persianDigitsFormatter.format(date.year)
-        }
-        if (LocalConfiguration.current.isScreenRound) {
-            val style = MaterialTheme.typography.arcMedium
-            CurvedLayout(
-                anchor = 90f,
-                angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = weekDayName, style = style) }
-            CurvedLayout(
-                anchor = 45f,
-                angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = firstText, style = style) }
-            CurvedLayout(
-                anchor = 135f,
-                angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = secondText, style = style) }
-        } else {
-            Text(
-                weekDayName,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 20.dp),
-            )
-            Column(
-                Modifier.align(Alignment.BottomCenter),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(firstText)
-                Text(secondText)
-            }
-        }
+        OtherCalendars(
+            weekDayNames = weekDayNames,
+            persianMonths = persianMonths,
+            gregorianMonths = gregorianMonths,
+            islamicMonths = islamicMonths,
+            persianDigitsFormatter = persianDigitsFormatter,
+            currentJdn = currentJdn,
+            calendarIndex = calendarIndex,
+        )
     }
 }
 
+@Composable
+fun BoxScope.OtherCalendars(
+    weekDayNames: List<String>,
+    persianMonths: List<String>,
+    gregorianMonths: List<String>,
+    islamicMonths: List<String>,
+    persianDigitsFormatter: DecimalFormat,
+    currentJdn: Long,
+    calendarIndex: Int = 0,
+) {
+    val weekDayName = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
+
+    fun monthsFromDate(date: AbstractDate) = when (date) {
+        is PersianDate -> persianMonths
+        is CivilDate -> gregorianMonths
+        else -> islamicMonths
+    }
+
+    fun allNumDateFormat(date: AbstractDate) =
+        persianDigitsFormatter.format(date.dayOfMonth) + " " +
+                monthsFromDate(date)[date.month - 1] + " " +
+                persianDigitsFormatter.format(date.year)
+
+    val firstText = allNumDateFormat(
+        when (calendarIndex) {
+            0 -> CivilDate(currentJdn)
+            1 -> PersianDate(currentJdn)
+            else -> PersianDate(currentJdn)
+        }
+    )
+    val secondText = allNumDateFormat(
+        when (calendarIndex) {
+            0 -> IslamicDate(currentJdn)
+            1 -> IslamicDate(currentJdn)
+            else -> CivilDate(currentJdn)
+        }
+    )
+    if (LocalConfiguration.current.isScreenRound) {
+        val style = MaterialTheme.typography.arcMedium
+        CurvedLayout(
+            anchor = 90f,
+            angularDirection = CurvedDirection.Angular.CounterClockwise,
+        ) { curvedText(text = weekDayName, style = style) }
+        CurvedLayout(
+            anchor = 45f,
+            angularDirection = CurvedDirection.Angular.CounterClockwise,
+        ) { curvedText(text = firstText, style = style) }
+        CurvedLayout(
+            anchor = 135f,
+            angularDirection = CurvedDirection.Angular.CounterClockwise,
+        ) { curvedText(text = secondText, style = style) }
+    } else {
+        Text(
+            weekDayName,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 20.dp),
+        )
+        Column(
+            Modifier.align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(firstText)
+            Text(secondText)
+        }
+    }
+}
