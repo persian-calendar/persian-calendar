@@ -1,8 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.icu.text.DecimalFormat
-import android.icu.text.DecimalFormatSymbols
-import android.icu.util.ULocale
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,9 +10,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
-import androidx.wear.compose.material3.TimeText
 import androidx.wear.compose.material3.dynamicColorScheme
-import androidx.wear.compose.material3.timeTextCurvedText
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
@@ -41,19 +36,19 @@ private fun WearApp() {
             colorScheme = dynamicColorScheme(LocalContext.current) ?: MaterialTheme.colorScheme
         ) {
             AppScaffold(
-                timeText = {
-                    val persianDigitsFormatter = run {
-                        val symbols = DecimalFormatSymbols.getInstance(ULocale("fa_IR"))
-                        DecimalFormat("#", symbols)
-                    }
-                    TimeText { time ->
-                        timeTextCurvedText(
-                            time.map {
-                                it.digitToIntOrNull()?.let(persianDigitsFormatter::format) ?: it
-                            }.joinToString(""),
-                        )
-                    }
-                }
+//                timeText = {
+//                    val persianDigitsFormatter = run {
+//                        val symbols = DecimalFormatSymbols.getInstance(ULocale("fa_IR"))
+//                        DecimalFormat("#", symbols)
+//                    }
+//                    TimeText { time ->
+//                        timeTextCurvedText(
+//                            time.map {
+//                                it.digitToIntOrNull()?.let(persianDigitsFormatter::format) ?: it
+//                            }.joinToString(""),
+//                        )
+//                    }
+//                }
             ) {
                 val navController = rememberSwipeDismissableNavController()
                 val mainRoute = "app"
