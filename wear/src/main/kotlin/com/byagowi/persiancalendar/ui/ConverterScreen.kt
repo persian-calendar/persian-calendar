@@ -194,35 +194,47 @@ fun BoxScope.OtherCalendars(
             else -> CivilDate(currentJdn)
         }
     )
-    if (LocalConfiguration.current.isScreenRound) {
+    val weekDayColor = MaterialTheme.colorScheme.primaryDim
+    val othersColor = MaterialTheme.colorScheme.secondaryDim
+    val isRound = LocalConfiguration.current.isScreenRound
+    if (isRound || onTop) {
         val curvedStyle = MaterialTheme.typography.arcMedium
-        CurvedLayout(
-            anchor = 90f,
-            angularDirection = CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = weekDayName, style = curvedStyle) }
+        if (isRound) {
+            CurvedLayout(
+                anchor = 90f,
+                angularDirection = CurvedDirection.Angular.CounterClockwise,
+            ) { curvedText(text = weekDayName, style = curvedStyle, color = weekDayColor) }
+        } else Text(
+            weekDayName,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(top = 20.dp),
+            color = weekDayColor,
+        )
         CurvedLayout(
             anchor = if (onTop) 315f else 45f,
             angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
                 CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = firstText, style = curvedStyle) }
+        ) { curvedText(text = firstText, style = curvedStyle, color = othersColor) }
         CurvedLayout(
             anchor = if (onTop) 225f else 135f,
             angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
                 CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = secondText, style = curvedStyle) }
+        ) { curvedText(text = secondText, style = curvedStyle, color = othersColor) }
     } else {
         Text(
             weekDayName,
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 20.dp),
+            color = weekDayColor,
         )
         Column(
             Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(firstText)
-            Text(secondText)
+            Text(firstText, color = othersColor)
+            Text(secondText, color = othersColor)
         }
     }
 }

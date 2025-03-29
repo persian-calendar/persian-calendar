@@ -152,8 +152,12 @@ fun CalendarScreen(navigateToDay: (Long) -> Unit) {
                     .padding(top = 48.dp, start = 12.dp, end = 12.dp),
             ) {
                 repeat(7) {
-                    val a = weekdays[(it + 6) % 7 + 1]
-                    Text(a, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
+                    Text(
+                        weekdays[(it + 6) % 7 + 1],
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        color = MaterialTheme.colorScheme.secondaryDim,
+                    )
                 }
             }
         }
