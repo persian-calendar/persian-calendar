@@ -6,6 +6,7 @@ import android.icu.text.DecimalFormatSymbols
 import android.icu.util.Calendar
 import android.icu.util.ULocale
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -15,8 +16,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,7 +36,9 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.EntryType
+import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
+import com.byagowi.persiancalendar.preferences
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
@@ -63,6 +69,8 @@ fun CalendarScreen(navigateToDay: (Long) -> Unit) {
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
         val focusedPersianDate = PersianDate(todayJdn + (state.centerItemIndex - initialItem) * 7)
+        val preferences by preferences.collectAsState()
+        val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         ScalingLazyColumn(
             state = state,
             verticalArrangement = Arrangement.Top,
@@ -79,12 +87,8 @@ fun CalendarScreen(navigateToDay: (Long) -> Unit) {
                         val civilDate = CivilDate(jdn)
                         val isFocusedMonth =
                             persianDate.year == focusedPersianDate.year && persianDate.month == focusedPersianDate.month
-                        val isHoliday = weekDay == 6 || run {
-                            getEventsOfDay(
-                                emptySet(),
-                                civilDate
-                            ).any { it.type == EntryType.Holiday }
-                        }
+                        val events = getEventsOfDay(enabledEvents, civilDate)
+                        val isHoliday = weekDay == 6 || events.any { it.type == EntryType.Holiday }
                         Box(
                             Modifier
                                 .weight(1f)
@@ -107,12 +111,19 @@ fun CalendarScreen(navigateToDay: (Long) -> Unit) {
                                     )
                                     .clickable { navigateToDay(jdn) },
                             )
+                            val foregroundColor =
+                                if (isHoliday) MaterialTheme.colorScheme.onPrimaryContainer
+                                else LocalContentColor.current
                             Text(
                                 persianDigitsFormatter.format(persianDate.dayOfMonth),
-                                color = if (isHoliday) MaterialTheme.colorScheme.onPrimaryContainer
-                                else LocalContentColor.current,
+                                color = foregroundColor,
                                 textAlign = TextAlign.Center,
                             )
+                            Canvas(
+                                Modifier
+                                    .padding(top = 16.dp)
+                                    .size(2.dp)
+                            ) { if (events.isNotEmpty()) drawCircle(foregroundColor) }
                         }
                     }
                 }
