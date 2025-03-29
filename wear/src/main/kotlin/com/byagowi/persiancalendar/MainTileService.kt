@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -25,6 +26,12 @@ import androidx.wear.tiles.EventBuilders
 import com.byagowi.persiancalendar.ui.MainActivity
 
 class MainTileService : GlanceTileService() {
+
+    override fun onDestroy() {
+        runCatching { super.onDestroy() }.onFailure {
+            Log.e("PC", "prevent a crash", it)
+        }
+    }
 
     override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {
         super.onTileEnterEvent(requestParams)
