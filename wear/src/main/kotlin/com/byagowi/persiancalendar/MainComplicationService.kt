@@ -9,10 +9,14 @@ import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
 import androidx.wear.watchface.complications.data.ShortTextComplicationData
+import androidx.wear.watchface.complications.data.TimeRange
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import com.byagowi.persiancalendar.ui.MainActivity
 import kotlinx.coroutines.flow.firstOrNull
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.Date
 
 class MainComplicationService : SuspendingComplicationDataSourceService() {
@@ -44,6 +48,13 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
+        dataBuilder.setValidTimeRange(run {
+            val now = ZonedDateTime.now(ZoneId.systemDefault())
+            val endOfDay = now.toLocalDate().atTime(23, 59, 59, 999_999_999)
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+            TimeRange.between(Instant.now(), endOfDay)
+        })
         return dataBuilder.build()
     }
 

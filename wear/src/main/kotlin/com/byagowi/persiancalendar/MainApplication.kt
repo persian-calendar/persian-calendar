@@ -4,10 +4,11 @@ import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.hours
 import kotlin.time.toJavaDuration
 
 class MainApplication : Application() {
@@ -20,7 +21,9 @@ class MainApplication : Application() {
         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "PeriodicUpdateWork",
             ExistingPeriodicWorkPolicy.KEEP,
-            PeriodicWorkRequestBuilder<UpdateWorker>(15.minutes.toJavaDuration()).build()
+            PeriodicWorkRequestBuilder<UpdateWorker>(1.hours.toJavaDuration())
+                .setConstraints(Constraints.Builder().setRequiresBatteryNotLow(true).build())
+                .build()
         )
     }
 }
