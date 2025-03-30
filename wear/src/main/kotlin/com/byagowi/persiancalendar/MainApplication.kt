@@ -26,13 +26,15 @@ class MainApplication : Application() {
 
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        // Nothing right now
-        // if (intent.action == Intent.ACTION_BOOT_COMPLETED)
+        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+            // Nothing right now
+            let {}
+        }
     }
 }
 
 fun Context.enqueueUpdateWorker() {
-    val workRequest = PeriodicWorkRequestBuilder<UpdateWorker>(1, TimeUnit.HOURS).build()
+    val workRequest = PeriodicWorkRequestBuilder<UpdateWorker>(15, TimeUnit.MINUTES).build()
     WorkManager.getInstance(this).enqueueUniquePeriodicWork(
         "PeriodicUpdateWork",
         ExistingPeriodicWorkPolicy.KEEP,

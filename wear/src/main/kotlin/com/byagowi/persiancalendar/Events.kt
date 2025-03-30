@@ -1,7 +1,8 @@
 package com.byagowi.persiancalendar
 
-import android.icu.text.DateFormat
-import android.icu.util.Calendar
+import android.icu.text.DateFormatSymbols
+import android.icu.text.DecimalFormat
+import android.icu.text.DecimalFormatSymbols
 import android.icu.util.ULocale
 import androidx.collection.IntIntPair
 import com.byagowi.persiancalendar.generated.CalendarRecord
@@ -14,8 +15,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import java.util.GregorianCalendar
-import kotlin.time.Duration.Companion.days
 
 enum class EntryType { Date, NonHoliday, Holiday }
 class Entry(val title: String, val type: EntryType, val jdn: Long? = null)
@@ -24,25 +23,35 @@ private const val spacedComma = "، "
 
 val persianLocale by lazy(LazyThreadSafetyMode.NONE) { ULocale("fa_IR@calendar=persian") }
 
-fun generateEntries(enabledEvents: Set<String>, days: Int): List<Entry> {
-    val locale = persianLocale
-    val calendar = Calendar.getInstance(persianLocale)
-    val weekDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.ABBR_WEEKDAY, locale)
-    val monthDayFormat = DateFormat.getPatternInstance(calendar, DateFormat.MONTH_DAY, locale)
-    val oneDayInMillis = 1.days.inWholeMilliseconds
-    val gregorianCalendar = GregorianCalendar.getInstance()
+fun generateEntries(
+    startingDay: Long,
+    enabledEvents: Set<String>,
+    days: Int,
+    withYear: Boolean,
+): List<Entry> {
+    val persianLocale = ULocale("fa_IR@calendar=persian")
+    val persianDigitsFormatter = run {
+        val symbols = DecimalFormatSymbols.getInstance(persianLocale)
+        symbols.groupingSeparator = '\u0000'
+        DecimalFormat("#", symbols)
+    }
+    val persianSymbols = DateFormatSymbols.getInstance(persianLocale)
+    val weekDayNames = persianSymbols.weekdays.toList()
+    val persianMonths = persianSymbols.months.toList()
+    var previousYear = 0
     return (0..<days).flatMap { day ->
-        val date = gregorianCalendar.time
-        val civilDate = CivilDate(
-            gregorianCalendar[Calendar.YEAR],
-            gregorianCalendar[Calendar.MONTH] + 1,
-            gregorianCalendar[Calendar.DAY_OF_MONTH]
-        )
-        val jdn = civilDate.toJdn()
+        val jdn = startingDay + day
+        val civilDate = CivilDate(jdn)
+        val persianDate = PersianDate(jdn)
         val events = getEventsOfDay(enabledEvents, civilDate)
-        gregorianCalendar.timeInMillis += oneDayInMillis
         if (events.isNotEmpty() || day == 0) {
-            val dateTitle = weekDayFormat.format(date) + spacedComma + monthDayFormat.format(date)
+            var dateTitle = weekDayNames[((jdn + 1) % 7 + 1).toInt()] + spacedComma +
+                    persianDigitsFormatter.format(persianDate.dayOfMonth) + " " +
+                    persianMonths[persianDate.month - 1]
+            if (withYear && previousYear != persianDate.year) {
+                dateTitle += " " + persianDigitsFormatter.format(persianDate.year)
+                previousYear = persianDate.year
+            }
             listOf(
                 Entry(dateTitle, EntryType.Date, jdn)
             ) + events.ifEmpty { listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday)) }

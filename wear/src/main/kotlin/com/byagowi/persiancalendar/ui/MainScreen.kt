@@ -46,7 +46,8 @@ import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 fun MainScreen(
     navigateToUtilities: () -> Unit,
     navigateToDay: (Long) -> Unit,
-    preferences: Preferences?
+    preferences: Preferences?,
+    today: Long,
 ) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
@@ -71,7 +72,7 @@ fun MainScreen(
             edgeButton = { EdgeButton({ showWarnDialog = false }) { Text("متوجه شدم") } },
         )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
-            items(items = generateEntries(enabledEvents, days = 14)) {
+            items(items = generateEntries(today, enabledEvents, days = 14, withYear = true)) {
                 EntryView(it, navigateToDay)
             }
         }
@@ -127,6 +128,6 @@ private fun EventButton(
 @Composable
 fun MainPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { MainScreen({}, {}, null) }
+        AppScaffold { MainScreen({}, {}, null, todayJdn()) }
     }
 }
