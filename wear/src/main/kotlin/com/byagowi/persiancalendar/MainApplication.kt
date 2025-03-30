@@ -15,7 +15,8 @@ import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUp
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.toJavaDuration
 
 class MainApplication : Application() {
     override fun onCreate() {
@@ -34,11 +35,10 @@ class BroadcastReceivers : BroadcastReceiver() {
 }
 
 fun Context.enqueueUpdateWorker() {
-    val workRequest = PeriodicWorkRequestBuilder<UpdateWorker>(15, TimeUnit.MINUTES).build()
     WorkManager.getInstance(this).enqueueUniquePeriodicWork(
         "PeriodicUpdateWork",
         ExistingPeriodicWorkPolicy.KEEP,
-        workRequest
+        PeriodicWorkRequestBuilder<UpdateWorker>(15.minutes.toJavaDuration()).build()
     )
 }
 
