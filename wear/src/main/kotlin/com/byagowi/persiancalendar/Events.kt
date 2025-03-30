@@ -17,14 +17,14 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
 enum class EntryType { Date, NonHoliday, Holiday }
-class Entry(val title: String, val type: EntryType, val jdn: Long? = null)
+class Entry(val title: String, val type: EntryType, val jdn: Jdn? = null)
 
 private const val spacedComma = "، "
 
 val persianLocale by lazy(LazyThreadSafetyMode.NONE) { ULocale("fa_IR@calendar=persian") }
 
 fun generateEntries(
-    startingDay: Long,
+    startingDay: Jdn,
     enabledEvents: Set<String>,
     days: Int,
     withYear: Boolean,
@@ -41,11 +41,11 @@ fun generateEntries(
     var previousYear = 0
     return (0..<days).flatMap { day ->
         val jdn = startingDay + day
-        val civilDate = CivilDate(jdn)
-        val persianDate = PersianDate(jdn)
+        val civilDate = jdn.toCivilDate()
+        val persianDate = jdn.toPersianDate()
         val events = getEventsOfDay(enabledEvents, civilDate)
         if (events.isNotEmpty() || day == 0) {
-            var dateTitle = weekDayNames[((jdn + 1) % 7 + 1).toInt()] + spacedComma +
+            var dateTitle = weekDayNames[jdn.weekDayIndex] + spacedComma +
                     persianDigitsFormatter.format(persianDate.dayOfMonth) + " " +
                     persianMonths[persianDate.month - 1]
             if (withYear && previousYear != persianDate.year) {

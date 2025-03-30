@@ -19,13 +19,12 @@ import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
+import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
-import io.github.persiancalendar.calendar.CivilDate
-import io.github.persiancalendar.calendar.PersianDate
 
 @Composable
-fun DayScreen(jdn: Long, preferences: Preferences?) {
+fun DayScreen(day: Jdn, preferences: Preferences?) {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
     val persianMonths = formatSymbols.months.toList()
@@ -34,7 +33,7 @@ fun DayScreen(jdn: Long, preferences: Preferences?) {
         symbols.groupingSeparator = '\u0000'
         DecimalFormat("#", symbols)
     }
-    val persianDate = PersianDate(jdn)
+    val persianDate = day.toPersianDate()
     val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
     ScalingLazyColumn(
         state = rememberScalingLazyListState(initialCenterItemIndex = 0),
@@ -56,7 +55,7 @@ fun DayScreen(jdn: Long, preferences: Preferences?) {
                 }
             }
         }
-        items(getEventsOfDay(enabledEvents, CivilDate(jdn))) { EntryView(it) }
+        items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EntryView(it) }
     }
     Box(Modifier.fillMaxSize()) {
         val weekDayNames = DateFormatSymbols.getInstance(persianLocale).weekdays.toList()
@@ -70,7 +69,7 @@ fun DayScreen(jdn: Long, preferences: Preferences?) {
             gregorianMonths = gregorianMonths,
             islamicMonths = islamicMonths,
             persianDigitsFormatter = persianDigitsFormatter,
-            currentJdn = jdn,
+            day = day,
             onTop = true,
         )
     }

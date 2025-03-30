@@ -37,6 +37,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.Entry
 import com.byagowi.persiancalendar.EntryType
+import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.generateEntries
 import com.byagowi.persiancalendar.persianLocale
@@ -45,9 +46,9 @@ import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 @Composable
 fun MainScreen(
     navigateToUtilities: () -> Unit,
-    navigateToDay: (Long) -> Unit,
+    navigateToDay: (Jdn) -> Unit,
     preferences: Preferences?,
-    today: Long,
+    today: Jdn,
 ) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
@@ -80,7 +81,7 @@ fun MainScreen(
 }
 
 @Composable
-fun EntryView(it: Entry, navigateToDay: (Long) -> Unit = {}) {
+fun EntryView(it: Entry, navigateToDay: (Jdn) -> Unit = {}) {
     if (it.type == EntryType.Date) ListSubHeader {
         Text(
             text = it.title,
@@ -128,6 +129,6 @@ private fun EventButton(
 @Composable
 fun MainPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { MainScreen({}, {}, null, todayJdn()) }
+        AppScaffold { MainScreen({}, {}, null, Jdn.today()) }
     }
 }

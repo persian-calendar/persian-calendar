@@ -28,13 +28,14 @@ import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
+import com.byagowi.persiancalendar.Jdn
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
 @Composable
-fun ConverterScreen(todayJdn: Long) {
+fun ConverterScreen(todayJdn: Jdn) {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val persianDigitsFormatter = run {
         val symbols = DecimalFormatSymbols.getInstance(persianLocale)
@@ -49,7 +50,7 @@ fun ConverterScreen(todayJdn: Long) {
     val islamicMonths =
         DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
 
-    val today = listOf(PersianDate(todayJdn), CivilDate(todayJdn), IslamicDate(todayJdn))
+    val today = listOf(todayJdn.toPersianDate(), todayJdn.toCivilDate(), todayJdn.toIslamicDate())
 
     var selectedIndex by remember { mutableIntStateOf(1) }
     val calendarPickerState = remember { PickerState(3, 0, false) }
@@ -87,7 +88,7 @@ fun ConverterScreen(todayJdn: Long) {
             else -> date
         }.toJdn()
         daysOnMonth = (nextMonthDate - currentMonth).toInt()
-        date.toJdn()
+        Jdn(date)
     }
 
     ScreenScaffold {
@@ -140,7 +141,7 @@ fun ConverterScreen(todayJdn: Long) {
             gregorianMonths = gregorianMonths,
             islamicMonths = islamicMonths,
             persianDigitsFormatter = persianDigitsFormatter,
-            currentJdn = currentJdn,
+            day = currentJdn,
             calendarIndex = calendarIndex,
         )
     }
@@ -153,11 +154,11 @@ fun BoxScope.OtherCalendars(
     gregorianMonths: List<String>,
     islamicMonths: List<String>,
     persianDigitsFormatter: DecimalFormat,
-    currentJdn: Long,
+    day: Jdn,
     onTop: Boolean = false,
     calendarIndex: Int = 0,
 ) {
-    val weekDayName = weekDayNames[((currentJdn + 1) % 7 + 1).toInt()]
+    val weekDayName = weekDayNames[day.weekDayIndex]
 
     fun monthsFromDate(date: AbstractDate) = when (date) {
         is PersianDate -> persianMonths
@@ -172,16 +173,16 @@ fun BoxScope.OtherCalendars(
 
     val firstText = allNumDateFormat(
         when (calendarIndex) {
-            0 -> CivilDate(currentJdn)
-            1 -> PersianDate(currentJdn)
-            else -> PersianDate(currentJdn)
+            0 -> day.toCivilDate()
+            1 -> day.toPersianDate()
+            else -> day.toPersianDate()
         }
     )
     val secondText = allNumDateFormat(
         when (calendarIndex) {
-            0 -> IslamicDate(currentJdn)
-            1 -> IslamicDate(currentJdn)
-            else -> CivilDate(currentJdn)
+            0 -> day.toIslamicDate()
+            1 -> day.toIslamicDate()
+            else -> day.toCivilDate()
         }
     )
     val weekDayColor = MaterialTheme.colorScheme.primaryDim

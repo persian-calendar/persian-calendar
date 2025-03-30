@@ -8,7 +8,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
@@ -23,15 +23,14 @@ import androidx.wear.compose.material3.dynamicColorScheme
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.dataStore
 import com.byagowi.persiancalendar.requestComplicationUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
-import io.github.persiancalendar.calendar.CivilDate
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.runBlocking
-import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.seconds
 
 class MainActivity : ComponentActivity() {
@@ -79,7 +78,7 @@ private fun WearApp() {
                             navigateToDay = { jdn ->
                                 navController.graph.findNode(dayRoute)?.let { destination ->
                                     navController.navigate(
-                                        destination.id, bundleOf(dayJdnKey to jdn)
+                                        destination.id, bundleOf(dayJdnKey to jdn.value)
                                     )
                                 }
                             }
@@ -97,7 +96,7 @@ private fun WearApp() {
                         CalendarScreen(today, preferences) { jdn ->
                             navController.graph.findNode(dayRoute)?.let { destination ->
                                 navController.navigate(
-                                    destination.id, bundleOf(dayJdnKey to jdn)
+                                    destination.id, bundleOf(dayJdnKey to jdn.value)
                                 )
                             }
                         }
@@ -105,7 +104,10 @@ private fun WearApp() {
                     composable(dayRoute) { backStackEntry ->
                         DayScreen(
                             preferences = preferences,
-                            jdn = backStackEntry.arguments?.getLong(dayJdnKey, today) ?: today
+                            day = Jdn(
+                                backStackEntry.arguments?.getLong(dayJdnKey, today.value)
+                                    ?: today.value
+                            )
                         )
                     }
                     composable(settingsRoute) { SettingsScreen(preferences) }
@@ -115,24 +117,15 @@ private fun WearApp() {
     }
 }
 
-fun todayJdn(): Long {
-    val calendar = GregorianCalendar.getInstance()
-    return CivilDate(
-        calendar[GregorianCalendar.YEAR],
-        calendar[GregorianCalendar.MONTH] + 1,
-        calendar[GregorianCalendar.DAY_OF_MONTH],
-    ).toJdn()
-}
-
 @Composable
-private fun updatedToday(): Long {
+private fun updatedToday(): Jdn {
     val lifecycleOwner = LocalLifecycleOwner.current
-    var today by remember { mutableLongStateOf(todayJdn()) }
+    var today by remember { mutableStateOf(Jdn.today()) }
 
     LaunchedEffect(lifecycleOwner.lifecycle.currentState) {
         if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
             while (isActive) {
-                today = todayJdn()
+                today = Jdn.today()
                 delay(30.seconds)
             }
         }

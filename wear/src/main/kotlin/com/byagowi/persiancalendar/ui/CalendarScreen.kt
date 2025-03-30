@@ -34,14 +34,13 @@ import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.EntryType
+import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
-import io.github.persiancalendar.calendar.CivilDate
-import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 
 @Composable
-fun CalendarScreen(todayJdn: Long, preferences: Preferences?, navigateToDay: (Long) -> Unit) {
+fun CalendarScreen(today: Jdn, preferences: Preferences?, navigateToDay: (Jdn) -> Unit) {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
     val weekdays =
@@ -53,10 +52,10 @@ fun CalendarScreen(todayJdn: Long, preferences: Preferences?, navigateToDay: (Lo
         DecimalFormat("#", symbols)
     }
     ScreenScaffold {
-        val weekStartJdn = todayJdn - ((todayJdn + 2) % 7)
+        val weekStartJdn = today - ((today.value + 2) % 7).toInt()
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
-        val focusedPersianDate = PersianDate(todayJdn + (state.centerItemIndex - initialItem) * 7)
+        val focusedPersianDate = (today + (state.centerItemIndex - initialItem) * 7).toPersianDate()
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         ScalingLazyColumn(
             state = state,
@@ -70,8 +69,8 @@ fun CalendarScreen(todayJdn: Long, preferences: Preferences?, navigateToDay: (Lo
                 ) {
                     repeat(7) { weekDay ->
                         val jdn = weekStartJdn + weekDay + (row - initialItem) * 7
-                        val persianDate = PersianDate(jdn)
-                        val civilDate = CivilDate(jdn)
+                        val persianDate = jdn.toPersianDate()
+                        val civilDate = jdn.toCivilDate()
                         val isFocusedMonth =
                             persianDate.year == focusedPersianDate.year && persianDate.month == focusedPersianDate.month
                         val events = getEventsOfDay(enabledEvents, civilDate)
@@ -81,7 +80,7 @@ fun CalendarScreen(todayJdn: Long, preferences: Preferences?, navigateToDay: (Lo
                                 .weight(1f)
                                 .aspectRatio(1f)
                                 .border(
-                                    2.dp, if (todayJdn == jdn) MaterialTheme.colorScheme.primary
+                                    2.dp, if (today == jdn) MaterialTheme.colorScheme.primary
                                     else Color.Transparent, RoundedCornerShape(50)
                                 )
                                 .alpha(if (isFocusedMonth) 1f else .5f),

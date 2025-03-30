@@ -23,7 +23,6 @@ import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
 import androidx.wear.tiles.EventBuilders
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.ui.todayJdn
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
@@ -49,7 +48,7 @@ class MainTileService : GlanceTileService() {
             val todayEntries = run {
                 val preferences = runBlocking { dataStore.data.firstOrNull() }
                 val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-                generateEntries(todayJdn(), enabledEvents, 1, false)
+                generateEntries(Jdn.today(), enabledEvents, 1, false)
             }
             Text(
                 todayEntries[0].title,
