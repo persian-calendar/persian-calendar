@@ -17,22 +17,22 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 
-class MainApplication : Application()
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        enqueueUpdateWorker()
+    }
+}
 
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            context.applicationContext.run {
-                requestTileUpdate()
-                requestComplicationUpdate()
-                enqueueUpdateWorker()
-            }
-        }
+        // Nothing right now
+        // if (intent.action == Intent.ACTION_BOOT_COMPLETED)
     }
 }
 
 fun Context.enqueueUpdateWorker() {
-    val workRequest = PeriodicWorkRequestBuilder<UpdateWorker>(15, TimeUnit.MINUTES).build()
+    val workRequest = PeriodicWorkRequestBuilder<UpdateWorker>(1, TimeUnit.HOURS).build()
     WorkManager.getInstance(this).enqueueUniquePeriodicWork(
         "PeriodicUpdateWork",
         ExistingPeriodicWorkPolicy.KEEP,
