@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Construction
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.Preferences
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
@@ -40,11 +40,14 @@ import com.byagowi.persiancalendar.EntryType
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.generateEntries
 import com.byagowi.persiancalendar.persianLocale
-import com.byagowi.persiancalendar.preferences
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
-fun MainScreen(navigateToUtilities: () -> Unit, navigateToDay: (Long) -> Unit) {
+fun MainScreen(
+    navigateToUtilities: () -> Unit,
+    navigateToDay: (Long) -> Unit,
+    preferences: Preferences?
+) {
     val scrollState = rememberScalingLazyListState()
     ScreenScaffold(
         scrollState = scrollState,
@@ -55,7 +58,6 @@ fun MainScreen(navigateToUtilities: () -> Unit, navigateToDay: (Long) -> Unit) {
             ) { Icon(Icons.Default.Construction, contentDescription = "تنظیمات") }
         },
     ) {
-        val preferences by preferences.collectAsState()
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
             val currentYear = Calendar.getInstance(persianLocale).get(Calendar.YEAR)
@@ -125,6 +127,6 @@ private fun EventButton(
 @Composable
 fun MainPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { MainScreen({}, {}) }
+        AppScaffold { MainScreen({}, {}, null) }
     }
 }

@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -36,16 +34,16 @@ import com.byagowi.persiancalendar.editPreferences
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.internationalKey
 import com.byagowi.persiancalendar.iranNonHolidaysKey
-import com.byagowi.persiancalendar.preferences
+import com.byagowi.persiancalendar.requestComplicationUpdate
+import com.byagowi.persiancalendar.requestTileUpdate
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsScreen() {
+fun SettingsScreen(preferences: Preferences?) {
     ScreenScaffold {
-        val preferences by preferences.collectAsState()
+        val context = LocalContext.current
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         val coroutineScope = rememberCoroutineScope()
-        val context = LocalContext.current
 
         @Composable
         fun EventsSwitch(key: String, title: String) {
@@ -58,6 +56,7 @@ fun SettingsScreen() {
                 onCheckedChange = { value ->
                     coroutineScope.launch {
                         context.editPreferences {
+                            context.requestTileUpdate()
                             it[enabledEventsKey] =
                                 if (value) enabledEvents + key else enabledEvents - key
                         }
@@ -67,7 +66,10 @@ fun SettingsScreen() {
         }
 
         @Composable
-        fun PreferenceSwitch(key: Preferences.Key<Boolean>, title: @Composable (Boolean) -> Unit) {
+        fun ComplicationSwitch(
+            key: Preferences.Key<Boolean>,
+            title: @Composable (Boolean) -> Unit,
+        ) {
             val value = preferences?.get(key) ?: false
             SwitchButton(
                 value,
@@ -76,6 +78,7 @@ fun SettingsScreen() {
                     .padding(horizontal = 8.dp),
                 label = { title(value) },
                 onCheckedChange = { newValue ->
+                    context.requestComplicationUpdate()
                     coroutineScope.launch { context.editPreferences { it[key] = newValue } }
                 },
             )
@@ -95,7 +98,7 @@ fun SettingsScreen() {
                 }
             }
             item {
-                PreferenceSwitch(complicationWeekdayInitial) { checked ->
+                ComplicationSwitch(complicationWeekdayInitial) { checked ->
                     Column {
                         Text("روز هفتهٔ کوتاه")
                         AnimatedContent(
@@ -106,7 +109,7 @@ fun SettingsScreen() {
                 }
             }
             item {
-                PreferenceSwitch(complicationMonthNumber) { checked ->
+                ComplicationSwitch(complicationMonthNumber) { checked ->
                     Column {
                         Text("نمایش عددی ماه")
                         AnimatedContent(
@@ -132,6 +135,6 @@ val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
 @Composable
 fun SettingsPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { SettingsScreen() }
+        AppScaffold { SettingsScreen(null) }
     }
 }

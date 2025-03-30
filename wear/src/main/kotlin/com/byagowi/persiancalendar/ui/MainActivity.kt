@@ -5,6 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
@@ -15,6 +17,7 @@ import androidx.wear.compose.material3.dynamicColorScheme
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.byagowi.persiancalendar.dataStore
 import com.byagowi.persiancalendar.requestComplicationUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import io.github.persiancalendar.calendar.CivilDate
@@ -38,21 +41,9 @@ private fun WearApp() {
         MaterialTheme(
             colorScheme = dynamicColorScheme(LocalContext.current) ?: MaterialTheme.colorScheme
         ) {
-            AppScaffold(
-//                timeText = {
-//                    val persianDigitsFormatter = run {
-//                        val symbols = DecimalFormatSymbols.getInstance(ULocale("fa_IR"))
-//                        DecimalFormat("#", symbols)
-//                    }
-//                    TimeText { time ->
-//                        timeTextCurvedText(
-//                            time.map {
-//                                it.digitToIntOrNull()?.let(persianDigitsFormatter::format) ?: it
-//                            }.joinToString(""),
-//                        )
-//                    }
-//                }
-            ) {
+            AppScaffold {
+                val context = LocalContext.current
+                val preferences by context.dataStore.data.collectAsState(null)
                 val navController = rememberSwipeDismissableNavController()
                 val mainRoute = "app"
                 val settingsRoute = "settings"
@@ -76,6 +67,7 @@ private fun WearApp() {
                 ) {
                     composable(mainRoute) {
                         MainScreen(
+                            preferences = preferences,
                             navigateToUtilities = { navController.navigate(utilitiesRoute) },
                             navigateToDay = { jdn ->
                                 navController.graph.findNode(dayRoute)?.let { destination ->
@@ -95,7 +87,7 @@ private fun WearApp() {
                     }
                     composable(converterRoute) { ConverterScreen() }
                     composable(calendarRoute) {
-                        CalendarScreen { jdn ->
+                        CalendarScreen(preferences) { jdn ->
                             navController.graph.findNode(dayRoute)?.let { destination ->
                                 navController.navigate(
                                     destination.id, bundleOf(dayJdnKey to jdn)
@@ -105,10 +97,11 @@ private fun WearApp() {
                     }
                     composable(dayRoute) { backStackEntry ->
                         DayScreen(
-                            backStackEntry.arguments?.getLong(dayJdnKey, todayJdn) ?: todayJdn
+                            preferences = preferences,
+                            jdn = backStackEntry.arguments?.getLong(dayJdnKey, todayJdn) ?: todayJdn
                         )
                     }
-                    composable(settingsRoute) { SettingsScreen() }
+                    composable(settingsRoute) { SettingsScreen(preferences) }
                 }
             }
         }

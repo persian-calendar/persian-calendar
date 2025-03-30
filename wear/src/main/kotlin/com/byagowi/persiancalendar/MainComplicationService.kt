@@ -24,15 +24,15 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
         val locale = ULocale("fa_IR@calendar=persian")
         val calendar = Calendar.getInstance(locale)
         val date = Date()
-        val preferences = preferences.first()
+        val preferences = dataStore.data.first()
         val title = run {
-            val format = if (preferences?.get(complicationWeekdayInitial) == true) "EEEEE"
+            val format = if (preferences.get(complicationWeekdayInitial) == true) "EEEEE"
             else DateFormat.WEEKDAY
             DateFormat.getPatternInstance(calendar, format, locale).format(date)
         }
         val body = run {
             val format =
-                if (preferences?.get(complicationMonthNumber) == true) DateFormat.NUM_MONTH_DAY
+                if (preferences.get(complicationMonthNumber) == true) DateFormat.NUM_MONTH_DAY
                 else DateFormat.ABBR_MONTH_DAY
             DateFormat.getPatternInstance(calendar, format, locale).format(date)
         }

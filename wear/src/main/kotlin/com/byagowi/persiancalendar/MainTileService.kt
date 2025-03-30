@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -24,6 +23,8 @@ import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
 import androidx.wear.tiles.EventBuilders
 import com.byagowi.persiancalendar.ui.MainActivity
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
 
 class MainTileService : GlanceTileService() {
 
@@ -45,8 +46,8 @@ class MainTileService : GlanceTileService() {
             // LocalConfiguration doesn't work here
             val screenHeightDp = resources.configuration.screenHeightDp
             val todayEntries = run {
-                @SuppressLint("StateFlowValueCalledInComposition")
-                val enabledEvents = preferences.value?.get(enabledEventsKey) ?: emptySet()
+                val preferences = runBlocking { dataStore.data.firstOrNull() }
+                val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
                 generateEntries(enabledEvents, 1)
             }
             Text(

@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,6 +26,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.core.Preferences
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
@@ -38,14 +37,13 @@ import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.EntryType
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
-import com.byagowi.persiancalendar.preferences
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 
 @Composable
-fun CalendarScreen(navigateToDay: (Long) -> Unit) {
+fun CalendarScreen(preferences: Preferences?, navigateToDay: (Long) -> Unit) {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
     val weekdays =
@@ -69,7 +67,6 @@ fun CalendarScreen(navigateToDay: (Long) -> Unit) {
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
         val focusedPersianDate = PersianDate(todayJdn + (state.centerItemIndex - initialItem) * 7)
-        val preferences by preferences.collectAsState()
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         ScalingLazyColumn(
             state = state,
