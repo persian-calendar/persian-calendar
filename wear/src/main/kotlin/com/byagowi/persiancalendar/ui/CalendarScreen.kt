@@ -47,7 +47,8 @@ fun CalendarScreen(
         val weekStartJdn = today - ((today.value + 2) % 7).toInt()
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
-        val focusedPersianDate = (today + (state.centerItemIndex - initialItem) * 7).toPersianDate()
+        val focusedPersianDate = (if (state.centerItemIndex == initialItem) today
+        else (weekStartJdn + 3 + (state.centerItemIndex - initialItem) * 7)).toPersianDate()
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         ScalingLazyColumn(
             state = state,
@@ -72,8 +73,10 @@ fun CalendarScreen(
                                 .weight(1f)
                                 .aspectRatio(1f)
                                 .border(
-                                    2.dp, if (today == jdn) MaterialTheme.colorScheme.primary
-                                    else Color.Transparent, RoundedCornerShape(50)
+                                    width = 2.dp,
+                                    color = if (today == jdn) MaterialTheme.colorScheme.primary
+                                    else Color.Transparent,
+                                    shape = RoundedCornerShape(50),
                                 )
                                 .alpha(if (isFocusedMonth) 1f else .5f),
                             contentAlignment = Alignment.Center
@@ -82,10 +85,10 @@ fun CalendarScreen(
                                 Modifier
                                     .fillParentMaxSize()
                                     .background(
-                                        if (isHoliday) {
+                                        color = if (isHoliday) {
                                             MaterialTheme.colorScheme.primaryContainer.copy(alpha = .7f)
                                         } else Color.Transparent,
-                                        RoundedCornerShape(50),
+                                        shape = RoundedCornerShape(50),
                                     )
                                     .clickable { navigateToDay(jdn) },
                             )
