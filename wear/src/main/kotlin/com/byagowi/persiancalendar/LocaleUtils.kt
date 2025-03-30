@@ -13,10 +13,12 @@ class LocaleUtils {
     val narrowWeekdays: List<String> =
         formatSymbols.getWeekdays(DateFormatSymbols.STANDALONE, DateFormatSymbols.NARROW).toList()
     val persianMonths: List<String> = formatSymbols.months.toList()
-    val gregorianMonths: List<String> =
+    val gregorianMonths: List<String> by lazy(LazyThreadSafetyMode.NONE) {
         DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months.toList()
-    val islamicMonths: List<String> =
+    }
+    val islamicMonths: List<String> by lazy(LazyThreadSafetyMode.NONE) {
         DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
+    }
 
     fun persianMonth(persianDate: PersianDate): String = persianMonths[persianDate.month - 1]
 
