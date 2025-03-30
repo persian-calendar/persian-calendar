@@ -1,16 +1,12 @@
+<details>
+  <summary>English</summary>
+  
 # Android Persian Calendar
+A simple, free and open-source Android calendar
 
+### Project Status & Localization
 [![Android CI](https://github.com/persian-calendar/persian-calendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/persian-calendar/actions)
 [![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
-
-<div dir=rtl>
-
-## تقویم فارسی اندروید
-
-تقویم ساده، رایگان و آزاد اندروید
-
-
-</div>
 
 ## Download
 <a href='https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar'><img height=70 alt='Get it on Google Play' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GooglePlay.svg'/></a>
@@ -35,8 +31,26 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see https://www.gnu.org/licenses/.
+</details>
 
-<div dir=rtl>
+<details>
+  <summary>فارسی</summary>
+
+<div dir="rtl">
+
+## تقویم فارسی اندروید
+تقویم ساده، رایگان و آزاد اندروید
+
+### وضعیت توسعه و ترجمه
+[![Android CI](https://github.com/persian-calendar/persian-calendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/persian-calendar/actions)
+[![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
+
+## دریافت برنامه
+<a href='https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar'><img height=70 alt='Get it on Google Play' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GooglePlay.svg'/></a>
+<a href='https://f-droid.org/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on F-Droid' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/FDroid.svg'/></a>
+<a href='https://github.com/persian-calendar/persian-calendar/releases/'><img height=70 alt='Get it on GitHub' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GitHub.svg'/></a>
+<a href='https://cafebazaar.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Bazaar' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Bazaar.svg'/></a>
+<a href='https://myket.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Myket' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Myket.svg'/></a>
 
 ## مجوز شرایط استفاده از کد برنامه
 
@@ -44,9 +58,9 @@ along with this program.  If not, see https://www.gnu.org/licenses/.
 https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 توضیح داده شده است، خلاصه‌اش تقریباً اینگونه است که لازم است به همان شکلی که سورس برنامه را به همراه برنامه دریافت کرده‌اید، سورس برنامهٔ تغییر داده شده خود را حداقل در هر انتشار در جایی عمومی قرار دهید، پیوند آن را هم به صورت عمومی قرار دهید و ارجاع مناسب به سورس اصلی دهید. همانطور که اشاره شد از آنجایی که از سورس دیگرانی با همین مجوز در این برنامه استفاده شده است در اختیار ما نیست که به شکل دیگری استفاده از این سورس را مجاز کنیم. با تشکر
 </div>
+</details>
 
 ## Build
 
 1. In Android Studio, File > New > Project from Version Control.
 2. Use `https://github.com/persian-calendar/persian-calendar` as URL, click the clone button.
-
