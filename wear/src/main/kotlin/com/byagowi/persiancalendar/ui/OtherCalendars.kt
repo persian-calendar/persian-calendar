@@ -57,6 +57,7 @@ fun BoxScope.OtherCalendars(
     val weekDayColor = MaterialTheme.colorScheme.primaryDim
     val othersColor = MaterialTheme.colorScheme.secondaryDim
     val isRound = LocalConfiguration.current.isScreenRound
+    val nonCurvedStyle = MaterialTheme.typography.titleSmall
     if (isRound || onTop) {
         val curvedStyle = MaterialTheme.typography.arcSmall
         if (withWeekDayName) {
@@ -71,6 +72,7 @@ fun BoxScope.OtherCalendars(
                     .align(Alignment.BottomCenter)
                     .padding(top = 20.dp),
                 color = weekDayColor,
+                style = nonCurvedStyle,
             )
         }
         CurvedLayout(
@@ -90,13 +92,14 @@ fun BoxScope.OtherCalendars(
                 .align(Alignment.TopCenter)
                 .padding(top = 20.dp),
             color = weekDayColor,
+            style = nonCurvedStyle,
         )
         Column(
             Modifier.align(Alignment.BottomCenter),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text(firstText, color = othersColor)
-            Text(secondText, color = othersColor)
+            Text(firstText, color = othersColor, style = nonCurvedStyle)
+            Text(secondText, color = othersColor, style = nonCurvedStyle)
         }
     }
 }
