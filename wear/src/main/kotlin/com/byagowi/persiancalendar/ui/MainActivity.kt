@@ -5,16 +5,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.State
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
@@ -26,10 +27,10 @@ import com.byagowi.persiancalendar.dataStore
 import com.byagowi.persiancalendar.requestComplicationUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
 import io.github.persiancalendar.calendar.CivilDate
-import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.seconds
 
@@ -53,7 +54,10 @@ private fun WearApp() {
         ) {
             AppScaffold {
                 val context = LocalContext.current
-                val preferences by context.dataStore.data.collectAsState(null)
+                val dataStore = context.dataStore.data
+                val preferences by dataStore.collectAsState(
+                    remember { runBlocking { dataStore.firstOrNull() } }
+                )
                 val navController = rememberSwipeDismissableNavController()
                 val mainRoute = "app"
                 val settingsRoute = "settings"
@@ -62,7 +66,7 @@ private fun WearApp() {
                 val calendarRoute = "calendar"
                 val dayRoute = "day"
                 val dayJdnKey = "dayJdnKey"
-                val today by rememberUpdatedToday()
+                val today = updatedToday()
                 SwipeDismissableNavHost(
                     navController = navController,
                     startDestination = mainRoute,
@@ -88,9 +92,9 @@ private fun WearApp() {
                             navigateToSettings = { navController.navigate(settingsRoute) },
                         )
                     }
-                    composable(converterRoute) { ConverterScreen() }
+                    composable(converterRoute) { ConverterScreen(today) }
                     composable(calendarRoute) {
-                        CalendarScreen(preferences) { jdn ->
+                        CalendarScreen(today, preferences) { jdn ->
                             navController.graph.findNode(dayRoute)?.let { destination ->
                                 navController.navigate(
                                     destination.id, bundleOf(dayJdnKey to jdn)
@@ -121,33 +125,18 @@ fun todayJdn(): Long {
 }
 
 @Composable
-private fun rememberUpdatedToday(): State<Long> {
+private fun updatedToday(): Long {
     val lifecycleOwner = LocalLifecycleOwner.current
+    var today by remember { mutableLongStateOf(todayJdn()) }
 
-    return produceState(initialValue = todayJdn(), lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> {
-                    todayJdn().let { if (value != it) value = it }
-                    launch {
-                        while (isActive) {
-                            delay(30.seconds)
-                            todayJdn().let { if (value != it) value = it }
-                        }
-                    }
-                }
-
-                Lifecycle.Event.ON_PAUSE -> coroutineContext.cancelChildren()
-
-                else -> {}
+    LaunchedEffect(lifecycleOwner.lifecycle.currentState) {
+        if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
+            while (isActive) {
+                today = todayJdn()
+                delay(30.seconds)
             }
         }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        awaitDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-            coroutineContext.cancelChildren()
-        }
     }
+
+    return today
 }

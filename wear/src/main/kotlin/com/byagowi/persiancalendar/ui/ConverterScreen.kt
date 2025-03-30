@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui
 import android.icu.text.DateFormatSymbols
 import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
-import android.icu.util.Calendar
 import android.icu.util.ULocale
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -33,10 +32,9 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import java.util.GregorianCalendar
 
 @Composable
-fun ConverterScreen() {
+fun ConverterScreen(todayJdn: Long) {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val persianDigitsFormatter = run {
         val symbols = DecimalFormatSymbols.getInstance(persianLocale)
@@ -51,15 +49,7 @@ fun ConverterScreen() {
     val islamicMonths =
         DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
 
-    val today = run {
-        val gregorianCalendar = GregorianCalendar.getInstance()
-        val civilDate = CivilDate(
-            gregorianCalendar[Calendar.YEAR],
-            gregorianCalendar[Calendar.MONTH] + 1,
-            gregorianCalendar[Calendar.DAY_OF_MONTH]
-        )
-        listOf(PersianDate(civilDate), civilDate, IslamicDate(civilDate))
-    }
+    val today = listOf(PersianDate(todayJdn), CivilDate(todayJdn), IslamicDate(todayJdn))
 
     var selectedIndex by remember { mutableIntStateOf(1) }
     val calendarPickerState = remember { PickerState(3, 0, false) }

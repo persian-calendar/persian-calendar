@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui
 import android.icu.text.DateFormatSymbols
 import android.icu.text.DecimalFormat
 import android.icu.text.DecimalFormatSymbols
-import android.icu.util.Calendar
 import android.icu.util.ULocale
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Canvas
@@ -40,10 +39,9 @@ import com.byagowi.persiancalendar.getEventsOfDay
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
-import java.util.GregorianCalendar
 
 @Composable
-fun CalendarScreen(preferences: Preferences?, navigateToDay: (Long) -> Unit) {
+fun CalendarScreen(todayJdn: Long, preferences: Preferences?, navigateToDay: (Long) -> Unit) {
     val persianLocale = ULocale("fa_IR@calendar=persian")
     val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
     val weekdays =
@@ -55,14 +53,6 @@ fun CalendarScreen(preferences: Preferences?, navigateToDay: (Long) -> Unit) {
         DecimalFormat("#", symbols)
     }
     ScreenScaffold {
-        val todayJdn = run {
-            val gregorianCalendar = GregorianCalendar.getInstance()
-            CivilDate(
-                gregorianCalendar[Calendar.YEAR],
-                gregorianCalendar[Calendar.MONTH] + 1,
-                gregorianCalendar[Calendar.DAY_OF_MONTH]
-            ).toJdn()
-        }
         val weekStartJdn = todayJdn - ((todayJdn + 2) % 7)
         val initialItem = 100
         val state = rememberScalingLazyListState(initialItem)
