@@ -44,7 +44,7 @@ fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
                 }
             }
         }
-        items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EntryView(it) }
+        items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EventView(it) }
     }
     Box(Modifier.fillMaxSize()) {
         OtherCalendars(

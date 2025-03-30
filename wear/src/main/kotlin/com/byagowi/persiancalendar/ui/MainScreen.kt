@@ -81,41 +81,41 @@ fun MainScreen(
             val entries = generateEntries(
                 localeUtils, today, enabledEvents, days = 14, withYear = true
             )
-            items(items = entries) { EntryView(it, navigateToDay) }
+            items(items = entries) {
+                if (it.type == EntryType.Date) ListSubHeader {
+                    Text(
+                        text = it.title,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { it.jdn?.let(navigateToDay) },
+                        textAlign = TextAlign.Center,
+                    )
+                } else EventView(it)
+            }
         }
     }
 }
 
 @Composable
-fun EntryView(it: Entry, navigateToDay: (Jdn) -> Unit = {}) {
-    if (it.type == EntryType.Date) ListSubHeader {
-        Text(
-            text = it.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { it.jdn?.let(navigateToDay) },
-            textAlign = TextAlign.Center,
-        )
-    } else {
-        var isExpanded by remember { mutableStateOf(false) }
-        val isHoliday = it.type == EntryType.Holiday
-        EventButton(
-            onClick = { isExpanded = !isExpanded },
-            isHoliday = isHoliday,
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .fillMaxWidth()
-        ) {
-            AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
-                Text(
-                    it.title,
-                    maxLines = if (state) Int.MAX_VALUE else 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxWidth()
-                )
-            }
+fun EventView(it: Entry) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val isHoliday = it.type == EntryType.Holiday
+    EventButton(
+        onClick = { isExpanded = !isExpanded },
+        isHoliday = isHoliday,
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+    ) {
+        AnimatedContent(isExpanded, transitionSpec = appCrossfadeSpec) { state ->
+            Text(
+                it.title,
+                maxLines = if (state) Int.MAX_VALUE else 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxWidth()
+            )
         }
     }
 }
