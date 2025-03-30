@@ -45,10 +45,11 @@ class MainTileService : GlanceTileService() {
         Box(contentAlignment = Alignment.Center) {
             // LocalConfiguration doesn't work here
             val screenHeightDp = resources.configuration.screenHeightDp
+            val localeUtils = LocaleUtils()
             val todayEntries = run {
                 val preferences = runBlocking { dataStore.data.firstOrNull() }
                 val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-                generateEntries(Jdn.today(), enabledEvents, 1, false)
+                generateEntries(localeUtils, Jdn.today(), enabledEvents, 1, false)
             }
             Text(
                 todayEntries[0].title,

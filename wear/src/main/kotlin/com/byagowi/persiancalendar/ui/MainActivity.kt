@@ -24,6 +24,7 @@ import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import com.byagowi.persiancalendar.Jdn
+import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.dataStore
 import com.byagowi.persiancalendar.requestComplicationUpdate
 import com.byagowi.persiancalendar.requestTileUpdate
@@ -65,6 +66,7 @@ private fun WearApp() {
                 val calendarRoute = "calendar"
                 val dayRoute = "day"
                 val dayJdnKey = "dayJdnKey"
+                val localeUtils = LocaleUtils()
                 val today = updatedToday()
                 SwipeDismissableNavHost(
                     navController = navController,
@@ -72,6 +74,7 @@ private fun WearApp() {
                 ) {
                     composable(mainRoute) {
                         MainScreen(
+                            localeUtils = localeUtils,
                             today = today,
                             preferences = preferences,
                             navigateToUtilities = { navController.navigate(utilitiesRoute) },
@@ -93,7 +96,11 @@ private fun WearApp() {
                     }
                     composable(converterRoute) { ConverterScreen(today) }
                     composable(calendarRoute) {
-                        CalendarScreen(today, preferences) { jdn ->
+                        CalendarScreen(
+                            today = today,
+                            localeUtils = localeUtils,
+                            preferences = preferences
+                        ) { jdn ->
                             navController.graph.findNode(dayRoute)?.let { destination ->
                                 navController.navigate(
                                     destination.id, bundleOf(dayJdnKey to jdn.value)
@@ -104,6 +111,7 @@ private fun WearApp() {
                     composable(dayRoute) { backStackEntry ->
                         DayScreen(
                             preferences = preferences,
+                            localeUtils = localeUtils,
                             day = Jdn(
                                 backStackEntry.arguments?.getLong(dayJdnKey, today.value)
                                     ?: today.value

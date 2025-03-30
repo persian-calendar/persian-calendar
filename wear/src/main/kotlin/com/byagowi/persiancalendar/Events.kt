@@ -1,9 +1,5 @@
 package com.byagowi.persiancalendar
 
-import android.icu.text.DateFormatSymbols
-import android.icu.text.DecimalFormat
-import android.icu.text.DecimalFormatSymbols
-import android.icu.util.ULocale
 import androidx.collection.IntIntPair
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
@@ -21,23 +17,13 @@ class Entry(val title: String, val type: EntryType, val jdn: Jdn? = null)
 
 private const val spacedComma = "، "
 
-val persianLocale by lazy(LazyThreadSafetyMode.NONE) { ULocale("fa_IR@calendar=persian") }
-
 fun generateEntries(
+    localeUtils: LocaleUtils,
     startingDay: Jdn,
     enabledEvents: Set<String>,
     days: Int,
     withYear: Boolean,
 ): List<Entry> {
-    val persianLocale = ULocale("fa_IR@calendar=persian")
-    val persianDigitsFormatter = run {
-        val symbols = DecimalFormatSymbols.getInstance(persianLocale)
-        symbols.groupingSeparator = '\u0000'
-        DecimalFormat("#", symbols)
-    }
-    val persianSymbols = DateFormatSymbols.getInstance(persianLocale)
-    val weekDayNames = persianSymbols.weekdays.toList()
-    val persianMonths = persianSymbols.months.toList()
     var previousYear = 0
     return (0..<days).flatMap { day ->
         val jdn = startingDay + day
@@ -45,11 +31,11 @@ fun generateEntries(
         val persianDate = jdn.toPersianDate()
         val events = getEventsOfDay(enabledEvents, civilDate)
         if (events.isNotEmpty() || day == 0) {
-            var dateTitle = weekDayNames[jdn.weekDayIndex] + spacedComma +
-                    persianDigitsFormatter.format(persianDate.dayOfMonth) + " " +
-                    persianMonths[persianDate.month - 1]
+            var dateTitle = localeUtils.weekDayName(jdn) + spacedComma +
+                    localeUtils.format(persianDate.dayOfMonth) + " " +
+                    localeUtils.persianMonth(persianDate)
             if (withYear && previousYear != persianDate.year) {
-                dateTitle += " " + persianDigitsFormatter.format(persianDate.year)
+                dateTitle += " " + localeUtils.format(persianDate.year)
                 previousYear = persianDate.year
             }
             listOf(

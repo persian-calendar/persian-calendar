@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.icu.util.Calendar
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,13 +37,14 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.byagowi.persiancalendar.Entry
 import com.byagowi.persiancalendar.EntryType
 import com.byagowi.persiancalendar.Jdn
+import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.generateEntries
-import com.byagowi.persiancalendar.persianLocale
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 
 @Composable
 fun MainScreen(
+    localeUtils: LocaleUtils,
     navigateToUtilities: () -> Unit,
     navigateToDay: (Jdn) -> Unit,
     preferences: Preferences?,
@@ -62,7 +62,7 @@ fun MainScreen(
     ) {
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
-            val currentYear = Calendar.getInstance(persianLocale).get(Calendar.YEAR)
+            val currentYear = today.toPersianDate().year
             val isOutDated = currentYear > IranianIslamicDateConverter.latestSupportedYearOfIran
             mutableStateOf(isOutDated)
         }
@@ -73,9 +73,10 @@ fun MainScreen(
             edgeButton = { EdgeButton({ showWarnDialog = false }) { Text("متوجه شدم") } },
         )
         ScalingLazyColumn(Modifier.fillMaxWidth(), state = scrollState) {
-            items(items = generateEntries(today, enabledEvents, days = 14, withYear = true)) {
-                EntryView(it, navigateToDay)
-            }
+            val entries = generateEntries(
+                localeUtils, today, enabledEvents, days = 14, withYear = true
+            )
+            items(items = entries) { EntryView(it, navigateToDay) }
         }
     }
 }
@@ -129,6 +130,6 @@ private fun EventButton(
 @Composable
 fun MainPreview() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        AppScaffold { MainScreen({}, {}, null, Jdn.today()) }
+        AppScaffold { MainScreen(LocaleUtils(), {}, {}, null, Jdn.today()) }
     }
 }

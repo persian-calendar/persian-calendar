@@ -1,9 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.icu.text.DateFormatSymbols
-import android.icu.text.DecimalFormat
-import android.icu.text.DecimalFormatSymbols
-import android.icu.util.ULocale
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -35,22 +31,18 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.EntryType
 import com.byagowi.persiancalendar.Jdn
+import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
 import kotlinx.coroutines.launch
 
 @Composable
-fun CalendarScreen(today: Jdn, preferences: Preferences?, navigateToDay: (Jdn) -> Unit) {
-    val persianLocale = ULocale("fa_IR@calendar=persian")
-    val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
-    val weekdays =
-        formatSymbols.getWeekdays(DateFormatSymbols.STANDALONE, DateFormatSymbols.NARROW).toList()
-    val persianMonths = formatSymbols.months.toList()
-    val persianDigitsFormatter = run {
-        val symbols = DecimalFormatSymbols.getInstance(persianLocale)
-        symbols.groupingSeparator = '\u0000'
-        DecimalFormat("#", symbols)
-    }
+fun CalendarScreen(
+    today: Jdn,
+    localeUtils: LocaleUtils,
+    preferences: Preferences?,
+    navigateToDay: (Jdn) -> Unit,
+) {
     ScreenScaffold {
         val weekStartJdn = today - ((today.value + 2) % 7).toInt()
         val initialItem = 100
@@ -101,7 +93,7 @@ fun CalendarScreen(today: Jdn, preferences: Preferences?, navigateToDay: (Jdn) -
                                 if (isHoliday) MaterialTheme.colorScheme.onPrimaryContainer
                                 else LocalContentColor.current
                             Text(
-                                persianDigitsFormatter.format(persianDate.dayOfMonth),
+                                localeUtils.format(persianDate.dayOfMonth),
                                 color = foregroundColor,
                                 textAlign = TextAlign.Center,
                             )
@@ -126,9 +118,9 @@ fun CalendarScreen(today: Jdn, preferences: Preferences?, navigateToDay: (Jdn) -
                     .fillMaxWidth()
                     .padding(top = 8.dp)
             ) {
-                val formattedYear = persianDigitsFormatter.format(focusedPersianDate.year)
+                val formattedYear = localeUtils.format(focusedPersianDate.year)
                 AnimatedContent(
-                    targetState = persianMonths[focusedPersianDate.month - 1] + " " + formattedYear,
+                    targetState = localeUtils.persianMonth(focusedPersianDate) + " " + formattedYear,
                     transitionSpec = appCrossfadeSpec
                 ) { Text(it) }
             }
@@ -139,7 +131,7 @@ fun CalendarScreen(today: Jdn, preferences: Preferences?, navigateToDay: (Jdn) -
             ) {
                 repeat(7) {
                     Text(
-                        weekdays[(it + 6) % 7 + 1],
+                        localeUtils.narrowWeekdays[(it + 6) % 7 + 1],
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center,
                         color = MaterialTheme.colorScheme.secondaryDim,

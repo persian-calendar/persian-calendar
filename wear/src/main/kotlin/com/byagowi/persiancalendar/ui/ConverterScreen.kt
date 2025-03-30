@@ -1,9 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.icu.text.DateFormatSymbols
-import android.icu.text.DecimalFormat
-import android.icu.text.DecimalFormatSymbols
-import android.icu.util.ULocale
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
@@ -29,6 +25,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
 import com.byagowi.persiancalendar.Jdn
+import com.byagowi.persiancalendar.LocaleUtils
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -36,20 +33,7 @@ import io.github.persiancalendar.calendar.PersianDate
 
 @Composable
 fun ConverterScreen(todayJdn: Jdn) {
-    val persianLocale = ULocale("fa_IR@calendar=persian")
-    val persianDigitsFormatter = run {
-        val symbols = DecimalFormatSymbols.getInstance(persianLocale)
-        symbols.groupingSeparator = '\u0000'
-        DecimalFormat("#", symbols)
-    }
-    val persianSymbols = DateFormatSymbols.getInstance(persianLocale)
-    val weekDayNames = persianSymbols.weekdays.toList()
-    val persianMonths = persianSymbols.months.toList()
-    val gregorianMonths =
-        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months.toList()
-    val islamicMonths =
-        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
-
+    val localeUtils = LocaleUtils()
     val today = listOf(todayJdn.toPersianDate(), todayJdn.toCivilDate(), todayJdn.toIslamicDate())
 
     var selectedIndex by remember { mutableIntStateOf(1) }
@@ -112,15 +96,15 @@ fun ConverterScreen(todayJdn: Jdn) {
                                     else -> "قمری"
                                 }
 
-                                1 -> persianDigitsFormatter.format(optionIndex + 1)
+                                1 -> localeUtils.format(optionIndex + 1)
 
                                 2 -> when (calendarIndex) {
-                                    0 -> persianMonths
-                                    1 -> gregorianMonths
-                                    else -> islamicMonths
+                                    0 -> localeUtils.persianMonths
+                                    1 -> localeUtils.gregorianMonths
+                                    else -> localeUtils.islamicMonths
                                 }[optionIndex]
 
-                                else -> persianDigitsFormatter.format(
+                                else -> localeUtils.format(
                                     optionIndex + today[calendarIndex].year
                                             - yearsLimit / 2
                                 )
@@ -136,11 +120,7 @@ fun ConverterScreen(todayJdn: Jdn) {
             }
         }
         OtherCalendars(
-            weekDayNames = weekDayNames,
-            persianMonths = persianMonths,
-            gregorianMonths = gregorianMonths,
-            islamicMonths = islamicMonths,
-            persianDigitsFormatter = persianDigitsFormatter,
+            localeUtils = localeUtils,
             day = currentJdn,
             calendarIndex = calendarIndex,
         )
@@ -149,27 +129,23 @@ fun ConverterScreen(todayJdn: Jdn) {
 
 @Composable
 fun BoxScope.OtherCalendars(
-    weekDayNames: List<String>,
-    persianMonths: List<String>,
-    gregorianMonths: List<String>,
-    islamicMonths: List<String>,
-    persianDigitsFormatter: DecimalFormat,
+    localeUtils: LocaleUtils,
     day: Jdn,
     onTop: Boolean = false,
     calendarIndex: Int = 0,
 ) {
-    val weekDayName = weekDayNames[day.weekDayIndex]
+    val weekDayName = localeUtils.weekDayName(day)
 
     fun monthsFromDate(date: AbstractDate) = when (date) {
-        is PersianDate -> persianMonths
-        is CivilDate -> gregorianMonths
-        else -> islamicMonths
+        is PersianDate -> localeUtils.persianMonths
+        is CivilDate -> localeUtils.gregorianMonths
+        else -> localeUtils.islamicMonths
     }
 
     fun allNumDateFormat(date: AbstractDate) =
-        persianDigitsFormatter.format(date.dayOfMonth) + " " +
+        localeUtils.format(date.dayOfMonth) + " " +
                 monthsFromDate(date)[date.month - 1] + " " +
-                persianDigitsFormatter.format(date.year)
+                localeUtils.format(date.year)
 
     val firstText = allNumDateFormat(
         when (calendarIndex) {

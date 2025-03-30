@@ -12,9 +12,6 @@ import java.util.GregorianCalendar
 value class Jdn(val value: Long) {
     constructor(value: AbstractDate) : this(value.toJdn())
 
-    // Index in the format of ICU weekday names
-    val weekDayIndex get() = ((value + 1) % 7 + 1).toInt()
-
     fun toIslamicDate() = IslamicDate(value)
     fun toCivilDate() = CivilDate(value)
     fun toPersianDate() = PersianDate(value)

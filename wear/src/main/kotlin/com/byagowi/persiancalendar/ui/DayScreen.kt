@@ -1,9 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.icu.text.DateFormatSymbols
-import android.icu.text.DecimalFormat
-import android.icu.text.DecimalFormatSymbols
-import android.icu.util.ULocale
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -20,19 +16,12 @@ import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.Jdn
+import com.byagowi.persiancalendar.LocaleUtils
 import com.byagowi.persiancalendar.enabledEventsKey
 import com.byagowi.persiancalendar.getEventsOfDay
 
 @Composable
-fun DayScreen(day: Jdn, preferences: Preferences?) {
-    val persianLocale = ULocale("fa_IR@calendar=persian")
-    val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
-    val persianMonths = formatSymbols.months.toList()
-    val persianDigitsFormatter = run {
-        val symbols = DecimalFormatSymbols.getInstance(persianLocale)
-        symbols.groupingSeparator = '\u0000'
-        DecimalFormat("#", symbols)
-    }
+fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
     val persianDate = day.toPersianDate()
     val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
     ScalingLazyColumn(
@@ -44,11 +33,11 @@ fun DayScreen(day: Jdn, preferences: Preferences?) {
             ListHeader {
                 Box(contentAlignment = Alignment.TopCenter) {
                     Text(
-                        persianDigitsFormatter.format(persianDate.dayOfMonth),
+                        localeUtils.format(persianDate.dayOfMonth),
                         style = MaterialTheme.typography.displayLarge,
                     )
                     Text(
-                        persianMonths[persianDate.month - 1],
+                        localeUtils.persianMonth(persianDate),
                         modifier = Modifier.padding(top = 44.dp),
                         textAlign = TextAlign.Center
                     )
@@ -58,17 +47,8 @@ fun DayScreen(day: Jdn, preferences: Preferences?) {
         items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EntryView(it) }
     }
     Box(Modifier.fillMaxSize()) {
-        val weekDayNames = DateFormatSymbols.getInstance(persianLocale).weekdays.toList()
-        val gregorianMonths =
-            DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months.toList()
-        val islamicMonths =
-            DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
         OtherCalendars(
-            weekDayNames = weekDayNames,
-            persianMonths = persianMonths,
-            gregorianMonths = gregorianMonths,
-            islamicMonths = islamicMonths,
-            persianDigitsFormatter = persianDigitsFormatter,
+            localeUtils = localeUtils,
             day = day,
             onTop = true,
         )
