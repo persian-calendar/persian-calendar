@@ -1,32 +1,23 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.compose.foundation.layout.BoxScope
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.wear.compose.foundation.CurvedDirection
-import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.material3.DatePickerDefaults
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.PickerGroup
 import androidx.wear.compose.material3.PickerState
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
-import androidx.wear.compose.material3.curvedText
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
-import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -124,84 +115,5 @@ fun ConverterScreen(todayJdn: Jdn) {
             day = currentJdn,
             calendarIndex = calendarIndex,
         )
-    }
-}
-
-@Composable
-fun BoxScope.OtherCalendars(
-    localeUtils: LocaleUtils,
-    day: Jdn,
-    onTop: Boolean = false,
-    calendarIndex: Int = 0,
-) {
-    val weekDayName = localeUtils.weekDayName(day)
-
-    fun monthsFromDate(date: AbstractDate) = when (date) {
-        is PersianDate -> localeUtils.persianMonths
-        is CivilDate -> localeUtils.gregorianMonths
-        else -> localeUtils.islamicMonths
-    }
-
-    fun allNumDateFormat(date: AbstractDate) =
-        localeUtils.format(date.dayOfMonth) + " " +
-                monthsFromDate(date)[date.month - 1] + " " +
-                localeUtils.format(date.year)
-
-    val firstText = allNumDateFormat(
-        when (calendarIndex) {
-            0 -> day.toCivilDate()
-            1 -> day.toPersianDate()
-            else -> day.toPersianDate()
-        }
-    )
-    val secondText = allNumDateFormat(
-        when (calendarIndex) {
-            0 -> day.toIslamicDate()
-            1 -> day.toIslamicDate()
-            else -> day.toCivilDate()
-        }
-    )
-    val weekDayColor = MaterialTheme.colorScheme.primaryDim
-    val othersColor = MaterialTheme.colorScheme.secondaryDim
-    val isRound = LocalConfiguration.current.isScreenRound
-    if (isRound || onTop) {
-        val curvedStyle = MaterialTheme.typography.arcMedium
-        if (isRound) {
-            CurvedLayout(
-                anchor = 90f,
-                angularDirection = CurvedDirection.Angular.CounterClockwise,
-            ) { curvedText(text = weekDayName, style = curvedStyle, color = weekDayColor) }
-        } else Text(
-            weekDayName,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(top = 20.dp),
-            color = weekDayColor,
-        )
-        CurvedLayout(
-            anchor = if (onTop) 315f else 45f,
-            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
-                CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = firstText, style = curvedStyle, color = othersColor) }
-        CurvedLayout(
-            anchor = if (onTop) 225f else 135f,
-            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
-                CurvedDirection.Angular.CounterClockwise,
-        ) { curvedText(text = secondText, style = curvedStyle, color = othersColor) }
-    } else {
-        Text(
-            weekDayName,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 20.dp),
-            color = weekDayColor,
-        )
-        Column(
-            Modifier.align(Alignment.BottomCenter),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(firstText, color = othersColor)
-            Text(secondText, color = othersColor)
-        }
     }
 }

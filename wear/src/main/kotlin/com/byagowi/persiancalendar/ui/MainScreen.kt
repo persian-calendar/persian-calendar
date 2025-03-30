@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -23,6 +24,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.material3.AlertDialog
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.Button
@@ -60,6 +62,9 @@ fun MainScreen(
             ) { Icon(Icons.Default.Construction, contentDescription = "تنظیمات") }
         },
     ) {
+        Box(Modifier.scrollAway(scrollState)) {
+            OtherCalendars(localeUtils, today, onTop = true, withWeekDayName = false)
+        }
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         var showWarnDialog by remember {
             val currentYear = today.toPersianDate().year
