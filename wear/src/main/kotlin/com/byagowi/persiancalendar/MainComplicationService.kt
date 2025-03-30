@@ -8,11 +8,12 @@ import android.icu.util.ULocale
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
 import androidx.wear.watchface.complications.data.PlainComplicationText
-import androidx.wear.watchface.complications.data.ShortTextComplicationData
+import androidx.wear.watchface.complications.data.RangedValueComplicationData
 import androidx.wear.watchface.complications.data.TimeRange
 import androidx.wear.watchface.complications.datasource.ComplicationRequest
 import androidx.wear.watchface.complications.datasource.SuspendingComplicationDataSourceService
 import com.byagowi.persiancalendar.ui.MainActivity
+import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.firstOrNull
 import java.time.Instant
 import java.time.ZoneId
@@ -22,7 +23,7 @@ import java.util.Date
 class MainComplicationService : SuspendingComplicationDataSourceService() {
     override fun getPreviewData(type: ComplicationType): ComplicationData? =
         if (type != ComplicationType.SHORT_TEXT) null
-        else createComplicationData("شنبه", "۱ مهر").build()
+        else createComplicationData(20f, 30f, "شنبه", "۱ مهر").build()
 
     override suspend fun onComplicationRequest(request: ComplicationRequest): ComplicationData {
         val locale = ULocale("fa_IR@calendar=persian")
@@ -40,7 +41,16 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
                 else DateFormat.ABBR_MONTH_DAY
             DateFormat.getPatternInstance(calendar, format, locale).format(date)
         }
-        val dataBuilder = createComplicationData(title, body).setTapAction(
+
+        val today = Jdn.today()
+        val persianDate = today.toPersianDate()
+        val endOfMonth = persianDate.monthStartOfMonthsDistance(1).toJdn() - 1
+        val dataBuilder = createComplicationData(
+            persianDate.dayOfMonth.toFloat(),
+            PersianDate(endOfMonth).dayOfMonth.toFloat(),
+            title,
+            body,
+        ).setTapAction(
             PendingIntent.getActivity(
                 this,
                 0,
@@ -59,11 +69,15 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
     }
 
     private fun createComplicationData(
-        title: String, body: String
-    ): ShortTextComplicationData.Builder {
-        return ShortTextComplicationData.Builder(
-            text = PlainComplicationText.Builder(body).build(),
-            contentDescription = PlainComplicationText.Builder(body).build()
-        ).setTitle(PlainComplicationText.Builder(title).build())
+        value: Float,
+        max: Float,
+        title: String,
+        body: String,
+    ): RangedValueComplicationData.Builder {
+        return RangedValueComplicationData.Builder(
+            value, 1f, max, PlainComplicationText.Builder(body).build(),
+        )
+            .setText(PlainComplicationText.Builder(body).build())
+            .setTitle(PlainComplicationText.Builder(title).build())
     }
 }
