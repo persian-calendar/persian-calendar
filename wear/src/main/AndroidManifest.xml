@@ -45,7 +45,20 @@
 
             <meta-data
                 android:name="androidx.wear.tiles.PREVIEW"
-                android:resource="@drawable/tile_preview" />
+                android:resource="@drawable/main_tile_preview" />
+        </service>
+        <service
+            android:name=".MonthTileService"
+            android:exported="true"
+            android:label="@string/month"
+            android:permission="com.google.android.wearable.permission.BIND_TILE_PROVIDER">
+            <intent-filter>
+                <action android:name="androidx.wear.tiles.action.BIND_TILE_PROVIDER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="androidx.wear.tiles.PREVIEW"
+                android:resource="@drawable/month_tile_preview" />
         </service>
 
         <receiver

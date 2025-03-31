@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Persian Calendar</string>
+    <string name="month">Month</string>
 </resources>

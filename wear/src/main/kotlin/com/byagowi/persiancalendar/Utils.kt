@@ -10,4 +10,8 @@ fun Context.requestComplicationUpdate() {
     ComplicationDataSourceUpdateRequester.create(this, component).requestUpdateAll()
 }
 
-fun Context.requestTileUpdate() = getUpdater(this).requestUpdate(MainTileService::class.java)
+fun Context.requestTileUpdate() {
+    val updater = getUpdater(this)
+    updater.requestUpdate(MainTileService::class.java)
+    updater.requestUpdate(MonthTileService::class.java)
+}
