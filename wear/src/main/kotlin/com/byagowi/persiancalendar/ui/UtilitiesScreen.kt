@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.FilledTonalButton
 import androidx.wear.compose.material3.Icon
 import androidx.wear.compose.material3.ListHeader
@@ -25,8 +26,9 @@ fun UtilitiesScreen(
     navigateToCalendar: () -> Unit,
     navigateToConverter: () -> Unit,
 ) {
-    ScreenScaffold {
-        ScalingLazyColumn {
+    val scrollState = rememberScalingLazyListState()
+    ScreenScaffold(scrollState = scrollState) {
+        ScalingLazyColumn(state = scrollState) {
             item { ListHeader { Text("ابزارها") } }
             items(
                 listOf(

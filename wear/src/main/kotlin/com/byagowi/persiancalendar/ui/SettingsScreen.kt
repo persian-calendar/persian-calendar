@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.Preferences
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.ListSubHeader
 import androidx.wear.compose.material3.ScreenScaffold
@@ -40,7 +41,8 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SettingsScreen(preferences: Preferences?) {
-    ScreenScaffold {
+    val scrollState = rememberScalingLazyListState()
+    ScreenScaffold(scrollState = scrollState) {
         val context = LocalContext.current
         val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
         val coroutineScope = rememberCoroutineScope()
@@ -84,7 +86,7 @@ fun SettingsScreen(preferences: Preferences?) {
             )
         }
 
-        ScalingLazyColumn {
+        ScalingLazyColumn(state = scrollState) {
             item {
                 ListSubHeader {
                     Text("نمایش رویدادها", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)

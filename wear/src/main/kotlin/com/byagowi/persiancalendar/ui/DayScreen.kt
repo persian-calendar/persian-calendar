@@ -14,6 +14,7 @@ import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.Text
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
@@ -24,33 +25,36 @@ import com.byagowi.persiancalendar.getEventsOfDay
 fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
     val persianDate = day.toPersianDate()
     val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
-    ScalingLazyColumn(
-        state = rememberScalingLazyListState(initialCenterItemIndex = 0),
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        item {
-            ListHeader {
-                Box(contentAlignment = Alignment.TopCenter) {
-                    Text(
-                        localeUtils.format(persianDate.dayOfMonth),
-                        style = MaterialTheme.typography.displayLarge,
-                    )
-                    Text(
-                        localeUtils.persianMonth(persianDate),
-                        modifier = Modifier.padding(top = 44.dp),
-                        textAlign = TextAlign.Center
-                    )
+    val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
+    ScreenScaffold(scrollState = scrollState) {
+        ScalingLazyColumn(
+            state = scrollState,
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                ListHeader {
+                    Box(contentAlignment = Alignment.TopCenter) {
+                        Text(
+                            localeUtils.format(persianDate.dayOfMonth),
+                            style = MaterialTheme.typography.displayLarge,
+                        )
+                        Text(
+                            localeUtils.persianMonth(persianDate),
+                            modifier = Modifier.padding(top = 44.dp),
+                            textAlign = TextAlign.Center
+                        )
+                    }
                 }
             }
+            items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EventView(it) }
         }
-        items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EventView(it) }
-    }
-    Box(Modifier.fillMaxSize()) {
-        OtherCalendars(
-            localeUtils = localeUtils,
-            day = day,
-            onTop = true,
-        )
+        Box(Modifier.fillMaxSize()) {
+            OtherCalendars(
+                localeUtils = localeUtils,
+                day = day,
+                onTop = true,
+            )
+        }
     }
 }
