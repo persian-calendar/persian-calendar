@@ -27,6 +27,7 @@ import androidx.glance.wear.tiles.GlanceTileService
 import androidx.wear.tiles.EventBuilders
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.PersianDate
+import kotlin.math.min
 
 class MonthTileService : GlanceTileService() {
 
@@ -48,6 +49,7 @@ class MonthTileService : GlanceTileService() {
             // LocalConfiguration doesn't work here
             val configuration = resources.configuration
             val screenHeightDp = configuration.screenHeightDp
+            val screenMinDp = min(configuration.screenHeightDp, configuration.screenWidthDp)
             val localeUtils = LocaleUtils()
             val today = Jdn.today()
             val persianDate = today.toPersianDate()
@@ -82,20 +84,23 @@ class MonthTileService : GlanceTileService() {
                                 if (jdn == today) Image(
                                     provider = ImageProvider(R.drawable.month_today_indicator),
                                     contentDescription = "امروز",
-                                    modifier = GlanceModifier.size(18.dp),
+                                    modifier = GlanceModifier.size((screenMinDp / 12.5).dp),
                                 )
                                 Text(
                                     text,
-                                    style = if (isHoliday || y == 0) TextStyle(
+                                    style = TextStyle(
                                         textAlign = TextAlign.Center,
-                                        color = ColorProvider(
+                                        color = if (isHoliday || y == 0) ColorProvider(
                                             if (y == 0) R.color.month_tile_weekdays
                                             else R.color.month_tile_holidays
-                                        ),
-                                    ) else null,
+                                        ) else null,
+                                        fontSize = (screenMinDp / (if (y == 0) 13 else 12)).sp,
+                                    ),
                                     modifier = GlanceModifier.size(
-                                        width = 24.dp,
-                                        height = if (y == 0) 22.dp else 18.dp,
+                                        width = (screenMinDp / 9.5).dp,
+                                        height =
+                                            if (y == 0) (screenMinDp / 10.3).dp
+                                            else (screenMinDp / 12.5).dp,
                                     )
                                 )
                             }
