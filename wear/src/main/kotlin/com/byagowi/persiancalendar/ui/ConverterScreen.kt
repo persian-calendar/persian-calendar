@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -75,39 +74,37 @@ fun ConverterScreen(todayJdn: Jdn) {
         )
         PickerGroup(selectedPickerState = pickerStates[selectedIndex]) {
             pickerStates.forEachIndexed { i, pickerState ->
-                key(if (i == 0) 0 else calendarIndex) {
-                    PickerGroupItem(
-                        pickerState = pickerState,
-                        selected = selectedIndex == i,
-                        onSelected = { selectedIndex = i },
-                    ) { optionIndex, pickerSelected ->
-                        Text(
-                            when (i) {
-                                0 -> when (optionIndex) {
-                                    0 -> "شمسی"
-                                    1 -> "میلادی"
-                                    else -> "قمری"
-                                }
+                PickerGroupItem(
+                    pickerState = pickerState,
+                    selected = selectedIndex == i,
+                    onSelected = { selectedIndex = i },
+                ) { optionIndex, pickerSelected ->
+                    Text(
+                        when (i) {
+                            0 -> when (optionIndex) {
+                                0 -> "شمسی"
+                                1 -> "میلادی"
+                                else -> "قمری"
+                            }
 
-                                1 -> localeUtils.format(optionIndex + 1)
+                            1 -> localeUtils.format(optionIndex + 1)
 
-                                2 -> when (calendarIndex) {
-                                    0 -> localeUtils.persianMonths
-                                    1 -> localeUtils.gregorianMonths
-                                    else -> localeUtils.islamicMonths
-                                }[optionIndex]
+                            2 -> when (calendarIndex) {
+                                0 -> localeUtils.persianMonths
+                                1 -> localeUtils.gregorianMonths
+                                else -> localeUtils.islamicMonths
+                            }[optionIndex]
 
-                                else -> localeUtils.format(
-                                    optionIndex + today[calendarIndex].year - yearsLimit / 2
-                                )
-                            },
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier.defaultMinSize(minWidth = 40.dp),
-                            fontSize = MaterialTheme.typography.displayMedium.fontSize,
-                            color = if (pickerSelected) DatePickerDefaults.datePickerColors().activePickerContentColor
-                            else DatePickerDefaults.datePickerColors().inactivePickerContentColor,
-                        )
-                    }
+                            else -> localeUtils.format(
+                                optionIndex + today[calendarIndex].year - yearsLimit / 2
+                            )
+                        },
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.defaultMinSize(minWidth = 40.dp),
+                        fontSize = MaterialTheme.typography.displayMedium.fontSize,
+                        color = if (pickerSelected) DatePickerDefaults.datePickerColors().activePickerContentColor
+                        else DatePickerDefaults.datePickerColors().inactivePickerContentColor,
+                    )
                 }
             }
         }
