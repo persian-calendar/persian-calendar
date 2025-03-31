@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.material.scrollAway
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.ScreenScaffold
@@ -25,6 +26,7 @@ import com.byagowi.persiancalendar.getEventsOfDay
 fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
     val persianDate = day.toPersianDate()
     val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
+    val events = getEventsOfDay(enabledEvents, day.toCivilDate())
     val scrollState = rememberScalingLazyListState(initialCenterItemIndex = 0)
     ScreenScaffold(scrollState = scrollState) {
         ScalingLazyColumn(
@@ -47,12 +49,17 @@ fun DayScreen(day: Jdn, localeUtils: LocaleUtils, preferences: Preferences?) {
                     }
                 }
             }
-            items(getEventsOfDay(enabledEvents, day.toCivilDate())) { EventView(it) }
+            items(events) { EventView(it) }
         }
-        Box(Modifier.fillMaxSize()) {
+        Box(
+            Modifier
+                .scrollAway(scrollState)
+                .fillMaxSize(),
+        ) {
             OtherCalendars(
                 localeUtils = localeUtils,
                 day = day,
+                withWeekDayName = events.size < 2,
                 onTop = true,
             )
         }

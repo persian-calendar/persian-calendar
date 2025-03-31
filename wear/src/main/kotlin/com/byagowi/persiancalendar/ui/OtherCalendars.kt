@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
@@ -59,7 +60,11 @@ fun BoxScope.OtherCalendars(
     val isRound = LocalConfiguration.current.isScreenRound
     val nonCurvedStyle = MaterialTheme.typography.titleSmall
     if (isRound || onTop) {
-        val curvedStyle = MaterialTheme.typography.arcSmall
+        val curvedStyle = MaterialTheme.typography.arcSmall.let {
+            if (LocalConfiguration.current.fontScale > 1f) it.copy(
+                fontSize = with(LocalDensity.current) { 14.dp.toPx().toSp() }
+            ) else it
+        }
         if (withWeekDayName) {
             if (isRound) {
                 CurvedLayout(

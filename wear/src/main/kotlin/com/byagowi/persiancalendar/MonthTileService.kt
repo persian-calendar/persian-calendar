@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar
 
+import android.os.Build
 import android.util.Log
+import android.util.TypedValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,7 +41,17 @@ class MonthTileService : GlanceTileService() {
 
     override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {
         super.onTileEnterEvent(requestParams)
-        requestTileUpdate()
+        getUpdater(this).requestUpdate(MonthTileService::class.java)
+    }
+
+    private fun dpToSp(dp: Float): Float {
+        val displayMetrics = resources.displayMetrics
+        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            TypedValue.convertPixelsToDimension(TypedValue.COMPLEX_UNIT_SP, px, displayMetrics)
+        } else @Suppress("DEPRECATION") {
+            px / displayMetrics.scaledDensity
+        }
     }
 
     @Composable
@@ -49,7 +61,10 @@ class MonthTileService : GlanceTileService() {
             // LocalConfiguration doesn't work here
             val configuration = resources.configuration
             val screenHeightDp = configuration.screenHeightDp
-            val screenMinDp = min(configuration.screenHeightDp, configuration.screenWidthDp)
+            val screenMinDp = min(
+                configuration.screenHeightDp,
+                configuration.screenWidthDp,
+            )
             val localeUtils = LocaleUtils()
             val today = Jdn.today()
             val persianDate = today.toPersianDate()
@@ -91,17 +106,21 @@ class MonthTileService : GlanceTileService() {
                                     style = TextStyle(
                                         textAlign = TextAlign.Center,
                                         color = if (isHoliday || y == 0) ColorProvider(
-                                            if (y == 0) R.color.month_tile_weekdays
-                                            else R.color.month_tile_holidays
+                                            resId = when {
+                                                y == 0 -> R.color.month_tile_weekdays
+                                                jdn == today -> R.color.tile_on_button_color
+                                                else -> R.color.month_tile_holidays
+                                            }
                                         ) else null,
-                                        fontSize = (screenMinDp / (if (y == 0) 13 else 12)).sp,
+                                        fontSize = dpToSp(
+                                            screenMinDp / (if (y == 0) 13f else 12f)
+                                        ).sp,
                                     ),
                                     modifier = GlanceModifier.size(
                                         width = (screenMinDp / 9.5).dp,
-                                        height =
-                                            if (y == 0) (screenMinDp / 10.3).dp
-                                            else (screenMinDp / 12.5).dp,
-                                    )
+                                        height = if (y == 0) (screenMinDp / 10.3).dp
+                                        else (screenMinDp / 12.5).dp,
+                                    ),
                                 )
                             }
                         }

@@ -36,7 +36,7 @@ class MainTileService : GlanceTileService() {
 
     override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {
         super.onTileEnterEvent(requestParams)
-        requestTileUpdate()
+        getUpdater(this).requestUpdate(MainTileService::class.java)
     }
 
     @Composable
