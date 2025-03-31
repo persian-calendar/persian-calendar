@@ -67,17 +67,19 @@ fun ConverterScreen(todayJdn: Jdn) {
     }
 
     ScreenScaffold {
-        PickerGroup {
-            listOf(
-                calendarPickerState,
-                dayPickerState,
-                monthPickerState,
-                yearPickerState,
-            ).forEachIndexed { i, pickerState ->
+        val pickerStates = listOf(
+            calendarPickerState,
+            dayPickerState,
+            monthPickerState,
+            yearPickerState,
+        )
+        PickerGroup(selectedPickerState = pickerStates[selectedIndex]) {
+            pickerStates.forEachIndexed { i, pickerState ->
                 key(if (i == 0) 0 else calendarIndex) {
                     PickerGroupItem(
-                        pickerState,
-                        selected = selectedIndex == i, { selectedIndex = i },
+                        pickerState = pickerState,
+                        selected = selectedIndex == i,
+                        onSelected = { selectedIndex = i },
                     ) { optionIndex, pickerSelected ->
                         Text(
                             when (i) {
@@ -96,8 +98,7 @@ fun ConverterScreen(todayJdn: Jdn) {
                                 }[optionIndex]
 
                                 else -> localeUtils.format(
-                                    optionIndex + today[calendarIndex].year
-                                            - yearsLimit / 2
+                                    optionIndex + today[calendarIndex].year - yearsLimit / 2
                                 )
                             },
                             textAlign = TextAlign.Center,
