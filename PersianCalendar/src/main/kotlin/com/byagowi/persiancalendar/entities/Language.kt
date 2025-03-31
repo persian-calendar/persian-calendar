@@ -34,6 +34,7 @@ enum class Language(val code: String, val nativeName: String) {
     AR("ar", "العربية"),
     AZB("azb", "تۆرکجه"),
     CKB("ckb", "کوردی"),
+    DE("de", "Deutsch"),
     EN_IR("en", "English (Iran)"),
     EN_US("en-US", "English"),
     ES("es", "Español"),
@@ -107,13 +108,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, EN_IR, JA, ZH_CN, FR, ES, PT, IT, AR, TR, TG, RU, CKB -> true
+            EN_US, EN_IR, JA, ZH_CN, FR, ES, DE, PT, IT, AR, TR, TG, RU, CKB -> true
             else -> false
         }
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, PT, IT, TR, KMR, TA, TG, NE, RU -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, TR, KMR, TA, TG, NE, RU -> true
             else -> false
         }
 
@@ -145,14 +146,14 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, TR, KMR, EN_IR, TG, NE, TA -> false
+            EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, TR, KMR, EN_IR, TG, NE, TA -> false
             else -> true
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalDigits: Boolean
         get() = when (this) {
-            UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, TR, KMR, TG -> false
+            UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, TR, KMR, TG -> false
             else -> true
         }
 
@@ -191,7 +192,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, PT, IT, RU, UR, TR, KMR, TG, TA -> true
+            EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, UR, TR, KMR, TG, TA -> true
             else -> false
         }
 
@@ -379,7 +380,7 @@ enum class Language(val code: String, val nativeName: String) {
     fun allNumericsDateFormat(year: Int, month: Int, dayOfMonth: Int, digits: CharArray): String {
         val sep = when (this) {
             PS, NE -> '-'
-            KMR, RU, TR -> '.'
+            KMR, RU, TR, DE -> '.'
             else -> '/'
         }
         val needsZeroPad = when (this) {
@@ -393,7 +394,7 @@ enum class Language(val code: String, val nativeName: String) {
             EN_US -> "%2\$s$sep%3\$s$sep%1\$s"
             // Day major, most likely everything else goes here but check via JS'
             // new Date().toLocaleDateString('XX')
-            AR, CKB, ES, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> "%3\$s$sep%2\$s$sep%1\$s"
+            AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> "%3\$s$sep%2\$s$sep%1\$s"
         }
         return format.format(
             formatNumber(year, digits),
