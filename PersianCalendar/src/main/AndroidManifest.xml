@@ -373,6 +373,22 @@
             android:name=".service.ScheduleWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <meta-data
+            android:name="androidx.car.app.minCarApiLevel"
+            android:value="1" />
+
+            <meta-data
+                android:name="com.google.android.gms.car.application"
+                android:resource="@xml/automotive_app_desc" />
+
+            <service
+                android:name=".service.PersianCalendarCarService"
+                android:exported="true">
+                <intent-filter>
+                    <action android:name="androidx.car.app.CarAppService" />
+                </intent-filter>
+            </service>
+
     </application>
 
 </manifest>
