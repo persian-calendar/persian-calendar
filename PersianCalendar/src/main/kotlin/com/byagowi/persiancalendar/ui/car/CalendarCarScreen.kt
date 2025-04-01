@@ -3,10 +3,14 @@ package com.byagowi.persiancalendar.ui.car
 import android.content.Intent
 import androidx.car.app.CarContext
 import androidx.car.app.Screen
+import androidx.car.app.model.Action
+import androidx.car.app.model.ActionStrip
+import androidx.car.app.model.CarIcon
 import androidx.car.app.model.ItemList
 import androidx.car.app.model.ListTemplate
 import androidx.car.app.model.Row
 import androidx.car.app.model.Template
+import androidx.core.graphics.drawable.IconCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -14,9 +18,11 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.jdnActionKey
 import com.byagowi.persiancalendar.utils.launchAppPendingIntent
 import com.byagowi.persiancalendar.utils.logException
@@ -60,10 +66,22 @@ class CalendarCarScreen(carContext: CarContext) : Screen(carContext) {
                     .build()
             )
         }
+        val icon = IconCompat.createWithResource(
+            carContext,
+            getDayIconResource((today on mainCalendar).dayOfMonth)
+        )
         return ListTemplate.Builder()
+            .setActionStrip(
+                ActionStrip.Builder()
+                    .addAction(
+                        Action.Builder()
+                            .setIcon(CarIcon.Builder(icon).build())
+                            .setOnClickListener { pendingIntent?.send() }
+                            .build()
+                    )
+                    .build()
+            )
             .setTitle(enabledCalendars.joinToString(spacedComma) { formatDate(today on it) })
             .setSingleList(builder.build()).build()
     }
 }
-
-
