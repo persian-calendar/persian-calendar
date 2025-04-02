@@ -540,7 +540,7 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val gregorianCalendarMonthsInDari = listOf12Items(
             "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون",
-            "جولای", "آگست", "سپتامبر", "اکتوبر", "نوامبر", "دسامبر"
+            "جولای", "اگست", "سپتمبر", "اکتوبر", "نومبر", "دسمبر",
         )
         private val gregorianCalendarMonthsInPersianEnglishPronunciation = listOf12Items(
             "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون",
