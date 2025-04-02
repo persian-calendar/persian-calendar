@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.ancientDayName
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
@@ -121,5 +122,13 @@ class CalendarTests {
         val (passedDaysInSeason, totalSeasonDays) = jdn.getPositionInSeason()
         assertEquals(passedDays, passedDaysInSeason)
         assertEquals(daysCount, totalSeasonDays)
+    }
+
+    @Test
+    fun `ancient persian date names`() {
+        // FIXME: IT'S NOT A REAL TEST!
+        (Jdn(PersianDate(1403, 1, 1))..<Jdn(PersianDate(1404, 1, 1))).forEach {
+            println(it.toPersianDate().let { "${it.year}/${it.month}/${it.dayOfMonth}" + " " + it.ancientDayName })
+        }
     }
 }
