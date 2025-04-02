@@ -125,6 +125,7 @@ abstract class CodeGenerators : DefaultTask() {
         @SerialName("Source") val source: Map<String, String>,
         @SerialName("#meta") val meta: List<String>,
         @SerialName("Persian Calendar") val persianCalendar: List<Event>,
+        @SerialName("Ancient Persian Calendar") val ancientPersianCalendar: List<Event>,
         @SerialName("Hijri Calendar") val islamicCalendar: List<Event>,
         @SerialName("Gregorian Calendar") val gregorianCalendar: List<Event>,
         @SerialName("Nepali Calendar") val nepaliCalendar: List<Event>,
@@ -194,6 +195,7 @@ abstract class CodeGenerators : DefaultTask() {
         )
         listOf(
             events.persianCalendar to "persianEvents",
+            events.ancientPersianCalendar to "ancientPersianEvents",
             events.islamicCalendar to "islamicEvents",
             events.gregorianCalendar to "gregorianEvents",
             events.nepaliCalendar to "nepaliEvents"

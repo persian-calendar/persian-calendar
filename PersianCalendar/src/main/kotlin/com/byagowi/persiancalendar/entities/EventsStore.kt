@@ -38,6 +38,7 @@ private constructor(private val store: Map<Int, List<T>>) {
 }
 
 typealias PersianCalendarEventsStore = EventsStore<CalendarEvent.PersianCalendarEvent>
+typealias AncientPersianCalendarEventsStore = EventsStore<CalendarEvent.AncientPersianCalendarEvent>
 typealias IslamicCalendarEventsStore = EventsStore<CalendarEvent.IslamicCalendarEvent>
 typealias GregorianCalendarEventsStore = EventsStore<CalendarEvent.GregorianCalendarEvent>
 typealias NepaliCalendarEventsStore = EventsStore<CalendarEvent.NepaliCalendarEvent>

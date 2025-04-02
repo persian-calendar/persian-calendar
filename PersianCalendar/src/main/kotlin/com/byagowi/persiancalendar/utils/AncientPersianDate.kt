@@ -6,7 +6,8 @@
 // The information here is provided by Roozbeh Pournader
 package com.byagowi.persiancalendar.utils
 
-import io.github.persiancalendar.calendar.PersianDate
+import androidx.annotation.VisibleForTesting
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 private val ancientPersianNames = listOf(
     "اورمزد", "وهمن", "اردیبهشت", "شهریور", "سپندارمزد", "خورداد", "امرداد", "دی‌بآذر",
@@ -19,10 +20,24 @@ private const val leapYearDayName = "اورداد"
 private val lastDayOfYearNames =
     listOf("اهنود", "اشتود", "سپنتمد", "وهوخشتر", "وهوشتواش", leapYearDayName)
 
-val PersianDate.ancientDayName: String
-    get() {
-        val dayOfYear = toJdn() - PersianDate(year, 1, 1).toJdn()
-        val dayOfMonth = (dayOfYear % 30).toInt()
-        val month = (dayOfYear / 30).toInt()
-        return if (month == 12) lastDayOfYearNames[dayOfMonth] else ancientPersianNames[dayOfMonth]
-    }
+private val persianMonthNames = listOf(
+    "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
+    "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
+)
+
+// dayOfYear is a zero indexed number
+@VisibleForTesting
+fun ancientDayName(dayOfYear: Int): String {
+    val dayOfMonth = (dayOfYear - 1) % 30
+    val month = (dayOfYear - 1) / 30
+    return ((if (month == 12) lastDayOfYearNames else ancientPersianNames)
+        .getOrNull(dayOfMonth).debugAssertNotNull ?: "") + " در " +
+            (persianMonthNames.getOrNull(if (month == 12) 11 else month).debugAssertNotNull ?: "") +
+            " ماه"
+}
+
+private val daysToMonth = listOf(0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336, 366)
+fun ancientDayNameFromModernDayMonth(day: Int, month: Int): String {
+    val dayOfYear = (daysToMonth.getOrNull(month - 1).debugAssertNotNull ?: 0) + day
+    return ancientDayName(dayOfYear)
+}
