@@ -279,7 +279,7 @@
     <string name="afghanistan_others">Andere Ereignisse in Afghanistan</string>
     <string name="saturday">Samstag</string>
     <string name="sunday">Sonntag</string>
-    <string name="friday_short">F</string>
+    <string name="friday_short">Fr</string>
     <string name="monday_short">Mo</string>
     <string name="theme_dark">Dunkel</string>
     <string name="theme_modern">Modern</string>
@@ -310,4 +310,107 @@
     <string name="sunday_short">So</string>
     <string name="thursday">Donnerstag</string>
     <string name="friday">Freitag</string>
+    <string name="neptune">Neptun</string>
+    <string name="true_north">Echter Norden</string>
+    <string name="save">Speichern</string>
+    <plurals name="shift_work_record_title">
+        <item quantity="one">%1$s %2$s Tag</item>
+        <item quantity="other">%1$s %2$s Tage</item>
+    </plurals>
+    <string name="solar_eclipse">Sonnenfinsternis</string>
+    <string name="lunar_eclipse">Mondfinsternis</string>
+    <string name="venus">Venus</string>
+    <string name="earth">Erde</string>
+    <string name="uranus">Uranus</string>
+    <string name="pluto">Pluto</string>
+    <string name="sun">Sonne</string>
+    <plurals name="work_days">
+        <item quantity="one">%1$s Arbeitstag</item>
+        <item quantity="other">%1$s Arbeitstage</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s Sekunde</item>
+        <item quantity="other">%1$s Sekunden</item>
+    </plurals>
+    <plurals name="months">
+        <item quantity="one">%1$s Monat</item>
+        <item quantity="other">%1$s Monate</item>
+    </plurals>
+    <string name="daily_schedule">Tagesablauf</string>
+    <plurals name="minutes">
+        <item quantity="one">%1$s Minute</item>
+        <item quantity="other">%1$s Minuten</item>
+    </plurals>
+    <string name="gps_location_help">Andere Optionen sind nicht erforderlich, wenn dies möglich ist</string>
+    <string name="month_pray_times">Gebetszeiten des Monats</string>
+    <string name="high_latitudes_method">Methode für hohe Breitengrade</string>
+    <string name="nepali_calendar_short">Nepalesisch</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Sonne und Mondpfad in 24 Stunden anzeigen</string>
+    <string name="show_secondary_calendar">Zweitkalender anzeigen</string>
+    <string name="nepal">Nepal</string>
+    <string name="calculator">Rechner</string>
+    <string name="chinese_calendar">Chinesischer Kalender</string>
+    <string name="tropical">Tropisch</string>
+    <string name="lock">Sperren</string>
+    <string name="full_screen">Vollbild</string>
+    <string name="screensaver_settings">Bildschirmschoner Einstellungen</string>
+    <string name="exit_full_screen">Vollbild beenden</string>
+    <string name="color_gradient">Farbverlauf</string>
+    <string name="time_zones">Zeitzonen</string>
+    <string name="qr_code">QR-Code</string>
+    <string name="more_options">Weitere Optionen</string>
+    <string name="yes">Ja</string>
+    <string name="holidays_in_red">Feiertage in roter Farbe</string>
+    <plurals name="days">
+        <item quantity="one">%1$s Tag</item>
+        <item quantity="other">%1$s Tage</item>
+    </plurals>
+    <plurals name="weeks">
+        <item quantity="one">%1$s Woche</item>
+        <item quantity="other">%1$s Wochen</item>
+    </plurals>
+    <plurals name="years">
+        <item quantity="one">%1$s Jahr</item>
+        <item quantity="other">%1$s Jahre</item>
+    </plurals>
+    <string name="sun_view">Ansicht der Sonne</string>
+    <string name="enable_new_interface">Neue Schnittstelle Aktivieren</string>
+    <string name="are_you_sure">Sind Sie sicher?</string>
+    <string name="high_latitudes_angle_based">Winkelbasiert</string>
+    <string name="high_latitudes_one_seventh">Ein Siebtel</string>
+    <string name="none">Keine</string>
+    <string name="high_latitudes_night_middle">Nachtmitte</string>
+    <string name="widget_prefer_device_colors">Gerätefärbung in Widgets verfolgen</string>
+    <string name="nepali_calendar">Nepalesischer Kalender</string>
+    <string name="season">Jahreszeit</string>
+    <string name="summer">Sommer</string>
+    <string name="autumn">Herbst</string>
+    <string name="winter">Winter</string>
+    <string name="spring">Frühling</string>
+    <string name="mercury">Merkur</string>
+    <string name="mars">Mars</string>
+    <string name="jupiter">Jupiter</string>
+    <string name="saturn">Saturn</string>
+    <string name="moon">Mond</string>
+    <string name="chinese">Chinesisch</string>
+    <string name="year_view">Jahresansicht</string>
+    <string name="exempt_app_battery_optimization">Möchten Sie die App zur Ausnahme für die Batterieoptimierung hinzufügen, damit die Benachrichtigung korrekt funktioniert?</string>
+    <string name="vibration">Vibration</string>
+    <string name="print">Drucken</string>
+    <string name="week_view">Wochenansicht</string>
+    <string name="day_view">Tagesansicht</string>
+    <string name="asr_hanafi_juristic">Hanafi Asr Juristische Methode</string>
+    <string name="enable_notification">Möchten Sie die Datumsbenachrichtigung aktivieren?</string>
+    <string name="add_quick_settings_tile">Kachel für Schnelleinstellungen hinzufügen</string>
+    <string name="navigate_up">Nach oben navigieren</string>
+    <string name="open_drawer">Navigationsfach öffnen</string>
+    <string name="live_wallpaper_settings">Live-Hintergrundbild Einstellungen</string>
+    <string name="sample_inputs">Beispieleingaben</string>
+    <string name="widget_background_transparency">Transparenz des Widget-Hintergrundes</string>
+    <string name="add_widget">Widget hinzufügen</string>
+    <string name="schedule">Zeitplan</string>
+    <plurals name="hours">
+        <item quantity="one">%1$s Stunde</item>
+        <item quantity="other">%1$s Stunden</item>
+    </plurals>
 </resources>
