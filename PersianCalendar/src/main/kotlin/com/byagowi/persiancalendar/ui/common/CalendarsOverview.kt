@@ -200,8 +200,9 @@ fun CalendarsOverview(
             }
         }
 
+        val language by language.collectAsState()
         if (isAncientIranEnabled && selectedCalendar == Calendar.SHAMSI &&
-            language.value.isPersian
+            language.isPersian
         ) this.AnimatedVisibility(isExpanded) {
             Box(
                 modifier = Modifier
