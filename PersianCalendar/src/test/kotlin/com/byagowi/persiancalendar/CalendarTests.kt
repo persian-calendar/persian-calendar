@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.ancientDayName
-import com.byagowi.persiancalendar.utils.ancientDayNameFromModernDayMonth
+import com.byagowi.persiancalendar.utils.ancientName
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
@@ -128,13 +128,15 @@ class CalendarTests {
     @Test
     fun `ancient persian date names`() {
         (Jdn(PersianDate(1403, 1, 1))..<Jdn(PersianDate(1404, 1, 1))).forEach { jdn ->
-            println(jdn.toPersianDate().let {
-                val name = ancientDayName(
-                    jdn - Jdn(PersianDate(it.year, 1, 1)) + 1
-                )
-                assertEquals(name, ancientDayNameFromModernDayMonth(it.dayOfMonth, it.month))
-                "${it.year}/${it.month}/${it.dayOfMonth}" + " " + name
-            })
+            val date = jdn.toPersianDate()
+            val name = ancientDayName(
+                jdn - Jdn(PersianDate(date.year, 1, 1)) + 1
+            )
+            assertEquals(
+                expected = name,
+                actual = PersianDate(date.year, date.month, date.dayOfMonth).ancientName,
+                message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name
+            )
         }
     }
 }

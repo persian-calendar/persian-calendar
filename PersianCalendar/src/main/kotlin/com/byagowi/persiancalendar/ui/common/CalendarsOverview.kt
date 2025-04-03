@@ -210,10 +210,7 @@ fun CalendarsOverview(
             ) {
                 SelectionContainer {
                     Text(
-                        text = when (date) {
-                            is PersianDate -> date
-                            else -> PersianDate(date)
-                        }.ancientName,
+                        text = PersianDate(date).ancientName,
                         modifier = Modifier.animateContentSize(),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center

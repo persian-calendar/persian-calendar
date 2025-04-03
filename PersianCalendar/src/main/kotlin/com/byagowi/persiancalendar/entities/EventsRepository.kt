@@ -13,7 +13,6 @@ import com.byagowi.persiancalendar.global.islamicMonths
 import com.byagowi.persiancalendar.global.nepaliMonths
 import com.byagowi.persiancalendar.global.persianMonths
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.utils.ancientDayNameFromModernDayMonth
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.variants.debugAssertNotNull

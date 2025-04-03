@@ -7,6 +7,7 @@
 package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.PersianDate
 
@@ -37,10 +38,5 @@ fun ancientDayName(dayOfYear: Int): String {
             " ماه"
 }
 
-private val daysToMonth = listOf(0, 31, 62, 93, 124, 155, 186, 216, 246, 276, 306, 336, 366)
-fun ancientDayNameFromModernDayMonth(day: Int, month: Int): String {
-    val dayOfYear = (daysToMonth.getOrNull(month - 1).debugAssertNotNull ?: 0) + day
-    return ancientDayName(dayOfYear)
-}
-
-val PersianDate.ancientName get() = ancientDayNameFromModernDayMonth(dayOfMonth, month)
+val PersianDate.ancientName: String
+    get() = ancientDayName(Jdn(this) - Jdn(PersianDate(year, 1, 1)) + 1)
