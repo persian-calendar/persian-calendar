@@ -29,9 +29,7 @@ import kotlinx.coroutines.runBlocking
 class MainTileService : GlanceTileService() {
 
     override fun onDestroy() {
-        runCatching { super.onDestroy() }.onFailure {
-            Log.e("PC", "prevent a crash", it)
-        }
+        runCatching { super.onDestroy() }.onFailure { Log.e("", "", it) }
     }
 
     override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {

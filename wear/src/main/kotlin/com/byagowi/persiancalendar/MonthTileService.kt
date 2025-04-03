@@ -34,9 +34,7 @@ import kotlin.math.min
 class MonthTileService : GlanceTileService() {
 
     override fun onDestroy() {
-        runCatching { super.onDestroy() }.onFailure {
-            Log.e("PC", "prevent a crash", it)
-        }
+        runCatching { super.onDestroy() }.onFailure { Log.e("", "", it) }
     }
 
     override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {
