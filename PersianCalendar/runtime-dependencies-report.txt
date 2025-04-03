@@ -3,8 +3,8 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 1.9.22 (c)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 1.9.22 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.1.20 (c)
-+--- com.github.persian-calendar:calendar:d9278c13466a04148e75f74508b4b11d0097bfe6
-|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.1.20 (*)
++--- com.github.persian-calendar:calendar:771f83cdf081b1043f363678638d42f74d11f348
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.20 (*)
 +--- com.github.persian-calendar:praytimes:0e619dfd2683acc0c6f0b53568ed78336a17057a
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.22
 |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 -> 2.1.20 (*)
