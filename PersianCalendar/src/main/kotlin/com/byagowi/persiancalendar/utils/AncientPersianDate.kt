@@ -31,7 +31,7 @@ fun ancientDayName(dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     val month = (dayOfYear - 1) / 30
     return ((if (month == 12) lastDayOfYearNames else ancientPersianNames)
-        .getOrNull(dayOfMonth).debugAssertNotNull ?: "") + " در " +
+        .getOrNull(dayOfMonth).debugAssertNotNull ?: "") + " و " +
             (persianMonthNames.getOrNull(if (month == 12) 11 else month).debugAssertNotNull ?: "") +
             " ماه"
 }
