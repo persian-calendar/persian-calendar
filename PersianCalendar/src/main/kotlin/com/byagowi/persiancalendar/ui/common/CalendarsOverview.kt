@@ -107,7 +107,7 @@ fun CalendarsOverview(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
+            this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
                 AndroidView(
                     factory = ::MoonView,
                     update = { it.jdn = jdn.value.toFloat() },
@@ -138,7 +138,7 @@ fun CalendarsOverview(
         }
         val contextColor = LocalContentColor.current
 
-        AnimatedVisibility(
+        this.AnimatedVisibility(
             visible = equinox != null,
             modifier = Modifier.align(Alignment.CenterHorizontally),
         ) {
@@ -158,7 +158,7 @@ fun CalendarsOverview(
             }
         }
 
-        AnimatedVisibility(!isToday) {
+        this.AnimatedVisibility(!isToday) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -187,7 +187,7 @@ fun CalendarsOverview(
         }
 
         val showIsMoonInScorpio = isAstronomicalExtraFeaturesEnabled && isMoonInScorpio(jdn)
-        AnimatedVisibility(showIsMoonInScorpio) {
+        this.AnimatedVisibility(showIsMoonInScorpio) {
             SelectionContainer {
                 Text(
                     stringResource(R.string.moon_in_scorpio),
@@ -202,7 +202,7 @@ fun CalendarsOverview(
 
         if (isAncientIranEnabled && selectedCalendar == Calendar.SHAMSI &&
             language.value.isPersian
-        ) AnimatedVisibility(isExpanded) {
+        ) this.AnimatedVisibility(isExpanded) {
             Box(
                 modifier = Modifier
                     .padding(top = 4.dp)
@@ -220,7 +220,7 @@ fun CalendarsOverview(
             }
         }
 
-        AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+        this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -260,7 +260,7 @@ fun CalendarsOverview(
             label = "stroke width",
         )
 
-        AnimatedVisibility(isExpanded) {
+        this.AnimatedVisibility(isExpanded) {
             Row(
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxWidth(),
@@ -294,7 +294,7 @@ fun CalendarsOverview(
             }
         }
 
-        AnimatedVisibility(isExpanded) {
+        this.AnimatedVisibility(isExpanded) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -322,7 +322,7 @@ fun CalendarsOverview(
                 }
             }
         }
-        AnimatedVisibility(isExpanded) {
+        this.AnimatedVisibility(isExpanded) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

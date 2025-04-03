@@ -68,7 +68,7 @@ class WallpaperSettingsActivity : ComponentActivity() {
                             wallpaperAutomatic,
                             stringResource(R.string.theme_default)
                         )
-                        AnimatedVisibility(!wallpaperAutomatic) {
+                        this.AnimatedVisibility(!wallpaperAutomatic) {
                             val wallpaperDark by wallpaperDark.collectAsState()
                             SettingsSwitch(
                                 PREF_WALLPAPER_DARK,

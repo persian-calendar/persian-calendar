@@ -265,7 +265,7 @@ fun SharedTransitionScope.CompassScreen(
                             },
                         )
                         Column {
-                            AnimatedVisibility(
+                            this.AnimatedVisibility(
                                 visible = isSliderShown,
                                 enter = fadeIn() + expandVertically(),
                                 exit = fadeOut() + shrinkVertically(),

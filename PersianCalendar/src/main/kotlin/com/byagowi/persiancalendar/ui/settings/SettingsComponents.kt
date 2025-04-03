@@ -76,7 +76,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
                 color = MaterialTheme.colorScheme.primary,
             )
         }
-        AnimatedVisibility(visible = subtitle != null) {
+        this.AnimatedVisibility(visible = subtitle != null) {
             Text(
                 subtitle ?: "",
                 style = MaterialTheme.typography.bodyMedium,

@@ -103,7 +103,7 @@ fun SharedTransitionScope.EventsTab(
         val jdn by viewModel.selectedDay.collectAsState()
         val refreshToken by viewModel.refreshToken.collectAsState()
         val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
-        AnimatedVisibility(visible = shiftWorkTitle != null) {
+        this.AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
                 targetState = shiftWorkTitle ?: "",
                 label = "shift work title",
@@ -122,7 +122,7 @@ fun SharedTransitionScope.EventsTab(
             }
         }
         val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn)
-        AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
+        this.AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
                 targetState = shiftWorkInDaysDistance ?: "",
                 label = "shift work days diff",
@@ -144,7 +144,7 @@ fun SharedTransitionScope.EventsTab(
             val deviceEvents = remember(jdn, refreshToken) { context.readDayDeviceEvents(jdn) }
             val events = readEvents(jdn, viewModel, deviceEvents)
             Spacer(Modifier.height(16.dp))
-            AnimatedVisibility(events.isEmpty()) {
+            this.AnimatedVisibility(events.isEmpty()) {
                 Text(
                     stringResource(R.string.no_event),
                     Modifier.fillMaxWidth(),
@@ -279,7 +279,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                         LocalLayoutDirection provides LayoutDirection.Ltr
                     ) { Row { EquinoxCountDown(contentColor, event, backgroundColor) } }
                 }
-                AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent || event is CalendarEvent.EquinoxCalendarEvent) {
+                this.AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent || event is CalendarEvent.EquinoxCalendarEvent) {
                     Icon(
                         if (event is CalendarEvent.EquinoxCalendarEvent) Icons.Default.Yard
                         else Icons.AutoMirrored.Default.OpenInNew,

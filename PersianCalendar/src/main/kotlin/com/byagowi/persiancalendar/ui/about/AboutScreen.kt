@@ -349,7 +349,7 @@ private fun HelpItems() {
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                 }
-                AnimatedVisibility(visible = isExpanded) {
+                this.AnimatedVisibility(visible = isExpanded) {
                     SelectionContainer {
                         Text(body, Modifier.padding(horizontal = 16.dp))
                     }

@@ -270,7 +270,7 @@ fun SharedTransitionScope.CalendarScreen(
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
             Column(Modifier.fillMaxSize()) {
-                AnimatedVisibility(isYearView) {
+                this.AnimatedVisibility(isYearView) {
                     YearView(viewModel, maxWidth, maxHeight, bottomPaddingWithMinimum)
                 }
 
@@ -289,7 +289,7 @@ fun SharedTransitionScope.CalendarScreen(
                 )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
-                AnimatedVisibility(
+                this.AnimatedVisibility(
                     !isYearView,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top, clip = false),
                 ) {
@@ -826,7 +826,7 @@ private fun SharedTransitionScope.Toolbar(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                AnimatedVisibility(visible = subtitle.isNotEmpty()) {
+                this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(subtitle, label = "subtitle") { state ->
                         val fraction by animateFloatAsState(
                             targetValue = if (isYearView) 1f else 0f, label = "font size"
@@ -856,37 +856,37 @@ private fun SharedTransitionScope.Toolbar(
             }
         },
         actions = {
-            AnimatedVisibility(isYearView) {
+            this.AnimatedVisibility(isYearView) {
                 TodayActionButton(yearViewOffset != 0 && !yearViewIsInYearSelection) {
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
-            AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
+            this.AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowDown,
                     title = stringResource(R.string.next_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.NextMonth) }
             }
-            AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
+            this.AnimatedVisibility(isYearView && !yearViewIsInYearSelection) {
                 AppIconButton(
                     icon = Icons.Default.KeyboardArrowUp,
                     title = stringResource(R.string.previous_x, stringResource(R.string.year)),
                 ) { viewModel.commandYearView(YearViewCommand.PreviousMonth) }
             }
 
-            AnimatedVisibility(!isYearView) {
+            this.AnimatedVisibility(!isYearView) {
                 val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                 TodayActionButton(todayButtonVisibility) {
                     bringDate(viewModel, Jdn.today(), context, highlight = false)
                 }
             }
-            AnimatedVisibility(!isYearView) {
+            this.AnimatedVisibility(!isYearView) {
                 AppIconButton(
                     icon = Icons.Default.Search,
                     title = stringResource(R.string.search_in_events),
                 ) { viewModel.openSearch() }
             }
-            AnimatedVisibility(!isYearView) {
+            this.AnimatedVisibility(!isYearView) {
                 Menu(
                     animatedContentScope = animatedContentScope,
                     navigateToSchedule = navigateToSchedule,
@@ -1038,7 +1038,7 @@ private fun SharedTransitionScope.Menu(
         )
 
         (listOf(null) + enabledCalendars.drop(1)).forEach { calendar ->
-            AnimatedVisibility(showSecondaryCalendarSubMenu) {
+            this.AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
                     stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar
                 ) { _ ->

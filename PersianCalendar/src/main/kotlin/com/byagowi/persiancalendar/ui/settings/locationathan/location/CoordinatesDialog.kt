@@ -146,7 +146,7 @@ fun CoordinatesDialog(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
-        AnimatedVisibility(
+        this.AnimatedVisibility(
             !cityName.isNullOrBlank(),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

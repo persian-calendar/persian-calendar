@@ -109,7 +109,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
         stringResource(R.string.athan),
         if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)
     )
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
             PREF_PRAY_TIME_METHOD,
             CalculationMethod.entries.map { stringResource(it.titleStringId) },
@@ -119,7 +119,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             title = stringResource(R.string.pray_methods)
         )
     }
-    AnimatedVisibility(coordinates?.enableHighLatitudesConfiguration == true) {
+    this.AnimatedVisibility(coordinates?.enableHighLatitudesConfiguration == true) {
         SettingsSingleSelect(
             PREF_HIGH_LATITUDES_METHOD,
             HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
@@ -129,7 +129,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             title = stringResource(R.string.high_latitudes_method)
         )
     }
-    AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
+    this.AnimatedVisibility(isLocationSet && !calculationMethod.isJafari) {
         val asrMethod by asrMethod.collectAsState()
         SettingsSwitch(
             key = PREF_ASR_HANAFI_JURISTIC,
@@ -137,32 +137,32 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             title = stringResource(R.string.asr_hanafi_juristic)
         )
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.athan_gap),
             stringResource(R.string.athan_gap_summary),
         ) { onDismissRequest -> AthanGapDialog(onDismissRequest) }
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),
             defaultOpen = destination == PREF_ATHAN_ALARM,
         ) { onDismissRequest -> PrayerSelectDialog(onDismissRequest) }
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         val athanSoundName by athanSoundName.collectAsState()
         SettingsClickable(
             stringResource(R.string.custom_athan),
             athanSoundName?.takeIf { it.isNotBlank() } ?: stringResource(R.string.default_athan),
         ) { onDismissRequest -> AthanSelectDialog(onDismissRequest) }
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
             PrayerSelectPreviewDialog(onDismissRequest)
         }
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -185,7 +185,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             },
         )
     }
-    AnimatedVisibility(isLocationSet && !notificationAthan) {
+    this.AnimatedVisibility(isLocationSet && !notificationAthan) {
         SettingsSwitch(
             PREF_ASCENDING_ATHAN_VOLUME,
             ascendingAthan,
@@ -193,12 +193,12 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             stringResource(R.string.enable_ascending_athan_volume),
         )
     }
-    AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
+    this.AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
         SettingsClickable(
             stringResource(R.string.athan_volume), stringResource(R.string.athan_volume_summary)
         ) { onDismissRequest -> AthanVolumeDialog(onDismissRequest) }
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
             PREF_ATHAN_VIBRATION,
             athanVibration.collectAsState().value,
@@ -206,7 +206,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             language.tryTranslateAthanVibrationSummary()
         )
     }
-    AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet) {
         var midnightSummary by remember {
             mutableStateOf(getMidnightMethodPreferenceSummary(context))
         }

@@ -105,7 +105,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         title = stringResource(R.string.language),
         summary = language.nativeName,
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
-    AnimatedVisibility(language.isArabic) {
+    this.AnimatedVisibility(language.isArabic) {
         SettingsSwitchWithInnerState(
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
             DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
@@ -113,7 +113,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             "كانون الثاني، شباط، آذار، …"
         )
     }
-    AnimatedVisibility(language == Language.AZB) {
+    this.AnimatedVisibility(language == Language.AZB) {
         SettingsSwitchWithInnerState(
             PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
             DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
@@ -121,7 +121,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             "آغلارگۆلر، گۆلن، قیزاران، …"
         )
     }
-    AnimatedVisibility(language.isPersian) {
+    this.AnimatedVisibility(language.isPersian) {
         SettingsSwitchWithInnerState(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
             DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
@@ -130,7 +130,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         )
     }
     // TODO: To be integrated into the language selection dialog one day
-    AnimatedVisibility(language.canHaveLocalDigits) {
+    this.AnimatedVisibility(language.canHaveLocalDigits) {
         SettingsSwitchWithInnerState(
             PREF_LOCAL_DIGITS,
             true,
@@ -164,7 +164,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             extraWidget = {
                 var showEventsSettingsDialog by rememberSaveable { mutableStateOf(false) }
                 Row {
-                    AnimatedVisibility(
+                    this.AnimatedVisibility(
                         isShowDeviceCalendarEvents && resolveDeviceCalendars {}.isNotEmpty()
                     ) {
                         FilledIconButton(onClick = { showEventsSettingsDialog = true }) {
@@ -286,7 +286,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
         },
         neutralButton = {
             Row {
-                AnimatedVisibility(!showHolidaysToggles) {
+                this.AnimatedVisibility(!showHolidaysToggles) {
                     TextButton(onClick = { showHolidaysToggles = true }) { Text(holidayLabel) }
                 }
             }
@@ -304,7 +304,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                         .weight(1f),
                     style = MaterialTheme.typography.titleMedium,
                 )
-                AnimatedVisibility(i == 0 && showHolidaysToggles, Modifier.alignByBaseline()) {
+                this.AnimatedVisibility(i == 0 && showHolidaysToggles, Modifier.alignByBaseline()) {
                     val density = LocalDensity.current
                     Text(
                         holidayLabel,
@@ -343,7 +343,7 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                         )
                         Text(it.displayName)
                     }
-                    AnimatedVisibility(showHolidaysToggles && visibility) {
+                    this.AnimatedVisibility(showHolidaysToggles && visibility) {
                         Checkbox(
                             checked = isHoliday,
                             onCheckedChange = { value ->

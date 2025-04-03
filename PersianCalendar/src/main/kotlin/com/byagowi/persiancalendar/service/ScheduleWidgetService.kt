@@ -302,7 +302,7 @@ private class EventsViewFactory(
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.title
-                item.value is String -> item.value.toString()
+                item.value is String -> item.value
                 else -> ""
             }
             row.setTextViewText(R.id.event, title)

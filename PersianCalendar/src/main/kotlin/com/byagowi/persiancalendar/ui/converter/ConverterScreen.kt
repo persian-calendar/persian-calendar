@@ -175,7 +175,7 @@ fun SharedTransitionScope.ConverterScreen(
                             LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
                         // Timezones
-                        AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
+                        this.AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
                             val zones = remember {
                                 TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
                                     .sortedBy { it.rawOffset }
@@ -195,7 +195,7 @@ fun SharedTransitionScope.ConverterScreen(
                             }
                         }
 
-                        AnimatedVisibility(
+                        this.AnimatedVisibility(
                             screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
@@ -203,13 +203,13 @@ fun SharedTransitionScope.ConverterScreen(
                             }
                         }
 
-                        AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
+                        this.AnimatedVisibility(screenMode == ConverterScreenMode.CALCULATOR) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 Calculator(viewModel)
                             }
                         }
 
-                        AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
+                        this.AnimatedVisibility(screenMode == ConverterScreenMode.QR_CODE) {
                             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                                 QrCode(viewModel) { qrShareAction = it }
                             }
@@ -439,7 +439,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
         }
         Spacer(Modifier.width(8.dp))
         Column(Modifier.weight(1f)) {
-            AnimatedVisibility(
+            this.AnimatedVisibility(
                 visible = screenMode == ConverterScreenMode.CONVERTER,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.extraLarge)
@@ -454,7 +454,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                     isExpanded = isExpanded
                 )
             }
-            AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
+            this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart(viewModel, jdn, calendar)
             }
         }
@@ -463,7 +463,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
         DatePicker(
             calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
         )
-        AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
+        this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
                 elevation = CardDefaults.cardElevation(8.dp),
@@ -483,7 +483,7 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                 Spacer(Modifier.height(12.dp))
             }
         }
-        AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
+        this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
             DaysDistanceSecondPart(viewModel, jdn, calendar)
         }
     }

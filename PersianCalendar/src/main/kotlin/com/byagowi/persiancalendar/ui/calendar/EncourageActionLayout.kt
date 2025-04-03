@@ -34,7 +34,7 @@ fun ColumnScope.EncourageActionLayout(
     acceptAction: () -> Unit,
 ) {
     var shown by rememberSaveable { mutableStateOf(true) }
-    AnimatedVisibility(modifier = modifier, visible = shown) {
+    this.AnimatedVisibility(modifier = modifier, visible = shown) {
         Column(
             Modifier
                 .fillMaxWidth()

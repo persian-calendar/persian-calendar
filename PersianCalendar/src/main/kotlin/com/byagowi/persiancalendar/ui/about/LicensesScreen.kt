@@ -199,7 +199,7 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                         color = MaterialTheme.colorScheme.onSecondaryContainer,
                     )
                 }
-                AnimatedVisibility(visible = expandedItem == i) {
+                this.AnimatedVisibility(visible = expandedItem == i) {
                     SelectionContainer { Text(text) }
                 }
             }

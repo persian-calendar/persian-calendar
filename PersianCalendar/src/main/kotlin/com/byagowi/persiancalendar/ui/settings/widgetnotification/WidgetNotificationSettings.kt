@@ -91,7 +91,7 @@ fun ColumnScope.NotificationSettings() {
             },
         )
     }
-    AnimatedVisibility(isNotifyDate) {
+    this.AnimatedVisibility(isNotifyDate) {
         val isNotifyDateOnLockScreen by isNotifyDateOnLockScreen.collectAsState()
         SettingsSwitch(
             key = PREF_NOTIFY_DATE_LOCK_SCREEN,
@@ -107,7 +107,7 @@ fun ColumnScope.NotificationSettings() {
 fun ColumnScope.WidgetConfiguration() {
     val prefersWidgetsDynamicColors by prefersWidgetsDynamicColorsFlow.collectAsState()
     WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors)
-    AnimatedVisibility(!prefersWidgetsDynamicColors) {
+    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsColor(
             title = stringResource(R.string.widget_text_color),
             summary = stringResource(R.string.select_widgets_text_color),
@@ -115,7 +115,7 @@ fun ColumnScope.WidgetConfiguration() {
             key = PREF_SELECTED_WIDGET_TEXT_COLOR
         )
     }
-    AnimatedVisibility(!prefersWidgetsDynamicColors) {
+    this.AnimatedVisibility(!prefersWidgetsDynamicColors) {
         SettingsColor(
             title = stringResource(R.string.widget_background_color),
             summary = stringResource(R.string.select_widgets_background_color),
@@ -187,7 +187,7 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
             title = stringResource(R.string.widget_prefer_device_colors),
         )
     }
-    AnimatedVisibility(prefersWidgetsDynamicColors) {
+    this.AnimatedVisibility(prefersWidgetsDynamicColors) {
         val context = LocalContext.current
         val widgetTransparencyFlow = remember { MutableStateFlow(widgetTransparency.value) }
         @OptIn(FlowPreview::class)

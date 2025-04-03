@@ -107,7 +107,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 RadioButton(selected = entry == userSetTheme, onClick = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(stringResource(entry.title))
-                AnimatedVisibility(visible = showMore && userSetTheme == Theme.SYSTEM_DEFAULT) {
+                this.AnimatedVisibility(visible = showMore && userSetTheme == Theme.SYSTEM_DEFAULT) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
                             // To make sure the label and radio button will take the same size
@@ -136,7 +136,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
-        AnimatedVisibility(
+        this.AnimatedVisibility(
             visible = showMore && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
@@ -146,7 +146,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 checked = isGradient,
             ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) } }
         }
-        AnimatedVisibility(
+        this.AnimatedVisibility(
             visible = showMore && anyThemeIsDynamicColors,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
@@ -157,7 +157,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, !isRedHolidays) } }
         }
         val language by language.collectAsState()
-        AnimatedVisibility(
+        this.AnimatedVisibility(
             visible = showMore && BuildConfig.DEVELOPMENT && language.isArabicScript,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
