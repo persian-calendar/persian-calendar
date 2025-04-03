@@ -20,9 +20,6 @@ sealed class CalendarEvent<T : AbstractDate>(
     class PersianCalendarEvent(title: String, isHoliday: Boolean, date: PersianDate) :
         CalendarEvent<PersianDate>(title, isHoliday, date)
 
-    class AncientPersianCalendarEvent(title: String, isHoliday: Boolean, date: PersianDate) :
-        CalendarEvent<PersianDate>(title, isHoliday, date)
-
     class EquinoxCalendarEvent(
         title: String, isHoliday: Boolean, date: PersianDate, val remainingMillis: Long
     ) : CalendarEvent<PersianDate>(title, isHoliday, date)
@@ -50,7 +47,6 @@ sealed class CalendarEvent<T : AbstractDate>(
             is GregorianCalendarEvent,
             is IslamicCalendarEvent,
             is PersianCalendarEvent,
-            is AncientPersianCalendarEvent,
             is EquinoxCalendarEvent,
             is NepaliCalendarEvent -> title
 

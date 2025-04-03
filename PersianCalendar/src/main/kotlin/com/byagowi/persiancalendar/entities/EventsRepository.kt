@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
-import com.byagowi.persiancalendar.generated.ancientPersianEvents
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.nepaliEvents
@@ -93,10 +92,6 @@ data class EventsRepository(
     private val persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull {
         createEvent(it, Calendar.SHAMSI)
     })
-    private val ancientPersianCalendarEvents =
-        PersianCalendarEventsStore(ancientPersianEvents.mapNotNull {
-            createEvent(it, Calendar.SHAMSI, ancientPersian = true)
-        })
     private val islamicCalendarEvents = IslamicCalendarEventsStore(islamicEvents.mapNotNull {
         createEvent(it, Calendar.ISLAMIC)
     })
@@ -110,10 +105,6 @@ data class EventsRepository(
     fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> {
         return listOf(
             persianCalendarEvents.getEvents(jdn.toPersianDate(), irregularCalendarEventsStore),
-            ancientPersianCalendarEvents.getEvents(
-                jdn.toPersianDate(),
-                irregularCalendarEventsStore
-            ),
             islamicCalendarEvents.getEvents(jdn.toIslamicDate(), irregularCalendarEventsStore),
             nepaliCalendarEvents.getEvents(jdn.toNepaliDate(), irregularCalendarEventsStore),
             gregorianCalendarEvents
@@ -124,7 +115,6 @@ data class EventsRepository(
     fun getEnabledEvents(jdn: Jdn): List<CalendarEvent<*>> {
         return listOf(
             persianCalendarEvents.getAllEvents(),
-            ancientPersianCalendarEvents.getAllEvents(),
             islamicCalendarEvents.getAllEvents(),
             nepaliCalendarEvents.getAllEvents(),
             gregorianCalendarEvents.getAllEvents()
@@ -144,13 +134,11 @@ data class EventsRepository(
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
-        record: CalendarRecord, calendar: Calendar, ancientPersian: Boolean = false
+        record: CalendarRecord, calendar: Calendar
     ): T? {
         if (skipEvent(record, calendar)) return null
         val multiCountryComment = multiCountryComment(record)
-        val dayAndMonth = if (ancientPersian && language.isPersian) {
-            ancientDayNameFromModernDayMonth(record.day, record.month)
-        } else formatDayAndMonth(calendar, record.day, record.month)
+        val dayAndMonth = formatDayAndMonth(calendar, record.day, record.month)
         val title = "${record.title} ($multiCountryComment$dayAndMonth)"
 
         val holiday = determineIsHoliday(record)

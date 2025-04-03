@@ -1140,8 +1140,6 @@
       "title": "جشن گلدان (اینجه، رسیدگی به امور نباتات)" }
   ],
 
-  "Ancient Persian Calendar": [],
-
   "Hijri Calendar": [
     { "holiday": true, "month": 1, "day": 10, "type": "Afghanistan",
       "title": "روز عاشورا" },
