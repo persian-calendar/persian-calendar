@@ -291,6 +291,8 @@ var shiftWorkPeriod = 0
     private set
 var isIranHolidaysEnabled = true
     private set
+var isAncientIranEnabled = false
+    private set
 var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
@@ -339,6 +341,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 
     eventsRepository = EventsRepository(preferences, language.value)
     isIranHolidaysEnabled = eventsRepository?.iranHolidays == true
+    isAncientIranEnabled = eventsRepository?.iranAncient == true
 }
 
 fun loadLanguageResources(resources: Resources) {

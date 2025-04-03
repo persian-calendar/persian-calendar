@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.isAncientIranEnabled
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -63,6 +64,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.utils.ancientDayNameFromModernDayMonth
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -160,8 +162,7 @@ fun CalendarsOverview(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 4.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .padding(start = 24.dp, end = 24.dp, top = 4.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 SelectionContainer {
@@ -199,12 +200,31 @@ fun CalendarsOverview(
             }
         }
 
+        if (isAncientIranEnabled && selectedCalendar == Calendar.SHAMSI &&
+            language.value.isPersian
+        ) AnimatedVisibility(isExpanded) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                SelectionContainer {
+                    Text(
+                        text = ancientDayNameFromModernDayMonth(date.dayOfMonth, date.month),
+                        modifier = Modifier.animateContentSize(),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+        }
+
         AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 4.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .padding(start = 24.dp, end = 24.dp, top = 4.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 SelectionContainer {
@@ -278,8 +298,7 @@ fun CalendarsOverview(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 4.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .padding(start = 24.dp, end = 24.dp, top = 4.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 SelectionContainer {
@@ -307,8 +326,7 @@ fun CalendarsOverview(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .align(Alignment.CenterHorizontally),
+                    .padding(horizontal = 24.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 SelectionContainer {
