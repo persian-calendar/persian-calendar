@@ -64,7 +64,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
-import com.byagowi.persiancalendar.utils.ancientDayNameFromModernDayMonth
+import com.byagowi.persiancalendar.utils.ancientName
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -201,9 +201,7 @@ fun CalendarsOverview(
         }
 
         val language by language.collectAsState()
-        if (isAncientIranEnabled && selectedCalendar == Calendar.SHAMSI &&
-            language.isPersian
-        ) this.AnimatedVisibility(isExpanded) {
+        if (isAncientIranEnabled && language.isPersian) this.AnimatedVisibility(isExpanded) {
             Box(
                 modifier = Modifier
                     .padding(top = 4.dp)
@@ -212,7 +210,10 @@ fun CalendarsOverview(
             ) {
                 SelectionContainer {
                     Text(
-                        text = ancientDayNameFromModernDayMonth(date.dayOfMonth, date.month),
+                        text = when (date) {
+                            is PersianDate -> date
+                            else -> PersianDate(date)
+                        }.ancientName,
                         modifier = Modifier.animateContentSize(),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
