@@ -1,5 +1,4 @@
 // The data and ideas in the following file is released under public domain/CC0
-// They are currently unused on the project but can be used later for ancient events
 // There are different variants of calendars used by Zoroaster people but this one is the specific
 // one used by Iranian, called "تقویم فصلی", the variant used by Parsi people in India is more of
 // less the same but doesn't have leap day thus has become out of sync with the Iranian variant
