@@ -44,7 +44,12 @@ class CalendarTests {
         )
 
         (1206..1498).forEach {
-            if (it !in 1230..1303) assertEquals(
+            assertEquals(
+                if (it in leapYears) 366 else 365,
+                Jdn(PersianDate(it + 1, 1, 1)) - Jdn(PersianDate(it, 1, 1)),
+                it.toString()
+            )
+            if (1303 < it) assertEquals(
                 if (it in leapYears) 30 else 29,
                 Calendar.SHAMSI.getMonthLength(it, 12),
                 it.toString()
