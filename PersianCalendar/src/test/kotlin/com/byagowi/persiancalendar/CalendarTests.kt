@@ -132,7 +132,7 @@ class CalendarTests {
 
     @Test
     fun `ancient persian date names`() {
-        (Jdn(PersianDate(1370, 1, 1))..<Jdn(PersianDate(1420, 1, 1))).forEach { jdn ->
+        (Jdn(PersianDate(1200, 1, 1))..<Jdn(PersianDate(1500, 1, 1))).forEach { jdn ->
             val date = jdn.toPersianDate()
             val name = ancientDayName(
                 jdn - Jdn(PersianDate(date.year, 1, 1)) + 1
