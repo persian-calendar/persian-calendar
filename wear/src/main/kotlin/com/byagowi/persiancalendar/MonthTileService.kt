@@ -27,6 +27,8 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
+import androidx.glance.wear.tiles.curved.CurvedRow
+import androidx.glance.wear.tiles.curved.CurvedTextStyle
 import androidx.wear.tiles.EventBuilders
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.PersianDate
@@ -107,6 +109,16 @@ class MonthTileService : GlanceTileService() {
                         }
                     }
                 }
+            }
+            val style = CurvedTextStyle(
+                color = ColorProvider(R.color.month_tile_other_calendars),
+                fontSize = dpToSp(12f).sp,
+            )
+            CurvedRow(anchorDegrees = 270 + 45f) {
+                curvedText(localeUtils.format(today.toCivilDate()), style = style)
+            }
+            CurvedRow(anchorDegrees = 270 - 45f) {
+                curvedText(localeUtils.format(today.toIslamicDate()), style = style)
             }
         }
     }

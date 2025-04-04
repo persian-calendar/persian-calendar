@@ -16,9 +16,6 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
 import com.byagowi.persiancalendar.Jdn
 import com.byagowi.persiancalendar.LocaleUtils
-import io.github.persiancalendar.calendar.AbstractDate
-import io.github.persiancalendar.calendar.CivilDate
-import io.github.persiancalendar.calendar.PersianDate
 
 @Composable
 fun BoxScope.OtherCalendars(
@@ -30,25 +27,14 @@ fun BoxScope.OtherCalendars(
 ) {
     val weekDayName = localeUtils.weekDayName(day)
 
-    fun monthsFromDate(date: AbstractDate) = when (date) {
-        is PersianDate -> localeUtils.persianMonths
-        is CivilDate -> localeUtils.gregorianMonths
-        else -> localeUtils.islamicMonths
-    }
-
-    fun allNumDateFormat(date: AbstractDate) =
-        localeUtils.format(date.dayOfMonth) + " " +
-                monthsFromDate(date)[date.month - 1] + " " +
-                localeUtils.format(date.year)
-
-    val firstText = allNumDateFormat(
+    val firstText = localeUtils.format(
         when (calendarIndex) {
             0 -> day.toCivilDate()
             1 -> day.toPersianDate()
             else -> day.toPersianDate()
         }
     )
-    val secondText = allNumDateFormat(
+    val secondText = localeUtils.format(
         when (calendarIndex) {
             0 -> day.toIslamicDate()
             1 -> day.toIslamicDate()
@@ -58,13 +44,10 @@ fun BoxScope.OtherCalendars(
     val weekDayColor = MaterialTheme.colorScheme.primaryDim
     val othersColor = MaterialTheme.colorScheme.secondaryDim
     val isRound = LocalConfiguration.current.isScreenRound
-    val nonCurvedStyle = MaterialTheme.typography.titleSmall
+    val nonCurvedStyle = MaterialTheme.typography.bodySmall
     if (isRound || onTop) {
-        val curvedStyle = MaterialTheme.typography.arcSmall.let {
-            if (LocalConfiguration.current.fontScale > 1f) it.copy(
-                fontSize = with(LocalDensity.current) { 14.dp.toPx().toSp() }
-            ) else it
-        }
+        val curvedStyle = MaterialTheme.typography.arcSmall
+            .copy(fontSize = with(LocalDensity.current) { 12.dp.toPx().toSp() })
         if (withWeekDayName) {
             if (isRound) {
                 CurvedLayout(

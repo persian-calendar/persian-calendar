@@ -4,4 +4,5 @@
     <color name="month_tile_weekdays">#C0C6DC</color>
     <color name="month_tile_on_weekdays">#001945</color>
     <color name="month_tile_holidays">#B0C6FF</color>
+    <color name="month_tile_other_calendars">#C0C6DC</color>
 </resources>
