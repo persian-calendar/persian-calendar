@@ -7,7 +7,6 @@ package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.PersianDate
 
 private val ancientPersianNames = listOf(
@@ -31,10 +30,8 @@ private val persianMonthNames = listOf(
 fun ancientDayName(dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     val month = (dayOfYear - 1) / 30
-    return ((if (month == 12) lastDayOfYearNames else ancientPersianNames)
-        .getOrNull(dayOfMonth).debugAssertNotNull ?: "") + " و " +
-            (persianMonthNames.getOrNull(if (month == 12) 11 else month).debugAssertNotNull ?: "") +
-            " ماه"
+    return ((if (month == 12) lastDayOfYearNames else ancientPersianNames)[dayOfMonth]) + " و " +
+            persianMonthNames[if (month == 12) 11 else month] + " ماه"
 }
 
 val PersianDate.ancientName: String
