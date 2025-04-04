@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -50,10 +47,6 @@ fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
             }
             val todayYear = remember(state) { Jdn.today().on(state).year }
             val startYear = remember(state) { todayYear - 200 }
-            var monthChangeToken by remember { mutableIntStateOf(0) }
-            var previousMonth by remember { mutableIntStateOf(0) }
-            if (previousMonth != date.month) ++monthChangeToken
-            previousMonth = date.month
             Row(modifier = Modifier.fillMaxWidth()) {
                 val view = LocalView.current
                 NumberPicker(
