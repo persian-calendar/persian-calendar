@@ -260,7 +260,7 @@ enum class Language(val code: String, val nativeName: String) {
         alternativeMonthsInAzeri: Boolean,
     ): List<String> = when (this) {
         FA -> persianCalendarMonthsInPersian
-        FA_AF -> persianCalendarMonthsInDari
+        FA_AF -> persianCalendarMonthsInDariOrPersianOldEra
         AZB -> if (alternativeMonthsInAzeri) persianCalendarMonthsInAzeriAlternative
         else persianCalendarMonths.map(resources::getString)
 
@@ -534,7 +534,7 @@ enum class Language(val code: String, val nativeName: String) {
             "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن",
             "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
         )
-        private val persianCalendarMonthsInDari = listOf12Items(
+        val persianCalendarMonthsInDariOrPersianOldEra = listOf12Items(
             "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
             "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
         )

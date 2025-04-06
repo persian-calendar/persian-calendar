@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -42,7 +43,7 @@ fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
                 state.getYearMonths(date.year)
             }
             val monthsFormat = remember(state, date.year) {
-                val months = date.calendar.monthsNames
+                val months = yearMonthNameOfDate(date);
                 { item: Int -> months[item - 1] + " / " + formatNumber(item) }
             }
             val todayYear = remember(state) { Jdn.today().on(state).year }

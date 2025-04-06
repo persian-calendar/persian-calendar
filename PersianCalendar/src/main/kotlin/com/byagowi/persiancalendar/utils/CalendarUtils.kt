@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
+import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -65,7 +66,7 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-val AbstractDate.monthName get() = this.calendar.monthsNames.getOrNull(month - 1) ?: ""
+val AbstractDate.monthName get() = yearMonthNameOfDate(this).getOrNull(month - 1) ?: ""
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(

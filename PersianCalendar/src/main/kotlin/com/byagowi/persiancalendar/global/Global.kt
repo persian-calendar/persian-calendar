@@ -110,7 +110,10 @@ import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
+import io.github.persiancalendar.calendar.AbstractDate
+import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
@@ -127,6 +130,8 @@ import java.util.TimeZone
 
 private val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
+    private set
+var oldEraPersianMonths = monthNameEmptyList
     private set
 var islamicMonths = monthNameEmptyList
     private set
@@ -344,10 +349,21 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     isAncientIranEnabled = eventsRepository?.iranAncient == true
 }
 
+fun yearMonthNameOfDate(date: AbstractDate): List<String> {
+    return when (date) {
+        is PersianDate -> if (date.year > 1303) persianMonths else oldEraPersianMonths
+        is CivilDate -> gregorianMonths
+        is IslamicDate -> islamicMonths
+        else -> monthNameEmptyList
+    }
+}
+
 fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
     val language = language.value
     persianMonths = language.getPersianMonths(resources, alternativePersianMonthsInAzeri)
+    oldEraPersianMonths =
+        if (language.isPersian) Language.persianCalendarMonthsInDariOrPersianOldEra else persianMonths
     islamicMonths = language.getIslamicMonths(resources)
     gregorianMonths = language.getGregorianMonths(resources, alternativeGregorianMonths)
     nepaliMonths = language.getNepaliMonths()
