@@ -48,7 +48,7 @@ enum class ChineseZodiac(
     GOAT(R.string.animal_year_name_goat, "🐐", "قوی ئیل", "🐑" to "گوسفند"),
     MONKEY(R.string.animal_year_name_monkey, "🐒", "پیچی ئیل"),
     ROOSTER(R.string.animal_year_name_rooster, "🐓", "تخاقوی ئیل", "🐔" to "مرغ"),
-    DOG(R.string.animal_year_name_dog, "🐕", "تخاقوی ئیل"),
+    DOG(R.string.animal_year_name_dog, "🐕", "ایت ئیل"),
     PIG(R.string.animal_year_name_pig, "🐖", "تنگوز ئیل");
 
     fun format(
