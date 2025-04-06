@@ -74,21 +74,6 @@ enum class ChineseZodiac(
     val harmfulMatch get() = harmfulMatchRaw[ordinal]
 
     companion object {
-        private val oldPersianNames = listOf(
-            "سیچقان ئیل",
-            "اود ئیل",
-            "بارس ئیل",
-            "توشقان ئیل",
-            "لوی ئیل",
-            "ئیلان ئیل",
-            "یونت ئیل",
-            "قوی ئیل",
-            "پیچی ئیل",
-            "تخاقوی ئیل",
-            "ایت ئیل",
-            "تنگوز ئیل",
-        )
-
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             entries.getOrNull((persianDate.year + 5) % 12) ?: RAT
 
