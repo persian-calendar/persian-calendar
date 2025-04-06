@@ -42,7 +42,7 @@ enum class ChineseZodiac(
     OX(R.string.animal_year_name_ox, "🐂", "اود ئیل"),
     TIGER(R.string.animal_year_name_tiger, "🐅", "بارس ئیل", "🐆" to "پلنگ"),
     RABBIT(R.string.animal_year_name_rabbit, "🐇", "توشقان ئیل"),
-    DRAGON(R.string.animal_year_name_dragon, "🐲", "لوی ئیل", "🐳" to "نهنگ"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲", "لوی ئیل", "🐊" to "نهنگ"),
     SNAKE(R.string.animal_year_name_snake, "🐍", "ئیلان ئیل"),
     HORSE(R.string.animal_year_name_horse, "🐎", "یونت ئیل"),
     GOAT(R.string.animal_year_name_goat, "🐐", "قوی ئیل", "🐑" to "گوسفند"),
