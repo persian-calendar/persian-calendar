@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
@@ -35,25 +34,34 @@ import io.github.persiancalendar.calendar.PersianDate
  */
 enum class ChineseZodiac(
     @StringRes private val title: Int, private val emoji: String,
-    private val persianAlternative: String? = null,
+    // For example used in https://rc.majlis.ir/fa/law/show/91137
+    private val oldEraPersianName: String,
+    private val persianAlternative: Pair<String, String>? = null,
 ) {
-    RAT(R.string.animal_year_name_rat, "🐀"),
-    OX(R.string.animal_year_name_ox, "🐂"),
-    TIGER(R.string.animal_year_name_tiger, "🐅", persianAlternative = "🐆 پلنگ"),
-    RABBIT(R.string.animal_year_name_rabbit, "🐇"),
-    DRAGON(R.string.animal_year_name_dragon, "🐲", persianAlternative = "🐳 نهنگ"),
-    SNAKE(R.string.animal_year_name_snake, "🐍"),
-    HORSE(R.string.animal_year_name_horse, "🐎"),
-    GOAT(R.string.animal_year_name_goat, "🐐", persianAlternative = "🐑 گوسفند"),
-    MONKEY(R.string.animal_year_name_monkey, "🐒"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐓", persianAlternative = "🐔 مرغ"),
-    DOG(R.string.animal_year_name_dog, "🐕"),
-    PIG(R.string.animal_year_name_pig, "🐖");
+    RAT(R.string.animal_year_name_rat, "🐀", "سیچقان ئیل"),
+    OX(R.string.animal_year_name_ox, "🐂", "اود ئیل"),
+    TIGER(R.string.animal_year_name_tiger, "🐅", "بارس ئیل", "🐆" to "پلنگ"),
+    RABBIT(R.string.animal_year_name_rabbit, "🐇", "توشقان ئیل"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲", "لوی ئیل", "🐳" to "نهنگ"),
+    SNAKE(R.string.animal_year_name_snake, "🐍", "ئیلان ئیل"),
+    HORSE(R.string.animal_year_name_horse, "🐎", "یونت ئیل"),
+    GOAT(R.string.animal_year_name_goat, "🐐", "قوی ئیل", "🐑" to "گوسفند"),
+    MONKEY(R.string.animal_year_name_monkey, "🐒", "پیچی ئیل"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐓", "تخاقوی ئیل", "🐔" to "مرغ"),
+    DOG(R.string.animal_year_name_dog, "🐕", "تخاقوی ئیل"),
+    PIG(R.string.animal_year_name_pig, "🐖", "تنگوز ئیل");
 
-    fun format(resources: Resources, withEmoji: Boolean, isForPersian: Boolean): String {
-        return if (isForPersian && language.value.isPersian && persianAlternative != null) {
-            if (withEmoji) persianAlternative
-            else persianAlternative.split(" ").getOrNull(1).debugAssertNotNull ?: ""
+    fun format(
+        resources: Resources,
+        withEmoji: Boolean,
+        persianDate: PersianDate? = null,
+    ): String {
+        val oldEra = persianDate?.year?.let { it < 1304 } ?: false
+        return if (persianDate != null && language.value.isPersian && (persianAlternative != null || oldEra)) {
+            (if (withEmoji) "${persianAlternative?.first ?: emoji} " else "") + let {
+                if (oldEra) oldEraPersianName else persianAlternative?.second
+                    ?: resources.getString(title)
+            }
         } else buildString {
             if (withEmoji) append("$emoji ")
             append(resources.getString(title))
@@ -66,6 +74,21 @@ enum class ChineseZodiac(
     val harmfulMatch get() = harmfulMatchRaw[ordinal]
 
     companion object {
+        private val oldPersianNames = listOf(
+            "سیچقان ئیل",
+            "اود ئیل",
+            "بارس ئیل",
+            "توشقان ئیل",
+            "لوی ئیل",
+            "ئیلان ئیل",
+            "یونت ئیل",
+            "قوی ئیل",
+            "پیچی ئیل",
+            "تخاقوی ئیل",
+            "ایت ئیل",
+            "تنگوز ئیل",
+        )
+
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             entries.getOrNull((persianDate.year + 5) % 12) ?: RAT
 
