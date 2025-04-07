@@ -206,7 +206,7 @@ fun SharedTransitionScope.CalendarScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val isYearView by viewModel.isYearView.collectAsState()
     val context = LocalContext.current
-    val addEvent = addEvent(viewModel)
+    val addEvent = addEvent(viewModel, snackbarHostState)
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val today by viewModel.today.collectAsState()
 
@@ -1118,19 +1118,31 @@ private class AddEventContract : ActivityResultContract<AddEventData, Void?>() {
 }
 
 @Composable
-fun addEvent(viewModel: CalendarViewModel): (AddEventData) -> Unit {
+fun addEvent(
+    viewModel: CalendarViewModel, snackbarHostState: SnackbarHostState
+): (AddEventData) -> Unit {
     val addEvent = rememberLauncherForActivityResult(AddEventContract()) {
         viewModel.refreshCalendar()
     }
 
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     var addEventData by remember { mutableStateOf<AddEventData?>(null) }
 
     addEventData?.let { data ->
         AskForCalendarPermissionDialog { isGranted ->
             viewModel.refreshCalendar()
             if (isGranted) runCatching { addEvent.launch(data) }.onFailure(logException).onFailure {
-                Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT).show()
+                if (language.value.isPersian) coroutineScope.launch {
+                    if (snackbarHostState.showSnackbar(
+                            "جهت افزودن رویداد نیاز است از نصب و فعال بودن تقویم گوگل اطمینان حاصل کنید",
+                            duration = SnackbarDuration.Long,
+                            actionLabel = "نصب",
+                            withDismissAction = true,
+                        ) == SnackbarResult.ActionPerformed
+                    ) context.bringMarketPage("com.google.android.calendar")
+                } else Toast.makeText(context, R.string.device_does_not_support, Toast.LENGTH_SHORT)
+                    .show()
             }
             addEventData = null
         }

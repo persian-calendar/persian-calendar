@@ -189,7 +189,8 @@ fun SharedTransitionScope.DaysScreen(
         }
     }
 
-    val addEvent = addEvent(calendarViewModel)
+    val snackbarHostState = remember { SnackbarHostState() }
+    val addEvent = addEvent(calendarViewModel, snackbarHostState)
     val hasWeeksPager = LocalWindowInfo.current.containerSize.height > 600
     val language by language.collectAsState()
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
@@ -218,8 +219,6 @@ fun SharedTransitionScope.DaysScreen(
     }
 
     var addAction by remember { mutableStateOf({}) }
-
-    val snackbarHostState = remember { SnackbarHostState() }
 
     val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE

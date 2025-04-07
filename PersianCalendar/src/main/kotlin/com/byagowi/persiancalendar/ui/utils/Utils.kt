@@ -29,7 +29,7 @@ inline val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_
 inline val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 inline val Resources.dp: Float get() = displayMetrics.density
 
-fun Context.bringMarketPage() {
+fun Context.bringMarketPage(packageName: String = this.packageName) {
     runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
     }.onFailure(logException).onFailure {
