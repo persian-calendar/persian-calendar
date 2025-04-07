@@ -20,7 +20,6 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable

@@ -69,6 +69,7 @@ import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.LargeShapeCornerSize
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.readYearDeviceEvents
 import kotlinx.coroutines.launch
@@ -85,7 +86,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         selectedMonth.year - todayDate.year
     }
 
-    val monthNames = mainCalendar.monthsNames
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
@@ -186,8 +186,10 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                             repeat(if (isLandscape) 4 else 3) { column ->
                                 val month = 1 + column + row * if (isLandscape) 4 else 3
                                 val offset = yearOffset * 12 + month - todayDate.month
+                                val monthDate =
+                                    mainCalendar.getMonthStartFromMonthsDistance(today, offset)
                                 val title = language.value.my.format(
-                                    monthNames[month - 1],
+                                    monthDate.monthName,
                                     formatNumber(yearOffset + todayDate.year),
                                 )
                                 Column(
@@ -223,9 +225,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                 width = size.width,
                                                 canvas = canvas.nativeCanvas,
                                                 today = today,
-                                                baseDate = mainCalendar.getMonthStartFromMonthsDistance(
-                                                    today, offset
-                                                ),
+                                                baseDate = monthDate,
                                                 deviceEvents = yearDeviceEvents,
                                                 isRtl = isRtl,
                                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
