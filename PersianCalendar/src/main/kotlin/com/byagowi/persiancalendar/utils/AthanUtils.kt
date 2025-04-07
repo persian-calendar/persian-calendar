@@ -166,8 +166,15 @@ private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Lo
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || am.canScheduleExactAlarms())
-        AlarmManagerCompat.setExactAndAllowWhileIdle(
-            am, AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent
-        )
+    if (AlarmManagerCompat.canScheduleExactAlarms(am)) AlarmManagerCompat.setExactAndAllowWhileIdle(
+        am,
+        AlarmManager.RTC_WAKEUP,
+        timeInMillis,
+        pendingIntent,
+    ) else AlarmManagerCompat.setAndAllowWhileIdle(
+        am,
+        AlarmManager.RTC_WAKEUP,
+        timeInMillis,
+        pendingIntent
+    )
 }
