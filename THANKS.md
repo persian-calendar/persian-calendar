@@ -141,19 +141,31 @@ https://github.com/Calvin-LL/Reorderable
 Persian Calendar - Apache 2
 https://github.com/roozbehp/persiancalendar
 
+  This code is based on the Common Lisp code published by Reingold and Dershowitz
+  under the Apache 2.0 license.
+
+  Python port and further modificiations were made by Roozbeh Pournader.
+
   Copyright 2024 Roozbeh Pournader
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  The original header follows:
 
-     http://www.apache.org/licenses/LICENSE-2.0
+  CALENDRICA 4.0 -- Common Lisp
+  E. M. Reingold and N. Dershowitz
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+  The Functions (code, comments, and definitions) contained in this
+  file (the "Program") were written by Edward M. Reingold and Nachum
+  Dershowitz (the "Authors"), who retain all rights to them except as
+  granted in the License and subject to the warranty and liability
+  limitations listed therein.  These Functions are explained in the Authors'
+  book, "Calendrical Calculations", 4th ed. (Cambridge University
+  Press, 2016), and are subject to an international copyright.
+
+  Licensed under the Apache License, Version 2.0 <LICENSE or
+  https://www.apache.org/licenses/LICENSE-2.0>.
+
+  Sample values for the functions (useful for debugging) are given in
+  Appendix C of the book.
 
 ----
 Umm-Alqura Calendar - MIT
