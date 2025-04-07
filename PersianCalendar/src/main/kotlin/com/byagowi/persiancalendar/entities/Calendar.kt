@@ -76,12 +76,4 @@ enum class Calendar(
         val date = baseJdn on this
         return getMonthStartFromMonthsDistance(date.year, date.month, monthsDistance)
     }
-
-    val monthsNames: List<String>
-        get() = when (this) {
-            SHAMSI -> persianMonths
-            ISLAMIC -> islamicMonths
-            GREGORIAN -> gregorianMonths
-            NEPALI -> nepaliMonths
-        }
 }

@@ -39,7 +39,6 @@ import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -354,14 +353,14 @@ fun monthFormatForSecondaryCalendar(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
             to.year to 1..to.month
         ).joinToString(separator) { (year, months) ->
-            language.value.my.format(months.joinToString(separator) {
-                from.calendar.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
+            language.value.my.format(months.joinToString(separator) { month ->
+                from.calendar.createDate(year, month, 1).monthName
             }, formatNumber(year))
         }
 
         else -> language.value.my.format(
-            (from.month..to.month).joinToString(separator) {
-                from.calendar.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
+            (from.month..to.month).joinToString(separator) { month ->
+                from.calendar.createDate(from.year, month, 1).monthName
             },
             formatNumber(from.year)
         )
