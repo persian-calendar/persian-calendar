@@ -64,7 +64,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
-import com.byagowi.persiancalendar.utils.ancientName
+import com.byagowi.persiancalendar.utils.ancientDayName
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -72,7 +72,9 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateZodiacInformation
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
+import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.persianDayOfYear
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.seasons
@@ -200,8 +202,8 @@ fun CalendarsOverview(
             }
         }
 
-        val language by language.collectAsState()
-        if (isAncientIranEnabled && language.isPersian) this.AnimatedVisibility(isExpanded) {
+        @Composable
+        fun AdditionalDateText(text: String) {
             Box(
                 modifier = Modifier
                     .padding(top = 4.dp)
@@ -210,12 +212,24 @@ fun CalendarsOverview(
             ) {
                 SelectionContainer {
                     Text(
-                        text = PersianDate(date).ancientName,
+                        text = text,
                         modifier = Modifier.animateContentSize(),
                         style = MaterialTheme.typography.bodyMedium,
                         textAlign = TextAlign.Center
                     )
                 }
+            }
+        }
+
+        val language by language.collectAsState()
+        if (language.isPersian) {
+            val persianDate = jdn.toPersianDate()
+            val dayOfYear = persianDayOfYear(persianDate, jdn)
+            this.AnimatedVisibility(isAncientIranEnabled && isExpanded) {
+                AdditionalDateText(ancientDayName(dayOfYear))
+            }
+            this.AnimatedVisibility(isAncientIranEnabled || persianDate.year < 1304) {
+                AdditionalDateText(jalaliName(persianDate, dayOfYear) + " (جلالی)")
             }
         }
 

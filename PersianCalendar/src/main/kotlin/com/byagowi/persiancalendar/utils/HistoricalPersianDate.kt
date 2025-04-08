@@ -5,7 +5,6 @@
 // The information here is provided by Roozbeh Pournader
 package com.byagowi.persiancalendar.utils
 
-import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.Jdn
 import io.github.persiancalendar.calendar.PersianDate
 
@@ -25,8 +24,6 @@ private val persianMonthNames = listOf(
     "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
 )
 
-// dayOfYear is a zero indexed number
-@VisibleForTesting
 fun ancientDayName(dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     val month = (dayOfYear - 1) / 30
@@ -34,5 +31,16 @@ fun ancientDayName(dayOfYear: Int): String {
             persianMonthNames[if (month == 12) 11 else month] + " ماه"
 }
 
-val PersianDate.ancientName: String
-    get() = ancientDayName(Jdn(this) - Jdn(PersianDate(year, 1, 1)) + 1)
+// the returned value is a zero indexed number
+fun persianDayOfYear(persianDate: PersianDate, jdn: Jdn): Int {
+    return jdn - Jdn(PersianDate(persianDate.year, 1, 1)) + 1
+}
+
+fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
+    val dayOfMonth = (dayOfYear - 1) % 30
+    val month = (dayOfYear - 1) / 30
+    return when (month) {
+        12 -> "روز " + formatNumber(dayOfMonth + 1) + " خمسهٔ مسترقه"
+        else -> formatNumber(dayOfMonth + 1) + " " + persianMonthNames[month]
+    } + " " + formatNumber(persianDate.year - 457)
+}
