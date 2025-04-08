@@ -229,7 +229,7 @@ fun CalendarsOverview(
                 AdditionalDateText(ancientDayName(dayOfYear))
             }
             this.AnimatedVisibility(isAncientIranEnabled || persianDate.year < 1304) {
-                AdditionalDateText(jalaliName(persianDate, dayOfYear) + " (جلالی)")
+                AdditionalDateText(jalaliName(persianDate, dayOfYear) + " جلالی")
             }
         }
 
