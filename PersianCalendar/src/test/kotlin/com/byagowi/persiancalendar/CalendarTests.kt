@@ -6,6 +6,8 @@ import com.byagowi.persiancalendar.utils.ancientDayName
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
+import io.github.persiancalendar.calendar.CivilDate
+import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -132,7 +134,22 @@ class CalendarTests {
     }
 
     @Test
-    fun `ancient persian date names`() {
+    fun `historical persian dates`() {
+        // https://commons.wikimedia.org/wiki/File:HablolMatin_1907-12-31.pdf
+        val jdn = Jdn(CivilDate(1907, 12, 31))
+        assertEquals(
+            jdn,
+            Jdn(IslamicDate(1325, 11, 25))
+        )
+        val persianDate = jdn.toPersianDate()
+        assertEquals(
+            "۱۵ دی ۸۲۹",
+            jalaliName(persianDate, persianDayOfYear(persianDate, jdn))
+        )
+    }
+
+    @Test
+    fun `historical persian dates smoke test`() {
         (Jdn(PersianDate(1200, 1, 1))..<Jdn(PersianDate(1500, 1, 1))).forEach { jdn ->
             val date = jdn.toPersianDate()
             val name = ancientDayName(
