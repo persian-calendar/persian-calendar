@@ -140,7 +140,7 @@ class MapDraw(
 
             MapType.TIME_ZONES -> canvas.drawPath(timezones, miscPaint)
             MapType.TECTONIC_PLATES -> canvas.drawPath(tectonicPlates, miscPaint)
-            MapType.YALLOP, MapType.ODEH ->
+            MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH ->
                 canvas.drawBitmap(maskMapCrescentVisibility, null, mapRect, null)
         }
     }
@@ -171,7 +171,7 @@ class MapDraw(
                 writeMagneticMap(timeInMillis, mapType)
             }
 
-            MapType.YALLOP, MapType.ODEH -> {
+            MapType.EVENING_YALLOP, MapType.EVENING_ODEH, MapType.MORNING_YALLOP, MapType.MORNING_ODEH -> {
                 maskFormattedTime = formatDate(
                     Jdn(maskDateSink.toCivilDate()) on mainCalendar,
                     forceNonNumerical = true
@@ -259,11 +259,14 @@ class MapDraw(
         rot.rotate(bVec - oVec).let { it.z / it.length() }
 
     private fun writeCrescentVisibilityMap(date: GregorianCalendar, mapType: MapType) {
-        val isYallop = mapType == MapType.YALLOP
+        val isYallop = mapType == MapType.MORNING_YALLOP || mapType == MapType.EVENING_YALLOP
+        val isEvening = mapType == MapType.EVENING_YALLOP || mapType == MapType.EVENING_ODEH
         val baseTime = Time(
             date[GregorianCalendar.YEAR], date[GregorianCalendar.MONTH] + 1,
             date[GregorianCalendar.DAY_OF_MONTH], 0, 0, .0
         )
+        val direction = if (isEvening) Direction.Set else Direction.Rise
+        val multiplier = if (isEvening) 1 else -1
         // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
         (0..<360 / maskMapMoonScaleDown).forEach { x ->
             (0..<180 / maskMapMoonScaleDown).forEach heightForEach@{ y ->
@@ -271,15 +274,15 @@ class MapDraw(
                 val longitude = x * maskMapMoonScaleDown - 360 / 2.0
                 val observer = Observer(latitude, longitude, .0)
                 val time = baseTime.addDays(-longitude / 360)
-                val sunset = searchRiseSet(Body.Sun, observer, Direction.Set, time, 1.0)
-                val moonset = searchRiseSet(Body.Moon, observer, Direction.Set, time, 1.0)
-                if (sunset == null || moonset == null) return@heightForEach
-                val lagTime = moonset.ut - sunset.ut
+                val sunRiseSet = searchRiseSet(Body.Sun, observer, direction, time, 1.0)
+                val moonRiseSet = searchRiseSet(Body.Moon, observer, direction, time, 1.0)
+                if (sunRiseSet == null || moonRiseSet == null) return@heightForEach
+                val lagTime = (moonRiseSet.ut - sunRiseSet.ut) * multiplier
                 if (lagTime < 0) {
                     maskMapCrescentVisibility[x, y] = 0x70FF0000
                     return@heightForEach
                 }
-                val bestTime = sunset.addDays(lagTime * 4.0 / 9)
+                val bestTime = sunRiseSet.addDays(lagTime * 4.0 / 9 * multiplier)
                 val sunEquator = equator(
                     Body.Sun, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected
                 )
