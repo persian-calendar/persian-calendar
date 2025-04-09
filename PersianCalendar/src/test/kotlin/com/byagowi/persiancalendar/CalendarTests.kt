@@ -2,8 +2,10 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.utils.ancientDayName
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
+import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
 import io.github.persiancalendar.calendar.CivilDate
@@ -135,17 +137,43 @@ class CalendarTests {
 
     @Test
     fun `historical persian dates`() {
-        // https://commons.wikimedia.org/wiki/File:HablolMatin_1907-12-31.pdf
-        val jdn = Jdn(CivilDate(1907, 12, 31))
-        assertEquals(
-            jdn,
-            Jdn(IslamicDate(1325, 11, 25))
-        )
-        val persianDate = jdn.toPersianDate()
-        assertEquals(
-            "۱۵ دی ۸۲۹",
-            jalaliName(persianDate, persianDayOfYear(persianDate, jdn))
-        )
+        run {
+            // https://commons.wikimedia.org/wiki/File:HablolMatin_1907-12-31.pdf
+            val jdn = Jdn(CivilDate(1907, 12, 31))
+            assertEquals(
+                jdn,
+                Jdn(IslamicDate(1325, 11, 25))
+            )
+            val persianDate = jdn.toPersianDate()
+            assertEquals(
+                "۱۵ دی ۸۲۹",
+                jalaliName(persianDate, persianDayOfYear(persianDate, jdn))
+            )
+        }
+        run {
+            // https://w.wiki/DkKf
+            val jdn = Jdn(CivilDate(1921, 4, 10))
+            assertEquals(
+                jdn,
+                Jdn(IslamicDate(1339, 8, 1)) // غره means first of it
+            )
+            // We don't have بزگردی yet if not ever
+//            val persianDate = jdn.toPersianDate()
+//            assertEquals(
+//                "۲۱ فروردین ۸۴۳",
+//                jalaliName(persianDate, persianDayOfYear(persianDate, jdn))
+//            )
+        }
+        initiateMonthNamesForTest()
+        run {
+            // https://commons.wikimedia.org/wiki/File:Moz_4_293.pdf
+            val jdn = Jdn(IslamicDate(1341, 11, 6))
+            val persianDate = jdn.toPersianDate()
+            assertEquals(
+                "۳۱ جوزا ۱۳۰۲",
+                formatDate(persianDate)
+            )
+        }
     }
 
     @Test

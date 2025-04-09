@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.view.accessibility.AccessibilityManager
+import androidx.annotation.VisibleForTesting
 import androidx.collection.LongSet
 import androidx.collection.emptyLongSet
 import androidx.collection.longSetOf
@@ -579,6 +580,11 @@ fun updateStoredPreference(context: Context) {
             } else it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
         }
     }.onFailure(logException).getOrNull() == true
+}
+
+@VisibleForTesting
+fun initiateMonthNamesForTest() {
+    oldEraPersianMonths = Language.persianCalendarMonthsInDariOrPersianOldEra
 }
 
 // A very special case to trig coordinates mechanism in saveLocation
