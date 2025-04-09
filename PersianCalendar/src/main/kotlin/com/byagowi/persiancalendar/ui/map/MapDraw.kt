@@ -262,7 +262,7 @@ class MapDraw(
         val isYallop = mapType == MapType.YALLOP
         val baseTime = Time(
             date[GregorianCalendar.YEAR], date[GregorianCalendar.MONTH] + 1,
-            date[GregorianCalendar.DAY_OF_MONTH] + 1, 0, 0, .0
+            date[GregorianCalendar.DAY_OF_MONTH], 0, 0, .0
         )
         // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
         (0..<360 / maskMapMoonScaleDown).forEach { x ->
