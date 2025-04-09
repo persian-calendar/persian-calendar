@@ -167,10 +167,12 @@ class CalendarTests {
         initiateMonthNamesForTest()
         run {
             // https://commons.wikimedia.org/wiki/File:Moz_4_293.pdf
-            val jdn = Jdn(IslamicDate(1341, 11, 6))
+            // FIXME: Change this to 6 when calendar dependency covers the year
+            val jdn = Jdn(IslamicDate(1341, 11, 7))
+            assertEquals(jdn.weekDay, 6) // which means جمغع in this code base
             val persianDate = jdn.toPersianDate()
             assertEquals(
-                "۳۱ جوزا ۱۳۰۲",
+                "۳۲ جوزا ۱۳۰۲",
                 formatDate(persianDate)
             )
         }
