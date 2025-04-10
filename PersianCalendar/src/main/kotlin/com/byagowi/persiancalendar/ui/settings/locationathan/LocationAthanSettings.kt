@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -20,6 +21,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -143,12 +145,54 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             stringResource(R.string.athan_gap_summary),
         ) { onDismissRequest -> AthanGapDialog(onDismissRequest) }
     }
+
+    @Composable
+    fun ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest: () -> Unit): Boolean {
+        var result by remember {
+            mutableStateOf(
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+                        ActivityCompat.checkSelfPermission(
+                            context, Manifest.permission.POST_NOTIFICATIONS
+                        ) == PackageManager.PERMISSION_GRANTED
+            )
+        }
+        if (result) return true
+        val launcher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (!isGranted) {
+                Toast.makeText(
+                    context,
+                    "اگر امکان فعال‌سازی اعلان وجود ندارد احتمالاً نیاز باشد برنامه را حذف و مجدداً نصب کنید.",
+                    Toast.LENGTH_LONG
+                ).show()
+                onDismissRequest()
+            }
+            result = true
+            context.preferences.edit { putBoolean(PREF_NOTIFICATION_ATHAN, isGranted) }
+            updateStoredPreference(context)
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) LaunchedEffect(Unit) {
+            if (language.isPersian) Toast.makeText(
+                context,
+                "جهت عملکرد صحیح اذان برنامه به دسترسی اعلان نیاز دارد.",
+                Toast.LENGTH_LONG
+            ).show()
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        return false
+    }
+
     this.AnimatedVisibility(isLocationSet) {
         SettingsClickable(
             stringResource(R.string.athan_alarm),
             stringResource(R.string.athan_alarm_summary),
             defaultOpen = destination == PREF_ATHAN_ALARM,
-        ) { onDismissRequest -> PrayerSelectDialog(onDismissRequest) }
+        ) { onDismissRequest ->
+            if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
+                PrayerSelectDialog(onDismissRequest)
+            }
+        }
     }
     this.AnimatedVisibility(isLocationSet) {
         val athanSoundName by athanSoundName.collectAsState()
@@ -159,10 +203,12 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     }
     this.AnimatedVisibility(isLocationSet) {
         SettingsClickable(stringResource(R.string.preview)) { onDismissRequest ->
-            PrayerSelectPreviewDialog(onDismissRequest)
+            if (ensureNotificationPermissionIsGrantedBeforeDialog(onDismissRequest)) {
+                PrayerSelectPreviewDialog(onDismissRequest)
+            }
         }
     }
-    this.AnimatedVisibility(isLocationSet) {
+    this.AnimatedVisibility(isLocationSet && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         val launcher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
