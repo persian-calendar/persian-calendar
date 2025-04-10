@@ -20,8 +20,8 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 26
         targetSdk = 34
-        versionCode = 33
-        versionName = "0.3.3"
+        versionCode = 37
+        versionName = "0.3.7"
         androidResources.localeFilters += listOf("en", "fa")
     }
 
