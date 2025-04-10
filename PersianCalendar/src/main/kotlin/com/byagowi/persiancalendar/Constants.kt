@@ -79,6 +79,7 @@ const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
 const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 const val PREF_SWIPE_DOWN_ACTION = "SwipeDownAction"
 const val PREF_TILE_STATE = "TileState"
+const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
@@ -106,6 +107,7 @@ const val DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS = false
 const val DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS = false
 const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
 const val DEFAULT_WIDGET_TRANSPARENCY = 0f
+const val DEFAULT_ATHAN_CHANNEL_ID = 3005
 
 const val ALARMS_BASE_ID = 2000
 

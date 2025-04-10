@@ -4,6 +4,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
@@ -15,10 +16,12 @@ import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.os.postDelayed
-import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.DEFAULT_ATHAN_CHANNEL_ID
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
+import com.byagowi.persiancalendar.PREF_ATHAN_CHANNEL_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
@@ -35,10 +38,10 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.startAthanActivity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import kotlin.random.Random
 import kotlin.time.Duration.Companion.minutes
 
 class AthanNotification : Service() {
@@ -51,11 +54,8 @@ class AthanNotification : Service() {
 
         val athanVibration = athanVibration.value
         val notificationAthan = notificationAthan.value
-        val notificationId = if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000) else {
-            if (notificationAthan) (if (athanVibration) 3000 else 3002)
-            else (if (athanVibration) 3001 else 3003)
-        }
-        val notificationChannelId = notificationId.toString()
+        val notificationId = currentChannelId(this)
+        val notificationChannelId = "$notificationId"
 
         val notificationManager = getSystemService<NotificationManager>()
 
@@ -171,4 +171,28 @@ class AthanNotification : Service() {
     }
 
     private var cleanUp = {}
+
+    companion object {
+        fun invalidateChannel(context: Context) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+            val current = context.preferences
+                .getInt(PREF_ATHAN_CHANNEL_ID, DEFAULT_ATHAN_CHANNEL_ID)
+            context.getSystemService<NotificationManager>()
+                ?.deleteNotificationChannel("$current")
+            context.preferences.edit { putInt(PREF_ATHAN_CHANNEL_ID, current + 1) }
+        }
+
+        private fun currentChannelId(context: Context): Int {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return DEFAULT_ATHAN_CHANNEL_ID
+            val preferences = context.preferences
+            return if (PREF_ATHAN_CHANNEL_ID !in preferences) {
+                context.getSystemService<NotificationManager>()?.let { nm ->
+                    // Just clean up historical ids along the way
+                    (3000..3003).forEach { nm.deleteNotificationChannel("$it") }
+                }
+                context.preferences.edit { putInt(PREF_ATHAN_CHANNEL_ID, DEFAULT_ATHAN_CHANNEL_ID) }
+                DEFAULT_ATHAN_CHANNEL_ID
+            } else context.preferences.getInt(PREF_ATHAN_CHANNEL_ID, DEFAULT_ATHAN_CHANNEL_ID)
+        }
+    }
 }

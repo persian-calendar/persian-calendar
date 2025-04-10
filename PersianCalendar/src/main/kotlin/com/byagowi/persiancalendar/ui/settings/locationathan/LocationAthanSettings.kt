@@ -58,6 +58,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
@@ -221,6 +222,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             stringResource(R.string.notification_athan),
             stringResource(R.string.enable_notification_athan),
             onBeforeToggle = { value ->
+                AthanNotification.invalidateChannel(context)
                 if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
                         context, Manifest.permission.POST_NOTIFICATIONS
                     ) != PackageManager.PERMISSION_GRANTED
@@ -249,7 +251,11 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             PREF_ATHAN_VIBRATION,
             athanVibration.collectAsState().value,
             stringResource(R.string.vibration),
-            language.tryTranslateAthanVibrationSummary()
+            language.tryTranslateAthanVibrationSummary(),
+            onBeforeToggle = {
+                AthanNotification.invalidateChannel(context)
+                it
+            },
         )
     }
     this.AnimatedVisibility(isLocationSet) {

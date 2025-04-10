@@ -28,6 +28,7 @@ import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
@@ -41,6 +42,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val launcher = rememberLauncherForActivityResult(PickRingtoneContract()) callback@{ uri ->
         onDismissRequest()
         uri ?: return@callback
+        AthanNotification.invalidateChannel(context)
         // If no ringtone has been found better to skip touching preferences store
         val ringtone = RingtoneManager.getRingtone(context, uri.toUri()) ?: return@callback
         val ringtoneTitle = ringtone.getTitle(context) ?: ""
@@ -66,6 +68,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                 R.string.entezar to R.raw.entezar
             ).map { (stringId, rawId) ->
                 stringId to {
+                    AthanNotification.invalidateChannel(context)
                     context.preferences.edit {
                         putString(PREF_ATHAN_URI, context.resources.getRawUri(rawId))
                         putString(PREF_ATHAN_NAME, context.getString(stringId))
