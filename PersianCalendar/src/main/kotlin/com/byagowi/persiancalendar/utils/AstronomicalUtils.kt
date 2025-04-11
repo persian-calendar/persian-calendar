@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.annotation.StringRes
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
@@ -23,6 +24,7 @@ import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.math.atan2
 
 // Based on Mehdi's work
@@ -33,8 +35,9 @@ import kotlin.math.atan2
 private val scorpioRange = 210.0..267.0
 
 // This only checks the midday, useful for calendar table where fast calculatio is needed
-fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12): Boolean {
+fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean {
     val calendar = jdn.toGregorianCalendar()
+    calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
     calendar[GregorianCalendar.MINUTE] = 0
     calendar[GregorianCalendar.SECOND] = 0
@@ -61,9 +64,9 @@ fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12): Boolean {
 
 enum class MoonInScorpioState { Start, Inside, End }
 
-fun moonInScorpioState(jdn: Jdn): MoonInScorpioState? {
-    val end = isMoonInScorpio(jdn, 0)
-    val start = isMoonInScorpio(jdn + 1, 0)
+fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioState? {
+    val end = isMoonInScorpio(jdn, 0, setIranTime)
+    val start = isMoonInScorpio(jdn + 1, 0, setIranTime)
     return when {
         start && end -> MoonInScorpioState.Inside
         start -> MoonInScorpioState.Start

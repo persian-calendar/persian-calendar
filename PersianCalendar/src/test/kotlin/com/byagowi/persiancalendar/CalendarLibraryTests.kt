@@ -255,7 +255,7 @@ class CalendarLibraryTests {
         }.forEach { jdn ->
             assertEquals(
                 moonInScorpioDaysOf1404[jdn],
-                moonInScorpioState(jdn),
+                moonInScorpioState(jdn, setIranTime = true),
                 "${jdn.toPersianDate()}"
             )
         }
