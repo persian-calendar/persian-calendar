@@ -225,10 +225,11 @@ fun CalendarsOverview(
         if (language.isPersian) {
             val persianDate = jdn.toPersianDate()
             val dayOfYear = persianDayOfYear(persianDate, jdn)
-            this.AnimatedVisibility(isAncientIranEnabled && isExpanded) {
+            val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
+            this.AnimatedVisibility(enableExtra && isExpanded) {
                 AdditionalDateText(ancientDayName(dayOfYear))
             }
-            this.AnimatedVisibility((isAncientIranEnabled && isExpanded) || persianDate.year < 1304) {
+            this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
                 AdditionalDateText(jalaliName(persianDate, dayOfYear) + " جلالی")
             }
         }
