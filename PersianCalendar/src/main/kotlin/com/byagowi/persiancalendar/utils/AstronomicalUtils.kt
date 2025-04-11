@@ -17,21 +17,59 @@ import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
-import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.GregorianCalendar
 import kotlin.math.atan2
 
 // Based on Mehdi's work
 
-fun isMoonInScorpio(jdn: Jdn): Boolean = isMoonInScorpio(jdn.toPersianDate(), jdn.toIslamicDate())
 
-fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean {
-    return (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
-            persianDate.month).toInt() % 12 == 8
+// Staring number is from tropical range, Zodiac.SCORPIO.tropicalRange[0] == 210
+// I'm seeing 242-267 in their "صورت فلکی" calculation, let's just use it's ending number for now
+private val scorpioRange = 210.0..267.0
+
+// This only checks the midday, useful for calendar table where fast calculatio is needed
+fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12): Boolean {
+    val calendar = jdn.toGregorianCalendar()
+    calendar[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
+    calendar[GregorianCalendar.MINUTE] = 0
+    calendar[GregorianCalendar.SECOND] = 0
+    calendar[GregorianCalendar.MILLISECOND] = 0
+    return eclipticGeoMoon(Time.fromMillisecondsSince1970(calendar.timeInMillis)).lon in scorpioRange
+}
+
+// Search for actual time of it, not used till making it accurate and compatible enough
+//private fun Double.withMaxDegreeValue(max: Double): Double {
+//    var deg = this
+//    while (deg <= max - 360.0)
+//        deg += 360.0
+//    while (deg > max)
+//        deg -= 360.0
+//    return deg
+//}
+//
+//fun searchLunarLongitude(targetLon: Double, startTime: Time): Time? {
+//    val time2 = startTime.addDays(20.0)
+//    return search(startTime, time2, 30.0) { time ->
+//        (eclipticGeoMoon(time).lon - targetLon).withMaxDegreeValue(+180.0)
+//    }
+//}
+
+enum class MoonInScorpioState { Start, Inside, End }
+
+fun moonInScorpioState(jdn: Jdn): MoonInScorpioState? {
+    val end = isMoonInScorpio(jdn, 0)
+    val start = isMoonInScorpio(jdn + 1, 0)
+    return when {
+        start && end -> MoonInScorpioState.Inside
+        start -> MoonInScorpioState.Start
+        end -> MoonInScorpioState.End
+        else -> null
+    }
 }
 
 fun generateZodiacInformation(resources: Resources, jdn: Jdn, withEmoji: Boolean): String {

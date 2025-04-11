@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.ancientDayName
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
@@ -74,6 +75,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.moonInScorpioState
 import com.byagowi.persiancalendar.utils.persianDayOfYear
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
@@ -188,20 +190,6 @@ fun CalendarsOverview(
             }
         }
 
-        val showIsMoonInScorpio = isAstronomicalExtraFeaturesEnabled && isMoonInScorpio(jdn)
-        this.AnimatedVisibility(showIsMoonInScorpio) {
-            SelectionContainer {
-                Text(
-                    stringResource(R.string.moon_in_scorpio),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 24.dp, end = 24.dp, top = 4.dp),
-                )
-            }
-        }
-
         @Composable
         fun AdditionalDateText(text: String) {
             Box(
@@ -222,6 +210,27 @@ fun CalendarsOverview(
         }
 
         val language by language.collectAsState()
+
+        val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
+            moonInScorpioState(jdn) else null
+        this.AnimatedVisibility(moonInScorpioState != null) {
+            val isMoonInScorpioInMidday = isMoonInScorpio(jdn)
+            AdditionalDateText(
+                if (language.isPersian) when (moonInScorpioState) {
+                    MoonInScorpioState.Inside -> stringResource(R.string.moon_in_scorpio)
+                    MoonInScorpioState.Start ->
+                        if (isMoonInScorpioInMidday) "قمر پیش از ظهر وارد برج عقرب می‌شود"
+                        else "قمر پس از ظهر وارد برج عقرب می‌شود"
+
+                    MoonInScorpioState.End ->
+                        if (isMoonInScorpioInMidday) "قمر پس از ظهر از صورت فلکی عقرب خارج می‌شود"
+                        else "قمر پیش از ظهر از صورت فلکی عقرب خارج می‌شود"
+
+                    else -> ""
+                } else stringResource(R.string.moon_in_scorpio)
+            )
+        }
+
         if (language.isPersian) {
             val persianDate = jdn.toPersianDate()
             val dayOfYear = persianDayOfYear(persianDate, jdn)
