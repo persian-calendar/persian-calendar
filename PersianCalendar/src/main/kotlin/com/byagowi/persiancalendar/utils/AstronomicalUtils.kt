@@ -37,7 +37,7 @@ private val scorpioRange = 210.0..267.0
 // This only checks the midday, useful for calendar table where fast calculatio is needed
 fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean {
     val calendar = jdn.toGregorianCalendar()
-    calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+    if (setIranTime) calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
     calendar[GregorianCalendar.MINUTE] = 0
     calendar[GregorianCalendar.SECOND] = 0
