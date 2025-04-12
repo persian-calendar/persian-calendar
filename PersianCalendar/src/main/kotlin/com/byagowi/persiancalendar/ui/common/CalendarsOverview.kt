@@ -157,18 +157,12 @@ fun CalendarsOverview(
         val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
             moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
-            val isMoonInScorpioInMidday = isMoonInScorpio(jdn)
             CalendarOverviewText(
                 if (language.isPersian) when (moonInScorpioState) {
                     MoonInScorpioState.Borji -> "قمر در برج عقرب"
                     MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
-                    MoonInScorpioState.Start ->
-                        if (isMoonInScorpioInMidday) "قمر در ساعتی پیش از ظهر وارد برج عقرب می‌شود"
-                        else "قمر پس از ظهر وارد برج عقرب می‌شود"
-
-                    MoonInScorpioState.End ->
-                        if (isMoonInScorpioInMidday) "قمر در ساعتی پس از ظهر از صورت فلکی عقرب خارج می‌شود"
-                        else "قمر پیش از ظهر از صورت فلکی عقرب خارج می‌شود"
+                    MoonInScorpioState.Start -> "قمر وارد برج عقرب می‌شود"
+                    MoonInScorpioState.End -> "قمر از صورت فلکی عقرب خارج می‌شود"
 
                     else -> ""
                 } else stringResource(R.string.moon_in_scorpio)
