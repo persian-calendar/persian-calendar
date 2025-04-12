@@ -185,8 +185,8 @@ fun SharedTransitionScope.AstronomyScreen(
             ScreenSurface(animatedContentScope) {
                 val bottomPadding = paddingValues.calculateBottomPadding()
                 if (isLandscape) BoxWithConstraints(Modifier.fillMaxSize()) {
-                    val maxHeight = maxHeight
-                    val maxWidth = maxWidth
+                    val maxHeight = this.maxHeight
+                    val maxWidth = this.maxWidth
                     Row(Modifier.fillMaxWidth()) {
                         Column(
                             Modifier
@@ -212,8 +212,8 @@ fun SharedTransitionScope.AstronomyScreen(
                     }
                 } else Column {
                     BoxWithConstraints(Modifier.weight(1f, fill = false)) {
-                        val maxHeight = maxHeight
-                        val maxWidth = maxWidth
+                        val maxHeight = this.maxHeight
+                        val maxWidth = this.maxWidth
                         var needsScroll by remember { mutableStateOf(false) }
                         // Puts content in middle of available space after the measured header
                         Layout(

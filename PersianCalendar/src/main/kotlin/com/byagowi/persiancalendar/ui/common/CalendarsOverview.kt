@@ -48,7 +48,6 @@ import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
@@ -140,73 +139,17 @@ fun CalendarsOverview(
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1)
                 equinoxTitle(date, jdn, context).first else null
         }
-        val contextColor = LocalContentColor.current
 
-        this.AnimatedVisibility(
-            visible = equinox != null,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-        ) {
-            SelectionContainer {
-                BasicText(
-                    equinox ?: "",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = { contextColor },
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
-                    maxLines = 1,
-                    softWrap = false,
-                    autoSize = TextAutoSize.StepBased(
-                        minFontSize = MaterialTheme.typography.labelSmall.fontSize,
-                        maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    ),
-                )
-            }
-        }
+        this.AnimatedVisibility(visible = equinox != null) { CalendarOverviewText(equinox ?: "") }
 
         this.AnimatedVisibility(!isToday) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 4.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                SelectionContainer {
-                    BasicText(
-                        listOf(
-                            stringResource(R.string.days_distance),
-                            spacedColon,
-                            calculateDaysDifference(context.resources, jdn, today)
-                        ).joinToString(""),
-                        color = { contextColor },
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.animateContentSize(),
-                        maxLines = 1,
-                        softWrap = false,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = MaterialTheme.typography.labelSmall.fontSize,
-                            maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        ),
-                    )
-                }
-            }
-        }
-
-        @Composable
-        fun AdditionalDateText(text: String) {
-            Box(
-                modifier = Modifier
-                    .padding(top = 4.dp)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                SelectionContainer {
-                    Text(
-                        text = text,
-                        modifier = Modifier.animateContentSize(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
+            CalendarOverviewText(
+                listOf(
+                    stringResource(R.string.days_distance),
+                    spacedColon,
+                    calculateDaysDifference(context.resources, jdn, today)
+                ).joinToString("")
+            )
         }
 
         val language by language.collectAsState()
@@ -215,15 +158,16 @@ fun CalendarsOverview(
             moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
             val isMoonInScorpioInMidday = isMoonInScorpio(jdn)
-            AdditionalDateText(
+            CalendarOverviewText(
                 if (language.isPersian) when (moonInScorpioState) {
-                    MoonInScorpioState.Inside -> stringResource(R.string.moon_in_scorpio)
+                    MoonInScorpioState.Borji -> "قمر در برج عقرب"
+                    MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
                     MoonInScorpioState.Start ->
-                        if (isMoonInScorpioInMidday) "قمر پیش از ظهر وارد برج عقرب می‌شود"
+                        if (isMoonInScorpioInMidday) "قمر در ساعتی پیش از ظهر وارد برج عقرب می‌شود"
                         else "قمر پس از ظهر وارد برج عقرب می‌شود"
 
                     MoonInScorpioState.End ->
-                        if (isMoonInScorpioInMidday) "قمر پس از ظهر از صورت فلکی عقرب خارج می‌شود"
+                        if (isMoonInScorpioInMidday) "قمر در ساعتی پس از ظهر از صورت فلکی عقرب خارج می‌شود"
                         else "قمر پیش از ظهر از صورت فلکی عقرب خارج می‌شود"
 
                     else -> ""
@@ -236,29 +180,17 @@ fun CalendarsOverview(
             val dayOfYear = persianDayOfYear(persianDate, jdn)
             val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility(enableExtra && isExpanded) {
-                AdditionalDateText(ancientDayName(dayOfYear))
+                CalendarOverviewText(ancientDayName(dayOfYear))
             }
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
-                AdditionalDateText(jalaliName(persianDate, dayOfYear) + " جلالی")
+                CalendarOverviewText(jalaliName(persianDate, dayOfYear) + " جلالی")
             }
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 4.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                SelectionContainer {
-                    Text(
-                        generateZodiacInformation(context.resources, jdn, withEmoji = true),
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.animateContentSize(),
-                    )
-                }
-            }
+            CalendarOverviewText(
+                generateZodiacInformation(context.resources, jdn, withEmoji = true)
+            )
         }
 
         val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)
@@ -286,7 +218,9 @@ fun CalendarsOverview(
         this.AnimatedVisibility(isExpanded) {
             Row(
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .padding(top = 4.dp)
+                    .fillMaxWidth(),
             ) {
                 progresses.forEach { (stringId, current, max) ->
                     val title = stringResource(stringId)
@@ -318,60 +252,25 @@ fun CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp, top = 4.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                SelectionContainer {
-                    BasicText(
-                        stringResource(
-                            R.string.start_of_year_diff,
-                            formatNumber(jdn - startOfYearJdn + 1),
-                            formatNumber(currentWeek),
-                            formatNumber(date.month)
-                        ),
-                        color = { contextColor },
-                        modifier = Modifier.animateContentSize(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        softWrap = false,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = MaterialTheme.typography.labelSmall.fontSize,
-                            maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        ),
-                    )
-                }
-            }
+            CalendarOverviewText(
+                stringResource(
+                    R.string.start_of_year_diff,
+                    formatNumber(jdn - startOfYearJdn + 1),
+                    formatNumber(currentWeek),
+                    formatNumber(date.month)
+                )
+            )
         }
         this.AnimatedVisibility(isExpanded) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                SelectionContainer {
-                    BasicText(
-                        stringResource(
-                            R.string.end_of_year_diff,
-                            formatNumber(endOfYearJdn - jdn),
-                            formatNumber(weeksCount - currentWeek),
-                            formatNumber(12 - date.month)
-                        ),
-                        color = { contextColor },
-                        modifier = Modifier.animateContentSize(),
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        softWrap = false,
-                        autoSize = TextAutoSize.StepBased(
-                            minFontSize = MaterialTheme.typography.labelSmall.fontSize,
-                            maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        ),
-                    )
-                }
-            }
+            CalendarOverviewText(
+                stringResource(
+                    R.string.end_of_year_diff,
+                    formatNumber(endOfYearJdn - jdn),
+                    formatNumber(weeksCount - currentWeek),
+                    formatNumber(12 - date.month)
+                ),
+                noTopPadding = true,
+            )
         }
 
         Spacer(Modifier.height(8.dp))
@@ -382,6 +281,32 @@ fun CalendarsOverview(
             isExpanded = isExpanded,
             tint = MaterialTheme.colorScheme.primary,
         )
+    }
+}
+
+@Composable
+private fun CalendarOverviewText(text: String, noTopPadding: Boolean = false) {
+    val contextColor = LocalContentColor.current
+    Box(
+        modifier = Modifier
+            .padding(top = (if (noTopPadding) 0 else 4).dp, start = 24.dp, end = 24.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        SelectionContainer {
+            BasicText(
+                text = text,
+                color = { contextColor },
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.animateContentSize(),
+                maxLines = 1,
+                softWrap = false,
+                autoSize = TextAutoSize.StepBased(
+                    minFontSize = MaterialTheme.typography.labelSmall.fontSize,
+                    maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                ),
+            )
+        }
     }
 }
 

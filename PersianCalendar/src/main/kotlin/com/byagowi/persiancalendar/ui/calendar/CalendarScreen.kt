@@ -265,8 +265,8 @@ fun SharedTransitionScope.CalendarScreen(
             // For screens without navigation bar, at least make sure it has some bottom padding
             .coerceAtLeast(24.dp)
         BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
-            val maxWidth = maxWidth
-            val maxHeight = maxHeight
+            val maxWidth = this.maxWidth
+            val maxHeight = this.maxHeight
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
 
             Column(Modifier.fillMaxSize()) {

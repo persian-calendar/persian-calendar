@@ -34,16 +34,19 @@ import kotlin.math.atan2
 // I'm seeing 242-267 in their "صورت فلکی" calculation, let's just use it's ending number for now
 private val scorpioRange = 210.0..267.0
 
-// This only checks the midday, useful for calendar table where fast calculatio is needed
-fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean {
+private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int = 12): Double {
     val calendar = jdn.toGregorianCalendar()
     if (setIranTime) calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
     calendar[GregorianCalendar.MINUTE] = 0
     calendar[GregorianCalendar.SECOND] = 0
     calendar[GregorianCalendar.MILLISECOND] = 0
-    return eclipticGeoMoon(Time.fromMillisecondsSince1970(calendar.timeInMillis)).lon in scorpioRange
+    return eclipticGeoMoon(Time.fromMillisecondsSince1970(calendar.timeInMillis)).lon
 }
+
+// This only checks the midday, useful for calendar table where fast calculatio is needed
+fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean =
+    lunarLongitude(jdn, setIranTime, hourOfDay) in scorpioRange
 
 // Search for actual time of it, not used till making it accurate and compatible enough
 //private fun Double.withMaxDegreeValue(max: Double): Double {
@@ -62,13 +65,15 @@ fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false)
 //    }
 //}
 
-enum class MoonInScorpioState { Start, Inside, End }
+enum class MoonInScorpioState { Start, Borji, Falaki, End }
 
 fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioState? {
     val end = isMoonInScorpio(jdn, 0, setIranTime)
     val start = isMoonInScorpio(jdn + 1, 0, setIranTime)
     return when {
-        start && end -> MoonInScorpioState.Inside
+        start && end ->
+            if (lunarLongitude(jdn, setIranTime) <= 240/*Zodiac.SCORPIO.tropicalRange[1]*/)
+                MoonInScorpioState.Borji else MoonInScorpioState.Falaki
         start -> MoonInScorpioState.Start
         end -> MoonInScorpioState.End
         else -> null
