@@ -61,6 +61,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
@@ -71,17 +72,20 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateZodiacInformation
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
 import com.byagowi.persiancalendar.utils.persianDayOfYear
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
+import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.seasons
+import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.GregorianCalendar
 
 @Composable
 fun CalendarsOverview(
@@ -185,6 +189,15 @@ fun CalendarsOverview(
             CalendarOverviewText(
                 generateZodiacInformation(context.resources, jdn, withEmoji = true)
             )
+        }
+
+        this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+            val date = jdn.toGregorianCalendar()
+            date[GregorianCalendar.HOUR_OF_DAY] = 12
+            val time = Time.fromMillisecondsSince1970(date.time.time)
+            val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
+            val phase = lunarAge.toPhase()
+            CalendarOverviewText(phase.emoji + " " + stringResource(phase.stringRes))
         }
 
         val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)

@@ -420,4 +420,14 @@
     <string name="print">چاپ</string>
     <string name="week_view">نمای هفته</string>
     <string name="day_view">نمای روز</string>
+
+    <!-- https://commons.wikimedia.org/wiki/File:Lunar-Phase-Diagram-Parsi.png -->
+    <string name="new_moon">ماه نو یا بَرن</string>
+    <string name="waxing_crescent">هلال سوی ماه تمام</string>
+    <string name="first_quarter">یک‌چهارم نخست</string>
+    <string name="waxing_gibbous">برآمدگی سوی ماه تمام</string>
+    <string name="full_moon">ماه تمام یا بدر</string>
+    <string name="waning_gibbous">برآمدگی سوی کمرنگی</string>
+    <string name="third_quarter">یک‌چهارم سوم</string>
+    <string name="waning_crescent">هلال سوی کمرنگی</string>
 </resources>
