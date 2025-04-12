@@ -63,9 +63,13 @@ class AstronomyTests {
     @Test
     fun `Zodiac from ecliptic`() {
         listOf(10, 40, 60, 100, 130, 140, 180, 230, 260, 280, 310, 320, 350).zip(
-            Zodiac.entries + Zodiac.ARIES
+            listOf(Zodiac.PISCES) + Zodiac.entries
         ) { longitude, zodiac ->
-            assertEquals(zodiac, Zodiac.fromIau(longitude.toDouble()))
+            assertEquals(
+                expected = zodiac,
+                actual = Zodiac.fromIau(longitude.toDouble()),
+                message = longitude.toString()
+            )
         }
         (0..11).map { 20 + it * 30 }
             .zip(Zodiac.entries + Zodiac.PISCES) { longitude, zodiac ->
@@ -76,8 +80,8 @@ class AstronomyTests {
     @Test
     fun `Zodiac center of range`() {
         listOf(
-            10.88, 42.17, 72.3, 106.46, 127.39, 154.32,
-            198.755, 233.37, 256.915, 286.875, 307.105, 330.15
+            42.17, 72.3, 106.46, 127.39, 154.32, 198.755,
+            233.37, 256.915, 286.875, 307.105, 330.15, 370.88,
         ).zip(Zodiac.entries) { centerOfZodiac, zodiac ->
             assertThat(zodiac.iauRange.average()).isWithin(1.0e-10).of(centerOfZodiac)
         }

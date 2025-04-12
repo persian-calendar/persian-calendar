@@ -30,10 +30,6 @@ import kotlin.math.atan2
 // Based on Mehdi's work
 
 
-// Staring number is from tropical range, Zodiac.SCORPIO.tropicalRange[0] == 210
-// I'm seeing 242-267 in their "صورت فلکی" calculation, let's just use it's ending number for now
-private val scorpioRange = 210.0..267.0
-
 private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int = 12): Double {
     val calendar = jdn.toGregorianCalendar()
     if (setIranTime) calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
@@ -46,7 +42,7 @@ private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: In
 
 // This only checks the midday, useful for calendar table where fast calculatio is needed
 fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean =
-    lunarLongitude(jdn, setIranTime, hourOfDay) in scorpioRange
+    lunarLongitude(jdn, setIranTime, hourOfDay) in Zodiac.scorpioRange
 
 // Search for actual time of it, not used till making it accurate and compatible enough
 //private fun Double.withMaxDegreeValue(max: Double): Double {
