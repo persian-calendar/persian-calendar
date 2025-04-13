@@ -54,6 +54,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAncientIranEnabled
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
@@ -197,7 +198,8 @@ fun CalendarsOverview(
             val time = Time.fromMillisecondsSince1970(date.time.time)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
-            CalendarOverviewText(phase.emoji + " " + stringResource(phase.stringRes))
+            val coordinates by coordinates.collectAsState()
+            CalendarOverviewText(phase.emoji(coordinates) + " " + stringResource(phase.stringRes))
         }
 
         val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)

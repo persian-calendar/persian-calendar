@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.isSouthernHemisphere
+import io.github.persiancalendar.praytimes.Coordinates
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.floor
@@ -23,7 +25,7 @@ value class LunarAge private constructor(private val fraction: Double) {
     // Eight is number phases in this system, named by most of the cultures
     fun toPhase() = Phase.entries.getOrNull((fraction * 8).roundToInt()) ?: Phase.NEW_MOON
 
-    enum class Phase(@StringRes val stringRes: Int, val emoji: String) {
+    enum class Phase(@StringRes val stringRes: Int, private val rawEmoji: String) {
         NEW_MOON(R.string.new_moon, "🌑"),
         WAXING_CRESCENT(R.string.waxing_crescent, "🌒"),
         FIRST_QUARTER(R.string.first_quarter, "🌓"),
@@ -31,7 +33,15 @@ value class LunarAge private constructor(private val fraction: Double) {
         FULL_MOON(R.string.full_moon, "🌕"),
         WANING_GIBBOUS(R.string.waning_gibbous, "🌖"),
         THIRD_QUARTER(R.string.third_quarter, "🌗"),
-        WANING_CRESCENT(R.string.waning_crescent, "🌘")
+        WANING_CRESCENT(R.string.waning_crescent, "🌘");
+
+        fun emoji(coordinates: Coordinates?): String {
+            return when {
+                ordinal == 0 -> rawEmoji
+                coordinates?.isSouthernHemisphere == true -> entries[entries.size - ordinal].rawEmoji
+                else -> rawEmoji
+            }
+        }
     }
 
     companion object {

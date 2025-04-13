@@ -9,6 +9,8 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.compose.ui.util.lerp
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
@@ -42,9 +44,19 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             invalidate()
         }
 
+    val isSouthernHemisphere = coordinates.value?.isSouthernHemisphere == true
+
     override fun onDraw(canvas: Canvas) {
         val cx = width / 2f
-        solarDraw.moon(canvas, sun ?: return, moon ?: return, cx, cx, cx)
+        solarDraw.moon(
+            canvas = canvas,
+            sun = sun ?: return,
+            moon = moon ?: return,
+            cx = cx,
+            cy = cx,
+            r = cx,
+            isSouthernHemisphere = isSouthernHemisphere
+        )
     }
 
     fun update() {

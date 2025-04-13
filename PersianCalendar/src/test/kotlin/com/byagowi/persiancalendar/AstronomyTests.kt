@@ -182,4 +182,19 @@ class AstronomyTests {
             assertEquals(expected, ChineseZodiac.fromChineseCalendar(mock))
         }
     }
+
+    @Test
+    fun `Southern hemisphere in moon draw`() {
+        val southern = Coordinates(-10.0, 10.0, 10.0)
+        assertEquals(
+            LunarAge.Phase.WAXING_CRESCENT.emoji(null),
+            LunarAge.Phase.WANING_CRESCENT.emoji(southern)
+        )
+
+        // Just make sure things go well
+        (-720..720).map {
+            val phase = LunarAge.fromDegrees(it.toDouble()).toPhase()
+            "$phase ${phase.emoji(null)} ${phase.emoji(southern)}"
+        }
+    }
 }
