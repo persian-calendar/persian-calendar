@@ -35,7 +35,7 @@ class SolarDraw(resources: Resources) {
 
     fun moon(
         canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
-        angle: Float? = null, moonAltitude: Double? = null, isSouthernHemisphere: Boolean = false,
+        angle: Float? = null, moonAltitude: Double? = null, flipHorizontally: Boolean = false,
     ) {
         val alpha =
             if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(127, 255)
@@ -47,7 +47,7 @@ class SolarDraw(resources: Resources) {
         moonDrawable.draw(canvas)
         val phase = (moon.lon - sun.elon)
             .let { it + if (it < 0) 360 else 0 }
-            .let { if (isSouthernHemisphere) 360 - it else it }
+            .let { if (flipHorizontally) 360 - it else it }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
             val sr = r * .97f
             val arcWidth = (cos(Math.toRadians(phase)) * sr).toFloat()

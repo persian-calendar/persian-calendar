@@ -55,7 +55,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             cx = cx,
             cy = cx,
             r = cx,
-            isSouthernHemisphere = isSouthernHemisphere
+            flipHorizontally = isSouthernHemisphere
         )
     }
 
