@@ -55,16 +55,19 @@ enum class ChineseZodiac(
         resources: Resources,
         withEmoji: Boolean,
         persianDate: PersianDate? = null,
+        withOldEraName: Boolean = false,
     ): String {
         val oldEra = persianDate?.year?.let { it < 1304 } ?: false
+        val oldEraNameAddition = if (!oldEra && withOldEraName) " «$oldEraPersianName»" else ""
         return if (persianDate != null && language.value.isPersian && (persianAlternative != null || oldEra)) {
             (if (withEmoji) "${persianAlternative?.first ?: emoji} " else "") + let {
-                if (oldEra) oldEraPersianName else persianAlternative?.second
-                    ?: resources.getString(title)
+                if (oldEra) oldEraPersianName
+                else (persianAlternative?.second ?: resources.getString(title)) + oldEraNameAddition
             }
         } else buildString {
             if (withEmoji) append("$emoji ")
             append(resources.getString(title))
+            append(oldEraNameAddition)
         }
     }
 

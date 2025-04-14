@@ -66,7 +66,13 @@ class AstronomyState(val date: GregorianCalendar) {
             val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
             (language.value.tryTranslateEclipseType(isSolar, kind)
                 ?: resources.getString(title)) + spacedColon + formattedDate
-        } + generateYearName(resources, jdn.toPersianDate(), true, date)
+        } + generateYearName(
+            resources = resources,
+            persianDate = jdn.toPersianDate(),
+            withOldEraName = language.value.isPersian,
+            withEmoji = true,
+            time = date
+        )
     }
 
     companion object {

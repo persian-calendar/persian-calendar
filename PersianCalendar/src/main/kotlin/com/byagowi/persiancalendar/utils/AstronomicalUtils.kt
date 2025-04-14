@@ -89,11 +89,17 @@ fun generateYearName(
     resources: Resources,
     persianDate: PersianDate,
     withEmoji: Boolean,
-    time: GregorianCalendar? = null
+    time: GregorianCalendar? = null,
+    withOldEraName: Boolean = false,
 ): String {
     val yearNames = listOfNotNull(
         language.value.inParentheses.format(
-            ChineseZodiac.fromPersianCalendar(persianDate).format(resources, withEmoji, persianDate),
+            ChineseZodiac.fromPersianCalendar(persianDate).format(
+                resources = resources,
+                withEmoji = withEmoji,
+                persianDate = persianDate,
+                withOldEraName = withOldEraName,
+            ),
             resources.getString(R.string.shamsi_calendar_short)
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
