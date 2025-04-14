@@ -75,6 +75,9 @@
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
+        <property
+            android:name="com.google.wear.watchface.format.version"
+            android:value="1" />
 
         <activity
             android:name=".ui.MainActivity"
