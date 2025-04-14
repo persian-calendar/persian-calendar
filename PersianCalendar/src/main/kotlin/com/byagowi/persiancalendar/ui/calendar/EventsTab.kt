@@ -326,11 +326,12 @@ private fun EquinoxCountDown(
     }.dropWhile { it.first == 0 }.forEachIndexed { i, (_, x) ->
         if (i != 0) Spacer(Modifier.width(8.dp))
         val parts = x.split(" ")
-        if (parts.size == 2 && parts[0].length <= 2 && !isTalkBackEnabled) Column(
+        if (parts.size == 2 && parts[0].length <= 3 && !isTalkBackEnabled) Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row {
-                parts[0].padStart(2, formatNumber(0)[0]).forEachIndexed { i, c ->
+                val digits = parts[0].padStart(2, formatNumber(0)[0])
+                digits.forEachIndexed { i, c ->
                     Text(
                         "$c",
                         style = MaterialTheme.typography.headlineSmall,
@@ -343,7 +344,7 @@ private fun EquinoxCountDown(
                             )
                             .width(28.dp),
                     )
-                    if (i == 0) Spacer(Modifier.width(2.dp))
+                    if (i + 1 < digits.length) Spacer(Modifier.width(2.dp))
                 }
             }
             Text(
