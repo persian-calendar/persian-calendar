@@ -16,7 +16,7 @@ value class Jdn(val value: Long) {
     fun toCivilDate() = CivilDate(value)
     fun toPersianDate() = PersianDate(value)
 
-    operator fun compareTo(other: Jdn) = value.compareTo(other.value)
+    operator fun compareTo(other: Jdn) = value compareTo other.value
     operator fun plus(other: Int): Jdn = Jdn(value + other)
     operator fun minus(other: Int): Jdn = Jdn(value - other)
 

@@ -58,9 +58,9 @@ val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->
         city to language.value.getCityName(city).let { language.value.prepareForSort(it) }
     }.sortedWith { (leftCity, leftSortName), (rightCity, rightSortName) ->
-        language.value.countriesOrder.indexOf(leftCity.countryCode).compareTo(
+        (language.value.countriesOrder.indexOf(leftCity.countryCode) compareTo
             language.value.countriesOrder.indexOf(rightCity.countryCode)
-        ).takeIf { it != 0 } ?: leftSortName.compareTo(rightSortName)
+        ).takeIf { it != 0 } ?: (leftSortName compareTo rightSortName)
     }.map { (city, _) -> city }
 
 fun <T> listOf31Items(

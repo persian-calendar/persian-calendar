@@ -552,11 +552,11 @@ private fun DaysView(
             addDivisions(
                 dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
                     .filter { it.time != null }.sortedWith { x, y ->
-                        x.start.timeInMillis.compareTo(y.end.timeInMillis).let {
+                        (x.start.timeInMillis compareTo y.end.timeInMillis).let {
                             if (it != 0) return@sortedWith it
                         }
                         // If both start at the same time, put bigger events first, better for interval graphs
-                        y.start.timeInMillis.compareTo(x.end.timeInMillis)
+                        y.start.timeInMillis compareTo x.end.timeInMillis
                     },
             )
         }
