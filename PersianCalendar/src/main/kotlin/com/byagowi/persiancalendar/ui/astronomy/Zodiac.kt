@@ -71,10 +71,12 @@ enum class Zodiac(
         fun fromPersianCalendar(persianDate: PersianDate): Zodiac =
             entries.getOrNull(persianDate.month - 1) ?: ARIES
 
+        // Or can be named Falaki فلکی
         fun fromIau(longitude: Double): Zodiac =
             if (longitude < ARIES.iauRangeStart) PISCES
             else entries.firstOrNull { longitude < it.iauNextRangeStart } ?: PISCES
 
+        // Or can be named Borji برجی in addition to اعتدالی ُTropical
         fun fromTropical(longitude: Double): Zodiac =
             entries.getOrNull(floor(longitude / 30).toInt()) ?: PISCES
 
