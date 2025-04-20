@@ -407,10 +407,10 @@ fun loadLanguageResources(resources: Resources) {
 fun updateStoredPreference(context: Context) {
     debugLog("Utils: updateStoredPreference is called")
     val preferences = context.preferences
-    val language = language.value
-
-    language_.value = preferences.getString(PREF_APP_LANGUAGE, null)
+    val language = preferences.getString(PREF_APP_LANGUAGE, null)
         ?.let(Language::valueOfLanguageCode) ?: Language.getPreferredDefaultLanguage(context)
+
+    language_.value = language
     userSetTheme_.value = run {
         val key = preferences.getString(PREF_THEME, null)
         Theme.entries.find { it.key == key }
