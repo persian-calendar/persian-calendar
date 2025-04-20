@@ -56,6 +56,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
     val isNepali get() = this == NE
+    val isTamil get() = this == TA
 
     val showNepaliCalendar get() = this == NE
 
@@ -165,13 +166,14 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     // Local digits (۱۲۳) make sense for the locale
-    val canHaveLocalDigits get() = isArabicScript || isNepali
+    val canHaveLocalDigits get() = isArabicScript || isNepali || isTamil
 
     // Prefers ٤٥٦ over ۴۵۶
     val preferredDigits
         get() = when (this) {
             AR, CKB -> ARABIC_INDIC_DIGITS
             NE -> DEVANAGARI_DIGITS
+            TA -> TAMIL_DIGITS
             else -> PERSIAN_DIGITS
         }
 
@@ -588,6 +590,7 @@ enum class Language(val code: String, val nativeName: String) {
         val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
         val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
         val DEVANAGARI_DIGITS = charArrayOf('०', '१', '२', '३', '४', '५', '६', '७', '८', '९')
+        val TAMIL_DIGITS = charArrayOf('௦', '௧', '௨', '௩', '௪', '௫', '௬', '௭', '௮', '௯')
         // CJK digits: charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
         // but they weren't looking nice in the UI
     }

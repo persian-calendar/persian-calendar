@@ -156,7 +156,7 @@ fun SharedTransitionScope.DaysTable(
         }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
         val daysTextSize =
-            diameter * (if (mainCalendarDigitsIsArabic || isVazirEnabled) 18 else 25) / 40
+            diameter * (if (mainCalendarDigitsIsArabic || language.isTamil || isVazirEnabled) 18 else 25) / 40
         val daysStyle = LocalTextStyle.current.copy(
             fontSize = with(density) { daysTextSize.toSp() },
         )

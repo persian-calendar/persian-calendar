@@ -26,7 +26,7 @@ fun createStatusIcon(dayOfMonth: Int): Bitmap {
 }
 
 fun getDayIconResource(day: Int): Int = when (preferredDigits) {
-    Language.DEVANAGARI_DIGITS, Language.ARABIC_DIGITS -> DAYS_ICONS_ARABIC
+    Language.DEVANAGARI_DIGITS, Language.ARABIC_DIGITS, Language.TAMIL_DIGITS -> DAYS_ICONS_ARABIC
     Language.ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
     else -> DAYS_ICONS_PERSIAN
 }.getOrNull(day - 1) ?: 0

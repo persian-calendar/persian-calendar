@@ -48,6 +48,12 @@ fun formatNumber(number: Int, digits: CharArray = preferredDigits): String =
 
 fun formatNumber(number: String, digits: CharArray = preferredDigits): String {
     if (isArabicDigitSelected) return number
+    if (digits === Language.TAMIL_DIGITS) when (number) {
+        "10" -> return "௰"
+        "100" -> return "௱"
+        "1000" -> return "௲"
+        else -> Unit
+    }
     return number.map { digits.getOrNull(Character.getNumericValue(it)) ?: it }
         .joinToString("")
 }

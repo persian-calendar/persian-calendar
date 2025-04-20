@@ -1385,7 +1385,7 @@ private data class NotificationData(
 
         // Dynamic small icon generator, most of the times disabled as it needs API 23 and
         // we need to have the other path anyway
-        if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if ((language.isNepali || language.isTamil) && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val icon = IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth))
             builder.setSmallIcon(icon)
         } else {
