@@ -114,6 +114,7 @@ import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -355,6 +356,7 @@ fun yearMonthNameOfDate(date: AbstractDate): List<String> {
         is PersianDate -> if (date.year > 1303) persianMonths else oldEraPersianMonths
         is CivilDate -> gregorianMonths
         is IslamicDate -> islamicMonths
+        is NepaliDate -> nepaliMonths
         else -> monthNameEmptyList
     }
 }
