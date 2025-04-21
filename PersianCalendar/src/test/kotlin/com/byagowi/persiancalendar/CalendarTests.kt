@@ -146,7 +146,7 @@ class CalendarTests {
             )
             val persianDate = jdn.toPersianDate()
             assertEquals(
-                "۱۵ دی ۸۲۹",
+                "۱۵ دی جلالی ۸۲۹",
                 jalaliName(persianDate, persianDayOfYear(persianDate, jdn))
             )
         }

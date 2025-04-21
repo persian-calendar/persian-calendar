@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateZodiacInformation
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
+import com.byagowi.persiancalendar.utils.jalaliAndAncientName
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
@@ -174,22 +175,18 @@ fun CalendarsOverview(
             )
         }
 
-        if (language.isPersian) {
-            val persianDate = jdn.toPersianDate()
-            val dayOfYear = persianDayOfYear(persianDate, jdn)
-            val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
-            this.AnimatedVisibility(enableExtra && isExpanded) {
-                CalendarOverviewText(ancientDayName(dayOfYear))
-            }
-            this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
-                CalendarOverviewText(jalaliName(persianDate, dayOfYear) + " جلالی")
-            }
-        }
-
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             CalendarOverviewText(
                 generateZodiacInformation(context.resources, jdn, withEmoji = true)
             )
+        }
+
+        if (language.isPersian) {
+            val persianDate = jdn.toPersianDate()
+            val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
+            this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
+                CalendarOverviewText(jalaliAndAncientName(persianDate, jdn))
+            }
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {

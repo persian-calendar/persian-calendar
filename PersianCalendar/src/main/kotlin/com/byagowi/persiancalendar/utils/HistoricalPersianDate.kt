@@ -27,8 +27,8 @@ private val persianMonthNames = listOf(
 fun ancientDayName(dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     val month = (dayOfYear - 1) / 30
-    return ((if (month == 12) lastDayOfYearNames else ancientPersianNames)[dayOfMonth]) + " و " +
-            persianMonthNames[if (month == 12) 11 else month] + " ماه"
+    return ((if (month == 12) lastDayOfYearNames else ancientPersianNames)[dayOfMonth]) +
+            if (month == 12) "" else " و ${persianMonthNames[month]} ماه"
 }
 
 // the returned value is a zero indexed number
@@ -40,7 +40,13 @@ fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     val month = (dayOfYear - 1) / 30
     return when (month) {
-        12 -> "روز " + formatNumber(dayOfMonth + 1) + " خمسهٔ مسترقه"
-        else -> formatNumber(dayOfMonth + 1) + " " + persianMonthNames[month]
+        12 -> "روز " + formatNumber(dayOfMonth + 1) + " خمسهٔ جلالی"
+        else -> formatNumber(dayOfMonth + 1) + " " + persianMonthNames[month] + " جلالی"
     } + " " + formatNumber(persianDate.year - 457)
+}
+
+fun jalaliAndAncientName(persianDate: PersianDate, jdn: Jdn): String {
+    val dayOfYear = persianDayOfYear(persianDate, jdn)
+    val ancientName = ancientDayName(dayOfYear)
+    return jalaliName(persianDate, dayOfYear) + " ــــ " + ancientName
 }
