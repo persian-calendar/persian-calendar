@@ -47,6 +47,5 @@ fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
 
 fun jalaliAndAncientName(persianDate: PersianDate, jdn: Jdn): String {
     val dayOfYear = persianDayOfYear(persianDate, jdn)
-    val ancientName = ancientDayName(dayOfYear)
-    return jalaliName(persianDate, dayOfYear) + " ــــ " + ancientName
+    return jalaliName(persianDate, dayOfYear) + " ــــ " + ancientDayName(dayOfYear)
 }
