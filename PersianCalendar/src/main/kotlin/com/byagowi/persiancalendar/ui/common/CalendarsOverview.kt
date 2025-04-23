@@ -66,18 +66,15 @@ import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
-import com.byagowi.persiancalendar.utils.ancientDayName
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateZodiacInformation
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.jalaliAndAncientName
-import com.byagowi.persiancalendar.utils.jalaliName
+import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
-import com.byagowi.persiancalendar.utils.persianDayOfYear
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.Time
@@ -185,14 +182,14 @@ fun CalendarsOverview(
             val persianDate = jdn.toPersianDate()
             val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
-                CalendarOverviewText(jalaliAndAncientName(persianDate, jdn))
+                CalendarOverviewText(jalaliAndHistoricalName(persianDate, jdn))
             }
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            val date = jdn.toGregorianCalendar()
-            date[GregorianCalendar.HOUR_OF_DAY] = 12
-            val time = Time.fromMillisecondsSince1970(date.time.time)
+            val gregorianDate = jdn.toGregorianCalendar()
+            gregorianDate[GregorianCalendar.HOUR_OF_DAY] = 12
+            val time = Time.fromMillisecondsSince1970(gregorianDate.time.time)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
             val coordinates by coordinates.collectAsState()

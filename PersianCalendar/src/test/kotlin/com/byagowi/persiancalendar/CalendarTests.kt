@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
-import com.byagowi.persiancalendar.utils.ancientDayName
+import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.jalaliName
@@ -182,14 +182,14 @@ class CalendarTests {
     fun `historical persian dates smoke test`() {
         (Jdn(PersianDate(1200, 1, 1))..<Jdn(PersianDate(1500, 1, 1))).forEach { jdn ->
             val date = jdn.toPersianDate()
-            val name = ancientDayName(
+            val name = fasliDayName(
                 jdn - Jdn(PersianDate(date.year, 1, 1)) + 1
             )
             val dayOfYear =
                 persianDayOfYear(PersianDate(date.year, date.month, date.dayOfMonth), jdn)
             assertEquals(
                 expected = name,
-                actual = ancientDayName(dayOfYear),
+                actual = fasliDayName(dayOfYear),
                 message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name
             )
             jalaliName(jdn.toPersianDate(), dayOfYear)
