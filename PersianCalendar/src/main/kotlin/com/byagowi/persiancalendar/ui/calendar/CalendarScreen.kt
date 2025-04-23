@@ -96,6 +96,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.type
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -198,7 +203,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Int) -> Unit,
-    navigateToDays: (Jdn, Boolean) -> Unit,
+    navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
@@ -216,6 +221,33 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     Scaffold(
+        modifier = Modifier.onKeyEvent { keyEvent ->
+            if (!viewModel.isYearView.value && keyEvent.type == KeyEventType.KeyDown) {
+                when (keyEvent.key) {
+                    Key.D -> {
+                        navigateToDays(viewModel.selectedDay.value, false)
+                        true
+                    }
+
+                    Key.W -> {
+                        navigateToDays(viewModel.selectedDay.value, true)
+                        true
+                    }
+
+                    Key.Y -> {
+                        viewModel.openYearView()
+                        true
+                    }
+
+                    Key.A -> {
+                        navigateToSchedule()
+                        true
+                    }
+
+                    else -> false
+                }
+            } else false
+        },
         containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
