@@ -48,6 +48,8 @@ import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
@@ -174,7 +176,8 @@ fun CalendarsOverview(
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             CalendarOverviewText(
-                generateZodiacInformation(context.resources, jdn, withEmoji = true)
+                generateZodiacInformation(context.resources, jdn, withEmoji = true),
+                isAutoSize = !language.isArabicScript,
             )
         }
 
@@ -272,7 +275,7 @@ fun CalendarsOverview(
                     formatNumber(weeksCount - currentWeek),
                     formatNumber(12 - date.month)
                 ),
-                noTopPadding = true,
+                topPadding = 0.dp,
             )
         }
 
@@ -288,11 +291,16 @@ fun CalendarsOverview(
 }
 
 @Composable
-private fun CalendarOverviewText(text: String, noTopPadding: Boolean = false) {
+fun CalendarOverviewText(
+    text: String,
+    topPadding: Dp = 4.dp,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    isAutoSize: Boolean = true,
+) {
     val contextColor = LocalContentColor.current
     Box(
         modifier = Modifier
-            .padding(top = (if (noTopPadding) 0 else 4).dp, start = 24.dp, end = 24.dp)
+            .padding(top = topPadding, start = 24.dp, end = 24.dp)
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
     ) {
@@ -300,14 +308,14 @@ private fun CalendarOverviewText(text: String, noTopPadding: Boolean = false) {
             BasicText(
                 text = text,
                 color = { contextColor },
-                style = MaterialTheme.typography.bodyMedium,
+                style = textStyle,
                 modifier = Modifier.animateContentSize(),
                 maxLines = 1,
                 softWrap = false,
-                autoSize = TextAutoSize.StepBased(
+                autoSize = if (isAutoSize) TextAutoSize.StepBased(
                     minFontSize = MaterialTheme.typography.labelSmall.fontSize,
-                    maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                ),
+                    maxFontSize = textStyle.fontSize,
+                ) else null,
             )
         }
     }

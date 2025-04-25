@@ -134,6 +134,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -490,8 +491,11 @@ private fun SharedTransitionScope.detailsTabs(
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
+    val hasTimesTab = enableTimesTab(context) && !removeThirdTab
+    val isOnlyEventsTab =
+        !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
     return listOfNotNull(
-        R.string.calendar to { interactionSource, minHeight ->
+        if (!isOnlyEventsTab) R.string.calendar to { interactionSource, minHeight ->
             CalendarsTab(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
@@ -499,17 +503,18 @@ private fun SharedTransitionScope.detailsTabs(
                 bottomPadding = bottomPadding,
                 today = today,
             )
-        },
+        } else null,
         R.string.events to { _, _ ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
                 bottomPadding = bottomPadding,
+                isOnlyEventsTab = isOnlyEventsTab,
             )
         },
         // The optional third tab
-        if (enableTimesTab(context) && !removeThirdTab) R.string.times to { interactionSource, minHeight ->
+        if (hasTimesTab) R.string.times to { interactionSource, minHeight ->
             TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -553,8 +558,9 @@ private fun Details(
     Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
         val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
         val coroutineScope = rememberCoroutineScope()
+        val isOnlyEventsTab = tabs.size == 1
 
-        TabRow(
+        if (!isOnlyEventsTab) TabRow(
             selectedTabIndex = selectedTabIndex,
             divider = {},
             containerColor = Color.Transparent,
@@ -576,7 +582,7 @@ private fun Details(
 
         HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
             /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
-            val tabMinHeight = contentMinHeight - 48.dp
+            val tabMinHeight = contentMinHeight - (if (isOnlyEventsTab) 0 else 48).dp
             Box {
                 // Currently scrollable tabs only happen on landscape layout
                 val scrollState = if (scrollableTabs) rememberScrollState() else null

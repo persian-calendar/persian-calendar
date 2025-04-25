@@ -70,12 +70,15 @@ import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
+import com.byagowi.persiancalendar.ui.common.CalendarOverviewText
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
@@ -96,11 +99,19 @@ fun SharedTransitionScope.EventsTab(
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     bottomPadding: Dp,
+    isOnlyEventsTab: Boolean,
 ) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
 
         val jdn by viewModel.selectedDay.collectAsState()
+
+        if (isOnlyEventsTab) CalendarOverviewText(
+            jdn.weekDayName + spacedComma + formatDate(jdn on mainCalendar),
+            textStyle = MaterialTheme.typography.titleMedium,
+            topPadding = 12.dp,
+        )
+
         val refreshToken by viewModel.refreshToken.collectAsState()
         val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
         this.AnimatedVisibility(visible = shiftWorkTitle != null) {
