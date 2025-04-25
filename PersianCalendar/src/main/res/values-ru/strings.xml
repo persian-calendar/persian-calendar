@@ -21,7 +21,7 @@
     <string name="add_event">Добавить событие</string>
     <string name="return_to_today">Вернуться к сегодняшнему</string>
     <string name="search_in_events">Поиск в событиях</string>
-    <string name="app_name">Персидский календарь</string>
+    <string name="app_name">Календарь</string>
     <string name="widget_name">Персидский календарь</string>
     <string name="outdated_app">Из-за того, что они устарели, вещи могут быть неточными</string>
     <string name="update">ОБНОВИТЬ</string>
