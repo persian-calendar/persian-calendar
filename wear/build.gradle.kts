@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.lifecycle.process)
-    implementation(libs.datastore.preferences.core.jvm)
     implementation(libs.datastore.preferences)
     implementation(libs.wear.tiles.proto)
     implementation(libs.wear.protolayout.proto)
