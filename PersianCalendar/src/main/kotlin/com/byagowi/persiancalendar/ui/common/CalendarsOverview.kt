@@ -115,7 +115,10 @@ fun CalendarsOverview(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
+            val language by language.collectAsState()
+            this.AnimatedVisibility(
+                (isAstronomicalExtraFeaturesEnabled || language.isNepali) && isExpanded
+            ) {
                 AndroidView(
                     factory = ::MoonView,
                     update = { it.jdn = jdn.value.toFloat() },
@@ -125,7 +128,6 @@ fun CalendarsOverview(
                 )
             }
             val isForcedIranTimeEnabled by isForcedIranTimeEnabled.collectAsState()
-            val language by language.collectAsState()
             AnimatedContent(
                 if (isToday && isForcedIranTimeEnabled) language.inParentheses.format(
                     jdn.weekDayName, stringResource(R.string.iran_time)
