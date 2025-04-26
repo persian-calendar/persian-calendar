@@ -191,14 +191,21 @@ fun CalendarsOverview(
             }
         }
 
-        this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+        this.AnimatedVisibility(
+            isExpanded && (isAstronomicalExtraFeaturesEnabled || language.isNepali)
+        ) {
             val gregorianDate = jdn.toGregorianCalendar()
             gregorianDate[GregorianCalendar.HOUR_OF_DAY] = 12
             val time = Time.fromMillisecondsSince1970(gregorianDate.time.time)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
             val coordinates by coordinates.collectAsState()
-            CalendarOverviewText(phase.emoji(coordinates) + " " + stringResource(phase.stringRes))
+            CalendarOverviewText(
+                if (language.isNepali) {
+                    phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +
+                            stringResource(phase.stringRes) + " ~" + lunarAge.tithiName
+                } else phase.emoji(coordinates) + " " + stringResource(phase.stringRes)
+            )
         }
 
         val startOfYearJdn = Jdn(selectedCalendar, date.year, 1, 1)
