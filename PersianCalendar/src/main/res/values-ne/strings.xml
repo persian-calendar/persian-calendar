@@ -352,4 +352,13 @@
     <string name="widget_prefer_device_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="nepal">नेपाल</string>
     <string name="calculator">क्यालकुलेटर</string>
+
+    <string name="new_moon">अमावस्या</string>
+    <string name="waxing_crescent">बढ्दो अर्धचन्द्र</string>
+    <string name="first_quarter">प्रथम चतुर्थी</string>
+    <string name="waxing_gibbous">बढ्दो गिबस चन्द्र</string>
+    <string name="full_moon">पूर्णिमा</string>
+    <string name="waning_gibbous">घट्दो गिबस चन्द्र</string>
+    <string name="third_quarter">तृतीय चतुर्थी</string>
+    <string name="waning_crescent">घट्दो अर्धचन्द्र</string>
 </resources>

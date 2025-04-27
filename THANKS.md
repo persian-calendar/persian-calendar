@@ -139,16 +139,9 @@ https://github.com/Calvin-LL/Reorderable
 
 ----
 Persian Calendar - Apache 2
+https://github.com/echeran/calendar-code2
+https://github.com/EdReingold/calendar-code2
 https://github.com/roozbehp/persiancalendar
-
-  This code is based on the Common Lisp code published by Reingold and Dershowitz
-  under the Apache 2.0 license.
-
-  Python port and further modificiations were made by Roozbeh Pournader.
-
-  Copyright 2024 Roozbeh Pournader
-
-  The original header follows:
 
   CALENDRICA 4.0 -- Common Lisp
   E. M. Reingold and N. Dershowitz
@@ -166,6 +159,10 @@ https://github.com/roozbehp/persiancalendar
 
   Sample values for the functions (useful for debugging) are given in
   Appendix C of the book.
+
+  Python port and further modificiations were made by Roozbeh Pournader.
+
+  Copyright 2024 Roozbeh Pournader
 
 ----
 Umm-Alqura Calendar - MIT

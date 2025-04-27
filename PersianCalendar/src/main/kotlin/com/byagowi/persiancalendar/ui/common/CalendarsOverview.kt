@@ -65,6 +65,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
+import com.byagowi.persiancalendar.ui.astronomy.Tithi
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
@@ -203,7 +204,8 @@ fun CalendarsOverview(
             CalendarOverviewText(
                 if (language.isNepali) {
                     phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +
-                            stringResource(phase.stringRes) + " ~" + lunarAge.tithiName
+                            stringResource(phase.stringRes) +
+                            " ~" + Tithi.tithiName(System.currentTimeMillis())
                 } else phase.emoji(coordinates) + " " + stringResource(phase.stringRes)
             )
         }

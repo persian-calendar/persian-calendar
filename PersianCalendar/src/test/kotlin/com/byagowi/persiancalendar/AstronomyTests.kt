@@ -29,10 +29,6 @@ class AstronomyTests {
             assertThat(lunarAge.days).isWithin(1.0e-5).of(it)
             assertThat(lunarAge.toPhase().ordinal).isEqualTo((index + 1) % 8)
         }
-        (0..720).map { LunarAge.fromDegrees(it.toDouble()).tithi }.forEach {
-            assertThat(it).isAtLeast(1)
-            assertThat(it).isAtMost(30)
-        }
         val time = GregorianCalendar(TimeZone.getTimeZone("UTC"))
         time.clear()
         time.set(2022, 1, 13, 0, 0, 0)
