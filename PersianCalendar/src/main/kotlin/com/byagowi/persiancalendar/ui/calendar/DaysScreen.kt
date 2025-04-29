@@ -11,12 +11,14 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitEachGesture
@@ -329,6 +331,14 @@ fun SharedTransitionScope.DaysScreen(
                     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
                     val isVazirEnabled by isVazirEnabled.collectAsState()
                     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+
+                    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
+                    val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
+                    val density = LocalDensity.current
+                    val initialScroll =
+                        with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
+                    val scrollState = rememberScrollState(initialScroll)
+
                     HorizontalPager(
                         state = weekPagerState,
                         verticalAlignment = Alignment.Top,
@@ -415,6 +425,10 @@ fun SharedTransitionScope.DaysScreen(
                                     snackbarHostState = snackbarHostState,
                                     calendarViewModel = calendarViewModel,
                                     screenWidth = screenWidth,
+                                    scrollState = scrollState,
+                                    initialScroll = initialScroll,
+                                    cellHeight = cellHeight,
+                                    scale = scale,
                                 )
                             }
                         }
@@ -471,6 +485,10 @@ fun SharedTransitionScope.DaysScreen(
                                 hasWeekPager = hasWeeksPager,
                                 deviceEvents = dayDeviceEvents,
                                 screenWidth = screenWidth,
+                                scrollState = scrollState,
+                                scale = scale,
+                                initialScroll = initialScroll,
+                                cellHeight = cellHeight,
                             )
                         }
                     }
@@ -534,10 +552,14 @@ private fun DaysView(
     hasWeekPager: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
     screenWidth: Dp,
+    scrollState: ScrollState,
+    scale: Animatable<Float, AnimationVector1D>,
+    initialScroll: Int,
+    cellHeight: Dp,
     modifier: Modifier = Modifier,
 ) {
-    val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
     val coroutineScope = rememberCoroutineScope()
+    val density = LocalDensity.current
     var interaction by remember { mutableStateOf<Interaction?>(null) }
     Column(
         modifier.detectZoom(
@@ -551,10 +573,6 @@ private fun DaysView(
             onRelease = { if (interaction == Interaction.Zoom) interaction = null },
         )
     ) {
-        val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
-        val density = LocalDensity.current
-        val initialScroll = with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
-        val scrollState = rememberScrollState(initialScroll)
         val events = (startingDay..<startingDay + days).toList().map { jdn ->
             readEvents(jdn, calendarViewModel, deviceEvents)
         }
