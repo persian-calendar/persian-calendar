@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
@@ -276,7 +277,14 @@ fun SharedTransitionScope.DaysScreen(
                         }
                     },
                     colors = appTopAppBarColors(),
-                    navigationIcon = { NavigationNavigateUpIcon(navigateUp) },
+                    navigationIcon = {
+                        if (isAddEventBoxEnabled) BackHandler(enabled = true) {
+                            isAddEventBoxEnabled = false
+                        }
+                        NavigationNavigateUpIcon {
+                            if (isAddEventBoxEnabled) isAddEventBoxEnabled = false else navigateUp()
+                        }
+                    },
                     actions = {
                         TodayActionButton(isHighlighted || isAddEventBoxEnabled) {
                             todayButtonAction()
