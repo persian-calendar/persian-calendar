@@ -30,9 +30,7 @@ val Color.isLight: Boolean get() = this.luminance() > .5
 // https://github.com/auchenberg/volkswagen like idea…
 // Please don't use it outside shared elements context
 // For more context https://github.com/ReactiveCircus/android-emulator-runner/issues/417
-fun Context.isOnCI(): Boolean = BuildConfig.DEVELOPMENT && Settings.Global.getFloat(
-    contentResolver, Settings.Global.ANIMATOR_DURATION_SCALE, 1.0f
-) == 0f // Our current CI config disables animation
+fun Context.isOnCI(): Boolean = false
 
 /**
  * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently
