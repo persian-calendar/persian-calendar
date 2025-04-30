@@ -21,7 +21,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
-import com.byagowi.persiancalendar.ui.utils.isOnCI
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -30,7 +29,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
     content: @Composable ColumnScope.(onDismissRequest: () -> Unit) -> Unit,
 ) {
     Box(
-        if (LocalContext.current.isOnCI()) Modifier else Modifier.sharedElement(
+        Modifier.sharedElement(
             rememberSharedContentState(key = SHARED_CONTENT_KEY_THREE_DOTS_MENU),
             animatedVisibilityScope = animatedContentScope,
         )

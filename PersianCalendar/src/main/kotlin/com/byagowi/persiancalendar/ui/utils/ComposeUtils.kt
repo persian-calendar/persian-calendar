@@ -27,11 +27,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 @Stable
 val Color.isLight: Boolean get() = this.luminance() > .5
 
-// https://github.com/auchenberg/volkswagen like idea…
-// Please don't use it outside shared elements context
-// For more context https://github.com/ReactiveCircus/android-emulator-runner/issues/417
-fun Context.isOnCI(): Boolean = false
-
 /**
  * As Material's [androidx.compose.material3.tokens.ShapeTokens.CornerExtraLargeTop] isn't exposed and we need it frequently
  * let's build our own based on Material's

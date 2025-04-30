@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.Constraints
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
 import com.byagowi.persiancalendar.ui.theme.animateColor
-import com.byagowi.persiancalendar.ui.utils.isOnCI
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -34,20 +33,18 @@ fun SharedTransitionScope.ScreenSurface(
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
-        // Workaround CI not liking shared elements
-        val isOnCI = LocalContext.current.isOnCI()
         // Parent
         Surface(
             shape = shape,
             color = animateColor(MaterialTheme.colorScheme.surface).value,
-            modifier = if (disableSharedContent || isOnCI) Modifier else Modifier.sharedElement(
+            modifier = if (disableSharedContent) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
             ),
         ) {}
         // Content
         Box(
-            (if (disableSharedContent || isOnCI) Modifier else Modifier.sharedBounds(
+            (if (disableSharedContent) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
             )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)
