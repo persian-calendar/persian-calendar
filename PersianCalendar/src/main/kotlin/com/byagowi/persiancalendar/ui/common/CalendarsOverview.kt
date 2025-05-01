@@ -66,6 +66,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
@@ -178,17 +179,15 @@ fun CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            CalendarOverviewText(
-                generateYearName(context.resources, jdn, withEmoji = true),
-            )
+            CalendarOverviewText(generateYearName(context.resources, jdn, withEmoji = true))
         }
 
-// TODO: Display this somehow, both sidereal and tropical is needed I guess
-//    val persianDate = jdn.toPersianDate()
-//    return "%s$spacedColon%s".format(
-//        resources.getString(R.string.zodiac),
-//        Zodiac.fromPersianCalendar(persianDate).format(resources, withEmoji)
-//    ).trim()
+        this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+            CalendarOverviewText(
+                stringResource(R.string.zodiac) + spacedColon + Zodiac.fromPersianCalendar(jdn.toPersianDate())
+                    .format(LocalContext.current.resources, true)
+            )
+        }
 
         if (language.isPersian) {
             val persianDate = jdn.toPersianDate()
