@@ -121,9 +121,8 @@ fun getEnabledAlarms(context: Context): Set<PrayTime> {
 
 fun scheduleAlarms(context: Context) {
     val enabledAlarms = getEnabledAlarms(context).takeIf { it.isNotEmpty() } ?: return
-    val athanGap =
-        ((context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
-            ?: .0) * 60.0 * 1000.0).toLong()
+    val athanGap = (context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
+        ?: .0).minutes.inWholeMilliseconds
 
     val prayTimes = coordinates.value?.calculatePrayTimes() ?: return
     // convert spacedComma separated string to a set
