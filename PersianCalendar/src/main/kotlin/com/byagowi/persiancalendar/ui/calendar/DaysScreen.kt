@@ -127,6 +127,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.DaysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
@@ -266,14 +267,36 @@ fun SharedTransitionScope.DaysScreen(
                                 )
                             ) { if (!isWeekView) isWeekView = true else navigateUp() },
                         ) {
-                            Crossfade(
-                                if (hasWeeksPager) date.monthName
-                                else language.dm.format(
+                            val secondaryCalendar = secondaryCalendar
+                            val title: String
+                            val subtitle: String
+                            if (secondaryCalendar == null) {
+                                title = if (hasWeeksPager) date.monthName else language.dm.format(
                                     formatNumber(date.dayOfMonth), date.monthName
-                                ),
-                                label = "title",
-                            ) { state -> Text(state, style = MaterialTheme.typography.titleLarge) }
-                            Crossfade(formatNumber(date.year), label = "subtitle") { state ->
+                                )
+                                subtitle = formatNumber(date.year)
+                            } else {
+                                title = if (hasWeeksPager) language.my.format(
+                                    date.monthName, formatNumber(date.year)
+                                ) else language.dmy.format(
+                                    formatNumber(date.dayOfMonth),
+                                    date.monthName, formatNumber(date.year)
+                                )
+                                val secondaryDate = selectedDay on secondaryCalendar
+                                subtitle = if (hasWeeksPager) language.my.format(
+                                    secondaryDate.monthName,
+                                    formatNumber(secondaryDate.year)
+                                ) else language.dmy.format(
+                                    formatNumber(secondaryDate.dayOfMonth),
+                                    secondaryDate.monthName,
+                                    formatNumber(secondaryDate.year),
+                                )
+                            }
+
+                            Crossfade(title, label = "title") { state ->
+                                Text(state, style = MaterialTheme.typography.titleLarge)
+                            }
+                            Crossfade(subtitle, label = "subtitle") { state ->
                                 Text(state, style = MaterialTheme.typography.titleMedium)
                             }
                         }
