@@ -22,7 +22,6 @@ import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
-import io.github.persiancalendar.calendar.PersianDate
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.atan2
@@ -76,22 +75,14 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
     }
 }
 
-fun generateZodiacInformation(resources: Resources, jdn: Jdn, withEmoji: Boolean): String {
-    val persianDate = jdn.toPersianDate()
-    return "%s\n%s$spacedColon%s".format(
-        generateYearName(resources, persianDate, withEmoji),
-        resources.getString(R.string.zodiac),
-        Zodiac.fromPersianCalendar(persianDate).format(resources, withEmoji)
-    ).trim()
-}
-
 fun generateYearName(
     resources: Resources,
-    persianDate: PersianDate,
+    jdn: Jdn,
     withEmoji: Boolean,
     time: GregorianCalendar? = null,
     withOldEraName: Boolean = false,
 ): String {
+    val persianDate = jdn.toPersianDate()
     val yearNames = listOfNotNull(
         language.value.inParentheses.format(
             ChineseZodiac.fromPersianCalendar(persianDate).format(
@@ -103,7 +94,7 @@ fun generateYearName(
             resources.getString(R.string.shamsi_calendar_short)
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val date = ChineseCalendar((time ?: Jdn(persianDate).toGregorianCalendar()).time)
+            val date = ChineseCalendar((time ?: jdn.toGregorianCalendar()).time)
             val year = date[ChineseCalendar.YEAR]
             language.value.inParentheses.format(
                 ChineseZodiac.fromChineseCalendar(date).format(resources, withEmoji),

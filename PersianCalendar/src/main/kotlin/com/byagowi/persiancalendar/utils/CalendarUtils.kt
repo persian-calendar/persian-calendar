@@ -126,7 +126,7 @@ fun getA11yDaySummary(
 
     if (withZodiac && isAstronomicalExtraFeaturesEnabled) {
         appendLine().appendLine()
-            .appendLine(generateZodiacInformation(resources, jdn, withEmoji = false))
+            .appendLine(generateYearName(resources, jdn, withEmoji = false))
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))
     }
 }

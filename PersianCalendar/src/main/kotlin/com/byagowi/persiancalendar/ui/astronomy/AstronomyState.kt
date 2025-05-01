@@ -68,7 +68,7 @@ class AstronomyState(val date: GregorianCalendar) {
                 ?: resources.getString(title)) + spacedColon + formattedDate
         } + generateYearName(
             resources = resources,
-            persianDate = jdn.toPersianDate(),
+            jdn = jdn,
             withOldEraName = language.value.isPersian,
             withEmoji = true,
             time = date

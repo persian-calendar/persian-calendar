@@ -73,7 +73,7 @@ import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.generateZodiacInformation
+import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.monthName
@@ -179,10 +179,16 @@ fun CalendarsOverview(
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             CalendarOverviewText(
-                generateZodiacInformation(context.resources, jdn, withEmoji = true),
-                isAutoSize = !language.isArabicScript,
+                generateYearName(context.resources, jdn, withEmoji = true),
             )
         }
+
+// TODO: Display this somehow, both sidereal and tropical is needed I guess
+//    val persianDate = jdn.toPersianDate()
+//    return "%s$spacedColon%s".format(
+//        resources.getString(R.string.zodiac),
+//        Zodiac.fromPersianCalendar(persianDate).format(resources, withEmoji)
+//    ).trim()
 
         if (language.isPersian) {
             val persianDate = jdn.toPersianDate()
@@ -306,7 +312,6 @@ fun CalendarOverviewText(
     text: String,
     topPadding: Dp = 4.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
-    isAutoSize: Boolean = true,
 ) {
     val contextColor = LocalContentColor.current
     Box(
@@ -323,10 +328,10 @@ fun CalendarOverviewText(
                 modifier = Modifier.animateContentSize(),
                 maxLines = 1,
                 softWrap = false,
-                autoSize = if (isAutoSize) TextAutoSize.StepBased(
+                autoSize = TextAutoSize.StepBased(
                     minFontSize = MaterialTheme.typography.labelSmall.fontSize,
                     maxFontSize = textStyle.fontSize,
-                ) else null,
+                ),
             )
         }
     }
