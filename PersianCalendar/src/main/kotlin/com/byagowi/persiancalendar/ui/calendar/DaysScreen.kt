@@ -197,7 +197,9 @@ fun SharedTransitionScope.DaysScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
     val addEvent = addEvent(calendarViewModel, snackbarHostState)
-    val hasWeeksPager = LocalWindowInfo.current.containerSize.height > 600
+    val density = LocalDensity.current
+    val hasWeeksPager =
+        LocalWindowInfo.current.containerSize.height > with(density) { 600.dp.toPx() }
     val language by language.collectAsState()
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
 
@@ -357,7 +359,6 @@ fun SharedTransitionScope.DaysScreen(
 
                     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
                     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
-                    val density = LocalDensity.current
                     val initialScroll =
                         with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
