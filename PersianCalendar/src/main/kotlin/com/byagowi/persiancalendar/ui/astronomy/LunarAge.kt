@@ -1,13 +1,11 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.annotation.StringRes
-import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlin.math.PI
 import kotlin.math.cos
-import kotlin.math.floor
 import kotlin.math.roundToInt
 
 @JvmInline

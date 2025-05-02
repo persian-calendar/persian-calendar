@@ -69,6 +69,7 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
         start && end ->
             if (lunarLongitude(jdn, setIranTime) <= 240/*Zodiac.SCORPIO.tropicalRange[1]*/)
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
+
         start -> MoonInScorpioState.Start
         end -> MoonInScorpioState.End
         else -> null

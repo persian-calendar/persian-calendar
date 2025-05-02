@@ -149,10 +149,10 @@ fun CalendarsOverview(
                 equinoxTitle(date, jdn, context).first else null
         }
 
-        this.AnimatedVisibility(visible = equinox != null) { CalendarOverviewText(equinox ?: "") }
+        this.AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox ?: "") }
 
         this.AnimatedVisibility(!isToday) {
-            CalendarOverviewText(
+            AutoSizedBodyText(
                 listOf(
                     stringResource(R.string.days_distance),
                     spacedColon,
@@ -166,7 +166,7 @@ fun CalendarsOverview(
         val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
             moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
-            CalendarOverviewText(
+            AutoSizedBodyText(
                 if (language.isPersian) when (moonInScorpioState) {
                     MoonInScorpioState.Borji -> "قمر در برج عقرب"
                     MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
@@ -179,11 +179,11 @@ fun CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            CalendarOverviewText(generateYearName(context.resources, jdn, withEmoji = true))
+            AutoSizedBodyText(generateYearName(context.resources, jdn, withEmoji = true))
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            CalendarOverviewText(
+            AutoSizedBodyText(
                 stringResource(R.string.zodiac) + spacedColon + Zodiac.fromPersianCalendar(jdn.toPersianDate())
                     .format(LocalContext.current.resources, true)
             )
@@ -193,7 +193,7 @@ fun CalendarsOverview(
             val persianDate = jdn.toPersianDate()
             val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
-                CalendarOverviewText(jalaliAndHistoricalName(persianDate, jdn))
+                AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
         }
 
@@ -206,7 +206,7 @@ fun CalendarsOverview(
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
             val coordinates by coordinates.collectAsState()
-            CalendarOverviewText(
+            AutoSizedBodyText(
                 if (language.isNepali) {
                     phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +
                             stringResource(phase.stringRes) +
@@ -274,7 +274,7 @@ fun CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded) {
-            CalendarOverviewText(
+            AutoSizedBodyText(
                 stringResource(
                     R.string.start_of_year_diff,
                     formatNumber(jdn - startOfYearJdn + 1),
@@ -284,7 +284,7 @@ fun CalendarsOverview(
             )
         }
         this.AnimatedVisibility(isExpanded) {
-            CalendarOverviewText(
+            AutoSizedBodyText(
                 stringResource(
                     R.string.end_of_year_diff,
                     formatNumber(endOfYearJdn - jdn),
@@ -307,7 +307,7 @@ fun CalendarsOverview(
 }
 
 @Composable
-fun CalendarOverviewText(
+fun AutoSizedBodyText(
     text: String,
     topPadding: Dp = 4.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,

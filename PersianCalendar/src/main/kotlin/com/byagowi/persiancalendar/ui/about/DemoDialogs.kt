@@ -1012,7 +1012,7 @@ fun showSpringDemoDialog(activity: Activity) {
         private val lifecycle = (activity as? ComponentActivity).debugAssertNotNull?.lifecycleScope
     }
 
-    val dialog = AlertDialog.Builder(activity)
+    AlertDialog.Builder(activity)
         .setView(view)
         .show()
 

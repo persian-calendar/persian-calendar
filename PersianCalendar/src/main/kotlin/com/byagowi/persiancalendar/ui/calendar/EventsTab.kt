@@ -72,7 +72,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
-import com.byagowi.persiancalendar.ui.common.CalendarOverviewText
+import com.byagowi.persiancalendar.ui.common.AutoSizedBodyText
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -106,7 +106,7 @@ fun SharedTransitionScope.EventsTab(
 
         val jdn by viewModel.selectedDay.collectAsState()
 
-        if (isOnlyEventsTab) CalendarOverviewText(
+        if (isOnlyEventsTab) AutoSizedBodyText(
             jdn.weekDayName + spacedComma + formatDate(jdn on mainCalendar),
             textStyle = MaterialTheme.typography.titleMedium,
             topPadding = 12.dp,

@@ -545,7 +545,6 @@ private fun BoxScope.DrawerDarkModeToggle() {
     // If current theme is default theme, isDark is null so no toggle is shown also
     val isDark = userSetTheme.isDark ?: return
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
     Crossfade(
         label = "dark mode toggle",
         targetState = if (isDark) Icons.Outlined.LightMode else Icons.Default.ModeNight,

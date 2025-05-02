@@ -2,10 +2,6 @@ package com.byagowi.persiancalendar.entities
 
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.gregorianMonths
-import com.byagowi.persiancalendar.global.islamicMonths
-import com.byagowi.persiancalendar.global.nepaliMonths
-import com.byagowi.persiancalendar.global.persianMonths
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate

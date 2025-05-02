@@ -465,7 +465,7 @@ fun updateStoredPreference(context: Context) {
     isWidgetClock = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan_.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
-        preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
+            preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
     athanVibration_.value = preferences.getBoolean(PREF_ATHAN_VIBRATION, DEFAULT_ATHAN_VIBRATION)
     ascendingAthan_.value =
         preferences.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
