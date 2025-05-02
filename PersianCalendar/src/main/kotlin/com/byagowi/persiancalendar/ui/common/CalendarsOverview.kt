@@ -183,9 +183,16 @@ fun CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+            val gregorianDate = jdn.toGregorianCalendar()
+            gregorianDate[GregorianCalendar.HOUR_OF_DAY] = 12
+            gregorianDate[GregorianCalendar.MINUTE] = 0
+            gregorianDate[GregorianCalendar.SECOND] = 0
+            gregorianDate[GregorianCalendar.MILLISECOND] = 0
+            val time = Time.fromMillisecondsSince1970(gregorianDate.time.time)
+            val zodiac = Zodiac.fromTropical(sunPosition(time).elon)
             AutoSizedBodyText(
-                stringResource(R.string.zodiac) + spacedColon + Zodiac.fromPersianCalendar(jdn.toPersianDate())
-                    .format(LocalContext.current.resources, true)
+                stringResource(R.string.zodiac) + spacedColon +
+                        zodiac.format(LocalContext.current.resources, true)
             )
         }
 
@@ -202,6 +209,9 @@ fun CalendarsOverview(
         ) {
             val gregorianDate = jdn.toGregorianCalendar()
             gregorianDate[GregorianCalendar.HOUR_OF_DAY] = 12
+            gregorianDate[GregorianCalendar.MINUTE] = 0
+            gregorianDate[GregorianCalendar.SECOND] = 0
+            gregorianDate[GregorianCalendar.MILLISECOND] = 0
             val time = Time.fromMillisecondsSince1970(gregorianDate.time.time)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
