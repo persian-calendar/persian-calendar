@@ -71,5 +71,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     companion object {
         private fun linearFormat(hours: Int, minutes: Int) =
             formatNumber("%d:%02d".format(Locale.ENGLISH, hours, minutes))
+
+        val zero = Clock(.0)
     }
 }

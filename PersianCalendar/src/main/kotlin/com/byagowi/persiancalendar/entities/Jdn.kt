@@ -1,11 +1,13 @@
 package com.byagowi.persiancalendar.entities
 
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
+import io.github.cosinekitty.astronomy.Time
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -13,6 +15,7 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.Date
 import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.math.ceil
 
 // Julian day number, basically a day counter starting from some day in concept
@@ -52,6 +55,16 @@ value class Jdn(val value: Long) {
     fun toGregorianCalendar(): GregorianCalendar = GregorianCalendar().also {
         val gregorian = this.toCivilDate()
         it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
+    }
+
+    fun toAstronomyTime(hourOfDay: Int, setIranTime: Boolean = false): Time {
+        val date = toGregorianCalendar()
+        if (setIranTime) date.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+        date[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
+        date[GregorianCalendar.MINUTE] = 0
+        date[GregorianCalendar.SECOND] = 0
+        date[GregorianCalendar.MILLISECOND] = 0
+        return Time.fromMillisecondsSince1970(date.timeInMillis)
     }
 
     fun getWeekOfYear(startOfYear: Jdn): Int {

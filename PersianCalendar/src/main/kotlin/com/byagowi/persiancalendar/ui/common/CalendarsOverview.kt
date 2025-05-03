@@ -81,14 +81,12 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
-import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 import java.util.Date
-import java.util.GregorianCalendar
 
 @Composable
 fun CalendarsOverview(
@@ -167,11 +165,14 @@ fun CalendarsOverview(
             moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
             AutoSizedBodyText(
-                if (language.isPersian) when (moonInScorpioState) {
+                if (language.isPersian) when (val state = moonInScorpioState) {
                     MoonInScorpioState.Borji -> "قمر در برج عقرب"
                     MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
-                    MoonInScorpioState.Start -> "قمر وارد برج عقرب می‌شود"
-                    MoonInScorpioState.End -> "قمر از صورت فلکی عقرب خارج می‌شود"
+                    is MoonInScorpioState.Start ->
+                        "قمر در ${state.clock.toFormattedString()} وارد برج عقرب می‌شود"
+
+                    is MoonInScorpioState.End ->
+                        "قمر در ${state.clock.toFormattedString()} از صورت فلکی عقرب خارج می‌شود"
 
                     else -> ""
                 } else stringResource(R.string.moon_in_scorpio)
@@ -183,13 +184,7 @@ fun CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            val gregorianDate = jdn.toGregorianCalendar()
-            gregorianDate[GregorianCalendar.HOUR_OF_DAY] = 12
-            gregorianDate[GregorianCalendar.MINUTE] = 0
-            gregorianDate[GregorianCalendar.SECOND] = 0
-            gregorianDate[GregorianCalendar.MILLISECOND] = 0
-            val time = Time.fromMillisecondsSince1970(gregorianDate.time.time)
-            val zodiac = Zodiac.fromTropical(sunPosition(time).elon)
+            val zodiac = Zodiac.fromTropical(sunPosition(jdn.toAstronomyTime(hourOfDay = 12)).elon)
             AutoSizedBodyText(
                 stringResource(R.string.zodiac) + spacedColon +
                         zodiac.format(LocalContext.current.resources, true)
@@ -207,12 +202,7 @@ fun CalendarsOverview(
         this.AnimatedVisibility(
             isExpanded && (isAstronomicalExtraFeaturesEnabled || language.isNepali)
         ) {
-            val gregorianDate = jdn.toGregorianCalendar()
-            gregorianDate[GregorianCalendar.HOUR_OF_DAY] = 12
-            gregorianDate[GregorianCalendar.MINUTE] = 0
-            gregorianDate[GregorianCalendar.SECOND] = 0
-            gregorianDate[GregorianCalendar.MILLISECOND] = 0
-            val time = Time.fromMillisecondsSince1970(gregorianDate.time.time)
+            val time = jdn.toAstronomyTime(hourOfDay = 12)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
             val coordinates by coordinates.collectAsState()

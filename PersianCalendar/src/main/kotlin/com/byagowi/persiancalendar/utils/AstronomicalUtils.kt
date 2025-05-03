@@ -4,8 +4,8 @@ import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.annotation.StringRes
-import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
@@ -22,56 +22,60 @@ import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
+import io.github.cosinekitty.astronomy.search
 import java.util.GregorianCalendar
-import java.util.TimeZone
 import kotlin.math.atan2
 
-// Based on Mehdi's work
+private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
+    eclipticGeoMoon(jdn.toAstronomyTime(hourOfDay, setIranTime)).lon
 
-
-private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int = 12): Double {
-    val calendar = jdn.toGregorianCalendar()
-    if (setIranTime) calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
-    calendar[GregorianCalendar.HOUR_OF_DAY] = hourOfDay
-    calendar[GregorianCalendar.MINUTE] = 0
-    calendar[GregorianCalendar.SECOND] = 0
-    calendar[GregorianCalendar.MILLISECOND] = 0
-    return eclipticGeoMoon(Time.fromMillisecondsSince1970(calendar.timeInMillis)).lon
-}
-
-// This only checks the midday, useful for calendar table where fast calculatio is needed
+// This only checks the midday, useful for calendar table where fast calculation is needed
 fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean =
     lunarLongitude(jdn, setIranTime, hourOfDay) in Zodiac.scorpioRange
 
-// Search for actual time of it, not used till making it accurate and compatible enough
-//private fun Double.withMaxDegreeValue(max: Double): Double {
-//    var deg = this
-//    while (deg <= max - 360.0)
-//        deg += 360.0
-//    while (deg > max)
-//        deg -= 360.0
-//    return deg
-//}
-//
-//fun searchLunarLongitude(targetLon: Double, startTime: Time): Time? {
-//    val time2 = startTime.addDays(20.0)
-//    return search(startTime, time2, 30.0) { time ->
-//        (eclipticGeoMoon(time).lon - targetLon).withMaxDegreeValue(+180.0)
-//    }
-//}
+private fun Double.withMaxDegreeValue(max: Double): Double {
+    var deg = this
+    while (deg <= max - 360.0) deg += 360.0
+    while (deg > max) deg -= 360.0
+    return deg
+}
 
-enum class MoonInScorpioState { Start, Borji, Falaki, End }
+fun searchLunarLongitude(targetLon: Double, startTime: Time, days: Double): Time? {
+    val time2 = startTime.addDays(days)
+    return search(startTime, time2, 30.0) { time ->
+        (eclipticGeoMoon(time).lon - targetLon).withMaxDegreeValue(+180.0)
+    }
+}
+
+sealed class MoonInScorpioState {
+    object Borji : MoonInScorpioState()
+    object Falaki : MoonInScorpioState()
+    class Start(private val jdn: Jdn) : MoonInScorpioState() {
+        val clock: Clock get() = calculate(jdn, Zodiac.scorpioRange.start)
+    }
+
+    class End(private val jdn: Jdn) : MoonInScorpioState() {
+        val clock: Clock get() = calculate(jdn, Zodiac.scorpioRange.endInclusive)
+    }
+
+    protected fun calculate(jdn: Jdn, targetLon: Double): Clock {
+        return searchLunarLongitude(targetLon, jdn.toAstronomyTime(hourOfDay = 0), 1.0)
+            ?.toMillisecondsSince1970()?.let { timeInMillis ->
+                Clock(GregorianCalendar().also { it.timeInMillis = timeInMillis })
+            } ?: Clock.zero
+    }
+}
 
 fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioState? {
     val end = isMoonInScorpio(jdn, 0, setIranTime)
     val start = isMoonInScorpio(jdn + 1, 0, setIranTime)
     return when {
         start && end ->
-            if (lunarLongitude(jdn, setIranTime) <= 240/*Zodiac.SCORPIO.tropicalRange[1]*/)
+            if (lunarLongitude(jdn, setIranTime, hourOfDay = 12) <= Zodiac.SCORPIO.tropicalRange[1])
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
 
-        start -> MoonInScorpioState.Start
-        end -> MoonInScorpioState.End
+        start -> MoonInScorpioState.Start(jdn)
+        end -> MoonInScorpioState.End(jdn)
         else -> null
     }
 }
