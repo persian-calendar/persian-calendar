@@ -169,10 +169,10 @@ fun CalendarsOverview(
                     MoonInScorpioState.Borji -> "قمر در برج عقرب"
                     MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
                     is MoonInScorpioState.Start ->
-                        "قمر در ${state.clock.toFormattedString()} وارد برج عقرب می‌شود"
+                        "${state.clock.toFormattedString()} قمر وارد برج عقرب می‌شود"
 
                     is MoonInScorpioState.End ->
-                        "قمر در ${state.clock.toFormattedString()} از صورت فلکی عقرب خارج می‌شود"
+                        "${state.clock.toFormattedString()} قمر از صورت فلکی عقرب خارج می‌شود"
 
                     else -> ""
                 } else stringResource(R.string.moon_in_scorpio)
