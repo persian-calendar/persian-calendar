@@ -86,6 +86,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
@@ -167,6 +168,13 @@ fun SharedTransitionScope.AstronomyScreen(
                             toggle = viewModel::toggleIsTropical,
                         )
                     }
+                    var showYearNameHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
+                    if (showYearNameHoroscopeDialog) {
+                        val astronomyState by viewModel.astronomyState.collectAsState()
+                        YearNameHoroscope(Jdn(astronomyState.date.toCivilDate())) {
+                            showYearNameHoroscopeDialog = false
+                        }
+                    }
                     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
                             closeMenu()
@@ -175,6 +183,11 @@ fun SharedTransitionScope.AstronomyScreen(
                         AppDropdownMenuItem({ Text(stringResource(R.string.map)) }) {
                             closeMenu()
                             navigateToMap()
+                        }
+                        val language by language.collectAsState()
+                        if (language.isPersian) AppDropdownMenuItem({ Text("زایجهٔ دور اثنی‌عشری") }) {
+                            showYearNameHoroscopeDialog = true
+                            closeMenu()
                         }
                     }
                 },
