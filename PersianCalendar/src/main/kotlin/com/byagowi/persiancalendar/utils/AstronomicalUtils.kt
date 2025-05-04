@@ -36,11 +36,11 @@ fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false)
     lunarLongitude(jdn, setIranTime, hourOfDay) in Zodiac.scorpioRange
 
 
-sealed class MoonInScorpioState {
-    data object Borji : MoonInScorpioState()
-    data object Falaki : MoonInScorpioState()
-    data class Start(val clock: Clock) : MoonInScorpioState()
-    data class End(val clock: Clock) : MoonInScorpioState()
+sealed interface MoonInScorpioState {
+    data object Borji : MoonInScorpioState
+    data object Falaki : MoonInScorpioState
+    data class Start(val clock: Clock) : MoonInScorpioState
+    data class End(val clock: Clock) : MoonInScorpioState
 }
 
 private fun Double.withMaxDegreeValue(max: Double): Double {
