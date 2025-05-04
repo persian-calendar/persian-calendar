@@ -180,7 +180,7 @@
     <string name="version">संस्करण %1$s</string>
     <string name="nepali_calendar">नेपाली पात्रो</string>
     <string name="nepali_calendar_short">नेपाली</string>
-    <string name="season">सिजन</string>
+    <string name="season">ऋतु</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s दिन</item>
         <item quantity="other">%1$s %2$s दिनहरु</item>
