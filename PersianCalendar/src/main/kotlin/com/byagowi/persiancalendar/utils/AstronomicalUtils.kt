@@ -4,6 +4,7 @@ import android.content.res.Resources
 import android.icu.util.ChineseCalendar
 import android.os.Build
 import androidx.annotation.StringRes
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
@@ -24,6 +25,7 @@ import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.search
 import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.math.atan2
 
 private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
@@ -48,13 +50,18 @@ private fun Double.withMaxDegreeValue(max: Double): Double {
     return deg
 }
 
-private fun searchLunarLongitude(jdn: Jdn, targetLon: Double): Clock {
-    val startTime = jdn.toAstronomyTime(hourOfDay = 0)
+private fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boolean): Clock {
+    val startTime = jdn.toAstronomyTime(hourOfDay = 0, setIranTime = setIranTime)
     val endTime = startTime.addDays(1.0)
     return search(startTime, endTime, 1.0) { time ->
         (eclipticGeoMoon(time).lon - targetLon).withMaxDegreeValue(+180.0)
     }?.toMillisecondsSince1970()?.let { timeInMillis ->
-        Clock(GregorianCalendar().also { it.timeInMillis = timeInMillis })
+        Clock(
+            GregorianCalendar().also {
+                if (setIranTime) it.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+                it.timeInMillis = timeInMillis
+            }
+        )
     } ?: Clock.zero
 }
 
@@ -66,8 +73,14 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
             if (lunarLongitude(jdn, setIranTime, hourOfDay = 12) <= Zodiac.SCORPIO.tropicalRange[1])
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
 
-        start -> MoonInScorpioState.Start(searchLunarLongitude(jdn, Zodiac.scorpioRange.start))
-        end -> MoonInScorpioState.End(searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive))
+        start -> MoonInScorpioState.Start(
+            searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime)
+        )
+
+        end -> MoonInScorpioState.End(
+            searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive, setIranTime)
+        )
+
         else -> null
     }
 }
