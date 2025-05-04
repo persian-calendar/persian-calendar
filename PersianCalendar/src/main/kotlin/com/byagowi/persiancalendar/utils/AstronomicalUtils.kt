@@ -50,6 +50,7 @@ private fun Double.withMaxDegreeValue(max: Double): Double {
     return deg
 }
 
+// setIranTime should be used only for tests
 private fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boolean): Clock {
     val startTime = jdn.toAstronomyTime(hourOfDay = 0, setIranTime = setIranTime)
     val endTime = startTime.addDays(1.0)
