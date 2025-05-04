@@ -33,6 +33,14 @@ private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: In
 fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean =
     lunarLongitude(jdn, setIranTime, hourOfDay) in Zodiac.scorpioRange
 
+
+sealed class MoonInScorpioState {
+    data object Borji : MoonInScorpioState()
+    data object Falaki : MoonInScorpioState()
+    data class Start(val clock: Clock) : MoonInScorpioState()
+    data class End(val clock: Clock) : MoonInScorpioState()
+}
+
 private fun Double.withMaxDegreeValue(max: Double): Double {
     var deg = this
     while (deg <= max - 360.0) deg += 360.0
@@ -40,30 +48,14 @@ private fun Double.withMaxDegreeValue(max: Double): Double {
     return deg
 }
 
-fun searchLunarLongitude(targetLon: Double, startTime: Time, days: Double): Time? {
-    val time2 = startTime.addDays(days)
-    return search(startTime, time2, 30.0) { time ->
+private fun searchLunarLongitude(jdn: Jdn, targetLon: Double): Clock {
+    val startTime = jdn.toAstronomyTime(hourOfDay = 0)
+    val endTime = startTime.addDays(1.0)
+    return search(startTime, endTime, 1.0) { time ->
         (eclipticGeoMoon(time).lon - targetLon).withMaxDegreeValue(+180.0)
-    }
-}
-
-sealed class MoonInScorpioState {
-    object Borji : MoonInScorpioState()
-    object Falaki : MoonInScorpioState()
-    class Start(private val jdn: Jdn) : MoonInScorpioState() {
-        val clock: Clock get() = calculate(jdn, Zodiac.scorpioRange.start)
-    }
-
-    class End(private val jdn: Jdn) : MoonInScorpioState() {
-        val clock: Clock get() = calculate(jdn, Zodiac.scorpioRange.endInclusive)
-    }
-
-    protected fun calculate(jdn: Jdn, targetLon: Double): Clock {
-        return searchLunarLongitude(targetLon, jdn.toAstronomyTime(hourOfDay = 0), 1.0)
-            ?.toMillisecondsSince1970()?.let { timeInMillis ->
-                Clock(GregorianCalendar().also { it.timeInMillis = timeInMillis })
-            } ?: Clock.zero
-    }
+    }?.toMillisecondsSince1970()?.let { timeInMillis ->
+        Clock(GregorianCalendar().also { it.timeInMillis = timeInMillis })
+    } ?: Clock.zero
 }
 
 fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioState? {
@@ -74,8 +66,8 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
             if (lunarLongitude(jdn, setIranTime, hourOfDay = 12) <= Zodiac.SCORPIO.tropicalRange[1])
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
 
-        start -> MoonInScorpioState.Start(jdn)
-        end -> MoonInScorpioState.End(jdn)
+        start -> MoonInScorpioState.Start(searchLunarLongitude(jdn, Zodiac.scorpioRange.start))
+        end -> MoonInScorpioState.End(searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive))
         else -> null
     }
 }
