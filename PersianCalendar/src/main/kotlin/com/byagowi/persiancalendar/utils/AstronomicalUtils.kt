@@ -35,7 +35,6 @@ private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: In
 fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean =
     lunarLongitude(jdn, setIranTime, hourOfDay) in Zodiac.scorpioRange
 
-
 sealed interface MoonInScorpioState {
     data object Borji : MoonInScorpioState
     data object Falaki : MoonInScorpioState

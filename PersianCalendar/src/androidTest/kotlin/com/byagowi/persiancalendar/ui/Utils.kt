@@ -9,9 +9,7 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
-import androidx.compose.ui.unit.LayoutDirection
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun ComposeContentTestRule.setContentWithParent(
