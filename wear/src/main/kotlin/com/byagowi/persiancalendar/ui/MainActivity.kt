@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.core.os.bundleOf
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.currentStateAsState
 import androidx.wear.compose.material3.AppScaffold
 import androidx.wear.compose.material3.MaterialTheme
 import androidx.wear.compose.material3.dynamicColorScheme
@@ -127,15 +128,13 @@ private fun WearApp() {
 
 @Composable
 private fun updatedToday(): Jdn {
-    val lifecycleOwner = LocalLifecycleOwner.current
     var today by remember { mutableStateOf(Jdn.today()) }
 
-    LaunchedEffect(lifecycleOwner.lifecycle.currentState) {
-        if (lifecycleOwner.lifecycle.currentState == Lifecycle.State.RESUMED) {
-            while (isActive) {
-                today = Jdn.today()
-                delay(30.seconds)
-            }
+    val currentState by LocalLifecycleOwner.current.lifecycle.currentStateAsState()
+    if (currentState == Lifecycle.State.RESUMED) LaunchedEffect(Unit) {
+        while (isActive) {
+            today = Jdn.today()
+            delay(30.seconds)
         }
     }
 
