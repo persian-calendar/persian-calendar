@@ -8,7 +8,9 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
+import androidx.annotation.AttrRes
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.scale
 import com.byagowi.persiancalendar.R
@@ -128,14 +130,6 @@ private class EventsViewFactory(
     override fun getViewAt(position: Int): RemoteViews {
         val row = RemoteViews(context.packageName, R.layout.widget_schedule_item)
         val entry = items[position]
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            row.setBoolean(R.id.event_background, "setClipToOutline", true)
-            row.setViewOutlinePreferredRadius(
-                R.id.event_background,
-                12f,
-                TypedValue.COMPLEX_UNIT_DIP
-            )
-        }
         row.setInt(R.id.event, "setTextColor", Color.WHITE)
 
         if (entry == Spacer) {
@@ -233,72 +227,12 @@ private class EventsViewFactory(
 
         val item = (entry as? Item).debugAssertNotNull ?: return row
         val event = item.value as? CalendarEvent<*>
-        if (item.value == NextTime) {
+        val backgroundColor = if (item.value == NextTime) {
             val (title, color) = getNextEnabledTime(enabledAlarms)
             row.setTextViewText(R.id.event, title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                row.setInt(R.id.event_background, "setBackgroundColor", color)
-                row.setInt(R.id.event, "setTextColor", eventTextColor(color))
-                row.setInt(R.id.event_time, "setTextColor", eventTextColor(color))
-                row.setBoolean(R.id.event_background, "setClipToOutline", true)
-                row.setViewOutlinePreferredRadius(
-                    R.id.event_background, 12f, TypedValue.COMPLEX_UNIT_DIP
-                )
-            } else {
-                val background = R.drawable.widget_schedule_item_time
-                row.setInt(R.id.event_background, "setBackgroundResource", background)
-            }
             row.setViewVisibility(R.id.event_time, View.GONE)
+            color
         } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (item.value is String) {
-                    row.setColorAttr(
-                        R.id.event,
-                        "setTextColor",
-                        android.R.attr.colorAccent,
-                    )
-                    row.setColorAttr(
-                        R.id.event_time,
-                        "setTextColor",
-                        android.R.attr.colorAccent,
-                    )
-                    row.setInt(
-                        R.id.event_background,
-                        "setBackgroundResource",
-                        R.drawable.widget_nothing_scheduled,
-                    )
-                } else if (event is CalendarEvent<*>) {
-                    if (event is CalendarEvent.DeviceCalendarEvent) {
-                        val background =
-                            if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
-                        row.setInt(R.id.event_background, "setBackgroundColor", background)
-                        row.setInt(R.id.event, "setTextColor", eventTextColor(background))
-                        row.setInt(R.id.event_time, "setTextColor", eventTextColor(background))
-                    } else {
-                        if (event.isHoliday) row.setColorAttr(
-                            R.id.event_background,
-                            "setBackgroundColor",
-                            android.R.attr.colorAccent,
-                        ) else row.setInt(
-                            R.id.event_background,
-                            "setBackgroundResource",
-                            R.drawable.widget_nothing_scheduled,
-                        )
-                        val textColor = if (event.isHoliday) android.R.attr.colorForegroundInverse
-                        else android.R.attr.colorForeground
-                        row.setColorAttr(R.id.event, "setTextColor", textColor)
-                        row.setColorAttr(R.id.event_time, "setTextColor", textColor)
-                    }
-                }
-            } else {
-                val background = when {
-                    event?.isHoliday == true -> R.drawable.widget_schedule_item_holiday
-                    event is CalendarEvent.DeviceCalendarEvent -> R.drawable.widget_schedule_item_event
-
-                    else -> R.drawable.widget_schedule_item_default
-                }
-                row.setInt(R.id.event_background, "setBackgroundResource", background)
-            }
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
                 event is CalendarEvent<*> -> event.title
@@ -310,7 +244,25 @@ private class EventsViewFactory(
                 row.setTextViewText(R.id.event_time, it)
                 row.setViewVisibility(R.id.event_time, View.VISIBLE)
             } ?: row.setViewVisibility(R.id.event_time, View.GONE)
+
+            if (item.value is String) {
+                ContextCompat.getColor(context, R.color.widget_nothing_scheduled)
+            } else if (event is CalendarEvent<*>) {
+                if (event is CalendarEvent.DeviceCalendarEvent) {
+                    if (event.color.isEmpty()) Color.GRAY else event.color.toLong().toInt()
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    ContextCompat.getColor(
+                        context,
+                        if (event.isHoliday) android.R.color.system_accent1_200
+                        else android.R.color.system_accent1_100
+                    )
+                } else if (event.isHoliday) 0xFFB0C6FF.toInt() else 0xFFD9E2FF.toInt()
+            } else null.debugAssertNotNull ?: Color.TRANSPARENT
         }
+        row.setInt(R.id.event_background, "setColorFilter", backgroundColor)
+        val textColor = eventTextColor(backgroundColor)
+        row.setTextColor(R.id.event, textColor)
+        row.setTextColor(R.id.event_time, textColor)
 
         row.setViewVisibility(R.id.header, View.GONE)
         row.setViewVisibility(R.id.event_parent, View.VISIBLE)
@@ -371,6 +323,10 @@ private class EventsViewFactory(
         row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
         return row
     }
+
+    fun Context.attrColor(@AttrRes attr: Int): Int = TypedValue()
+        .also { theme.resolveAttribute(attr, it, true) }
+        .let { if (it.resourceId != 0) ContextCompat.getColor(this, it.resourceId) else it.data }
 
     private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>): Pair<String, Int> {
         if (enabledAlarms.isEmpty()) return "" to 0
