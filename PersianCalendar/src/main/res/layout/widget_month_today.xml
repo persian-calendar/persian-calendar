@@ -16,13 +16,15 @@
         android:background="@drawable/widget_month_today"
         android:elegantTextHeight="false"
         android:textAlignment="center"
-        android:textColor="@color/widget_add_event_icon" />
+        android:textColor="@color/widget_add_event_icon"
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/secondary_day"
         android:layout_width="wrap_content"
         android:layout_height="14dp"
         android:elegantTextHeight="false"
-        android:textColor="@color/widget_add_event" />
+        android:textColor="@color/widget_add_event"
+        android:textSize="11sp" />
 
 </LinearLayout>

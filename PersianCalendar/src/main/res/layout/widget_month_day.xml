@@ -13,7 +13,7 @@
         android:layout_height="14dp"
         android:elegantTextHeight="false"
         android:textColor="@color/widget_modern_text"
-        android:textSize="12sp" />
+        android:textSize="11sp" />
 
     <TextView
         android:id="@+id/secondary_day"
@@ -21,6 +21,7 @@
         android:layout_height="14dp"
         android:layout_marginStart="4dp"
         android:elegantTextHeight="false"
-        android:textColor="@color/widget_modern_text" />
+        android:textColor="@color/widget_modern_text"
+        android:textSize="11sp" />
 
 </LinearLayout>

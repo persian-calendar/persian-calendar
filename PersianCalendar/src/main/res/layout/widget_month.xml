@@ -230,6 +230,7 @@
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
+            android:paddingTop="2dp"
             android:paddingEnd="2dp">
 
             <TextView
@@ -327,6 +328,7 @@
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
+            android:paddingTop="2dp"
             android:paddingEnd="2dp">
 
             <TextView
@@ -424,6 +426,7 @@
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
+            android:paddingTop="2dp"
             android:paddingEnd="2dp">
 
             <TextView
@@ -521,6 +524,7 @@
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
+            android:paddingTop="2dp"
             android:paddingEnd="2dp">
 
             <TextView
@@ -619,6 +623,7 @@
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
+            android:paddingTop="2dp"
             android:paddingEnd="2dp">
 
             <TextView
@@ -716,6 +721,7 @@
             android:layout_width="@dimen/widget_month_week_number_width"
             android:layout_height="wrap_content"
             android:paddingStart="6dp"
+            android:paddingTop="2dp"
             android:paddingEnd="2dp">
 
             <TextView

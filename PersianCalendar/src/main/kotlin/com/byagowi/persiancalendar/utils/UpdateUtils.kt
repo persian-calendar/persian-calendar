@@ -539,20 +539,9 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
             )
             dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
             secondaryCalendar?.let {
-                dayView.setTextViewTextSize(
-                    R.id.day,
-                    TypedValue.COMPLEX_UNIT_SP,
-                    if (preferredDigits === Language.ARABIC_DIGITS) 9f else 11f
-                )
-                dayView.setTextViewTextSize(R.id.secondary_day, TypedValue.COMPLEX_UNIT_SP, 9f)
                 val text = formatNumber((day on it).dayOfMonth, it.preferredDigits)
                 dayView.setTextViewText(R.id.secondary_day, "($text)")
             } ?: run {
-                dayView.setTextViewTextSize(
-                    R.id.day,
-                    TypedValue.COMPLEX_UNIT_SP,
-                    if (preferredDigits === Language.ARABIC_DIGITS) 12f else 14f
-                )
                 dayView.setViewVisibility(R.id.secondary_day, View.GONE)
             }
             // TODO: Consider use of addStableView
