@@ -78,7 +78,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="1dp"
-                android:elegantTextHeight="false"
                 android:textColor="@color/widget_schedule_today_text"
                 android:textSize="12sp" />
 
@@ -88,7 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
-                android:elegantTextHeight="false"
                 android:textColor="@color/widget_schedule_today_text"
                 android:textSize="14sp" />
 
@@ -98,7 +96,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:alpha=".9"
-                android:elegantTextHeight="false"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="10sp"
                 tools:ignore="SmallSp" />
@@ -110,7 +107,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/schedule_today_with_secondary"
-                android:elegantTextHeight="false"
                 android:textAlignment="center"
                 android:textColor="@color/widget_schedule_highlight_text"
                 android:textSize="14sp" />
@@ -120,7 +116,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:elegantTextHeight="false"
                 android:lineSpacingMultiplier=".9"
                 android:textColor="@color/widget_schedule_day_first_line"
                 android:textSize="12sp" />
@@ -131,7 +126,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="14dp"
-                android:elegantTextHeight="false"
                 android:lineSpacingMultiplier=".9"
                 android:textColor="@color/widget_modern_text"
                 android:textSize="14sp" />
