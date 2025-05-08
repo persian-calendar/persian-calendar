@@ -570,38 +570,32 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         events.take(dayEventsCountToShow - if (overflows) 1 else 0).forEach {
             val eventView = RemoteViews(context.packageName, R.layout.widget_month_event)
             eventView.setTextViewText(R.id.title, it.title)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                eventView.setViewOutlinePreferredRadius(
-                    R.id.title, 3f, TypedValue.COMPLEX_UNIT_DIP
-                )
-                eventView.setBoolean(R.id.title, "setClipToOutline", true)
-            }
             when {
                 it is CalendarEvent.DeviceCalendarEvent -> {
                     val background =
                         if (it.color.isEmpty()) Color.GRAY else it.color.toLong().toInt()
-                    eventView.setInt(R.id.title, "setBackgroundColor", background)
+                    eventView.setInt(R.id.title_background, "setColorFilter", background)
                     eventView.setInt(R.id.title, "setTextColor", eventTextColor(background))
                 }
 
                 it.isHoliday -> {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                         eventView.setColorAttr(
-                            R.id.title,
-                            "setBackgroundColor",
+                            R.id.title_background,
+                            "setColorFilter",
                             android.R.attr.colorAccent,
                         )
                         eventView.setColorInt(
                             R.id.title, "setTextColor", Color.WHITE, Color.WHITE
                         )
                     } else {
-                        eventView.setInt(R.id.title, "setBackgroundColor", 0xFFFF8A65.toInt())
+                        eventView.setInt(R.id.title_background, "setColorFilter", 0xFFFF8A65.toInt())
                         eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                     }
                 }
 
                 else -> {
-                    eventView.setInt(R.id.title, "setBackgroundColor", 0xFF8D95AD.toInt())
+                    eventView.setInt(R.id.title_background, "setColorFilter", 0xFF8D95AD.toInt())
                     eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                 }
             }
