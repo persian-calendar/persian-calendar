@@ -117,7 +117,7 @@ fun CalendarsOverview(
         ) {
             val language by language.collectAsState()
             this.AnimatedVisibility(
-                (isAstronomicalExtraFeaturesEnabled || language.isNepali) && isExpanded
+                (isAstronomicalExtraFeaturesEnabled && isExpanded) || language.isNepali
             ) {
                 AndroidView(
                     factory = ::MoonView,
