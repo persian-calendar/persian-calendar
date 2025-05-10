@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
@@ -409,6 +410,55 @@ enum class Language(val code: String, val nativeName: String) {
                 digits
             )
         )
+    }
+
+    fun moonNames(lunarAge: LunarAge.Phase): String {
+        return when (this) {
+            // https://commons.wikimedia.org/wiki/File:Lunar-Phase-Diagram-Parsi.png
+            FA, FA_AF -> when (lunarAge) {
+                LunarAge.Phase.NEW_MOON -> "ماه نو یا بَرن"
+                LunarAge.Phase.WAXING_CRESCENT -> "هلال سوی ماه تمام"
+                LunarAge.Phase.FIRST_QUARTER -> "یک‌چهارم نخست"
+                LunarAge.Phase.WAXING_GIBBOUS -> "برآمدگی سوی ماه تمام"
+                LunarAge.Phase.FULL_MOON -> "ماه تمام یا بدر"
+                LunarAge.Phase.WANING_GIBBOUS -> "برآمدگی سوی کمرنگی"
+                LunarAge.Phase.THIRD_QUARTER -> "یک‌چهارم سوم"
+                LunarAge.Phase.WANING_CRESCENT -> "هلال سوی کمرنگی"
+            }
+
+            NE -> when (lunarAge) {
+                LunarAge.Phase.NEW_MOON -> "औंशी"
+                LunarAge.Phase.WAXING_CRESCENT -> "शुक्ल पक्ष प्रतिपदा"
+                LunarAge.Phase.FIRST_QUARTER -> "शुक्ल पक्ष पञ्चमी"
+                LunarAge.Phase.WAXING_GIBBOUS -> "शुक्ल पक्ष चतुर्दशी"
+                LunarAge.Phase.FULL_MOON -> "पूर्णिमा"
+                LunarAge.Phase.WANING_GIBBOUS -> "कृष्ण पक्ष चतुर्दशीर"
+                LunarAge.Phase.THIRD_QUARTER -> "कृष्ण पक्ष पञ्चमी"
+                LunarAge.Phase.WANING_CRESCENT -> "कृष्ण पक्ष प्रतिपदा"
+            }
+
+            TA -> when (lunarAge) {
+                LunarAge.Phase.NEW_MOON -> "இல்மதி"
+                LunarAge.Phase.WAXING_CRESCENT -> "மூன்றாம்பிறை"
+                LunarAge.Phase.FIRST_QUARTER -> "முதல் கால்பகுதி"
+                LunarAge.Phase.WAXING_GIBBOUS -> "வளர்பிறை"
+                LunarAge.Phase.FULL_MOON -> "முழுமதி"
+                LunarAge.Phase.WANING_GIBBOUS -> "தேய்பிறை"
+                LunarAge.Phase.THIRD_QUARTER -> "மூன்றாம் கால்பகுதி"
+                LunarAge.Phase.WANING_CRESCENT -> "தேய் மூன்றாம் பிறை"
+            }
+
+            else -> when (lunarAge) {
+                LunarAge.Phase.NEW_MOON -> "New moon"
+                LunarAge.Phase.WAXING_CRESCENT -> "Waxing crescent"
+                LunarAge.Phase.FIRST_QUARTER -> "First quarter"
+                LunarAge.Phase.WAXING_GIBBOUS -> "Waxing gibbous"
+                LunarAge.Phase.FULL_MOON -> "Full moon"
+                LunarAge.Phase.WANING_GIBBOUS -> "Waning gibbous"
+                LunarAge.Phase.THIRD_QUARTER -> "Third quarter"
+                LunarAge.Phase.WANING_CRESCENT -> "Warning crescent"
+            }
+        }
     }
 
     companion object {

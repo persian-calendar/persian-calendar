@@ -413,15 +413,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="week_view">Week view</string>
     <string name="day_view">Day view</string>
 
-    <string name="new_moon">New moon</string>
-    <string name="waxing_crescent">Waxing crescent</string>
-    <string name="first_quarter">First quarter</string>
-    <string name="waxing_gibbous">Waxing gibbous</string>
-    <string name="full_moon">Full moon</string>
-    <string name="waning_gibbous">Waning gibbous</string>
-    <string name="third_quarter">Third quarter</string>
-    <string name="waning_crescent">Warning crescent</string>
-
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
         <item quantity="other">%1$s %2$s days</item>

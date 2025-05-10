@@ -413,12 +413,4 @@
     <string name="dhu_al_hijjah">து அல்-இச்சா</string>
     <string name="n_till">%1$s முதல் %2$s வரை</string>
     <string name="nothing_scheduled">எதுவும் திட்டமிடப்படவில்லை</string>
-    <string name="new_moon">இல்மதி</string>
-    <string name="waxing_crescent">மூன்றாம்பிறை</string>
-    <string name="first_quarter">முதல் கால்பகுதி</string>
-    <string name="waxing_gibbous">வளர்பிறை</string>
-    <string name="full_moon">முழுமதி</string>
-    <string name="waning_gibbous">தேய்பிறை</string>
-    <string name="third_quarter">மூன்றாம் கால்பகுதி</string>
-    <string name="waning_crescent">தேய் மூன்றாம் பிறை</string>
 </resources>

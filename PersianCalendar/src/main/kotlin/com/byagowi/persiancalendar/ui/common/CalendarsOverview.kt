@@ -209,9 +209,9 @@ fun CalendarsOverview(
             AutoSizedBodyText(
                 if (language.isNepali) {
                     phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +
-                            stringResource(phase.stringRes) +
+                            language.moonNames(phase) +
                             " ~" + Tithi.tithiName(System.currentTimeMillis())
-                } else phase.emoji(coordinates) + " " + stringResource(phase.stringRes)
+                } else phase.emoji(coordinates) + " " + language.moonNames(phase)
             )
         }
 

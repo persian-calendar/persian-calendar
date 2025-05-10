@@ -352,12 +352,4 @@
     <string name="widget_prefer_device_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="nepal">नेपाल</string>
     <string name="calculator">क्यालकुलेटर</string>
-    <string name="new_moon">औंशी</string>
-    <string name="waxing_crescent">शुक्ल पक्ष प्रतिपदा</string>
-    <string name="first_quarter">शुक्ल पक्ष पञ्चमी</string>
-    <string name="waxing_gibbous">शुक्ल पक्ष चतुर्दशी</string>
-    <string name="full_moon">पूर्णिमा</string>
-    <string name="waning_gibbous">कृष्ण पक्ष चतुर्दशीर</string>
-    <string name="third_quarter">कृष्ण पक्ष पञ्चमी</string>
-    <string name="waning_crescent">कृष्ण पक्ष प्रतिपदा</string>
 </resources>
