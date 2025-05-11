@@ -64,6 +64,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.PREF_COMPASS_SET_LOCATION_IGNORED
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
@@ -156,13 +157,17 @@ fun SharedTransitionScope.CompassScreen(
 
     fun showSetLocationMessage() {
         coroutineScope.launch {
-            if (snackbarHostState.showSnackbar(
-                    context.getString(R.string.set_location),
-                    duration = SnackbarDuration.Long,
-                    actionLabel = context.getString(R.string.settings),
-                    withDismissAction = true,
-                ) == SnackbarResult.ActionPerformed
-            ) navigateToSettingsLocationTab()
+            when (snackbarHostState.showSnackbar(
+                context.getString(R.string.set_location),
+                duration = SnackbarDuration.Long,
+                actionLabel = context.getString(R.string.settings),
+                withDismissAction = true,
+            )) {
+                SnackbarResult.ActionPerformed -> navigateToSettingsLocationTab()
+                SnackbarResult.Dismissed -> context.preferences.edit {
+                    putBoolean(PREF_COMPASS_SET_LOCATION_IGNORED, true)
+                }
+            }
         }
     }
 
@@ -375,7 +380,11 @@ fun SharedTransitionScope.CompassScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 debugLog("compass: ON_RESUME")
-                if (coordinates == null) showSetLocationMessage()
+                if (coordinates == null) {
+                    if (!context.preferences.getBoolean(PREF_COMPASS_SET_LOCATION_IGNORED, false)) {
+                        showSetLocationMessage()
+                    }
+                }
                 if (orientationSensor != null) {
                     sensorManager.registerListener(
                         orientationSensorListener,
