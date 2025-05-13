@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="libra">துலாம்</string>
-    <string name="n_hours_minutes">%1$sh %2$sm</string>
-    <string name="times">பெருக்கல்</string>
+    <string name="n_hours_minutes">%1$sம %2$sநி</string>
+    <string name="times">பொழுதுகள்</string>
     <string name="fajr">ஃபச்ர்</string>
     <string name="imsak">உண்ணாவிரதம்</string>
     <string name="native_digits">சொந்த இலக்கங்கள்</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s நாள்</item>
-        <item quantity="other">%1$s %2$s நாட்கள்</item>
+        <item quantity="other">%1$s %2$s நாள்கள்</item>
     </plurals>
     <string name="athan_alarm_summary">அலாரத்தைத் தூண்டுவதற்கான வேண்டுதல்கள்</string>
     <string name="notification_athan">அதான் அறிவிப்பு</string>
@@ -42,7 +42,7 @@
     <string name="about_developers">உருவாக்குபவர்கள் (நேர்ந்தாற்போல வரிசை)</string>
     <string name="previous_x">முந்தைய %1$s</string>
     <string name="next_x">அடுத்த %1$s</string>
-    <string name="week_days_name_column">நாட்கள் அட்டவணையில் %1$s நெடுவரிசை</string>
+    <string name="week_days_name_column">நாள்கள் அட்டவணையில் %1$s நெடுவரிசை</string>
     <string name="equivalent_to">சமமான</string>
     <string name="holiday_reason">%1$s காரணமாக விடுமுறை</string>
     <string name="nth_week_of_year">ஆண்டின் %1$s வது வாரம்</string>
@@ -216,7 +216,7 @@
     <string name="yes">ஆம்</string>
     <string name="sample_inputs">மாதிரி உள்ளீடுகள்</string>
     <string name="year_view">ஆண்டு பார்வை</string>
-    <string name="daily_schedule">நாள்தோறும் அட்டவணை</string>
+    <string name="daily_schedule">நாள் அட்டவணை</string>
     <string name="exempt_app_battery_optimization">அறிவிப்பின் சரியான செயல்பாட்டிற்கு மின்கலம் உகப்பாக்கம் விதிவிலக்குக்குப் பயன்பாட்டைச் சேர்க்க விரும்புகிறீர்களா?</string>
     <string name="widget_background_transparency">நிரல்பலகை பின்னணி வெளிப்படைத்தன்மை</string>
     <string name="save">சேமி</string>
@@ -229,19 +229,19 @@
     <string name="day_view">நாள் பார்வை</string>
     <plurals name="work_days">
         <item quantity="one">%1$s வேலை நாள்</item>
-        <item quantity="other">%1$s வேலை நாட்கள்</item>
+        <item quantity="other">%1$s வேலை நாள்கள்</item>
     </plurals>
     <plurals name="seconds">
         <item quantity="one">%1$s நொடி</item>
         <item quantity="other">%1$s நொடிகள்</item>
     </plurals>
     <plurals name="minutes">
-        <item quantity="one">%1$s மணித்துளி</item>
-        <item quantity="other">%1$s மணித்துளிகள்</item>
+        <item quantity="one">%1$s நிமையம்</item>
+        <item quantity="other">%1$s நிமையங்கள்</item>
     </plurals>
     <plurals name="days">
         <item quantity="one">%1$s நாள்</item>
-        <item quantity="other">%1$s நாட்கள்</item>
+        <item quantity="other">%1$s நாள்கள்</item>
     </plurals>
     <plurals name="weeks">
         <item quantity="one">%1$s வாரம்</item>
@@ -283,8 +283,8 @@
     <string name="return_to_today">இன்று திரும்பவும்</string>
     <string name="search_in_events">நிகழ்வுகளில் தேடு</string>
     <string name="days_distance">தூரம்</string>
-    <string name="start_of_year_diff">ஆண்டின் தொடக்கத்திலிருந்து %1$s நாட்கள் (~ %2$s வாரங்கள் அல்லது %3$sons)</string>
-    <string name="end_of_year_diff">ஆண்டின் இறுதிக்கு %1$s நாட்கள் (~ %2$s வாரங்கள் அல்லது %3$s மாதங்கள்)</string>
+    <string name="start_of_year_diff">ஆண்டின் தொடக்கத்திலிருந்து %1$s நாள்கள் (~ %2$s வாரங்கள் அல்லது %3$sதிங்கள்கள்)</string>
+    <string name="end_of_year_diff">ஆண்டின் இறுதிக்கு %1$s நாள்கள் (~ %2$s வாரங்கள் அல்லது %3$s திங்கள்கள்)</string>
     <string name="date_copied_clipboard">%1$s இடைநிலைப்பலகைக்கு நகலெடுக்கப்பட்டது.</string>
     <string name="year_name">ஆண்டுப் பெயர்</string>
     <string name="animal_year_name_monkey">குரங்கு</string>
@@ -319,8 +319,8 @@
     <string name="sunrise_sun_view">வைகறை | காலை</string>
     <string name="midday_sun_view">நண்பகல்</string>
     <string name="sunset_sun_view">எற்பாடு | மாலை</string>
-    <string name="length_of_day">பகல்நேரம்</string>
-    <string name="remaining_daylight">மீதமுள்ள</string>
+    <string name="length_of_day">பகல்</string>
+    <string name="remaining_daylight">மீதம்</string>
     <string name="sunrise">வைகறை | காலை</string>
     <string name="dhuhr">துஅர்</string>
     <string name="asr">அச்ர்</string>
@@ -366,7 +366,7 @@
     <string name="week_number_summary">காலிகையில் வார எண்ணைக் காட்டு</string>
     <string name="week_start">வாரம் தொடக்கம்</string>
     <string name="week_start_summary">வாரத் தொடக்க நாளைத் தேர்ந்தெடு</string>
-    <string name="week_ends">வார இறுதி நாட்கள்</string>
+    <string name="week_ends">வார இறுதி நாள்கள்</string>
     <string name="week_ends_summary">வார இறுதி நாட்களைத் தேர்ந்தெடு</string>
     <string name="islamic_offset">இச்லாமிய எதிரீடு</string>
     <string name="islamic_offset_summary">ஒரு எண்ணைச் சேர்ப்பதன் மூலம் இச்லாமிய காலிகையை சரிசெய்</string>
@@ -389,9 +389,9 @@
     <string name="gps_location">இடங்காட்டி அல்லது இணையத்திலிருந்து இருப்பிடத்தைப் பெறுங்கள்</string>
     <string name="gps_location_help">இது முடிந்தால் பிற விருப்பங்கள் தேவையில்லை</string>
     <string name="gps_internet_desc">தயவுசெய்து உங்கள் இருப்பிடத்தைக் கண்டுபிடிக்கச் சாதனத்தின் இடங்காட்டி மற்றும் இணைய இணைப்பை இயக்கவும்.\n\nபயன்பாட்டிற்கு இது ஒரு முறை மட்டுமே தேவை, இருப்பினும், நீங்கள் ஒரு புதிய இடத்திற்குச் சென்றால், இடங்காட்டி மற்றும் இணையத்தை அணுகுவது மீண்டும் தேவைப்படுகிறது.</string>
-    <string name="wait_for_gps">தயவுசெய்து காத்திருங்கள்… ஒரு மணித்துளி கழித்து எதுவும் தோன்றவில்லை என்றால் நீங்கள் மற்ற விருப்பங்களை முயற்சிக்க வேண்டும்</string>
+    <string name="wait_for_gps">தயவுசெய்து காத்திரு… ஒரு நிமையம் கழித்து எதுவும் தோன்றவில்லை என்றால் நீங்கள் மற்ற விருப்பங்களை முயற்சிக்க வேண்டும்</string>
     <string name="location">இடம்</string>
-    <string name="location_help">அவை எதுவும் இல்லை என்றால், அதைக் கீழே குறிப்பிடவும்</string>
+    <string name="location_help">அவை எதுவும் இல்லை என்றால், அதைக் கீழே குறிப்பிடு</string>
     <string name="latitude">குறுக்குக்கோடு</string>
     <string name="longitude">நெடுங்கோடு</string>
     <string name="altitude">குத்துயரம்</string>
