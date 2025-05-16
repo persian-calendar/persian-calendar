@@ -29,6 +29,7 @@ import io.github.persiancalendar.calendar.PersianDate
 // * https://github.com/user-attachments/assets/5f42c377-3f39-4000-b79c-08cbbf76fc07
 // * https://github.com/user-attachments/assets/21eadf3f-c780-470d-91b0-a0e504689198
 // See for example: https://w.wiki/E9uz
+// See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
 fun YearNameHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
     val items = run {
