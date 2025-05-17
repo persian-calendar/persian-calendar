@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -22,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import io.github.persiancalendar.calendar.PersianDate
 
@@ -32,6 +35,7 @@ import io.github.persiancalendar.calendar.PersianDate
 // See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
 fun YearNameHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
+    val language by language.collectAsState()
     val items = run {
         val baseDate = jdn.toPersianDate()
         val resources = LocalContext.current.resources
@@ -41,7 +45,7 @@ fun YearNameHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
                 resources = resources,
                 withEmoji = true,
                 persianDate = date,
-                withOldEraName = true,
+                withOldEraName = language.isUserAbleToReadPersian,
                 separator = "\n",
             )
         }

@@ -86,7 +86,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
@@ -168,6 +168,12 @@ fun SharedTransitionScope.AstronomyScreen(
                             toggle = viewModel::toggleIsTropical,
                         )
                     }
+
+                    var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
+                    if (showHoroscopeDialog) {
+                        val astronomyState by viewModel.astronomyState.collectAsState()
+                        HoroscopesDialog(astronomyState.date.time) { showHoroscopeDialog = false }
+                    }
                     var showYearNameHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
                     if (showYearNameHoroscopeDialog) {
                         val astronomyState by viewModel.astronomyState.collectAsState()
@@ -175,6 +181,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             showYearNameHoroscopeDialog = false
                         }
                     }
+
                     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
                         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
                             closeMenu()
@@ -184,8 +191,17 @@ fun SharedTransitionScope.AstronomyScreen(
                             closeMenu()
                             navigateToMap()
                         }
-                        val language by language.collectAsState()
-                        if (language.isPersian) AppDropdownMenuItem({ Text("زایجهٔ دور اثنی‌عشری") }) {
+                        AppDropdownMenuItem({ Text(stringResource(R.string.horoscope)) }) {
+                            showHoroscopeDialog = true
+                            closeMenu()
+                        }
+                        AppDropdownMenuItem({
+                            // Also called "زایجهٔ دور اثنی‌عشری" in Persian
+                            Text(
+                                stringResource(R.string.horoscope) + spacedComma +
+                                        stringResource(R.string.year_name)
+                            )
+                        }) {
                             showYearNameHoroscopeDialog = true
                             closeMenu()
                         }
@@ -400,8 +416,6 @@ private fun SharedTransitionScope.SolarDisplay(
     val state by viewModel.astronomyState.collectAsState()
     val isTropical by viewModel.isTropical.collectAsState()
     val mode by viewModel.mode.collectAsState()
-    var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-    if (showHoroscopeDialog) HoroscopesDialog(state.date.time) { showHoroscopeDialog = false }
     Box(modifier) {
         Column(Modifier.align(Alignment.CenterStart)) {
             AstronomyMode.entries.forEach {
@@ -426,10 +440,6 @@ private fun SharedTransitionScope.SolarDisplay(
         AndroidView(
             factory = {
                 val solarView = SolarView(it)
-                var clickCount = 0
-                solarView.setOnClickListener {
-                    if (++clickCount % 2 == 0) showHoroscopeDialog = true
-                }
                 solarView.rotationalMinutesChange = { offset ->
                     viewModel.addMinutesOffset(offset)
                     slider?.manualScrollBy(offset / 200f, 0f)

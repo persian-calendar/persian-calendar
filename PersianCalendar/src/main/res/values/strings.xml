@@ -412,6 +412,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="print">Print</string>
     <string name="week_view">Week view</string>
     <string name="day_view">Day view</string>
+    <string name="horoscope">Horoscope</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
