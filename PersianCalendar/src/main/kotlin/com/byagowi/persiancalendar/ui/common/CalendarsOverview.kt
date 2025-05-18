@@ -3,7 +3,10 @@ package com.byagowi.persiancalendar.ui.common
 import android.content.ClipData
 import android.content.Context
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
@@ -47,12 +50,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
@@ -88,13 +93,16 @@ import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 import java.util.Date
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun CalendarsOverview(
+fun SharedTransitionScope.CalendarsOverview(
     jdn: Jdn,
     today: Jdn,
     selectedCalendar: Calendar,
     shownCalendars: List<Calendar>,
     isExpanded: Boolean,
+    navigateToAstronomy: (Jdn) -> Unit,
+    animatedContentScope: AnimatedContentScope,
 ) {
     val context = LocalContext.current
     val isToday = today == jdn
@@ -124,6 +132,12 @@ fun CalendarsOverview(
                     update = { it.jdn = jdn.value.toFloat() },
                     modifier = Modifier
                         .padding(end = 8.dp)
+                        .semantics { this.hideFromAccessibility() }
+                        .sharedBounds(
+                            rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
+                            animatedVisibilityScope = animatedContentScope,
+                        )
+                        .clickable { navigateToAstronomy(jdn) }
                         .size(20.dp)
                 )
             }

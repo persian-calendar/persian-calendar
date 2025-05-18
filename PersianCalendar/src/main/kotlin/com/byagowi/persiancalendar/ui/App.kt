@@ -182,6 +182,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                 }
 
+                fun navigateToAstronomy(jdn: Jdn) {
+                    navController.graph.findNode(astronomyRoute)?.let { destination ->
+                        navController.navigate(
+                            destination.id, bundleOf(daysOffsetKey to jdn - Jdn.today())
+                        )
+                    }
+                }
+
                 fun isCurrentDestination(route: String) =
                     navController.currentDestination?.route == route
 
@@ -235,13 +243,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             }
                         },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
-                        navigateToAstronomy = { daysOffset ->
-                            navController.graph.findNode(astronomyRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(daysOffsetKey to daysOffset)
-                                )
-                            }
-                        },
+                        navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
                         animatedContentScope = this,
                         isCurrentDestination = isCurrentDestination(calendarRoute),
@@ -289,6 +291,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     ConverterScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
+                        navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel<ConverterViewModel>()
                     )
                 }

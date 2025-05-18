@@ -203,7 +203,7 @@ fun SharedTransitionScope.CalendarScreen(
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
-    navigateToAstronomy: (Int) -> Unit,
+    navigateToAstronomy: (Jdn) -> Unit,
     navigateToDays: (Jdn, isWeek: Boolean) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
@@ -484,7 +484,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
-    navigateToAstronomy: (Int) -> Unit,
+    navigateToAstronomy: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
     bottomPadding: Dp,
     today: Jdn,
@@ -502,6 +502,8 @@ private fun SharedTransitionScope.detailsTabs(
                 minHeight = minHeight,
                 bottomPadding = bottomPadding,
                 today = today,
+                navigateToAstronomy = navigateToAstronomy,
+                animatedContentScope = animatedContentScope,
             )
         } else null,
         R.string.events to { _, _ ->
@@ -598,13 +600,16 @@ private fun Details(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun CalendarsTab(
+private fun SharedTransitionScope.CalendarsTab(
     viewModel: CalendarViewModel,
     interactionSource: MutableInteractionSource,
     minHeight: Dp,
     bottomPadding: Dp,
     today: Jdn,
+    navigateToAstronomy: (Jdn) -> Unit,
+    animatedContentScope: AnimatedContentScope,
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Column(
@@ -625,6 +630,8 @@ private fun CalendarsTab(
             selectedCalendar = mainCalendar,
             shownCalendars = enabledCalendars,
             isExpanded = isExpanded,
+            navigateToAstronomy = navigateToAstronomy,
+            animatedContentScope = animatedContentScope,
         )
 
         val context = LocalContext.current

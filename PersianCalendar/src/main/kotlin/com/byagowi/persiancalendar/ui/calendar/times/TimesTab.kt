@@ -62,7 +62,7 @@ import io.github.persiancalendar.praytimes.PrayTimes
 fun SharedTransitionScope.TimesTab(
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
-    navigateToAstronomy: (Int) -> Unit,
+    navigateToAstronomy: (Jdn) -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     interactionSource: MutableInteractionSource,
@@ -153,7 +153,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
     prayTimes: PrayTimes,
     now: Long,
     isToday: Boolean,
-    navigateToAstronomy: (Int) -> Unit,
+    navigateToAstronomy: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
     val jdn by viewModel.selectedDay.collectAsState()
@@ -195,7 +195,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,
-                    ) { navigateToAstronomy(jdn - Jdn.today()) },
+                    ) { navigateToAstronomy(jdn) },
             )
         }
     }

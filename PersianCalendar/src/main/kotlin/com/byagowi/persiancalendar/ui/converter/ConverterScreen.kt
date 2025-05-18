@@ -102,6 +102,7 @@ import kotlin.time.Duration.Companion.milliseconds
 fun SharedTransitionScope.ConverterScreen(
     animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
+    navigateToAstronomy: (Jdn) -> Unit,
     viewModel: ConverterViewModel,
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
@@ -199,7 +200,12 @@ fun SharedTransitionScope.ConverterScreen(
                             screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
-                                ConverterAndDistance(viewModel)
+                                ConverterAndDistance(
+                                    navigateToAstronomy = navigateToAstronomy,
+                                    viewModel = viewModel,
+                                    animatedContentScope = animatedContentScope,
+                                    sharedTransitionScope = this@ConverterScreen,
+                                )
                             }
                         }
 
@@ -421,8 +427,14 @@ private fun QrCode(viewModel: ConverterViewModel, setShareAction: (() -> Unit) -
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
+private fun ColumnScope.ConverterAndDistance(
+    navigateToAstronomy: (Jdn) -> Unit,
+    viewModel: ConverterViewModel,
+    animatedContentScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope,
+) {
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendar by viewModel.calendar.collectAsState()
@@ -446,13 +458,17 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
                     .clickable { isExpanded = !isExpanded }
                     .padding(top = 12.dp, bottom = 12.dp)
             ) {
-                CalendarsOverview(
-                    jdn = jdn,
-                    today = today,
-                    selectedCalendar = calendar,
-                    shownCalendars = enabledCalendars - calendar,
-                    isExpanded = isExpanded
-                )
+                sharedTransitionScope.apply {
+                    CalendarsOverview(
+                        jdn = jdn,
+                        today = today,
+                        selectedCalendar = calendar,
+                        shownCalendars = enabledCalendars - calendar,
+                        isExpanded = isExpanded,
+                        navigateToAstronomy = navigateToAstronomy,
+                        animatedContentScope = animatedContentScope,
+                    )
+                }
             }
             this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
                 DaysDistanceSecondPart(viewModel, jdn, calendar)
@@ -472,13 +488,17 @@ private fun ColumnScope.ConverterAndDistance(viewModel: ConverterViewModel) {
             ) {
                 Spacer(Modifier.height(20.dp))
                 Box(Modifier.fillMaxWidth()) {
-                    CalendarsOverview(
-                        jdn = jdn,
-                        today = today,
-                        selectedCalendar = calendar,
-                        shownCalendars = enabledCalendars - calendar,
-                        isExpanded = isExpanded,
-                    )
+                    sharedTransitionScope.apply {
+                        CalendarsOverview(
+                            jdn = jdn,
+                            today = today,
+                            selectedCalendar = calendar,
+                            shownCalendars = enabledCalendars - calendar,
+                            isExpanded = isExpanded,
+                            navigateToAstronomy = navigateToAstronomy,
+                            animatedContentScope = animatedContentScope,
+                        )
+                    }
                 }
                 Spacer(Modifier.height(12.dp))
             }
