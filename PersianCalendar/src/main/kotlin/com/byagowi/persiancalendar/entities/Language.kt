@@ -461,6 +461,12 @@ enum class Language(val code: String, val nativeName: String) {
         }
     }
 
+    // Indian locales always need to see moon view as https://en.wikipedia.org/wiki/Tithi
+    val alwaysNeedMoonStatus: Boolean get() = when (this) {
+        NE, TA -> true
+        else -> false
+    }
+
     companion object {
         @SuppressLint("ConstantLocale")
         val userDeviceLanguage = Locale.getDefault().language ?: "en"
