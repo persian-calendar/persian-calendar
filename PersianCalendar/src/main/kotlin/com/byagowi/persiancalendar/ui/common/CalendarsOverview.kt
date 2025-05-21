@@ -124,9 +124,7 @@ fun SharedTransitionScope.CalendarsOverview(
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
             val language by language.collectAsState()
-            this.AnimatedVisibility(
-                (isAstronomicalExtraFeaturesEnabled && isExpanded) || language.isNepali
-            ) {
+            this.AnimatedVisibility(isExpanded || language.isNepali) {
                 AndroidView(
                     factory = ::MoonView,
                     update = { it.jdn = jdn.value.toFloat() },
