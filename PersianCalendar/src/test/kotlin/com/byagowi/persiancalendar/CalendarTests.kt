@@ -5,13 +5,17 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
+import com.byagowi.persiancalendar.utils.formatAsRomanDate
 import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.calendar.util.julianFromJdn
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
@@ -193,6 +197,42 @@ class CalendarTests {
                 message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name
             )
             jalaliName(jdn.toPersianDate(), dayOfYear)
+            formatAsRomanDate(jdn)
         }
+    }
+
+    @Test
+    fun `roman date format`() {
+        assertAll(
+            listOf(
+                PersianDate(1404, 1, 1) to "۸ آذر ۲۳۳۶",
+                PersianDate(1404, 1, 11) to "۱۸ آذر ۲۳۳۶",
+                PersianDate(1404, 1, 26) to "۲ نیسان ۲۳۳۶",
+                PersianDate(1404, 2, 9) to "۱۶ نیسان ۲۳۳۶",
+                PersianDate(1404, 2, 24) to "۱ ایار ۲۳۳۶",
+                PersianDate(1404, 3, 7) to "۱۵ ایار ۲۳۳۶",
+                PersianDate(1404, 3, 22) to "۳۰ ایار ۲۳۳۶",
+                PersianDate(1404, 4, 6) to "۱۴ حزیران ۲۳۳۶",
+                PersianDate(1404, 4, 21) to "۲۹ حزیران ۲۳۳۶",
+                PersianDate(1404, 5, 4) to "۱۳ تموز ۲۳۳۶",
+                PersianDate(1404, 5, 19) to "۲۸ تموز ۲۳۳۶",
+                PersianDate(1404, 6, 3) to "۱۲ آب ۲۳۳۶",
+                PersianDate(1404, 6, 18) to "۲۷ آب ۲۳۳۶",
+                PersianDate(1404, 7, 2) to "۱۱ ایلول ۲۳۳۶",
+                PersianDate(1404, 7, 17) to "۲۶ ایلول ۲۳۳۶",
+                PersianDate(1404, 8, 1) to "۱۰ تشرین اول ۲۳۳۷",
+                PersianDate(1404, 8, 16) to "۲۵ تشرین اول ۲۳۳۷",
+                PersianDate(1404, 9, 1) to "۹ تشرین آخر ۲۳۳۷",
+                PersianDate(1404, 9, 16) to "۲۴ تشرین آخر ۲۳۳۷",
+                PersianDate(1404, 10, 1) to "۹ کانون اول ۲۳۳۷",
+                PersianDate(1404, 10, 16) to "۲۴ کانون اول ۲۳۳۷",
+                PersianDate(1404, 11, 1) to "۸ کانون آخر ۲۳۳۷",
+                PersianDate(1404, 11, 16) to "۲۳ کانون آخر ۲۳۳۷",
+                PersianDate(1404, 11, 30) to "۶ شباط ۲۳۳۷",
+                PersianDate(1404, 12, 15) to "۲۱ شباط ۲۳۳۷",
+            ).map { (persianDate, expectation) ->
+                { assertEquals(expectation, formatAsRomanDate(Jdn(persianDate)), expectation) }
+            }
+        )
     }
 }

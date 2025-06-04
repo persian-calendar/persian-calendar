@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
+import com.byagowi.persiancalendar.utils.formatAsRomanDate
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -208,6 +209,9 @@ fun SharedTransitionScope.CalendarsOverview(
             val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
             this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
+            }
+            this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
+                AutoSizedBodyText(formatAsRomanDate(jdn) + " رومی")
             }
         }
 
