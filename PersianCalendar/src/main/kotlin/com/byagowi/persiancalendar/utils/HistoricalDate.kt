@@ -15,6 +15,6 @@ private val romanMonths = listOf(
 fun formatAsRomanDate(jdn: Jdn): String {
     val (julianYear, julianMonth, dayOfMonth) = julianFromJdn(jdn.value)
     val year = julianYear + 311 + if (julianMonth > 9) 1 else 0
-    val month = julianMonth + if (julianMonth > 9) -9 else 3
-    return "${formatNumber(dayOfMonth)} ${romanMonths[month - 1]} ${formatNumber(year)}"
+    val month = romanMonths[(julianMonth + 2) % 12]
+    return "${formatNumber(dayOfMonth)} $month ${formatNumber(year)}"
 }
