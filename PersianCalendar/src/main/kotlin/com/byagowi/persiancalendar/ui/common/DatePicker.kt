@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
@@ -24,6 +25,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
 fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
+    val yearsLimit = if (BuildConfig.DEVELOPMENT) 4000 else 400
     Crossfade(targetState = calendar, label = "day picker") { state ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,7 +48,7 @@ fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
                 { item: Int -> months[item - 1] + " / " + formatNumber(item) }
             }
             val todayYear = remember(state) { Jdn.today().on(state).year }
-            val startYear = remember(state) { todayYear - 200 }
+            val startYear = remember(state) { todayYear - yearsLimit / 2 }
             Row(modifier = Modifier.fillMaxWidth()) {
                 val view = LocalView.current
                 NumberPicker(
@@ -75,7 +77,7 @@ fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
                 Spacer(modifier = Modifier.width(8.dp))
                 NumberPicker(
                     modifier = Modifier.weight(1f),
-                    range = startYear..startYear + 400,
+                    range = startYear..startYear + yearsLimit,
                     value = date.year,
                     onClickLabel = stringResource(R.string.year),
                 ) { year ->
