@@ -36,7 +36,7 @@ wear-compose-material3 = "1.5.0-beta02"
 wear-glance-tiles = "1.0.0-alpha05"
 wear-tooling-preview = "1.0.0"
 wear-protolayout-proto = "1.2.1"
-wear-tiles-proto = "1.4.1"
+wear-tiles-proto = "1.5.0"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
