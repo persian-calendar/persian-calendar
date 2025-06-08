@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.BasicAlertDialog
@@ -67,6 +71,79 @@ fun AppDialog(
                     }
                     ScrollShadow(scrollState, top = true)
                     ScrollShadow(scrollState, top = false)
+                }
+
+                if (neutralButton != null || dismissButton != null || confirmButton != null) {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
+                        neutralButton?.invoke()
+                        Spacer(Modifier.weight(1f))
+                        dismissButton?.invoke()
+                        if (dismissButton != null && confirmButton != null)
+                            Spacer(Modifier.width(8.dp))
+                        confirmButton?.invoke()
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppDialogWithLazyList(
+    title: (@Composable () -> Unit)? = null,
+    onDismissRequest: () -> Unit,
+    neutralButton: (@Composable () -> Unit)? = null,
+    confirmButton: (@Composable () -> Unit)? = null,
+    dismissButton: (@Composable () -> Unit)? = null,
+    vertical: Boolean = true,
+    content: LazyListScope.() -> Unit,
+) {
+    BasicAlertDialog(onDismissRequest = onDismissRequest) {
+        DialogSurface {
+            Column {
+                val lazyState = rememberLazyListState()
+
+                title?.also { title ->
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.headlineSmall
+                    ) {
+                        Box(
+                            Modifier.padding(
+                                top = SettingsHorizontalPaddingItem.dp,
+                                start = SettingsHorizontalPaddingItem.dp,
+                                bottom = 16.dp,
+                                end = SettingsHorizontalPaddingItem.dp,
+                            )
+                        ) { title() }
+                    }
+                }
+
+                Box(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(weight = 1f, fill = false)
+                ) {
+                    CompositionLocalProvider(
+                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
+                    ) {
+                        if (vertical) {
+                            LazyColumn(
+                                state = lazyState,
+                                content = content
+                            )
+                        } else {
+                            LazyRow(
+                                state = lazyState,
+                                content = content
+                            )
+                        }
+                    }
+                    ScrollShadow(lazyState, top = true)
+                    ScrollShadow(lazyState, top = false)
                 }
 
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {

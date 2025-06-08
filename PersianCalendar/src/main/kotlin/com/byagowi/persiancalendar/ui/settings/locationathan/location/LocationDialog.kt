@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -27,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyList
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
@@ -40,7 +42,8 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     if (showProvincesDialog) return ProvincesDialog(onDismissRequest)
     val cities = remember { citiesStore.values.sortCityNames }
     val language by language.collectAsState()
-    AppDialog(
+    val context = LocalContext.current
+    AppDialogWithLazyList(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.location)) },
         confirmButton = if (language.isIranExclusive) {
@@ -52,8 +55,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
             }
         } else null
     ) {
-        val context = LocalContext.current
-        cities.forEach { city ->
+        items(cities, key = { it.key }) { city ->
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
