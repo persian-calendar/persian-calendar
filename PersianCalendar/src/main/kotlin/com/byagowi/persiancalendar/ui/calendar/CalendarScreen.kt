@@ -66,6 +66,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarDefaults
@@ -74,9 +75,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults.PrimaryIndicator
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ripple
@@ -547,6 +546,7 @@ private fun detailsPagerState(
     return pagerState
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Details(
     viewModel: CalendarViewModel,
@@ -562,14 +562,12 @@ private fun Details(
         val coroutineScope = rememberCoroutineScope()
         val isOnlyEventsTab = tabs.size == 1
 
-        if (!isOnlyEventsTab) TabRow(
+        if (!isOnlyEventsTab) PrimaryTabRow(
             selectedTabIndex = selectedTabIndex,
             divider = {},
             containerColor = Color.Transparent,
-            indicator = @Composable { tabPositions ->
-                if (selectedTabIndex < tabPositions.size) {
-                    PrimaryIndicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
-                }
+            indicator = {
+                TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(selectedTabIndex))
             },
         ) {
             tabs.forEachIndexed { index, (titlesResId, _) ->

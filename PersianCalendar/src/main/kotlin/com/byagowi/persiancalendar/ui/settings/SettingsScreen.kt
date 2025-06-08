@@ -46,11 +46,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -154,21 +153,19 @@ fun SharedTransitionScope.SettingsScreen(
             val coroutineScope = rememberCoroutineScope()
 
             val selectedTabIndex = pagerState.currentPage
-            TabRow(
+            PrimaryTabRow(
                 selectedTabIndex = selectedTabIndex,
                 contentColor = LocalContentColor.current,
                 containerColor = Color.Transparent,
                 divider = {},
-                indicator = @Composable { tabPositions ->
-                    if (selectedTabIndex < tabPositions.size) {
-                        val isLandscape =
-                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-                        TabRowDefaults.PrimaryIndicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                            width = if (isLandscape) 92.dp else 64.dp,
-                            color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
-                        )
-                    }
+                indicator = {
+                    val isLandscape =
+                        LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+                    TabRowDefaults.PrimaryIndicator(
+                        Modifier.tabIndicatorOffset(selectedTabIndex),
+                        width = if (isLandscape) 92.dp else 64.dp,
+                        color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
+                    )
                 },
             ) {
                 tabs.forEachIndexed { index, tab ->

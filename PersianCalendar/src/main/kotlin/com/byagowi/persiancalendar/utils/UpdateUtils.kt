@@ -98,7 +98,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -578,7 +577,11 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
                             R.id.title, "setTextColor", Color.WHITE, Color.WHITE
                         )
                     } else {
-                        eventView.setInt(R.id.title_background, "setColorFilter", 0xFFFF8A65.toInt())
+                        eventView.setInt(
+                            R.id.title_background,
+                            "setColorFilter",
+                            0xFFFF8A65.toInt()
+                        )
                         eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                     }
                 }

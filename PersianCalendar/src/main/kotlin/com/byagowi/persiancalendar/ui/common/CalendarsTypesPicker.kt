@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults.PrimaryIndicator
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,19 +16,18 @@ import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarsTypesPicker(current: Calendar, setCurrent: (Calendar) -> Unit) {
     val selectedTabIndex = enabledCalendars.indexOf(current)
         // If user returned from disabling one of the calendar, do a fallback
         .coerceAtLeast(0)
-    TabRow(
+    PrimaryTabRow(
         selectedTabIndex = selectedTabIndex,
         divider = {},
         containerColor = Color.Transparent,
-        indicator = @Composable { tabPositions ->
-            if (selectedTabIndex < tabPositions.size) {
-                PrimaryIndicator(Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]))
-            }
+        indicator = {
+            TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(selectedTabIndex))
         },
     ) {
         enabledCalendars.forEach { calendar ->
