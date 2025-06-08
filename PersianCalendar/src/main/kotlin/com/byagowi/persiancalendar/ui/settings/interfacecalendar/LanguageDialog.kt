@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,6 +26,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyList
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
@@ -33,14 +35,15 @@ import java.util.TimeZone
 
 @Composable
 fun LanguageDialog(onDismissRequest: () -> Unit) {
-    AppDialog(
+    val currentLanguage by language.collectAsState()
+    val context = LocalContext.current
+    AppDialogWithLazyList(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.language)) },
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         }
     ) {
-        val currentLanguage by language.collectAsState()
         val languages = Language.entries.let { languages ->
             if (TimeZone.getDefault().id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID))
                 languages else languages.sortedBy { it.code }
@@ -49,8 +52,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
             listOf(currentLanguage) + languages.filter { it != currentLanguage }
         }
 
-        val context = LocalContext.current
-        languages.forEach { item ->
+        items(languages, key = { it.code }) { item ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
