@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.generated.districtsStore
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyList
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
@@ -33,8 +36,11 @@ import io.github.persiancalendar.praytimes.Coordinates
 fun ProvincesDialog(onDismissRequest: () -> Unit) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
     if (province != null) return DistrictsDialog(province ?: "", onDismissRequest)
-    AppDialog(title = { Text("انتخاب استان") }, onDismissRequest = onDismissRequest) {
-        districtsStore.forEach { (provinceName, _) ->
+    AppDialogWithLazyList(
+        title = { Text("انتخاب استان") },
+        onDismissRequest = onDismissRequest,
+    ) {
+        items(districtsStore.keys.toList()) { provinceName ->
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
@@ -55,9 +61,9 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
             countyDetails.drop(1).map { it.split(":") to countyDetails[0] }
         }.sortedBy { (district, _) -> language.value.prepareForSort(district[0/*district name*/]) }
     }
-    AppDialog(title = { Text(province) }, onDismissRequest = onDismissRequest) {
-        val context = LocalContext.current
-        districts.forEachIndexed { index, (district, county) ->
+    val context = LocalContext.current
+    AppDialogWithLazyList(title = { Text(province) }, onDismissRequest = onDismissRequest) {
+        itemsIndexed(districts, { _, (district, _) -> district }) { index, (district, county) ->
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
