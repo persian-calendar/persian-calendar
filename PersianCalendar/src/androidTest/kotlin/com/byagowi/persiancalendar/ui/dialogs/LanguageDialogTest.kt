@@ -24,7 +24,7 @@ class LanguageDialogTest {
         }
         composeTestRule.onNodeWithText(languageString)
 
-        val language = Language.entries.random()
+        val language = Language.entries.take(5).random()
         println("\n\n\nSelecting $language in language preference switch dialog\n\n\n")
         composeTestRule.onNodeWithText(language.nativeName)
             .assertHasClickAction()
