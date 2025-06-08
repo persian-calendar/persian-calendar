@@ -126,14 +126,16 @@ fun AppDialogWithLazyList(
         dismissButton = dismissButton,
     ) {
         val lazyState = rememberLazyListState()
-        if (vertical) LazyColumn(
-            state = lazyState,
-            content = content,
-        ) else LazyRow(
+        if (vertical) {
+            LazyColumn(
+                state = lazyState,
+                content = content,
+            )
+            ScrollShadow(lazyState, top = true)
+            ScrollShadow(lazyState, top = false)
+        } else LazyRow(
             state = lazyState,
             content = content,
         )
-        ScrollShadow(lazyState, top = true)
-        ScrollShadow(lazyState, top = false)
     }
 }
