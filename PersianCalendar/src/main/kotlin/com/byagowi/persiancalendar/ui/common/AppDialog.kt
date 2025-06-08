@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
@@ -27,19 +28,17 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppDialog(
-    title: (@Composable () -> Unit)? = null,
+private fun BaseAppDialog(
+    title: (@Composable () -> Unit)?,
     onDismissRequest: () -> Unit,
-    neutralButton: (@Composable () -> Unit)? = null,
-    confirmButton: (@Composable () -> Unit)? = null,
-    dismissButton: (@Composable () -> Unit)? = null,
-    content: @Composable ColumnScope.() -> Unit,
+    neutralButton: (@Composable () -> Unit)?,
+    confirmButton: (@Composable () -> Unit)?,
+    dismissButton: (@Composable () -> Unit)?,
+    content: @Composable BoxScope.() -> Unit,
 ) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         DialogSurface {
             Column {
-                val scrollState = rememberScrollState()
-
                 title?.also { title ->
                     CompositionLocalProvider(
                         LocalTextStyle provides MaterialTheme.typography.headlineSmall
@@ -55,22 +54,14 @@ fun AppDialog(
                     }
                 }
 
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(weight = 1f, fill = false)
+                CompositionLocalProvider(
+                    LocalTextStyle provides MaterialTheme.typography.bodyMedium
                 ) {
-                    CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
-                    ) {
-                        Column(
-                            Modifier
-                                .fillMaxWidth()
-                                .verticalScroll(scrollState)
-                        ) { content() }
-                    }
-                    ScrollShadow(scrollState, top = true)
-                    ScrollShadow(scrollState, top = false)
+                    Box(
+                        Modifier
+                            .fillMaxWidth()
+                            .weight(weight = 1f, fill = false)
+                    ) { content() }
                 }
 
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
@@ -90,8 +81,33 @@ fun AppDialog(
     }
 }
 
+@Composable
+fun AppDialog(
+    title: (@Composable () -> Unit)? = null,
+    onDismissRequest: () -> Unit,
+    neutralButton: (@Composable () -> Unit)? = null,
+    confirmButton: (@Composable () -> Unit)? = null,
+    dismissButton: (@Composable () -> Unit)? = null,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    BaseAppDialog(
+        title = title,
+        onDismissRequest = onDismissRequest,
+        neutralButton = neutralButton,
+        confirmButton = confirmButton,
+        dismissButton = dismissButton,
+    ) {
+        val scrollState = rememberScrollState()
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .verticalScroll(scrollState)
+        ) { content() }
+        ScrollShadow(scrollState, top = true)
+        ScrollShadow(scrollState, top = false)
+    }
+}
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDialogWithLazyList(
     title: (@Composable () -> Unit)? = null,
@@ -102,63 +118,22 @@ fun AppDialogWithLazyList(
     vertical: Boolean = true,
     content: LazyListScope.() -> Unit,
 ) {
-    BasicAlertDialog(onDismissRequest = onDismissRequest) {
-        DialogSurface {
-            Column {
-                val lazyState = rememberLazyListState()
-
-                title?.also { title ->
-                    CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.headlineSmall
-                    ) {
-                        Box(
-                            Modifier.padding(
-                                top = SettingsHorizontalPaddingItem.dp,
-                                start = SettingsHorizontalPaddingItem.dp,
-                                bottom = 16.dp,
-                                end = SettingsHorizontalPaddingItem.dp,
-                            )
-                        ) { title() }
-                    }
-                }
-
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(weight = 1f, fill = false)
-                ) {
-                    CompositionLocalProvider(
-                        LocalTextStyle provides MaterialTheme.typography.bodyMedium
-                    ) {
-                        if (vertical) {
-                            LazyColumn(
-                                state = lazyState,
-                                content = content
-                            )
-                        } else {
-                            LazyRow(
-                                state = lazyState,
-                                content = content
-                            )
-                        }
-                    }
-                    ScrollShadow(lazyState, top = true)
-                    ScrollShadow(lazyState, top = false)
-                }
-
-                if (neutralButton != null || dismissButton != null || confirmButton != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
-                        neutralButton?.invoke()
-                        Spacer(Modifier.weight(1f))
-                        dismissButton?.invoke()
-                        if (dismissButton != null && confirmButton != null)
-                            Spacer(Modifier.width(8.dp))
-                        confirmButton?.invoke()
-                    }
-                }
-            }
-        }
+    BaseAppDialog(
+        title = title,
+        onDismissRequest = onDismissRequest,
+        neutralButton = neutralButton,
+        confirmButton = confirmButton,
+        dismissButton = dismissButton,
+    ) {
+        val lazyState = rememberLazyListState()
+        if (vertical) LazyColumn(
+            state = lazyState,
+            content = content,
+        ) else LazyRow(
+            state = lazyState,
+            content = content,
+        )
+        ScrollShadow(lazyState, top = true)
+        ScrollShadow(lazyState, top = false)
     }
 }
