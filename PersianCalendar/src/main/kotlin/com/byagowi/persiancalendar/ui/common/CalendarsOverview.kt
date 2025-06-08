@@ -76,7 +76,6 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.utils.formatAsRomanDate
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -85,6 +84,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
+import com.byagowi.persiancalendar.utils.romanAndYazdigirdName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
@@ -211,7 +211,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
             this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
-                AutoSizedBodyText(formatAsRomanDate(jdn) + " رومی")
+                AutoSizedBodyText(romanAndYazdigirdName(jdn))
             }
         }
 

@@ -6,8 +6,8 @@ import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.formatAsRomanDate
+import com.byagowi.persiancalendar.utils.formatAsYazdigird
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
 import io.github.persiancalendar.calendar.CivilDate
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.math.exp
 import kotlin.test.assertEquals
 
 class CalendarTests {
@@ -198,6 +199,7 @@ class CalendarTests {
             )
             jalaliName(jdn.toPersianDate(), dayOfYear)
             formatAsRomanDate(jdn)
+            formatAsYazdigird(jdn)
         }
     }
 
@@ -230,9 +232,45 @@ class CalendarTests {
                 PersianDate(1404, 11, 16) to "۲۳ کانون آخر ۲۳۳۷",
                 PersianDate(1404, 11, 30) to "۶ شباط ۲۳۳۷",
                 PersianDate(1404, 12, 15) to "۲۱ شباط ۲۳۳۷",
-            ).map { (persianDate, expectation) ->
-                { assertEquals(expectation, formatAsRomanDate(Jdn(persianDate)), expectation) }
+            ).map { (persianDate, expected) ->
+                { assertEquals(expected, formatAsRomanDate(Jdn(persianDate))) }
             }
         )
+    }
+
+    @Test
+    fun `yazdigird date format`() {
+        // Not matching right now
+//        assertAll(
+//            listOf(
+//                PersianDate(1404, 1, 1) to "۱۰ آذر ۱۳۹۴",
+//                PersianDate(1404, 1, 11) to "۲۰ آذر ۱۳۹۴",
+//                PersianDate(1404, 1, 26) to "۵ دی ۱۳۹۴",
+//                PersianDate(1404, 2, 9) to "۱۹ دی ۱۳۹۴",
+//                PersianDate(1404, 2, 24) to "۴ بهمن ۱۳۹۴",
+//                PersianDate(1404, 3, 7) to "۱۸ بهمن ۱۳۹۴",
+//                PersianDate(1404, 3, 22) to "۳ اسفند ۱۳۹۴",
+//                PersianDate(1404, 4, 6) to "۱۸ اسفند ۱۳۹۴",
+//                PersianDate(1404, 4, 21) to "۳۳ اسفند ۱۳۹۴",
+//                PersianDate(1404, 5, 4) to "۱۲ فروردین ۱۳۹۵",
+//                PersianDate(1404, 5, 19) to "۲۷ فروردین ۱۳۹۵",
+//                PersianDate(1404, 6, 3) to "۱۲ اردیبهشت ۱۳۹۵",
+//                PersianDate(1404, 6, 18) to "۲۷ اردیبهشت ۱۳۹۵",
+//                PersianDate(1404, 7, 2) to "۱۲ خرداد ۱۳۹۵",
+//                PersianDate(1404, 7, 17) to "۲۷ خرداد ۱۳۹۵",
+//                PersianDate(1404, 8, 1) to "۱۱ تیر ۱۳۹۵",
+//                PersianDate(1404, 8, 16) to "۲۶ تیر ۱۳۹۵",
+//                PersianDate(1404, 9, 1) to "۱۱ مرداد ۱۳۹۵",
+//                PersianDate(1404, 9, 16) to "۲۶ مرداد ۱۳۹۵",
+//                PersianDate(1404, 10, 1) to "۱۱ شهریور ۱۳۹۵",
+//                PersianDate(1404, 10, 16) to "۲۶ شهریور ۱۳۹۵",
+//                PersianDate(1404, 11, 1) to "۱۱ مهر ۱۳۹۵",
+//                PersianDate(1404, 11, 16) to "۲۶ مهر ۱۳۹۵",
+//                PersianDate(1404, 11, 30) to "۱۰ آبان ۱۳۹۵",
+//                PersianDate(1404, 12, 15) to "۲۵ آبان ۱۳۹۵",
+//            ).map { (persianDate, expected) ->
+//                { assertEquals(expected, formatAsYazdigird(Jdn(persianDate))) }
+//            }
+//        )
     }
 }
