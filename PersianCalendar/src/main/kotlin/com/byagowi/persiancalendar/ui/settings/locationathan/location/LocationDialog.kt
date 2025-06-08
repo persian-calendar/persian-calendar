@@ -29,8 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
+import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyList
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
@@ -44,7 +43,7 @@ fun LocationDialog(onDismissRequest: () -> Unit) {
     val cities = remember { citiesStore.values.sortCityNames }
     val language by language.collectAsState()
     val context = LocalContext.current
-    AppDialogWithLazyColumn(
+    AppDialogWithLazyList(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(R.string.location)) },
         confirmButton = if (language.isIranExclusive) {
