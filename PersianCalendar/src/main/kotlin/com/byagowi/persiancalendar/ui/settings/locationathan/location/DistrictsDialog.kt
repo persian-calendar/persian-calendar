@@ -24,7 +24,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.generated.districtsStore
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyList
+import com.byagowi.persiancalendar.ui.common.AppDialogWithLazyColumn
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
@@ -35,7 +35,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 fun ProvincesDialog(onDismissRequest: () -> Unit) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
     if (province != null) return DistrictsDialog(province ?: "", onDismissRequest)
-    AppDialogWithLazyList(
+    AppDialogWithLazyColumn(
         title = { Text("انتخاب استان") },
         onDismissRequest = onDismissRequest,
     ) {
@@ -61,7 +61,7 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
         }.sortedBy { (district, _) -> language.value.prepareForSort(district[0/*district name*/]) }
     }
     val context = LocalContext.current
-    AppDialogWithLazyList(title = { Text(province) }, onDismissRequest = onDismissRequest) {
+    AppDialogWithLazyColumn(title = { Text(province) }, onDismissRequest = onDismissRequest) {
         itemsIndexed(districts, { _, (district, _) -> district }) { index, (district, county) ->
             Box(
                 contentAlignment = Alignment.CenterStart,

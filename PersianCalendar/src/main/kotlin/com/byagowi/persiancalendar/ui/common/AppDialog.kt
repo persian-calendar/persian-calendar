@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -99,23 +98,23 @@ fun AppDialog(
     ) {
         val scrollState = rememberScrollState()
         Column(
-            Modifier
+            modifier = Modifier
                 .fillMaxWidth()
-                .verticalScroll(scrollState)
-        ) { content() }
+                .verticalScroll(scrollState),
+            content = content
+        )
         ScrollShadow(scrollState, top = true)
         ScrollShadow(scrollState, top = false)
     }
 }
 
 @Composable
-fun AppDialogWithLazyList(
+fun AppDialogWithLazyColumn(
     title: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
     neutralButton: (@Composable () -> Unit)? = null,
     confirmButton: (@Composable () -> Unit)? = null,
     dismissButton: (@Composable () -> Unit)? = null,
-    vertical: Boolean = true,
     content: LazyListScope.() -> Unit,
 ) {
     BaseAppDialog(
@@ -126,16 +125,8 @@ fun AppDialogWithLazyList(
         dismissButton = dismissButton,
     ) {
         val lazyState = rememberLazyListState()
-        if (vertical) {
-            LazyColumn(
-                state = lazyState,
-                content = content,
-            )
-            ScrollShadow(lazyState, top = true)
-            ScrollShadow(lazyState, top = false)
-        } else LazyRow(
-            state = lazyState,
-            content = content,
-        )
+        LazyColumn(state = lazyState, content = content)
+        ScrollShadow(lazyState, top = true)
+        ScrollShadow(lazyState, top = false)
     }
 }
