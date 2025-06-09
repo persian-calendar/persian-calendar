@@ -10,6 +10,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -375,7 +376,6 @@ private fun SharedTransitionScope.SliderBar(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun TimeArrow(buttonScrollSlider: (Int) -> Unit, isPrevious: Boolean) {
     val hapticFeedback = LocalHapticFeedback.current
@@ -514,7 +514,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                 }
             }
         }
-        Seasons(jdn)
+        Seasons(jdn, viewModel)
         this.AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
             Row(Modifier.padding(top = 8.dp)) {
                 Box(Modifier.weight(1f)) {
@@ -539,7 +539,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 }
 
 @Composable
-private fun Seasons(jdn: Jdn) {
+private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
     val seasonsCache = remember { lruCache(1024, create = ::seasons) }
     val seasonsOrder = remember {
         if (coordinates.value?.isSouthernHemisphere == true) {
@@ -558,17 +558,18 @@ private fun Seasons(jdn: Jdn) {
                     else -> it.marchEquinox
                 }
             }.toMillisecondsSince1970()
-        ).toGregorianCalendar().formatDateAndTime()
+        ).let { it.time to it.toGregorianCalendar().formatDateAndTime() }
     }
     repeat(2) { row ->
         Row(Modifier.padding(top = 8.dp)) {
             repeat(2) { cell ->
                 Box(Modifier.weight(1f)) {
+                    val (time, title) = equinoxes[cell + row * 2]
                     Cell(
-                        Modifier,
+                        Modifier.clickable { viewModel.animateToTime(time) },
                         seasonsOrder[cell + row * 2].color,
                         stringResource(seasonsOrder[cell + row * 2].nameStringId),
-                        equinoxes[cell + row * 2],
+                        title,
                     )
                 }
             }

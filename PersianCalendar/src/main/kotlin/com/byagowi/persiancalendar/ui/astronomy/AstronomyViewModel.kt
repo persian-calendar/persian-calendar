@@ -85,6 +85,12 @@ class AstronomyViewModel : ViewModel() {
         animateToAbsoluteMinutesOffset(_minutesOffset.value + dayOffset * MINUTES_IN_DAY)
     }
 
+    fun animateToTime(time: Long) {
+        animateToAbsoluteMinutesOffset(
+            ((time - System.currentTimeMillis()).milliseconds / 1.minutes).roundToInt()
+        )
+    }
+
     // This is provided to bypass view model provided animation for the screen's slider
     // which changes the values smoothly and doesn't need another filter in between.
     fun addMinutesOffset(offset: Int) {
