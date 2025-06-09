@@ -6,19 +6,17 @@ import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.formatAsRomanDate
-import com.byagowi.persiancalendar.utils.formatAsYazdigird
+import com.byagowi.persiancalendar.utils.formatAsYazdegerd
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.calendar.util.julianFromJdn
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import kotlin.math.exp
 import kotlin.test.assertEquals
 
 class CalendarTests {
@@ -199,7 +197,7 @@ class CalendarTests {
             )
             jalaliName(jdn.toPersianDate(), dayOfYear)
             formatAsRomanDate(jdn)
-            formatAsYazdigird(jdn)
+            formatAsYazdegerd(jdn)
         }
     }
 
@@ -239,7 +237,7 @@ class CalendarTests {
     }
 
     @Test
-    fun `yazdigird date format`() {
+    fun `yazdegerd date format`() {
         // Not matching right now
 //        assertAll(
 //            listOf(
@@ -269,7 +267,7 @@ class CalendarTests {
 //                PersianDate(1404, 11, 30) to "۱۰ آبان ۱۳۹۵",
 //                PersianDate(1404, 12, 15) to "۲۵ آبان ۱۳۹۵",
 //            ).map { (persianDate, expected) ->
-//                { assertEquals(expected, formatAsYazdigird(Jdn(persianDate))) }
+//                { assertEquals(expected, formatAsYazdegerd(Jdn(persianDate))) }
 //            }
 //        )
     }

@@ -14,6 +14,7 @@ private val romanMonths = listOf(
     "نیسان", "ایار", "حزیران", "تموز", "آب", "ایلول",
 )
 
+// It's called رومی or اسکندری رومی by the different sources
 @VisibleForTesting
 fun formatAsRomanDate(jdn: Jdn): String {
     val (julianYear, julianMonth, dayOfMonth) = julianFromJdn(jdn.value)
@@ -25,25 +26,27 @@ fun formatAsRomanDate(jdn: Jdn): String {
 
 // region Yazdigird
 // Same months as current Persian calendar it seems
-private val yazdigirdMonths = listOf(
+private val yazdegerdMonths = listOf(
     "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور",
     "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند",
 )
 
-// It's one variant of Yazdigird
-// for the other variant have a look at the source:
+// It's one variant of Yazdegerd
+// For the other variant have a look at the source:
 // https://www.aoi.uzh.ch/de/islamwissenschaft/studium/tools/kalenderumrechnung/yazdigird.html
+// It's called فرس قدیم or فرسی یزدگردی by the different sources
+// Doesn't match what indicated on traditional calendars thus not exposed
 @VisibleForTesting
-fun formatAsYazdigird(jdn: Jdn): String {
+fun formatAsYazdegerd(jdn: Jdn): String {
     // It needs one day offset to match with traditionally published calendars
-    val daysDifference = ((jdn.value + 1) - 1952063).toInt()
-    val year = (daysDifference / 365) + 1
-    val yearDifference = daysDifference - (year - 1) * 365
-    val month = ((yearDifference - (yearDifference / 360) * 5) / 30) + 1
-    val day = yearDifference - (month - 1) * 30 - (yearDifference / (360 + 5)) * 5 + 1
-    return "${formatNumber(day)} ${yazdigirdMonths[month - 1]} ${formatNumber(year)}"
+    val daysSinceEpoch = ((jdn.value + 1) - 1952063).toInt()
+    val year = (daysSinceEpoch / 365) + 1
+    val dayOfYear = daysSinceEpoch % 365
+    val month = ((dayOfYear - (dayOfYear / 360) * 5) / 30) + 1
+    val day = dayOfYear - (month - 1) * 30 + 1
+    return "${formatNumber(day)} ${yazdegerdMonths[month - 1]} ${formatNumber(year)}"
 }
 // endregion
 
-fun romanAndYazdigirdName(jdn: Jdn): String =
+fun romanAndYazdegerdName(jdn: Jdn): String =
     formatAsRomanDate(jdn) + " رومی" // + " ــــ " + formatAsYazdigird(jdn) + " یزدگردی"

@@ -84,7 +84,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
-import com.byagowi.persiancalendar.utils.romanAndYazdigirdName
+import com.byagowi.persiancalendar.utils.romanAndYazdegerdName
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
@@ -211,7 +211,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
             this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {
-                AutoSizedBodyText(romanAndYazdigirdName(jdn))
+                AutoSizedBodyText(romanAndYazdegerdName(jdn))
             }
         }
 
