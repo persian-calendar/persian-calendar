@@ -6,7 +6,6 @@ import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.formatAsRomanDate
-import com.byagowi.persiancalendar.utils.formatAsYazdegerd
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
