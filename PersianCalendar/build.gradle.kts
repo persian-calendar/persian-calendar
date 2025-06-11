@@ -82,6 +82,8 @@ android {
     packaging {
         resources.excludes += "DebugProbesKt.bin"
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        // Maybe we can drop the only native dependency? At least it works and doesn't lead to crash
+        // jniLibs.excludes.add("lib/*/libandroidx.graphics.path.so")
     }
 
     bundle {
