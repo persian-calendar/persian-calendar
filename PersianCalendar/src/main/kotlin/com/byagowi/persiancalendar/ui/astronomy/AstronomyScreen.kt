@@ -8,7 +8,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -175,11 +174,11 @@ fun SharedTransitionScope.AstronomyScreen(
                         val astronomyState by viewModel.astronomyState.collectAsState()
                         HoroscopesDialog(astronomyState.date.time) { showHoroscopeDialog = false }
                     }
-                    var showYearNameHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-                    if (showYearNameHoroscopeDialog) {
+                    var showYearHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
+                    if (showYearHoroscopeDialog) {
                         val astronomyState by viewModel.astronomyState.collectAsState()
-                        YearNameHoroscope(Jdn(astronomyState.date.toCivilDate())) {
-                            showYearNameHoroscopeDialog = false
+                        YearHoroscope(Jdn(astronomyState.date.toCivilDate())) {
+                            showYearHoroscopeDialog = false
                         }
                     }
 
@@ -197,13 +196,12 @@ fun SharedTransitionScope.AstronomyScreen(
                             closeMenu()
                         }
                         AppDropdownMenuItem({
-                            // Also called "زایجهٔ دور اثنی‌عشری" in Persian
                             Text(
                                 stringResource(R.string.horoscope) + spacedComma +
-                                        stringResource(R.string.year_name)
+                                        stringResource(R.string.year)
                             )
                         }) {
-                            showYearNameHoroscopeDialog = true
+                            showYearHoroscopeDialog = true
                             closeMenu()
                         }
                     }
