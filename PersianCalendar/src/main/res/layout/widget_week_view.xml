@@ -116,12 +116,17 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:maxLines="1"
+                    android:layout_marginBottom="8dp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeMinTextSize="9sp"
+                    android:autoSizeStepGranularity="1sp"
+                    android:autoSizeTextType="uniform"
                     android:ellipsize="end"
+                    android:maxLines="1"
                     android:textAlignment="center"
                     android:textSize="14sp"
                     android:textStyle="bold"
+                    tools:targetApi="26"
                     tools:text="جمعه" />
 
                 <FrameLayout
@@ -234,9 +239,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
             android:gravity="center_horizontal|bottom"
-            android:textSize="15dp"
+            android:textSize="15sp"
             tools:text="اردیبهشت ۱۴۰۱"
             tools:ignore="SpUsage" />
-        <!-- Using sp can be dangerous as possibility of overflow in this mini widget -->
     </LinearLayout>
 </FrameLayout>
