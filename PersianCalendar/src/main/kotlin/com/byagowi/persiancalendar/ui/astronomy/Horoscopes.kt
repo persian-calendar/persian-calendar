@@ -185,7 +185,8 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
             Spacer(Modifier.height(1.dp))
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             EasternHoroscopePattern(originalDirection) {
-                // We don't how these are calculated each year, let's hard code the far we can
+                // We don't know yet how these are calculated for each year,
+                // let's hard code the far we can for now
                 val offset = when (persianYear) {
                     1299 -> 9 // جدی
                     1300 -> 0 // implied حمل
