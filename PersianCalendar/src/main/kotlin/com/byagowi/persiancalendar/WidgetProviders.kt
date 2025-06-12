@@ -41,6 +41,7 @@ class WidgetSunView : WidgetProvider()
 class WidgetMonth : WidgetProvider()
 class WidgetMonthView : WidgetProvider()
 class WidgetSchedule : WidgetProvider()
+class WidgetWeekView : WidgetProvider()
 
 class AgeWidget : WidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {

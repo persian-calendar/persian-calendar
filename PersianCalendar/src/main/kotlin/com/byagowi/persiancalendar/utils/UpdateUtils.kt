@@ -33,10 +33,16 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.blue
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.green
+import androidx.core.graphics.red
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
@@ -72,6 +78,7 @@ import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetMoon
 import com.byagowi.persiancalendar.WidgetSchedule
 import com.byagowi.persiancalendar.WidgetSunView
+import com.byagowi.persiancalendar.WidgetWeekView
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -120,6 +127,7 @@ import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.resumeToken
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.isRtl
@@ -264,6 +272,9 @@ fun update(context: Context, updateDate: Boolean) {
         }
         updateFromRemoteViews<WidgetSchedule>(context, now) { width, _, hasSize, widgetId ->
             createScheduleRemoteViews(context, width.takeIf { hasSize }, widgetId)
+        }
+        updateFromRemoteViews<WidgetWeekView>(context, now) { width, height, _, _ ->
+            createWeekViewRemoteViews(context, width, height, date, jdn)
         }
     }
 
@@ -1214,6 +1225,98 @@ private fun create4x2RemoteViews(
     setEventsInWidget(context.resources, jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
 
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, context.launchAppPendingIntent())
+    return remoteViews
+}
+
+private fun createWeekViewRemoteViews(
+    context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn
+): RemoteViews {
+    val weekDays = listOf(
+        Triple(Jdn(today.value - 3), R.id.textWeekDayText1, R.id.textWeekDayNumber1),
+        Triple(Jdn(today.value - 2), R.id.textWeekDayText2, R.id.textWeekDayNumber2),
+        Triple(Jdn(today.value - 1), R.id.textWeekDayText3, R.id.textWeekDayNumber3),
+        Triple(today, R.id.textWeekDayText4, R.id.textWeekDayNumber4),
+        Triple(Jdn(today.value + 1), R.id.textWeekDayText5, R.id.textWeekDayNumber5),
+        Triple(Jdn(today.value + 2), R.id.textWeekDayText6, R.id.textWeekDayNumber6),
+        Triple(Jdn(today.value + 3), R.id.textWeekDayText7, R.id.textWeekDayNumber7),
+    )
+
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_week_view)
+    remoteViews.setDirection(R.id.widget_layout_week_view, context.resources)
+    remoteViews.setRoundBackground(R.id.widget_layout_week_view_background, width, height)
+
+    val weekDaysViews = weekDays.flatMap { listOf(it.second, it.third) } + R.id.textDate
+    remoteViews.setupForegroundTextColors(*weekDaysViews.toIntArray())
+
+    val holidaysColor = if (prefersWidgetsDynamicColors) {
+        context.getColor(android.R.color.system_accent1_300)
+    } else {
+        0xFFE51C23.toInt()
+    }
+
+    weekDays.forEachIndexed { index, day ->
+        val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day.first, 0)
+        val deviceEvents =
+            if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
+            else EventsStore.empty()
+        val events = eventsRepository?.getEvents(day.first, deviceEvents) ?: emptyList()
+        val isHoliday = events.any { it.isHoliday } || day.first.isWeekEnd
+
+        if (isHoliday) {
+            remoteViews.setTextColor(day.third, holidaysColor)
+        }
+
+        if (index == 3) {
+            // the day is today
+            val drawable = ContextCompat.getDrawable(context, R.drawable.hollow_circle)!!
+            drawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                if (prefersWidgetsDynamicColors) {
+                    if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+                } else {
+                    selectedWidgetTextColor
+                }, BlendModeCompat.SRC_ATOP
+            )
+            remoteViews.setImageViewBitmap(
+                R.id.today_background,
+                drawable.toBitmap(
+                    (32 * context.resources.dp).toInt(),
+                    (32 * context.resources.dp).toInt()
+                )
+            )
+
+            remoteViews.setTextViewText(day.second, day.first.weekDayName)
+        } else {
+            val weekDayNameColor =
+                when {
+                    prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+
+                    else -> selectedWidgetTextColor
+                }
+            val weekDayNameColorInt = Color.argb(
+                (AppBlendAlpha * 255).toInt(),
+                (weekDayNameColor.red).toInt(),
+                (weekDayNameColor.green).toInt(),
+                (weekDayNameColor.blue).toInt()
+            )
+
+            remoteViews.setTextColor(day.second, weekDayNameColorInt)
+
+            remoteViews.setTextViewText(day.second, day.first.weekDayNameInitials)
+        }
+
+        val date = day.first on mainCalendar
+        remoteViews.setTextViewText(day.third, formatNumber(date.dayOfMonth))
+    }
+
+    remoteViews.setTextViewText(
+        R.id.textDate,
+        "${date.monthName} ${formatNumber(date.year)}"
+    )
+
+    remoteViews.setOnClickPendingIntent(
+        R.id.widget_layout_week_view,
+        context.launchAppPendingIntent()
+    )
     return remoteViews
 }
 
