@@ -57,7 +57,10 @@ fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
 }
 // endregion
 
+// Looks better with Persian as Roozbeh
+val persianDelimiter = " ــــ "
+
 fun jalaliAndHistoricalName(persianDate: PersianDate, jdn: Jdn): String {
     val dayOfYear = persianDayOfYear(persianDate, jdn)
-    return jalaliName(persianDate, dayOfYear) + " ــــ " + fasliDayName(dayOfYear)
+    return jalaliName(persianDate, dayOfYear) + persianDelimiter + fasliDayName(dayOfYear)
 }

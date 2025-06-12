@@ -152,7 +152,7 @@ private fun EasternHoroscopePattern(textDirection: LayoutDirection, cellLabel: (
 // See for example: https://w.wiki/E9uz
 // See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
-fun YearHoroscope(jdn: Jdn = Jdn(PersianDate(1300, 1, 1)), onDismissRequest: () -> Unit) {
+fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
     val language by language.collectAsState()
     val resources = LocalContext.current.resources
     val baseDate = jdn.toPersianDate()
