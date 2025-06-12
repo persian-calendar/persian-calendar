@@ -156,9 +156,9 @@ private fun EasternHoroscopePattern(textDirection: LayoutDirection, cellLabel: (
 fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
     val language by language.collectAsState()
     val resources = LocalContext.current.resources
-    val baseDate = jdn.toPersianDate()
+    val persianYear = jdn.toPersianDate().year
     val items = (0..<12).map {
-        val date = PersianDate(baseDate.year + it, 1, 1)
+        val date = PersianDate(persianYear + it, 1, 1)
         ChineseZodiac.fromPersianCalendar(date).format(
             resources = resources,
             withEmoji = true,
@@ -171,7 +171,7 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         AppDialog(onDismissRequest = onDismissRequest) {
             EasternHoroscopePattern(originalDirection) { items[it] }
-            val time = seasons(CivilDate(PersianDate(baseDate.year, 1, 1)).year).marchEquinox
+            val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
             val bodiesZodiac = bodies.filter {
                 // Sun has fixed place, no point on showing that for year zodiac
                 it != Body.Sun
@@ -186,7 +186,7 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             EasternHoroscopePattern(originalDirection) {
                 // We don't how these are calculated each year, let's hard code the far we can
-                val offset = when (baseDate.year) {
+                val offset = when (persianYear) {
                     1299 -> 9 // جدی
                     1300 -> 0 // implied حمل
                     1301 -> 3 // implied سرطان
