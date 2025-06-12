@@ -1260,9 +1260,7 @@ private fun createWeekViewRemoteViews(
         val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
         val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
 
-        if (isHoliday) {
-            remoteViews.setTextColor(weekDayNumberViewId, holidaysColor)
-        }
+        if (isHoliday) remoteViews.setTextColor(weekDayNumberViewId, holidaysColor)
 
         if (index == 3) {
             // the day is today
@@ -1285,12 +1283,11 @@ private fun createWeekViewRemoteViews(
 
             remoteViews.setTextViewText(weekDayNameViewId, day.weekDayName)
         } else {
-            val weekDayNameColor =
-                when {
-                    prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
+            val weekDayNameColor = when {
+                prefersWidgetsDynamicColors -> if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
 
-                    else -> selectedWidgetTextColor
-                }
+                else -> selectedWidgetTextColor
+            }
             val weekDayNameColorInt = ColorUtils.setAlphaComponent(
                 weekDayNameColor,
                 (AppBlendAlpha * 255).toInt(),
@@ -1298,11 +1295,16 @@ private fun createWeekViewRemoteViews(
 
             remoteViews.setTextColor(weekDayNameViewId, weekDayNameColorInt)
 
+            remoteViews.setContentDescription(weekDayNameViewId, day.weekDayName)
             remoteViews.setTextViewText(weekDayNameViewId, day.weekDayNameInitials)
         }
 
         val dayOfMonth = (day on mainCalendar).dayOfMonth
         remoteViews.setTextViewText(weekDayNumberViewId, formatNumber(dayOfMonth))
+
+        val action = jdnActionKey + day.value
+        remoteViews.setOnClickPendingIntent(weekDayNumberViewId, context.launchAppPendingIntent(action))
+        remoteViews.setInt(weekDayNumberViewId, "setBackgroundResource", R.drawable.widget_month_day_ripple)
     }
 
     remoteViews.setTextViewText(
