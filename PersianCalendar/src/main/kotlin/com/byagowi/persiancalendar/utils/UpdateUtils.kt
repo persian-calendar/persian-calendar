@@ -17,6 +17,7 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -37,12 +38,9 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.blue
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.green
-import androidx.core.graphics.red
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
@@ -1232,13 +1230,13 @@ private fun createWeekViewRemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate, today: Jdn
 ): RemoteViews {
     val weekDays = listOf(
-        Triple(Jdn(today.value - 3), R.id.textWeekDayText1, R.id.textWeekDayNumber1),
-        Triple(Jdn(today.value - 2), R.id.textWeekDayText2, R.id.textWeekDayNumber2),
-        Triple(Jdn(today.value - 1), R.id.textWeekDayText3, R.id.textWeekDayNumber3),
+        Triple(today - 3, R.id.textWeekDayText1, R.id.textWeekDayNumber1),
+        Triple(today - 2, R.id.textWeekDayText2, R.id.textWeekDayNumber2),
+        Triple(today - 1, R.id.textWeekDayText3, R.id.textWeekDayNumber3),
         Triple(today, R.id.textWeekDayText4, R.id.textWeekDayNumber4),
-        Triple(Jdn(today.value + 1), R.id.textWeekDayText5, R.id.textWeekDayNumber5),
-        Triple(Jdn(today.value + 2), R.id.textWeekDayText6, R.id.textWeekDayNumber6),
-        Triple(Jdn(today.value + 3), R.id.textWeekDayText7, R.id.textWeekDayNumber7),
+        Triple(today + 1, R.id.textWeekDayText5, R.id.textWeekDayNumber5),
+        Triple(today + 2, R.id.textWeekDayText6, R.id.textWeekDayNumber6),
+        Triple(today + 3, R.id.textWeekDayText7, R.id.textWeekDayNumber7),
     )
 
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_week_view)
@@ -1254,21 +1252,22 @@ private fun createWeekViewRemoteViews(
         0xFFE51C23.toInt()
     }
 
-    weekDays.forEachIndexed { index, day ->
-        val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day.first, 0)
+    weekDays.forEachIndexed { index, (day, weekDayNameViewId, weekDayNumberViewId) ->
+        val baseDate = mainCalendar.getMonthStartFromMonthsDistance(day, 0)
         val deviceEvents =
             if (isShowDeviceCalendarEvents.value) context.readMonthDeviceEvents(Jdn(baseDate))
             else EventsStore.empty()
-        val events = eventsRepository?.getEvents(day.first, deviceEvents) ?: emptyList()
-        val isHoliday = events.any { it.isHoliday } || day.first.isWeekEnd
+        val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
+        val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
 
         if (isHoliday) {
-            remoteViews.setTextColor(day.third, holidaysColor)
+            remoteViews.setTextColor(weekDayNumberViewId, holidaysColor)
         }
 
         if (index == 3) {
             // the day is today
-            val drawable = ContextCompat.getDrawable(context, R.drawable.hollow_circle)!!
+            val drawable =
+                ContextCompat.getDrawable(context, R.drawable.hollow_circle) ?: ShapeDrawable()
             drawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 if (prefersWidgetsDynamicColors) {
                     if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
@@ -1284,7 +1283,7 @@ private fun createWeekViewRemoteViews(
                 )
             )
 
-            remoteViews.setTextViewText(day.second, day.first.weekDayName)
+            remoteViews.setTextViewText(weekDayNameViewId, day.weekDayName)
         } else {
             val weekDayNameColor =
                 when {
@@ -1292,25 +1291,23 @@ private fun createWeekViewRemoteViews(
 
                     else -> selectedWidgetTextColor
                 }
-            val weekDayNameColorInt = Color.argb(
+            val weekDayNameColorInt = ColorUtils.setAlphaComponent(
+                weekDayNameColor,
                 (AppBlendAlpha * 255).toInt(),
-                (weekDayNameColor.red).toInt(),
-                (weekDayNameColor.green).toInt(),
-                (weekDayNameColor.blue).toInt()
             )
 
-            remoteViews.setTextColor(day.second, weekDayNameColorInt)
+            remoteViews.setTextColor(weekDayNameViewId, weekDayNameColorInt)
 
-            remoteViews.setTextViewText(day.second, day.first.weekDayNameInitials)
+            remoteViews.setTextViewText(weekDayNameViewId, day.weekDayNameInitials)
         }
 
-        val date = day.first on mainCalendar
-        remoteViews.setTextViewText(day.third, formatNumber(date.dayOfMonth))
+        val dayOfMonth = (day on mainCalendar).dayOfMonth
+        remoteViews.setTextViewText(weekDayNumberViewId, formatNumber(dayOfMonth))
     }
 
     remoteViews.setTextViewText(
         R.id.textDate,
-        "${date.monthName} ${formatNumber(date.year)}"
+        language.value.my.format(date.monthName, formatNumber(date.year))
     )
 
     remoteViews.setOnClickPendingIntent(
