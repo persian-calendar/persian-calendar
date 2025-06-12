@@ -44,6 +44,7 @@ import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
+import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.Date
 import java.util.Locale
@@ -170,7 +171,7 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         AppDialog(onDismissRequest = onDismissRequest) {
             EasternHoroscopePattern(originalDirection) { items[it] }
-            val time = seasons(jdn.toCivilDate().year).marchEquinox
+            val time = seasons(CivilDate(PersianDate(baseDate.year, 1, 1)).year).marchEquinox
             val bodiesZodiac = bodies.filter {
                 // Sun has fixed place, no point on showing that for year zodiac
                 it != Body.Sun
