@@ -17,7 +17,6 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -1264,8 +1263,7 @@ private fun createWeekViewRemoteViews(
 
         if (index == 3) {
             // the day is today
-            val drawable =
-                ContextCompat.getDrawable(context, R.drawable.hollow_circle) ?: ShapeDrawable()
+            val drawable = context.resources.getDrawable(R.drawable.hollow_circle, null)
             drawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                 if (prefersWidgetsDynamicColors) {
                     if (isSystemInDarkTheme(context.resources.configuration)) Color.WHITE else Color.BLACK
