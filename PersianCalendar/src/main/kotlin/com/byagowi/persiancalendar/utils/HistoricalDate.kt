@@ -35,7 +35,7 @@ fun formatAsRomanDate(jdn: Jdn): String {
 fun formatAsYazdegerdDate(jdn: Jdn): String {
     // It needs one day offset to match with traditionally published calendars
     val daysSinceEpoch = (jdn.value - 1952063).toInt()
-    return "~" + formatNumber(daysSinceEpoch / 365 + 1) + " یزدگردی"
+    return formatNumber(daysSinceEpoch / 365 + 1) + "~ یزدگردی"
 }
 // endregion
 
