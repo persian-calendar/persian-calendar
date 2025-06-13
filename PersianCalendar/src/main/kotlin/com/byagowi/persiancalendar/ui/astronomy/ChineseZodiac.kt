@@ -58,6 +58,7 @@ enum class ChineseZodiac(
         withOldEraName: Boolean = false,
         separator: String = " "
     ): String {
+        // TODO: This really needs to be untangled…
         val oldEra = persianDate?.year?.let { it < 1304 } ?: false
         val oldEraNameAddition = if (!oldEra && withOldEraName) {
             if (separator == "\n") "$oldEraPersianName\n"
