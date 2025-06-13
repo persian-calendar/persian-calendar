@@ -174,65 +174,65 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
             // We don't know yet how these are calculated for each year,
             // let's hard code the far we can for now
             val offset = when (persianYear) {
-                1276 -> 3 // سرطان
-                1277 -> 5 // سنبله
-                1278 -> 8 // قوس
-                1279 -> 11 // حوت
-                1280 -> 2 // جوزا
-                1281 -> 5 // سنبله
-                1282 -> 7 // عقرب
-                1283 -> 10 // دلو
-                1284 -> 2 // جوزا
-                1285 -> 5 // implied سنبله
-                1286 -> 7 // عقرب
-                1287 -> 10 // دلو
-                1288 -> 2 // جوزا
-                1289 -> 4 // اسد
-                1290 -> 7 // عقرب
-                1291 -> 9 // جدی
-                1292 -> 1 // ثور
-                1293 -> 4 // اسد
-                1294 -> 6 // میزان
-                1295 -> 9 // جدی
-                1296 -> 1 // ثور
-                1297 -> 4 // اسد
-                1298 -> 6 // میزان
-                1299 -> 9 // جدی
-                1300 -> 0 // implied حمل
-                1301 -> 3 // implied سرطان
-                1302 -> 6 // implied میزان
-                1303 -> 8 // قوس
-                1304 -> 0 // حمل
-                1305 -> 3 // سرطان
-                1306 -> 6 // implied میزان
+                1276 -> Zodiac.CANCER
+                1277 -> Zodiac.VIRGO
+                1278 -> Zodiac.SAGITTARIUS
+                1279 -> Zodiac.PISCES
+                1280 -> Zodiac.GEMINI
+                1281 -> Zodiac.VIRGO
+                1282 -> Zodiac.SCORPIO
+                1283 -> Zodiac.AQUARIUS
+                1284 -> Zodiac.GEMINI
+                1285 -> Zodiac.VIRGO // implied
+                1286 -> Zodiac.SCORPIO
+                1287 -> Zodiac.AQUARIUS
+                1288 -> Zodiac.GEMINI
+                1289 -> Zodiac.LEO
+                1290 -> Zodiac.SCORPIO
+                1291 -> Zodiac.CAPRICORN
+                1292 -> Zodiac.TAURUS
+                1293 -> Zodiac.LEO
+                1294 -> Zodiac.LIBRA
+                1295 -> Zodiac.CAPRICORN
+                1296 -> Zodiac.TAURUS
+                1297 -> Zodiac.LEO
+                1298 -> Zodiac.LIBRA
+                1299 -> Zodiac.CAPRICORN
+                1300 -> Zodiac.ARIES // implied
+                1301 -> Zodiac.CANCER // implied
+                1302 -> Zodiac.LIBRA // implied
+                1303 -> Zodiac.SAGITTARIUS
+                1304 -> Zodiac.ARIES
+                1305 -> Zodiac.CANCER
+                1306 -> Zodiac.LIBRA // implied
                 // 1307 can be implied even
-                1308 -> 11 // implied حوت
-                1309 -> 3 // سرطان
-                1310 -> 5 // سنبله
-                1311 -> 8 // قوس
-                1312 -> 11 // حوت
-                1313 -> 2 // جوزا
-                1314 -> 5 // سنبله
-                1315 -> 7 // عقرب
-                1316 -> 10 // دلو
-                1317 -> 2 // جوزا
-                1318 -> 5 // سنبله
-                1319 -> 7 // عقرب
-                1320 -> 10 // دلو
-                1321 -> 2 // جوزا
-                1322 -> 4 // اسد
-                1323 -> 7 // عقرب
-                1324 -> 9 // جدی
-                1325 -> 1 // ثور
-                1326 -> 4 // اسد
-                1327 -> 6 // میزان
-                1328 -> 9 // implied جدی
-                1329 -> 1 // ثور
-                1330 -> 4 // اسد
+                1308 -> Zodiac.PISCES // implied
+                1309 -> Zodiac.CANCER
+                1310 -> Zodiac.VIRGO
+                1311 -> Zodiac.SAGITTARIUS
+                1312 -> Zodiac.PISCES
+                1313 -> Zodiac.GEMINI
+                1314 -> Zodiac.VIRGO
+                1315 -> Zodiac.SCORPIO
+                1316 -> Zodiac.AQUARIUS
+                1317 -> Zodiac.GEMINI
+                1318 -> Zodiac.VIRGO
+                1319 -> Zodiac.SCORPIO
+                1320 -> Zodiac.AQUARIUS
+                1321 -> Zodiac.GEMINI
+                1322 -> Zodiac.LEO
+                1323 -> Zodiac.SCORPIO
+                1324 -> Zodiac.CAPRICORN
+                1325 -> Zodiac.TAURUS
+                1326 -> Zodiac.LEO
+                1327 -> Zodiac.LIBRA
+                1328 -> Zodiac.CAPRICORN // implied
+                1329 -> Zodiac.TAURUS
+                1330 -> Zodiac.LEO
 
-                1402 -> 3 // implied حوت
-                1403 -> 4 // implied اسد
-                1404 -> 3 // سرطان
+                1402 -> Zodiac.CANCER // implied
+                1403 -> Zodiac.LEO // implied
+                1404 -> Zodiac.CANCER
                 else -> return@appDialog
             }
             val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
