@@ -174,6 +174,29 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
             // We don't know yet how these are calculated for each year,
             // let's hard code the far we can for now
             val offset = when (persianYear) {
+                1276 -> 3 // سرطان
+                1277 -> 5 // سنبله
+                1278 -> 8 // قوس
+                1279 -> 11 // حوت
+                1280 -> 2 // جوزا
+                1281 -> 5 // سنبله
+                1282 -> 7 // عقرب
+                1283 -> 10 // دلو
+                1284 -> 2 // جوزا
+                1285 -> 5 // implied سنبله
+                1286 -> 7 // عقرب
+                1287 -> 10 // دلو
+                1288 -> 2 // جوزا
+                1289 -> 4 // اسد
+                1290 -> 7 // عقرب
+                1291 -> 9 // جدی
+                1292 -> 1 // ثور
+                1293 -> 4 // اسد
+                1294 -> 6 // میزان
+                1295 -> 9 // جدی
+                1296 -> 1 // ثور
+                1297 -> 4 // اسد
+                1298 -> 6 // میزان
                 1299 -> 9 // جدی
                 1300 -> 0 // implied حمل
                 1301 -> 3 // implied سرطان
@@ -207,12 +230,13 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
                 1329 -> 1 // ثور
                 1330 -> 4 // اسد
 
-                1402 -> 11 // implied حوت
+                1402 -> 3 // implied حوت
                 1403 -> 4 // implied اسد
                 1404 -> 3 // سرطان
                 else -> return@appDialog
             }
             val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
+            // debugLog(calculateAscendant(35.68, 51.42, time))
             val bodiesZodiac = bodies.filter {
                 // Sun has fixed place, no point on showing that for year zodiac
                 it != Body.Sun
