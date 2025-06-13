@@ -234,7 +234,7 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
                 1403 -> Zodiac.LEO // implied
                 1404 -> Zodiac.CANCER
                 else -> return@appDialog
-            }
+            }.ordinal
             val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
             // debugLog(calculateAscendant(35.68, 51.42, time))
             val bodiesZodiac = bodies.filter {
