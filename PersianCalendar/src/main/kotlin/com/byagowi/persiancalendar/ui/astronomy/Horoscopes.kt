@@ -205,7 +205,7 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
                 1304 -> Zodiac.ARIES
                 1305 -> Zodiac.CANCER
                 1306 -> Zodiac.LIBRA // implied
-                // 1307 can be implied even
+                // 1307 can't be implied even
                 1308 -> Zodiac.PISCES // implied
                 1309 -> Zodiac.CANCER
                 1310 -> Zodiac.VIRGO
