@@ -4,6 +4,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -77,7 +78,7 @@ private val bodies = listOf(
 )
 
 @Composable
-fun HoroscopesDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
+fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
     val time = Time.fromMillisecondsSince1970(date.time)
     AppDialog(onDismissRequest = onDismissRequest) {
         Text(
@@ -195,7 +196,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
+private fun ColumnScope.AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
     val bodiesZodiac = bodies.filter {
         // Sun has fixed place, no point on showing that for year zodiac
         it != Body.Sun || !isYearEquinox
@@ -206,10 +207,10 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
         body to longitude
     }.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
     val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
-    val ascendantOrdinal = Zodiac.fromTropical(ascendant).ordinal
+    val ascendantZodiac = Zodiac.fromTropical(ascendant)
     val resources = LocalContext.current.resources
     EasternHoroscopePattern {
-        val zodiac = Zodiac.entries[(it + ascendantOrdinal) % 12]
+        val zodiac = Zodiac.entries[(it + ascendantZodiac.ordinal) % 12]
         zodiac.format(
             resources,
             delim = "\n",
@@ -220,6 +221,10 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             "${resources.getString(body.titleStringId)}: $LRM$title$LRM"
         }?.let { "\n" + it }.orEmpty()
     }
+    Text(
+        "$LRM${ascendantZodiac.emoji} ${formatNumber(formatAngle(ascendant % 30))}$LRM",
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+    )
 }
 
 // Extracted from not exposed calculations of astronomy library

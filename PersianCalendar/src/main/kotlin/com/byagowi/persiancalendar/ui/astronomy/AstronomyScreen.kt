@@ -172,7 +172,7 @@ fun SharedTransitionScope.AstronomyScreen(
                     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
                     if (showHoroscopeDialog) {
                         val astronomyState by viewModel.astronomyState.collectAsState()
-                        HoroscopesDialog(astronomyState.date.time) { showHoroscopeDialog = false }
+                        HoroscopeDialog(astronomyState.date.time) { showHoroscopeDialog = false }
                     }
                     var showYearHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
                     if (showYearHoroscopeDialog) {
