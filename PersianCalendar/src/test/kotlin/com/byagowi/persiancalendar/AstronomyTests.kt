@@ -6,11 +6,15 @@ import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.calculateAscendant
+import com.byagowi.persiancalendar.ui.astronomy.calculateMidheaven
 import com.google.common.truth.Truth.assertThat
 import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import java.util.GregorianCalendar
@@ -192,5 +196,122 @@ class AstronomyTests {
             val phase = LunarAge.fromDegrees(it.toDouble()).toPhase()
             "$phase ${phase.emoji(null)} ${phase.emoji(southern)}"
         }
+    }
+
+    @Test
+    fun `Ascendant correctness`() {
+        val expected = listOf(
+            165.29847801886166, 236.29668499183026, 321.797191638284,
+            80.34263360923649, 153.48105769394334, 225.9653124106477,
+            304.6980552072615, 64.62545992403068, 143.33024864679658,
+            215.11313481654395, 291.38637627325454, 54.76578575422565,
+            134.72543967324845, 207.94257567520026, 282.13323220688267,
+            40.57586845190173, 128.0385988488901, 199.39109345375834,
+            270.9214212751657, 26.357835345588768, 117.51716101735667,
+        )
+        assertAll((1380..1400).mapIndexed { i, year ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            val result = calculateAscendant(35.68, 51.42, time);
+            { assertEquals(expected[i], result, "$year") }
+        })
+        // Smoke test
+        (1300..1500).forEach { year ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            calculateAscendant(35.68, 51.42, time)
+        }
+    }
+
+    @Test
+    fun `Midheaven correctness`() {
+        val expected = listOf(
+            72.28739476413239, 158.56694589409585, 244.67001720044186,
+            331.6668632833108, 57.955409005311594, 145.87263528159508,
+            231.43067114198846, 316.60746336344357, 45.54938891786833,
+            132.54248302254933, 219.75197983786268, 308.12962517701135,
+            34.97878989562639, 123.77830259687084, 210.82820991496624,
+            297.0705530603623, 26.755431559256067, 113.38601405322447,
+            199.13703705776845, 287.04520335660277, 13.882593420879289
+        )
+        assertAll((1380..1400).mapIndexed { i, year ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            val result = calculateMidheaven(51.42, time);
+            { assertEquals(expected[i], result, "$year") }
+        })
+        // Smoke test
+        (1300..1500).forEach { year ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            calculateMidheaven(51.42, time)
+        }
+    }
+
+    @Test
+    fun `Test known ascendants`() {
+        assertAll(
+            listOf(
+                1276 to Zodiac.CANCER,
+                1277 to Zodiac.VIRGO,
+                1278 to Zodiac.SAGITTARIUS,
+                1279 to Zodiac.PISCES,
+                1280 to Zodiac.GEMINI,
+                1281 to Zodiac.VIRGO,
+                1282 to Zodiac.SCORPIO,
+                1283 to Zodiac.AQUARIUS,
+                1284 to Zodiac.GEMINI,
+                1285 to Zodiac.VIRGO, // implied
+                1286 to Zodiac.SCORPIO,
+                1287 to Zodiac.AQUARIUS,
+                1288 to Zodiac.GEMINI,
+                1289 to Zodiac.LEO,
+                1290 to Zodiac.SCORPIO,
+                1291 to Zodiac.CAPRICORN,
+                1292 to Zodiac.TAURUS,
+                1293 to Zodiac.LEO,
+                1294 to Zodiac.LIBRA,
+                1295 to Zodiac.CAPRICORN,
+                1296 to Zodiac.TAURUS,
+                1297 to Zodiac.LEO,
+                1298 to Zodiac.LIBRA,
+                1299 to Zodiac.CAPRICORN,
+                1300 to Zodiac.ARIES, // implied
+                1301 to Zodiac.CANCER, // implied
+                1302 to Zodiac.LIBRA, // implied
+                1303 to Zodiac.SAGITTARIUS,
+                1304 to Zodiac.ARIES,
+                1305 to Zodiac.CANCER,
+                1306 to Zodiac.LIBRA, // implied
+                // 1307 can't be implied even
+                1308 to Zodiac.PISCES, // implied
+                1309 to Zodiac.CANCER,
+                1310 to Zodiac.VIRGO,
+                1311 to Zodiac.SAGITTARIUS,
+                1312 to Zodiac.PISCES,
+                1313 to Zodiac.GEMINI,
+                1314 to Zodiac.VIRGO,
+                1315 to Zodiac.SCORPIO,
+                1316 to Zodiac.AQUARIUS,
+                1317 to Zodiac.GEMINI,
+                1318 to Zodiac.VIRGO,
+                1319 to Zodiac.SCORPIO,
+                1320 to Zodiac.AQUARIUS,
+                1321 to Zodiac.GEMINI,
+                1322 to Zodiac.LEO,
+                1323 to Zodiac.SCORPIO,
+                1324 to Zodiac.CAPRICORN,
+                // 1325 to Zodiac.TAURUS,
+                1326 to Zodiac.LEO,
+                1327 to Zodiac.LIBRA,
+                1328 to Zodiac.CAPRICORN, // implied
+                1329 to Zodiac.TAURUS,
+                1330 to Zodiac.LEO,
+
+                // 1402 to Zodiac.CANCER, // implied
+                // 1403 to Zodiac.LEO, // implied
+                1404 to Zodiac.CANCER
+            ).map { (year, sign) ->
+                val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+                val ascendant = calculateAscendant(35.68, 51.42, time);
+                { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
+            }
+        )
     }
 }

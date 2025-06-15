@@ -1,14 +1,13 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
@@ -43,14 +43,20 @@ import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.seasons
+import io.github.cosinekitty.astronomy.siderealTime
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
 import java.util.Locale
+import kotlin.math.atan
+import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
+import kotlin.math.sin
+import kotlin.math.tan
 
 private fun formatAngle(value: Double): String {
     val degrees = floor(value)
@@ -88,6 +94,8 @@ fun HoroscopesDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
             }.joinToString("\n"),
             modifier = Modifier.padding(SettingsHorizontalPaddingItem.dp),
         )
+        val coordinates by coordinates.collectAsState()
+        coordinates?.let { AscendantZodiac(time, it, isYearEquinox = false) }
     }
 }
 
@@ -107,40 +115,43 @@ private val easternHoroscopePositions = listOf(
 )
 
 @Composable
-private fun EasternHoroscopePattern(textDirection: LayoutDirection, cellLabel: (Int) -> String) {
+private fun EasternHoroscopePattern(cellLabel: (Int) -> String) {
     val outline = MaterialTheme.colorScheme.outline
-    BoxWithConstraints(
-        Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f),
-    ) {
-        easternHoroscopePositions.forEachIndexed { i, (x, y) ->
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .absoluteOffset(this.maxWidth * x, this.maxHeight * y)
-                    .size(this.maxWidth / 3),
-            ) {
-                CompositionLocalProvider(LocalLayoutDirection provides textDirection) {
-                    Text(cellLabel(i), textAlign = TextAlign.Center)
+    val textDirection = LocalLayoutDirection.current
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
+        BoxWithConstraints(
+            Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
+        ) {
+            easternHoroscopePositions.forEachIndexed { i, (x, y) ->
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .absoluteOffset(this.maxWidth * x, this.maxHeight * y)
+                        .size(this.maxWidth / 3),
+                ) {
+                    CompositionLocalProvider(LocalLayoutDirection provides textDirection) {
+                        Text(cellLabel(i), textAlign = TextAlign.Center)
+                    }
                 }
             }
-        }
-        Canvas(Modifier.fillMaxSize()) {
-            val oneDp = 1.dp.toPx()
-            val sizePx = size.width
-            val c0 = Offset(0f, sizePx / 2)
-            val c1 = Offset(sizePx / 6, sizePx / 2)
-            val c2 = Offset(sizePx / 2, sizePx / 6)
-            val c3 = Offset(sizePx / 6 + 3 * oneDp, sizePx / 2)
-            val c4 = Offset(sizePx / 2, sizePx / 6 + 3 * oneDp)
-            val c5 = Offset(sizePx / 2, sizePx / 2)
-            (0..3).forEach {
-                rotate(it * 90f) {
-                    drawLine(outline, Offset.Zero, c5, oneDp)
-                    drawLine(outline, c0, c1, oneDp)
-                    drawLine(outline, c1, c2, oneDp)
-                    drawLine(outline, c3, c4, oneDp)
+            Canvas(Modifier.fillMaxSize()) {
+                val oneDp = 1.dp.toPx()
+                val sizePx = size.width
+                val c0 = Offset(0f, sizePx / 2)
+                val c1 = Offset(sizePx / 6, sizePx / 2)
+                val c2 = Offset(sizePx / 2, sizePx / 6)
+                val c3 = Offset(sizePx / 6 + 3 * oneDp, sizePx / 2)
+                val c4 = Offset(sizePx / 2, sizePx / 6 + 3 * oneDp)
+                val c5 = Offset(sizePx / 2, sizePx / 2)
+                (0..3).forEach {
+                    rotate(it * 90f) {
+                        drawLine(outline, Offset.Zero, c5, oneDp)
+                        drawLine(outline, c0, c1, oneDp)
+                        drawLine(outline, c1, c2, oneDp)
+                        drawLine(outline, c3, c4, oneDp)
+                    }
                 }
             }
         }
@@ -153,10 +164,9 @@ private fun EasternHoroscopePattern(textDirection: LayoutDirection, cellLabel: (
 // See for example: https://w.wiki/E9uz
 // See also: https://agnastrology.ir/بهینه-سازی-فروش/
 @Composable
-fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
+fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     val language by language.collectAsState()
     val resources = LocalContext.current.resources
-    val persianYear = jdn.toPersianDate().year
     val items = (0..<12).map {
         val date = PersianDate(persianYear + it, 1, 1)
         ChineseZodiac.fromPersianCalendar(date).format(
@@ -167,140 +177,105 @@ fun YearHoroscope(jdn: Jdn = Jdn.today(), onDismissRequest: () -> Unit) {
             separator = "\n",
         )
     }
-    val originalDirection = LocalLayoutDirection.current
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        AppDialog(onDismissRequest = onDismissRequest) appDialog@{
-            EasternHoroscopePattern(originalDirection) { items[it] }
-            // We don't know yet how these are calculated for each year,
-            // let's hard code the far we can for now
-            val offset = when (persianYear) {
-                1276 -> Zodiac.CANCER
-                1277 -> Zodiac.VIRGO
-                1278 -> Zodiac.SAGITTARIUS
-                1279 -> Zodiac.PISCES
-                1280 -> Zodiac.GEMINI
-                1281 -> Zodiac.VIRGO
-                1282 -> Zodiac.SCORPIO
-                1283 -> Zodiac.AQUARIUS
-                1284 -> Zodiac.GEMINI
-                1285 -> Zodiac.VIRGO // implied
-                1286 -> Zodiac.SCORPIO
-                1287 -> Zodiac.AQUARIUS
-                1288 -> Zodiac.GEMINI
-                1289 -> Zodiac.LEO
-                1290 -> Zodiac.SCORPIO
-                1291 -> Zodiac.CAPRICORN
-                1292 -> Zodiac.TAURUS
-                1293 -> Zodiac.LEO
-                1294 -> Zodiac.LIBRA
-                1295 -> Zodiac.CAPRICORN
-                1296 -> Zodiac.TAURUS
-                1297 -> Zodiac.LEO
-                1298 -> Zodiac.LIBRA
-                1299 -> Zodiac.CAPRICORN
-                1300 -> Zodiac.ARIES // implied
-                1301 -> Zodiac.CANCER // implied
-                1302 -> Zodiac.LIBRA // implied
-                1303 -> Zodiac.SAGITTARIUS
-                1304 -> Zodiac.ARIES
-                1305 -> Zodiac.CANCER
-                1306 -> Zodiac.LIBRA // implied
-                // 1307 can't be implied even
-                1308 -> Zodiac.PISCES // implied
-                1309 -> Zodiac.CANCER
-                1310 -> Zodiac.VIRGO
-                1311 -> Zodiac.SAGITTARIUS
-                1312 -> Zodiac.PISCES
-                1313 -> Zodiac.GEMINI
-                1314 -> Zodiac.VIRGO
-                1315 -> Zodiac.SCORPIO
-                1316 -> Zodiac.AQUARIUS
-                1317 -> Zodiac.GEMINI
-                1318 -> Zodiac.VIRGO
-                1319 -> Zodiac.SCORPIO
-                1320 -> Zodiac.AQUARIUS
-                1321 -> Zodiac.GEMINI
-                1322 -> Zodiac.LEO
-                1323 -> Zodiac.SCORPIO
-                1324 -> Zodiac.CAPRICORN
-                1325 -> Zodiac.TAURUS
-                1326 -> Zodiac.LEO
-                1327 -> Zodiac.LIBRA
-                1328 -> Zodiac.CAPRICORN // implied
-                1329 -> Zodiac.TAURUS
-                1330 -> Zodiac.LEO
-
-                1402 -> Zodiac.CANCER // implied
-                1403 -> Zodiac.LEO // implied
-                1404 -> Zodiac.CANCER
-                else -> return@appDialog
-            }.ordinal
-            val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
-            // debugLog(calculateAscendant(35.68, 51.42, time))
-            val bodiesZodiac = bodies.filter {
-                // Sun has fixed place, no point on showing that for year zodiac
-                it != Body.Sun
-            }.filter {
-                it != Body.Neptune && it != Body.Pluto // Not visible to naked eye
-            }.map { body ->
-                val (longitude, _) = longitudeAndDistanceOfBody(body, time)
-                body to longitude
-            }.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
-            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-            Spacer(Modifier.height(1.dp))
-            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-            EasternHoroscopePattern(originalDirection) {
-                val zodiac = Zodiac.entries[(it + offset) % 12]
-                zodiac.format(
-                    resources,
-                    delim = "\n",
-                    withEmoji = true,
-                    short = true,
-                ) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
-                    val title = formatNumber(formatAngle(longitude % 30))
-                    "${resources.getString(body.titleStringId)}: $LRM$title$LRM"
-                }?.let { "\n" + it }.orEmpty()
-            }
-        }
+    AppDialog(onDismissRequest = onDismissRequest) appDialog@{
+        EasternHoroscopePattern { items[it] }
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+        Text(
+            if (language.isUserAbleToReadPersian) "تهران، لحظهٔ تحویل سال" else "Tehran, March Equinox",
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
+        HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+        val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
+        // So the user would be able to verify it with the calendar book published
+        val tehran = Coordinates(35.68, 51.42, 0.0)
+        AscendantZodiac(time, tehran, isYearEquinox = true)
     }
 }
 
-//// As https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
-//fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double {
-//    val localSiderealRadians = localSiderealTimeRadians(longitude, time)
-//    val eclipticObliquity = run {
-//        val t = time.tt / 36525.0
-//        val asec =
-//            ((((-0.0000000434 * t
-//                    - 0.000000576) * t
-//                    + 0.00200340) * t
-//                    - 0.0001831) * t
-//                    - 46.836769) * t + 84381.406
-//        val mobl = asec / 3600
-//        val tobl = mobl + (time.nutationEps() / 3600)
-//        Math.toRadians(tobl)
-//    }
-//    val x =
-//        sin(localSiderealRadians) * cos(eclipticObliquity) +
-//                tan(Math.toRadians(latitude)) * sin(eclipticObliquity)
-//    val y = -1 * cos(localSiderealRadians)
-//    val celestialLongitudeRadians = atan2(y, x)
-//    var ascendantDegrees = Math.toDegrees(celestialLongitudeRadians)
-//
-//    // Correcting the quadrant
-//    ascendantDegrees += if (x < 0) 180.0 else 360.0
-//    if (ascendantDegrees < 180.0) ascendantDegrees += 180.0 else ascendantDegrees -= 180.0
-//    return ascendantDegrees
-//}
-//
-//fun hoursToDegrees(hours: Double) = hours * 15
-//fun degreesToHours(degrees: Double) = degrees / 15
-//
-//fun localSiderealTimeRadians(longitude: Double, time: Time): Double {
-//    val greenwichSiderealTime = siderealTime(time)
-//    val localSiderealTime = greenwichSiderealTime + degreesToHours(longitude)
-//    var localSiderealDegrees = hoursToDegrees(localSiderealTime)
-//    localSiderealDegrees = (localSiderealDegrees + 360) % 360
-//    val localSiderealRadians = Math.toRadians(localSiderealDegrees)
-//    return localSiderealRadians
-//}
+@Composable
+private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
+    val bodiesZodiac = bodies.filter {
+        // Sun has fixed place, no point on showing that for year zodiac
+        it != Body.Sun || !isYearEquinox
+    }.filter {
+        it != Body.Neptune && it != Body.Pluto // Not visible to naked eye
+    }.map { body ->
+        val (longitude, _) = longitudeAndDistanceOfBody(body, time)
+        body to longitude
+    }.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
+    val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
+    val ascendantOrdinal = Zodiac.fromTropical(ascendant).ordinal
+    val resources = LocalContext.current.resources
+    EasternHoroscopePattern {
+        val zodiac = Zodiac.entries[(it + ascendantOrdinal) % 12]
+        zodiac.format(
+            resources,
+            delim = "\n",
+            withEmoji = true,
+            short = true,
+        ) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+            val title = formatNumber(formatAngle(longitude % 30))
+            "${resources.getString(body.titleStringId)}: $LRM$title$LRM"
+        }?.let { "\n" + it }.orEmpty()
+    }
+}
+
+// Extracted from not exposed calculations of astronomy library
+private fun eclipticObliquity(time: Time): Double {
+    val t = time.tt / 36525.0
+    val asec = ((((-0.0000000434 * t
+            - 0.000000576) * t
+            + 0.00200340) * t
+            - 0.0001831) * t
+            - 46.836769) * t + 84381.406
+    val mobl = asec / 3600
+    val tobl = mobl + (time.nutationEps() / 3600)
+    return Math.toRadians(tobl)
+}
+
+// As https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
+@VisibleForTesting
+fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double {
+    val localSiderealRadians = localSiderealTimeRadians(longitude, time)
+    val eclipticObliquity = eclipticObliquity(time)
+    val x = sin(localSiderealRadians) * cos(eclipticObliquity) +
+            tan(Math.toRadians(latitude)) * sin(eclipticObliquity)
+    val y = -1 * cos(localSiderealRadians)
+    val celestialLongitudeRadians = atan(y / x)
+    var ascendantDegrees = Math.toDegrees(celestialLongitudeRadians)
+
+    // Correcting the quadrant
+    ascendantDegrees += if (x < 0) 180.0 else 360.0
+    if (ascendantDegrees < 180.0) ascendantDegrees += 180.0 else ascendantDegrees -= 180.0
+    return ascendantDegrees
+}
+
+@VisibleForTesting
+fun calculateMidheaven(longitude: Double, time: Time): Double {
+    val localSiderealRadians = localSiderealTimeRadians(longitude, time);
+    val eclipticObliquity = eclipticObliquity(time)
+    val numerator = tan(localSiderealRadians)
+    val denominator = cos(Math.toRadians(eclipticObliquity))
+    var midheavenDegrees = Math.toDegrees(atan(numerator / denominator))
+
+    // Correcting the quadrant
+    if (midheavenDegrees < 0) midheavenDegrees += 360
+    val localSiderealDegrees = Math.toDegrees(localSiderealRadians)
+    if (midheavenDegrees > localSiderealDegrees) midheavenDegrees -= 180
+    if (midheavenDegrees < 0) midheavenDegrees += 180
+    if (midheavenDegrees < 180 && localSiderealDegrees >= 180) midheavenDegrees += 180
+    midheavenDegrees = (midheavenDegrees + 360) % 360
+    return midheavenDegrees
+}
+
+private fun hoursToDegrees(hours: Double) = hours * 15
+private fun degreesToHours(degrees: Double) = degrees / 15
+
+private fun localSiderealTimeRadians(longitude: Double, time: Time): Double {
+    val greenwichSiderealTime = siderealTime(time)
+    val localSiderealTime = greenwichSiderealTime + degreesToHours(longitude)
+    var localSiderealDegrees = hoursToDegrees(localSiderealTime)
+    localSiderealDegrees = (localSiderealDegrees + 360) % 360
+    val localSiderealRadians = Math.toRadians(localSiderealDegrees)
+    return localSiderealRadians
+}
