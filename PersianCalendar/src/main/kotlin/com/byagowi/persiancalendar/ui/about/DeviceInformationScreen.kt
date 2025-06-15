@@ -352,7 +352,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             Locale.ENGLISH, when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> activity.display?.refreshRate
                 else -> @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.refreshRate
-            }?.toString().orEmpty()
+            } ?: 0f
         ),
     ),
     Item("DPI", activity.resources?.displayMetrics?.densityDpi?.toString()),
