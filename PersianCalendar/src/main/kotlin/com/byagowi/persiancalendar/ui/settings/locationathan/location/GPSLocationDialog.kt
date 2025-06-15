@@ -204,7 +204,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         LaunchedEffect(coord.latitude, coord.longitude) {
             // Don't set elevation/altitude even from GPS, See #1011
             val coordinate = Coordinates(coord.latitude, coord.longitude, .0)
-            context.preferences.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
+            context.preferences.saveLocation(coordinate, cityName.orEmpty(), countryCode.orEmpty())
         }
     }
 
@@ -248,7 +248,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                             textDecoration = TextDecoration.Underline
                         )
                     )
-                ) { context.shareText(geoLink, cityName ?: "") }
+                ) { context.shareText(geoLink, cityName.orEmpty()) }
             ) { appendLine(geoLink) }
             appendLine(formatCoordinateISO6709(coord.latitude, coord.longitude, coord.elevation))
             cityName?.also(::appendLine)
@@ -264,7 +264,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
                             textDecoration = TextDecoration.Underline
                         )
                     )
-                ) { context.shareText(plusLink, cityName ?: "") }
+                ) { context.shareText(plusLink, cityName.orEmpty()) }
             ) { append(plusLink) }
         }
         SelectionContainer { Text(text, modifier = textModifier, textAlign = TextAlign.Center) }

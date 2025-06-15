@@ -87,7 +87,7 @@ fun getEventsOfDay(enabledEvents: Set<String>, civilDate: CivilDate): List<Entry
                     ).month != islamicDate.month && (it["holiday"] == "true" || iranNonHolidaysKey in enabledEvents)
                 ) add(
                     Entry(
-                        it["title"] ?: "",
+                        it["title"].orEmpty(),
                         if (it["holiday"] == "true") EntryType.Holiday else EntryType.NonHoliday
                     )
                 )

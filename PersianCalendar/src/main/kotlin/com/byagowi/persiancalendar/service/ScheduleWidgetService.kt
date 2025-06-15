@@ -306,7 +306,7 @@ private class EventsViewFactory(
                     } else R.id.day_first_line,
                     item.day.weekDayNameInitials + (item.secondaryDate?.let {
                         "(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})"
-                    } ?: ""),
+                    }.orEmpty()),
                 )
                 row.setTextViewText(
                     if (item.today) {
@@ -334,8 +334,7 @@ private class EventsViewFactory(
         val now = Clock(time)
         return coordinates.value?.calculatePrayTimes(time)?.let { times ->
             val next = enabledAlarms.firstOrNull { times[it] > now } ?: enabledAlarms.first()
-            (prayTimesTitles[next]
-                ?: "") + spacedColon + times[next].toFormattedString() to next.tint.toArgb()
+            prayTimesTitles[next].orEmpty() + spacedColon + times[next].toFormattedString() to next.tint.toArgb()
         } ?: ("" to 0)
     }
 }

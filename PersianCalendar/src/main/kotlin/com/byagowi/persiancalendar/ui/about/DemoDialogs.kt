@@ -187,7 +187,7 @@ fun showShaderSandboxDialog(activity: Activity) {
         glView.setRenderer(renderer)
         glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         inputText.doAfterTextChanged {
-            renderer.fragmentShader = inputText.text?.toString() ?: ""
+            renderer.fragmentShader = inputText.text?.toString().orEmpty()
             glView.queueEvent { renderer.compileProgram(); glView.requestRender() }
         }
         inputText.setText(sandboxFragmentShader)

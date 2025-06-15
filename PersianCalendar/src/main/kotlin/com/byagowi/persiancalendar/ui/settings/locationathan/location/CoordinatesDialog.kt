@@ -106,8 +106,8 @@ fun CoordinatesDialog(
                     val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
                     if (saveCoordinates) context.preferences.saveLocation(
                         coordinates = newCoordinates,
-                        cityName = cityName ?: "",
-                        countryCode = countryCode ?: ""
+                        cityName = cityName.orEmpty(),
+                        countryCode = countryCode.orEmpty()
                     )
                     notifyChange(newCoordinates)
                 } else context.preferences.edit { fields.map { it.second }.forEach(::remove) }
@@ -153,7 +153,7 @@ fun CoordinatesDialog(
                 .padding(horizontal = 16.dp),
         ) {
             AnimatedContent(
-                cityName ?: "",
+                cityName.orEmpty(),
                 label = "summary",
                 transitionSpec = appCrossfadeSpec,
             ) { state -> Text(state, style = MaterialTheme.typography.titleSmall) }

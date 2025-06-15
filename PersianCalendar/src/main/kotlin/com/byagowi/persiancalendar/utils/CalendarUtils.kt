@@ -65,7 +65,7 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-val AbstractDate.monthName get() = yearMonthNameOfDate(this).getOrNull(month - 1) ?: ""
+val AbstractDate.monthName get() = yearMonthNameOfDate(this).getOrNull(month - 1).orEmpty()
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
@@ -201,9 +201,9 @@ private fun readDeviceEvents(
                             else ""),
                 start = start,
                 end = end,
-                description = it.getString(2)?.replace(descriptionCleaningPattern, "") ?: "",
+                description = it.getString(2)?.replace(descriptionCleaningPattern, "").orEmpty(),
                 date = start.toCivilDate(),
-                color = it.getString(7) ?: it.getString(8) ?: "",
+                color = it.getString(7) ?: it.getString(8).orEmpty(),
                 isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
             )
         }.take(1000 /* let's put some limitation */).toList()
@@ -384,7 +384,7 @@ fun otherCalendarFormat(mainCalendarYear: Int, calendar: Calendar): String {
 }
 
 private fun getCalendarNameAbbr(date: AbstractDate) =
-    calendarsTitlesAbbr.getOrNull(date.calendar.ordinal) ?: ""
+    calendarsTitlesAbbr.getOrNull(date.calendar.ordinal).orEmpty()
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn on it) }

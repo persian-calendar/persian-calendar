@@ -259,7 +259,7 @@ fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double 
 
 @VisibleForTesting
 fun calculateMidheaven(longitude: Double, time: Time): Double {
-    val localSiderealRadians = localSiderealTimeRadians(longitude, time);
+    val localSiderealRadians = localSiderealTimeRadians(longitude, time)
     val eclipticObliquity = eclipticObliquity(time)
     val numerator = tan(localSiderealRadians)
     val denominator = cos(Math.toRadians(eclipticObliquity))

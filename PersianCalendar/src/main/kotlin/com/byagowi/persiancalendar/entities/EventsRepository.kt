@@ -170,7 +170,7 @@ data class EventsRepository(
             Calendar.GREGORIAN -> gregorianMonths
             Calendar.ISLAMIC -> islamicMonths
             Calendar.NEPALI -> nepaliMonths
-        }.getOrNull(month - 1).debugAssertNotNull ?: ""
+        }.getOrNull(month - 1).debugAssertNotNull.orEmpty()
         return language.dm.format(formatNumber(day), monthName)
     }
 

@@ -282,7 +282,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                     runCatching {
                         // running this inside a runCatching block is absolutely important
                         eval(viewModel.calculatorInputText.value)
-                    }.getOrElse { it.message } ?: "",
+                    }.getOrElse { it.message }.orEmpty(),
                     chooserTitle,
                 )
             }
@@ -312,7 +312,7 @@ private fun Calculator(viewModel: ConverterViewModel) {
     val result = runCatching {
         // running this inside a runCatching block is absolutely important
         eval(inputText.value)
-    }.getOrElse { it.message } ?: ""
+    }.getOrElse { it.message }.orEmpty()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
         TextField(

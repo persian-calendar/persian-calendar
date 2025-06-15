@@ -546,11 +546,11 @@ fun updateStoredPreference(context: Context) {
     isShowDeviceCalendarEvents_.value =
         preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     eventCalendarsIdsToExclude_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
-        *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null) ?: "").splitFilterNotEmpty(",")
+        *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null).orEmpty()).splitFilterNotEmpty(",")
             .mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
     eventCalendarsIdsAsHoliday_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
-        *(preferences.getString(PREF_CALENDARS_IDS_AS_HOLIDAY, null) ?: "").splitFilterNotEmpty(",")
+        *(preferences.getString(PREF_CALENDARS_IDS_AS_HOLIDAY, null).orEmpty()).splitFilterNotEmpty(",")
             .mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
 
@@ -564,7 +564,7 @@ fun updateStoredPreference(context: Context) {
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)
 
     shiftWorks =
-        (preferences.getString(PREF_SHIFT_WORK_SETTING, null) ?: "").splitFilterNotEmpty(",")
+        (preferences.getString(PREF_SHIFT_WORK_SETTING, null).orEmpty()).splitFilterNotEmpty(",")
             .map { it.splitFilterNotEmpty("=") }.filter { it.size == 2 }
             .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
     shiftWorkPeriod = shiftWorks.sumOf { it.length }

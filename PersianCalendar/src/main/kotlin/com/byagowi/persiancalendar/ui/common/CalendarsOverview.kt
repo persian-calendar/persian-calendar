@@ -160,7 +160,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 equinoxTitle(date, jdn, context).first else null
         }
 
-        this.AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox ?: "") }
+        this.AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
 
         this.AnimatedVisibility(!isToday) {
             AutoSizedBodyText(

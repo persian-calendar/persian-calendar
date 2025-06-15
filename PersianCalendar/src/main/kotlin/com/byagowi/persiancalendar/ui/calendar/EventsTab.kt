@@ -116,7 +116,7 @@ fun SharedTransitionScope.EventsTab(
         val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
         this.AnimatedVisibility(visible = shiftWorkTitle != null) {
             AnimatedContent(
-                targetState = shiftWorkTitle ?: "",
+                targetState = shiftWorkTitle.orEmpty(),
                 label = "shift work title",
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
@@ -135,7 +135,7 @@ fun SharedTransitionScope.EventsTab(
         val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn)
         this.AnimatedVisibility(visible = shiftWorkInDaysDistance != null) {
             AnimatedContent(
-                targetState = shiftWorkInDaysDistance ?: "",
+                targetState = shiftWorkInDaysDistance.orEmpty(),
                 label = "shift work days diff",
                 transitionSpec = appCrossfadeSpec,
             ) { state ->
@@ -243,7 +243,8 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
     val launcher = rememberLauncherForActivityResult(ViewEventContract()) { refreshCalendar() }
     events.forEach { event ->
         val backgroundColor by animateColor(eventColor(event))
-        val eventTime = (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it } ?: ""
+        val eventTime =
+            (event as? CalendarEvent.DeviceCalendarEvent)?.time?.let { "\n" + it }.orEmpty()
         AnimatedContent(
             (if (event.isHoliday) language.value.inParentheses.format(
                 event.title, holidayString

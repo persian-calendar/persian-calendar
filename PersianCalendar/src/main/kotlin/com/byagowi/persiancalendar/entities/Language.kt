@@ -509,7 +509,7 @@ enum class Language(val code: String, val nativeName: String) {
                         debugLog("Language: '$locale' is available in keyboards")
                         if (locale.isEmpty()) return@forEach
                         val language = valueOfLanguageCode(locale)
-                            ?: valueOfLanguageCode(locale.split("-").firstOrNull() ?: "")
+                            ?: valueOfLanguageCode(locale.split("-").firstOrNull().orEmpty())
                         // Use the knowledge only to detect Persian language
                         // as others might be surprising
                         if (language == FA || language == FA_AF) return language

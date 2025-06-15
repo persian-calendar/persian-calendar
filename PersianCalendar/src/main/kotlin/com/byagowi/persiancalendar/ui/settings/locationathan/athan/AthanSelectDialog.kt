@@ -45,7 +45,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
         AthanNotification.invalidateChannel(context)
         // If no ringtone has been found better to skip touching preferences store
         val ringtone = RingtoneManager.getRingtone(context, uri.toUri()) ?: return@callback
-        val ringtoneTitle = ringtone.getTitle(context) ?: ""
+        val ringtoneTitle = ringtone.getTitle(context).orEmpty()
         context.preferences.edit {
             putString(PREF_ATHAN_NAME, ringtoneTitle)
             putString(PREF_ATHAN_URI, uri)

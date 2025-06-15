@@ -192,6 +192,6 @@ object Tithi {
     fun tithiName(timeMillis: Long): String {
         // Please note that (fixed-from-gregorian [2025 4 27]) => 739368
         val tee = 719_162 + timeMillis.toDouble() / 1.days.inWholeMilliseconds
-        return tithiNamesInNepali.getOrNull(hinduLunarDayFromMoment(tee) - 1) ?: ""
+        return tithiNamesInNepali.getOrNull(hinduLunarDayFromMoment(tee) - 1).orEmpty()
     }
 }

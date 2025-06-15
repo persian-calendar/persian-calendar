@@ -256,7 +256,7 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             closeMenu()
             context.getSystemService<StatusBarManager>()?.requestAddTileService(
                 ComponentName(
-                    context.packageName, PersianCalendarTileService::class.qualifiedName ?: "",
+                    context.packageName, PersianCalendarTileService::class.qualifiedName.orEmpty(),
                 ),
                 context.getString(R.string.app_name),
                 Icon.createWithResource(context, R.drawable.day19),

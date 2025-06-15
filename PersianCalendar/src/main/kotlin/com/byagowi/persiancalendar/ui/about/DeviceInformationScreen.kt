@@ -352,7 +352,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             Locale.ENGLISH, when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> activity.display?.refreshRate
                 else -> @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.refreshRate
-            } ?: ""
+            }?.toString().orEmpty()
         ),
     ),
     Item("DPI", activity.resources?.displayMetrics?.densityDpi?.toString()),
@@ -391,7 +391,7 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
             }?.joinToString("\n") else "",
     ),
     Item("App Standby Bucket", appStandbyStatus(activity)),
-    Item("Display Metrics", activity.resources?.displayMetrics?.toString() ?: ""),
+    Item("Display Metrics", activity.resources?.displayMetrics?.toString().orEmpty()),
     Item(
         "Display Cutout",
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) run {
@@ -447,12 +447,12 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
                     |Installer Package Name: ${
                         @Suppress("DEPRECATION") activity.packageManager?.getInstallerPackageName(
                             activity.packageName
-                        ) ?: ""
+                        )?.toString().orEmpty()
                     }
                     """.trimMargin("|").trim()
                 }
             } else @Suppress("DEPRECATION") run {
-                activity.packageManager?.getInstallerPackageName(activity.packageName) ?: ""
+                activity.packageManager?.getInstallerPackageName(activity.packageName).orEmpty()
             }
         }.onFailure(logException).getOrNull(),
     ),

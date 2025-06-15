@@ -352,7 +352,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToMap = { navController.navigate(mapRoute) },
                         initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
-                        destination = backStackEntry.arguments?.getString(settingsKey) ?: ""
+                        destination = backStackEntry.arguments?.getString(settingsKey).orEmpty()
                     )
                 }
 

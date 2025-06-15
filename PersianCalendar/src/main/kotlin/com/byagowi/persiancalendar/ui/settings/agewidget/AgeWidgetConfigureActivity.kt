@@ -136,7 +136,7 @@ private fun AgeWidgetConfigureContent(appWidgetId: Int, confirm: () -> Unit) {
 
                 val context = LocalContext.current
                 val initialTitle = remember {
-                    context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null) ?: ""
+                    context.preferences.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, null).orEmpty()
                 }
                 var text by rememberSaveable { mutableStateOf(initialTitle) }
                 OutlinedTextField(

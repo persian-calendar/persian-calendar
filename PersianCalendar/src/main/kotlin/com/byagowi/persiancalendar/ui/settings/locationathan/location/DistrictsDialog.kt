@@ -34,7 +34,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 @Composable
 fun ProvincesDialog(onDismissRequest: () -> Unit) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
-    if (province != null) return DistrictsDialog(province ?: "", onDismissRequest)
+    if (province != null) return DistrictsDialog(province.orEmpty(), onDismissRequest)
     AppDialogWithLazyColumn(
         title = { Text("انتخاب استان") },
         onDismissRequest = onDismissRequest,

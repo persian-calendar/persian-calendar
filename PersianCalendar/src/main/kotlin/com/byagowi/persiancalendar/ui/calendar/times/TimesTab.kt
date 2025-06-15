@@ -120,7 +120,7 @@ fun SharedTransitionScope.TimesTab(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (cityName != null) Text(
-                cityName ?: "", style = MaterialTheme.typography.bodyLarge
+                cityName.orEmpty(), style = MaterialTheme.typography.bodyLarge
             )
             ExpandArrow(
                 modifier = Modifier.size(20.dp),

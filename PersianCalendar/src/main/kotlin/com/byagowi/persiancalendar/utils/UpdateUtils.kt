@@ -224,7 +224,7 @@ fun update(context: Context, updateDate: Boolean) {
             append(prayTimes[it].toFormattedString())
             if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) cityName.value?.also { append(" ($it)") }
         }
-    } ?: ""
+    }.orEmpty()
     // endregion
 
     selectedWidgetTextColor = getWidgetTextColor(preferences)
@@ -352,7 +352,7 @@ fun createAgeRemoteViews(
 ): RemoteViews {
     val preferences = context.preferences
     val primary = preferences.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: today
-    val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
+    val title = preferences.getString(PREF_TITLE_AGE_WIDGET + widgetId, null).orEmpty()
     val subtitle = calculateDaysDifference(context.resources, primary, today, isInWidget = true)
     val textColor = getWidgetTextColor(preferences, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(

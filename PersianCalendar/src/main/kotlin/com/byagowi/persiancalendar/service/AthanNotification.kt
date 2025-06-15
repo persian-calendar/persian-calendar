@@ -105,7 +105,7 @@ class AthanNotification : Service() {
         val prayTimes = coordinates.value?.calculatePrayTimes()
         val isJafari = calculationMethod.value.isJafari
         val subtitle = prayTime.upcomingTimes(isJafari).joinToString(" - ") {
-            "${getString(it.stringRes)}: ${prayTimes?.get(it)?.toFormattedString() ?: ""}"
+            "${getString(it.stringRes)}: ${prayTimes?.get(it)?.toFormattedString().orEmpty()}"
         }
 
         val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)

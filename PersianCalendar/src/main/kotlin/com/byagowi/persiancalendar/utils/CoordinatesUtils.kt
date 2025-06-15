@@ -12,7 +12,7 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     val minutes = ((degree - degree.toInt()) * 60).toInt()
     val seconds = ((degree - degree.toInt()) * 3600 % 60).toInt()
     "%d°%02d′%02d″%s".format(Locale.US, degree.toInt(), minutes, seconds, direction)
-} + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
+} + alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) }.orEmpty()
 
 val Address.friendlyName: String?
     get() = listOf(locality, subAdminArea, adminArea).firstOrNull { !it.isNullOrBlank() }

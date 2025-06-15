@@ -37,7 +37,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
     val alarms = rememberSaveable(
         saver = listSaver(save = { it.toList() }, restore = { it.toMutableStateList() })
     ) {
-        (context.preferences.getString(PREF_ATHAN_ALARM, null) ?: "")
+        context.preferences.getString(PREF_ATHAN_ALARM, null).orEmpty()
             .splitFilterNotEmpty(",").mapNotNull(PrayTime::fromName).toMutableStateList()
     }
     AppDialog(
