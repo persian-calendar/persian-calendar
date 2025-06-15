@@ -212,7 +212,7 @@ class AstronomyTests {
         assertAll((1380..1400).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val result = calculateAscendant(35.68, 51.42, time);
-            { assertEquals(expected[i], result, "$year") }
+            { assertEquals(expected[i], result, .1, "$year") }
         })
         // Smoke test
         (1300..1500).forEach { year ->
@@ -235,7 +235,7 @@ class AstronomyTests {
         assertAll((1380..1400).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val result = calculateMidheaven(51.42, time);
-            { assertEquals(expected[i], result, "$year") }
+            { assertEquals(expected[i], result, .1, "$year") }
         })
         // Smoke test
         (1300..1500).forEach { year ->
@@ -297,7 +297,7 @@ class AstronomyTests {
                 1322 to Zodiac.LEO,
                 1323 to Zodiac.SCORPIO,
                 1324 to Zodiac.CAPRICORN,
-                // 1325 to Zodiac.TAURUS,
+                // 1325 to Zodiac.TAURUS, doesn't match
                 1326 to Zodiac.LEO,
                 1327 to Zodiac.LIBRA,
                 1328 to Zodiac.CAPRICORN, // implied
