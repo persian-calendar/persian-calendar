@@ -58,10 +58,9 @@ enum class Zodiac(
     fun format(
         resources: Resources,
         withEmoji: Boolean,
-        delim: String = " ",
         short: Boolean = false
     ) = buildString {
-        if (withEmoji) append("$emoji$delim")
+        if (withEmoji) append("$emoji ")
         val result = resources.getString(title)
         append(if (short) result.split(" (")[0] else result)
     }

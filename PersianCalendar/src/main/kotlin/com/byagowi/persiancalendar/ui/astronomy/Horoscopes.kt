@@ -211,10 +211,9 @@ private fun ColumnScope.AscendantZodiac(time: Time, coordinates: Coordinates, is
     val resources = LocalContext.current.resources
     EasternHoroscopePattern {
         val zodiac = Zodiac.entries[(it + ascendantZodiac.ordinal) % 12]
-        zodiac.format(
+        zodiac.emoji + "\n" + zodiac.format(
             resources,
-            delim = "\n",
-            withEmoji = true,
+            withEmoji = false,
             short = true,
         ) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             val title = formatNumber(formatAngle(longitude % 30))
