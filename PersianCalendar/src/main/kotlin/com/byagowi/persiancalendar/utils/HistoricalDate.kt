@@ -40,4 +40,4 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 // endregion
 
 fun formatAsRomanAndYazdegerdDate(jdn: Jdn): String =
-    formatAsRomanDate(jdn) + persianDelimiter + formatAsYazdegerdDate(jdn)
+    formatAsRomanDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn)
