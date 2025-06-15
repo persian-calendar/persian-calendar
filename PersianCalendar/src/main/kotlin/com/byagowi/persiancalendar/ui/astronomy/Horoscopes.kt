@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
@@ -180,12 +179,15 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
         EasternHoroscopePattern { items[it] }
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+        val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
         Text(
-            if (language.isUserAbleToReadPersian) "تهران، لحظهٔ تحویل سال" else "Tehran, March Equinox",
+            if (language.isUserAbleToReadPersian) {
+                "لحظهٔ تحویل سال " + formatNumber(persianYear) + " در تهران"
+            } else "Tehran, March equinox of " + formatNumber(gregorianYear),
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
-        val time = seasons(CivilDate(PersianDate(persianYear, 1, 1)).year).marchEquinox
+        val time = seasons(gregorianYear).marchEquinox
         // So the user would be able to verify it with the calendar book published
         val tehran = Coordinates(35.68, 51.42, 0.0)
         AscendantZodiac(time, tehran, isYearEquinox = true)

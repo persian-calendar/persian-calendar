@@ -279,7 +279,7 @@ class AstronomyTests {
                 1304 to Zodiac.ARIES,
                 1305 to Zodiac.CANCER,
                 1306 to Zodiac.LIBRA, // implied
-                // 1307 can't be implied even
+                1307 to Zodiac.SAGITTARIUS, // implied hardly
                 1308 to Zodiac.PISCES, // implied
                 1309 to Zodiac.CANCER,
                 1310 to Zodiac.VIRGO,
