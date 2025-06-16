@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -59,7 +60,9 @@ import kotlin.math.tan
 
 private fun formatAngle(value: Double): String {
     val degrees = floor(value)
-    return "%02d°:%02d’".format(degrees.toInt(), ((value - degrees) * 60).roundToInt())
+    return formatNumber(
+        "$LRM%02d°:%02d’$LRM".format(degrees.toInt(), ((value - degrees) * 60).roundToInt())
+    )
 }
 
 private fun longitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
@@ -114,12 +117,12 @@ private val easternHoroscopePositions = listOf(
 )
 
 @Composable
-private fun EasternHoroscopePattern(cellLabel: (Int) -> String) {
+private fun EasternHoroscopePattern(modifier: Modifier = Modifier, cellLabel: (Int) -> String) {
     val outline = MaterialTheme.colorScheme.outline
     val textDirection = LocalLayoutDirection.current
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         BoxWithConstraints(
-            Modifier
+            modifier
                 .fillMaxWidth()
                 .aspectRatio(1f),
         ) {
@@ -193,6 +196,12 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     }
 }
 
+//private val abdajs = listOf(
+//    "ا", "ب", "ج", "د", "ه", "و", "ز", "ح", "ط", "ی",
+//    "با", "بب", "بج", "بد", "به", "بو", "بز", "بح", "بط", "بی",
+//    "جا", "جب"
+//)
+
 @Composable
 private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
     val bodiesZodiac = bodies.filter {
@@ -208,7 +217,10 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(ascendant)
     val resources = LocalContext.current.resources
-    EasternHoroscopePattern { i ->
+//    var abjad by remember { mutableStateOf(false) }
+    EasternHoroscopePattern(
+//        Modifier.clickable { abjad = !abjad }
+    ) { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
         zodiac.emoji + "\n" + zodiac.format(
             resources,
@@ -216,10 +228,9 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             short = true,
         ) + (if (i == 0) {
             // We currently only have the first value of Placidus Houses
-            ": $LRM${formatNumber(formatAngle(ascendant % 30))}$LRM"
+            spacedColon + formatAngle(ascendant % 30)
         } else "") + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
-            val title = formatNumber(formatAngle(longitude % 30))
-            "${resources.getString(body.titleStringId)}: $LRM$title$LRM"
+            resources.getString(body.titleStringId) + spacedColon + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }
 }
