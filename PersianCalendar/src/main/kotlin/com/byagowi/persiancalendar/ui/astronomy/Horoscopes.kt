@@ -213,7 +213,8 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
         }
         val (longitude, _) = longitudeAndDistanceOfBody(body, time)
         body to longitude
-    }.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
+    }.sortedBy { (_, longitude) -> longitude }
+        .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
     val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(ascendant)
     val resources = LocalContext.current.resources
