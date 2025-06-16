@@ -184,7 +184,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         Text(
             if (language.isUserAbleToReadPersian) {
                 "لحظهٔ تحویل سال " + formatNumber(persianYear) + " شمسی در تهران"
-            } else "Tehran, March equinox of " + formatNumber(gregorianYear),
+            } else "Tehran, March equinox of " + formatNumber(gregorianYear) + " CE",
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
