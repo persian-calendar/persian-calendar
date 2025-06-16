@@ -4,7 +4,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
@@ -60,7 +59,7 @@ import kotlin.math.tan
 
 private fun formatAngle(value: Double): String {
     val degrees = floor(value)
-    return "${degrees.toInt()}°${((value - degrees) * 60).roundToInt()}’"
+    return "%02d°:%02d’".format(degrees.toInt(), ((value - degrees) * 60).roundToInt())
 }
 
 private fun longitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
@@ -195,7 +194,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 }
 
 @Composable
-private fun ColumnScope.AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
+private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
     val bodiesZodiac = bodies.filter {
         it != Body.Neptune && it != Body.Pluto // Not visible to naked eye
     }.map { body ->
@@ -215,15 +214,14 @@ private fun ColumnScope.AscendantZodiac(time: Time, coordinates: Coordinates, is
             resources,
             withEmoji = false,
             short = true,
-        ) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+        ) + (if (i == 0) {
+            // We currently only have the first value of Placidus Houses
+            "$LRM${formatNumber(formatAngle(ascendant % 30))}$LRM"
+        } else "") + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             val title = formatNumber(formatAngle(longitude % 30))
             "${resources.getString(body.titleStringId)}: $LRM$title$LRM"
         }?.let { "\n" + it }.orEmpty()
     }
-    Text(
-        "$LRM${ascendantZodiac.emoji} ${formatNumber(formatAngle(ascendant % 30))}$LRM",
-        modifier = Modifier.align(Alignment.CenterHorizontally),
-    )
 }
 
 // Extracted from not exposed calculations of astronomy library
