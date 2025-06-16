@@ -167,18 +167,17 @@ private fun EasternHoroscopePattern(cellLabel: (Int) -> String) {
 fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     val language by language.collectAsState()
     val resources = LocalContext.current.resources
-    val items = (0..<12).map {
-        val date = PersianDate(persianYear + it, 1, 1)
-        ChineseZodiac.fromPersianCalendar(date).format(
-            resources = resources,
-            withEmoji = true,
-            persianDate = date,
-            withOldEraName = language.isUserAbleToReadPersian,
-            separator = "\n",
-        )
-    }
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
-        EasternHoroscopePattern { items[it] }
+        EasternHoroscopePattern { i ->
+            val date = PersianDate(persianYear + i, 1, 1)
+            ChineseZodiac.fromPersianCalendar(date).format(
+                resources = resources,
+                withEmoji = true,
+                persianDate = date,
+                withOldEraName = language.isUserAbleToReadPersian,
+                separator = "\n",
+            )
+        }
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
         Text(
@@ -209,8 +208,8 @@ private fun ColumnScope.AscendantZodiac(time: Time, coordinates: Coordinates, is
     val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(ascendant)
     val resources = LocalContext.current.resources
-    EasternHoroscopePattern {
-        val zodiac = Zodiac.entries[(it + ascendantZodiac.ordinal) % 12]
+    EasternHoroscopePattern { i ->
+        val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
         zodiac.emoji + "\n" + zodiac.format(
             resources,
             withEmoji = false,
