@@ -18,6 +18,8 @@ private val romanMonths = listOf(
 @VisibleForTesting
 fun formatAsRomanDate(jdn: Jdn): String {
     val (julianYear, julianMonth, dayOfMonth) = julianFromJdn(jdn.value)
+    // This 311 matches https://en.wikipedia.org/wiki/Seleucid_era
+    // while one other source uses 321
     val year = julianYear + 311 + if (julianMonth > 9) 1 else 0
     val month = romanMonths[(julianMonth + 2) % 12]
     return "${formatNumber(dayOfMonth)} $month ${formatNumber(year)}"
