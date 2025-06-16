@@ -216,7 +216,7 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             short = true,
         ) + (if (i == 0) {
             // We currently only have the first value of Placidus Houses
-            "$LRM${formatNumber(formatAngle(ascendant % 30))}$LRM"
+            ": $LRM${formatNumber(formatAngle(ascendant % 30))}$LRM"
         } else "") + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             val title = formatNumber(formatAngle(longitude % 30))
             "${resources.getString(body.titleStringId)}: $LRM$title$LRM"
