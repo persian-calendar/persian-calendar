@@ -183,7 +183,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
         Text(
             if (language.isUserAbleToReadPersian) {
-                "لحظهٔ تحویل سال " + formatNumber(persianYear) + " در تهران"
+                "لحظهٔ تحویل سال " + formatNumber(persianYear) + " شمسی در تهران"
             } else "Tehran, March equinox of " + formatNumber(gregorianYear),
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
