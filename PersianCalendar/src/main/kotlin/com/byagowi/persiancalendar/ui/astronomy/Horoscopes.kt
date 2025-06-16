@@ -197,11 +197,12 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 @Composable
 private fun ColumnScope.AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
     val bodiesZodiac = bodies.filter {
-        // Sun has fixed place, no point on showing that for year zodiac
-        it != Body.Sun || !isYearEquinox
-    }.filter {
         it != Body.Neptune && it != Body.Pluto // Not visible to naked eye
     }.map { body ->
+        if (body == Body.Sun && isYearEquinox) {
+            // Sometimes 359.99 put it in a incorrect house so let's just hardcode it
+            return@map body to .0
+        }
         val (longitude, _) = longitudeAndDistanceOfBody(body, time)
         body to longitude
     }.groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
