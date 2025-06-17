@@ -216,7 +216,7 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     }.sortedBy { (_, longitude) -> longitude }
         .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
     val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
-    // val midheaven = calculateMidheaven(coordinates.longitude, time)
+    val midheaven = calculateMidheaven(coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(ascendant)
     val resources = LocalContext.current.resources
 //    var abjad by remember { mutableStateOf(false) }
@@ -231,11 +231,11 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
         ) + when (i + 1) {
             1 -> spacedColon + formatAngle(ascendant % 30)
             // Nadir or Imum Coeli (IC)
-            //4 -> spacedColon + formatAngle((midheaven + 180) % 30)
+            4 -> spacedColon + formatAngle((midheaven + 180) % 30)
             // Descendant
             7 -> spacedColon + formatAngle((ascendant + 180) % 30)
             // Midheaven equals the 10th house
-            //10 -> spacedColon + formatAngle(midheaven % 30)
+            10 -> spacedColon + formatAngle(midheaven % 30)
             else -> ""
         } + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + spacedColon + formatAngle(longitude % 30)
@@ -278,7 +278,7 @@ fun calculateMidheaven(longitude: Double, time: Time): Double {
     val localSiderealRadians = localSiderealTimeRadians(longitude, time)
     val eclipticObliquity = eclipticObliquity(time)
     val numerator = tan(localSiderealRadians)
-    val denominator = cos(Math.toRadians(eclipticObliquity))
+    val denominator = cos(eclipticObliquity)
     var midheavenDegrees = Math.toDegrees(atan(numerator / denominator))
 
     // Correcting the quadrant
