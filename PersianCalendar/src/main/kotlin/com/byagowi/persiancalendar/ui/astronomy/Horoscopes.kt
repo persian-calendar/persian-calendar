@@ -216,6 +216,7 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     }.sortedBy { (_, longitude) -> longitude }
         .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
     val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
+    // val midheaven = calculateMidheaven(coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(ascendant)
     val resources = LocalContext.current.resources
 //    var abjad by remember { mutableStateOf(false) }
@@ -227,10 +228,16 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             resources,
             withEmoji = false,
             short = true,
-        ) + (if (i == 0) {
-            // We currently only have the first value of Placidus Houses
-            spacedColon + formatAngle(ascendant % 30)
-        } else "") + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+        ) + when (i + 1) {
+            1 -> spacedColon + formatAngle(ascendant % 30)
+            // Nadir or Imum Coeli (IC)
+            //4 -> spacedColon + formatAngle((midheaven + 180) % 30)
+            // Descendant
+            7 -> spacedColon + formatAngle((ascendant + 180) % 30)
+            // Midheaven equals the 10th house
+            //10 -> spacedColon + formatAngle(midheaven % 30)
+            else -> ""
+        } + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + spacedColon + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }
