@@ -28,7 +28,6 @@ persiancalendar-calculator = "13a660cb0e5a5943ec7c496f4ff4c2c4631f9fcf"
 persiancalendar-calendar = "f916a852ca9d48c917768693a127ece5347e8629"
 persiancalendar-praytimes = "135f0698f30bd05ee6b012452ebbe5b88922fa0f"
 persiancalendar-qr = "4ef9d44178046f8704edbc8964fca968f75b08d5"
-truth = "1.4.4"
 work-manager = "2.10.1"
 watchface-complications-data-source-ktx = "1.2.1"
 wear-compose = "1.4.1"
@@ -83,7 +82,6 @@ persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", versi
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
-truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
 wear-glance-tiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "wear-glance-tiles" }
 wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
