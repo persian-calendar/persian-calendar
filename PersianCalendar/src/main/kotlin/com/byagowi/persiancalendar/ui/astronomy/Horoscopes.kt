@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -97,7 +98,9 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
             modifier = Modifier.padding(SettingsHorizontalPaddingItem.dp),
         )
         val coordinates by coordinates.collectAsState()
-        coordinates?.let { AscendantZodiac(time, it, isYearEquinox = false) }
+        coordinates?.let {
+            if (!it.isHighLatitude) AscendantZodiac(time, it, isYearEquinox = false)
+        }
     }
 }
 

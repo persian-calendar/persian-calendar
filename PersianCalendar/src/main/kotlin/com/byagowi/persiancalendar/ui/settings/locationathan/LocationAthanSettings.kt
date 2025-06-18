@@ -75,7 +75,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocatio
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
-import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
+import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.praytimes.AsrMethod
@@ -122,7 +122,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             title = stringResource(R.string.pray_methods)
         )
     }
-    this.AnimatedVisibility(coordinates?.enableHighLatitudesConfiguration == true) {
+    this.AnimatedVisibility(coordinates?.isHighLatitude == true) {
         SettingsSingleSelect(
             PREF_HIGH_LATITUDES_METHOD,
             HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },

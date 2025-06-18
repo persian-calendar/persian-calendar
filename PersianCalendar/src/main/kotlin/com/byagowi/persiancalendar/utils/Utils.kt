@@ -79,7 +79,9 @@ val CalculationMethod.titleStringId
 
 // Midnight sun occurs at latitudes from 65°44' to 90° north or south as
 // https://en.wikipedia.org/wiki/Midnight_sun
-val Coordinates.enableHighLatitudesConfiguration: Boolean get() = abs(latitude) > 50
+// Additionally such latitudes aren't useful for placidus house system perhaps for the same reason
+// "[..] a latitude exceeding 66°N or 66°S [..] not be able to calculate [..] using the Placidus house system."
+val Coordinates.isHighLatitude: Boolean get() = abs(latitude) > 65
 
 val HighLatitudesMethod.titleStringId
     @StringRes
