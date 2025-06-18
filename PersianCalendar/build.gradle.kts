@@ -153,8 +153,6 @@ dependencies {
 
     testImplementation(libs.bundles.mockito)
 
-    testImplementation(libs.truth)
-
     androidTestImplementation(libs.test.runner)
     androidTestImplementation(libs.test.rules)
     androidTestImplementation(libs.test.core.ktx)
