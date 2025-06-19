@@ -4,10 +4,9 @@ import android.icu.util.ChineseCalendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
+import com.byagowi.persiancalendar.ui.astronomy.Houses
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
-import com.byagowi.persiancalendar.ui.astronomy.calculateAscendant
-import com.byagowi.persiancalendar.ui.astronomy.calculateMidheaven
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -201,7 +200,7 @@ class AstronomyTests {
 
     @Test
     fun `Ascendant correctness`() {
-        val expected = listOf(
+        val ascendants = listOf(
             165.29847801886166, 236.29668499183026, 321.797191638284,
             80.34263360923649, 153.48105769394334, 225.9653124106477,
             304.6980552072615, 64.62545992403068, 143.33024864679658,
@@ -217,21 +216,7 @@ class AstronomyTests {
             80.71131124720335, 154.8804221204217, 227.34730063093093,
             305.90002157601714, 69.70791148916334
         )
-        assertAll((1380..1420).mapIndexed { i, year ->
-            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            val result = calculateAscendant(35.68, 51.42, time);
-            { assertEquals(expected[i], result, 1.0e-5, "$year") }
-        })
-        // Smoke test
-        (1300..1500).forEach { year ->
-            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            calculateAscendant(35.68, 51.42, time)
-        }
-    }
-
-    @Test
-    fun `Midheaven correctness`() {
-        val expected = listOf(
+        val midheavens = listOf(
             73.6674692915762, 156.8359554622392, 246.5253026081649,
             329.55822788765704, 60.13096053952552, 143.5468865952335,
             233.8099812381863, 314.14168287940015, 48.0104581652713,
@@ -249,13 +234,16 @@ class AstronomyTests {
         )
         assertAll((1380..1420).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            val result = calculateMidheaven(51.42, time);
-            { assertEquals(expected[i], result, 1.0e-5, "$year") }
+            val houses = Houses(35.68, 51.42, time);
+            {
+                assertEquals(ascendants[i], houses.ascendant, 1.0e-5, "$year")
+                assertEquals(midheavens[i], houses.midheaven, 1.0e-5, "$year")
+            }
         })
         // Smoke test
         (1300..1500).forEach { year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            calculateMidheaven(51.42, time)
+            Houses(35.68, 51.42, time)
         }
     }
 
@@ -324,7 +312,7 @@ class AstronomyTests {
                 1404 to Zodiac.CANCER
             ).map { (year, sign) ->
                 val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-                val ascendant = calculateAscendant(35.68, 51.42, time);
+                val ascendant = Houses(35.68, 51.42, time).ascendant;
                 { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
             }
         )

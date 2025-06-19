@@ -220,9 +220,8 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
         body to longitude
     }.sortedBy { (_, longitude) -> longitude }
         .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
-    val ascendant = calculateAscendant(coordinates.latitude, coordinates.longitude, time)
-    val midheaven = calculateMidheaven(coordinates.longitude, time)
-    val ascendantZodiac = Zodiac.fromTropical(ascendant)
+    val houses = Houses(coordinates.latitude, coordinates.longitude, time)
+    val ascendantZodiac = Zodiac.fromTropical(houses.ascendant)
     val resources = LocalContext.current.resources
 //    var abjad by remember { mutableStateOf(false) }
     EasternHoroscopePattern(
@@ -234,13 +233,10 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             withEmoji = false,
             short = true,
         ) + when (i + 1) {
-            1 -> spacedColon + formatAngle(ascendant % 30)
-            // Nadir or Imum Coeli (IC)
-            4 -> spacedColon + formatAngle((midheaven + 180) % 30)
-            // Descendant
-            7 -> spacedColon + formatAngle((ascendant + 180) % 30)
-            // Midheaven equals the 10th house
-            10 -> spacedColon + formatAngle(midheaven % 30)
+            1 -> spacedColon + formatAngle(houses.ascendant % 30)
+            4 -> spacedColon + formatAngle(houses.ic % 30)
+            7 -> spacedColon + formatAngle(houses.descendant % 30)
+            10 -> spacedColon + formatAngle(houses.midheaven % 30)
             else -> ""
         } + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + spacedColon + formatAngle(longitude % 30)
@@ -250,34 +246,35 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
 
 // As https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
 @VisibleForTesting
-fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double {
-    val localSiderealRadians = localSiderealTimeRadians(longitude, time)
-    val (_, eclipticObliquityCos, eclipticObliquitySin) = rotationEctEqd(time).rot[1]
-    val x = sin(localSiderealRadians) * eclipticObliquityCos +
-            tan(Math.toRadians(latitude)) * eclipticObliquitySin
-    val y = -cos(localSiderealRadians)
-    val celestialLongitudeRadians = atan2(y, x)
-    return (Math.toDegrees(celestialLongitudeRadians) + 180 + 360) % 360
-}
+class Houses(latitude: Double, longitude: Double, time: Time) {
+    private fun hoursToDegrees(hours: Double) = hours * 15
+    private fun degreesToHours(degrees: Double) = degrees / 15
+    private val localSiderealRadians = run {
+        val greenwichSiderealTime = siderealTime(time)
+        val localSiderealTime = greenwichSiderealTime + degreesToHours(longitude)
+        val localSiderealDegrees = hoursToDegrees(localSiderealTime)
+        Math.toRadians((localSiderealDegrees + 360) % 360)
+    }
+    private val rotationMatrix = rotationEctEqd(time).rot
+    private val eclipticObliquityCos = rotationMatrix[1][1]
+    private val eclipticObliquitySin = rotationMatrix[1][2]
+    val descendant = run {
+        val x = sin(localSiderealRadians) * eclipticObliquityCos +
+                tan(Math.toRadians(latitude)) * eclipticObliquitySin
+        val y = -cos(localSiderealRadians)
+        val celestialLongitudeRadians = atan2(y, x)
+        (Math.toDegrees(celestialLongitudeRadians) + 360) % 360
+    }
+    val ascendant = (descendant + 180) % 360
+    val midheaven = run {
+        val numerator = tan(localSiderealRadians)
+        var midheavenDegrees = Math.toDegrees(atan2(numerator, eclipticObliquityCos))
+        // Correcting the quadrant
+        if (midheavenDegrees < 0) midheavenDegrees += 180
+        if (midheavenDegrees < 180 && localSiderealRadians >= PI) midheavenDegrees += 180
+        (midheavenDegrees + 360) % 360
+    }
 
-@VisibleForTesting
-fun calculateMidheaven(longitude: Double, time: Time): Double {
-    val localSiderealRadians = localSiderealTimeRadians(longitude, time)
-    val (_, eclipticObliquityCos, _) = rotationEctEqd(time).rot[1]
-    val numerator = tan(localSiderealRadians)
-    var midheavenDegrees = Math.toDegrees(atan2(numerator, eclipticObliquityCos))
-    // Correcting the quadrant
-    if (midheavenDegrees < 0) midheavenDegrees += 180
-    if (midheavenDegrees < 180 && localSiderealRadians >= PI) midheavenDegrees += 180
-    return (midheavenDegrees + 360) % 360
-}
-
-private fun hoursToDegrees(hours: Double) = hours * 15
-private fun degreesToHours(degrees: Double) = degrees / 15
-
-private fun localSiderealTimeRadians(longitude: Double, time: Time): Double {
-    val greenwichSiderealTime = siderealTime(time)
-    val localSiderealTime = greenwichSiderealTime + degreesToHours(longitude)
-    val localSiderealDegrees = hoursToDegrees(localSiderealTime)
-    return Math.toRadians((localSiderealDegrees + 360) % 360)
+    // Nadir or Imum Coeli (IC)
+    val ic = (midheaven + 180) % 360
 }
