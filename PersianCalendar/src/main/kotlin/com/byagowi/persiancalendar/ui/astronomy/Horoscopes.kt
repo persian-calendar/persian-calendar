@@ -43,6 +43,7 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.rotationEctEqd
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.siderealTime
 import io.github.cosinekitty.astronomy.sunPosition
@@ -51,7 +52,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
 import java.util.Locale
-import kotlin.math.atan
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
@@ -247,26 +247,13 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     }
 }
 
-// Extracted from not exposed calculations of astronomy library
-private fun eclipticObliquity(time: Time): Double {
-    val t = time.tt / 36525.0
-    val asec = ((((-0.0000000434 * t
-            - 0.000000576) * t
-            + 0.00200340) * t
-            - 0.0001831) * t
-            - 46.836769) * t + 84381.406
-    val mobl = asec / 3600
-    val tobl = mobl + (time.nutationEps() / 3600)
-    return Math.toRadians(tobl)
-}
-
 // As https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
 @VisibleForTesting
 fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double {
     val localSiderealRadians = localSiderealTimeRadians(longitude, time)
-    val eclipticObliquity = eclipticObliquity(time)
-    val x = sin(localSiderealRadians) * cos(eclipticObliquity) +
-            tan(Math.toRadians(latitude)) * sin(eclipticObliquity)
+    val (_, eclipticObliquityCos, eclipticObliquitySin) = rotationEctEqd(time).rot[1]
+    val x = sin(localSiderealRadians) * eclipticObliquityCos +
+            tan(Math.toRadians(latitude)) * eclipticObliquitySin
     val y = -cos(localSiderealRadians)
     val celestialLongitudeRadians = atan2(y, x)
     return (Math.toDegrees(celestialLongitudeRadians) + 180 + 360) % 360
@@ -275,9 +262,8 @@ fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double 
 @VisibleForTesting
 fun calculateMidheaven(longitude: Double, time: Time): Double {
     val localSiderealRadians = localSiderealTimeRadians(longitude, time)
-    val eclipticObliquity = eclipticObliquity(time)
     val numerator = tan(localSiderealRadians)
-    val denominator = cos(eclipticObliquity)
+    val denominator = cos(rotationEctEqd(time).rot[1][1])
     return (Math.toDegrees(atan2(numerator, denominator)) + 360) % 360
 }
 
