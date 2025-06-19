@@ -52,6 +52,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
 import java.util.Locale
 import kotlin.math.atan
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -266,14 +267,9 @@ fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double 
     val eclipticObliquity = eclipticObliquity(time)
     val x = sin(localSiderealRadians) * cos(eclipticObliquity) +
             tan(Math.toRadians(latitude)) * sin(eclipticObliquity)
-    val y = -1 * cos(localSiderealRadians)
-    val celestialLongitudeRadians = atan(y / x)
-    var ascendantDegrees = Math.toDegrees(celestialLongitudeRadians)
-
-    // Correcting the quadrant
-    ascendantDegrees += if (x < 0) 180.0 else 360.0
-    if (ascendantDegrees < 180.0) ascendantDegrees += 180.0 else ascendantDegrees -= 180.0
-    return ascendantDegrees
+    val y = -cos(localSiderealRadians)
+    val celestialLongitudeRadians = atan2(y, x)
+    return (Math.toDegrees(celestialLongitudeRadians) + 180 + 360) % 360
 }
 
 @VisibleForTesting
@@ -282,16 +278,7 @@ fun calculateMidheaven(longitude: Double, time: Time): Double {
     val eclipticObliquity = eclipticObliquity(time)
     val numerator = tan(localSiderealRadians)
     val denominator = cos(eclipticObliquity)
-    var midheavenDegrees = Math.toDegrees(atan(numerator / denominator))
-
-    // Correcting the quadrant
-    if (midheavenDegrees < 0) midheavenDegrees += 360
-    val localSiderealDegrees = Math.toDegrees(localSiderealRadians)
-    if (midheavenDegrees > localSiderealDegrees) midheavenDegrees -= 180
-    if (midheavenDegrees < 0) midheavenDegrees += 180
-    if (midheavenDegrees < 180 && localSiderealDegrees >= 180) midheavenDegrees += 180
-    midheavenDegrees = (midheavenDegrees + 360) % 360
-    return midheavenDegrees
+    return (Math.toDegrees(atan2(numerator, denominator)) + 360) % 360
 }
 
 private fun hoursToDegrees(hours: Double) = hours * 15
@@ -300,8 +287,6 @@ private fun degreesToHours(degrees: Double) = degrees / 15
 private fun localSiderealTimeRadians(longitude: Double, time: Time): Double {
     val greenwichSiderealTime = siderealTime(time)
     val localSiderealTime = greenwichSiderealTime + degreesToHours(longitude)
-    var localSiderealDegrees = hoursToDegrees(localSiderealTime)
-    localSiderealDegrees = (localSiderealDegrees + 360) % 360
-    val localSiderealRadians = Math.toRadians(localSiderealDegrees)
-    return localSiderealRadians
+    val localSiderealDegrees = hoursToDegrees(localSiderealTime)
+    return Math.toRadians((localSiderealDegrees + 360) % 360)
 }
