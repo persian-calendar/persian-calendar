@@ -263,7 +263,7 @@ fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double 
 fun calculateMidheaven(longitude: Double, time: Time): Double {
     val localSiderealRadians = localSiderealTimeRadians(longitude, time)
     val numerator = tan(localSiderealRadians)
-    val denominator = cos(rotationEctEqd(time).rot[1][1])
+    val denominator = rotationEctEqd(time).rot[1][1]
     return (Math.toDegrees(atan2(numerator, denominator)) + 360) % 360
 }
 
