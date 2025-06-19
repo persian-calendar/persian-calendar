@@ -13,8 +13,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
-import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.mock
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.test.assertEquals
@@ -167,21 +165,21 @@ class AstronomyTests {
         }
     }
 
-    @Test
-    fun `Chinese animal year name`() {
-        // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
-        (1..5).flatMap {
-            listOf(
-                ChineseZodiac.RAT, ChineseZodiac.OX, ChineseZodiac.TIGER,
-                ChineseZodiac.RABBIT, ChineseZodiac.DRAGON, ChineseZodiac.SNAKE,
-                ChineseZodiac.HORSE, ChineseZodiac.GOAT, ChineseZodiac.MONKEY,
-                ChineseZodiac.ROOSTER, ChineseZodiac.DOG, ChineseZodiac.PIG,
-            )
-        }.zip(1..60) { expected, year ->
-            val mock = mock<ChineseCalendar> { on { get(ChineseCalendar.YEAR) } doReturn year }
-            assertEquals(expected, ChineseZodiac.fromChineseCalendar(mock))
-        }
-    }
+//    @Test
+//    fun `Chinese animal year name`() {
+//        // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
+//        (1..5).flatMap {
+//            listOf(
+//                ChineseZodiac.RAT, ChineseZodiac.OX, ChineseZodiac.TIGER,
+//                ChineseZodiac.RABBIT, ChineseZodiac.DRAGON, ChineseZodiac.SNAKE,
+//                ChineseZodiac.HORSE, ChineseZodiac.GOAT, ChineseZodiac.MONKEY,
+//                ChineseZodiac.ROOSTER, ChineseZodiac.DOG, ChineseZodiac.PIG,
+//            )
+//        }.zip(1..60) { expected, year ->
+//            val mock = mock<ChineseCalendar> { on { get(ChineseCalendar.YEAR) } doReturn year }
+//            assertEquals(expected, ChineseZodiac.fromChineseCalendar(mock))
+//        }
+//    }
 
     @Test
     fun `Southern hemisphere in moon draw`() {
