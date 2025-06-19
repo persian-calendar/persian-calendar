@@ -217,7 +217,7 @@ class AstronomyTests {
             80.71131124720335, 154.8804221204217, 227.34730063093093,
             305.90002157601714, 69.70791148916334
         )
-        assertAll((1380..1400).mapIndexed { i, year ->
+        assertAll((1380..1420).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val result = calculateAscendant(35.68, 51.42, time);
             { assertEquals(expected[i], result, 1.0e-5, "$year") }
@@ -247,11 +247,11 @@ class AstronomyTests {
             329.96107258615484, 61.762612284235615, 145.29968044985748,
             234.77117761711645, 318.8433129667867
         )
-        (1380..1400).mapIndexed { i, year ->
+        assertAll((1380..1420).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val result = calculateMidheaven(51.42, time);
             { assertEquals(expected[i], result, 1.0e-5, "$year") }
-        }
+        })
         // Smoke test
         (1300..1500).forEach { year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox

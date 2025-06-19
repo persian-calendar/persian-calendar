@@ -52,6 +52,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
 import java.util.Locale
+import kotlin.math.atan
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
@@ -262,9 +263,17 @@ fun calculateAscendant(latitude: Double, longitude: Double, time: Time): Double 
 @VisibleForTesting
 fun calculateMidheaven(longitude: Double, time: Time): Double {
     val localSiderealRadians = localSiderealTimeRadians(longitude, time)
+    val (_, eclipticObliquityCos, _) = rotationEctEqd(time).rot[1]
     val numerator = tan(localSiderealRadians)
-    val denominator = rotationEctEqd(time).rot[1][1]
-    return (Math.toDegrees(atan2(numerator, denominator)) + 360) % 360
+    var midheavenDegrees = Math.toDegrees(atan(numerator / eclipticObliquityCos))
+    // Correcting the quadrant
+    if (midheavenDegrees < 0) midheavenDegrees += 360
+    val localSiderealDegrees = Math.toDegrees(localSiderealRadians)
+    if (midheavenDegrees > localSiderealDegrees) midheavenDegrees -= 180
+    if (midheavenDegrees < 0) midheavenDegrees += 180
+    if (midheavenDegrees < 180 && localSiderealDegrees >= 180) midheavenDegrees += 180
+    midheavenDegrees = (midheavenDegrees + 360) % 360
+    return midheavenDegrees
 }
 
 private fun hoursToDegrees(hours: Double) = hours * 15
