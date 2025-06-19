@@ -5,7 +5,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
-import com.byagowi.persiancalendar.utils.formatAsRomanDate
+import com.byagowi.persiancalendar.utils.formatAsSeleucidDate
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.jalaliName
 import com.byagowi.persiancalendar.utils.persianDayOfYear
@@ -195,12 +195,12 @@ class CalendarTests {
                 message = "${date.year}/${date.month}/${date.dayOfMonth}" + " " + name
             )
             jalaliName(jdn.toPersianDate(), dayOfYear)
-            formatAsRomanDate(jdn)
+            formatAsSeleucidDate(jdn)
         }
     }
 
     @Test
-    fun `roman date format`() {
+    fun `seleucid date format`() {
         assertAll(
             listOf(
                 PersianDate(1404, 1, 1) to "۸ آذر ۲۳۳۶",
@@ -229,7 +229,7 @@ class CalendarTests {
                 PersianDate(1404, 11, 30) to "۶ شباط ۲۳۳۷",
                 PersianDate(1404, 12, 15) to "۲۱ شباط ۲۳۳۷",
             ).map { (persianDate, expected) ->
-                { assertEquals(expected, formatAsRomanDate(Jdn(persianDate))) }
+                { assertEquals(expected, formatAsSeleucidDate(Jdn(persianDate))) }
             }
         )
     }

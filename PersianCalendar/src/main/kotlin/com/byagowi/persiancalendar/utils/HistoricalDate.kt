@@ -4,24 +4,24 @@ import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.Jdn
 import io.github.persiancalendar.calendar.util.julianFromJdn
 
-// region Roman
+// region Seleucid
 // The month names come from https://w.wiki/ENrQ ماه‌های آسوری
 // ابونصر فراهی در کتاب نصاب الصبیان اسامی ماه‌های رومی:
 //  دو تشرین و دو کانون و پس آنگه - شباط و آذر و نیسان، ایار است
 //  حزیران و تموز و آب و ایلول - نگه دارش که از من یادگار است
-private val romanMonths = listOf(
+private val seleucidMonths = listOf(
     "تشرین اول", "تشرین آخر", "کانون اول", "کانون آخر", "شباط", "آذر",
     "نیسان", "ایار", "حزیران", "تموز", "آب", "ایلول",
 )
 
 // It's called رومی or اسکندری رومی by the different sources
 @VisibleForTesting
-fun formatAsRomanDate(jdn: Jdn): String {
+fun formatAsSeleucidDate(jdn: Jdn): String {
     val (julianYear, julianMonth, dayOfMonth) = julianFromJdn(jdn.value)
     // This 311 matches https://en.wikipedia.org/wiki/Seleucid_era
     // while one other source uses 321
     val year = julianYear + 311 + if (julianMonth > 9) 1 else 0
-    val month = romanMonths[(julianMonth + 2) % 12]
+    val month = seleucidMonths[(julianMonth + 2) % 12]
     return "${formatNumber(dayOfMonth)} $month ${formatNumber(year)}"
 }
 // endregion
@@ -41,5 +41,5 @@ fun formatAsYazdegerdDate(jdn: Jdn): String {
 }
 // endregion
 
-fun formatAsRomanAndYazdegerdDate(jdn: Jdn): String =
-    formatAsRomanDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn)
+fun formatAsSeleucidAndYazdegerdDate(jdn: Jdn): String =
+    formatAsSeleucidDate(jdn) + " رومی" + persianDelimiter + formatAsYazdegerdDate(jdn)
