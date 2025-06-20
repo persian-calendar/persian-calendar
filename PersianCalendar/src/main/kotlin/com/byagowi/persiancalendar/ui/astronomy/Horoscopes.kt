@@ -202,7 +202,8 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 @Composable
 private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
     val bodiesZodiac = bodies.filter {
-        it != Body.Neptune && it != Body.Pluto // Not visible to naked eye
+        it != Body.Neptune && it != Body.Pluto && // Not visible to naked eye
+                it != Body.Uranus // Also not usually shown on such chart
     }.map { body ->
         if (body == Body.Sun && isYearEquinox) {
             // Sometimes 359.99 put it in a incorrect house so let's just hardcode it
