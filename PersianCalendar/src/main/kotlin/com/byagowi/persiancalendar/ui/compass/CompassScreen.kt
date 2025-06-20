@@ -73,8 +73,11 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_LEVEL
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_STOP
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -246,6 +249,36 @@ fun SharedTransitionScope.CompassScreen(
                                     compassView?.angle = it.animatedFraction * 360
                                 }
                                 if (Random.nextBoolean()) animator.start() else animator.reverse()
+                            }
+                        }
+                        val language by language.collectAsState()
+                        if (isAstronomicalExtraFeaturesEnabled && language.isPersian) {
+                            var title by remember { mutableStateOf("مربوره/مذکوره") }
+                            AppDropdownMenuItem({ Text(title) }) {
+                                val dayOfMonth = Jdn.today().toIslamicDate().dayOfMonth
+                                title = "مربوره: " + when (dayOfMonth) {
+                                    1, 9, 17, 25 -> "شرق"
+                                    2, 10, 18, 26 -> "شمال شرق"
+                                    3, 11, 19, 27 -> "شمال"
+                                    4, 12, 20, 28 -> "شمال غرب"
+                                    5, 13, 21, 29 -> "غرب"
+                                    6, 14, 22, 30 -> "جنوب غرب"
+                                    7, 15, 23 -> "جنوب"
+                                    8, 16, 24 -> "جنوب شرق"
+                                    else -> ""
+                                } + "\nمذکوره: " + when (dayOfMonth) {
+                                    1, 11, 21 -> "شرق"
+                                    2, 12, 22 -> "جنوب شرق"
+                                    3, 13, 23 -> "جنوب"
+                                    4, 14, 24 -> "جنوب غرب"
+                                    5, 15, 25 -> "غرب"
+                                    6, 16, 26 -> "شمال غرب"
+                                    7, 17, 27 -> "شمال"
+                                    8, 18, 28 -> "شمال شرق"
+                                    9, 19, 29 -> "تحت الارض"
+                                    10, 20, 30 -> "فوق الارض"
+                                    else -> ""
+                                }
                             }
                         }
                     }
