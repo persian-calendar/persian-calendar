@@ -134,7 +134,6 @@ fun SharedTransitionScope.CompassScreen(
             isTimeShiftAnimate = false
         }
     }
-    val cityName by cityName.collectAsState()
     val coordinates by coordinates.collectAsState()
     val sliderValue = if (isTimeShiftAnimate) timeShiftAnimate else timeShift
     val isSliderShown = sliderValue != 0f
@@ -185,6 +184,7 @@ fun SharedTransitionScope.CompassScreen(
                                 R.string.compass
                             )
                         )
+                        val cityName by cityName.collectAsState()
                         val subtitle = cityName ?: coordinates?.run {
                             formatCoordinateISO6709(
                                 latitude,
@@ -223,7 +223,7 @@ fun SharedTransitionScope.CompassScreen(
                             context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
                         )
                     }
-                    if (cityName != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu(
+                    if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu(
                         animatedContentScope
                     ) { closeMenu ->
                         AppDropdownMenuCheckableItem(
@@ -238,18 +238,6 @@ fun SharedTransitionScope.CompassScreen(
                             closeMenu()
                             compassView?.isShowQibla = it
                             context.preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
-                        }
-                        if (BuildConfig.DEVELOPMENT) {
-                            AppDropdownMenuItem({ Text("Do a rotation") }) {
-                                closeMenu()
-                                // Ugly, but is test only
-                                val animator = ValueAnimator.ofFloat(0f, 1f)
-                                animator.duration = 10.seconds.inWholeMilliseconds
-                                animator.addUpdateListener {
-                                    compassView?.angle = it.animatedFraction * 360
-                                }
-                                if (Random.nextBoolean()) animator.start() else animator.reverse()
-                            }
                         }
                         val language by language.collectAsState()
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersian) {
@@ -279,6 +267,18 @@ fun SharedTransitionScope.CompassScreen(
                                     10, 20, 30 -> "فوق الارض"
                                     else -> ""
                                 }
+                            }
+                        }
+                        if (BuildConfig.DEVELOPMENT) {
+                            AppDropdownMenuItem({ Text("Do a rotation") }) {
+                                closeMenu()
+                                // Ugly, but is test only
+                                val animator = ValueAnimator.ofFloat(0f, 1f)
+                                animator.duration = 10.seconds.inWholeMilliseconds
+                                animator.addUpdateListener {
+                                    compassView?.angle = it.animatedFraction * 360
+                                }
+                                if (Random.nextBoolean()) animator.start() else animator.reverse()
                             }
                         }
                     }
