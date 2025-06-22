@@ -86,6 +86,8 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -169,16 +171,25 @@ fun SharedTransitionScope.AstronomyScreen(
                         )
                     }
 
+                    val astronomyState by viewModel.astronomyState.collectAsState()
+
                     var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-                    if (showHoroscopeDialog) {
-                        val astronomyState by viewModel.astronomyState.collectAsState()
-                        HoroscopeDialog(astronomyState.date.time) { showHoroscopeDialog = false }
+                    if (showHoroscopeDialog) HoroscopeDialog(astronomyState.date.time) {
+                        showHoroscopeDialog = false
                     }
                     var showYearHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
                     if (showYearHoroscopeDialog) {
-                        val astronomyState by viewModel.astronomyState.collectAsState()
                         YearHoroscopeDialog(PersianDate(astronomyState.date.toCivilDate()).year) {
                             showYearHoroscopeDialog = false
+                        }
+                    }
+
+                    val language by language.collectAsState()
+                    val coordinates by coordinates.collectAsState()
+                    var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
+                    if (showPlanetaryHoursDialog) coordinates?.also {
+                        PlanetaryHoursDialog(it, astronomyState.date.timeInMillis) {
+                            showPlanetaryHoursDialog = false
                         }
                     }
 
@@ -203,6 +214,12 @@ fun SharedTransitionScope.AstronomyScreen(
                         }) {
                             showYearHoroscopeDialog = true
                             closeMenu()
+                        }
+                        if (isAstronomicalExtraFeaturesEnabled && coordinates != null && language.isPersian) {
+                            AppDropdownMenuItem({ Text("اوقات فلکی") }) {
+                                showPlanetaryHoursDialog = true
+                                closeMenu()
+                            }
                         }
                     }
                 },
