@@ -216,7 +216,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             closeMenu()
                         }
                         if (isAstronomicalExtraFeaturesEnabled && coordinates != null && language.isPersian) {
-                            AppDropdownMenuItem({ Text("اوقات فلکی") }) {
+                            AppDropdownMenuItem({ Text("ساعات کواکب") }) {
                                 showPlanetaryHoursDialog = true
                                 closeMenu()
                             }
