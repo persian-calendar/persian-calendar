@@ -80,7 +80,7 @@ private fun getDaySplits(
             val prayTimes = coordinates.calculatePrayTimes(day)
             listOf(prayTimes.sunrise + i * 24, prayTimes.sunset + i * 24)
         }
-        val currentDayIndex = times.indexOfFirst { (sunset) -> nowClock.value < sunset } - 1
+        val currentDayIndex = times.indexOfFirst { (sunrise) -> nowClock.value < sunrise } - 1
         times.flatten().reduceIndexed { i, previous, clock ->
             val dayIndex = (i - 1) / 2
             val isDay = i % 2 == 1
