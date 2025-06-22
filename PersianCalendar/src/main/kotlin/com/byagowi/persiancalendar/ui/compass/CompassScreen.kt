@@ -9,8 +9,10 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -241,10 +243,15 @@ fun SharedTransitionScope.CompassScreen(
                         }
                         val language by language.collectAsState()
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersian) {
-                            var title by remember { mutableStateOf("مربوره/مذکوره") }
-                            AppDropdownMenuItem({ Text(title) }) {
+                            var title by remember { mutableStateOf<String?>(null) }
+                            AppDropdownMenuItem({
+                                Crossfade(
+                                    title ?: "مربوره/مذکوره",
+                                    Modifier.animateContentSize(),
+                                ) { Text(it) }
+                            }) {
                                 val dayOfMonth = Jdn.today().toIslamicDate().dayOfMonth
-                                title = "مربوره: " + when (dayOfMonth) {
+                                title = if (title == null) "مربوره: " + when (dayOfMonth) {
                                     1, 9, 17, 25 -> "شرق"
                                     2, 10, 18, 26 -> "شمال شرق"
                                     3, 11, 19, 27 -> "شمال"
@@ -266,7 +273,7 @@ fun SharedTransitionScope.CompassScreen(
                                     9, 19, 29 -> "تحت الارض"
                                     10, 20, 30 -> "فوق الارض"
                                     else -> ""
-                                }
+                                } else null
                             }
                         }
                         if (BuildConfig.DEVELOPMENT) {
