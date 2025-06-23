@@ -26,15 +26,16 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.variants.debugLog
 import io.github.cosinekitty.astronomy.Body
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 
-class Planet(val body: Body, val en: String, val fa: String)
+@VisibleForTesting
+data class Planet(val body: Body, val en: String, val fa: String)
 
 // https://en.wikipedia.org/wiki/Planetary_hours
-@VisibleForTesting
 private val chaldeanOrder = listOf(
     Planet(Body.Saturn, en = "Greatest Inauspicious", fa = "نحس اکبر"),
     Planet(Body.Jupiter, en = "Greatest Auspicious", fa = "سعد اکبر"),
@@ -60,7 +61,8 @@ private fun chaldeanIndexFromJdn(jdn: Jdn): Int {
     return chaldeanOrder.indexOfFirst { it.body == ruledBy }
 }
 
-private class PlanetaryHourRow(
+@VisibleForTesting
+data class PlanetaryHourRow(
     val planet: Planet,
     val isDay: Boolean,
     val from: Clock,
@@ -68,10 +70,8 @@ private class PlanetaryHourRow(
     val highlighted: Boolean,
 )
 
-private fun getDaySplits(
-    now: Long,
-    coordinates: Coordinates,
-): List<PlanetaryHourRow> {
+@VisibleForTesting
+fun getDaySplits(now: Long, coordinates: Coordinates): List<PlanetaryHourRow> {
     val nowClock = Clock(GregorianCalendar().also { it.timeInMillis = now }) + Clock(24.0)
     return buildList {
         val days = (-1..1).map { day ->

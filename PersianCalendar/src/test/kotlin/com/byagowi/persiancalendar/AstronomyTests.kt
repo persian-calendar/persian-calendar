@@ -5,7 +5,9 @@ import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.getDaySplits
 import com.byagowi.persiancalendar.ui.astronomy.houses
+import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -15,6 +17,7 @@ import org.junit.jupiter.api.assertAll
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class AstronomyTests {
 
@@ -330,5 +333,22 @@ class AstronomyTests {
                 { assertEquals(expected, actual, 0.025) }
             },
         )
+    }
+
+    @Test
+    fun `Planetary hours`() {
+        val splits = getDaySplits(1750716418782, Coordinates(35.68, 51.42, 0.0))
+        run {
+            assertEquals(Body.Moon, splits[0].planet.body)
+            assertEquals(4.822251765217631, splits[0].from.value, 1.0e-5)
+            assertEquals(6.036834861898111, splits[0].to.value, 1.0e-5)
+            assertFalse(splits[0].highlighted)
+        }
+        run {
+            val split = splits.first { it.highlighted }
+            assertEquals(Body.Venus, split.planet.body)
+            assertEquals(0.8978681192065139, split.from.value, 1.0e-5)
+            assertEquals(1.6836708611812483, split.to.value, 1.0e-5)
+        }
     }
 }
