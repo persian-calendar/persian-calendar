@@ -17,16 +17,14 @@ import kotlin.math.tan
 // https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
 // to calculate ascendant and midheaven but changed and simplified and now supports all the 12 houses.
 fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
-    val rotationMatrix = rotationEctEqd(time).rot
-    val cosOb = rotationMatrix[1][1]
-    val sinOb = rotationMatrix[1][2]
+    val (_, cosOb, sinOb) = rotationEctEqd(time).rot[1]
     val tanPhi = tan(Math.toRadians(latitude))
     // Right Ascension of the Midheaven (mc)
     val ramcRad = Math.toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
-    val sinRamc = sin(ramcRad)
-    val cosRamc = cos(ramcRad)
     val houses = DoubleArray(12)
     run {
+        val sinRamc = sin(ramcRad)
+        val cosRamc = cos(ramcRad)
         val mc = (Math.toDegrees(atan2(sinRamc, cosRamc * cosOb)) + 360) % 360 // Midheaven
         val dsc = (Math.toDegrees(atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)) + 360) % 360
         houses[1 - 1] = (dsc + 180) % 360 // Ascendant, the first house and the most important one
@@ -60,7 +58,7 @@ private fun solvePlacidusCusp(
         val ad = asin((tan(asin(sin(cuspLonRad) * sinOb)) * tanPhi).coerceIn(-1.0, 1.0))
         val requiredRa = referenceRaRad + (PI / (if (isNocturnalCusp) -2 else 2) + ad) * cuspRatio
         cuspLonRad = atan2(sin(requiredRa), cos(requiredRa) * cosOb)
-        if (abs(cuspLonRad - prevCuspLonRad) < 1e-6) break
+        if (abs(cuspLonRad - prevCuspLonRad) < 1e-9) break
     }
     return (Math.toDegrees(cuspLonRad) + 360) % 360
 }
