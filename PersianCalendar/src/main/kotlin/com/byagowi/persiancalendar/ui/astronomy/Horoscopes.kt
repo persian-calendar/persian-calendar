@@ -213,8 +213,8 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
         body to longitude
     }.sortedBy { (_, longitude) -> longitude }
         .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
-    val houses = Houses(coordinates.latitude, coordinates.longitude, time)
-    val ascendantZodiac = Zodiac.fromTropical(houses.ascendant)
+    val houses = houses(coordinates.latitude, coordinates.longitude, time)
+    val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalContext.current.resources
 //    var abjad by remember { mutableStateOf(false) }
     EasternHoroscopePattern(
@@ -225,13 +225,7 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             resources,
             withEmoji = false,
             short = true,
-        ) + when (i + 1) {
-            1 -> spacedColon + formatAngle(houses.ascendant % 30)
-            4 -> spacedColon + formatAngle(houses.ic % 30)
-            7 -> spacedColon + formatAngle(houses.descendant % 30)
-            10 -> spacedColon + formatAngle(houses.midheaven % 30)
-            else -> ""
-        } + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+        ) + spacedColon + formatAngle(houses[i] % 30) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + spacedColon + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }

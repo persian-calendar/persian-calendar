@@ -1,12 +1,11 @@
 package com.byagowi.persiancalendar
 
-import android.icu.util.ChineseCalendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
-import com.byagowi.persiancalendar.ui.astronomy.Houses
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.houses
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -232,16 +231,16 @@ class AstronomyTests {
         )
         assertAll((1380..1420).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            val houses = Houses(35.68, 51.42, time);
+            val houses = houses(35.68, 51.42, time);
             {
-                assertEquals(ascendants[i], houses.ascendant, 1.0e-5, "$year")
-                assertEquals(midheavens[i], houses.midheaven, 1.0e-5, "$year")
+                assertEquals(ascendants[i], houses[0], 1.0e-5, "$year")
+                assertEquals(midheavens[i], houses[9], 1.0e-5, "$year")
             }
         })
         // Smoke test
         (1300..1500).forEach { year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-            Houses(35.68, 51.42, time)
+            houses(35.68, 51.42, time)
         }
     }
 
@@ -310,9 +309,26 @@ class AstronomyTests {
                 1404 to Zodiac.CANCER
             ).map { (year, sign) ->
                 val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-                val ascendant = Houses(35.68, 51.42, time).ascendant;
+                val ascendant = houses(35.68, 51.42, time)[0];
                 { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
             }
+        )
+    }
+
+    @Test
+    fun `Test against known ascedants`() {
+        val time = seasons(CivilDate(PersianDate(1404, 1, 1)).year).marchEquinox
+        // These numbers are from swisseph and brought here just for the sake of test
+        val expectations = listOf(
+            110.08328836357673, 131.1447801879015, 155.4061450733191,
+            185.3515114970782, 221.0773712487118, 257.7365979497495,
+            290.08328836357674, 311.14478018790146, 335.40614507331907,
+            5.351511497078217, 41.0773712487118, 77.73659794974952,
+        )
+        assertAll(
+            expectations.zip(houses(35.68, 51.42, time).toList()) { expected, actual ->
+                { assertEquals(expected, actual, 0.1) }
+            },
         )
     }
 }
