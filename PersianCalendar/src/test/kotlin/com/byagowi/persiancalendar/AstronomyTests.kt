@@ -327,7 +327,7 @@ class AstronomyTests {
         )
         assertAll(
             expectations.zip(houses(35.68, 51.42, time).toList()) { expected, actual ->
-                { assertEquals(expected, actual, 0.1) }
+                { assertEquals(expected, actual, 0.025) }
             },
         )
     }
