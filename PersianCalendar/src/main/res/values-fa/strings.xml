@@ -421,4 +421,5 @@
     <string name="week_view">نمای هفته</string>
     <string name="day_view">نمای روز</string>
     <string name="horoscope">زایچه</string>
+    <string name="planetary_hours">ساعات کواکب</string>
 </resources>

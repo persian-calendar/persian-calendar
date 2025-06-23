@@ -13,12 +13,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.titleStringId
@@ -57,9 +60,8 @@ private fun chaldeanIndexFromJdn(jdn: Jdn): Int {
     return chaldeanOrder.indexOfFirst { it.body == ruledBy }
 }
 
-class PlanetaryHourRow(
-    val body: Body,
-    val title: String,
+private class PlanetaryHourRow(
+    val chaldean: Chaldean,
     val isDay: Boolean,
     val from: Clock,
     val to: Clock,
@@ -90,11 +92,10 @@ private fun getDaySplits(
             if (dayIndex == currentDayIndex) addAll((0..<12).mapNotNull {
                 val from = previous + distance * it
                 val to = previous + distance * (it + 1)
-                val value =
+                val chaldean =
                     chaldeanOrder[(chaldeanIndex + it + groupOffset) % chaldeanOrder.size]
                 PlanetaryHourRow(
-                    body = value.body,
-                    title = value.fa,
+                    chaldean = chaldean,
                     isDay = isDay,
                     from = Clock(from % 24),
                     to = Clock(to % 24),
@@ -112,6 +113,7 @@ fun PlanetaryHoursDialog(
     now: Long = System.currentTimeMillis(),
     onDismissRequest: () -> Unit,
 ) {
+    val language by language.collectAsState()
     AppDialog(onDismissRequest = onDismissRequest) {
         getDaySplits(now, coordinates).forEach { row ->
             Row(
@@ -136,11 +138,15 @@ fun PlanetaryHoursDialog(
                     null
                 )
                 Text(
-                    stringResource(row.body.titleStringId),
+                    stringResource(row.chaldean.body.titleStringId),
                     Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
-                Text(row.title, Modifier.weight(1f), textAlign = TextAlign.Center)
+                Text(
+                    if (language.isArabicScript) row.chaldean.fa else row.chaldean.en,
+                    Modifier.weight(1f),
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }

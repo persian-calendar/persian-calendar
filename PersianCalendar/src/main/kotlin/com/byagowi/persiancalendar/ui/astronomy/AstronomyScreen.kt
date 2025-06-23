@@ -87,7 +87,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -184,7 +183,6 @@ fun SharedTransitionScope.AstronomyScreen(
                         }
                     }
 
-                    val language by language.collectAsState()
                     val coordinates by coordinates.collectAsState()
                     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
                     if (showPlanetaryHoursDialog) coordinates?.also {
@@ -215,8 +213,10 @@ fun SharedTransitionScope.AstronomyScreen(
                             showYearHoroscopeDialog = true
                             closeMenu()
                         }
-                        if (isAstronomicalExtraFeaturesEnabled && coordinates != null && language.isPersian) {
-                            AppDropdownMenuItem({ Text("ساعات کواکب") }) {
+                        if (isAstronomicalExtraFeaturesEnabled && coordinates != null) {
+                            AppDropdownMenuItem({
+                                Text(stringResource(R.string.planetary_hours))
+                            }) {
                                 showPlanetaryHoursDialog = true
                                 closeMenu()
                             }
