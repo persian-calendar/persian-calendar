@@ -31,18 +31,18 @@ import io.github.persiancalendar.praytimes.Coordinates
 import java.util.GregorianCalendar
 import kotlin.time.Duration.Companion.days
 
-class Chaldean(val body: Body, val en: String, val fa: String)
+class Planet(val body: Body, val en: String, val fa: String)
 
 // https://en.wikipedia.org/wiki/Planetary_hours
 @VisibleForTesting
 private val chaldeanOrder = listOf(
-    Chaldean(Body.Saturn, en = "Greatest Inauspicious", fa = "نحس اکبر"),
-    Chaldean(Body.Jupiter, en = "Greatest Auspicious", fa = "سعد اکبر"),
-    Chaldean(Body.Mars, en = "Lesser Inauspicious", fa = "نحس اصغر"),
-    Chaldean(Body.Sun, en = "Auspicious", fa = "سعد"),
-    Chaldean(Body.Venus, en = "Lesser Auspicious", fa = "سعد اصغر"),
-    Chaldean(Body.Mercury, en = "Mixed", fa = "ممترج"),
-    Chaldean(Body.Moon, en = "Ascendant", fa = "طالع")
+    Planet(Body.Saturn, en = "Greatest Inauspicious", fa = "نحس اکبر"),
+    Planet(Body.Jupiter, en = "Greatest Auspicious", fa = "سعد اکبر"),
+    Planet(Body.Mars, en = "Lesser Inauspicious", fa = "نحس اصغر"),
+    Planet(Body.Sun, en = "Auspicious", fa = "سعد"),
+    Planet(Body.Venus, en = "Lesser Auspicious", fa = "سعد اصغر"),
+    Planet(Body.Mercury, en = "Mixed", fa = "ممترج"),
+    Planet(Body.Moon, en = "Ascendant", fa = "طالع")
 )
 
 private val ruledBy = listOf(
@@ -61,7 +61,7 @@ private fun chaldeanIndexFromJdn(jdn: Jdn): Int {
 }
 
 private class PlanetaryHourRow(
-    val chaldean: Chaldean,
+    val planet: Planet,
     val isDay: Boolean,
     val from: Clock,
     val to: Clock,
@@ -92,10 +92,10 @@ private fun getDaySplits(
             if (dayIndex == currentDayIndex) addAll((0..<12).mapNotNull {
                 val from = previous + distance * it
                 val to = previous + distance * (it + 1)
-                val chaldean =
+                val planet =
                     chaldeanOrder[(chaldeanIndex + it + groupOffset) % chaldeanOrder.size]
                 PlanetaryHourRow(
-                    chaldean = chaldean,
+                    planet = planet,
                     isDay = isDay,
                     from = Clock(from % 24),
                     to = Clock(to % 24),
@@ -138,12 +138,12 @@ fun PlanetaryHoursDialog(
                     null
                 )
                 Text(
-                    stringResource(row.chaldean.body.titleStringId),
+                    stringResource(row.planet.body.titleStringId),
                     Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    if (language.isArabicScript) row.chaldean.fa else row.chaldean.en,
+                    if (language.isArabicScript) row.planet.fa else row.planet.en,
                     Modifier.weight(1f),
                     textAlign = TextAlign.Center
                 )
