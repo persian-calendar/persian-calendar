@@ -16,19 +16,16 @@ import kotlin.math.tan
 // The implementation initially was started with what was provided in
 // https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
 // to calculate ascendant and midheaven but changed and simplified and now supports all the 12 houses.
-fun houses(latitude: Double, longitude: Double, time: Time): DoubleArray {
+fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
     val rotationMatrix = rotationEctEqd(time).rot
     val cosOb = rotationMatrix[1][1]
     val sinOb = rotationMatrix[1][2]
     val tanPhi = tan(Math.toRadians(latitude))
-
-    // Right Ascension of the Midheaven
+    // Right Ascension of the Midheaven (mc)
     val ramcRad = Math.toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
     val sinRamc = sin(ramcRad)
     val cosRamc = cos(ramcRad)
-
     val houses = DoubleArray(12)
-
     run {
         val mc = (Math.toDegrees(atan2(sinRamc, cosRamc * cosOb)) + 360) % 360 // Midheaven
         val dsc = (Math.toDegrees(atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)) + 360) % 360
@@ -37,18 +34,15 @@ fun houses(latitude: Double, longitude: Double, time: Time): DoubleArray {
         houses[4 - 1] = (mc + 180) % 360 // Nadir or Imum Coeli (IC)
         houses[7 - 1] = dsc
     }
-
     houses[11 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 1.0 / 3, false)
     houses[12 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 2.0 / 3, false)
     houses[2 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 2.0 / 3, true)
     houses[3 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 1.0 / 3, true)
-
     houses[5 - 1] = (houses[11 - 1] + 180) % 360
     houses[6 - 1] = (houses[12 - 1] + 180) % 360
     houses[8 - 1] = (houses[2 - 1] + 180) % 360
     houses[9 - 1] = (houses[3 - 1] + 180) % 360
-
-    return houses
+    return houses.toList()
 }
 
 private fun solvePlacidusCusp(
