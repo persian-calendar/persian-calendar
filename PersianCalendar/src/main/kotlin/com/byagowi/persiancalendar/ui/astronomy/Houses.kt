@@ -23,7 +23,7 @@ fun houses(latitude: Double, longitude: Double, time: Time): DoubleArray {
     val tanPhi = tan(Math.toRadians(latitude))
 
     // Right Ascension of the Midheaven
-    val ramcRad = Math.toRadians(((siderealTime(time) + longitude / 15) * 15 + 360) % 360)
+    val ramcRad = Math.toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
     val sinRamc = sin(ramcRad)
     val cosRamc = cos(ramcRad)
 
