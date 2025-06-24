@@ -17,7 +17,7 @@ import kotlin.math.tan
 // https://github.com/cosinekitty/astronomy/discussions/340#discussioncomment-8966532
 // to calculate ascendant and midheaven but changed and simplified and now supports all the 12 houses.
 fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
-    val (_, cosOb, sinOb) = rotationEctEqd(time).rot[1]
+    val (_, cosOb, sinOb) = rotationEctEqd(time).rot[1] // Ecliptic obliquity's sin and cos results
     val tanPhi = tan(Math.toRadians(latitude))
     // Right Ascension of the Midheaven (mc)
     val ramcRad = Math.toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
