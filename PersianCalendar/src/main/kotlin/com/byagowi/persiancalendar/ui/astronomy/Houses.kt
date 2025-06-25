@@ -4,7 +4,6 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.rotationEctEqd
 import io.github.cosinekitty.astronomy.siderealTime
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -53,12 +52,10 @@ private fun solvePlacidusCusp(
 ): Double {
     val referenceRaRad = if (isNocturnalCusp) ramcRad + PI else ramcRad
     var cuspLonRad = atan2(sin(referenceRaRad), cos(referenceRaRad) * cosOb)
-    for (i in 0..9) {
-        val prevCuspLonRad = cuspLonRad
+    repeat(9) { // It's more than enough iterations to reach to the needed accuracy
         val ad = asin((tan(asin(sin(cuspLonRad) * sinOb)) * tanPhi).coerceIn(-1.0, 1.0))
         val requiredRa = referenceRaRad + (PI / (if (isNocturnalCusp) -2 else 2) + ad) * cuspRatio
         cuspLonRad = atan2(sin(requiredRa), cos(requiredRa) * cosOb)
-        if (abs(cuspLonRad - prevCuspLonRad) < 1e-9) break
     }
     return (Math.toDegrees(cuspLonRad) + 360) % 360
 }
