@@ -31,14 +31,14 @@ import kotlin.math.cos
 import kotlin.math.sqrt
 
 data class SunViewColors(
-    @ColorInt val nightColor: Int,
-    @ColorInt val dayColor: Int,
-    @ColorInt val middayColor: Int,
-    @ColorInt val sunriseTextColor: Int,
-    @ColorInt val middayTextColor: Int,
-    @ColorInt val sunsetTextColor: Int,
-    @ColorInt val textColorSecondary: Int,
-    @ColorInt val linesColor: Int,
+    @get:ColorInt val nightColor: Int,
+    @get:ColorInt val dayColor: Int,
+    @get:ColorInt val middayColor: Int,
+    @get:ColorInt val sunriseTextColor: Int,
+    @get:ColorInt val middayTextColor: Int,
+    @get:ColorInt val sunsetTextColor: Int,
+    @get:ColorInt val textColorSecondary: Int,
+    @get:ColorInt val linesColor: Int,
 )
 
 /**

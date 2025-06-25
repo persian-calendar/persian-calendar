@@ -3,7 +3,7 @@ package com.byagowi.persiancalendar.ui.map
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 
-enum class MapType(@StringRes val title: Int, val isCrescentVisibility: Boolean = false) {
+enum class MapType(@get:StringRes val title: Int, val isCrescentVisibility: Boolean = false) {
     NONE(R.string.none),
     DAY_NIGHT(R.string.show_night_mask_label),
     MOON_VISIBILITY(R.string.moon_visibility),

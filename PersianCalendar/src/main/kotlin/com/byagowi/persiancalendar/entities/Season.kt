@@ -13,7 +13,7 @@ import java.util.Date
 import kotlin.math.floor
 
 enum class Season(
-    @StringRes val nameStringId: Int, @DrawableRes val imageId: Int, val color: Color
+    @get:StringRes val nameStringId: Int, @get:DrawableRes val imageId: Int, val color: Color
 ) {
     SPRING(R.string.spring, R.drawable.spring, Color(0xcc80aa15)),
     SUMMER(R.string.summer, R.drawable.summer, Color(0xccfab000)),

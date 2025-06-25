@@ -8,7 +8,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 
 // a11y related state machine that starts in true state and announce if a transition to true happens
-class SensorEventAnnouncer(@StringRes private val text: Int, initialState: Boolean = true) {
+class SensorEventAnnouncer(@get:StringRes private val text: Int, initialState: Boolean = true) {
 
     private var state = initialState
     private var lastAnnounce = -1L

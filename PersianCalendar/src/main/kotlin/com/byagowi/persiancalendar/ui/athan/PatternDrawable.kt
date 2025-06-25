@@ -81,7 +81,7 @@ private interface Pattern {
     fun draw(canvas: Canvas)
 }
 
-private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class FirstPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
     override val width = size / 2
     override val height = size / 2
@@ -114,7 +114,7 @@ private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : 
     }
 }
 
-private class SecondPattern(@ColorInt private val tintColor: Int, private val size: Float) :
+private class SecondPattern(@get:ColorInt private val tintColor: Int, private val size: Float) :
     Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-4/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
@@ -138,7 +138,7 @@ private class SecondPattern(@ColorInt private val tintColor: Int, private val si
     }
 }
 
-private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class ThirdPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
     override val width = size / 2
     override val height = size / 2
@@ -169,7 +169,7 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
     }
 }
 
-private class FourthPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class FourthPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-2/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
     override val height = size
@@ -192,7 +192,7 @@ private class FourthPattern(@ColorInt private val tintColor: Int, size: Float) :
     }
 }
 
-private class SpiralPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
+private class SpiralPattern(@get:ColorInt private val tintColor: Int, size: Float) : Pattern {
     // Not enabled, just as an experiment on how spiral pattern and hexagon tiling would work
     // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/paths/polylines
     override val width = size

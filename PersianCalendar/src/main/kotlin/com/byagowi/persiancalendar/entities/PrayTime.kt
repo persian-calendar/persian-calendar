@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
 
-enum class PrayTime(@StringRes val stringRes: Int, val tint: Color = Color.Gray) {
+enum class PrayTime(@get:StringRes val stringRes: Int, val tint: Color = Color.Gray) {
     // Don't ever change name of these, they are stored in preferences
     IMSAK(R.string.imsak),
     FAJR(R.string.fajr, tint = Color(0xFF009788)),

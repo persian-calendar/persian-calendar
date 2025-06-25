@@ -33,7 +33,7 @@ import io.github.persiancalendar.calendar.PersianDate
  *آنگاه به اسب و گوسفند است حساب - حمدونه و مرغ و سگ و خوک آخر کار
  */
 enum class ChineseZodiac(
-    @StringRes private val title: Int, private val emoji: String,
+    @get:StringRes private val title: Int, private val emoji: String,
     // For example used in https://rc.majlis.ir/fa/law/show/91137
     private val oldEraPersianName: String,
     private val persianAlternative: Pair<String, String>? = null,

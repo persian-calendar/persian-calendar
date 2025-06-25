@@ -211,8 +211,8 @@ fun SharedTransitionScope.SettingsScreen(
 private data class TabItem(
     private val outlinedIcon: ImageVector,
     private val filledIcon: ImageVector,
-    @StringRes private val firstTitle: Int,
-    @StringRes private val secondTitle: Int,
+    @get:StringRes private val firstTitle: Int,
+    @get:StringRes private val secondTitle: Int,
     val content: @Composable ColumnScope.() -> Unit,
 ) {
     @Composable

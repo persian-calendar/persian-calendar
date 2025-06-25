@@ -7,7 +7,7 @@ import com.byagowi.persiancalendar.R
 
 enum class Theme(
     val key: String,
-    @StringRes val title: Int,
+    @get:StringRes val title: Int,
     val hasGradient: Boolean = true,
     private val lackDynamicColors: Boolean = false,
     // This is null in system default, if that's needed, use effectiveTheme()

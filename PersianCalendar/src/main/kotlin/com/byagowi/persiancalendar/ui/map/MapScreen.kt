@@ -158,7 +158,7 @@ fun SharedTransitionScope.MapScreen(
 
     class MenuItem(
         val icon: ImageVector,
-        @StringRes val title: Int,
+        @get:StringRes val title: Int,
         val isEnabled: () -> Boolean = { false },
         val onClick: () -> Unit
     )

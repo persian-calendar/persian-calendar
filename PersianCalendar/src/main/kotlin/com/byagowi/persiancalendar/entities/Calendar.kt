@@ -9,7 +9,9 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 
 enum class Calendar(
-    @StringRes val title: Int, @StringRes val shortTitle: Int, val preferredDigits: CharArray
+    @get:StringRes val title: Int,
+    @get:StringRes val shortTitle: Int,
+    val preferredDigits: CharArray
 ) {
     // So vital, don't ever change names of these
     SHAMSI(

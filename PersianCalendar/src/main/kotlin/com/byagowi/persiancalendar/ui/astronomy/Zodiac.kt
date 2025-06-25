@@ -40,7 +40,7 @@ import kotlin.math.floor
  * See also: https://en.wikipedia.org/wiki/Lunar_station#Arabic_manzil
  */
 enum class Zodiac(
-    private val iauRangeStart: Double, val emoji: String, @StringRes private val title: Int
+    private val iauRangeStart: Double, val emoji: String, @get:StringRes private val title: Int
 ) {
     ARIES(33.18, "♈", R.string.aries), // 0-30 (Tropical)
     TAURUS(51.16, "♉", R.string.taurus), // 30-60
