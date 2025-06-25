@@ -3,22 +3,28 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
@@ -26,7 +32,6 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.variants.debugLog
 import io.github.cosinekitty.astronomy.Body
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.GregorianCalendar
@@ -128,26 +133,35 @@ fun PlanetaryHoursDialog(
                     ),
                 horizontalArrangement = Arrangement.Center,
             ) {
-                Text(
+                AutoSizedText(
                     row.from.toFormattedString() + " - " + row.to.toFormattedString(),
-                    Modifier.weight(2f),
-                    textAlign = TextAlign.Center,
+                    2f
                 )
                 Icon(
                     if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
                     null
                 )
-                Text(
-                    stringResource(row.planet.body.titleStringId),
-                    Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
-                Text(
-                    if (language.isArabicScript) row.planet.fa else row.planet.en,
-                    Modifier.weight(1f),
-                    textAlign = TextAlign.Center
-                )
+                AutoSizedText(stringResource(row.planet.body.titleStringId), 1f)
+                AutoSizedText(if (language.isArabicScript) row.planet.fa else row.planet.en, 1f)
             }
         }
+    }
+}
+
+@Composable
+private fun RowScope.AutoSizedText(text: String, weight: Float) {
+    Box(Modifier.weight(weight), contentAlignment = Alignment.Center) {
+        val contentColor = LocalContentColor.current
+        BasicText(
+            text,
+            color = { contentColor },
+            style = LocalTextStyle.current,
+            maxLines = 1,
+            softWrap = false,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = 9.sp,
+                maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            ),
+        )
     }
 }
