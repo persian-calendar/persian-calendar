@@ -37,7 +37,9 @@
                 android:layout_height="wrap_content"
                 android:gravity="start"
                 android:textAlignment="viewStart"
-                android:textSize="30dp" />
+                android:textFontWeight="500"
+                android:textSize="30dp"
+                tools:ignore="UnusedAttribute" />
 
             <TextView
                 android:id="@+id/textPlaceholder3_4x1"
