@@ -38,7 +38,7 @@
                 android:fontFamily="sans-serif"
                 android:gravity="start"
                 android:textAlignment="viewStart"
-                android:textSize="36dp" />
+                android:textSize="30dp" />
 
             <TextView
                 android:id="@+id/textPlaceholder3_4x1"
