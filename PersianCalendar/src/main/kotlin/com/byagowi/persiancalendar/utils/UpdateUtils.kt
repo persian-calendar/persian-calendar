@@ -1052,7 +1052,7 @@ private fun create4x1RemoteViews(
         R.id.textPlaceholder1_4x1, R.id.textPlaceholder2_4x1, R.id.textPlaceholder3_4x1
     )
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-        R.id.textPlaceholder1_4x2, android.R.attr.colorAccent
+        R.id.textPlaceholder1_4x1, android.R.attr.colorAccent
     )
 
     if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
