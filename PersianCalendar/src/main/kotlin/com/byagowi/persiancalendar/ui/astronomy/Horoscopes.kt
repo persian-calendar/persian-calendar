@@ -225,8 +225,8 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
             resources,
             withEmoji = false,
             short = true,
-        ) + spacedColon + formatAngle(houses[i] % 30) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
-            resources.getString(body.titleStringId) + spacedColon + formatAngle(longitude % 30)
+        ) + " " + formatAngle(houses[i] % 30) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+            resources.getString(body.titleStringId) + " " + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }
 }
