@@ -3,10 +3,12 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
@@ -28,14 +30,17 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
+import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
+import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time
@@ -78,6 +83,7 @@ private val bodies = listOf(
 fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
     val time = Time.fromMillisecondsSince1970(date.time)
     AppDialog(onDismissRequest = onDismissRequest) {
+        Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Text(
             bodies.map { body ->
                 val (longitude, distance) = longitudeAndDistanceOfBody(body, time)
@@ -89,12 +95,23 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                     (distance * AU_IN_KM).roundToLong()
                 )
             }.joinToString("\n"),
-            modifier = Modifier.padding(SettingsHorizontalPaddingItem.dp),
+            modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
         )
         val coordinates by coordinates.collectAsState()
         coordinates?.let {
-            if (!it.isHighLatitude) AscendantZodiac(time, it, isYearEquinox = false)
-        }
+            if (!it.isHighLatitude) {
+                Text(
+                    text = buildString {
+                        append(date.toGregorianCalendar().formatDateAndTime())
+                        val cityName by cityName.collectAsState()
+                        cityName?.let { name -> append(spacedComma); append(name) }
+                    },
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                HorizontalDivider()
+                AscendantZodiac(time, it, isYearEquinox = false)
+            }
+        } ?: Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
     }
 }
 
