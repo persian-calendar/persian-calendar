@@ -243,15 +243,15 @@ fun SharedTransitionScope.CompassScreen(
                         }
                         val language by language.collectAsState()
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersian) {
-                            var title by remember { mutableStateOf<String?>(null) }
+                            var value by remember { mutableStateOf<String?>(null) }
                             AppDropdownMenuItem({
                                 Crossfade(
-                                    title ?: "مربوره/مذکوره",
+                                    value ?: "مزبوره/مذکوره",
                                     Modifier.animateContentSize(),
                                 ) { Text(it) }
                             }) {
                                 val dayOfMonth = Jdn.today().toIslamicDate().dayOfMonth
-                                title = if (title == null) "مربوره: " + when (dayOfMonth) {
+                                value = if (value == null) "مزبوره: " + when (dayOfMonth) {
                                     1, 9, 17, 25 -> "شرق"
                                     2, 10, 18, 26 -> "شمال شرق"
                                     3, 11, 19, 27 -> "شمال"
