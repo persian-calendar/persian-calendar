@@ -456,7 +456,7 @@ enum class Language(val code: String, val nativeName: String) {
                 LunarAge.Phase.FULL_MOON -> "Full moon"
                 LunarAge.Phase.WANING_GIBBOUS -> "Waning gibbous"
                 LunarAge.Phase.THIRD_QUARTER -> "Third quarter"
-                LunarAge.Phase.WANING_CRESCENT -> "Warning crescent"
+                LunarAge.Phase.WANING_CRESCENT -> "Waning crescent"
             }
         }
     }
