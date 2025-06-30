@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.ui.astronomy
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.aspectRatio
@@ -12,19 +14,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -47,6 +57,7 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.CivilDate
@@ -65,6 +76,7 @@ private fun formatAngle(value: Double): String {
     )
 }
 
+// This is geocentric
 private fun longitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
     return when (body) {
         Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
@@ -74,43 +86,84 @@ private fun longitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Dou
     }
 }
 
-private val bodies = listOf(
-    Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
-    Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-)
-
 @Composable
 fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
     val time = Time.fromMillisecondsSince1970(date.time)
     AppDialog(onDismissRequest = onDismissRequest) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
-        Text(
-            bodies.map { body ->
-                val (longitude, distance) = longitudeAndDistanceOfBody(body, time)
-                stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
-                    Locale.ENGLISH,
-                    LRM,
-                    formatAngle(longitude % 30), // Remaining angle
-                    Zodiac.fromTropical(longitude).emoji,
-                    (distance * AU_IN_KM).roundToLong()
-                )
-            }.joinToString("\n"),
-            modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
-        )
-        val coordinates by coordinates.collectAsState()
-        coordinates?.let {
-            if (!it.isHighLatitude) {
-                Text(
-                    text = buildString {
-                        append(date.toGregorianCalendar().formatDateAndTime())
-                        val cityName by cityName.collectAsState()
-                        cityName?.let { name -> append(spacedComma); append(name) }
-                    },
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-                HorizontalDivider()
-                AscendantZodiac(time, it, isYearEquinox = false)
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }
+            @Suppress("SimplifiableCallChain")
+            Text(
+                when (mode) {
+                    AstronomyMode.EARTH -> listOf(
+                        Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
+                        Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+                    ).map { body ->
+                        val (longitude, distance) = longitudeAndDistanceOfBody(body, time)
+                        stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
+                            Locale.ENGLISH,
+                            LRM,
+                            formatAngle(longitude % 30), // Remaining angle
+                            Zodiac.fromTropical(longitude).emoji,
+                            (distance * AU_IN_KM).roundToLong()
+                        )
+                    }.joinToString("\n")
+
+                    AstronomyMode.SUN -> listOf(
+                        Body.Mercury, Body.Venus, Body.Earth, Body.Moon, Body.Mars, Body.Jupiter,
+                        Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+                    ).map { body ->
+                        val (longitude, distance) = helioVector(body, time).let {
+                            // See also eclipticLongitude of the astronomy library
+                            equatorialToEcliptic(it).elon to it.length()
+                        }
+                        stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
+                            Locale.ENGLISH,
+                            LRM,
+                            formatAngle(longitude % 30), // Remaining angle
+                            Zodiac.fromTropical(longitude).emoji,
+                            (distance * AU_IN_KM).roundToLong()
+                        )
+                    }.joinToString("\n")
+
+                    else -> ""
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = SettingsHorizontalPaddingItem.dp),
+            )
+            Column {
+                listOf(AstronomyMode.EARTH, AstronomyMode.SUN).forEach {
+                    NavigationRailItem(
+                        modifier = Modifier.size(56.dp),
+                        selected = mode == it,
+                        onClick = { mode = it },
+                        icon = {
+                            Icon(
+                                ImageVector.vectorResource(it.icon),
+                                modifier = Modifier.size(24.dp),
+                                contentDescription = null,
+                                tint = Color.Unspecified,
+                            )
+                        },
+                    )
+                }
             }
+        }
+        val coordinates by coordinates.collectAsState()
+        coordinates?.takeIf { !it.isHighLatitude }?.let {
+            HorizontalDivider()
+            Text(
+                text = buildString {
+                    append(date.toGregorianCalendar().formatDateAndTime())
+                    val cityName by cityName.collectAsState()
+                    cityName?.let { name -> append(spacedComma); append(name) }
+                },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            HorizontalDivider()
+            AscendantZodiac(time, it, isYearEquinox = false)
         } ?: Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
     }
 }
@@ -218,10 +271,9 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 
 @Composable
 private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
-    val bodiesZodiac = bodies.filter {
-        it != Body.Neptune && it != Body.Pluto && // Not visible to naked eye
-                it != Body.Uranus // Also not usually shown on such chart
-    }.map { body ->
+    val bodiesZodiac = listOf(
+        Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn
+    ).map { body ->
         if (body == Body.Sun && isYearEquinox) {
             // Sometimes 359.99 put it in a incorrect house so let's just hardcode it
             return@map body to .0
