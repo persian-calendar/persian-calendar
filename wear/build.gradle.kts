@@ -32,12 +32,12 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
     }
-    val javaVersion = JavaVersion.VERSION_21
+
     compileOptions {
+        val javaVersion = JavaVersion.VERSION_21
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
     }
-    kotlinOptions { jvmTarget = javaVersion.majorVersion }
 
     buildFeatures { compose = true }
 }

@@ -91,14 +91,11 @@ android {
         language.enableSplit = false
     }
 
-    val javaVersion = JavaVersion.VERSION_21
-
     compileOptions {
+        val javaVersion = JavaVersion.VERSION_21
         sourceCompatibility = javaVersion
         targetCompatibility = javaVersion
     }
-
-    kotlinOptions { jvmTarget = javaVersion.majorVersion }
 
     lint { disable += listOf("MissingTranslation") }
 }
