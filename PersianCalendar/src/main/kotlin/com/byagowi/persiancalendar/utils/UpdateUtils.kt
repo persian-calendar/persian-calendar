@@ -1301,8 +1301,15 @@ private fun createWeekViewRemoteViews(
         remoteViews.setTextViewText(weekDayNumberViewId, formatNumber(dayOfMonth))
 
         val action = jdnActionKey + day.value
-        remoteViews.setOnClickPendingIntent(weekDayNumberViewId, context.launchAppPendingIntent(action))
-        remoteViews.setInt(weekDayNumberViewId, "setBackgroundResource", R.drawable.widget_month_day_ripple)
+        remoteViews.setOnClickPendingIntent(
+            weekDayNumberViewId,
+            context.launchAppPendingIntent(action)
+        )
+        remoteViews.setInt(
+            weekDayNumberViewId,
+            "setBackgroundResource",
+            R.drawable.widget_month_day_ripple
+        )
     }
 
     remoteViews.setTextViewText(

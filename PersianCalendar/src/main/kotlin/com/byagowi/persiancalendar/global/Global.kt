@@ -546,12 +546,14 @@ fun updateStoredPreference(context: Context) {
     isShowDeviceCalendarEvents_.value =
         preferences.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     eventCalendarsIdsToExclude_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
-        *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null).orEmpty()).splitFilterNotEmpty(",")
-            .mapNotNull { it.toLongOrNull() }.toLongArray()
+        *(preferences.getString(PREF_CALENDARS_IDS_TO_EXCLUDE, null).orEmpty()).splitFilterNotEmpty(
+            ","
+        ).mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
     eventCalendarsIdsAsHoliday_.value = if (isShowDeviceCalendarEvents_.value) longSetOf(
-        *(preferences.getString(PREF_CALENDARS_IDS_AS_HOLIDAY, null).orEmpty()).splitFilterNotEmpty(",")
-            .mapNotNull { it.toLongOrNull() }.toLongArray()
+        *(preferences.getString(PREF_CALENDARS_IDS_AS_HOLIDAY, null).orEmpty()).splitFilterNotEmpty(
+            ","
+        ).mapNotNull { it.toLongOrNull() }.toLongArray()
     ) else emptyLongSet()
 
     whatToShowOnWidgets =

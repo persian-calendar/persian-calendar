@@ -293,9 +293,8 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalContext.current.resources
 //    var abjad by remember { mutableStateOf(false) }
-    EasternHoroscopePattern(
 //        Modifier.clickable { abjad = !abjad }
-    ) { i ->
+    EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
         zodiac.emoji + "\n" + zodiac.format(
             resources,
