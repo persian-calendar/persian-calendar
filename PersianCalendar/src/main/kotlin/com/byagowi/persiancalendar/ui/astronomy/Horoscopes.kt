@@ -249,17 +249,24 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         }
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
+        val (coordinates, cityName) = when {
+            language.isAfghanistanExclusive -> Coordinates(34.53, 69.16, 0.0) to
+                    if (language.isUserAbleToReadPersian) "کابل" else "Kabul"
+
+            // So the user would be able to verify it with the calendar book published
+            else -> Coordinates(35.68, 51.42, 0.0) to
+                    if (language.isUserAbleToReadPersian) "تهران" else "Tehran"
+        }
+
         Text(
             if (language.isUserAbleToReadPersian) {
-                "لحظهٔ تحویل سال " + formatNumber(persianYear) + " شمسی در تهران"
-            } else "Tehran, March equinox of " + formatNumber(gregorianYear) + " CE",
+                "لحظهٔ تحویل سال " + formatNumber(persianYear) + " شمسی در $cityName"
+            } else "$cityName, March equinox of " + formatNumber(gregorianYear) + " CE",
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val time = seasons(gregorianYear).marchEquinox
-        // So the user would be able to verify it with the calendar book published
-        val tehran = Coordinates(35.68, 51.42, 0.0)
-        AscendantZodiac(time, tehran, isYearEquinox = true)
+        AscendantZodiac(time, coordinates, isYearEquinox = true)
     }
 }
 
