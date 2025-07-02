@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
 fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
-    val yearsLimit = 4000 // let's just don't care about accuracy of distant time
+    val yearsLimit = 5000 // let's just don't care about accuracy of distant time
     Crossfade(targetState = calendar, label = "day picker") { state ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
