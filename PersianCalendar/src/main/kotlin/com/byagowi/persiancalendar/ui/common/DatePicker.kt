@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
@@ -25,7 +24,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
 fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
-    val yearsLimit = if (BuildConfig.DEVELOPMENT) 4000 else 400
+    val yearsLimit = 4000 // let's just don't care about accuracy of distant time
     Crossfade(targetState = calendar, label = "day picker") { state ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
