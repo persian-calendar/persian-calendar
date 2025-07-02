@@ -5,9 +5,7 @@ import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
-import com.byagowi.persiancalendar.ui.astronomy.getDaySplits
 import com.byagowi.persiancalendar.ui.astronomy.houses
-import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -17,7 +15,6 @@ import org.junit.jupiter.api.assertAll
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 
 class AstronomyTests {
 
