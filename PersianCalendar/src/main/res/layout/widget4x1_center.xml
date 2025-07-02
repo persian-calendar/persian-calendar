@@ -54,14 +54,14 @@
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp"
             android:autoSizeMaxTextSize="14sp"
             android:autoSizeMinTextSize="9sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLines="1"
+            android:textSize="14sp"
             tools:ignore="UnusedAttribute" />
 
     </LinearLayout>

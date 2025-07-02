@@ -58,15 +58,15 @@
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textAlignment="viewStart"
-            android:textSize="14sp"
             android:autoSizeMaxTextSize="14sp"
             android:autoSizeMinTextSize="9sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:ellipsize="end"
+            android:gravity="start"
             android:maxLines="1"
+            android:textAlignment="viewStart"
+            android:textSize="14sp"
             tools:ignore="UnusedAttribute" />
 
     </LinearLayout>

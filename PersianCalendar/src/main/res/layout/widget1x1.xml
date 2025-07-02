@@ -35,14 +35,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            android:gravity="center_horizontal|bottom"
-            android:textSize="15dp"
             android:autoSizeMaxTextSize="15sp"
             android:autoSizeMinTextSize="9sp"
             android:autoSizeStepGranularity="1sp"
             android:autoSizeTextType="uniform"
             android:ellipsize="end"
+            android:gravity="center_horizontal|bottom"
             android:maxLines="1"
+            android:textSize="15dp"
             tools:ignore="SpUsage,UnusedAttribute" />
         <!-- Using sp can be dangerous as possibility of overflow in this mini widget -->
 
