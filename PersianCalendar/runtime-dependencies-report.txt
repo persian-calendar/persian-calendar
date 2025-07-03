@@ -700,8 +700,8 @@
 |         |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.1 (c)
 |         |    \--- androidx.lifecycle:lifecycle-process:2.9.1 (c)
 |         \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22 -> 2.2.0 (*)
-+--- androidx.navigation:navigation-compose:2.9.0
-|    \--- androidx.navigation:navigation-compose-android:2.9.0
++--- androidx.navigation:navigation-compose:2.9.1
+|    \--- androidx.navigation:navigation-compose-android:2.9.1
 |         +--- androidx.activity:activity:1.8.0 -> 1.10.1 (*)
 |         +--- androidx.activity:activity-compose:1.8.0 -> 1.10.1 (*)
 |         +--- androidx.annotation:annotation:1.8.0 -> 1.9.1 (*)
@@ -741,8 +741,8 @@
 |         |         \--- androidx.lifecycle:lifecycle-process:2.9.1 (c)
 |         +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0 -> 2.9.1 (*)
 |         +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.0 -> 2.9.1 (*)
-|         +--- androidx.navigation:navigation-common:2.9.0
-|         |    \--- androidx.navigation:navigation-common-android:2.9.0
+|         +--- androidx.navigation:navigation-common:2.9.1
+|         |    \--- androidx.navigation:navigation-common-android:2.9.1
 |         |         +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
 |         |         +--- androidx.collection:collection:1.4.2 -> 1.5.0 (*)
 |         |         +--- androidx.core:core-ktx:1.1.0 -> 1.16.0 (*)
@@ -752,14 +752,13 @@
 |         |         +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.9.0 -> 2.9.1 (*)
 |         |         +--- androidx.profileinstaller:profileinstaller:1.4.0 (*)
 |         |         +--- androidx.savedstate:savedstate:1.3.0 (*)
-|         |         +--- androidx.savedstate:savedstate-ktx:1.3.0 (*)
 |         |         +--- org.jetbrains.kotlin:kotlin-stdlib -> 2.2.0 (*)
 |         |         +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3 (*)
-|         |         +--- androidx.navigation:navigation-compose:2.9.0 (c)
-|         |         +--- androidx.navigation:navigation-runtime:2.9.0 (c)
+|         |         +--- androidx.navigation:navigation-compose:2.9.1 (c)
+|         |         +--- androidx.navigation:navigation-runtime:2.9.1 (c)
 |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.2.0 (c)
-|         +--- androidx.navigation:navigation-runtime:2.9.0
-|         |    \--- androidx.navigation:navigation-runtime-android:2.9.0
+|         +--- androidx.navigation:navigation-runtime:2.9.1
+|         |    \--- androidx.navigation:navigation-runtime-android:2.9.1
 |         |         +--- androidx.activity:activity-ktx:1.7.1 -> 1.10.1 (*)
 |         |         +--- androidx.annotation:annotation-experimental:1.4.1 (*)
 |         |         +--- androidx.collection:collection:1.4.2 -> 1.5.0 (*)
@@ -769,12 +768,12 @@
 |         |         +--- androidx.lifecycle:lifecycle-runtime-ktx:2.8.7 -> 2.9.1 (*)
 |         |         +--- androidx.lifecycle:lifecycle-viewmodel:2.8.7 -> 2.9.1 (*)
 |         |         +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7 -> 2.9.1 (*)
-|         |         +--- androidx.navigation:navigation-common:2.9.0 (*)
+|         |         +--- androidx.navigation:navigation-common:2.9.1 (*)
 |         |         +--- org.jetbrains.kotlin:kotlin-stdlib -> 2.2.0 (*)
 |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3 -> 1.10.2 (*)
 |         |         +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3 (*)
-|         |         +--- androidx.navigation:navigation-common:2.9.0 (c)
-|         |         +--- androidx.navigation:navigation-compose:2.9.0 (c)
+|         |         +--- androidx.navigation:navigation-common:2.9.1 (c)
+|         |         +--- androidx.navigation:navigation-compose:2.9.1 (c)
 |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.2.0 (c)
 |         +--- androidx.savedstate:savedstate:1.3.0 (*)
 |         +--- androidx.savedstate:savedstate-compose:1.3.0
@@ -788,8 +787,8 @@
 |         +--- org.jetbrains.kotlin:kotlin-stdlib -> 2.2.0 (*)
 |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3 -> 1.10.2 (*)
 |         +--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3 (*)
-|         +--- androidx.navigation:navigation-common:2.9.0 (c)
-|         +--- androidx.navigation:navigation-runtime:2.9.0 (c)
+|         +--- androidx.navigation:navigation-common:2.9.1 (c)
+|         +--- androidx.navigation:navigation-runtime:2.9.1 (c)
 |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 -> 2.2.0 (c)
 +--- androidx.compose.animation:animation-graphics-android -> 1.8.3
 |    +--- androidx.annotation:annotation:1.8.1 -> 1.9.1 (*)
