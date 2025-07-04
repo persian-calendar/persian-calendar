@@ -21,16 +21,7 @@ fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
     // Right Ascension of the Midheaven (mc)
     val ramcRad = Math.toRadians((siderealTime(time) * 15 + longitude + 360) % 360)
     val houses = DoubleArray(12)
-    run {
-        val sinRamc = sin(ramcRad)
-        val cosRamc = cos(ramcRad)
-        val mc = (Math.toDegrees(atan2(sinRamc, cosRamc * cosOb)) + 360) % 360 // Midheaven
-        val dsc = (Math.toDegrees(atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)) + 360) % 360
-        houses[1 - 1] = (dsc + 180) % 360 // Ascendant, the first house and the most important one
-        houses[10 - 1] = mc
-        houses[4 - 1] = (mc + 180) % 360 // Nadir or Imum Coeli (IC)
-        houses[7 - 1] = dsc
-    }
+
     houses[11 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 1.0 / 3, false)
     houses[12 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 2.0 / 3, false)
     houses[2 - 1] = solvePlacidusCusp(tanPhi, ramcRad, cosOb, sinOb, 2.0 / 3, true)
@@ -39,6 +30,15 @@ fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
     houses[6 - 1] = (houses[12 - 1] + 180) % 360
     houses[8 - 1] = (houses[2 - 1] + 180) % 360
     houses[9 - 1] = (houses[3 - 1] + 180) % 360
+
+    val sinRamc = sin(ramcRad)
+    val cosRamc = cos(ramcRad)
+    val mc = (Math.toDegrees(atan2(sinRamc, cosRamc * cosOb)) + 360) % 360 // Midheaven
+    val dsc = (Math.toDegrees(atan2(-cosRamc, sinRamc * cosOb + tanPhi * sinOb)) + 360) % 360
+    houses[1 - 1] = (dsc + 180) % 360 // Ascendant, the first house and the most important one
+    houses[10 - 1] = mc
+    houses[4 - 1] = (mc + 180) % 360 // Nadir or Imum Coeli (IC)
+    houses[7 - 1] = dsc
     return houses.toList()
 }
 
