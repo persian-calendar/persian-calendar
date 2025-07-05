@@ -39,7 +39,7 @@ fun houses(latitude: Double, longitude: Double, time: Time): List<Double> {
     houses[10 - 1] = mc
     houses[4 - 1] = (mc + 180) % 360 // Nadir or Imum Coeli (IC)
     houses[7 - 1] = dsc
-    return houses.toList()
+    return houses.asList()
 }
 
 private fun solvePlacidusCusp(

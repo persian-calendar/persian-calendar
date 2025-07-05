@@ -11,14 +11,14 @@ import io.github.persiancalendar.calendar.PersianDate
 class LocaleUtils {
     private val persianLocale = ULocale("fa_IR@calendar=persian")
     private val formatSymbols = DateFormatSymbols.getInstance(persianLocale)
-    private val weekDayNames = formatSymbols.weekdays.toList()
+    private val weekDayNames = formatSymbols.weekdays.asList()
     val narrowWeekdays: List<String> =
-        formatSymbols.getWeekdays(DateFormatSymbols.STANDALONE, DateFormatSymbols.NARROW).toList()
-    val persianMonths: List<String> = formatSymbols.months.toList()
+        formatSymbols.getWeekdays(DateFormatSymbols.STANDALONE, DateFormatSymbols.NARROW).asList()
+    val persianMonths: List<String> = formatSymbols.months.asList()
     val gregorianMonths: List<String> =
-        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months.toList()
+        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=gregorian")).months.asList()
     val islamicMonths: List<String> =
-        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.toList()
+        DateFormatSymbols.getInstance(ULocale("fa_IR@calendar=islamic")).months.asList()
 
     fun persianMonth(persianDate: PersianDate): String = persianMonths[persianDate.month - 1]
 
