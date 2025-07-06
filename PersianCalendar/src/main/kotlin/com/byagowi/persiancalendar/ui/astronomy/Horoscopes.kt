@@ -65,15 +65,13 @@ import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
 import java.util.Locale
 import kotlin.math.abs
-import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
 private fun formatAngle(value: Double): String {
-    val degrees = floor(value)
-    return formatNumber(
-        "$LRM%02d°:%02d’$LRM".format(degrees.toInt(), ((value - degrees) * 60).roundToInt())
-    )
+    val degrees = value.toInt()
+    val minutes = (value % 1 * 60).roundToInt()
+    return formatNumber("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
 // This is geocentric
@@ -153,7 +151,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
         }
         val coordinates by coordinates.collectAsState()
         coordinates?.takeIf { abs(it.latitude) <= 66 /* not useful for higher latitudes */ }?.let {
-            HorizontalDivider()
+            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             Text(
                 text = buildString {
                     append(date.toGregorianCalendar().formatDateAndTime())
@@ -162,7 +160,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-            HorizontalDivider()
+            HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             AscendantZodiac(time, it, isYearEquinox = false)
         } ?: Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
     }
@@ -269,12 +267,6 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         AscendantZodiac(time, coordinates, isYearEquinox = true)
     }
 }
-
-//private val abdajs = listOf(
-//    "ا", "ب", "ج", "د", "ه", "و", "ز", "ح", "ط", "ی",
-//    "با", "بب", "بج", "بد", "به", "بو", "بز", "بح", "بط", "بی",
-//    "جا", "جب"
-//)
 
 @Composable
 private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
