@@ -322,7 +322,7 @@ fun SharedTransitionScope.DaysTable(
                         mainCalendarDigits,
                     ),
                     color = when {
-                        isSelected -> monthColors.textDaySelected
+                        isSelected -> if (isHoliday) monthColors.holidays else monthColors.textDaySelected
                         isHoliday -> monthColors.holidays
                         else -> contentColor
                     },
