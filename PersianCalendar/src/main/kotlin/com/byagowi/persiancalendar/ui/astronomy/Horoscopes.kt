@@ -48,7 +48,6 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
@@ -65,6 +64,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
 import java.util.Locale
+import kotlin.math.abs
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
@@ -152,7 +152,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
             }
         }
         val coordinates by coordinates.collectAsState()
-        coordinates?.takeIf { !it.isHighLatitude }?.let {
+        coordinates?.takeIf { abs(it.latitude) <= 66 /* not useful for higher latitudes */ }?.let {
             HorizontalDivider()
             Text(
                 text = buildString {

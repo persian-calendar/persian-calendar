@@ -77,11 +77,8 @@ val CalculationMethod.titleStringId
         CalculationMethod.Tehran -> R.string.method_tehran
     }
 
-// Midnight sun occurs at latitudes from 65°44' to 90° north or south as
-// https://en.wikipedia.org/wiki/Midnight_sun
-// Additionally such latitudes aren't useful for placidus house system perhaps for the same reason
-// "[..] a latitude exceeding 66°N or 66°S [..] not be able to calculate [..] using the Placidus house system."
-val Coordinates.isHighLatitude: Boolean get() = abs(latitude) > 65
+// As "twilight may persist throughout the night during some months of the year" can happen in latitudes
+val Coordinates.isHighLatitude: Boolean get() = abs(latitude) > 48
 
 val HighLatitudesMethod.titleStringId
     @StringRes
