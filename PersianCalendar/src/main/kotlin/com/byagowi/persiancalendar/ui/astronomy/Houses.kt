@@ -58,7 +58,7 @@ private fun solvePlacidusCusp(
     repeat(8) { // It's more than enough iterations to reach to the needed accuracy
         val dec = y / hypot(y, x) * sinOb // Declination (δ) of the current longitude guess (λ)
         val ad = asin((dec / sqrt(1 - dec * dec) * tanPhi).coerceIn(-1.0, 1.0)) // Ascensional diff
-        val requiredRa = referenceRaRad + (PI / (if (isNocturnalCusp) -2 else 2) + ad) * cuspRatio
+        val requiredRa = referenceRaRad + (ad + PI / if (isNocturnalCusp) -2 else 2) * cuspRatio
         y = sin(requiredRa); x = cos(requiredRa) * cosOb
     }
     return (Math.toDegrees(atan2(y, x)) + 360) % 360
