@@ -7,7 +7,9 @@ import kotlin.math.PI
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.hypot
 import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.math.tan
 
 // See also Swiss Ephemeris' https://github.com/jwmatthys/pd-swisseph/blob/master/swehouse.h
@@ -51,11 +53,13 @@ private fun solvePlacidusCusp(
     isNocturnalCusp: Boolean,
 ): Double {
     val referenceRaRad = if (isNocturnalCusp) ramcRad + PI else ramcRad
-    var cuspLonRad = atan2(sin(referenceRaRad), cos(referenceRaRad) * cosOb)
-    repeat(9) { // It's more than enough iterations to reach to the needed accuracy
-        val ad = asin((tan(asin(sin(cuspLonRad) * sinOb)) * tanPhi).coerceIn(-1.0, 1.0))
+    var y = sin(referenceRaRad)
+    var x = cos(referenceRaRad) * cosOb
+    repeat(8) { // It's more than enough iterations to reach to the needed accuracy
+        val dec = y / hypot(y, x) * sinOb // Declination (δ) of the current longitude guess (λ)
+        val ad = asin((dec / sqrt(1 - dec * dec) * tanPhi).coerceIn(-1.0, 1.0)) // Ascensional diff
         val requiredRa = referenceRaRad + (PI / (if (isNocturnalCusp) -2 else 2) + ad) * cuspRatio
-        cuspLonRad = atan2(sin(requiredRa), cos(requiredRa) * cosOb)
+        y = sin(requiredRa); x = cos(requiredRa) * cosOb
     }
-    return (Math.toDegrees(cuspLonRad) + 360) % 360
+    return (Math.toDegrees(atan2(y, x)) + 360) % 360
 }
