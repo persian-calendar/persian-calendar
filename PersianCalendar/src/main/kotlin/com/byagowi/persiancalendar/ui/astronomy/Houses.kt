@@ -52,7 +52,7 @@ private fun solvePlacidusCusp(
     cuspRatio: Double,
     isNocturnalCusp: Boolean,
 ): Double {
-    val referenceRaRad = if (isNocturnalCusp) ramcRad + PI else ramcRad
+    val referenceRaRad = ramcRad + if (isNocturnalCusp) PI else .0
     var y = sin(referenceRaRad)
     var x = cos(referenceRaRad) * cosOb
     repeat(8) { // It's more than enough iterations to reach to the needed accuracy
