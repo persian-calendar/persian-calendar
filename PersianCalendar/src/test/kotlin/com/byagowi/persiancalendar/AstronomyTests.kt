@@ -248,6 +248,14 @@ class AstronomyTests {
     fun `Test known ascendants`() {
         assertAll(
             listOf(
+                1225 to Zodiac.CAPRICORN, // https://w.wiki/EhPH
+                1243 to Zodiac.CANCER, // https://w.wiki/EhPK https://w.wiki/EhPN
+                1269 to Zodiac.LIBRA, // https://w.wiki/EhPQ
+
+                1272 to Zodiac.CANCER, // https://w.wiki/EhPc
+                // 1273 to Zodiac.VIRGO, // doesn't match https://w.wiki/EhPY
+                1274 to Zodiac.SAGITTARIUS, // https://w.wiki/EhPX
+                1275 to Zodiac.PISCES, // https://w.wiki/EhPV but doesn't match with https://w.wiki/EhPR
                 1276 to Zodiac.CANCER,
                 1277 to Zodiac.VIRGO,
                 1278 to Zodiac.SAGITTARIUS,
