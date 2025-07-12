@@ -40,7 +40,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="4dp"
                     tools:text="د" />
 
                 <TextView
@@ -65,7 +65,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="4dp"
                     tools:text="ی" />
 
                 <TextView
@@ -90,7 +90,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="4dp"
                     tools:text="ش" />
 
                 <TextView
@@ -116,7 +116,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:paddingBottom="4dp"
                     android:autoSizeMaxTextSize="14sp"
                     android:autoSizeMinTextSize="9sp"
                     android:autoSizeStepGranularity="1sp"
@@ -167,7 +167,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="4dp"
                     tools:text="پ" />
 
                 <TextView
@@ -192,7 +192,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="4dp"
                     tools:text="چ" />
 
                 <TextView
@@ -217,7 +217,7 @@
                     style="@style/WidgetTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="4dp"
                     tools:text="س" />
 
                 <TextView
@@ -239,8 +239,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
             android:gravity="center_horizontal|bottom"
-            android:textSize="15sp"
+            android:autoSizeMaxTextSize="14sp"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
+            android:textSize="14sp"
             tools:ignore="SpUsage"
+            tools:targetApi="26"
             tools:text="اردیبهشت ۱۴۰۱" />
     </LinearLayout>
 </FrameLayout>
