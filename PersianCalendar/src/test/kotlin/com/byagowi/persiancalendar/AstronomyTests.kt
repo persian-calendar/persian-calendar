@@ -317,7 +317,8 @@ class AstronomyTests {
                 1404 to Zodiac.CANCER
             ).map { (year, sign) ->
                 val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-                val ascendant = houses(35.68, 51.42, time)[0];
+                val ascendant = houses(35.68, 51.42, time)[0]
+                println("$year: ${ascendant % 30}");
                 { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
             }
         )

@@ -289,7 +289,7 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                     }
                     if (event is CalendarEvent.EquinoxCalendarEvent) CompositionLocalProvider(
                         LocalLayoutDirection provides LayoutDirection.Ltr
-                    ) { Row { EquinoxCountDown(contentColor, event, backgroundColor) } }
+                    ) { EquinoxCountDown(contentColor, event, backgroundColor) }
                 }
                 this.AnimatedVisibility(event is CalendarEvent.DeviceCalendarEvent || event is CalendarEvent.EquinoxCalendarEvent) {
                     Icon(
@@ -317,54 +317,54 @@ private fun EquinoxCountDown(
     event: CalendarEvent.EquinoxCalendarEvent,
     backgroundColor: Color
 ) {
-    val isGradient by isGradient.collectAsState()
-    val foldedCardBrush = if (isGradient) Brush.verticalGradient(
-        .25f to contentColor,
-        .499f to contentColor.copy(alpha = if (contentColor.isLight) .75f else .5f),
-        .5f to contentColor,
-    ) else Brush.verticalGradient(
-        .49f to contentColor,
-        .491f to Color.Transparent,
-        .509f to Color.Transparent,
-        .51f to contentColor,
-    )
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        val isGradient by isGradient.collectAsState()
+        val foldedCardBrush = if (isGradient) Brush.verticalGradient(
+            .25f to contentColor,
+            .499f to contentColor.copy(alpha = if (contentColor.isLight) .75f else .5f),
+            .5f to contentColor,
+        ) else Brush.verticalGradient(
+            .49f to contentColor,
+            .491f to Color.Transparent,
+            .509f to Color.Transparent,
+            .51f to contentColor,
+        )
 
-    var remainedTime = event.remainingMillis.milliseconds
-    if (remainedTime < Duration.ZERO || remainedTime > 356.days) return
-    countDownTimeParts.map { (pluralId, interval) ->
-        val x = (remainedTime / interval).toInt()
-        remainedTime -= interval * x
-        x to pluralStringResource(pluralId, x, formatNumber(x))
-    }.dropWhile { it.first == 0 }.forEachIndexed { i, (_, x) ->
-        if (i != 0) Spacer(Modifier.width(8.dp))
-        val parts = x.split(" ")
-        if (parts.size == 2 && parts[0].length <= 3 && !isTalkBackEnabled) Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Row {
-                val digits = parts[0].padStart(2, formatNumber(0)[0])
-                digits.forEachIndexed { i, c ->
-                    Text(
-                        "$c",
-                        style = MaterialTheme.typography.headlineSmall,
-                        textAlign = TextAlign.Center,
-                        color = backgroundColor,
-                        modifier = Modifier
-                            .background(
-                                foldedCardBrush,
-                                MaterialTheme.shapes.extraSmall,
-                            )
-                            .width(28.dp),
-                    )
-                    if (i + 1 < digits.length) Spacer(Modifier.width(2.dp))
+        var remainedTime = event.remainingMillis.milliseconds
+        if (remainedTime < Duration.ZERO || remainedTime > 356.days) return
+        countDownTimeParts.map { (pluralId, interval) ->
+            val x = (remainedTime / interval).toInt()
+            remainedTime -= interval * x
+            x to pluralStringResource(pluralId, x, formatNumber(x))
+        }.dropWhile { it.first == 0 }.forEach { (_, x) ->
+            val parts = x.split(" ")
+            if (parts.size == 2 && parts[0].length <= 3 && !isTalkBackEnabled) Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                    val digits = parts[0].padStart(2, formatNumber(0)[0])
+                    digits.forEach {
+                        Text(
+                            "$it",
+                            style = MaterialTheme.typography.headlineSmall,
+                            textAlign = TextAlign.Center,
+                            color = backgroundColor,
+                            modifier = Modifier
+                                .background(
+                                    foldedCardBrush,
+                                    MaterialTheme.shapes.extraSmall,
+                                )
+                                .width(28.dp),
+                        )
+                    }
                 }
-            }
-            Text(
-                parts[1],
-                color = contentColor,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        } else Text(x, color = contentColor, style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    parts[1],
+                    color = contentColor,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            } else Text(x, color = contentColor, style = MaterialTheme.typography.bodyMedium)
+        }
     }
 }
 
