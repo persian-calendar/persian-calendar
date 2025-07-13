@@ -60,7 +60,6 @@
             android:autoSizeTextType="uniform"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="1"
             android:textSize="14sp"
             tools:ignore="UnusedAttribute" />
 

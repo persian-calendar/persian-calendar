@@ -21,6 +21,7 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
@@ -1060,6 +1061,10 @@ private fun create4x1RemoteViews(
         append(if (isWidgetClock) widgetTitle else mainDateString)
         if (showOtherCalendars) append(spacedComma + subtitle)
     })
+    remoteViews.setInt(
+        R.id.textPlaceholder2_4x1, "setMaxLines",
+        if (showOtherCalendars) 10 else 1
+    )
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
         if (isWidgetClock && isForcedIranTimeEnabled.value) "(" + context.getString(R.string.iran_time) + ")" else ""
