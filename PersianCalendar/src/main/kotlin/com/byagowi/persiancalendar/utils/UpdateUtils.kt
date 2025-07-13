@@ -21,7 +21,6 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.CheckResult
