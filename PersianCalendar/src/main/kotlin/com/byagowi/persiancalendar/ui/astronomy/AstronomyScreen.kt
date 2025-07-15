@@ -86,7 +86,6 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -213,13 +212,11 @@ fun SharedTransitionScope.AstronomyScreen(
                             showYearHoroscopeDialog = true
                             closeMenu()
                         }
-                        if (isAstronomicalExtraFeaturesEnabled && coordinates != null) {
-                            AppDropdownMenuItem({
-                                Text(stringResource(R.string.planetary_hours))
-                            }) {
-                                showPlanetaryHoursDialog = true
-                                closeMenu()
-                            }
+                        if (coordinates != null) AppDropdownMenuItem({
+                            Text(stringResource(R.string.planetary_hours))
+                        }) {
+                            showPlanetaryHoursDialog = true
+                            closeMenu()
                         }
                     }
                 },
