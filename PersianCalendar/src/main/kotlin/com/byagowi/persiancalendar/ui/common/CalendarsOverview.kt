@@ -193,7 +193,13 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
-            AutoSizedBodyText(generateYearName(context.resources, jdn, withEmoji = true))
+            val yearName = generateYearName(
+                context.resources,
+                jdn,
+                withOldEraName = language.isUserAbleToReadPersian,
+                withEmoji = true
+            )
+            AutoSizedBodyText(yearName)
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {

@@ -56,21 +56,18 @@ enum class ChineseZodiac(
         withEmoji: Boolean,
         persianDate: PersianDate? = null,
         withOldEraName: Boolean = false,
-        separator: String = " "
+        separator: String = " ",
     ): String {
         // TODO: This really needs to be untangled…
-        val oldEra = persianDate?.year?.let { it < 1304 } ?: false
-        val oldEraNameAddition = if (!oldEra && withOldEraName) {
+        val oldEraNameAddition = if (withOldEraName) {
             if (separator == "\n") "$oldEraPersianName\n"
             else "${separator}«$oldEraPersianName»"
         } else ""
-        return if (persianDate != null && language.value.isPersian && (persianAlternative != null || oldEra)) {
-            (if (withEmoji) "${persianAlternative?.first ?: emoji}$separator" else "") + let {
-                if (oldEra) oldEraPersianName else buildString {
-                    if (separator == "\n") append(oldEraNameAddition)
-                    append(persianAlternative?.second ?: resources.getString(title))
-                    if (separator != "\n") append(oldEraNameAddition)
-                }
+        return if (persianDate != null && language.value.isPersian && persianAlternative != null) {
+            (if (withEmoji) "${persianAlternative.first}$separator" else "") + buildString {
+                if (separator == "\n") append(oldEraNameAddition)
+                append(persianAlternative.second)
+                if (separator != "\n") append(oldEraNameAddition)
             }
         } else buildString {
             if (withEmoji) append("$emoji$separator")
