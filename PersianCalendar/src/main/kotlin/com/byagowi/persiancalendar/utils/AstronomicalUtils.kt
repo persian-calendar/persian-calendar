@@ -98,7 +98,7 @@ fun generateYearName(
             ChineseZodiac.fromPersianCalendar(persianDate).format(
                 resources = resources,
                 withEmoji = withEmoji,
-                persianDate = persianDate,
+                isPersian = language.value.isPersian,
                 withOldEraName = withOldEraName,
             ),
             resources.getString(R.string.shamsi_calendar_short)
@@ -107,7 +107,11 @@ fun generateYearName(
             val date = ChineseCalendar((time ?: jdn.toGregorianCalendar()).time)
             val year = date[ChineseCalendar.YEAR]
             language.value.inParentheses.format(
-                ChineseZodiac.fromChineseCalendar(date).format(resources, withEmoji),
+                ChineseZodiac.fromChineseCalendar(date).format(
+                    resources = resources,
+                    isPersian = false,
+                    withEmoji = withEmoji,
+                ),
                 resources.getString(R.string.chinese) + spacedComma + formatNumber(year)
             )
         } else null

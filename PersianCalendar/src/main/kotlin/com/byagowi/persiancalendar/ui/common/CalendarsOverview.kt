@@ -192,11 +192,13 @@ fun SharedTransitionScope.CalendarsOverview(
             )
         }
 
+        val persianDate = jdn.toPersianDate()
+        val oldEra = persianDate.year < 1304
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val yearName = generateYearName(
                 context.resources,
                 jdn,
-                withOldEraName = language.isUserAbleToReadPersian,
+                withOldEraName = oldEra && language.isUserAbleToReadPersian,
                 withEmoji = true
             )
             AutoSizedBodyText(yearName)
@@ -211,9 +213,8 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         if (language.isPersian) {
-            val persianDate = jdn.toPersianDate()
             val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
-            this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.year < 1304) {
+            this.AnimatedVisibility((enableExtra && isExpanded) || oldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
             this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {

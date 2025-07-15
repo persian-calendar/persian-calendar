@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.language
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
@@ -54,27 +53,25 @@ enum class ChineseZodiac(
     fun format(
         resources: Resources,
         withEmoji: Boolean,
-        persianDate: PersianDate? = null,
+        isPersian: Boolean,
         withOldEraName: Boolean = false,
-        separator: String = " ",
-    ): String {
-        // TODO: This really needs to be untangled…
-        val oldEraNameAddition = if (withOldEraName) {
-            if (separator == "\n") "$oldEraPersianName\n"
-            else "${separator}«$oldEraPersianName»"
-        } else ""
-        return if (persianDate != null && language.value.isPersian && persianAlternative != null) {
-            (if (withEmoji) "${persianAlternative.first}$separator" else "") + buildString {
-                if (separator == "\n") append(oldEraNameAddition)
-                append(persianAlternative.second)
-                if (separator != "\n") append(oldEraNameAddition)
-            }
-        } else buildString {
-            if (withEmoji) append("$emoji$separator")
-            if (separator == "\n") append(oldEraNameAddition)
-            append(resources.getString(title))
-            if (separator != "\n") append(oldEraNameAddition)
-        }
+    ): String = buildString {
+        val (emoji, title) = resolveName(isPersian, resources)
+        if (withEmoji) append("$emoji ")
+        append(title)
+        if (withOldEraName) append(" «$oldEraPersianName»")
+    }
+
+    fun formatForZodiac(resources: Resources, isPersian: Boolean): String = buildString {
+        val (emoji, title) = resolveName(isPersian, resources)
+        appendLine(emoji)
+        if (isPersian) appendLine(oldEraPersianName)
+        append(title)
+    }
+
+    private fun resolveName(isPersian: Boolean, resources: Resources): Pair<String, String> {
+        return if (isPersian && persianAlternative != null) persianAlternative
+        else emoji to resources.getString(title)
     }
 
     val bestMatches get() = bestMatchesRaw[ordinal]
