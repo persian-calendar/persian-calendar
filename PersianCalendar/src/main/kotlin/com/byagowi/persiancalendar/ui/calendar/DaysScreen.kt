@@ -667,7 +667,7 @@ private fun DaysView(
                     ExpandArrow(isExpanded = isExpanded)
                     Spacer(Modifier.height(8.dp))
                 } else Spacer(Modifier.height(12.dp))
-            } else Row(
+            } else if (maxDayAllDayEvents != 0) Row(
                 verticalAlignment = Alignment.Bottom,
                 modifier = if (maxDayAllDayEvents > 3) clickToExpandModifier else Modifier
             ) {
