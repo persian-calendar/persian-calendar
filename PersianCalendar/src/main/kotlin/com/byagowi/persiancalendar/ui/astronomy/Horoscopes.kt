@@ -281,13 +281,22 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalContext.current.resources
+    val language by language.collectAsState()
     EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
+        val houseAngle = run {
+            val houseZodiac = Zodiac.fromTropical(houses[i])
+            val value = formatAngle(houses[i] % 30)
+            if (houseZodiac == zodiac) value else language.inParentheses.format(
+                value,
+                houseZodiac.format(resources, withEmoji = false, short = true)
+            )
+        }
         zodiac.emoji + "\n" + zodiac.format(
             resources,
             withEmoji = false,
             short = true,
-        ) + " " + formatAngle(houses[i] % 30) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+        ) + " " + houseAngle + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + " " + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }
