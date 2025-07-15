@@ -82,6 +82,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
+import com.byagowi.persiancalendar.utils.isOldEra
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
@@ -193,12 +194,11 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         val persianDate = jdn.toPersianDate()
-        val oldEra = persianDate.year < 1304
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val yearName = generateYearName(
                 context.resources,
                 jdn,
-                withOldEraName = oldEra && language.isUserAbleToReadPersian,
+                withOldEraName = persianDate.isOldEra && language.isUserAbleToReadPersian,
                 withEmoji = true
             )
             AutoSizedBodyText(yearName)
@@ -214,7 +214,7 @@ fun SharedTransitionScope.CalendarsOverview(
 
         if (language.isPersian) {
             val enableExtra = isAncientIranEnabled || isAstronomicalExtraFeaturesEnabled
-            this.AnimatedVisibility((enableExtra && isExpanded) || oldEra) {
+            this.AnimatedVisibility((enableExtra && isExpanded) || persianDate.isOldEra) {
                 AutoSizedBodyText(jalaliAndHistoricalName(persianDate, jdn))
             }
             this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && isExpanded) {

@@ -43,6 +43,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
+import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import java.util.Date
 import java.util.GregorianCalendar
@@ -130,6 +131,9 @@ fun getA11yDaySummary(
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))
     }
 }
+
+// Before 1304 different month names and lengths, and different animal year names were in use
+val PersianDate.isOldEra get() = year < 1304
 
 fun GregorianCalendar.toCivilDate(): CivilDate {
     return CivilDate(

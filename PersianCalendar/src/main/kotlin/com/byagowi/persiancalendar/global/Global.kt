@@ -105,6 +105,7 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isHighLatitude
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
+import com.byagowi.persiancalendar.utils.isOldEra
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.scheduleAlarms
@@ -353,7 +354,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 
 fun yearMonthNameOfDate(date: AbstractDate): List<String> {
     return when (date) {
-        is PersianDate -> if (date.year > 1303) persianMonths else oldEraPersianMonths
+        is PersianDate -> if (date.isOldEra) oldEraPersianMonths else persianMonths
         is CivilDate -> gregorianMonths
         is IslamicDate -> islamicMonths
         is NepaliDate -> nepaliMonths
