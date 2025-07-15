@@ -35,18 +35,19 @@ enum class ChineseZodiac(
     @get:StringRes private val title: Int, private val emoji: String,
     // For example used in https://rc.majlis.ir/fa/law/show/91137
     private val oldEraPersianName: String,
-    private val persianAlternative: Pair<String, String>? = null,
+    private val persianAlternativeEmoji: String? = null,
+    private val persianAlternativeTitle: String? = null,
 ) {
     RAT(R.string.animal_year_name_rat, "🐀", "سیچقان ئیل"),
     OX(R.string.animal_year_name_ox, "🐂", "اود ئیل"),
-    TIGER(R.string.animal_year_name_tiger, "🐅", "بارس ئیل", "🐆" to "پلنگ"),
+    TIGER(R.string.animal_year_name_tiger, "🐅", "بارس ئیل", "🐆", "پلنگ"),
     RABBIT(R.string.animal_year_name_rabbit, "🐇", "توشقان ئیل"),
-    DRAGON(R.string.animal_year_name_dragon, "🐲", "لوی ئیل", "🐊" to "نهنگ"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲", "لوی ئیل", "🐊", "نهنگ"),
     SNAKE(R.string.animal_year_name_snake, "🐍", "ئیلان ئیل"),
     HORSE(R.string.animal_year_name_horse, "🐎", "یونت ئیل"),
-    GOAT(R.string.animal_year_name_goat, "🐐", "قوی ئیل", "🐑" to "گوسفند"),
+    GOAT(R.string.animal_year_name_goat, "🐐", "قوی ئیل", "🐑", "گوسفند"),
     MONKEY(R.string.animal_year_name_monkey, "🐒", "پیچی ئیل"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐓", "تخاقوی ئیل", "🐔" to "مرغ"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐓", "تخاقوی ئیل", "🐔", "مرغ"),
     DOG(R.string.animal_year_name_dog, "🐕", "ایت ئیل"),
     PIG(R.string.animal_year_name_pig, "🐖", "تنگوز ئیل");
 
@@ -56,23 +57,22 @@ enum class ChineseZodiac(
         isPersian: Boolean,
         withOldEraName: Boolean = false,
     ): String = buildString {
-        val (emoji, title) = resolveName(isPersian, resources)
-        if (withEmoji) append("$emoji ")
-        append(title)
+        if (withEmoji) append("${resolveEmoji(isPersian)} ")
+        append(resolveTitle(isPersian, resources))
         if (withOldEraName) append(" «$oldEraPersianName»")
     }
 
     fun formatForZodiac(resources: Resources, isPersian: Boolean): String = buildString {
-        val (emoji, title) = resolveName(isPersian, resources)
-        appendLine(emoji)
+        appendLine(resolveEmoji(isPersian))
         if (isPersian) appendLine(oldEraPersianName)
-        append(title)
+        append(resolveTitle(isPersian, resources))
     }
 
-    private fun resolveName(isPersian: Boolean, resources: Resources): Pair<String, String> {
-        return if (isPersian && persianAlternative != null) persianAlternative
-        else emoji to resources.getString(title)
-    }
+    private fun resolveEmoji(isPersian: Boolean): String =
+        persianAlternativeEmoji.takeIf { isPersian } ?: emoji
+
+    private fun resolveTitle(isPersian: Boolean, resources: Resources): String =
+        persianAlternativeTitle.takeIf { isPersian } ?: resources.getString(title)
 
     val bestMatches get() = bestMatchesRaw[ordinal]
     val averageMatches get() = averageMatchesRaw[ordinal]
