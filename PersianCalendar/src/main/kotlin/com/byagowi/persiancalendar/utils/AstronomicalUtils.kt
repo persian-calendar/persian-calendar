@@ -24,8 +24,10 @@ import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.search
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.math.abs
 import kotlin.math.atan2
 
 private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
@@ -47,6 +49,14 @@ private fun Double.withMaxDegreeValue(max: Double): Double {
     while (deg <= max - 360.0) deg += 360.0
     while (deg > max) deg -= 360.0
     return deg
+}
+
+fun searchMoonAgeTime(jdn: Jdn, targetDegrees: Double): Clock? {
+    return search(jdn.toAstronomyTime(0), (jdn + 1).toAstronomyTime(0), 1.0) { time ->
+        abs(eclipticGeoMoon(time).lon - sunPosition(time).elon) - targetDegrees
+    }?.toMillisecondsSince1970()?.let { timestamp ->
+        Clock(GregorianCalendar().also { it.timeInMillis = timestamp })
+    }
 }
 
 // setIranTime should be used only for tests

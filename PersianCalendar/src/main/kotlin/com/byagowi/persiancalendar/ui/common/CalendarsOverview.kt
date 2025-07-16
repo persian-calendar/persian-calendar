@@ -84,8 +84,10 @@ import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isOldEra
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.moonInScorpioState
+import com.byagowi.persiancalendar.utils.searchMoonAgeTime
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
@@ -228,13 +230,20 @@ fun SharedTransitionScope.CalendarsOverview(
             val time = jdn.toAstronomyTime(hourOfDay = 12)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
+            val fullMoonTime = if (phase == LunarAge.Phase.FULL_MOON) remember(jdn) {
+                runCatching {
+                    searchMoonAgeTime(jdn, 180.0)?.let { spacedColon + it.toFormattedString() }
+                }.onFailure(logException).getOrNull() ?: ""
+            } else ""
             val coordinates by coordinates.collectAsState()
             AutoSizedBodyText(
                 if (language.isNepali) {
                     phase.emoji(coordinates) + " " + jdn.toNepaliDate().monthName + " " +
                             language.moonNames(phase) +
                             " ~" + Tithi.tithiName(System.currentTimeMillis())
-                } else phase.emoji(coordinates) + " " + language.moonNames(phase)
+                } else {
+                    phase.emoji(coordinates) + " " + language.moonNames(phase) + fullMoonTime
+                }
             )
         }
 
