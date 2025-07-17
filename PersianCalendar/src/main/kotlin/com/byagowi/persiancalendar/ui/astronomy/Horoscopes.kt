@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
+import com.byagowi.persiancalendar.NBSP
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
@@ -284,19 +285,18 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val language by language.collectAsState()
     EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-        val houseAngle = run {
+        zodiac.emoji + "\n" + zodiac.format(
+            resources,
+            withEmoji = false,
+            short = true,
+        ) + " " + run {
             val houseZodiac = Zodiac.fromTropical(houses[i])
             val value = formatAngle(houses[i] % 30)
             if (houseZodiac == zodiac) value else language.inParentheses.format(
                 value,
                 houseZodiac.format(resources, withEmoji = false, short = true)
-            )
-        }
-        zodiac.emoji + "\n" + zodiac.format(
-            resources,
-            withEmoji = false,
-            short = true,
-        ) + " " + houseAngle + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+            ).replace(" ", NBSP)
+        } + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + " " + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }
