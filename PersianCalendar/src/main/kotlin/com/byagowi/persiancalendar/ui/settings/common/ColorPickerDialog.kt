@@ -54,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.toColorInt
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
@@ -111,7 +112,7 @@ fun ColorPickerDialog(
                     value = transientValue ?: "#%08X".format(Locale.ENGLISH, color.value.toArgb()),
                     onValueChange = { newValue ->
                         if (newValue.length != 9) transientValue = newValue else runCatching {
-                            val newColor = Color(android.graphics.Color.parseColor(newValue))
+                            val newColor = Color(newValue.toColorInt())
                             transientValue = null
                             coroutineScope.launch {
                                 color.animateTo(newColor, appColorAnimationSpec)
