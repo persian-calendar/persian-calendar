@@ -27,7 +27,8 @@ fun CalendarsTypesPicker(current: Calendar, setCurrent: (Calendar) -> Unit) {
         divider = {},
         containerColor = Color.Transparent,
         indicator = {
-            TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(selectedTabIndex))
+            val offset = selectedTabIndex.coerceAtMost(enabledCalendars.size - 1)
+            TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
         },
     ) {
         enabledCalendars.forEach { calendar ->

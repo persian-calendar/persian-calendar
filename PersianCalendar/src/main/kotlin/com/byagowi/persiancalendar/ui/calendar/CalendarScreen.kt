@@ -567,7 +567,8 @@ private fun Details(
             divider = {},
             containerColor = Color.Transparent,
             indicator = {
-                TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(selectedTabIndex))
+                val offset = selectedTabIndex.coerceAtMost(tabs.size - 1)
+                TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
             },
         ) {
             tabs.forEachIndexed { index, (titlesResId, _) ->
