@@ -92,8 +92,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }
-            @Suppress("SimplifiableCallChain")
-            Text(
+            @Suppress("SimplifiableCallChain") Text(
                 when (mode) {
                     AstronomyMode.EARTH -> listOf(
                         Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
@@ -159,7 +158,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                     val cityName by cityName.collectAsState()
                     cityName?.let { name -> append(spacedComma); append(name) }
                 },
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             AscendantZodiac(time, it, isYearEquinox = false)
@@ -246,12 +245,16 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
         val (coordinates, cityName) = when {
-            language.isAfghanistanExclusive -> Coordinates(34.53, 69.16, 0.0) to
-                    if (language.isUserAbleToReadPersian) "کابل" else "Kabul"
+            language.isAfghanistanExclusive -> {
+                Coordinates(34.53, 69.16, 0.0) to
+                        if (language.isUserAbleToReadPersian) "کابل" else "Kabul"
+            }
 
             // So the user would be able to verify it with the calendar book published
-            else -> Coordinates(35.68, 51.42, 0.0) to
-                    if (language.isUserAbleToReadPersian) "تهران" else "Tehran"
+            else -> {
+                Coordinates(35.68, 51.42, 0.0) to
+                        if (language.isUserAbleToReadPersian) "تهران" else "Tehran"
+            }
         }
 
         Text(
@@ -284,16 +287,14 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val resources = LocalContext.current.resources
     EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
+        val houseZodiac = Zodiac.fromTropical(houses[i]).takeIf { it != zodiac }?.let {
+            "/" + it.format(resources, withEmoji = false, short = true)
+        }.orEmpty()
         zodiac.emoji + "\n" + zodiac.format(
             resources,
             withEmoji = false,
             short = true,
-        ) + run {
-            val houseZodiac = Zodiac.fromTropical(houses[i])
-            if (zodiac != houseZodiac) "/" + houseZodiac.format(
-                resources, withEmoji = false, short = true
-            ) else ""
-        } + NBSP + formatAngle(houses[i] % 30) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
+        ) + houseZodiac + NBSP + formatAngle(houses[i] % 30) + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
             resources.getString(body.titleStringId) + NBSP + formatAngle(longitude % 30)
         }?.let { "\n" + it }.orEmpty()
     }
