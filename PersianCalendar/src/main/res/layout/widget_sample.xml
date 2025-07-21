@@ -22,7 +22,11 @@
             android:id="@+id/sample_clock"
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:autoSizeMaxTextSize="34sp"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
             android:fontFamily="sans-serif"
             android:gravity="center"
             android:textSize="34sp" />
