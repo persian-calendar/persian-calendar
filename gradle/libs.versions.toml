@@ -6,7 +6,6 @@ androidx-activity = "1.10.1"
 androidx-core = "1.16.0"
 androidx-navigation = "2.9.2"
 androidx-test-ext-junit = "1.2.1"
-#app-projected = "1.4.0"
 astronomy = "61dc07020aaa6885d2c7f688a4d82beaf6edb9ef" # is equal to v2.1.19
 browser = "1.8.0"
 compose-bom = "2025.07.00"
@@ -37,8 +36,6 @@ wear-tiles-proto = "1.5.0"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
-#androidx-app = { module = "androidx.car.app:app", version.ref = "app-projected" }
-#androidx-app-projected = { module = "androidx.car.app:app-projected", version.ref = "app-projected" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
