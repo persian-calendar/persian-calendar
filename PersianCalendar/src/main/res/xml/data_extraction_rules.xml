@@ -5,4 +5,9 @@
             domain="sharedpref"
             path="." />
     </cloud-backup>
+    <device-transfer>
+        <include
+            domain="sharedpref"
+            path="." />
+    </device-transfer>
 </data-extraction-rules>
