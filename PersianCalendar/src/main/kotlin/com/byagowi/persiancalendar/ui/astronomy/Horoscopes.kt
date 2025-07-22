@@ -246,14 +246,14 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         val gregorianYear = CivilDate(PersianDate(persianYear, 1, 1)).year
         val (coordinates, cityName) = when {
             language.isAfghanistanExclusive -> {
-                Coordinates(34.53, 69.16, 0.0) to
-                        if (language.isUserAbleToReadPersian) "کابل" else "Kabul"
+                val kabulCoordinates = Coordinates(34.53, 69.16, 0.0)
+                kabulCoordinates to if (language.isUserAbleToReadPersian) "کابل" else "Kabul"
             }
 
             // So the user would be able to verify it with the calendar book published
             else -> {
-                Coordinates(35.68, 51.42, 0.0) to
-                        if (language.isUserAbleToReadPersian) "تهران" else "Tehran"
+                val tehranCoordinates = Coordinates(35.68, 51.42, 0.0)
+                tehranCoordinates to if (language.isUserAbleToReadPersian) "تهران" else "Tehran"
             }
         }
 
@@ -287,8 +287,7 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val resources = LocalContext.current.resources
     EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-        val houseZodiac = listOf(zodiac, Zodiac.fromTropical(houses[i])).distinct()
-        val secondLine = houseZodiac.joinToString("/") {
+        val secondLine = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
             it.format(resources, withEmoji = false, short = true)
         } + NBSP + formatAngle(houses[i] % 30)
         zodiac.emoji + "\n" + secondLine + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
