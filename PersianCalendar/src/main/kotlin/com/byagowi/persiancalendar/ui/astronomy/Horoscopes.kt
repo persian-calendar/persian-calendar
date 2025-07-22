@@ -75,13 +75,14 @@ private fun formatAngle(value: Double): String {
     return formatNumber("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
-// This is geocentric
-private fun longitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
+private fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
     return when (body) {
         Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
         Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
-        else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
-            .let { it.elon to it.vec.length() }
+        else -> {
+            val ecliptic = equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
+            ecliptic.elon to ecliptic.vec.length()
+        }
     }
 }
 
@@ -94,11 +95,8 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
             var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }
             @Suppress("SimplifiableCallChain") Text(
                 when (mode) {
-                    AstronomyMode.EARTH -> listOf(
-                        Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
-                        Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-                    ).map { body ->
-                        val (longitude, distance) = longitudeAndDistanceOfBody(body, time)
+                    AstronomyMode.EARTH -> geocentricDistanceBodies.map { body ->
+                        val (longitude, distance) = geocentricLongitudeAndDistanceOfBody(body, time)
                         stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
                             Locale.ENGLISH,
                             LRM,
@@ -108,10 +106,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                         )
                     }.joinToString("\n")
 
-                    AstronomyMode.SUN -> listOf(
-                        Body.Mercury, Body.Venus, Body.Earth, Body.Moon, Body.Mars, Body.Jupiter,
-                        Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-                    ).map { body ->
+                    AstronomyMode.SUN -> heliocentricDistanceBodies.map { body ->
                         val (longitude, distance) = helioVector(body, time).let {
                             // See also eclipticLongitude of the astronomy library
                             equatorialToEcliptic(it).elon to it.length()
@@ -269,16 +264,28 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     }
 }
 
+private val geocentricDistanceBodies = listOf(
+    Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
+    Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto,
+)
+
+private val heliocentricDistanceBodies = listOf(
+    Body.Mercury, Body.Venus, Body.Earth, Body.Moon, Body.Mars, Body.Jupiter,
+    Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto,
+)
+
+private val ascendantBodies = listOf(
+    Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn,
+)
+
 @Composable
 private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
-    val bodiesZodiac = listOf(
-        Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn
-    ).map { body ->
+    val bodiesZodiac = ascendantBodies.map { body ->
         if (body == Body.Sun && isYearEquinox) {
             // Sometimes 359.99 put it in a incorrect house so let's just hardcode it
             return@map body to .0
         }
-        val (longitude, _) = longitudeAndDistanceOfBody(body, time)
+        val (longitude, _) = geocentricLongitudeAndDistanceOfBody(body, time)
         body to longitude
     }.sortedBy { (_, longitude) -> longitude }
         .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
