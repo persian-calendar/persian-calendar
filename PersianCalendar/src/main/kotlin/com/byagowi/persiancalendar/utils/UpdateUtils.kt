@@ -150,7 +150,6 @@ private val useDefaultPriority
 private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
 private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastLanguage: Language? = null
-private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
 private var latestJdnUpdate: Jdn? = null
 
@@ -197,24 +196,20 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     val jdn = Jdn.today()
-    val date = jdn on mainCalendar
-
-    val isDayUpdated = jdn != latestJdnUpdate
-    latestJdnUpdate = jdn
-
-    // Quick tile
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isDayUpdated) {
-        val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
-        TileService.requestListeningState(context, tileComponent)
-    }
-
-    if (pastDate != date || updateDate) {
+    if (jdn != latestJdnUpdate || updateDate) {
         debugLog("UpdateUtils: date has changed")
         scheduleAlarms(context)
-        pastDate = date
+        latestJdnUpdate = jdn
         readAndStoreDeviceCalendarEventsOfTheDay(context)
+
+        // Quick tile
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
+            TileService.requestListeningState(context, tileComponent)
+        }
     }
 
+    val date = jdn on mainCalendar
     val shiftWorkTitle = getShiftWorkTitle(jdn)
     val title =
         dayTitleSummary(jdn, date) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
