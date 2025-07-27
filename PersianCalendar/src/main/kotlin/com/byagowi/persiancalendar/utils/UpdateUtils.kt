@@ -18,6 +18,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
+import android.service.quicksettings.TileService
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -108,6 +109,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.service.BroadcastReceivers
+import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
 import com.byagowi.persiancalendar.service.widgetWidthCellKey
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -150,6 +152,7 @@ private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastLanguage: Language? = null
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
+private var latestJdnUpdate: Jdn? = null
 
 @ColorInt
 private var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
@@ -195,6 +198,15 @@ fun update(context: Context, updateDate: Boolean) {
 
     val jdn = Jdn.today()
     val date = jdn on mainCalendar
+
+    val isDayUpdated = jdn != latestJdnUpdate
+    latestJdnUpdate = jdn
+
+    // Quick tile
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && isDayUpdated) {
+        val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
+        TileService.requestListeningState(context, tileComponent)
+    }
 
     if (pastDate != date || updateDate) {
         debugLog("UpdateUtils: date has changed")
