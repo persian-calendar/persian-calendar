@@ -41,6 +41,7 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
@@ -347,12 +348,12 @@ private fun createRoundedBitmap(
 
 private fun getWidgetBackgroundColor(
     preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
-) = preferences.getString(key, null)?.let(Color::parseColor)
+) = preferences.getString(key, null)?.toColorInt()
     ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 private fun getWidgetTextColor(
     preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
-) = preferences.getString(key, null)?.let(Color::parseColor) ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(
     context: Context, width: Int, height: Int, widgetId: Int, today: Jdn,
