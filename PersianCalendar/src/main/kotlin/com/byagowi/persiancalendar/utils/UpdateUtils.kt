@@ -1497,13 +1497,6 @@ private data class NotificationData(
             builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
         }
 
-        // Night mode doesn't like our custom notifications in Samsung and HTC One UI,
-        // apparently fixed in newer version of Samsung UI
-        val shouldDisableCustomNotification = when (Build.BRAND) {
-            "samsung", "htc" -> isSystemInDarkTheme(context.resources.configuration)
-            else -> false
-        } && Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE
-
         if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val holidays = getEventsTitle(
                 events,
@@ -1511,7 +1504,7 @@ private data class NotificationData(
                 compact = true,
                 showDeviceCalendarEvents = true,
                 insertRLM = isRtl,
-                addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
+                addIsHoliday = isHighTextContrastEnabled
             )
 
             val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
@@ -1523,56 +1516,47 @@ private data class NotificationData(
                 addIsHoliday = false
             ) else ""
 
-            val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
+            builder.setCustomContentView(
+                RemoteViews(
+                    context.packageName, R.layout.custom_notification
+                ).also {
+                    it.setDirection(R.id.custom_notification_root, context.resources)
+                    it.setTextViewText(R.id.title, title)
+                    it.setTextViewText(R.id.body, subtitle)
+                },
+            )
 
-            if (shouldDisableCustomNotification) {
-                val content = listOf(
-                    subtitle, holidays.trim(), nonHolidays, notificationOwghat
-                ).filter { it.isNotBlank() }.joinToString("\n")
-                builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
-            } else {
-                builder.setCustomContentView(
-                    RemoteViews(
-                        context.packageName, R.layout.custom_notification
-                    ).also {
-                        it.setDirection(R.id.custom_notification_root, context.resources)
-                        it.setTextViewText(R.id.title, title)
-                        it.setTextViewText(R.id.body, subtitle)
-                    },
-                )
-
-                if (holidays.isNotBlank() || nonHolidays.isNotBlank() || timesToShow != null) builder.setCustomBigContentView(
-                    RemoteViews(
-                        context.packageName, R.layout.custom_notification_big
-                    ).also {
-                        it.setDirection(R.id.custom_notification_root, context.resources)
-                        it.setTextViewText(R.id.title, title)
-                        it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
-                        it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
-                        it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
-                        it.setViewVisibility(
-                            R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
+            if (holidays.isNotBlank() || nonHolidays.isNotBlank() || timesToShow != null) builder.setCustomBigContentView(
+                RemoteViews(
+                    context.packageName, R.layout.custom_notification_big
+                ).also {
+                    it.setDirection(R.id.custom_notification_root, context.resources)
+                    it.setTextViewText(R.id.title, title)
+                    it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
+                    it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
+                    it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
+                    it.setViewVisibility(
+                        R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
+                    )
+                    if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
+                        timesToShow,
+                    ) { (headViewId, timeViewId), prayTime ->
+                        it.setTextViewText(
+                            headViewId, context.getString(prayTime.stringRes)
                         )
-                        if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
-                            timesToShow,
-                        ) { (headViewId, timeViewId), prayTime ->
-                            it.setTextViewText(
-                                headViewId, context.getString(prayTime.stringRes)
-                            )
-                            it.setTextViewText(
-                                timeViewId, prayTimes[prayTime].toFormattedString(printAmPm = false)
-                            )
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                val alpha = if (prayTime == nextPrayTime) 1f else .6f
-                                it.setAlpha(headViewId, alpha)
-                                it.setAlpha(timeViewId, alpha)
-                            }
+                        it.setTextViewText(
+                            timeViewId, prayTimes[prayTime].toFormattedString(printAmPm = false)
+                        )
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                            val alpha = if (prayTime == nextPrayTime) 1f else .6f
+                            it.setAlpha(headViewId, alpha)
+                            it.setAlpha(timeViewId, alpha)
                         }
-                    },
-                )
+                    }
+                },
+            )
 
-                builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
-            }
+            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
         if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
