@@ -3,6 +3,18 @@ package com.byagowi.persiancalendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.DOG
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.DRAGON
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.GOAT
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.HORSE
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.MONKEY
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.OX
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.PIG
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.RABBIT
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.RAT
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.ROOSTER
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.SNAKE
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.TIGER
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.houses
@@ -356,5 +368,54 @@ class AstronomyTests {
 //            assertEquals(0.8978681192065139, split.from.value, 1.0e-5)
 //            assertEquals(1.6836708611812483, split.to.value, 1.0e-5)
 //        }
+    }
+
+    @Test
+    fun `Chinese zodiac matches the expecations`() {
+        listOf(
+            setOf(DRAGON, MONKEY, OX),
+            setOf(ROOSTER, SNAKE, RAT),
+            setOf(HORSE, DOG, PIG),
+            setOf(PIG, GOAT, DOG),
+            setOf(RAT, MONKEY, ROOSTER),
+            setOf(OX, ROOSTER, MONKEY),
+            setOf(DOG, TIGER, GOAT),
+            setOf(RABBIT, PIG, HORSE),
+            setOf(DRAGON, RAT, SNAKE),
+            setOf(SNAKE, OX, DRAGON),
+            setOf(TIGER, HORSE, RABBIT),
+            setOf(RABBIT, GOAT, TIGER),
+        ).zip(ChineseZodiac.entries) { bestMatch, zodiac ->
+            { assertEquals(bestMatch, zodiac.bestMatches) }
+        }.let(::assertAll)
+
+        listOf(
+            setOf(PIG, TIGER, DOG, SNAKE, RABBIT, ROOSTER, RAT),
+            setOf(MONKEY, DOG, RABBIT, TIGER, DRAGON, PIG, OX),
+            setOf(RABBIT, DRAGON, ROOSTER, RAT, GOAT, OX, TIGER),
+            setOf(TIGER, MONKEY, RABBIT, OX, HORSE, RAT, SNAKE),
+            setOf(TIGER, SNAKE, HORSE, GOAT, PIG, OX, DRAGON),
+            setOf(HORSE, DRAGON, GOAT, DOG, RABBIT, RAT, SNAKE),
+            setOf(SNAKE, RABBIT, DRAGON, ROOSTER, PIG, MONKEY, HORSE),
+            setOf(SNAKE, GOAT, DRAGON, MONKEY, ROOSTER, DOG, TIGER),
+            setOf(MONKEY, DOG, OX, GOAT, RABBIT, ROOSTER, HORSE),
+            setOf(HORSE, ROOSTER, GOAT, PIG, TIGER, MONKEY, RAT),
+            setOf(MONKEY, PIG, RAT, OX, SNAKE, GOAT, DOG),
+            setOf(RAT, ROOSTER, DOG, DRAGON, HORSE, OX, PIG),
+        ).zip(ChineseZodiac.entries) { bestMatch, zodiac ->
+            { assertEquals(bestMatch, zodiac.averageMatches) }
+        }.let(::assertAll)
+
+        listOf(HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE).zip(
+            ChineseZodiac.entries
+        ) { superBad, zodiac ->
+            { assertEquals(superBad, zodiac.superBadMatch) }
+        }.let(::assertAll)
+
+        listOf(GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY).zip(
+            ChineseZodiac.entries
+        ) { harmful, zodiac ->
+            { assertEquals(harmful, zodiac.harmfulMatch) }
+        }.let(::assertAll)
     }
 }
