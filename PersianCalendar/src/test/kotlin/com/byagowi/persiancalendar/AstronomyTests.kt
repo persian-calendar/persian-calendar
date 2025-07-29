@@ -3,6 +3,11 @@ package com.byagowi.persiancalendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.BEST
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.BETTER
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.NEUTRAL
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.WORSE
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.WORST
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.DOG
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.DRAGON
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.GOAT
@@ -26,8 +31,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.test.assertContains
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class AstronomyTests {
 
@@ -389,14 +394,7 @@ class AstronomyTests {
             setOf(RABBIT, GOAT, TIGER),
         ).zip(ChineseZodiac.entries) { bestMatch, yearZodiac ->
             bestMatch.map {
-                {
-                    assertTrue(
-                        yearZodiac compatibilityWith it in listOf(
-                            ChineseZodiac.Compatibility.BEST,
-                            ChineseZodiac.Compatibility.BETTER,
-                        )
-                    )
-                }
+                { assertContains(listOf(BEST, BETTER), yearZodiac compatibilityWith it) }
             }
         }.flatten().let(::assertAll)
 
@@ -414,21 +412,19 @@ class AstronomyTests {
             setOf(MONKEY, PIG, RAT, OX, SNAKE, GOAT, DOG),
             setOf(RAT, ROOSTER, DOG, DRAGON, HORSE, OX, PIG),
         ).zip(ChineseZodiac.entries) { neutralMatches, yearZodiac ->
-            neutralMatches.map {
-                { assertTrue(yearZodiac compatibilityWith it == ChineseZodiac.Compatibility.NEUTRAL) }
-            }
+            neutralMatches.map { { assertEquals(NEUTRAL, yearZodiac compatibilityWith it) } }
         }.flatten().let(::assertAll)
 
         listOf(HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE).zip(
             ChineseZodiac.entries
         ) { worseMatch, yearZodiac ->
-            { assertTrue(yearZodiac compatibilityWith worseMatch == ChineseZodiac.Compatibility.WORSE) }
+            { assertEquals(WORSE, yearZodiac compatibilityWith worseMatch) }
         }.let(::assertAll)
 
         listOf(GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY).zip(
             ChineseZodiac.entries
         ) { worstMatch, yearZodiac ->
-            { assertTrue(yearZodiac compatibilityWith worstMatch == ChineseZodiac.Compatibility.WORST) }
+            { assertEquals(WORST, yearZodiac compatibilityWith worstMatch) }
         }.let(::assertAll)
     }
 }
