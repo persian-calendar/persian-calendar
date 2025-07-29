@@ -93,13 +93,14 @@ enum class ChineseZodiac(
      * | Pig     | Rabbit, Goat, Tiger  | Rat, Rooster, Dog, Dragon, Horse, Ox, Pig          | Snake     | Monkey  |
      */
     infix fun compatibilityWith(other: ChineseZodiac): Compatibility {
-        return when (other.ordinal) {
-            (ordinal + 4) % 12 -> Compatibility.BEST
-            (ordinal + 8) % 12 -> Compatibility.BEST
-            (13 - ordinal) % 12 -> Compatibility.BETTER
-            (ordinal + 6) % 12 -> Compatibility.WORSE
-            (19 - ordinal) % 12 -> Compatibility.WORST
-            else -> Compatibility.NEUTRAL
+        return when ((ordinal - other.ordinal + 12) % 12) {
+            4, 8 -> Compatibility.BEST
+            6 -> Compatibility.WORSE
+            else -> when ((ordinal + other.ordinal) % 12) {
+                1 -> Compatibility.BETTER
+                7 -> Compatibility.WORST
+                else -> Compatibility.NEUTRAL
+            }
         }
     }
 
