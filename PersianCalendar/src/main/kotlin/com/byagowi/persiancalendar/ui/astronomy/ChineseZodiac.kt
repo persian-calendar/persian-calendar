@@ -76,7 +76,7 @@ enum class ChineseZodiac(
 
     val bestMatches get() = bestMatchesRaw[ordinal]
     val averageMatches get() = averageMatchesRaw[ordinal]
-    val poorMatch get() = poorMatchRaw[ordinal]
+    val superBadMatch get() = superBadMatchRow[ordinal]
     val harmfulMatch get() = harmfulMatchRaw[ordinal]
 
     companion object {
@@ -92,51 +92,51 @@ enum class ChineseZodiac(
          *
          * The follow table is copied from https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
          *
-         * |   Sign  |      Best Match     |                    Average Match                   | Super Bad | Harmful |
-         * |:-------:|:-------------------:|:--------------------------------------------------:|:---------:|---------|
-         * | Rat     | Dragon, Monkey, Rat | Pig, Tiger, Dog, Snake, Rabbit, Rooster, Ox        | Horse     | Goat    |
-         * | Ox      | Snake, Rooster, Ox  | Monkey, Dog, Rabbit, Tiger, Dragon, Pig, Rat       | Goat      | Horse   |
-         * | Tiger   | Horse, Dog, Tiger   | Rabbit, Dragon, Rooster, Rat, Goat, Ox, Pig        | Monkey    | Snake   |
-         * | Rabbit  | Pig, Goat, Rabbit   | Tiger, Monkey, Goat, Ox, Horse, Rat, Snake         | Rooster   | Dragon  |
-         * | Dragon  | Rat, Monkey, Dragon | Tiger, Snake, Horse, Goat, Pig, Ox, Rooster        | Dog       | Rabbit  |
-         * | Snake   | Ox, Rooster, Snake  | Horse, Dragon, Goat, Dog, Rabbit, Rat, Monkey      | Pig       | Tiger   |
-         * | Horse   | Dog, Tiger, Horse   | Snake, Rabbit, Dragon, Rooster, Pig, Monkey, Goat  | Rat       | Ox      |
-         * | Goat    | Rabbit, Pig, Goat   | Snake, Rabbit, Dragon, Monkey, Rooster, Dog, Tiger | Ox        | Rat     |
-         * | Monkey  | Dragon, Rat, Monkey | Dragon, Dog, Ox, Goat, Rabbit, Rooster, Horse      | Tiger     | Pig     |
-         * | Rooster | Ox, Snake, Rooster  | Horse, Snake, Goat, Pig, Tiger, Monkey, Rat        | Rabbit    | Dog     |
-         * | Dog     | Tiger, Horse, Dog   | Monkey, Pig, Rat, Ox, Snake, Goat, Rabbit          | Dragon    | Rooster |
-         * | Pig     | Rabbit, Goat, Pig   | Rat, Rooster, Dog, Dragon, Horse, Ox, Tiger        | Snake     | Monkey  |
+         * |   Sign  |      Best Match      |                    Average Match                   | Super Bad | Harmful |
+         * |:-------:|:--------------------:|:--------------------------------------------------:|:---------:|---------|
+         * | Rat     | Dragon, Monkey, Ox   | Pig, Tiger, Dog, Snake, Rabbit, Rooster, Rat       | Horse     | Goat    |
+         * | Ox      | Rooster, Snake, Rat  | Monkey, Dog, Rabbit, Tiger, Dragon, Pig, Ox        | Goat      | Horse   |
+         * | Tiger   | Horse, Dog, Pig      | Rabbit, Dragon, Rooster, Rat, Goat, Ox, Tiger      | Monkey    | Snake   |
+         * | Rabbit  | Pig, Goat, Dog       | Tiger, Monkey, Rabbit, Ox, Horse, Rat, Snake       | Rooster   | Dragon  |
+         * | Dragon  | Rat, Monkey, Rooster | Tiger, Snake, Horse, Goat, Pig, Ox, Dragon         | Dog       | Rabbit  |
+         * | Snake   | Ox, Rooster, Monkey  | Horse, Dragon, Goat, Dog, Rabbit, Rat, Snake       | Pig       | Tiger   |
+         * | Horse   | Dog, Tiger, Goat     | Snake, Rabbit, Dragon, Rooster, Pig, Monkey, Horse | Rat       | Ox      |
+         * | Goat    | Rabbit, Pig, Horse   | Snake, Goat, Dragon, Monkey, Rooster, Dog, Tiger   | Ox        | Rat     |
+         * | Monkey  | Dragon, Rat, Snake   | Monkey, Dog, Ox, Goat, Rabbit, Rooster, Horse      | Tiger     | Pig     |
+         * | Rooster | Snake, Ox, Dragon    | Horse, Rooster, Goat, Pig, Tiger, Monkey, Rat      | Rabbit    | Dog     |
+         * | Dog     | Tiger, Horse, Rabbit | Monkey, Pig, Rat, Ox, Snake, Goat, Dog             | Dragon    | Rooster |
+         * | Pig     | Rabbit, Goat, Tiger  | Rat, Rooster, Dog, Dragon, Horse, Ox, Pig          | Snake     | Monkey  |
          */
 
         private val bestMatchesRaw = listOf(
-            setOf(DRAGON, MONKEY, RAT),
-            setOf(SNAKE, ROOSTER, OX),
-            setOf(HORSE, DOG, TIGER),
-            setOf(PIG, GOAT, RABBIT),
-            setOf(RAT, MONKEY, DRAGON),
-            setOf(OX, ROOSTER, SNAKE),
-            setOf(DOG, TIGER, HORSE),
-            setOf(RABBIT, PIG, GOAT),
-            setOf(DRAGON, RAT, MONKEY),
-            setOf(OX, SNAKE, ROOSTER),
-            setOf(TIGER, HORSE, DOG),
-            setOf(RABBIT, GOAT, PIG)
+            setOf(DRAGON, MONKEY, OX),
+            setOf(ROOSTER, SNAKE, RAT),
+            setOf(HORSE, DOG, PIG),
+            setOf(PIG, GOAT, DOG),
+            setOf(RAT, MONKEY, ROOSTER),
+            setOf(OX, ROOSTER, MONKEY),
+            setOf(DOG, TIGER, GOAT),
+            setOf(RABBIT, PIG, HORSE),
+            setOf(DRAGON, RAT, SNAKE),
+            setOf(SNAKE, OX, DRAGON),
+            setOf(TIGER, HORSE, RABBIT),
+            setOf(RABBIT, GOAT, TIGER),
         )
         private val averageMatchesRaw = listOf(
-            setOf(PIG, TIGER, DOG, SNAKE, RABBIT, ROOSTER, OX),
-            setOf(MONKEY, DOG, RABBIT, TIGER, DRAGON, PIG, RAT),
-            setOf(RABBIT, DRAGON, ROOSTER, RAT, GOAT, OX, PIG),
-            setOf(TIGER, MONKEY, DOG, OX, HORSE, RAT, SNAKE),
-            setOf(TIGER, SNAKE, HORSE, GOAT, PIG, OX, ROOSTER),
-            setOf(HORSE, DRAGON, GOAT, DOG, RABBIT, RAT, MONKEY),
-            setOf(SNAKE, RABBIT, DRAGON, ROOSTER, PIG, MONKEY, GOAT),
-            setOf(SNAKE, RABBIT, DRAGON, MONKEY, ROOSTER, DOG, TIGER),
-            setOf(DRAGON, DOG, OX, GOAT, RABBIT, ROOSTER, HORSE),
-            setOf(HORSE, SNAKE, GOAT, PIG, TIGER, MONKEY, RAT),
-            setOf(MONKEY, PIG, RAT, OX, SNAKE, GOAT, RABBIT),
-            setOf(RAT, ROOSTER, DOG, DRAGON, HORSE, OX, TIGER)
+            setOf(PIG, TIGER, DOG, SNAKE, RABBIT, ROOSTER, RAT),
+            setOf(MONKEY, DOG, RABBIT, TIGER, DRAGON, PIG, OX),
+            setOf(RABBIT, DRAGON, ROOSTER, RAT, GOAT, OX, TIGER),
+            setOf(TIGER, MONKEY, RABBIT, OX, HORSE, RAT, SNAKE),
+            setOf(TIGER, SNAKE, HORSE, GOAT, PIG, OX, DRAGON),
+            setOf(HORSE, DRAGON, GOAT, DOG, RABBIT, RAT, SNAKE),
+            setOf(SNAKE, RABBIT, DRAGON, ROOSTER, PIG, MONKEY, HORSE),
+            setOf(SNAKE, GOAT, DRAGON, MONKEY, ROOSTER, DOG, TIGER),
+            setOf(MONKEY, DOG, OX, GOAT, RABBIT, ROOSTER, HORSE),
+            setOf(HORSE, ROOSTER, GOAT, PIG, TIGER, MONKEY, RAT),
+            setOf(MONKEY, PIG, RAT, OX, SNAKE, GOAT, DOG),
+            setOf(RAT, ROOSTER, DOG, DRAGON, HORSE, OX, PIG),
         )
-        private val poorMatchRaw =
+        private val superBadMatchRow =
             listOf(HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE)
         private val harmfulMatchRaw =
             listOf(GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY)
