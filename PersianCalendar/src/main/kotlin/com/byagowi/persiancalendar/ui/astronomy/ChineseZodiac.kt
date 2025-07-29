@@ -62,7 +62,7 @@ enum class ChineseZodiac(
         if (withOldEraName) append(" «$oldEraPersianName»")
     }
 
-    fun formatForZodiac(resources: Resources, isPersian: Boolean): String = buildString {
+    fun formatForHoroscope(resources: Resources, isPersian: Boolean): String = buildString {
         appendLine(resolveEmoji(isPersian))
         if (isPersian) appendLine(oldEraPersianName)
         append(resolveTitle(isPersian, resources))

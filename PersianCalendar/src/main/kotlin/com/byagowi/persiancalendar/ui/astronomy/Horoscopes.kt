@@ -232,7 +232,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
         EasternHoroscopePattern { i ->
             val date = PersianDate(persianYear + i, 1, 1)
-            ChineseZodiac.fromPersianCalendar(date).formatForZodiac(
+            ChineseZodiac.fromPersianCalendar(date).formatForHoroscope(
                 resources = resources,
                 isPersian = language.isPersian,
             )

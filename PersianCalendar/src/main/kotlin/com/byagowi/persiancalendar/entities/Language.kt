@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.listOf12Items
@@ -457,6 +458,34 @@ enum class Language(val code: String, val nativeName: String) {
                 LunarAge.Phase.WANING_GIBBOUS -> "Waning gibbous"
                 LunarAge.Phase.THIRD_QUARTER -> "Third quarter"
                 LunarAge.Phase.WANING_CRESCENT -> "Waning crescent"
+            }
+        }
+    }
+
+    fun formatCompatibility(compatibility: ChineseZodiac.Compatibility): String {
+        return when {
+            this == FA || this == FA_AF -> when (compatibility) {
+                ChineseZodiac.Compatibility.BEST -> "بهترین"
+                ChineseZodiac.Compatibility.BETTER -> "خوب"
+                ChineseZodiac.Compatibility.NEUTRAL -> "خنثی"
+                ChineseZodiac.Compatibility.WORSE -> "بد"
+                ChineseZodiac.Compatibility.WORST -> "بدترین"
+            }
+
+            this == ZH_CN -> when (compatibility) {
+                ChineseZodiac.Compatibility.BEST -> "三合" // Sān Hé
+                ChineseZodiac.Compatibility.BETTER -> "六合" // Liù Hé
+                ChineseZodiac.Compatibility.NEUTRAL -> "三會" // Sān Huì
+                ChineseZodiac.Compatibility.WORSE -> "六沖" // Liù Chōng
+                ChineseZodiac.Compatibility.WORST -> "口舌" // Kǒu Shé
+            }
+
+            else -> when (compatibility) {
+                ChineseZodiac.Compatibility.BEST -> "Best"
+                ChineseZodiac.Compatibility.BETTER -> "Better"
+                ChineseZodiac.Compatibility.NEUTRAL -> "Neutral"
+                ChineseZodiac.Compatibility.WORSE -> "Worse"
+                ChineseZodiac.Compatibility.WORST -> "Worst"
             }
         }
     }

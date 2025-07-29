@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.converter
 
 import android.content.res.Configuration
+import android.icu.util.ChineseCalendar
+import android.os.Build
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -67,8 +69,12 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
@@ -476,9 +482,7 @@ private fun ColumnScope.ConverterAndDistance(
         }
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
-        DatePicker(
-            calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
-        )
+        DatePicker(calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate)
         this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
@@ -507,13 +511,31 @@ private fun ColumnScope.ConverterAndDistance(
             DaysDistanceSecondPart(viewModel, jdn, calendar)
         }
     }
+    if (isAstronomicalExtraFeaturesEnabled) {
+        val secondJdn by viewModel.secondSelectedDate.collectAsState()
+        val isPersian = mainCalendar == Calendar.SHAMSI
+        val zodiacs = listOf(jdn, secondJdn).map {
+            if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                ChineseZodiac.fromPersianCalendar(it.toPersianDate())
+            } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
+        }
+        val resources = LocalContext.current.resources
+        val language by language.collectAsState()
+        TextWithSlideAnimation(
+            zodiacs.joinToString(spacedComma) { it.format(resources, true, isPersian) } +
+                    spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1])
+        )
+    }
 }
 
 @Composable
 private fun DaysDistanceSecondPart(viewModel: ConverterViewModel, jdn: Jdn, calendar: Calendar) {
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
-        DaysDistance(jdn, secondJdn, calendar)
+        val context = LocalContext.current
+        TextWithSlideAnimation(
+            calculateDaysDifference(context.resources, jdn, secondJdn, calendar)
+        )
         DatePicker(
             calendar = calendar,
             jdn = secondJdn,
@@ -523,10 +545,9 @@ private fun DaysDistanceSecondPart(viewModel: ConverterViewModel, jdn: Jdn, cale
 }
 
 @Composable
-private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: Calendar) {
-    val context = LocalContext.current
+private fun TextWithSlideAnimation(text: String) {
     AnimatedContent(
-        calculateDaysDifference(context.resources, jdn, baseJdn, calendar),
+        text,
         modifier = Modifier.padding(vertical = 12.dp),
         transitionSpec = {
             slideIntoContainer(
@@ -537,7 +558,7 @@ private fun DaysDistance(jdn: Jdn, baseJdn: Jdn, calendar: Calendar) {
                 animationSpec = tween(500)
             )
         },
-        label = "day distance",
+        label = "slide text",
     ) {
         SelectionContainer {
             Text(it, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
