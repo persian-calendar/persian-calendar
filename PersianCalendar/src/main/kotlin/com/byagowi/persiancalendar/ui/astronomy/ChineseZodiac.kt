@@ -9,27 +9,12 @@ import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
- * The following table is copied from https://en.wikipedia.org/wiki/Chinese_zodiac
- *
- * | Number |  Animal | Yin/Yang | Trine | Fixed Element |
- * |:------:|:-------:|:--------:|:-----:|:-------------:|
- * | 1      | Rat     | Yang     | 1st   | Water         |
- * | 2      | Ox      | Yin      | 2nd   | Earth         |
- * | 3      | Tiger   | Yang     | 3rd   | Wood          |
- * | 4      | Rabbit  | Yin      | 4th   | Wood          |
- * | 5      | Dragon  | Yang     | 1st   | Earth         |
- * | 6      | Snake   | Yin      | 2nd   | Fire          |
- * | 7      | Horse   | Yang     | 3rd   | Fire          |
- * | 8      | Goat    | Yin      | 4th   | Earth         |
- * | 9      | Monkey  | Yang     | 1st   | Metal         |
- * | 10     | Rooster | Yin      | 2nd   | Metal         |
- * | 11     | Dog     | Yang     | 3rd   | Earth         |
- * | 12     | Pig     | Yin      | 4th   | Water         |
- *
- * The following poem is copied from https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
- *
  * موش و بقر و پلنگ و خرگوش شمار - زان چار چو بگذری نهنگ آید و مار
  *آنگاه به اسب و گوسفند است حساب - حمدونه و مرغ و سگ و خوک آخر کار
+ *
+ * From https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
+ *
+ * See also: https://en.wikipedia.org/wiki/Chinese_zodiac#Signs
  */
 enum class ChineseZodiac(
     @get:StringRes private val title: Int, private val emoji: String,
@@ -74,24 +59,7 @@ enum class ChineseZodiac(
     private fun resolveTitle(isPersian: Boolean, resources: Resources): String =
         persianSpecificTitle.takeIf { isPersian } ?: resources.getString(title)
 
-    /*
-     * https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
-     *
-     * |   Sign  |      Best Match      |                    Average Match                   | Super Bad | Harmful |
-     * |:-------:|:--------------------:|:--------------------------------------------------:|:---------:|---------|
-     * | Rat     | Dragon, Monkey, Ox   | Pig, Tiger, Dog, Snake, Rabbit, Rooster, Rat       | Horse     | Goat    |
-     * | Ox      | Rooster, Snake, Rat  | Monkey, Dog, Rabbit, Tiger, Dragon, Pig, Ox        | Goat      | Horse   |
-     * | Tiger   | Horse, Dog, Pig      | Rabbit, Dragon, Rooster, Rat, Goat, Ox, Tiger      | Monkey    | Snake   |
-     * | Rabbit  | Pig, Goat, Dog       | Tiger, Monkey, Rabbit, Ox, Horse, Rat, Snake       | Rooster   | Dragon  |
-     * | Dragon  | Rat, Monkey, Rooster | Tiger, Snake, Horse, Goat, Pig, Ox, Dragon         | Dog       | Rabbit  |
-     * | Snake   | Ox, Rooster, Monkey  | Horse, Dragon, Goat, Dog, Rabbit, Rat, Snake       | Pig       | Tiger   |
-     * | Horse   | Dog, Tiger, Goat     | Snake, Rabbit, Dragon, Rooster, Pig, Monkey, Horse | Rat       | Ox      |
-     * | Goat    | Rabbit, Pig, Horse   | Snake, Goat, Dragon, Monkey, Rooster, Dog, Tiger   | Ox        | Rat     |
-     * | Monkey  | Dragon, Rat, Snake   | Monkey, Dog, Ox, Goat, Rabbit, Rooster, Horse      | Tiger     | Pig     |
-     * | Rooster | Snake, Ox, Dragon    | Horse, Rooster, Goat, Pig, Tiger, Monkey, Rat      | Rabbit    | Dog     |
-     * | Dog     | Tiger, Horse, Rabbit | Monkey, Pig, Rat, Ox, Snake, Goat, Dog             | Dragon    | Rooster |
-     * | Pig     | Rabbit, Goat, Tiger  | Rat, Rooster, Dog, Dragon, Horse, Ox, Pig          | Snake     | Monkey  |
-     */
+    // https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
     infix fun compatibilityWith(other: ChineseZodiac): Compatibility {
         return when ((ordinal - other.ordinal + 12) % 12) {
             4, 8 -> Compatibility.BEST
