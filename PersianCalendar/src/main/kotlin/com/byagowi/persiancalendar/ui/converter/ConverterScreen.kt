@@ -92,7 +92,6 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatDate
 import io.github.persiancalendar.calculator.eval
@@ -255,11 +254,13 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
         when (screenMode) {
             ConverterScreenMode.CONVERTER -> {
                 val jdn = viewModel.selectedDate.value
+                val selectedCalendar = viewModel.calendar.value
+                val otherCalendars = enabledCalendars - selectedCalendar
                 context.shareText(
                     listOf(
-                        dayTitleSummary(jdn, jdn on mainCalendar),
+                        dayTitleSummary(jdn, jdn on selectedCalendar),
                         context.getString(R.string.equivalent_to),
-                        dateStringOfOtherCalendars(jdn, spacedComma)
+                        otherCalendars.joinToString(spacedComma) { formatDate(jdn on it) }
                     ).joinToString(" "),
                     chooserTitle,
                 )
@@ -513,14 +514,14 @@ private fun ColumnScope.ConverterAndDistance(
     }
     if (isAstronomicalExtraFeaturesEnabled) {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
-        val isPersian = mainCalendar == Calendar.SHAMSI
+        val language by language.collectAsState()
+        val isPersian = language.isPersian || calendar == Calendar.SHAMSI
         val zodiacs = listOf(jdn, secondJdn).map {
             if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 ChineseZodiac.fromPersianCalendar(it.toPersianDate())
             } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
         }
         val resources = LocalContext.current.resources
-        val language by language.collectAsState()
         TextWithSlideAnimation(
             zodiacs.joinToString(spacedComma) { it.format(resources, true, isPersian) } +
                     spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1])
