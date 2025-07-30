@@ -108,10 +108,10 @@ enum class ChineseZodiac(
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
-            entries.getOrNull((persianDate.year + 5) % 12) ?: RAT
+            entries[(persianDate.year + 5).mod(12)]
 
         @RequiresApi(Build.VERSION_CODES.N)
         fun fromChineseCalendar(chineseDate: ChineseCalendar): ChineseZodiac =
-            entries.getOrNull((chineseDate[ChineseCalendar.YEAR] - 1) % 12) ?: RAT
+            entries[(chineseDate[ChineseCalendar.YEAR] - 1) % 12]
     }
 }
