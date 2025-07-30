@@ -512,16 +512,17 @@ private fun ColumnScope.ConverterAndDistance(
             DaysDistanceSecondPart(viewModel, jdn, calendar)
         }
     }
-    if (isAstronomicalExtraFeaturesEnabled) {
+
+    this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled || screenMode == ConverterScreenMode.DISTANCE) {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
-        val language by language.collectAsState()
-        val isPersian = language.isPersian || calendar == Calendar.SHAMSI
+        val isPersian = calendar == Calendar.SHAMSI
         val zodiacs = listOf(jdn, secondJdn).map {
             if (isPersian || Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 ChineseZodiac.fromPersianCalendar(it.toPersianDate())
             } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
         }
         val resources = LocalContext.current.resources
+        val language by language.collectAsState()
         TextWithSlideAnimation(
             zodiacs.joinToString(spacedComma) { it.format(resources, true, isPersian) } +
                     spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1])
