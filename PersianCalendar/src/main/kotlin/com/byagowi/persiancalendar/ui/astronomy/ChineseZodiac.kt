@@ -35,8 +35,8 @@ enum class ChineseZodiac(
     @get:StringRes private val title: Int, private val emoji: String,
     // For example used in https://rc.majlis.ir/fa/law/show/91137
     private val oldEraPersianName: String,
-    private val persianAlternativeEmoji: String? = null,
-    private val persianAlternativeTitle: String? = null,
+    private val persianSpecificEmoji: String? = null,
+    private val persianSpecificTitle: String? = null,
 ) {
     RAT(R.string.animal_year_name_rat, "🐀", "سیچقان ئیل"),
     OX(R.string.animal_year_name_ox, "🐂", "اود ئیل"),
@@ -69,10 +69,10 @@ enum class ChineseZodiac(
     }
 
     private fun resolveEmoji(isPersian: Boolean): String =
-        persianAlternativeEmoji.takeIf { isPersian } ?: emoji
+        persianSpecificEmoji.takeIf { isPersian } ?: emoji
 
     private fun resolveTitle(isPersian: Boolean, resources: Resources): String =
-        persianAlternativeTitle.takeIf { isPersian } ?: resources.getString(title)
+        persianSpecificTitle.takeIf { isPersian } ?: resources.getString(title)
 
     /*
      * https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
