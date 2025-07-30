@@ -163,40 +163,24 @@ class AstronomyTests {
     @Test
     fun `Iranian animal year name`() {
         assertEquals(
-            ChineseZodiac.OX,
+            OX,
             ChineseZodiac.fromPersianCalendar(PersianDate(1400, 1, 1))
         )
         assertEquals(
-            ChineseZodiac.TIGER,
+            TIGER,
             ChineseZodiac.fromPersianCalendar(PersianDate(1401, 1, 1))
         )
         listOf(
-            ChineseZodiac.MONKEY, ChineseZodiac.ROOSTER, ChineseZodiac.DOG,
-            ChineseZodiac.PIG, ChineseZodiac.RAT, ChineseZodiac.OX,
-            ChineseZodiac.TIGER, ChineseZodiac.RABBIT, ChineseZodiac.DRAGON,
-            ChineseZodiac.SNAKE, ChineseZodiac.HORSE, ChineseZodiac.GOAT
+            MONKEY, ROOSTER, DOG,
+            PIG, RAT, OX,
+            TIGER, RABBIT, DRAGON,
+            SNAKE, HORSE, GOAT
         ).zip(1395..1406) { expected, year ->
             assertEquals(
                 expected, ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1))
             )
         }
     }
-
-//    @Test
-//    fun `Chinese animal year name`() {
-//        // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
-//        (1..5).flatMap {
-//            listOf(
-//                ChineseZodiac.RAT, ChineseZodiac.OX, ChineseZodiac.TIGER,
-//                ChineseZodiac.RABBIT, ChineseZodiac.DRAGON, ChineseZodiac.SNAKE,
-//                ChineseZodiac.HORSE, ChineseZodiac.GOAT, ChineseZodiac.MONKEY,
-//                ChineseZodiac.ROOSTER, ChineseZodiac.DOG, ChineseZodiac.PIG,
-//            )
-//        }.zip(1..60) { expected, year ->
-//            val mock = mock<ChineseCalendar> { on { get(ChineseCalendar.YEAR) } doReturn year }
-//            assertEquals(expected, ChineseZodiac.fromChineseCalendar(mock))
-//        }
-//    }
 
     @Test
     fun `Southern hemisphere in moon draw`() {
