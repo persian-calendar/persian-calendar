@@ -180,6 +180,10 @@ class AstronomyTests {
                 expected, ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1))
             )
         }
+        // Just doesn't crash in negative years
+        (-20..20).forEach { year ->
+            ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1))
+        }
     }
 
     @Test
