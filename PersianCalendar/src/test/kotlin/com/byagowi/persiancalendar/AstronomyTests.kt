@@ -10,6 +10,11 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.WORS
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.Compatibility.WORST
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.DOG
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.DRAGON
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.EARTH
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.FIRE
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.METAL
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.WATER
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.WOOD
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.GOAT
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.HORSE
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.MONKEY
@@ -431,5 +436,36 @@ class AstronomyTests {
         ) { worstMatch, yearZodiac ->
             { assertEquals(WORST, yearZodiac compatibilityWith worstMatch) }
         }.let(::assertAll)
+    }
+
+    /**
+     * https://en.wikipedia.org/wiki/Chinese_zodiac#Signs
+     *
+     * | Number |  Animal | Yin/Yang | Trine | Fixed Element |
+     * |:------:|:-------:|:--------:|:-----:|:-------------:|
+     * | 1      | Rat     | Yang     | 1st   | Water         |
+     * | 2      | Ox      | Yin      | 2nd   | Earth         |
+     * | 3      | Tiger   | Yang     | 3rd   | Wood          |
+     * | 4      | Rabbit  | Yin      | 4th   | Wood          |
+     * | 5      | Dragon  | Yang     | 1st   | Earth         |
+     * | 6      | Snake   | Yin      | 2nd   | Fire          |
+     * | 7      | Horse   | Yang     | 3rd   | Fire          |
+     * | 8      | Goat    | Yin      | 4th   | Earth         |
+     * | 9      | Monkey  | Yang     | 1st   | Metal         |
+     * | 10     | Rooster | Yin      | 2nd   | Metal         |
+     * | 11     | Dog     | Yang     | 3rd   | Earth         |
+     * | 12     | Pig     | Yin      | 4th   | Water         |
+     */
+    @Test
+    fun `Matches with misc Chinese Zodiac details`() {
+        assertEquals(RAT.yinYang, ChineseZodiac.YinYang.YANG)
+        assertEquals(GOAT.yinYang, ChineseZodiac.YinYang.YIN)
+        assertEquals(DRAGON.trin, 1)
+
+        listOf(
+            WATER, EARTH, WOOD, WOOD, EARTH, FIRE, FIRE, EARTH, METAL, METAL, EARTH, WATER
+        ).forEachIndexed { i, element ->
+            assertEquals(element, ChineseZodiac.entries[i].fixedElement)
+        }
     }
 }

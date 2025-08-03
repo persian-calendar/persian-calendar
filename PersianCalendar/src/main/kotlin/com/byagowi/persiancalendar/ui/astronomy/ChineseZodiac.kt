@@ -6,6 +6,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.EARTH
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.FIRE
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.METAL
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.WATER
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.FixedElement.WOOD
 import io.github.persiancalendar.calendar.PersianDate
 
 /**
@@ -74,7 +79,23 @@ enum class ChineseZodiac(
 
     enum class Compatibility { BEST, BETTER, NEUTRAL, WORSE, WORST }
 
+    // https://en.wikipedia.org/wiki/Chinese_zodiac#Signs
+    val yinYang: YinYang get() = YinYang.entries[(ordinal + 1) % 2]
+
+    enum class YinYang { YIN, YANG }
+
+    val fixedElement: FixedElement get() = zodiacToElement[ordinal]
+
+    // https://en.wikipedia.org/wiki/Wuxing_(Chinese_philosophy)
+    enum class FixedElement { FIRE, WATER, WOOD, METAL, EARTH }
+
+    val trin get() = (ordinal % 4) + 1
+
     companion object {
+        private val zodiacToElement = listOf(
+            WATER, EARTH, WOOD, WOOD, EARTH, FIRE, FIRE, EARTH, METAL, METAL, EARTH, WATER
+        )
+
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             entries[(persianDate.year + 5).mod(12)]
 
