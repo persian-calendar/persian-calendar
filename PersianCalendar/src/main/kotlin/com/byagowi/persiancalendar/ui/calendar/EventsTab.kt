@@ -364,6 +364,8 @@ private fun EquinoxCountDownContent(
     event: CalendarEvent.EquinoxCalendarEvent,
     backgroundColor: Color,
 ) {
+    var remainedTime = event.remainingMillis.milliseconds
+    if (remainedTime !in Duration.ZERO..356.days) return
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         val isGradient by isGradient.collectAsState()
         val foldedCardBrush = if (isGradient) Brush.verticalGradient(
@@ -377,8 +379,6 @@ private fun EquinoxCountDownContent(
             .51f to contentColor,
         )
 
-        var remainedTime = event.remainingMillis.milliseconds
-        if (remainedTime < Duration.ZERO || remainedTime > 356.days) return
         countDownTimeParts.map { (pluralId, interval) ->
             val x = (remainedTime / interval).toInt()
             remainedTime -= interval * x
