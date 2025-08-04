@@ -12,8 +12,6 @@ import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
-import kotlin.math.floor
-import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -32,8 +30,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
 
     fun toHoursAndMinutesPair(): IntIntPair {
         if (value.isNaN()) return IntIntPair(0, 0)
-        val rounded = (value * 60).roundToInt()
-        return IntIntPair(floor(rounded / 60.0).toInt(), floor(rounded % 60.0).toInt())
+        return IntIntPair(value.toInt(), ((value - value.toInt()) * 60).toInt())
     }
 
     fun toBasicFormatString(): String {

@@ -194,14 +194,13 @@ private fun readDeviceEvents(
         }.map {
             val start = Date(it.getLong(3)).toGregorianCalendar()
             val end = Date(it.getLong(4)).toGregorianCalendar()
-            fun GregorianCalendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getLong(0),
                 title = it.getString(1),
                 time = if (it.getString(6/*ALL_DAY*/) == "1") null else
-                    start.clock() +
+                    Clock(start).toBasicFormatString() +
                             (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                                " $EN_DASH ${end.clock()}"
+                                " $EN_DASH ${Clock(end).toBasicFormatString()}"
                             else ""),
                 start = start,
                 end = end,

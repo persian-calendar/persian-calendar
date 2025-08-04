@@ -39,10 +39,10 @@ class PrayTimeTests {
         )
 
         assertEquals(IntIntPair(5, 9), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(16, 57), Clock(prayTimes.asr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(19, 48), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(19, 47), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
         assertEquals(IntIntPair(21, 21), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
@@ -53,11 +53,11 @@ class PrayTimeTests {
             CalculationMethod.ISNA.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 27), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(16, 57), Clock(prayTimes.asr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(19, 48), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(21, 9), Clock(prayTimes.isha).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(19, 47), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(21, 8), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
@@ -66,11 +66,11 @@ class PrayTimeTests {
             HighLatitudesMethod.NightMiddle,
             CalculationMethod.Egypt.defaultMidnight,
         )
-        assertEquals(IntIntPair(5, 0), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(4, 59), Clock(prayTimes.fajr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(17, 53), Clock(prayTimes.asr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(19, 48), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(19, 47), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
         assertEquals(IntIntPair(21, 24), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
@@ -81,11 +81,11 @@ class PrayTimeTests {
             CalculationMethod.Makkah.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 6), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(16, 57), Clock(prayTimes.asr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(19, 48), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(21, 18), Clock(prayTimes.isha).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(19, 47), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(21, 17), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
@@ -95,10 +95,10 @@ class PrayTimeTests {
             CalculationMethod.Karachi.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 9), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(16, 57), Clock(prayTimes.asr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(19, 48), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(19, 47), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
         assertEquals(IntIntPair(21, 27), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
@@ -109,11 +109,11 @@ class PrayTimeTests {
             CalculationMethod.Jafari.defaultMidnight,
         )
         assertEquals(IntIntPair(5, 21), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(16, 57), Clock(prayTimes.asr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(20, 5), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(21, 3), Clock(prayTimes.isha).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(21, 2), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(43.0, -80.0, 0.0).calculatePrayTimes(
             createCalendar("GMT-4:00", 2018, 9, 5),
@@ -122,12 +122,12 @@ class PrayTimeTests {
             HighLatitudesMethod.NightMiddle,
             CalculationMethod.Tehran.defaultMidnight,
         )
-        assertEquals(IntIntPair(5, 11), Clock(prayTimes.fajr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(6, 49), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(13, 19), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(5, 10), Clock(prayTimes.fajr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(6, 48), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(13, 18), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(16, 57), Clock(prayTimes.asr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(20, 8), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(21, 3), Clock(prayTimes.isha).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(21, 2), Clock(prayTimes.isha).toHoursAndMinutesPair())
 
         prayTimes = Coordinates(3.147778, 101.695278, 0.0).calculatePrayTimes(
             createCalendar("GMT+8:00", 2019, 6, 9),
@@ -139,9 +139,9 @@ class PrayTimeTests {
         assertEquals(IntIntPair(5, 49), Clock(prayTimes.fajr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(7, 3), Clock(prayTimes.sunrise).toHoursAndMinutesPair())
         assertEquals(IntIntPair(13, 12), Clock(prayTimes.dhuhr).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(16, 39), Clock(prayTimes.asr).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(16, 38), Clock(prayTimes.asr).toHoursAndMinutesPair())
         assertEquals(IntIntPair(19, 37), Clock(prayTimes.maghrib).toHoursAndMinutesPair())
-        assertEquals(IntIntPair(20, 19), Clock(prayTimes.isha).toHoursAndMinutesPair())
+        assertEquals(IntIntPair(20, 18), Clock(prayTimes.isha).toHoursAndMinutesPair())
     }
 
     private fun createCalendar(
