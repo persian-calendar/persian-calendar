@@ -51,6 +51,11 @@ class AstronomyTests {
             assertEquals(it, lunarAge.days, 1.0e-5)
             assertEquals((index + 1) % 8, lunarAge.toPhase().ordinal)
         }
+        assertEquals(LunarAge.Phase.NEW_MOON, LunarAge.fromDegrees(340.0).toPhase())
+        assertEquals(LunarAge.Phase.NEW_MOON, LunarAge.fromDegrees(0.0).toPhase())
+        assertEquals(LunarAge.Phase.FIRST_QUARTER, LunarAge.fromDegrees(90.0).toPhase())
+        assertEquals(LunarAge.Phase.FULL_MOON, LunarAge.fromDegrees(180.0).toPhase())
+        assertEquals(LunarAge.Phase.THIRD_QUARTER, LunarAge.fromDegrees(270.0).toPhase())
         val time = GregorianCalendar(TimeZone.getTimeZone("UTC"))
         time.clear()
         time.set(2022, 1, 13, 0, 0, 0)

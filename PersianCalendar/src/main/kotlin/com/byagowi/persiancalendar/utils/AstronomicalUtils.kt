@@ -27,7 +27,6 @@ import io.github.cosinekitty.astronomy.search
 import io.github.cosinekitty.astronomy.sunPosition
 import java.util.GregorianCalendar
 import java.util.TimeZone
-import kotlin.math.abs
 import kotlin.math.atan2
 
 private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
@@ -53,7 +52,8 @@ private fun Double.withMaxDegreeValue(max: Double): Double {
 
 fun searchMoonAgeTime(jdn: Jdn, targetDegrees: Double): Clock? {
     return search(jdn.toAstronomyTime(0), (jdn + 1).toAstronomyTime(0), 1.0) { time ->
-        abs(eclipticGeoMoon(time).lon - sunPosition(time).elon) - targetDegrees
+        val d = eclipticGeoMoon(time).lon - sunPosition(time).elon
+        (d.mod(360.0) - targetDegrees).withMaxDegreeValue(+180.0)
     }?.toMillisecondsSince1970()?.let { timestamp ->
         Clock(GregorianCalendar().also { it.timeInMillis = timestamp })
     }

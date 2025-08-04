@@ -230,11 +230,20 @@ fun SharedTransitionScope.CalendarsOverview(
             val time = jdn.toAstronomyTime(hourOfDay = 12)
             val lunarAge = LunarAge.fromDegrees(eclipticGeoMoon(time).lon - sunPosition(time).elon)
             val phase = lunarAge.toPhase()
-            val fullMoonTime = if (phase == LunarAge.Phase.FULL_MOON) remember(jdn) {
+            val exactTime = remember(jdn) {
+                val targetDegrees = when (phase) {
+                    LunarAge.Phase.NEW_MOON -> 0.0
+                    LunarAge.Phase.FIRST_QUARTER -> 90.0
+                    LunarAge.Phase.FULL_MOON -> 180.0
+                    LunarAge.Phase.THIRD_QUARTER -> 270.0
+                    else -> return@remember ""
+                }
                 runCatching {
-                    searchMoonAgeTime(jdn, 180.0)?.let { spacedColon + it.toFormattedString() }
+                    searchMoonAgeTime(jdn, targetDegrees)?.let {
+                        spacedColon + it.toFormattedString()
+                    }
                 }.onFailure(logException).getOrNull() ?: ""
-            } else ""
+            }
             val coordinates by coordinates.collectAsState()
             AutoSizedBodyText(
                 if (language.isNepali) {
@@ -242,7 +251,7 @@ fun SharedTransitionScope.CalendarsOverview(
                             language.moonNames(phase) +
                             " ~" + Tithi.tithiName(System.currentTimeMillis())
                 } else {
-                    phase.emoji(coordinates) + " " + language.moonNames(phase) + fullMoonTime
+                    phase.emoji(coordinates) + " " + language.moonNames(phase) + exactTime
                 }
             )
         }
