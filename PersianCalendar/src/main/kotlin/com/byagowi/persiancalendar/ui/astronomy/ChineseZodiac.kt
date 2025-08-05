@@ -24,7 +24,7 @@ import io.github.persiancalendar.calendar.PersianDate
 enum class ChineseZodiac(
     @get:StringRes private val title: Int,
     private val emoji: String,
-    private val arabicNameToUseInPersian: String, // See 
+    private val arabicNameToUseInPersian: String,
     private val oldEraPersianName: String, // e.g. used in https://rc.majlis.ir/fa/law/show/91137
     private val persianSpecificEmoji: String? = null,
     private val persianSpecificTitle: String? = null,
