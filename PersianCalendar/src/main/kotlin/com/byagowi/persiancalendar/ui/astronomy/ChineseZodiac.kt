@@ -57,7 +57,7 @@ enum class ChineseZodiac(
         appendLine(resolveEmoji(isPersian))
         val resolvedName = resolveTitle(isPersian, resources)
         if (isPersian) {
-            appendLine(resolvedName)
+            appendLine(if (this@ChineseZodiac == MONKEY) "$resolvedName (شادی)" else resolvedName)
             appendLine(oldEraPersianName)
             append(arabicNameToUseInPersian)
         } else append(resolvedName)
