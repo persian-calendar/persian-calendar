@@ -22,24 +22,25 @@ import io.github.persiancalendar.calendar.PersianDate
  * See also: https://en.wikipedia.org/wiki/Chinese_zodiac#Signs
  */
 enum class ChineseZodiac(
-    @get:StringRes private val title: Int, private val emoji: String,
-    // For example used in https://rc.majlis.ir/fa/law/show/91137
-    private val oldEraPersianName: String,
+    @get:StringRes private val title: Int,
+    private val emoji: String,
+    private val arabicNameToUseInPersian: String, // See 
+    private val oldEraPersianName: String, // e.g. used in https://rc.majlis.ir/fa/law/show/91137
     private val persianSpecificEmoji: String? = null,
     private val persianSpecificTitle: String? = null,
 ) {
-    RAT(R.string.animal_year_name_rat, "🐀", "سیچقان ئیل"),
-    OX(R.string.animal_year_name_ox, "🐂", "اود ئیل"),
-    TIGER(R.string.animal_year_name_tiger, "🐅", "بارس ئیل", "🐆", "پلنگ"),
-    RABBIT(R.string.animal_year_name_rabbit, "🐇", "توشقان ئیل"),
-    DRAGON(R.string.animal_year_name_dragon, "🐲", "لوی ئیل", "🐊", "نهنگ"),
-    SNAKE(R.string.animal_year_name_snake, "🐍", "ئیلان ئیل"),
-    HORSE(R.string.animal_year_name_horse, "🐎", "یونت ئیل"),
-    GOAT(R.string.animal_year_name_goat, "🐐", "قوی ئیل", "🐑", "گوسفند"),
-    MONKEY(R.string.animal_year_name_monkey, "🐒", "پیچی ئیل"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐓", "تخاقوی ئیل", "🐔", "مرغ"),
-    DOG(R.string.animal_year_name_dog, "🐕", "ایت ئیل"),
-    PIG(R.string.animal_year_name_pig, "🐖", "تنگوز ئیل");
+    RAT(R.string.animal_year_name_rat, "🐀", "فاره", "سیچقان ئیل"),
+    OX(R.string.animal_year_name_ox, "🐂", "بقر", "اود ئیل"),
+    TIGER(R.string.animal_year_name_tiger, "🐅", "نمر", "بارس ئیل", "🐆", "پلنگ"),
+    RABBIT(R.string.animal_year_name_rabbit, "🐇", "ارنب", "توشقان ئیل"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲", "تمساح/ثعبان", "لوی ئیل", "🐊", "نهنگ"),
+    SNAKE(R.string.animal_year_name_snake, "🐍", "حیه", "ئیلان ئیل"),
+    HORSE(R.string.animal_year_name_horse, "🐎", "فرس", "یونت ئیل"),
+    GOAT(R.string.animal_year_name_goat, "🐐", "غنم", "قوی ئیل", "🐑", "گوسفند"),
+    MONKEY(R.string.animal_year_name_monkey, "🐒", "حمدونه/قروه", "پیچی ئیل"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐓", "داقوی/دجاجه", "تخاقوی ئیل", "🐔", "مرغ"),
+    DOG(R.string.animal_year_name_dog, "🐕", "کلب", "ایت ئیل"),
+    PIG(R.string.animal_year_name_pig, "🐖", "خنزیر", "تنگوز ئیل");
 
     fun format(
         resources: Resources,
@@ -54,8 +55,12 @@ enum class ChineseZodiac(
 
     fun formatForHoroscope(resources: Resources, isPersian: Boolean): String = buildString {
         appendLine(resolveEmoji(isPersian))
-        if (isPersian) appendLine(oldEraPersianName)
-        append(resolveTitle(isPersian, resources))
+        val resolvedName = resolveTitle(isPersian, resources)
+        if (isPersian) {
+            appendLine(resolvedName)
+            appendLine(oldEraPersianName)
+            append(arabicNameToUseInPersian)
+        } else append(resolvedName)
     }
 
     private fun resolveEmoji(isPersian: Boolean): String =
