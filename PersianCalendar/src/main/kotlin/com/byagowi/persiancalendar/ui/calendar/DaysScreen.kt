@@ -158,7 +158,6 @@ import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -531,7 +530,7 @@ private fun weekPageFromJdn(day: Jdn, today: Jdn): Int {
 private fun dayPageFromJdn(day: Jdn, today: Jdn): Int = day - today + daysLimit / 2
 
 private fun hoursFractionOfDay(date: GregorianCalendar): Float =
-    date[Calendar.HOUR_OF_DAY] + date[Calendar.MINUTE] / 60f
+    date[GregorianCalendar.HOUR_OF_DAY] + date[GregorianCalendar.MINUTE] / 60f
 
 private data class EventDivision(
     val event: CalendarEvent.DeviceCalendarEvent, val column: Int, val columnsCount: Int
