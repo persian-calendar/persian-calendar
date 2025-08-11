@@ -85,13 +85,11 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                         }
                     }
                 }
-                if (calculationMethod.value != language.value.preferredCalculationMethod) {
-                    tfoot {
-                        tr {
-                            td {
-                                colSpan = "10"
-                                +resources.getString(calculationMethod.value.titleStringId)
-                            }
+                if (calculationMethod.value != language.value.preferredCalculationMethod) tfoot {
+                    tr {
+                        td {
+                            colSpan = "10"
+                            +resources.getString(calculationMethod.value.titleStringId)
                         }
                     }
                 }
