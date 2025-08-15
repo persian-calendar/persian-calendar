@@ -67,6 +67,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
+import com.byagowi.persiancalendar.utils.isTamilDigitSelected
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
@@ -155,8 +156,11 @@ fun SharedTransitionScope.DaysTable(
             )
         }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-        val daysTextSize =
-            diameter * (if (mainCalendarDigitsIsArabic || language.isTamil || isVazirEnabled) 18 else 25) / 40
+        val daysTextSize = diameter * when {
+            mainCalendarDigitsIsArabic || isVazirEnabled -> 18
+            isTamilDigitSelected -> 16
+            else -> 25
+        } / 40
         val daysStyle = LocalTextStyle.current.copy(
             fontSize = with(density) { daysTextSize.toSp() },
         )
