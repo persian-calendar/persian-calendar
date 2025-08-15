@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.variants
 
+
+fun mainApplicationOnCreateHook() = Unit
+
 @Suppress("UNUSED_PARAMETER")
 fun debugLog(vararg message: Any?) = Unit // Nothing here
 

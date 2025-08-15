@@ -15,10 +15,12 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.variants.mainApplicationOnCreateHook
 
 class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreate() {
         super.onCreate()
+        mainApplicationOnCreateHook()
         initGlobal(applicationContext) // mostly used for things should be provided in locale level
         preferences.registerOnSharedPreferenceChangeListener(this)
         update(this, true)
