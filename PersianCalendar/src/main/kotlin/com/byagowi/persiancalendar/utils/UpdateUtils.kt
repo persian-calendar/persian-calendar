@@ -1684,8 +1684,8 @@ private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int):
         0,
         Intent(
             this, AgeWidgetConfigureActivity::class.java
-        ).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        ).setAction(AppWidgetManager.EXTRA_APPWIDGET_ID + widgetId)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
         PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
 }
