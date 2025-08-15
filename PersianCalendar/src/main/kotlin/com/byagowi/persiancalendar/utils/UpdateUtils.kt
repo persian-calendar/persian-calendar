@@ -1671,9 +1671,10 @@ fun Context.launchAppPendingIntent(
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
                 if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
             }),
-        PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) (if (isMutable) PendingIntent.FLAG_MUTABLE
-        else PendingIntent.FLAG_IMMUTABLE)
-        else 0
+        PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) when {
+            isMutable -> PendingIntent.FLAG_MUTABLE
+            else -> PendingIntent.FLAG_IMMUTABLE
+        } else 0
     )
 }
 
