@@ -63,9 +63,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
@@ -501,9 +501,9 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
     val moonZodiac = if (isTropical) Zodiac.fromTropical(state.moon.lon)
     else Zodiac.fromIau(state.moon.lon)
 
-    val context = LocalContext.current
-    val headerCache = remember {
-        lruCache(1024, create = { jdn: Jdn -> state.generateHeader(context.resources, jdn) })
+    val resources = LocalResources.current
+    val headerCache = remember(resources) {
+        lruCache(1024, create = { jdn: Jdn -> state.generateHeader(resources, jdn) })
     }
 
     Column(modifier) {
@@ -534,7 +534,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                         Modifier.align(Alignment.Center),
                         Color(0xcceaaa00),
                         stringResource(R.string.sun),
-                        sunZodiac.format(context.resources, true) // ☉☀️
+                        sunZodiac.format(resources, true) // ☉☀️
                     )
                 }
                 Box(Modifier.weight(1f)) {
@@ -542,7 +542,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                         Modifier.align(Alignment.Center),
                         Color(0xcc606060),
                         stringResource(R.string.moon),
-                        moonZodiac.format(context.resources, true) // ☽it.moonPhaseEmoji
+                        moonZodiac.format(resources, true) // ☽it.moonPhaseEmoji
                     )
                 }
             }
@@ -596,8 +596,8 @@ private fun SharedTransitionScope.MoonIcon(
     astronomyState: AstronomyState,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val context = LocalContext.current
-    val solarDraw = remember { SolarDraw(context.resources) }
+    val resources = LocalResources.current
+    val solarDraw = remember(resources) { SolarDraw(resources) }
     Box(
         modifier = Modifier
             .size(24.dp)

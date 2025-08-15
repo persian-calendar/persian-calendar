@@ -57,6 +57,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -249,6 +250,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
 ) {
     val screenMode by viewModel.screenMode.collectAsState()
     val context = LocalContext.current
+    val resources = LocalResources.current
     ShareActionButton(animatedContentScope) {
         val chooserTitle = context.getString(screenMode.title)
         when (screenMode) {
@@ -272,7 +274,7 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
                 context.shareText(
                     listOf(
                         calculateDaysDifference(
-                            context.resources,
+                            resources,
                             jdn,
                             secondJdn,
                             calendar = viewModel.calendar.value,
@@ -521,7 +523,7 @@ private fun ColumnScope.ConverterAndDistance(
                 ChineseZodiac.fromPersianCalendar(it.toPersianDate())
             } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
         }
-        val resources = LocalContext.current.resources
+        val resources = LocalResources.current
         val language by language.collectAsState()
         TextWithSlideAnimation(
             zodiacs.joinToString(spacedComma) { it.format(resources, true, isPersian) } +
@@ -534,9 +536,9 @@ private fun ColumnScope.ConverterAndDistance(
 private fun DaysDistanceSecondPart(viewModel: ConverterViewModel, jdn: Jdn, calendar: Calendar) {
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
-        val context = LocalContext.current
+        val resources = LocalResources.current
         TextWithSlideAnimation(
-            calculateDaysDifference(context.resources, jdn, secondJdn, calendar)
+            calculateDaysDifference(resources, jdn, secondJdn, calendar)
         )
         DatePicker(
             calendar = calendar,

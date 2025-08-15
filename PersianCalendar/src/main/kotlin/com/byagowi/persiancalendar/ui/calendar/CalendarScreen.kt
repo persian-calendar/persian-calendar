@@ -104,6 +104,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
@@ -449,12 +450,7 @@ private fun enableTimesTab(context: Context): Boolean {
                     PREF_APP_LANGUAGE !in preferences)
 }
 
-fun bringDate(
-    viewModel: CalendarViewModel,
-    jdn: Jdn,
-    context: Context,
-    highlight: Boolean = true,
-) {
+fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highlight: Boolean = true) {
     viewModel.changeSelectedDay(jdn)
     if (!highlight) viewModel.clearHighlightedDay()
     val today = Jdn.today()
@@ -953,6 +949,7 @@ private fun SharedTransitionScope.Menu(
     isLandscape: Boolean,
 ) {
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     var showDatePickerDialog by rememberSaveable { mutableStateOf(false) }
     if (showDatePickerDialog) {
@@ -992,7 +989,7 @@ private fun SharedTransitionScope.Menu(
             val selectedMonthOffset = viewModel.selectedMonthOffset.value
             val selectedMonth =
                 mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
-            context.openHtmlInBrowser(prayTimeHtmlReport(context.resources, selectedMonth))
+            context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
 
         HorizontalDivider()

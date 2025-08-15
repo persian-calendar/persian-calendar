@@ -31,8 +31,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -228,7 +228,7 @@ private fun EasternHoroscopePattern(modifier: Modifier = Modifier, cellLabel: (I
 @Composable
 fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     val language by language.collectAsState()
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
         EasternHoroscopePattern { i ->
             val date = PersianDate(persianYear + i, 1, 1)
@@ -291,7 +291,7 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
         .groupBy { (_, longitude) -> Zodiac.fromTropical(longitude) }
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
-    val resources = LocalContext.current.resources
+    val resources = LocalResources.current
     EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
         val secondLine = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {

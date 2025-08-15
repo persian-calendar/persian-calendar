@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -97,6 +98,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
 
     val coordinates by coordinates.collectAsState()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val cityName by cityName.collectAsState()
     SettingsClickable(stringResource(R.string.coordination), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
@@ -259,8 +261,8 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
         )
     }
     this.AnimatedVisibility(isLocationSet) {
-        var midnightSummary by remember {
-            mutableStateOf(getMidnightMethodPreferenceSummary(context))
+        var midnightSummary by remember(resources) {
+            mutableStateOf(getMidnightMethodPreferenceSummary(context, resources))
         }
         SettingsClickable(stringResource(R.string.midnight), midnightSummary) { onDismissRequest ->
             AppDialog(
@@ -272,9 +274,9 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             ) {
                 val currentSelectionKey =
                     context.preferences.getString(PREF_MIDNIGHT_METHOD, null) ?: "DEFAULT"
-                (listOf(midnightDefaultTitle(context.resources) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
+                (listOf(midnightDefaultTitle(resources) to "DEFAULT") + MidnightMethod.entries.filter { !it.isJafariOnly || calculationMethod.isJafari }
                     .map {
-                        midnightMethodToString(context.resources, it) to it.name
+                        midnightMethodToString(resources, it) to it.name
                     }).forEach { (title, key) ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -307,10 +309,10 @@ private fun midnightDefaultTitle(resources: Resources): String {
     )
 }
 
-private fun getMidnightMethodPreferenceSummary(context: Context): String {
+private fun getMidnightMethodPreferenceSummary(context: Context, resources: Resources): String {
     return context.preferences.getString(PREF_MIDNIGHT_METHOD, null)
-        ?.let { midnightMethodToString(context.resources, MidnightMethod.valueOf(it)) }
-        ?: midnightDefaultTitle(context.resources)
+        ?.let { midnightMethodToString(resources, MidnightMethod.valueOf(it)) }
+        ?: midnightDefaultTitle(resources)
 }
 
 private fun midnightMethodToString(resources: Resources, method: MidnightMethod): String {

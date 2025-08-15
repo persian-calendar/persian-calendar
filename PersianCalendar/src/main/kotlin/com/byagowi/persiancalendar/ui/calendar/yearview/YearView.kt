@@ -45,6 +45,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -105,14 +106,14 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val widthInPx = with(LocalDensity.current) { width.toPx() }
     val paddingInPx = with(LocalDensity.current) { padding.toPx() }
 
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
 
     val monthColors = appMonthColors()
     val dayPainter = remember(monthColors, widthInPx) {
         lruCache(4, create = { height: Float ->
             DayPainter(
-                resources = context.resources,
+                resources = resources,
                 width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled.value) 8 else 7,
                 height = height / 7,/* rows count*/
                 isRtl = isRtl,
@@ -161,6 +162,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         }
     }
 
+    val context = LocalContext.current
     LazyColumn(state = lazyListState, modifier = detectZoom) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages

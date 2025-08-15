@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
@@ -39,6 +40,7 @@ import com.byagowi.persiancalendar.utils.preferences
 @Composable
 fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val launcher = rememberLauncherForActivityResult(PickRingtoneContract()) callback@{ uri ->
         onDismissRequest()
         uri ?: return@callback
@@ -70,7 +72,7 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                 stringId to {
                     AthanNotification.invalidateChannel(context)
                     context.preferences.edit {
-                        putString(PREF_ATHAN_URI, context.resources.getRawUri(rawId))
+                        putString(PREF_ATHAN_URI, resources.getRawUri(rawId))
                         putString(PREF_ATHAN_NAME, context.getString(stringId))
                     }
                     onDismissRequest()

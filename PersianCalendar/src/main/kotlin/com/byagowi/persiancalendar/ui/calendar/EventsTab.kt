@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -421,14 +422,14 @@ fun readEvents(
     viewModel: CalendarViewModel,
     deviceEvents: DeviceCalendarEventsStore,
 ): List<CalendarEvent<*>> {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val events = sortEvents(eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList())
 
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
             val now by viewModel.now.collectAsState()
-            val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, context)
+            val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
             val title = rawTitle.replace(": ", "\n")
             val remainedTime = equinoxTime - now
             val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, remainedTime)

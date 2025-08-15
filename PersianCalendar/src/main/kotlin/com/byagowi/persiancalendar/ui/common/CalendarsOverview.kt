@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.content.ClipData
-import android.content.Context
+import android.content.res.Resources
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -46,7 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -108,12 +108,12 @@ fun SharedTransitionScope.CalendarsOverview(
     navigateToAstronomy: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     val isToday = today == jdn
     Column(
         Modifier.semantics {
             if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
-                context.resources,
+                resources,
                 jdn,
                 isToday,
                 EventsStore.empty(),
@@ -157,10 +157,10 @@ fun SharedTransitionScope.CalendarsOverview(
         Spacer(Modifier.height(4.dp))
 
         val date = jdn on selectedCalendar
-        val equinox = remember(selectedCalendar, jdn) {
+        val equinox = remember(selectedCalendar, jdn, resources) {
             if (date !is PersianDate) return@remember null
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1)
-                equinoxTitle(date, jdn, context).first else null
+                equinoxTitle(date, jdn, resources).first else null
         }
 
         this.AnimatedVisibility(visible = equinox != null) { AutoSizedBodyText(equinox.orEmpty()) }
@@ -170,7 +170,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 listOf(
                     stringResource(R.string.days_distance),
                     spacedColon,
-                    calculateDaysDifference(context.resources, jdn, today)
+                    calculateDaysDifference(resources, jdn, today)
                 ).joinToString("")
             )
         }
@@ -198,7 +198,7 @@ fun SharedTransitionScope.CalendarsOverview(
         val persianDate = jdn.toPersianDate()
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val yearName = generateYearName(
-                context.resources,
+                resources,
                 jdn,
                 withOldEraName = persianDate.isOldEra && language.isUserAbleToReadPersian,
                 withEmoji = true
@@ -210,7 +210,7 @@ fun SharedTransitionScope.CalendarsOverview(
             val zodiac = Zodiac.fromTropical(sunPosition(jdn.toAstronomyTime(hourOfDay = 12)).elon)
             AutoSizedBodyText(
                 stringResource(R.string.zodiac) + spacedColon +
-                        zodiac.format(LocalContext.current.resources, true)
+                        zodiac.format(LocalResources.current, true)
             )
         }
 
@@ -377,7 +377,7 @@ fun AutoSizedBodyText(
     }
 }
 
-fun equinoxTitle(date: PersianDate, jdn: Jdn, context: Context): Pair<String, Long> {
+fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String, Long> {
     val gregorianYear = jdn.toCivilDate().year
     val timestamp = seasons(gregorianYear).marchEquinox.toMillisecondsSince1970()
     val equinoxYear = when (mainCalendar) {
@@ -385,7 +385,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, context: Context): Pair<String, Lo
         else -> gregorianYear
     }
     val calendar = Date(timestamp).toGregorianCalendar()
-    return context.getString(
+    return resources.getString(
         R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()
     ) to timestamp
 }

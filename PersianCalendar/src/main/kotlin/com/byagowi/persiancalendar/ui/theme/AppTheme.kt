@@ -42,9 +42,9 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
@@ -198,11 +198,8 @@ private val noTransition = fadeIn(snap()) togetherWith fadeOut(snap())
 val noTransitionSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { noTransition }
 
 @Composable
-fun isDynamicGrayscale(): Boolean {
-    // Also track configuration changes
-    LocalConfiguration.current.run {}
-    return effectiveTheme().isDynamicColors && LocalContext.current.resources.isDynamicGrayscale
-}
+fun isDynamicGrayscale(): Boolean =
+    effectiveTheme().isDynamicColors && LocalResources.current.isDynamicGrayscale
 
 @Composable
 private fun appBackground(): Brush {

@@ -23,7 +23,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.byagowi.persiancalendar.R
@@ -71,7 +71,7 @@ fun DatePickerDialog(
             targetState = if (jdn == today) null else listOf(
                 stringResource(R.string.days_distance), spacedColon,
                 calculateDaysDifference(
-                    LocalContext.current.resources,
+                    LocalResources.current,
                     jdn,
                     today,
                     calendar = calendar,

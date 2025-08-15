@@ -33,9 +33,9 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -144,17 +144,18 @@ fun SharedTransitionScope.DaysTable(
             }
         }
 
-        val context = LocalContext.current
+        val resources = LocalResources.current
         val diameter = min(cellWidth, cellHeight)
-        val dayPainter = remember(cellWidthPx, suggestedHeight, refreshToken, monthColors) {
-            DayPainter(
-                resources = context.resources,
-                width = cellWidthPx,
-                height = cellHeightPx,
-                isRtl = isRtl,
-                colors = monthColors
-            )
-        }
+        val dayPainter =
+            remember(cellWidthPx, suggestedHeight, refreshToken, monthColors, resources) {
+                DayPainter(
+                    resources = resources,
+                    width = cellWidthPx,
+                    height = cellHeightPx,
+                    isRtl = isRtl,
+                    colors = monthColors
+                )
+            }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
         val daysTextSize = diameter * when {
             mainCalendarDigitsIsArabic || isVazirEnabled -> 18
@@ -276,7 +277,7 @@ fun SharedTransitionScope.DaysTable(
                     )
                     .semantics {
                         if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
-                            context.resources,
+                            resources,
                             day,
                             isToday,
                             EventsStore.empty(),

@@ -66,6 +66,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
@@ -108,8 +109,8 @@ fun SharedTransitionScope.MapScreen(
     viewModel: MapViewModel,
 ) {
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
-    val mapDraw = remember { MapDraw(context.resources) }
+    val resources = LocalResources.current
+    val mapDraw = remember(resources) { MapDraw(resources) }
 
     LaunchedEffect(Unit) { coordinates.collect(viewModel::changeCurrentCoordinates) }
 
@@ -163,6 +164,7 @@ fun SharedTransitionScope.MapScreen(
         val onClick: () -> Unit
     )
 
+    val context = LocalContext.current
     val menu = listOf(
         MenuItem(Icons.Default._3dRotation, R.string.show_globe_view_label) onClick@{
             val textureSize = 2048
