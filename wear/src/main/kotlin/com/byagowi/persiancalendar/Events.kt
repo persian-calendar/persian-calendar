@@ -29,15 +29,16 @@ fun generateEntries(
         val jdn = startingDay + day
         val civilDate = jdn.toCivilDate()
         val persianDate = jdn.toPersianDate()
+        if (previousYear == 0) previousYear = persianDate.year
         val events = getEventsOfDay(enabledEvents, civilDate)
         if (events.isNotEmpty() || day == 0) {
             var dateTitle = localeUtils.weekDayName(jdn) + spacedComma +
                     localeUtils.format(persianDate.dayOfMonth) + " " +
                     localeUtils.persianMonth(persianDate)
-            if (withYear && previousYear != persianDate.year) {
+            if (withYear && (previousYear != persianDate.year || day == 0)) {
                 dateTitle += " " + localeUtils.format(persianDate.year)
-                previousYear = persianDate.year
             }
+            previousYear = persianDate.year
             listOf(
                 Entry(dateTitle, EntryType.Date, jdn)
             ) + events.ifEmpty { listOf(Entry("رویدادی یافت نشد", EntryType.NonHoliday)) }
