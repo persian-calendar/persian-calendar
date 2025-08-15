@@ -59,6 +59,7 @@ fun formatNumber(number: String, digits: CharArray = preferredDigits): String {
 }
 
 val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_DIGITS
+val isTamilDigitSelected: Boolean get() = preferredDigits === Language.TAMIL_DIGITS
 
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->

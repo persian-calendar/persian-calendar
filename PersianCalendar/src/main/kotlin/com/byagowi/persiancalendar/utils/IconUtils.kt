@@ -12,16 +12,24 @@ import com.byagowi.persiancalendar.global.preferredDigits
 
 // Dynamic icon generation, currently unused
 fun createStatusIcon(dayOfMonth: Int): Bitmap {
+    val text = formatNumber(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textSize = if (isArabicDigitSelected) 75f else 90f
+        it.textSize = when {
+            isArabicDigitSelected -> 75f
+            isTamilDigitSelected -> if (text.length == 1) 65f else 40f
+            else -> 90f
+        }
         it.textAlign = Paint.Align.CENTER
         it.color = Color.WHITE
     }
-    val text = formatNumber(dayOfMonth)
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)
     return createBitmap(90, 90).applyCanvas {
-        drawText(text, 45f, 45 + bounds.height() / 2f, paint)
+        val y = when {
+            isTamilDigitSelected -> if (text.length == 1) 62.5f else 55f
+            else -> 45f + bounds.height() / 2f
+        }
+        drawText(text, 45f, y, paint)
     }
 }
 
