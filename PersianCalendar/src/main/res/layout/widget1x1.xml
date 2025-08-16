@@ -26,8 +26,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-3dp"
+            android:autoSizeMaxTextSize="40sp"
+            android:autoSizeMinTextSize="20sp"
+            android:autoSizeStepGranularity="1sp"
+            android:autoSizeTextType="uniform"
             android:gravity="center"
-            android:textSize="40sp" />
+            android:maxLines="1"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:textSize="40sp"
+            tools:ignore="UnusedAttribute" />
 
         <TextView
             android:id="@+id/textPlaceholder2_1x1"
@@ -42,6 +50,8 @@
             android:ellipsize="end"
             android:gravity="center_horizontal|bottom"
             android:maxLines="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
             android:textSize="15dp"
             tools:ignore="SpUsage,UnusedAttribute" />
         <!-- Using sp can be dangerous as possibility of overflow in this mini widget -->
