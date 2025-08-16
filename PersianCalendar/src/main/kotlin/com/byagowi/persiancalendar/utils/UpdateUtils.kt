@@ -794,6 +794,12 @@ private fun createMonthViewRemoteViews(
     val cellHeight = height.toFloat() / 7f
     val cellRadius = min(cellWidth, cellHeight) / 2
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
+    val mainCalendarDigitsIsTamil = mainCalendarDigits === Language.TAMIL_DIGITS
+    val cellFontSize = cellRadius * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f) * when {
+        mainCalendarDigitsIsArabic -> .8f
+        mainCalendarDigitsIsTamil -> .7f
+        else -> 1f
+    }
     val contentDescription = renderMonthWidget(
         dayPainter = DayPainter(
             resources = context.resources,
@@ -825,11 +831,7 @@ private fun createMonthViewRemoteViews(
         setText = if (hasSize && prefersWidgetsDynamicColors) { i, text, isHoliday ->
             val id = monthWidgetCells[i]
             remoteViews.setTextViewText(id, text)
-            cellRadius.let {
-                it * if (isShowWeekOfYearEnabled) 1.2f else 1.1f
-            }.let {
-                it * if (mainCalendarDigitsIsArabic) .8f else 1f
-            }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it) }
+            remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, cellFontSize)
             when {
                 isHoliday -> android.R.attr.colorAccent
                 else -> android.R.attr.colorForeground
@@ -841,7 +843,7 @@ private fun createMonthViewRemoteViews(
             }.also { remoteViews.setAlpha(id, it) }
         } else null,
     )
-    val footerSize = min(width, height) / 7f * 20 / 40
+    val footerSize = min(width, height) / 7f * 20 / 40 * (if (language.value.isTamil) .8f else 1f)
     if (hasSize && prefersWidgetsDynamicColors) {
         remoteViews.setTextViewText(R.id.month_year, contentDescription)
         remoteViews.setTextViewTextSize(R.id.month_year, TypedValue.COMPLEX_UNIT_PX, footerSize)
