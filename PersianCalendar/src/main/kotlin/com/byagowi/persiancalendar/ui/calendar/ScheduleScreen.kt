@@ -41,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -202,7 +201,6 @@ fun SharedTransitionScope.ScheduleScreen(
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
                 val context = LocalContext.current
-                val resources = LocalResources.current
                 val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
                 val isVazirEnabled by isVazirEnabled.collectAsState()
                 val circleTextStyle =

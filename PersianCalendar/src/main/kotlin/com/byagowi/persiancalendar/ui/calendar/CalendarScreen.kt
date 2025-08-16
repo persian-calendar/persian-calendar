@@ -200,6 +200,7 @@ import kotlin.time.Duration.Companion.seconds
 fun SharedTransitionScope.CalendarScreen(
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
+    navigateToMonthView: () -> Unit,
     navigateToHolidaysSettings: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
@@ -261,6 +262,7 @@ fun SharedTransitionScope.CalendarScreen(
                     animatedContentScope = animatedContentScope,
                     openDrawer = openDrawer,
                     navigateToSchedule = navigateToSchedule,
+                    navigateToMonthView = navigateToMonthView,
                     navigateToDays = navigateToDays,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
@@ -373,6 +375,7 @@ fun SharedTransitionScope.CalendarScreen(
 
                                                 SwipeUpAction.None -> {}
                                             } else if (!isUp && wasAtTop) when (preferredSwipeDownAction.value) {
+//                                                SwipeDownAction.MonthView -> navigateToMonthView()
                                                 SwipeDownAction.YearView -> viewModel.openYearView()
                                                 SwipeDownAction.None -> {}
                                             }
@@ -795,6 +798,7 @@ private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
     navigateToSchedule: () -> Unit,
+    navigateToMonthView: () -> Unit,
     navigateToDays: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
@@ -931,6 +935,7 @@ private fun SharedTransitionScope.Toolbar(
                     animatedContentScope = animatedContentScope,
                     navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
+                    navigateToMonthView = navigateToMonthView,
                     isLandscape = isLandscape,
                     navigateToDays = navigateToDays,
                 )
@@ -944,6 +949,7 @@ private fun SharedTransitionScope.Toolbar(
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
     navigateToSchedule: () -> Unit,
+    navigateToMonthView: () -> Unit,
     navigateToDays: (Jdn, Boolean) -> Unit,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
@@ -1031,30 +1037,35 @@ private fun SharedTransitionScope.Menu(
         }
 
         val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
-        AppDropdownMenuItem(
-            text = { Text(stringResource(SwipeDownAction.YearView.titleId)) },
-            trailingIcon = icon@{
-                if (isLandscape || isTalkBackEnabled) return@icon
-                Box(Modifier.clickable(null, ripple(bounded = false)) {
-                    context.preferences.edit {
-                        putString(
-                            PREF_SWIPE_DOWN_ACTION,
-                            when (preferredSwipeDownAction) {
-                                SwipeDownAction.YearView -> SwipeUpAction.None
-                                else -> SwipeDownAction.YearView
-                            }.name,
+        listOf(
+//            SwipeDownAction.MonthView to { navigateToMonthView() },
+            SwipeDownAction.YearView to { viewModel.openYearView() },
+        ).forEach { (item, action) ->
+            AppDropdownMenuItem(
+                text = { Text(stringResource(item.titleId)) },
+                trailingIcon = icon@{
+                    if (isLandscape || isTalkBackEnabled) return@icon
+                    Box(Modifier.clickable(null, ripple(bounded = false)) {
+                        context.preferences.edit {
+                            putString(
+                                PREF_SWIPE_DOWN_ACTION,
+                                when (preferredSwipeDownAction) {
+                                    item -> SwipeUpAction.None
+                                    else -> item
+                                }.name,
+                            )
+                        }
+                    }) {
+                        val alpha by animateFloatAsState(
+                            targetValue = if (preferredSwipeDownAction == item) 1f else .2f,
+                            label = "alpha",
                         )
+                        val color = LocalContentColor.current.copy(alpha = alpha)
+                        Icon(Icons.TwoTone.SwipeDown, null, tint = color)
                     }
-                }) {
-                    val alpha by animateFloatAsState(
-                        targetValue = if (preferredSwipeDownAction == SwipeDownAction.YearView) 1f else .2f,
-                        label = "alpha",
-                    )
-                    val color = LocalContentColor.current.copy(alpha = alpha)
-                    Icon(Icons.TwoTone.SwipeDown, null, tint = color)
-                }
-            },
-        ) { closeMenu(); viewModel.openYearView() }
+                },
+            ) { closeMenu(); action() }
+        }
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
         if (isTalkBackEnabled || enabledCalendars.size == 1) return@ThreeDotsDropdownMenu

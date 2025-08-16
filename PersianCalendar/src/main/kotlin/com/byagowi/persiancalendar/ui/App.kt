@@ -103,6 +103,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.DaysScreen
 import com.byagowi.persiancalendar.ui.calendar.ScheduleScreen
+import com.byagowi.persiancalendar.ui.calendar.monthview.MonthScreen
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
@@ -242,11 +243,30 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 )
                             }
                         },
+                        navigateToMonthView = { navController.navigate(monthViewRoute) },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
                         animatedContentScope = this,
                         isCurrentDestination = isCurrentDestination(calendarRoute),
+                    )
+                }
+
+                composable(monthViewRoute) { backStackEntry ->
+                    val previousEntry = navController.previousBackStackEntry
+                    val previousRoute = previousEntry?.destination?.route
+                    val viewModel = if (previousRoute == calendarRoute) {
+                        viewModel<CalendarViewModel>(previousEntry)
+                    } else viewModel<CalendarViewModel>()
+
+                    val jdn =
+                        backStackEntry.arguments?.getLong(selectedDayKey, 0)?.takeIf { it != 0L }
+                            ?.let(::Jdn) ?: remember { viewModel.selectedDay.value }
+                    MonthScreen(
+                        calendarViewModel = viewModel,
+                        animatedContentScope = this,
+                        navigateUp = { navigateUp(monthViewRoute) },
+                        initiallySelectedDay = jdn,
                     )
                 }
 
@@ -462,6 +482,7 @@ private fun DrawerContent(
 
 
 private const val calendarRoute = "calendar"
+private const val monthViewRoute = "monthView"
 private const val compassRoute = "compass"
 private const val levelRoute = "level"
 private const val mapRoute = "map"

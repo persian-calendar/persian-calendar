@@ -18,7 +18,7 @@ class CalendarScreenTest {
     @Test
     fun calendarScreenSmokeTest() {
         composeTestRule.setContentWithParent { scope ->
-            CalendarScreen({}, {}, {}, {}, {}, {}, { _, _ -> }, viewModel(), scope, true)
+            CalendarScreen({}, {}, {}, {}, {}, {}, {}, { _, _ -> }, viewModel(), scope, true)
         }
     }
 
