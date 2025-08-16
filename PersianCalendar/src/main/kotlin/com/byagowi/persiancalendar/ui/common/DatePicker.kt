@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -15,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -32,7 +35,7 @@ private fun RowScope.DatePickerContent(calendar: Calendar, jdn: Jdn, setJdn: (Jd
     val date = remember(jdn.value, calendar) { jdn on calendar }
     val daysFormat = remember(calendar, date.year, date.month) {
         val monthStart = Jdn(calendar, date.year, date.month, 1);
-        { item: Int -> (monthStart + item - 1).weekDayName + " / " + formatNumber(item) }
+        { item: Int -> formatNumber(item) + " / " + (monthStart + item - 1).weekDayName }
     }
     val monthsLength = remember(calendar, date.year, date.month) {
         calendar.getMonthLength(date.year, date.month)
@@ -42,7 +45,7 @@ private fun RowScope.DatePickerContent(calendar: Calendar, jdn: Jdn, setJdn: (Jd
     }
     val monthsFormat = remember(calendar, date.year) {
         val months = yearMonthNameOfDate(date);
-        { item: Int -> months[item - 1] + " / " + formatNumber(item) }
+        { item: Int -> formatNumber(item) + " / " + months[item - 1] }
     }
     val todayYear = remember(calendar) { Jdn.today().on(calendar).year }
     val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
