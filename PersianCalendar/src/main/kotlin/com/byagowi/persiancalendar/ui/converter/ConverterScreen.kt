@@ -515,7 +515,7 @@ private fun ColumnScope.ConverterAndDistance(
         }
     }
 
-    this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled || screenMode == ConverterScreenMode.DISTANCE) {
+    this.AnimatedVisibility(isAstronomicalExtraFeaturesEnabled && screenMode == ConverterScreenMode.DISTANCE) {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
         val isPersian = calendar == Calendar.SHAMSI
         val zodiacs = listOf(jdn, secondJdn).map {
