@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
@@ -95,6 +96,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -999,60 +1001,56 @@ private fun SharedTransitionScope.Menu(
 
         HorizontalDivider()
 
-        val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
-        swipeUpActions.forEach { (item, action) ->
+        @Composable
+        fun <T> ActionItem(
+            item: T,
+            action: () -> Unit,
+            prefKey: String,
+            @StringRes title: Int,
+            preferredAction: T,
+            swipeIcon: ImageVector,
+            valueToStoreOnClick: () -> String,
+        ) {
             AppDropdownMenuItem(
-                text = { Text(stringResource(item.titleId)) },
+                text = { Text(stringResource(title)) },
                 trailingIcon = icon@{
                     if (isLandscape || isTalkBackEnabled) return@icon
                     Box(Modifier.clickable(null, ripple(bounded = false)) {
-                        context.preferences.edit {
-                            putString(
-                                PREF_SWIPE_UP_ACTION,
-                                when (preferredSwipeUpAction) {
-                                    item -> SwipeUpAction.None
-                                    else -> item
-                                }.name,
-                            )
-                        }
+                        context.preferences.edit { putString(prefKey, valueToStoreOnClick()) }
                     }) {
                         val alpha by animateFloatAsState(
-                            targetValue = if (preferredSwipeUpAction == item) 1f else .2f,
+                            targetValue = if (preferredAction == item) 1f else .2f,
                             label = "alpha",
                         )
                         val color = LocalContentColor.current.copy(alpha = alpha)
-                        Icon(Icons.TwoTone.SwipeUp, null, tint = color)
+                        Icon(swipeIcon, null, tint = color)
                     }
                 },
             ) { closeMenu(); action() }
         }
 
+        val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
+        swipeUpActions.forEach { (item, action) ->
+            ActionItem(
+                item,
+                action,
+                PREF_SWIPE_UP_ACTION,
+                item.titleId,
+                preferredSwipeUpAction,
+                Icons.TwoTone.SwipeUp,
+            ) { (if (preferredSwipeUpAction == item) SwipeUpAction.None else item).name }
+        }
+
         val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
         swipeDownActions.forEach { (item, action) ->
-            AppDropdownMenuItem(
-                text = { Text(stringResource(item.titleId)) },
-                trailingIcon = icon@{
-                    if (isLandscape || isTalkBackEnabled) return@icon
-                    Box(Modifier.clickable(null, ripple(bounded = false)) {
-                        context.preferences.edit {
-                            putString(
-                                PREF_SWIPE_DOWN_ACTION,
-                                when (preferredSwipeDownAction) {
-                                    item -> SwipeUpAction.None
-                                    else -> item
-                                }.name,
-                            )
-                        }
-                    }) {
-                        val alpha by animateFloatAsState(
-                            targetValue = if (preferredSwipeDownAction == item) 1f else .2f,
-                            label = "alpha",
-                        )
-                        val color = LocalContentColor.current.copy(alpha = alpha)
-                        Icon(Icons.TwoTone.SwipeDown, null, tint = color)
-                    }
-                },
-            ) { closeMenu(); action() }
+            ActionItem(
+                item,
+                action,
+                PREF_SWIPE_DOWN_ACTION,
+                item.titleId,
+                preferredSwipeDownAction,
+                Icons.TwoTone.SwipeDown,
+            ) { (if (preferredSwipeDownAction == item) SwipeDownAction.None else item).name }
         }
 
         // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
