@@ -318,7 +318,7 @@
     <string name="ask_for_calendar_permission">உங்கள் கருவியின் நாட்காட்டியிலிருந்து உங்கள் தனிப்பட்ட நிகழ்வுகளை இயக்க விரும்புகிறீர்களா?</string>
     <string name="sunrise_sun_view">புலர்</string>
     <string name="midday_sun_view">நண்பகல்</string>
-    <string name="sunset_sun_view">எற்பாடு | மாலை</string>
+    <string name="sunset_sun_view">கருக்கல்</string>
     <string name="length_of_day">பகல்</string>
     <string name="remaining_daylight">மீதம்</string>
     <string name="sunrise">புலர்</string>
