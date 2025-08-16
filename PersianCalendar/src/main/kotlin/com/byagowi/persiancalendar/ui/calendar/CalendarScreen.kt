@@ -222,6 +222,17 @@ fun SharedTransitionScope.CalendarScreen(
         daysScreenSelectedDay?.let { bringDate(viewModel, it, context, it != today) }
     }
 
+    val swipeUpActions = mapOf(
+        SwipeUpAction.Schedule to { navigateToSchedule() },
+        SwipeUpAction.DayView to { navigateToDays(viewModel.selectedDay.value, false) },
+        SwipeUpAction.WeekView to { navigateToDays(viewModel.selectedDay.value, true) },
+    )
+
+    val swipeDownActions = mapOf(
+//            SwipeDownAction.MonthView to { navigateToMonthView() },
+        SwipeDownAction.YearView to { viewModel.openYearView() },
+    )
+
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
             if (!viewModel.isYearView.value && keyEvent.type == KeyEventType.KeyDown) {
@@ -257,13 +268,11 @@ fun SharedTransitionScope.CalendarScreen(
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
 
             Crossfade(searchBoxIsOpen, label = "toolbar") {
-                if (it) Search(viewModel)
-                else Toolbar(
+                if (it) Search(viewModel) else Toolbar(
                     animatedContentScope = animatedContentScope,
                     openDrawer = openDrawer,
-                    navigateToSchedule = navigateToSchedule,
-                    navigateToMonthView = navigateToMonthView,
-                    navigateToDays = navigateToDays,
+                    swipeUpActions = swipeUpActions,
+                    swipeDownActions = swipeDownActions,
                     viewModel = viewModel,
                     isLandscape = isLandscape,
                     today = today,
@@ -361,24 +370,17 @@ fun SharedTransitionScope.CalendarScreen(
                                         val wasAtTop = scrollState.value == 0
                                         val wasAtEnd = scrollState.value == scrollState.maxValue
                                         { isUp: Boolean ->
-                                            if (isUp && wasAtEnd) when (preferredSwipeUpAction.value) {
-                                                SwipeUpAction.Schedule -> navigateToSchedule()
-                                                SwipeUpAction.DayView -> {
-                                                    val day = viewModel.selectedDay.value
-                                                    navigateToDays(day, false)
+                                            when {
+                                                isUp && wasAtEnd -> {
+                                                    swipeUpActions[preferredSwipeUpAction.value]
                                                 }
 
-                                                SwipeUpAction.WeekView -> {
-                                                    val day = viewModel.selectedDay.value
-                                                    navigateToDays(day, true)
+                                                !isUp && wasAtTop -> {
+                                                    swipeDownActions[preferredSwipeDownAction.value]
                                                 }
 
-                                                SwipeUpAction.None -> {}
-                                            } else if (!isUp && wasAtTop) when (preferredSwipeDownAction.value) {
-//                                                SwipeDownAction.MonthView -> navigateToMonthView()
-                                                SwipeDownAction.YearView -> viewModel.openYearView()
-                                                SwipeDownAction.None -> {}
-                                            }
+                                                else -> null
+                                            }?.invoke()
                                         }
                                     },
                             ) {
@@ -797,9 +799,8 @@ private fun bringEvent(viewModel: CalendarViewModel, event: CalendarEvent<*>, co
 private fun SharedTransitionScope.Toolbar(
     animatedContentScope: AnimatedContentScope,
     openDrawer: () -> Unit,
-    navigateToSchedule: () -> Unit,
-    navigateToMonthView: () -> Unit,
-    navigateToDays: (Jdn, Boolean) -> Unit,
+    swipeUpActions: Map<SwipeUpAction, () -> Unit>,
+    swipeDownActions: Map<SwipeDownAction, () -> Unit>,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
     today: Jdn,
@@ -933,11 +934,10 @@ private fun SharedTransitionScope.Toolbar(
             this.AnimatedVisibility(!isYearView) {
                 Menu(
                     animatedContentScope = animatedContentScope,
-                    navigateToSchedule = navigateToSchedule,
                     viewModel = viewModel,
-                    navigateToMonthView = navigateToMonthView,
                     isLandscape = isLandscape,
-                    navigateToDays = navigateToDays,
+                    swipeUpActions = swipeUpActions,
+                    swipeDownActions = swipeDownActions,
                 )
             }
         },
@@ -948,9 +948,8 @@ private fun SharedTransitionScope.Toolbar(
 @Composable
 private fun SharedTransitionScope.Menu(
     animatedContentScope: AnimatedContentScope,
-    navigateToSchedule: () -> Unit,
-    navigateToMonthView: () -> Unit,
-    navigateToDays: (Jdn, Boolean) -> Unit,
+    swipeUpActions: Map<SwipeUpAction, () -> Unit>,
+    swipeDownActions: Map<SwipeDownAction, () -> Unit>,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
 ) {
@@ -1001,15 +1000,7 @@ private fun SharedTransitionScope.Menu(
         HorizontalDivider()
 
         val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
-        listOf(
-            SwipeUpAction.Schedule to { navigateToSchedule() },
-            SwipeUpAction.DayView to {
-                navigateToDays(viewModel.selectedDay.value, false)
-            },
-            SwipeUpAction.WeekView to {
-                navigateToDays(viewModel.selectedDay.value, true)
-            },
-        ).forEach { (item, action) ->
+        swipeUpActions.forEach { (item, action) ->
             AppDropdownMenuItem(
                 text = { Text(stringResource(item.titleId)) },
                 trailingIcon = icon@{
@@ -1037,10 +1028,7 @@ private fun SharedTransitionScope.Menu(
         }
 
         val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
-        listOf(
-//            SwipeDownAction.MonthView to { navigateToMonthView() },
-            SwipeDownAction.YearView to { viewModel.openYearView() },
-        ).forEach { (item, action) ->
+        swipeDownActions.forEach { (item, action) ->
             AppDropdownMenuItem(
                 text = { Text(stringResource(item.titleId)) },
                 trailingIcon = icon@{
