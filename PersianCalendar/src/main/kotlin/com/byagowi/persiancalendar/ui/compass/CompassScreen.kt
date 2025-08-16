@@ -175,6 +175,12 @@ fun SharedTransitionScope.CompassScreen(
         }
     }
 
+    var showQibla by rememberSaveable {
+        mutableStateOf(
+            context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
+        )
+    }
+
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -218,11 +224,6 @@ fun SharedTransitionScope.CompassScreen(
                     var showTrueNorth by rememberSaveable {
                         mutableStateOf(
                             context.preferences.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
-                        )
-                    }
-                    var showQibla by rememberSaveable {
-                        mutableStateOf(
-                            context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
                         )
                     }
                     if (coordinates != null || BuildConfig.DEVELOPMENT) ThreeDotsDropdownMenu(
@@ -303,7 +304,12 @@ fun SharedTransitionScope.CompassScreen(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                 animatedVisibilityScope = animatedContentScope,
                             ),
-                            factory = { CompassView(it).also { view -> compassView = view } },
+                            factory = {
+                                CompassView(it).also { view ->
+                                    view.isShowQibla = showQibla
+                                    compassView = view
+                                }
+                            },
                             update = {
                                 it.setSurfaceColor(surfaceColor.toArgb())
                                 it.setTime(time)
