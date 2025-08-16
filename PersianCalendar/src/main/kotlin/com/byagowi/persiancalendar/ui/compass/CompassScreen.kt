@@ -176,9 +176,7 @@ fun SharedTransitionScope.CompassScreen(
     }
 
     var showQibla by rememberSaveable {
-        mutableStateOf(
-            context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
-        )
+        mutableStateOf(context.preferences.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true))
     }
 
     Scaffold(
