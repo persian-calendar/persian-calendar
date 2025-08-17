@@ -68,7 +68,11 @@ class SunView(context: Context) : View(context) {
         }
     private var sun: Ecliptic? = null
     private var moon: Spherical? = null
-    private val fontSize = (if (language.value.isArabicScript) 14f else 11.5f) * resources.dp
+    private val fontSize = when {
+        language.value.isArabicScript -> 14f
+        language.value.isTamil -> 10.5f
+        else -> 11.5f
+    } * resources.dp
 
     fun setTime(date: Long) {
         val time = Time.fromMillisecondsSince1970(date)
