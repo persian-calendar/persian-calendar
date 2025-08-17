@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/day_root"
     android:layout_width="match_parent"
     android:layout_height="14dp"
@@ -13,10 +14,16 @@
         android:id="@+id/day"
         android:layout_width="14dp"
         android:layout_height="14dp"
+        android:autoSizeMaxTextSize="11sp"
+        android:autoSizeMinTextSize="7sp"
+        android:autoSizeStepGranularity="1sp"
+        android:autoSizeTextType="uniform"
         android:background="@drawable/widget_month_today"
+        android:maxLines="1"
         android:textAlignment="center"
         android:textColor="@color/widget_add_event_icon"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/secondary_day"
