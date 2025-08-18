@@ -70,7 +70,7 @@ class SunView(context: Context) : View(context) {
     private var moon: Spherical? = null
     private val fontSize = when {
         language.value.isArabicScript -> 14f
-        language.value.isTamil -> 10.5f
+        language.value.isTamil -> 11f
         else -> 11.5f
     } * resources.dp
 
@@ -200,12 +200,18 @@ class SunView(context: Context) : View(context) {
             it.style = Paint.Style.FILL
             it.color = colors.textColorSecondary
         }
-        canvas.drawText(
-            dayLengthString, width * if (isRtl) .70f else .30f, height * .94f, paint
-        )
-        canvas.drawText(
-            remainingString, width * if (isRtl) .30f else .70f, height * .94f, paint
-        )
+        if (language.value.isTamil) {
+            val (a, b) = dayLengthString.split(spacedColon)
+            val (c, d) = remainingString.split(spacedColon)
+            val lineHeight = paint.descent() - paint.ascent()
+            canvas.drawSideText(isRtl, width, height * .94f - lineHeight / 2, a, c)
+            canvas.drawSideText(isRtl, width, height * .94f + lineHeight / 2, b, d)
+        } else canvas.drawSideText(isRtl, width, height * .94f, dayLengthString, remainingString)
+    }
+
+    private fun Canvas.drawSideText(isRtl: Boolean, w: Int, y: Float, a: String, b: String) {
+        drawText(a, w * if (isRtl) .70f else .30f, y, paint)
+        drawText(b, w * if (isRtl) .30f else .70f, y, paint)
     }
 
     private val solarDraw = SolarDraw(resources)
