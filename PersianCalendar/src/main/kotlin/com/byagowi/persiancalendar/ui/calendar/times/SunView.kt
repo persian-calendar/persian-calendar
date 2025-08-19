@@ -201,8 +201,10 @@ class SunView(context: Context) : View(context) {
             it.color = colors.textColorSecondary
         }
         if (language.value.isTamil) {
-            val (a, b) = dayLengthString.split(spacedColon)
-            val (c, d) = remainingString.split(spacedColon)
+            val (a, b) = dayLengthString.split(spacedColon).takeIf { it.size == 2 }
+                ?: listOf("", "")
+            val (c, d) = remainingString.split(spacedColon).takeIf { it.size == 2 }
+                ?: listOf("", "")
             val lineHeight = paint.descent() - paint.ascent()
             canvas.drawSideText(isRtl, width, height * .94f - lineHeight / 2, a, c)
             canvas.drawSideText(isRtl, width, height * .94f + lineHeight / 2, b, d)
