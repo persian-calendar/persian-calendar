@@ -259,7 +259,7 @@
     <string name="app_name">இறை நேரம்</string>
     <string name="widget_name">இறை நேரம்</string>
     <string name="widget_mini_name">இறை நேரம் (சிறு)</string>
-    <string name="widget_age_name">இறை நேரம் (வயது)</string>
+    <string name="widget_age_name">இறை நேரம் (அகவை)</string>
     <string name="close">மூடு</string>
     <string name="open">திற</string>
     <string name="accept">சரி</string>
@@ -319,7 +319,7 @@
     <string name="sunrise_sun_view">புலர்</string>
     <string name="midday_sun_view">நண்பகல்</string>
     <string name="sunset_sun_view">கருக்கல்</string>
-    <string name="length_of_day">☼</string>
+    <string name="length_of_day">முப்போது</string>
     <string name="remaining_daylight">மீதம்</string>
     <string name="sunrise">புலர்</string>
     <string name="dhuhr">நண்பகல் வழிபாடு</string>
@@ -386,7 +386,7 @@
     <string name="enable_notify">எல்லா தேதி வகைகளுக்கும் தொடர்ச்சியான அறிவிப்பு</string>
     <string name="notify_date_lock_screen">பூட்டுத் திரையில் அறிவிப்பைக் காட்டு</string>
     <string name="notify_date_lock_screen_summary">பூட்டு திரை பாதுகாப்பு முறை அமைக்கப்படும்போது மட்டுமே.</string>
-    <string name="gps_location">இடங்காட்டி அல்லது இணையத்திலிருந்து இருப்பிடத்தைப் பெறுங்கள்</string>
+    <string name="gps_location">இடங்காட்டி அல்லது இணையத்திலிருந்து இருப்பிடத்தைப் பெறு</string>
     <string name="gps_location_help">இது முடிந்தால் பிற விருப்பங்கள் தேவையில்லை</string>
     <string name="gps_internet_desc">தயவுசெய்து உங்கள் இருப்பிடத்தைக் கண்டுபிடிக்கச் கருவியின் இடங்காட்டி மற்றும் இணைய இணைப்பை இயக்கவும்.\n\nபயன்பாட்டிற்கு இது ஒரு முறை மட்டுமே தேவை, இருப்பினும், நீங்கள் ஒரு புதிய இடத்திற்குச் சென்றால், இடங்காட்டி மற்றும் இணையத்தை அணுகுவது மீண்டும் தேவைப்படுகிறது.</string>
     <string name="wait_for_gps">தயவுசெய்து காத்திரு… ஒரு நிமையம் கழித்து எதுவும் தோன்றவில்லை என்றால் நீங்கள் மற்ற விருப்பங்களை முயற்சிக்க வேண்டும்</string>
