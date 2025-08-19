@@ -413,4 +413,7 @@
         <item quantity="one">%1$s Stunde</item>
         <item quantity="other">%1$s Stunden</item>
     </plurals>
+    <string name="month_view">Monatsansicht</string>
+    <string name="horoscope">Horoskop</string>
+    <string name="planetary_hours">Planetenstunden</string>
 </resources>
