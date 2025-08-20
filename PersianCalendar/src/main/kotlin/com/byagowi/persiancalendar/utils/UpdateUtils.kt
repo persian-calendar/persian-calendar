@@ -1215,7 +1215,7 @@ private fun create4x2RemoteViews(
             R.id.textPlaceholder2_4x2, context.getString(
                 R.string.n_till,
                 (if (difference.value < .0) difference + Clock(24.0) else difference).asRemainingTime(
-                    context.resources
+                    context.resources, short = language.value.isTamil,
                 ),
                 context.getString(nextOwghatId)
             )
