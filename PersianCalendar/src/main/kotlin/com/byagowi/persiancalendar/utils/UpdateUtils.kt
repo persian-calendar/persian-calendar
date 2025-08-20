@@ -106,6 +106,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
@@ -1211,8 +1212,9 @@ private fun create4x2RemoteViews(
         }
 
         val difference = timeClock - clock
+        val tamilExtra = if (language.value.isTamil) clock.timeSlot.tamilName + spacedComma else ""
         remoteViews.setTextViewText(
-            R.id.textPlaceholder2_4x2, context.getString(
+            R.id.textPlaceholder2_4x2, tamilExtra + context.getString(
                 R.string.n_till,
                 (if (difference.value < .0) difference + Clock(24.0) else difference).asRemainingTime(
                     context.resources, short = language.value.isTamil,
