@@ -9,6 +9,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotEquals
@@ -406,5 +407,23 @@ class CalendarLibraryTests {
             assertEquals(from.month, it[2])
             assertEquals(from.dayOfMonth, it[3])
         }
+    }
+
+    @Test
+    fun `TimeSlots works`() {
+        assertAll(
+            mapOf(
+                2 to Clock.TimeSlot.Dawn,
+                4 to Clock.TimeSlot.Dawn,
+                7 to Clock.TimeSlot.Morning,
+                10 to Clock.TimeSlot.Midday,
+                15 to Clock.TimeSlot.Sunset,
+                19 to Clock.TimeSlot.Evening,
+                22 to Clock.TimeSlot.Dusk,
+                1 to Clock.TimeSlot.Dusk,
+            ).map { (hour, slot) ->
+                { assertEquals(slot, Clock(hour.toDouble()).timeSlot) }
+            }
+        )
     }
 }

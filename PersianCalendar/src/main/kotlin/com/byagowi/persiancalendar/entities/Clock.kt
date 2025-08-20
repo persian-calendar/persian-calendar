@@ -65,6 +65,21 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     operator fun minus(clock: Clock) = Clock(value - clock.value)
     operator fun plus(clock: Clock) = Clock(value + clock.value)
 
+    val timeSlot: TimeSlot
+        get() {
+            return TimeSlot.entries.getOrNull((toHoursAndMinutesPair().first - 2).floorDiv(4))
+                ?: TimeSlot.Dusk
+        }
+
+    enum class TimeSlot(val tamilName: String) {
+        Dawn("வைகறை"/*Vaikarai 2-6*/),
+        Morning("காலை"/*Kalai 6-10*/),
+        Midday("நண்பகல்"/*Nanpagal 10-14*/),
+        Sunset("எற்பாடு"/*Erppadu 14-18*/),
+        Evening("மாலை"/*Maalai 18-22*/),
+        Dusk("யாமம்"/*Yaamam 22-0,0-2*/)
+    }
+
     companion object {
         private fun linearFormat(hours: Int, minutes: Int) =
             formatNumber("%d:%02d".format(Locale.ENGLISH, hours, minutes))
