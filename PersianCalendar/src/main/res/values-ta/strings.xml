@@ -411,7 +411,7 @@
     <string name="tir">டிர்</string>
     <string name="esfand">எச்ஃபாண்ட்</string>
     <string name="dhu_al_hijjah">துல்-இச்சா</string>
-    <string name="n_till">%1$s முதல் %2$s வரை</string>
+    <string name="n_till">%2$sக்கு %1$s</string>
     <string name="nothing_scheduled">எதுவும் திட்டமிடப்படவில்லை</string>
     <string name="horoscope">பிறப்பியம்</string>
     <string name="planetary_hours">கோள்களின் நேரம்</string>
