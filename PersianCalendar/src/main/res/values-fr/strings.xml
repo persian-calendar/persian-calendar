@@ -416,4 +416,15 @@
     <string name="save">Enregistrer</string>
     <string name="navigate_up">Remonter</string>
     <string name="year_view">Vue annuelle</string>
+    <string name="nothing_scheduled">Rien de panifié</string>
+    <string name="starting_date">Date de début</string>
+    <string name="month_view">Vue mensuelle</string>
+    <string name="daily_schedule">Planification journalière</string>
+    <string name="vibration">Vibration</string>
+    <string name="schedule">Agenda</string>
+    <string name="print">Imprimer</string>
+    <string name="week_view">Vue hebdomadaire</string>
+    <string name="day_view">Vue journalière</string>
+    <string name="horoscope">Horoscope</string>
+    <string name="planetary_hours">Heures planétaires</string>
 </resources>
