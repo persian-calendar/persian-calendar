@@ -66,10 +66,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     operator fun plus(clock: Clock) = Clock(value + clock.value)
 
     val timeSlot: TimeSlot
-        get() {
-            return TimeSlot.entries.getOrNull((toHoursAndMinutesPair().first - 2).floorDiv(4))
-                ?: TimeSlot.Dusk
-        }
+        get() = TimeSlot.entries.getOrNull((value - 2).toInt().floorDiv(4)) ?: TimeSlot.Dusk
 
     enum class TimeSlot(val tamilName: String) {
         Dawn("வைகறை"/*Vaikarai 2-6*/),
