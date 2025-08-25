@@ -39,7 +39,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_WEEK_NUMBER
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isVazirEnabled
@@ -47,7 +46,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.calendar.SwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.calendar.detectSwipe

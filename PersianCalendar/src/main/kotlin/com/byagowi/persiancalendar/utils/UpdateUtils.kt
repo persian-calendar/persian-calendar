@@ -106,7 +106,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency

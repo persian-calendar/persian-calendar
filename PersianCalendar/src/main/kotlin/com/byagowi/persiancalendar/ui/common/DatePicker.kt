@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
@@ -17,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.yearMonthNameOfDate
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatNumber
