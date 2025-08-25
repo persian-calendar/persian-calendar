@@ -573,7 +573,11 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val overflows = events.size > dayEventsCountToShow
         events.take(dayEventsCountToShow - if (overflows) 1 else 0).forEach {
             val eventView = RemoteViews(context.packageName, R.layout.widget_month_event)
-            eventView.setTextViewText(R.id.title, it.title)
+            eventView.setTextViewText(
+                R.id.title,
+                if (it is CalendarEvent.DeviceCalendarEvent) it.title else
+                    it.title.split(" (")[0]
+            )
             when {
                 it is CalendarEvent.DeviceCalendarEvent -> {
                     val background =
