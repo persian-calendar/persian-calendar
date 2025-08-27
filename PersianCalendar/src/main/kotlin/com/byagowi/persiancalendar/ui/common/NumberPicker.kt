@@ -150,51 +150,11 @@ fun NumberPicker(
                 var showTextEdit by remember { mutableStateOf(false) }
                 Crossfade(showTextEdit, label = "edit toggle") { state ->
                     if (state) {
-                        val focusRequester = remember { FocusRequester() }
-                        var inputValue by remember {
-                            val valueText = formatNumber(value)
-                            mutableStateOf(
-                                TextFieldValue(
-                                    valueText, selection = TextRange(0, valueText.length)
-                                )
-                            )
-                        }
-                        LaunchedEffect(Unit) { focusRequester.requestFocus() }
-                        var isCapturedOnce by remember { mutableStateOf(false) }
-
-                        val interactionSource = remember { MutableInteractionSource() }
-                        val isFocused by interactionSource.collectIsFocusedAsState()
-                        if (isFocused && !isCapturedOnce) isCapturedOnce = true
-                        if (!isFocused && isCapturedOnce) showTextEdit = false
-                        Box(
+                        NumberInlineEdit(
                             Modifier.height(numbersColumnHeight / 3),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            BasicTextField(
-                                value = inputValue,
-                                interactionSource = interactionSource,
-                                maxLines = 1,
-                                onValueChange = { inputValue = it },
-                                keyboardActions = KeyboardActions(
-                                    onDone = {
-                                        focusManager.clearFocus()
-                                        showTextEdit = false
-                                        inputValue.text.toIntOrNull()?.let {
-                                            if (it in range) onValueChange(it)
-                                        }
-                                    },
-                                ),
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number,
-                                    imeAction = ImeAction.Done,
-                                ),
-                                textStyle = LocalTextStyle.current.copy(
-                                    textAlign = TextAlign.Center,
-                                    color = LocalContentColor.current,
-                                ),
-                                modifier = Modifier.focusRequester(focusRequester),
-                            )
-                        }
+                            { showTextEdit = false },
+                            value,
+                        ) { if (it in range) onValueChange(it) }
                     } else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
@@ -235,6 +195,56 @@ fun NumberPicker(
                 yPosition + placeable.height
             }
         }
+    }
+}
+
+@Composable
+fun NumberInlineEdit(
+    modifier: Modifier,
+    dismissTextEdit: () -> Unit,
+    value: Int,
+    onValueChange: (Int) -> Unit,
+) {
+    val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
+    var inputValue by remember {
+        val valueText = formatNumber(value)
+        mutableStateOf(
+            TextFieldValue(
+                valueText, selection = TextRange(0, valueText.length)
+            )
+        )
+    }
+    LaunchedEffect(Unit) { focusRequester.requestFocus() }
+    var isCapturedOnce by remember { mutableStateOf(false) }
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    if (isFocused && !isCapturedOnce) isCapturedOnce = true
+    if (!isFocused && isCapturedOnce) dismissTextEdit()
+    Box(modifier, contentAlignment = Alignment.Center) {
+        BasicTextField(
+            value = inputValue,
+            interactionSource = interactionSource,
+            maxLines = 1,
+            onValueChange = { inputValue = it },
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                    dismissTextEdit()
+                    inputValue.text.toIntOrNull()?.let { onValueChange(it) }
+                },
+            ),
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
+            ),
+            textStyle = LocalTextStyle.current.copy(
+                textAlign = TextAlign.Center,
+                color = LocalContentColor.current,
+            ),
+            modifier = Modifier.focusRequester(focusRequester),
+        )
     }
 }
 
