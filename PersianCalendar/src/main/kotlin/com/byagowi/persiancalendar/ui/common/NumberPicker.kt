@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -221,6 +222,9 @@ fun NumberEdit(
     val isFocused by interactionSource.collectIsFocusedAsState()
     if (isFocused && !isCapturedOnce) isCapturedOnce = true
     if (!isFocused && isCapturedOnce) dismissNumberEdit()
+    fun onDone() {
+        value.text.toIntOrNull()?.let { setValue(it) }
+    }
     Box(modifier, contentAlignment = Alignment.Center) {
         BasicTextField(
             value = value,
@@ -231,7 +235,7 @@ fun NumberEdit(
                 onDone = {
                     focusManager.clearFocus()
                     dismissNumberEdit()
-                    value.text.toIntOrNull()?.let { setValue(it) }
+                    onDone()
                 },
             ),
             keyboardOptions = KeyboardOptions(
@@ -242,7 +246,9 @@ fun NumberEdit(
                 textAlign = TextAlign.Center,
                 color = LocalContentColor.current,
             ),
-            modifier = Modifier.focusRequester(focusRequester),
+            modifier = Modifier
+                .focusRequester(focusRequester)
+                .onFocusChanged { if (!it.isFocused) onDone() },
         )
     }
 }
