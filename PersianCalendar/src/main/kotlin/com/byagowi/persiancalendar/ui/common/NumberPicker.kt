@@ -148,14 +148,13 @@ fun NumberPicker(
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
-                Crossfade(showTextEdit, label = "edit toggle") { state ->
-                    if (state) {
-                        NumberInlineEdit(
-                            Modifier.height(numbersColumnHeight / 3),
-                            { showTextEdit = false },
-                            value,
-                        ) { if (it in range) onValueChange(it) }
-                    } else Label(
+                Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
+                    if (isInNumberEdit) NumberEdit(
+                        dismissNumberEdit = { showTextEdit = false },
+                        initialValue = value,
+                        setValue = { if (it in range) onValueChange(it) },
+                        modifier = Modifier.height(numbersColumnHeight / 3),
+                    ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
                             .height(numbersColumnHeight / 3)
@@ -199,16 +198,16 @@ fun NumberPicker(
 }
 
 @Composable
-fun NumberInlineEdit(
-    modifier: Modifier,
-    dismissTextEdit: () -> Unit,
-    value: Int,
-    onValueChange: (Int) -> Unit,
+fun NumberEdit(
+    dismissNumberEdit: () -> Unit,
+    initialValue: Int,
+    setValue: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-    var inputValue by remember {
-        val valueText = formatNumber(value)
+    var value by remember {
+        val valueText = formatNumber(initialValue)
         mutableStateOf(
             TextFieldValue(
                 valueText, selection = TextRange(0, valueText.length)
@@ -221,18 +220,18 @@ fun NumberInlineEdit(
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     if (isFocused && !isCapturedOnce) isCapturedOnce = true
-    if (!isFocused && isCapturedOnce) dismissTextEdit()
+    if (!isFocused && isCapturedOnce) dismissNumberEdit()
     Box(modifier, contentAlignment = Alignment.Center) {
         BasicTextField(
-            value = inputValue,
+            value = value,
             interactionSource = interactionSource,
             maxLines = 1,
-            onValueChange = { inputValue = it },
+            onValueChange = { value = it },
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
-                    dismissTextEdit()
-                    inputValue.text.toIntOrNull()?.let { onValueChange(it) }
+                    dismissNumberEdit()
+                    value.text.toIntOrNull()?.let { setValue(it) }
                 },
             ),
             keyboardOptions = KeyboardOptions(

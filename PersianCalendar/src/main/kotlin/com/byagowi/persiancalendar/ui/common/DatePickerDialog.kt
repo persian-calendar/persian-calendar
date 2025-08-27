@@ -19,7 +19,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -71,16 +70,14 @@ fun DatePickerDialog(
         CalendarsTypesPicker(current = calendar) { calendar = it }
 
         DatePicker(calendar, jdn) { jdn = it }
-        var showTextEdit by remember { mutableStateOf(false) }
-        Crossfade(showTextEdit, label = "edit toggle") { state ->
-            if (state) {
-                var value by rememberSaveable { mutableIntStateOf(jdn - today) }
-                NumberInlineEdit(
-                    Modifier.fillMaxWidth(),
-                    { showTextEdit = false },
-                    value,
-                ) { if (abs(it) < 100_000) jdn = today + it }
-            } else AnimatedContent(
+        var showNumberEdit by remember { mutableStateOf(false) }
+        Crossfade(showNumberEdit, label = "edit toggle") { isInNumberEdit ->
+            if (isInNumberEdit) NumberEdit(
+                dismissNumberEdit = { showNumberEdit = false },
+                initialValue = jdn - today,
+                { if (abs(it) < 100_000) jdn = today + it },
+                modifier = Modifier.fillMaxWidth(),
+            ) else AnimatedContent(
                 targetState = if (jdn == today) null else listOf(
                     stringResource(R.string.days_distance), spacedColon,
                     calculateDaysDifference(
@@ -108,7 +105,7 @@ fun DatePickerDialog(
                             indication = null,
                             interactionSource = null,
                             onClickLabel = stringResource(R.string.days_distance),
-                        ) { showTextEdit = true },
+                        ) { showNumberEdit = true },
                     contentAlignment = Alignment.Center,
                 ) {
                     if (state != null) SelectionContainer {
