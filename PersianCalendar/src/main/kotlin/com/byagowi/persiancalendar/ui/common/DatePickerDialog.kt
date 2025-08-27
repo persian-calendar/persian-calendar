@@ -75,8 +75,7 @@ fun DatePickerDialog(
             if (isInNumberEdit) NumberEdit(
                 dismissNumberEdit = { showNumberEdit = false },
                 initialValue = jdn - today,
-                { if (abs(it) < 100_000) jdn = today + it },
-                modifier = Modifier.fillMaxWidth(),
+                setValue = { if (abs(it) < 100_000) jdn = today + it },
             ) else AnimatedContent(
                 targetState = if (jdn == today) null else listOf(
                     stringResource(R.string.days_distance), spacedColon,
