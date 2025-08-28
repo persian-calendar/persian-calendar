@@ -28,7 +28,7 @@
             android:fontFamily="sans-serif"
             android:gravity="start"
             android:textAlignment="viewStart"
-            android:textSize="14sp" />
+            android:textSize="22sp" />
 
         <TextClock
             android:id="@+id/time_2x2"

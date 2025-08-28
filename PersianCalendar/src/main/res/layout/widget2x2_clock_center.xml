@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:gravity="center"
-            android:textSize="14sp" />
+            android:textSize="22sp" />
 
         <TextClock
             android:id="@+id/time_2x2"
