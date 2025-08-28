@@ -255,7 +255,9 @@ fun update(context: Context, updateDate: Boolean) {
             create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle)
         }
         updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, _ ->
-            create2x2RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, owghat)
+            create2x2RemoteViews(
+                context, width, height, jdn, date, widgetTitle, subtitle, owghat, clock
+            )
         }
         updateFromRemoteViews<Widget4x2>(context, now) { width, height, _, _ ->
             create4x2RemoteViews(context, width, height, jdn, date, clock, prayTimes)
@@ -1094,7 +1096,8 @@ private fun create2x2RemoteViews(
     date: AbstractDate,
     widgetTitle: String,
     subtitle: String,
-    owghat: String
+    owghat: String,
+    clock: Clock,
 ): RemoteViews {
     val weekDayName = jdn.weekDayName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
@@ -1112,6 +1115,17 @@ private fun create2x2RemoteViews(
     remoteViews.setupForegroundTextColors(
         R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2
     )
+    if (isWidgetClock) {
+        remoteViews.setupForegroundTextColors(R.id.time_header_2x2)
+        if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
+            R.id.time_header_2x2,
+            android.R.attr.colorAccent,
+        )
+        remoteViews.setTextViewTextOrHideIfEmpty(
+            R.id.time_header_2x2,
+            if (language.value.isTamil) clock.timeSlot.tamilName else "",
+        )
+    }
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.time_2x2, android.R.attr.colorAccent
     )

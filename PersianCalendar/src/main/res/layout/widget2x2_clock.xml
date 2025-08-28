@@ -20,6 +20,16 @@
         android:orientation="vertical"
         android:padding="3dp">
 
+        <TextView
+            android:id="@+id/time_header_2x2"
+            style="@style/WidgetTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="start"
+            android:textAlignment="viewStart"
+            android:textSize="14sp" />
+
         <TextClock
             android:id="@+id/time_2x2"
             style="@style/WidgetTextStyle"
