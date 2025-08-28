@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar
 
 import android.util.Log
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceComposable
@@ -60,9 +59,9 @@ class MainTileService : GlanceTileService() {
                         modifier = GlanceModifier.padding(vertical = 2.dp, horizontal = 8.dp),
                         style = TextStyle(
                             fontSize = 16.sp,
-                            color = FixedColorProvider(
-                                if (it.type == EntryType.Holiday) Color(0xffafcbfa)
-                                else Color.White
+                            color = ResourceColorProvider(
+                                if (it.type == EntryType.Holiday) R.color.tile_holidays
+                                else R.color.tile_default_color
                             ),
                         ),
                         maxLines = 1,

@@ -4,7 +4,6 @@ import android.os.Build
 import android.util.Log
 import android.util.TypedValue
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceComposable
@@ -81,7 +80,7 @@ class MonthTileService : GlanceTileService() {
                 style = TextStyle(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
-                    color = FixedColorProvider(Color.White),
+                    color = ResourceColorProvider(R.color.tile_default_color),
                 ),
             )
             Column(GlanceModifier.clickable(actionStartActivity(MainActivity::class.java))) {
@@ -164,8 +163,8 @@ class MonthTileService : GlanceTileService() {
                     resId = when {
                         y == 0 -> R.color.month_tile_on_weekdays
                         isToday -> R.color.tile_on_button_color
-                        isHoliday -> R.color.month_tile_holidays
-                        else -> android.R.color.white
+                        isHoliday -> R.color.tile_holidays
+                        else -> R.color.tile_default_color
                     }
                 ),
                 fontSize = dpToSp(screenMinDp / (if (y == 0) 15.2f else 14.2f)).sp,

@@ -18,13 +18,6 @@ fun Context.requestTileUpdate() {
     updater.requestUpdate(MonthTileService::class.java)
 }
 
-data class FixedColorProvider(val color: Color) : ColorProvider {
-    override fun getColor(context: Context): Color = color
-}
-
 data class ResourceColorProvider(val resId: Int) : ColorProvider {
-    override fun getColor(context: Context): Color {
-        val androidColor = context.getColor(resId)
-        return Color(androidColor)
-    }
+    override fun getColor(context: Context) = Color(context.getColor(resId))
 }

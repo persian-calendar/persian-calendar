@@ -3,6 +3,6 @@
     <color name="tile_on_button_color">@android:color/system_on_primary_fixed</color>
     <color name="month_tile_weekdays">@android:color/system_surface_container_high_dark</color>
     <color name="month_tile_on_weekdays">@android:color/system_on_surface_dark</color>
-    <color name="month_tile_holidays">@android:color/system_primary_fixed_dim</color>
+    <color name="tile_holidays">@android:color/system_primary_fixed_dim</color>
     <color name="month_tile_other_calendars">@android:color/system_secondary_fixed_dim</color>
 </resources>
