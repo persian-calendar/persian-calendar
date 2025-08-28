@@ -19,7 +19,6 @@ import androidx.glance.layout.size
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
 import androidx.wear.tiles.EventBuilders
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -61,9 +60,10 @@ class MainTileService : GlanceTileService() {
                         modifier = GlanceModifier.padding(vertical = 2.dp, horizontal = 8.dp),
                         style = TextStyle(
                             fontSize = 16.sp,
-                            color = if (it.type == EntryType.Holiday) {
-                                ColorProvider(Color(0xffafcbfa))
-                            } else null
+                            color = FixedColorProvider(
+                                if (it.type == EntryType.Holiday) Color(0xffafcbfa)
+                                else Color.White
+                            ),
                         ),
                         maxLines = 1,
                     )
@@ -85,7 +85,7 @@ class MainTileService : GlanceTileService() {
                     "تقویم",
                     style = TextStyle(
                         fontSize = 14.sp,
-                        color = ColorProvider(R.color.tile_on_button_color)
+                        color = ResourceColorProvider(R.color.tile_on_button_color)
                     )
                 )
             }

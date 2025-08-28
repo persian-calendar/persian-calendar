@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import android.util.TypedValue
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceComposable
@@ -25,7 +26,6 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
 import androidx.glance.wear.tiles.GlanceTileService
 import androidx.glance.wear.tiles.curved.CurvedRow
 import androidx.glance.wear.tiles.curved.CurvedTextStyle
@@ -78,7 +78,11 @@ class MonthTileService : GlanceTileService() {
             Text(
                 localeUtils.persianMonth(persianDate) + " " + localeUtils.format(persianDate.year),
                 modifier = GlanceModifier.padding(bottom = (screenHeightDp / 1.7).dp),
-                style = TextStyle(fontSize = 16.sp, fontWeight = FontWeight.Bold),
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = FixedColorProvider(Color.White),
+                ),
             )
             Column(GlanceModifier.clickable(actionStartActivity(MainActivity::class.java))) {
                 Spacer(GlanceModifier.height(24.dp))
@@ -111,7 +115,7 @@ class MonthTileService : GlanceTileService() {
                 }
             }
             val style = CurvedTextStyle(
-                color = ColorProvider(R.color.month_tile_other_calendars),
+                color = ResourceColorProvider(R.color.month_tile_other_calendars),
                 fontSize = dpToSp(12f).sp,
             )
             CurvedRow(anchorDegrees = 270 + 45f) {
@@ -156,13 +160,14 @@ class MonthTileService : GlanceTileService() {
             text,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                color = if (isHoliday || y == 0 || isToday) ColorProvider(
+                color = ResourceColorProvider(
                     resId = when {
                         y == 0 -> R.color.month_tile_on_weekdays
                         isToday -> R.color.tile_on_button_color
-                        else -> R.color.month_tile_holidays
+                        isHoliday -> R.color.month_tile_holidays
+                        else -> android.R.color.white
                     }
-                ) else null,
+                ),
                 fontSize = dpToSp(screenMinDp / (if (y == 0) 15.2f else 14.2f)).sp,
             ),
             modifier = GlanceModifier.size(
