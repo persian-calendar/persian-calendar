@@ -225,7 +225,7 @@ fun NumberEdit(
     fun onDone() {
         value.text.toIntOrNull()?.let { setValue(it) }
     }
-    Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+    Box(modifier, contentAlignment = Alignment.Center) {
         BasicTextField(
             value = value,
             interactionSource = interactionSource,
