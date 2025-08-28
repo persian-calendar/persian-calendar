@@ -19,7 +19,7 @@ android {
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 37
         versionName = "0.3.7"
         androidResources.localeFilters += listOf("en", "fa")
