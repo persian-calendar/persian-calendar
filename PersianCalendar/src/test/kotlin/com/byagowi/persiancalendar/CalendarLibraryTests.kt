@@ -413,16 +413,17 @@ class CalendarLibraryTests {
     fun `TimeSlots works`() {
         assertAll(
             mapOf(
-                2 to Clock.TimeSlot.Dawn,
-                4 to Clock.TimeSlot.Dawn,
-                7 to Clock.TimeSlot.Morning,
-                10 to Clock.TimeSlot.Midday,
-                15 to Clock.TimeSlot.Sunset,
-                19 to Clock.TimeSlot.Evening,
-                22 to Clock.TimeSlot.Dusk,
-                1 to Clock.TimeSlot.Dusk,
+                2.0 to Clock.TimeSlot.Dawn,
+                4.0 to Clock.TimeSlot.Dawn,
+                7.0 to Clock.TimeSlot.Morning,
+                10.0 to Clock.TimeSlot.Midday,
+                15.0 to Clock.TimeSlot.Sunset,
+                19.0 to Clock.TimeSlot.Evening,
+                22.0 to Clock.TimeSlot.Dusk,
+                1.0 to Clock.TimeSlot.Dusk,
+                1.5 to Clock.TimeSlot.Dusk,
             ).map { (hour, slot) ->
-                { assertEquals(slot, Clock(hour.toDouble()).timeSlot) }
+                { assertEquals(slot, Clock(hour).timeSlot) }
             }
         )
     }

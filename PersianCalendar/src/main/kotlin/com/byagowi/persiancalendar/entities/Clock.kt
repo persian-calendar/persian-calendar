@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
+import kotlin.math.floor
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
@@ -66,7 +67,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     operator fun plus(clock: Clock) = Clock(value + clock.value)
 
     val timeSlot: TimeSlot
-        get() = TimeSlot.entries.getOrNull((value - 2).toInt().floorDiv(4)) ?: TimeSlot.Dusk
+        get() = TimeSlot.entries.getOrNull(floor(value - 2).toInt().floorDiv(4)) ?: TimeSlot.Dusk
 
     enum class TimeSlot(val tamilName: String) {
         Dawn("வைகறை"/*Vaikarai 2-6*/),
