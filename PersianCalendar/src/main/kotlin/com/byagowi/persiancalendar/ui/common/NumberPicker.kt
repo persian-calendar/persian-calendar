@@ -154,6 +154,7 @@ fun NumberPicker(
                         dismissNumberEdit = { showTextEdit = false },
                         initialValue = value,
                         setValue = { if (it in range) onValueChange(it) },
+                        modifier = Modifier.height(numbersColumnHeight / 3),
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
@@ -202,6 +203,7 @@ fun NumberEdit(
     dismissNumberEdit: () -> Unit,
     initialValue: Int,
     setValue: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -223,7 +225,7 @@ fun NumberEdit(
     fun onDone() {
         value.text.toIntOrNull()?.let { setValue(it) }
     }
-    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+    Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
         BasicTextField(
             value = value,
             interactionSource = interactionSource,
