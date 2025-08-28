@@ -711,6 +711,8 @@ private fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     }.onFailure(logException).getOrNull() == true
 }
 
+private val toolbarHeight = 56.dp
+
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun Search(viewModel: CalendarViewModel) {
@@ -730,7 +732,7 @@ private fun Search(viewModel: CalendarViewModel) {
     SearchBar(
         inputField = {
             SearchBarDefaults.InputField(
-                modifier = Modifier.height(56.dp),
+                modifier = Modifier.height(toolbarHeight),
                 query = query,
                 onQueryChange = { query = it },
                 onSearch = {},
