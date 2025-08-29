@@ -411,6 +411,10 @@ class CalendarLibraryTests {
 
     @Test
     fun `TimeSlots works`() {
+        (0..(24 * 2)).forEach {
+            val clock = Clock(it / 2.0)
+            println("${clock.toHoursAndMinutesPair()}: ${clock.timeSlot}")
+        }
         assertAll(
             mapOf(
                 2.0 to Clock.TimeSlot.Dawn,
@@ -423,7 +427,7 @@ class CalendarLibraryTests {
                 1.0 to Clock.TimeSlot.Dusk,
                 1.5 to Clock.TimeSlot.Dusk,
             ).map { (hour, slot) ->
-                { assertEquals(slot, Clock(hour).timeSlot) }
+                { assertEquals(slot, Clock(hour).timeSlot, "$hour") }
             }
         )
     }
