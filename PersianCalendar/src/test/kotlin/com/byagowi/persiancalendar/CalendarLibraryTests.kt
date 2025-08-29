@@ -419,20 +419,18 @@ class CalendarLibraryTests {
             val clock = Clock(it / 2.0)
             "${clock.toHoursAndMinutesPair()}: ${clock.timeSlot}"
         }
-        assertAll(
-            mapOf(
-                2.0 to Clock.TimeSlot.Dawn,
-                4.0 to Clock.TimeSlot.Dawn,
-                7.0 to Clock.TimeSlot.Morning,
-                10.0 to Clock.TimeSlot.Midday,
-                15.0 to Clock.TimeSlot.Sunset,
-                19.0 to Clock.TimeSlot.Evening,
-                22.0 to Clock.TimeSlot.Dusk,
-                1.0 to Clock.TimeSlot.Dusk,
-                1.5 to Clock.TimeSlot.Dusk,
-            ).map { (hour, slot) ->
-                { assertEquals(slot, Clock(hour).timeSlot, "$hour") }
-            }
-        )
+        listOf(
+            2.0 to Clock.TimeSlot.Dawn,
+            4.0 to Clock.TimeSlot.Dawn,
+            7.0 to Clock.TimeSlot.Morning,
+            10.0 to Clock.TimeSlot.Midday,
+            15.0 to Clock.TimeSlot.Sunset,
+            19.0 to Clock.TimeSlot.Evening,
+            22.0 to Clock.TimeSlot.Dusk,
+            1.0 to Clock.TimeSlot.Dusk,
+            1.5 to Clock.TimeSlot.Dusk,
+        ).map { (hour, slot) ->
+            { assertEquals(slot, Clock(hour).timeSlot, "$hour") }
+        }.let(::assertAll)
     }
 }
