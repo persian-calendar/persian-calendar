@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,10 +80,12 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
+import com.byagowi.persiancalendar.ui.common.LocalAcceptManager
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -113,6 +117,7 @@ fun SharedTransitionScope.ConverterScreen(
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
+    val acceptManager = remember { mutableStateOf<(() -> Unit)?>(null) }
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -159,6 +164,13 @@ fun SharedTransitionScope.ConverterScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
+                    AnimatedVisibility(acceptManager.value != null) {
+                        AppIconButton(
+                            icon = Icons.Default.Done,
+                            title = stringResource(R.string.accept),
+                            onClick = acceptManager.value ?: {},
+                        )
+                    }
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                     TodayActionButton(visible = todayButtonVisibility) {
                         val todayJdn = Jdn.today()
@@ -206,12 +218,14 @@ fun SharedTransitionScope.ConverterScreen(
                             screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
-                                ConverterAndDistance(
-                                    navigateToAstronomy = navigateToAstronomy,
-                                    viewModel = viewModel,
-                                    animatedContentScope = animatedContentScope,
-                                    sharedTransitionScope = this@ConverterScreen,
-                                )
+                                CompositionLocalProvider(LocalAcceptManager provides acceptManager) {
+                                    ConverterAndDistance(
+                                        navigateToAstronomy = navigateToAstronomy,
+                                        viewModel = viewModel,
+                                        animatedContentScope = animatedContentScope,
+                                        sharedTransitionScope = this@ConverterScreen,
+                                    )
+                                }
                             }
                         }
 

@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -52,12 +53,15 @@ fun DatePickerDialog(
             today = Jdn.today()
         }
     }
+    val acceptManager = remember { mutableStateOf<(() -> Unit)?>(null) }
     AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(onClick = {
-                onDismissRequest()
-                onSuccess(jdn)
+                acceptManager.value?.invoke() ?: run {
+                    onDismissRequest()
+                    onSuccess(jdn)
+                }
             }) { Text(stringResource(R.string.accept)) }
         },
         neutralButton = {
@@ -69,15 +73,21 @@ fun DatePickerDialog(
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
         CalendarsTypesPicker(current = calendar) { calendar = it }
 
-        DatePicker(calendar, jdn) { jdn = it }
+        CompositionLocalProvider(LocalAcceptManager provides acceptManager) {
+            DatePicker(calendar, jdn) { jdn = it }
+        }
         var showNumberEdit by remember { mutableStateOf(false) }
         Crossfade(showNumberEdit, label = "edit toggle") { isInNumberEdit ->
-            if (isInNumberEdit) NumberEdit(
-                dismissNumberEdit = { showNumberEdit = false },
-                initialValue = jdn - today,
-                setValue = { if (abs(it) < 100_000) jdn = today + it },
-                modifier = Modifier.fillMaxWidth(),
-            ) else AnimatedContent(
+            if (isInNumberEdit) CompositionLocalProvider(
+                LocalAcceptManager provides acceptManager
+            ) {
+                NumberEdit(
+                    dismissNumberEdit = { showNumberEdit = false },
+                    initialValue = jdn - today,
+                    setValue = { if (abs(it) < 100_000) jdn = today + it },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            } else AnimatedContent(
                 targetState = if (jdn == today) null else listOf(
                     stringResource(R.string.days_distance), spacedColon,
                     calculateDaysDifference(

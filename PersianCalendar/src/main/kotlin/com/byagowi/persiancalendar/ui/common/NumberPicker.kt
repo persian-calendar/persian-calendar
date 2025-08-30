@@ -28,12 +28,15 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -198,6 +201,8 @@ fun NumberPicker(
     }
 }
 
+val LocalAcceptManager = staticCompositionLocalOf<MutableState<(() -> Unit)?>?> { null }
+
 @Composable
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
@@ -222,22 +227,30 @@ fun NumberEdit(
     val isFocused by interactionSource.collectIsFocusedAsState()
     if (isFocused && !isCapturedOnce) isCapturedOnce = true
     if (!isFocused && isCapturedOnce) dismissNumberEdit()
+
     fun onDone() {
         value.text.toIntOrNull()?.let { setValue(it) }
     }
+
+    fun clearFocus() {
+        focusManager.clearFocus()
+        dismissNumberEdit()
+        onDone()
+    }
+
+    val acceptManager = LocalAcceptManager.current
+    DisposableEffect(Unit) {
+        acceptManager?.value = ::clearFocus
+        onDispose { acceptManager?.value = null }
+    }
+
     Box(modifier, contentAlignment = Alignment.Center) {
         BasicTextField(
             value = value,
             interactionSource = interactionSource,
             maxLines = 1,
             onValueChange = { value = it },
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                    dismissNumberEdit()
-                    onDone()
-                },
-            ),
+            keyboardActions = KeyboardActions(onDone = { clearFocus() }),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
