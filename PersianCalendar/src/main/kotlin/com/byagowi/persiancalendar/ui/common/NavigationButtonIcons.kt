@@ -21,7 +21,6 @@ fun SharedTransitionScope.NavigationOpenDrawerIcon(
     AppIconButton(
         icon = Icons.Default.Menu,
         title = stringResource(R.string.open_drawer),
-        // Workaround CI not liking shared elements
         iconModifier = Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_OPEN_DRAWER),
             animatedVisibilityScope = animatedContentScope,

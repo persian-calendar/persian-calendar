@@ -20,7 +20,6 @@ fun SharedTransitionScope.ShareActionButton(
     AppIconButton(
         icon = Icons.Default.Share,
         title = stringResource(R.string.share),
-        // Workaround CI not liking shared elements
         iconModifier = Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_SHARE_BUTTON),
             animatedVisibilityScope = animatedContentScope,
