@@ -7,6 +7,7 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.exponentialDecay
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -43,6 +44,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -55,6 +57,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -152,15 +155,20 @@ fun NumberPicker(
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
+                var showError by remember { mutableStateOf(false) }
+                val errorColor = MaterialTheme.colorScheme.error.copy(alpha = .1f)
+                val validationResult by animateColor(if (showError) errorColor else Color.Transparent)
+                if (validationResult == errorColor) showError = false
                 Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
                     if (isInNumberEdit) NumberEdit(
                         dismissNumberEdit = { showTextEdit = false },
                         initialValue = value,
-                        setValue = { if (it in range) onValueChange(it) },
+                        setValue = { if (it in range) onValueChange(it) else showError = true },
                         modifier = Modifier.height(numbersColumnHeight / 3),
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
+                            .background(validationResult, MaterialTheme.shapes.medium)
                             .height(numbersColumnHeight / 3)
                             .alpha(
                                 maxOf(
