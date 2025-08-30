@@ -44,6 +44,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -117,7 +118,7 @@ fun SharedTransitionScope.ConverterScreen(
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
-    val acceptManager = remember { mutableStateOf<(() -> Unit)?>(null) }
+    val acceptManager = remember { mutableStateListOf<() -> Unit>() }
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -164,11 +165,11 @@ fun SharedTransitionScope.ConverterScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
-                    AnimatedVisibility(acceptManager.value != null) {
+                    AnimatedVisibility(acceptManager.isNotEmpty()) {
                         AppIconButton(
                             icon = Icons.Default.Done,
                             title = stringResource(R.string.accept),
-                            onClick = acceptManager.value ?: {},
+                            onClick = { acceptManager.forEach { it() } },
                         )
                     }
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()

@@ -29,14 +29,13 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -209,7 +208,7 @@ fun NumberPicker(
     }
 }
 
-val LocalAcceptManager = staticCompositionLocalOf<MutableState<(() -> Unit)?>?> { null }
+val LocalAcceptManager = staticCompositionLocalOf<SnapshotStateList<() -> Unit>?> { null }
 
 @Composable
 fun NumberEdit(
@@ -246,19 +245,14 @@ fun NumberEdit(
         onDone()
     }
 
-    val acceptManager = LocalAcceptManager.current
-    DisposableEffect(Unit) {
-        acceptManager?.value = ::clearFocus
-        onDispose { acceptManager?.value = null }
-    }
-
     Box(modifier, contentAlignment = Alignment.Center) {
+        val acceptManager = LocalAcceptManager.current
         BasicTextField(
             value = value,
             interactionSource = interactionSource,
             maxLines = 1,
             onValueChange = { value = it },
-            keyboardActions = KeyboardActions(onDone = { clearFocus() }),
+            keyboardActions = KeyboardActions(onDone = { acceptManager?.clear(); clearFocus() }),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
@@ -269,7 +263,12 @@ fun NumberEdit(
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)
-                .onFocusChanged { if (!it.isFocused) onDone() },
+                .onFocusChanged {
+                    if (it.isFocused) acceptManager?.add(::clearFocus) else {
+                        acceptManager?.remove(::clearFocus)
+                        onDone()
+                    }
+                },
         )
     }
 }

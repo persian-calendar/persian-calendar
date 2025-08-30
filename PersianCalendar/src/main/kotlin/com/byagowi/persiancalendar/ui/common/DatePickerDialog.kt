@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -53,12 +54,12 @@ fun DatePickerDialog(
             today = Jdn.today()
         }
     }
-    val acceptManager = remember { mutableStateOf<(() -> Unit)?>(null) }
+    val acceptManager = remember { mutableStateListOf<() -> Unit>() }
     AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             TextButton(onClick = {
-                acceptManager.value?.invoke() ?: run {
+                acceptManager.takeIf { it.isNotEmpty() }?.forEach { it() } ?: run {
                     onDismissRequest()
                     onSuccess(jdn)
                 }
