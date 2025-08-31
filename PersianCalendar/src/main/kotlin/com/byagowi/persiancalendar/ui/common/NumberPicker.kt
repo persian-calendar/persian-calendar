@@ -43,7 +43,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -56,11 +55,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.utils.formatNumber
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.milliseconds
 
 // The following is brought from
 // https://github.com/ChargeMap/Compose-NumberPicker and customized to support number edits
@@ -154,20 +154,29 @@ fun NumberPicker(
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
-                var showError by remember { mutableStateOf(false) }
-                val errorColor = MaterialTheme.colorScheme.error.copy(alpha = .1f)
-                val validationResult by animateColor(if (showError) errorColor else Color.Transparent)
-                if (validationResult == errorColor) showError = false
+                val errorAlpha = remember { Animatable(.0f) }
+                val errorColor = MaterialTheme.colorScheme.error
                 Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
                     if (isInNumberEdit) NumberEdit(
                         dismissNumberEdit = { showTextEdit = false },
                         initialValue = value,
-                        setValue = { if (it in range) onValueChange(it) else showError = true },
+                        setValue = {
+                            if (it in range) onValueChange(it) else {
+                                coroutineScope.launch {
+                                    errorAlpha.snapTo(.1f)
+                                    delay(750.milliseconds)
+                                    errorAlpha.animateTo(0f)
+                                }
+                            }
+                        },
                         modifier = Modifier.height(numbersColumnHeight / 3),
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
-                            .background(validationResult, MaterialTheme.shapes.medium)
+                            .background(
+                                errorColor.copy(alpha = errorAlpha.value),
+                                MaterialTheme.shapes.medium
+                            )
                             .height(numbersColumnHeight / 3)
                             .alpha(
                                 maxOf(
