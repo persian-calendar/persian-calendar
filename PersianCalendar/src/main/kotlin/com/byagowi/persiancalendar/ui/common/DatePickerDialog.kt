@@ -20,7 +20,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -84,21 +83,16 @@ fun DatePickerDialog(
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
         CalendarsTypesPicker(current = calendar) { calendar = it }
 
-        CompositionLocalProvider(LocalPendingConfirms provides pendingConfirms) {
-            DatePicker(calendar, jdn) { jdn = it }
-        }
+        DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
         var showNumberEdit by remember { mutableStateOf(false) }
         Crossfade(showNumberEdit, label = "edit toggle") { isInNumberEdit ->
-            if (isInNumberEdit) CompositionLocalProvider(
-                LocalPendingConfirms provides pendingConfirms
-            ) {
-                NumberEdit(
-                    dismissNumberEdit = { showNumberEdit = false },
-                    initialValue = jdn - today,
-                    setValue = { if (it != null && abs(it) < 100_000) jdn = today + it },
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            } else AnimatedContent(
+            if (isInNumberEdit) NumberEdit(
+                dismissNumberEdit = { showNumberEdit = false },
+                initialValue = jdn - today,
+                setValue = { if (it != null && abs(it) < 100_000) jdn = today + it },
+                modifier = Modifier.fillMaxWidth(),
+                pendingConfirms = pendingConfirms,
+            ) else AnimatedContent(
                 targetState = if (jdn == today) null else listOf(
                     stringResource(R.string.days_distance), spacedColon,
                     calculateDaysDifference(

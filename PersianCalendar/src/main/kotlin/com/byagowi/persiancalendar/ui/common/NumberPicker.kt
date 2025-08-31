@@ -74,6 +74,7 @@ fun NumberPicker(
     value: Int,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
     onValueChange: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
@@ -171,6 +172,7 @@ fun NumberPicker(
                             }
                         },
                         modifier = Modifier.height(numbersColumnHeight / 3),
+                        pendingConfirms = pendingConfirms,
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
@@ -218,14 +220,13 @@ fun NumberPicker(
     }
 }
 
-val LocalPendingConfirms = staticCompositionLocalOf<SnapshotStateList<() -> Unit>?> { null }
-
 @Composable
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
     initialValue: Int,
     setValue: (Int?) -> Unit,
     modifier: Modifier = Modifier,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -249,7 +250,6 @@ fun NumberEdit(
         { focusManager.clearFocus(); dismissNumberEdit() }
     }
 
-    val pendingConfirms = LocalPendingConfirms.current
     DisposableEffect(clearFocus) {
         pendingConfirms?.add(clearFocus)
         onDispose { pendingConfirms?.remove(clearFocus) }

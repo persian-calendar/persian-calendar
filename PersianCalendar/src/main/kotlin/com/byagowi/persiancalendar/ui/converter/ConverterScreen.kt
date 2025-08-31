@@ -49,6 +49,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -86,7 +87,6 @@ import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
-import com.byagowi.persiancalendar.ui.common.LocalPendingConfirms
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -209,16 +209,21 @@ fun SharedTransitionScope.ConverterScreen(
                             }
                             if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
                                 Box(Modifier.weight(1f)) {
-                                    TimezoneClock(viewModel, zones, isFirst = true)
+                                    TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
                                 }
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Box(Modifier.weight(1f)) {
-                                    TimezoneClock(viewModel, zones, isFirst = false)
+                                    TimezoneClock(
+                                        viewModel,
+                                        zones,
+                                        pendingConfirms,
+                                        isFirst = false
+                                    )
                                 }
                             } else Column(Modifier.padding(horizontal = 24.dp)) {
-                                TimezoneClock(viewModel, zones, isFirst = true)
+                                TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
                                 Spacer(modifier = Modifier.height(8.dp))
-                                TimezoneClock(viewModel, zones, isFirst = false)
+                                TimezoneClock(viewModel, zones, pendingConfirms, isFirst = false)
                             }
                         }
 
@@ -226,14 +231,13 @@ fun SharedTransitionScope.ConverterScreen(
                             screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
-                                CompositionLocalProvider(LocalPendingConfirms provides pendingConfirms) {
-                                    ConverterAndDistance(
-                                        navigateToAstronomy = navigateToAstronomy,
-                                        viewModel = viewModel,
-                                        animatedContentScope = animatedContentScope,
-                                        sharedTransitionScope = this@ConverterScreen,
-                                    )
-                                }
+                                ConverterAndDistance(
+                                    navigateToAstronomy = navigateToAstronomy,
+                                    viewModel = viewModel,
+                                    animatedContentScope = animatedContentScope,
+                                    sharedTransitionScope = this@ConverterScreen,
+                                    pendingConfirms = pendingConfirms,
+                                )
                             }
                         }
 
@@ -465,6 +469,7 @@ private fun ColumnScope.ConverterAndDistance(
     viewModel: ConverterViewModel,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
 ) {
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -477,7 +482,10 @@ private fun ColumnScope.ConverterAndDistance(
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
             DatePicker(
-                calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate
+                calendar = calendar,
+                jdn = jdn,
+                pendingConfirms = pendingConfirms,
+                setJdn = viewModel::changeSelectedDate,
             )
         }
         Spacer(Modifier.width(8.dp))
@@ -502,12 +510,17 @@ private fun ColumnScope.ConverterAndDistance(
                 }
             }
             this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
-                DaysDistanceSecondPart(viewModel, jdn, calendar)
+                DaysDistanceSecondPart(viewModel, jdn, calendar, pendingConfirms)
             }
         }
     } else {
         CalendarsTypesPicker(calendar, viewModel::changeCalendar)
-        DatePicker(calendar = calendar, jdn = jdn, setJdn = viewModel::changeSelectedDate)
+        DatePicker(
+            calendar = calendar,
+            jdn = jdn,
+            pendingConfirms = pendingConfirms,
+            setJdn = viewModel::changeSelectedDate
+        )
         this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.CONVERTER) {
             Card(
                 shape = MaterialTheme.shapes.extraLarge,
@@ -533,7 +546,7 @@ private fun ColumnScope.ConverterAndDistance(
             }
         }
         this.AnimatedVisibility(visible = screenMode == ConverterScreenMode.DISTANCE) {
-            DaysDistanceSecondPart(viewModel, jdn, calendar)
+            DaysDistanceSecondPart(viewModel, jdn, calendar, pendingConfirms)
         }
     }
 
@@ -558,7 +571,12 @@ private fun ColumnScope.ConverterAndDistance(
 }
 
 @Composable
-private fun DaysDistanceSecondPart(viewModel: ConverterViewModel, jdn: Jdn, calendar: Calendar) {
+private fun DaysDistanceSecondPart(
+    viewModel: ConverterViewModel,
+    jdn: Jdn,
+    calendar: Calendar,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
+) {
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
         val resources = LocalResources.current
@@ -568,6 +586,7 @@ private fun DaysDistanceSecondPart(viewModel: ConverterViewModel, jdn: Jdn, cale
         DatePicker(
             calendar = calendar,
             jdn = secondJdn,
+            pendingConfirms = pendingConfirms,
             setJdn = viewModel::changeSecondSelectedDate,
         )
     }
@@ -599,7 +618,12 @@ private val hoursRange = 0..23
 private val minutesRange = 0..59
 
 @Composable
-private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, isFirst: Boolean) {
+private fun TimezoneClock(
+    viewModel: ConverterViewModel,
+    zones: List<TimeZone>,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
+    isFirst: Boolean,
+) {
     val timeZone by (if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone).collectAsState()
     val clock by viewModel.clock.collectAsState()
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -623,6 +647,7 @@ private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, 
                     "$id ($offset)"
                 },
                 disableEdit = true,
+                pendingConfirms = pendingConfirms,
             )
             Spacer(modifier = Modifier.width(4.dp))
             val time = GregorianCalendar(timeZone).also { it.time = clock.time }
@@ -637,6 +662,7 @@ private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, 
                         it[GregorianCalendar.HOUR_OF_DAY] = hours
                     })
                 },
+                pendingConfirms = pendingConfirms,
             )
             Text(":")
             NumberPicker(
@@ -650,6 +676,7 @@ private fun TimezoneClock(viewModel: ConverterViewModel, zones: List<TimeZone>, 
                         it[GregorianCalendar.MINUTE] = minutes
                     })
                 },
+                pendingConfirms = pendingConfirms,
             )
         }
     }

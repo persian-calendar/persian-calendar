@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -20,14 +21,31 @@ import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
-fun DatePicker(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
+fun DatePicker(
+    calendar: Calendar,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
+    jdn: Jdn,
+    setJdn: (Jdn) -> Unit
+) {
     Crossfade(targetState = calendar, label = "day picker") { calendarState ->
-        Row(modifier = Modifier.fillMaxWidth()) { DatePickerContent(calendarState, jdn, setJdn) }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            DatePickerContent(
+                calendarState,
+                pendingConfirms,
+                jdn,
+                setJdn,
+            )
+        }
     }
 }
 
 @Composable
-private fun RowScope.DatePickerContent(calendar: Calendar, jdn: Jdn, setJdn: (Jdn) -> Unit) {
+private fun RowScope.DatePickerContent(
+    calendar: Calendar,
+    pendingConfirms: SnapshotStateList<() -> Unit>,
+    jdn: Jdn,
+    setJdn: (Jdn) -> Unit,
+) {
     val yearsLimit = 5000 // let's just don't care about accuracy of distant time
     val date = remember(jdn.value, calendar) { jdn on calendar }
     val daysFormat = remember(calendar, date.year, date.month) {
@@ -53,6 +71,7 @@ private fun RowScope.DatePickerContent(calendar: Calendar, jdn: Jdn, setJdn: (Jd
         range = 1..monthsLength,
         value = date.dayOfMonth,
         onClickLabel = stringResource(R.string.day),
+        pendingConfirms = pendingConfirms,
     ) {
         setJdn(Jdn(calendar, date.year, date.month, it))
         view.performHapticFeedbackVirtualKey()
@@ -64,6 +83,7 @@ private fun RowScope.DatePickerContent(calendar: Calendar, jdn: Jdn, setJdn: (Jd
         range = 1..yearMonths,
         value = date.month,
         onClickLabel = stringResource(R.string.month),
+        pendingConfirms = pendingConfirms,
     ) { month ->
         val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
         setJdn(Jdn(calendar, date.year, month, day))
@@ -75,6 +95,7 @@ private fun RowScope.DatePickerContent(calendar: Calendar, jdn: Jdn, setJdn: (Jd
         range = startYear..startYear + yearsLimit,
         value = date.year,
         onClickLabel = stringResource(R.string.year),
+        pendingConfirms = pendingConfirms,
     ) { year ->
         val month = date.month.coerceIn(1, calendar.getYearMonths(year))
         val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(year, month))
