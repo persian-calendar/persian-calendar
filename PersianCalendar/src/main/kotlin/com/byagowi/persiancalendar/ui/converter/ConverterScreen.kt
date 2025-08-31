@@ -165,21 +165,28 @@ fun SharedTransitionScope.ConverterScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
-                    AnimatedVisibility(acceptManager.isNotEmpty()) {
+                    val anyPendingAccept = acceptManager.isNotEmpty()
+                    val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
+                    TodayActionButton(visible = todayButtonVisibility && !anyPendingAccept) {
+                        val todayJdn = Jdn.today()
+                        viewModel.changeSelectedDate(todayJdn)
+                        viewModel.changeSecondSelectedDate(todayJdn)
+                        viewModel.resetTimeZoneClock()
+                    }
+                    AnimatedVisibility(anyPendingAccept) {
                         AppIconButton(
                             icon = Icons.Default.Done,
                             title = stringResource(R.string.accept),
                             onClick = { acceptManager.forEach { it() } },
                         )
                     }
-                    val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
-                    TodayActionButton(visible = todayButtonVisibility) {
-                        val todayJdn = Jdn.today()
-                        viewModel.changeSelectedDate(todayJdn)
-                        viewModel.changeSecondSelectedDate(todayJdn)
-                        viewModel.resetTimeZoneClock()
+                    AnimatedVisibility(!anyPendingAccept) {
+                        ConverterScreenShareActionButton(
+                            animatedContentScope,
+                            viewModel,
+                            qrShareAction,
+                        )
                     }
-                    ConverterScreenShareActionButton(animatedContentScope, viewModel, qrShareAction)
                 },
             )
         },
