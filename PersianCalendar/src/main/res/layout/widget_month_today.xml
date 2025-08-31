@@ -16,7 +16,6 @@
         android:layout_height="14dp"
         android:autoSizeMaxTextSize="11sp"
         android:autoSizeMinTextSize="7sp"
-        android:autoSizeStepGranularity="1sp"
         android:autoSizeTextType="uniform"
         android:background="@drawable/widget_month_today"
         android:maxLines="1"

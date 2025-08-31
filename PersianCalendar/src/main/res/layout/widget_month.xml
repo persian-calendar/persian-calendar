@@ -41,7 +41,8 @@
                     android:autoSizeTextType="uniform"
                     android:maxLines="1"
                     android:textColor="@color/widget_modern_text"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:ignore="UnusedAttribute" />
 
                 <TextView
                     android:id="@+id/month_name_secondary"
@@ -52,7 +53,8 @@
                     android:autoSizeTextType="uniform"
                     android:maxLines="2"
                     android:textColor="@color/widget_modern_text"
-                    android:textSize="11sp" />
+                    android:textSize="11sp"
+                    tools:ignore="UnusedAttribute" />
 
             </LinearLayout>
 
