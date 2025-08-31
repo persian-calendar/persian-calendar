@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -58,12 +60,13 @@ fun DatePickerDialog(
     AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
-            TextButton(onClick = {
-                acceptManager.takeIf { it.isNotEmpty() }?.forEach { it() } ?: run {
-                    onDismissRequest()
-                    onSuccess(jdn)
-                }
-            }) { Text(stringResource(R.string.accept)) }
+            val title = stringResource(R.string.accept)
+            if (acceptManager.isNotEmpty()) AppIconButton(Icons.Default.Done, title) {
+                acceptManager.forEach { it() }
+            } else TextButton(onClick = {
+                onDismissRequest()
+                onSuccess(jdn)
+            }) { Text(title) }
         },
         neutralButton = {
             AnimatedVisibility(visible = jdn != today, enter = fadeIn(), exit = fadeOut()) {
