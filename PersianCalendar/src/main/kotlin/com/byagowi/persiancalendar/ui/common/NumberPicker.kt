@@ -7,7 +7,6 @@ import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.DecayAnimationSpec
 import androidx.compose.animation.core.calculateTargetValue
 import androidx.compose.animation.core.exponentialDecay
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -37,13 +36,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -54,14 +53,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.utils.formatNumber
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import kotlin.time.Duration.Companion.milliseconds
 
 // The following is brought from
 // https://github.com/ChargeMap/Compose-NumberPicker and customized to support number edits
@@ -156,30 +154,17 @@ fun NumberPicker(
                         ),
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
-                val errorAlpha = remember { Animatable(.0f) }
-                val errorColor = MaterialTheme.colorScheme.error
                 Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
                     if (isInNumberEdit) NumberEdit(
                         dismissNumberEdit = { showTextEdit = false },
                         initialValue = value,
-                        setValue = {
-                            if (it != null && it in range) onValueChange(it) else {
-                                coroutineScope.launch {
-                                    errorAlpha.snapTo(.1f)
-                                    delay(750.milliseconds)
-                                    errorAlpha.animateTo(0f)
-                                }
-                            }
-                        },
+                        setValue = { onValueChange(it) },
+                        isValid = { it in range },
                         modifier = Modifier.height(numbersColumnHeight / 3),
                         pendingConfirms = pendingConfirms,
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
-                            .background(
-                                errorColor.copy(alpha = errorAlpha.value),
-                                MaterialTheme.shapes.medium
-                            )
                             .height(numbersColumnHeight / 3)
                             .alpha(
                                 maxOf(
@@ -224,7 +209,8 @@ fun NumberPicker(
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
     initialValue: Int,
-    setValue: (Int?) -> Unit,
+    setValue: (Int) -> Unit,
+    isValid: (Int) -> Boolean,
     modifier: Modifier = Modifier,
     pendingConfirms: SnapshotStateList<() -> Unit>,
 ) {
@@ -251,9 +237,11 @@ fun NumberEdit(
     }
 
     DisposableEffect(clearFocus) {
-        pendingConfirms?.add(clearFocus)
-        onDispose { pendingConfirms?.remove(clearFocus) }
+        pendingConfirms.add(clearFocus)
+        onDispose { pendingConfirms.remove(clearFocus) }
     }
+
+    fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
 
     Box(modifier, contentAlignment = Alignment.Center) {
         BasicTextField(
@@ -261,7 +249,7 @@ fun NumberEdit(
             interactionSource = interactionSource,
             maxLines = 1,
             onValueChange = { value = it },
-            keyboardActions = KeyboardActions(onDone = { pendingConfirms?.clear(); clearFocus() }),
+            keyboardActions = KeyboardActions(onDone = { pendingConfirms.clear(); clearFocus() }),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
@@ -269,13 +257,17 @@ fun NumberEdit(
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 color = LocalContentColor.current,
+                textDecoration = TextDecoration.Underline,
+                background =
+                    if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
+                    else Color.Transparent,
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     if (!it.isFocused) {
-                        pendingConfirms?.remove(clearFocus)
-                        setValue(value.text.toIntOrNull())
+                        pendingConfirms.remove(clearFocus)
+                        resolveValue()?.let(setValue)
                     }
                 },
         )

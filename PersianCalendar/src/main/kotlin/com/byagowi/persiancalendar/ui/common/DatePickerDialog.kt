@@ -89,7 +89,8 @@ fun DatePickerDialog(
             if (isInNumberEdit) NumberEdit(
                 dismissNumberEdit = { showNumberEdit = false },
                 initialValue = jdn - today,
-                setValue = { if (it != null && abs(it) < 100_000) jdn = today + it },
+                setValue = { jdn = today + it },
+                isValid = { abs(it) < 100_000 },
                 modifier = Modifier.fillMaxWidth(),
                 pendingConfirms = pendingConfirms,
             ) else AnimatedContent(
