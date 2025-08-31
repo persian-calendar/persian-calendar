@@ -44,9 +44,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri
-import androidx.core.text.buildSpannedString
 import androidx.core.text.layoutDirection
-import androidx.core.text.scale
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.AgeWidget
@@ -485,19 +483,19 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     val mainCalendar = mainCalendar
     val secondaryCalendar = secondaryCalendar
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
-    remoteViews.setTextViewText(R.id.month_name, buildSpannedString {
-        val firstLine =
+    remoteViews.setTextViewText(
+        R.id.month_name,
             if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
             else language.value.my.format(
                 monthStartDate.monthName, formatNumber(monthStartDate.year)
             )
+    )
+    remoteViews.setTextViewTextOrHideIfEmpty(
+        R.id.month_name_secondary,
         secondaryCalendar?.let {
-            scale(.9f) {
-                append(firstLine + "\n")
-                scale(.625f) { append(monthFormatForSecondaryCalendar(monthStartDate, it, true)) }
-            }
-        } ?: append(firstLine)
-    })
+            monthFormatForSecondaryCalendar(monthStartDate, it, true)
+        }.orEmpty()
+    )
 
     // Round the background better
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
