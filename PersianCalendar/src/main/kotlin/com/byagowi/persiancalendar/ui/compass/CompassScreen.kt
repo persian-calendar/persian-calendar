@@ -212,7 +212,7 @@ fun SharedTransitionScope.CompassScreen(
                     if (coordinates != null) AppIconButton(
                         icon = In24HoursIcon,
                         title = stringResource(R.string.show_sun_and_moon_path_in_24_hours),
-                        iconModifier = Modifier.rotate(sliderValue / 24f * 360f),
+                        modifier = Modifier.rotate(sliderValue / 24f * 360f),
                     ) {
                         if (isTimeShiftAnimate) {
                             isTimeShiftAnimate = false
@@ -336,7 +336,7 @@ fun SharedTransitionScope.CompassScreen(
                         AppIconButton(
                             icon = ImageVector.vectorResource(R.drawable.ic_level),
                             title = stringResource(R.string.level),
-                            iconModifier = Modifier.sharedBounds(
+                            modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = animatedContentScope,
                             ),
@@ -345,7 +345,7 @@ fun SharedTransitionScope.CompassScreen(
                         AppIconButton(
                             icon = Icons.Default.Map,
                             title = stringResource(R.string.map),
-                            iconModifier = Modifier.sharedBounds(
+                            modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                                 animatedVisibilityScope = animatedContentScope,
                             ),

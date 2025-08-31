@@ -43,7 +43,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
             AppIconButton(
                 icon = Icons.Default.MoreVert,
                 title = stringResource(R.string.more_options),
-                iconModifier = Modifier.scale(1f, scaleY),
+                modifier = Modifier.scale(1f, scaleY),
             ) { expanded = !expanded }
         }
         AppDropdownMenu(

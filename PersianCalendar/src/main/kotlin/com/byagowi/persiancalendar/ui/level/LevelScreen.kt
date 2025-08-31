@@ -159,7 +159,7 @@ fun SharedTransitionScope.LevelScreen(
                         AppIconButton(
                             icon = Icons.Default.SyncAlt,
                             title = "cm / in",
-                            iconModifier = Modifier.rotate(rotation),
+                            modifier = Modifier.rotate(rotation),
                         ) { cmInchFlip = !cmInchFlip }
                     }
                     AppIconButton(
@@ -230,7 +230,7 @@ fun SharedTransitionScope.LevelScreen(
                             AppIconButton(
                                 icon = Icons.Default.Explore,
                                 title = stringResource(R.string.compass),
-                                iconModifier = Modifier.sharedBounds(
+                                modifier = Modifier.sharedBounds(
                                     rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                     animatedVisibilityScope = animatedContentScope,
                                 ),

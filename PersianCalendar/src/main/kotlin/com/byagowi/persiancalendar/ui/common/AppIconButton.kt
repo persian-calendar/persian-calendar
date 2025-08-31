@@ -17,12 +17,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 fun AppIconButton(
     icon: ImageVector,
     title: String,
-    iconModifier: Modifier = Modifier,
+    modifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     TooltipBox(
         positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
         tooltip = { PlainTooltip { Text(title) } },
         state = rememberTooltipState()
-    ) { IconButton(onClick = onClick) { Icon(icon, contentDescription = title, iconModifier) } }
+    ) { IconButton(onClick = onClick) { Icon(icon, contentDescription = title, modifier) } }
 }
