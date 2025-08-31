@@ -218,7 +218,7 @@ fun NumberPicker(
     }
 }
 
-val LocalAcceptManager = staticCompositionLocalOf<SnapshotStateList<() -> Unit>?> { null }
+val LocalPendingConfirms = staticCompositionLocalOf<SnapshotStateList<() -> Unit>?> { null }
 
 @Composable
 fun NumberEdit(
@@ -249,10 +249,10 @@ fun NumberEdit(
         { focusManager.clearFocus(); dismissNumberEdit() }
     }
 
-    val acceptManager = LocalAcceptManager.current
+    val pendingConfirms = LocalPendingConfirms.current
     DisposableEffect(clearFocus) {
-        acceptManager?.add(clearFocus)
-        onDispose { acceptManager?.remove(clearFocus) }
+        pendingConfirms?.add(clearFocus)
+        onDispose { pendingConfirms?.remove(clearFocus) }
     }
 
     Box(modifier, contentAlignment = Alignment.Center) {
@@ -261,7 +261,7 @@ fun NumberEdit(
             interactionSource = interactionSource,
             maxLines = 1,
             onValueChange = { value = it },
-            keyboardActions = KeyboardActions(onDone = { acceptManager?.clear(); clearFocus() }),
+            keyboardActions = KeyboardActions(onDone = { pendingConfirms?.clear(); clearFocus() }),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done,
@@ -274,7 +274,7 @@ fun NumberEdit(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     if (!it.isFocused) {
-                        acceptManager?.remove(clearFocus)
+                        pendingConfirms?.remove(clearFocus)
                         setValue(value.text.toIntOrNull())
                     }
                 },

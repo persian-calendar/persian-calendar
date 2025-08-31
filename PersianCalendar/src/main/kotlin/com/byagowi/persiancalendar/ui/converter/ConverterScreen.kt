@@ -86,7 +86,7 @@ import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
-import com.byagowi.persiancalendar.ui.common.LocalAcceptManager
+import com.byagowi.persiancalendar.ui.common.LocalPendingConfirms
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -118,7 +118,7 @@ fun SharedTransitionScope.ConverterScreen(
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
-    val acceptManager = remember { mutableStateListOf<() -> Unit>() }
+    val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     Scaffold(
         containerColor = Color.Transparent,
         topBar = {
@@ -165,22 +165,22 @@ fun SharedTransitionScope.ConverterScreen(
                 colors = appTopAppBarColors(),
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
-                    val anyPendingAccept = acceptManager.isNotEmpty()
+                    val anyPendingConfirm = pendingConfirms.isNotEmpty()
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
-                    TodayActionButton(visible = todayButtonVisibility && !anyPendingAccept) {
+                    TodayActionButton(visible = todayButtonVisibility && !anyPendingConfirm) {
                         val todayJdn = Jdn.today()
                         viewModel.changeSelectedDate(todayJdn)
                         viewModel.changeSecondSelectedDate(todayJdn)
                         viewModel.resetTimeZoneClock()
                     }
-                    AnimatedVisibility(anyPendingAccept) {
+                    AnimatedVisibility(anyPendingConfirm) {
                         AppIconButton(
                             icon = Icons.Default.Done,
                             title = stringResource(R.string.accept),
-                            onClick = { acceptManager.forEach { it() } },
+                            onClick = { pendingConfirms.forEach { it() } },
                         )
                     }
-                    AnimatedVisibility(!anyPendingAccept) {
+                    AnimatedVisibility(!anyPendingConfirm) {
                         ConverterScreenShareActionButton(
                             animatedContentScope,
                             viewModel,
@@ -226,7 +226,7 @@ fun SharedTransitionScope.ConverterScreen(
                             screenMode == ConverterScreenMode.CONVERTER || screenMode == ConverterScreenMode.DISTANCE
                         ) {
                             Column(Modifier.padding(horizontal = 24.dp)) {
-                                CompositionLocalProvider(LocalAcceptManager provides acceptManager) {
+                                CompositionLocalProvider(LocalPendingConfirms provides pendingConfirms) {
                                     ConverterAndDistance(
                                         navigateToAstronomy = navigateToAstronomy,
                                         viewModel = viewModel,

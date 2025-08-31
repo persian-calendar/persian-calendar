@@ -57,15 +57,15 @@ fun DatePickerDialog(
             today = Jdn.today()
         }
     }
-    val acceptManager = remember { mutableStateListOf<() -> Unit>() }
+    val pendingConfirms = remember { mutableStateListOf<() -> Unit>() }
     AppDialog(
         onDismissRequest = onDismissRequest,
         confirmButton = {
             Row {
                 val title = stringResource(R.string.accept)
-                val anyPendingAccept = acceptManager.isNotEmpty()
+                val anyPendingAccept = pendingConfirms.isNotEmpty()
                 AnimatedVisibility(anyPendingAccept) {
-                    AppIconButton(Icons.Default.Done, title) { acceptManager.forEach { it() } }
+                    AppIconButton(Icons.Default.Done, title) { pendingConfirms.forEach { it() } }
                 }
                 AnimatedVisibility(!anyPendingAccept) {
                     TextButton(onClick = {
@@ -84,13 +84,13 @@ fun DatePickerDialog(
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
         CalendarsTypesPicker(current = calendar) { calendar = it }
 
-        CompositionLocalProvider(LocalAcceptManager provides acceptManager) {
+        CompositionLocalProvider(LocalPendingConfirms provides pendingConfirms) {
             DatePicker(calendar, jdn) { jdn = it }
         }
         var showNumberEdit by remember { mutableStateOf(false) }
         Crossfade(showNumberEdit, label = "edit toggle") { isInNumberEdit ->
             if (isInNumberEdit) CompositionLocalProvider(
-                LocalAcceptManager provides acceptManager
+                LocalPendingConfirms provides pendingConfirms
             ) {
                 NumberEdit(
                     dismissNumberEdit = { showNumberEdit = false },
