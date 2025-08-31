@@ -29,6 +29,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -161,7 +162,7 @@ fun NumberPicker(
                         dismissNumberEdit = { showTextEdit = false },
                         initialValue = value,
                         setValue = {
-                            if (it in range) onValueChange(it) else {
+                            if (it != null && it in range) onValueChange(it) else {
                                 coroutineScope.launch {
                                     errorAlpha.snapTo(.1f)
                                     delay(750.milliseconds)
@@ -223,7 +224,7 @@ val LocalAcceptManager = staticCompositionLocalOf<SnapshotStateList<() -> Unit>?
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
     initialValue: Int,
-    setValue: (Int) -> Unit,
+    setValue: (Int?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
@@ -244,18 +245,17 @@ fun NumberEdit(
     if (isFocused && !isCapturedOnce) isCapturedOnce = true
     if (!isFocused && isCapturedOnce) dismissNumberEdit()
 
-    fun onDone() {
-        value.text.toIntOrNull()?.let { setValue(it) }
+    val clearFocus = remember(focusManager, dismissNumberEdit) {
+        { focusManager.clearFocus(); dismissNumberEdit() }
     }
 
-    fun clearFocus() {
-        focusManager.clearFocus()
-        dismissNumberEdit()
-        onDone()
+    val acceptManager = LocalAcceptManager.current
+    DisposableEffect(clearFocus) {
+        acceptManager?.add(clearFocus)
+        onDispose { acceptManager?.remove(clearFocus) }
     }
 
     Box(modifier, contentAlignment = Alignment.Center) {
-        val acceptManager = LocalAcceptManager.current
         BasicTextField(
             value = value,
             interactionSource = interactionSource,
@@ -273,9 +273,9 @@ fun NumberEdit(
             modifier = Modifier
                 .focusRequester(focusRequester)
                 .onFocusChanged {
-                    if (it.isFocused) acceptManager?.add(::clearFocus) else {
-                        acceptManager?.remove(::clearFocus)
-                        onDone()
+                    if (!it.isFocused) {
+                        acceptManager?.remove(clearFocus)
+                        setValue(value.text.toIntOrNull())
                     }
                 },
         )
