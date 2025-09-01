@@ -12,6 +12,7 @@ enum class SwipeUpAction(@get:StringRes val titleId: Int) {
 
 enum class SwipeDownAction(@get:StringRes val titleId: Int) {
     YearView(R.string.year_view),
-//    MonthView(R.string.month_view),
+
+    //    MonthView(R.string.month_view),
     None(R.string.empty),
 }

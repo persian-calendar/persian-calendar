@@ -257,7 +257,6 @@ fun NumberEdit(
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 color = LocalContentColor.current,
-                textDecoration = TextDecoration.Underline,
                 background =
                     if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
                     else Color.Transparent,

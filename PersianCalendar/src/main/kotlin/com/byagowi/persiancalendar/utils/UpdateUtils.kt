@@ -485,10 +485,10 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
     remoteViews.setTextViewText(
         R.id.month_name,
-            if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
-            else language.value.my.format(
-                monthStartDate.monthName, formatNumber(monthStartDate.year)
-            )
+        if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
+        else language.value.my.format(
+            monthStartDate.monthName, formatNumber(monthStartDate.year)
+        )
     )
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.month_name_secondary,
