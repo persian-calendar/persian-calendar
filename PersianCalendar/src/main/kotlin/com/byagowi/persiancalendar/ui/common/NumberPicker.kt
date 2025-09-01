@@ -155,12 +155,11 @@ fun NumberPicker(
                 Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
                     if (isInNumberEdit) NumberEdit(
                         dismissNumberEdit = { showTextEdit = false },
-                        initialValue = value,
-                        setValue = { onValueChange(it) },
-                        isValid = { it in range },
                         modifier = Modifier.height(numbersColumnHeight / 3),
                         pendingConfirms = pendingConfirms,
-                    ) else Label(
+                        isValid = { it in range },
+                        initialValue = value,
+                    ) { onValueChange(it) } else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
                             .height(numbersColumnHeight / 3)
@@ -206,11 +205,11 @@ fun NumberPicker(
 @Composable
 fun NumberEdit(
     dismissNumberEdit: () -> Unit,
+    pendingConfirms: MutableCollection<() -> Unit>,
+    modifier: Modifier = Modifier,
+    isValid: (Int) -> Boolean,
     initialValue: Int,
     setValue: (Int) -> Unit,
-    isValid: (Int) -> Boolean,
-    modifier: Modifier = Modifier,
-    pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
