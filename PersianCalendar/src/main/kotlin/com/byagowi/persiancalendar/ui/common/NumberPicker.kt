@@ -67,11 +67,11 @@ fun NumberPicker(
     modifier: Modifier = Modifier,
     label: (Int) -> String = { formatNumber(it) },
     range: IntRange,
-    value: Int,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
     pendingConfirms: MutableCollection<() -> Unit>,
-    onValueChange: (Int) -> Unit,
+    value: Int,
+    setValue: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
     val verticalMargin = 8.dp
@@ -121,7 +121,7 @@ fun NumberPicker(
                             },
                         ).endState.value
 
-                        onValueChange(
+                        setValue(
                             range.first + getItemIndexForOffset(
                                 range,
                                 value,
@@ -159,7 +159,8 @@ fun NumberPicker(
                         pendingConfirms = pendingConfirms,
                         isValid = { it in range },
                         initialValue = value,
-                    ) { onValueChange(it) } else Label(
+                        setValue = setValue,
+                    ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
                             .height(numbersColumnHeight / 3)

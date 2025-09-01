@@ -632,7 +632,7 @@ private fun TimezoneClock(
                 modifier = Modifier.weight(3f),
                 range = zones.indices,
                 value = zones.indexOf(timeZone).coerceAtLeast(0),
-                onValueChange = {
+                setValue = {
                     view.performHapticFeedbackVirtualKey()
                     if (isFirst) viewModel.changeFirstTimeZone(zones[it])
                     else viewModel.changeSecondTimeZone(zones[it])
@@ -654,7 +654,7 @@ private fun TimezoneClock(
                 modifier = Modifier.weight(1f),
                 range = hoursRange,
                 value = time[GregorianCalendar.HOUR_OF_DAY],
-                onValueChange = { hours ->
+                setValue = { hours ->
                     view.performHapticFeedbackVirtualKey()
                     viewModel.changeClock(GregorianCalendar(timeZone).also {
                         it.time = clock.time
@@ -668,7 +668,7 @@ private fun TimezoneClock(
                 modifier = Modifier.weight(1f),
                 range = minutesRange,
                 value = time[GregorianCalendar.MINUTE],
-                onValueChange = { minutes ->
+                setValue = { minutes ->
                     view.performHapticFeedbackVirtualKey()
                     viewModel.changeClock(GregorianCalendar(timeZone).also {
                         it.time = clock.time
