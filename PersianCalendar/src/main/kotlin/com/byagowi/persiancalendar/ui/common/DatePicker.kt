@@ -23,7 +23,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 @Composable
 fun DatePicker(
     calendar: Calendar,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
     jdn: Jdn,
     setJdn: (Jdn) -> Unit
 ) {
@@ -42,7 +42,7 @@ fun DatePicker(
 @Composable
 private fun RowScope.DatePickerContent(
     calendar: Calendar,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
     jdn: Jdn,
     setJdn: (Jdn) -> Unit,
 ) {

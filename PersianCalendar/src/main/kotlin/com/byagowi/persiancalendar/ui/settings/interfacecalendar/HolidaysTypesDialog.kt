@@ -22,7 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -153,7 +152,7 @@ fun CountryEvents(
     sourceLink: String,
     holidaysTitle: String,
     nonHolidaysTitle: String,
-    enabledTypes: SnapshotStateList<String>,
+    enabledTypes: MutableCollection<String>,
     holidaysKey: String,
     nonHolidaysKey: String,
 ) {
@@ -216,7 +215,7 @@ fun CountryEvents(
 @Composable
 private fun IndentedCheckBox(
     label: String,
-    enabledTypes: SnapshotStateList<String>,
+    enabledTypes: MutableCollection<String>,
     key: String,
 ) {
     Row(

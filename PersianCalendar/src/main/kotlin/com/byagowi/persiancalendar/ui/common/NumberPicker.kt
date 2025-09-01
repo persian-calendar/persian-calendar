@@ -35,7 +35,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -53,7 +52,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -72,7 +70,7 @@ fun NumberPicker(
     value: Int,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
     onValueChange: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
@@ -212,7 +210,7 @@ fun NumberEdit(
     setValue: (Int) -> Unit,
     isValid: (Int) -> Boolean,
     modifier: Modifier = Modifier,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }

@@ -49,7 +49,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -469,7 +468,7 @@ private fun ColumnScope.ConverterAndDistance(
     viewModel: ConverterViewModel,
     animatedContentScope: AnimatedContentScope,
     sharedTransitionScope: SharedTransitionScope,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
@@ -575,7 +574,7 @@ private fun DaysDistanceSecondPart(
     viewModel: ConverterViewModel,
     jdn: Jdn,
     calendar: Calendar,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
 ) {
     Column {
         val secondJdn by viewModel.secondSelectedDate.collectAsState()
@@ -621,7 +620,7 @@ private val minutesRange = 0..59
 private fun TimezoneClock(
     viewModel: ConverterViewModel,
     zones: List<TimeZone>,
-    pendingConfirms: SnapshotStateList<() -> Unit>,
+    pendingConfirms: MutableCollection<() -> Unit>,
     isFirst: Boolean,
 ) {
     val timeZone by (if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone).collectAsState()
