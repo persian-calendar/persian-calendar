@@ -722,7 +722,7 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         remoteViews.setViewLayoutWidth(
             R.id.add_event,
-            if (widthCells < 3 && secondaryCalendar != null) 32f else 52f,
+            if (widthCells < 3) 32f else 52f,
             TypedValue.COMPLEX_UNIT_DIP
         )
     }

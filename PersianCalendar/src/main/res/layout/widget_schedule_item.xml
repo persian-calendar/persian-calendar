@@ -17,14 +17,19 @@
 
         <TextView
             android:id="@+id/first_header"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:autoSizeMaxTextSize="18sp"
+            android:autoSizeMinTextSize="9sp"
+            android:autoSizeTextType="uniform"
             android:lineSpacingMultiplier="1.1"
             android:paddingStart="12dp"
             android:paddingTop="12dp"
             android:paddingEnd="0dp"
+            android:layout_marginEnd="50dp"
             android:textColor="@color/widget_modern_text"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:ignore="UnusedAttribute" />
 
         <TextView
             android:id="@+id/other_header"
