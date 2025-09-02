@@ -9,47 +9,59 @@
 
     <LinearLayout
         android:id="@+id/header"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="8dp"
-        android:paddingTop="12dp"
-        android:paddingEnd="0dp"
-        android:paddingBottom="4dp">
+        android:paddingEnd="0dp">
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/highlight"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:background="@drawable/widget_schedule_highlight"-->
+        <!--            android:paddingStart="4dp"-->
+        <!--            android:paddingEnd="4dp"-->
+        <!--            android:textColor="@color/widget_schedule_highlight_text"-->
+        <!--            android:textSize="14sp" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/weekday_name"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:paddingStart="4dp"-->
+        <!--            android:paddingEnd="4dp"-->
+        <!--            android:textColor="@color/widget_modern_text"-->
+        <!--            android:textSize="14sp" />-->
+
+        <!--        <TextView-->
+        <!--            android:id="@+id/day_of_month"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:paddingStart="4dp"-->
+        <!--            android:paddingEnd="4dp"-->
+        <!--            android:textColor="@color/widget_modern_text"-->
+        <!--            android:textSize="24sp" />-->
 
         <TextView
-            android:id="@+id/highlight"
+            android:id="@+id/first_header"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/widget_schedule_highlight"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:textColor="@color/widget_schedule_highlight_text"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/weekday_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
+            android:layout_height="52dp"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="0dp"
             android:textColor="@color/widget_modern_text"
-            android:textSize="14sp" />
+            android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/day_of_month"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:textColor="@color/widget_modern_text"
-            android:textSize="24sp" />
-
-        <TextView
-            android:id="@+id/bigger_month_name"
+            android:id="@+id/other_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:lineSpacingMultiplier="1.1"
+            android:paddingStart="12dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="0dp"
             android:textColor="@color/widget_modern_text"
             android:textSize="18sp" />
 
@@ -59,18 +71,17 @@
         android:id="@+id/event_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
         <FrameLayout
-            android:id="@+id/event_start_padding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <FrameLayout
             android:id="@+id/day_wrapper"
             android:layout_width="36dp"
-            android:layout_height="36dp">
+            android:layout_height="36dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="8dp">
 
             <TextView
                 android:id="@+id/today_first_line"
@@ -133,11 +144,6 @@
         </FrameLayout>
 
         <FrameLayout
-            android:id="@+id/event_middle_padding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
@@ -185,11 +191,6 @@
             </LinearLayout>
 
         </FrameLayout>
-
-        <FrameLayout
-            android:id="@+id/event_end_padding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

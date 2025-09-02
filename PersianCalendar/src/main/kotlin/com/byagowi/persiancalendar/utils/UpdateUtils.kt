@@ -348,8 +348,7 @@ private fun createRoundedBitmap(
 
 private fun getWidgetBackgroundColor(
     preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
-) = preferences.getString(key, null)?.toColorInt()
-    ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+) = preferences.getString(key, null)?.toColorInt() ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 private fun getWidgetTextColor(
     preferences: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
@@ -491,8 +490,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         )
     )
     remoteViews.setTextViewTextOrHideIfEmpty(
-        R.id.month_name_secondary,
-        secondaryCalendar?.let {
+        R.id.month_name_secondary, secondaryCalendar?.let {
             monthFormatForSecondaryCalendar(monthStartDate, it, true)
         }.orEmpty()
     )
@@ -575,8 +573,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
             val eventView = RemoteViews(context.packageName, R.layout.widget_month_event)
             eventView.setTextViewText(
                 R.id.title,
-                if (it is CalendarEvent.DeviceCalendarEvent) it.title else
-                    it.title.split(" (")[0]
+                if (it is CalendarEvent.DeviceCalendarEvent) it.title else it.title.split(" (")[0]
             )
             when {
                 it is CalendarEvent.DeviceCalendarEvent -> {
@@ -598,9 +595,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
                         )
                     } else {
                         eventView.setInt(
-                            R.id.title_background,
-                            "setColorFilter",
-                            0xFFFF8A65.toInt()
+                            R.id.title_background, "setColorFilter", 0xFFFF8A65.toInt()
                         )
                         eventView.setInt(R.id.title, "setTextColor", Color.WHITE)
                     }
@@ -696,7 +691,7 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     val widthCells = width?.let {
         val widthDp = it / context.resources.dp
         when {
-            widthDp < 180 -> 2
+            widthDp < 182 -> 2
             widthDp < 310 -> 3
             else -> 4
         }
@@ -741,15 +736,6 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
         )
         remoteViews.setBoolean(R.id.widget_schedule, "setClipToOutline", true)
     }
-
-    val topPadding = ((if (widthCells > 2) 16 else 12) * context.resources.dp).roundToInt()
-    val endPadding = (when {
-        widthCells > 3 -> 16
-        widthCells == 3 -> 8
-        else -> 12
-    } * context.resources.dp).roundToInt()
-    remoteViews.setViewPadding(R.id.add_event_parent, endPadding, topPadding, endPadding, 0)
-
     return remoteViews
 }
 
@@ -1075,8 +1061,7 @@ private fun create4x1RemoteViews(
         if (showOtherCalendars) append(spacedComma + subtitle)
     })
     remoteViews.setInt(
-        R.id.textPlaceholder2_4x1, "setMaxLines",
-        if (showOtherCalendars) 10 else 1
+        R.id.textPlaceholder2_4x1, "setMaxLines", if (showOtherCalendars) 10 else 1
     )
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
@@ -1303,10 +1288,8 @@ private fun createWeekViewRemoteViews(
                 }, BlendModeCompat.SRC_ATOP
             )
             remoteViews.setImageViewBitmap(
-                R.id.today_background,
-                drawable.toBitmap(
-                    (32 * context.resources.dp).toInt(),
-                    (32 * context.resources.dp).toInt()
+                R.id.today_background, drawable.toBitmap(
+                    (32 * context.resources.dp).toInt(), (32 * context.resources.dp).toInt()
                 )
             )
 
@@ -1333,24 +1316,19 @@ private fun createWeekViewRemoteViews(
 
         val action = jdnActionKey + day.value
         remoteViews.setOnClickPendingIntent(
-            weekDayNumberViewId,
-            context.launchAppPendingIntent(action)
+            weekDayNumberViewId, context.launchAppPendingIntent(action)
         )
         remoteViews.setInt(
-            weekDayNumberViewId,
-            "setBackgroundResource",
-            R.drawable.widget_month_day_ripple
+            weekDayNumberViewId, "setBackgroundResource", R.drawable.widget_month_day_ripple
         )
     }
 
     remoteViews.setTextViewText(
-        R.id.textDate,
-        language.value.my.format(date.monthName, formatNumber(date.year))
+        R.id.textDate, language.value.my.format(date.monthName, formatNumber(date.year))
     )
 
     remoteViews.setOnClickPendingIntent(
-        R.id.widget_layout_week_view,
-        context.launchAppPendingIntent()
+        R.id.widget_layout_week_view, context.launchAppPendingIntent()
     )
     return remoteViews
 }

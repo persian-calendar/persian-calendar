@@ -4,15 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import androidx.annotation.AttrRes
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
-import androidx.core.text.buildSpannedString
-import androidx.core.text.scale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
@@ -24,14 +20,15 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.nothingScheduledString
 import com.byagowi.persiancalendar.global.prayTimesTitles
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.calendar.eventTextColor
 import com.byagowi.persiancalendar.ui.calendar.sortEvents
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.eventKey
@@ -44,7 +41,6 @@ import com.byagowi.persiancalendar.utils.readTwoWeekDeviceEvents
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import java.util.GregorianCalendar
-import kotlin.math.roundToInt
 
 class ScheduleWidgetService : RemoteViewsService() {
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory =
@@ -139,90 +135,39 @@ private class EventsViewFactory(
             return row
         }
 
-        val dp = context.resources.dp
-        fun Int.dp() = (this * dp).roundToInt()
-
         (entry as? Header)?.let { header ->
-            val weekDayName = header.secondaryDate?.let {
-                val secondaryDayOfMonth = formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
-                "${header.day.weekDayNameInitials}($secondaryDayOfMonth)"
-            } ?: header.day.weekDayName
-            if (position == 0 && widthCells < 3) {
-                row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
-                row.setTextViewText(R.id.highlight, weekDayName)
-                row.setViewVisibility(R.id.highlight, View.VISIBLE)
-                row.setViewVisibility(R.id.weekday_name, View.GONE)
-                row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
-                row.setViewVisibility(R.id.bigger_month_name, View.GONE)
-            } else if (widthCells > 2) {
-                row.setViewVisibility(R.id.weekday_name, View.GONE)
-                row.setViewVisibility(R.id.highlight, View.GONE)
-                row.setViewVisibility(R.id.day_of_month, View.GONE)
-                if (header.withMonth || position == 0) {
-                    val topSpace = when (position) {
-                        0 -> if (header.secondaryDate == null) 12 else 2
-                        else -> if (header.secondaryDate == null) 4 else 0
-                    }.dp()
-                    val bottomSpace = when (position) {
-                        0 -> if (header.secondaryDate == null) 18 else 8
-                        else -> if (header.secondaryDate == null) 12 else 4
-                    }.dp()
-                    val startSpace = (if (widthCells > 3) 8 else 4).dp()
-                    val monthTitle = buildSpannedString {
-                        append(header.date.monthName)
-                        header.secondaryDate?.let { scale(.9f) { append("\n" + it.monthName) } }
-                    }
-                    row.setTextViewText(R.id.bigger_month_name, monthTitle)
-                    row.setViewVisibility(R.id.bigger_month_name, View.VISIBLE)
-                    row.setViewPadding(
-                        R.id.bigger_month_name, startSpace, topSpace, startSpace, bottomSpace
+            val headerContent = run {
+                val headerFirstPart = if (widthCells < 3) {
+                    header.day.weekDayNameInitials + spacedComma + language.value.dm.format(
+                        formatNumber(header.date.dayOfMonth),
+                        header.date.monthName
                     )
-                } else {
-                    row.setViewVisibility(R.id.bigger_month_name, View.GONE)
-                }
+                } else header.date.monthName
+                header.secondaryDate?.let {
+                    language.value.inParentheses.format(
+                        headerFirstPart,
+                        if (widthCells < 3) formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
+                        else it.monthName
+                    )
+                } ?: headerFirstPart
+            }
+            if (position == 0) {
+                row.setViewVisibility(R.id.first_header, View.VISIBLE)
+                row.setViewVisibility(R.id.other_header, View.GONE)
+                row.setTextViewText(R.id.first_header, headerContent)
+            } else if (widthCells < 3 || header.withMonth) {
+                row.setViewVisibility(R.id.first_header, View.GONE)
+                row.setViewVisibility(R.id.other_header, View.VISIBLE)
+                row.setTextViewText(R.id.other_header, headerContent)
             } else {
-                row.setTextViewText(R.id.day_of_month, formatNumber(header.date.dayOfMonth))
-                row.setTextViewText(R.id.weekday_name, weekDayName)
-                row.setViewVisibility(R.id.weekday_name, View.VISIBLE)
-                row.setViewVisibility(R.id.day_of_month, View.VISIBLE)
-                if (header.withMonth) {
-                    val monthTitle = buildSpannedString {
-                        append(header.date.monthName)
-                        header.secondaryDate?.let { scale(.9f) { append(" (${it.monthName})") } }
-                    }
-                    row.setTextViewText(R.id.highlight, monthTitle)
-                    row.setViewVisibility(R.id.highlight, View.VISIBLE)
-                } else row.setViewVisibility(R.id.highlight, View.GONE)
-                row.setViewVisibility(R.id.bigger_month_name, View.GONE)
+                row.setViewVisibility(R.id.first_header, View.GONE)
+                row.setViewVisibility(R.id.other_header, View.GONE)
             }
             row.setViewVisibility(R.id.header, View.VISIBLE)
             row.setViewVisibility(R.id.event_parent, View.GONE)
             val clickIntent = Intent().putExtra(jdnActionKey, header.day.value)
             row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
             return row
-        }
-
-        run {
-            val startPadding = when {
-                widthCells > 3 -> 12
-                widthCells == 3 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 6
-                else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 8
-            }.dp()
-            row.setViewPadding(R.id.event_start_padding, startPadding, 0, 0, 0)
-
-            val betweenPadding = when {
-                widthCells > 3 -> 8
-                widthCells == 3 -> 4
-                else -> 0
-            }.dp()
-            row.setViewPadding(R.id.event_middle_padding, betweenPadding, 0, 0, 0)
-
-            val endPadding = when {
-                widthCells > 3 -> 16
-                widthCells == 3 -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 8
-                else -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) 4 else 8
-            }.dp()
-            row.setViewPadding(R.id.event_end_padding, endPadding, 0, 0, 0)
         }
 
         val item = (entry as? Item).debugAssertNotNull ?: return row
@@ -323,10 +268,6 @@ private class EventsViewFactory(
         row.setOnClickFillInIntent(R.id.widget_schedule_item_root, clickIntent)
         return row
     }
-
-    fun Context.attrColor(@AttrRes attr: Int): Int = TypedValue()
-        .also { theme.resolveAttribute(attr, it, true) }
-        .let { if (it.resourceId != 0) ContextCompat.getColor(this, it.resourceId) else it.data }
 
     private fun getNextEnabledTime(enabledAlarms: Set<PrayTime>): Pair<String, Int> {
         if (enabledAlarms.isEmpty()) return "" to 0
