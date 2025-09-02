@@ -731,8 +731,7 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
     val addEventPendingIntent = PendingIntent.getBroadcast(
         context,
         0,
-        Intent(context, BroadcastReceivers::class.java).setAction(ADD_EVENT)
-            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId),
+        Intent(context, BroadcastReceivers::class.java).setAction(ADD_EVENT),
         PendingIntent.FLAG_IMMUTABLE
     )
     remoteViews.setOnClickPendingIntent(R.id.add_event, addEventPendingIntent)
