@@ -15,34 +15,6 @@
         android:paddingStart="8dp"
         android:paddingEnd="0dp">
 
-        <!--        <TextView-->
-        <!--            android:id="@+id/highlight"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:background="@drawable/widget_schedule_highlight"-->
-        <!--            android:paddingStart="4dp"-->
-        <!--            android:paddingEnd="4dp"-->
-        <!--            android:textColor="@color/widget_schedule_highlight_text"-->
-        <!--            android:textSize="14sp" />-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/weekday_name"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:paddingStart="4dp"-->
-        <!--            android:paddingEnd="4dp"-->
-        <!--            android:textColor="@color/widget_modern_text"-->
-        <!--            android:textSize="14sp" />-->
-
-        <!--        <TextView-->
-        <!--            android:id="@+id/day_of_month"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:paddingStart="4dp"-->
-        <!--            android:paddingEnd="4dp"-->
-        <!--            android:textColor="@color/widget_modern_text"-->
-        <!--            android:textSize="24sp" />-->
-
         <TextView
             android:id="@+id/first_header"
             android:layout_width="wrap_content"
