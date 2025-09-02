@@ -518,7 +518,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         if (daysRowsCount > 5) R.drawable.widget_month_bottom_border else 0
     )
     val eventsCountToShow = height?.let {
-        val bottomSpace = it / context.resources.dp - 72 - 20
+        val bottomSpace = it / context.resources.dp - 52 - 20
         ((bottomSpace / daysRowsCount - 14) / 14).toInt()
     } ?: 3
 

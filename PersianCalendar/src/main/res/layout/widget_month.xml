@@ -12,7 +12,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="52dp"
         android:orientation="horizontal">
 
         <FrameLayout
@@ -20,17 +20,16 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/widget_month_view_name">
+            android:background="@drawable/widget_month_view_name"
+            android:paddingTop="4dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|start"
                 android:orientation="vertical"
-                android:paddingStart="16dp"
-                android:paddingTop="16dp"
-                android:paddingEnd="0dp"
-                android:paddingBottom="8dp">
+                android:paddingStart="24dp"
+                android:paddingEnd="0dp">
 
                 <TextView
                     android:id="@+id/month_name"
@@ -51,7 +50,7 @@
                     android:autoSizeMaxTextSize="11sp"
                     android:autoSizeMinTextSize="7sp"
                     android:autoSizeTextType="uniform"
-                    android:maxLines="2"
+                    android:maxLines="1"
                     android:textColor="@color/widget_modern_text"
                     android:textSize="11sp"
                     tools:ignore="UnusedAttribute" />
@@ -63,8 +62,9 @@
         <ImageButton
             android:id="@+id/previous_month"
             android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:alpha=".65"
             android:background="@drawable/widget_month_button"
             android:contentDescription="@string/previous_x"
@@ -74,9 +74,10 @@
         <ImageButton
             android:id="@+id/next_month"
             android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_height="32dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
             android:alpha=".65"
             android:background="@drawable/widget_month_button"
             android:contentDescription="@string/next_x"
@@ -85,11 +86,11 @@
 
         <ImageButton
             android:id="@+id/add_event"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="52dp"
+            android:layout_height="32dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/widget_add_event"
             android:contentDescription="@string/add_event"
             android:src="@drawable/widget_add_event_icon"
