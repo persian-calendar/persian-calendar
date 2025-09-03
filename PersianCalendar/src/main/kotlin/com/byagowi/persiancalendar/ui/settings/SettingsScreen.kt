@@ -92,10 +92,10 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.launch
 
 @Composable

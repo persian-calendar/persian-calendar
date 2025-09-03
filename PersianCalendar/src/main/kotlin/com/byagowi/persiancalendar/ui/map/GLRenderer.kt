@@ -5,7 +5,7 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.GLUtils
 import com.byagowi.persiancalendar.generated.commonVertexShader
-import com.byagowi.persiancalendar.variants.debugLog
+import com.byagowi.persiancalendar.utils.debugLog
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import javax.microedition.khronos.egl.EGLConfig

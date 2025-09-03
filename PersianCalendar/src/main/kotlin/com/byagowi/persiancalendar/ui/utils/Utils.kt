@@ -20,8 +20,8 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.variants.debugLog
 import java.io.ByteArrayOutputStream
 import java.io.File
 

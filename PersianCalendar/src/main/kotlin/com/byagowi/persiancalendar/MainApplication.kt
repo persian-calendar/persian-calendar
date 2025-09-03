@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar
 import android.app.Application
 import android.content.Intent
 import android.content.SharedPreferences
+import androidx.compose.runtime.Composer
+import androidx.compose.runtime.ExperimentalComposeRuntimeApi
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
@@ -15,12 +17,12 @@ import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.variants.mainApplicationOnCreateHook
 
 class MainApplication : Application(), SharedPreferences.OnSharedPreferenceChangeListener {
+    @OptIn(ExperimentalComposeRuntimeApi::class)
     override fun onCreate() {
         super.onCreate()
-        mainApplicationOnCreateHook()
+        if (BuildConfig.DEVELOPMENT) Composer.setDiagnosticStackTraceEnabled(BuildConfig.DEBUG)
         initGlobal(applicationContext) // mostly used for things should be provided in locale level
         preferences.registerOnSharedPreferenceChangeListener(this)
         update(this, true)

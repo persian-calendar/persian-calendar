@@ -17,12 +17,12 @@ import com.byagowi.persiancalendar.MONTH_RESET_COMMAND
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startWorker
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateMonthWidget
-import com.byagowi.persiancalendar.variants.debugLog
 
 class BroadcastReceivers : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

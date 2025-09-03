@@ -36,12 +36,12 @@ import com.byagowi.persiancalendar.ui.athan.AthanActivity.Companion.CANCEL_ATHAN
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.startAthanActivity
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import kotlin.time.Duration.Companion.minutes
 
 class AthanNotification : Service() {

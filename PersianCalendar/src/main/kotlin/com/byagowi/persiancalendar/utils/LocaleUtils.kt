@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import java.util.Locale
 
 fun applyAppLanguage(context: Context) {

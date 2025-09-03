@@ -6,7 +6,6 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.UPDATE_TAG
 import com.byagowi.persiancalendar.service.UpdateWorker
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import java.util.concurrent.TimeUnit
 
 fun startWorker(context: Context) {

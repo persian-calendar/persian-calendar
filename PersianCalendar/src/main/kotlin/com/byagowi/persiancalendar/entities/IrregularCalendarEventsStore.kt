@@ -3,8 +3,8 @@ package com.byagowi.persiancalendar.entities
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.utils.calendar
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate

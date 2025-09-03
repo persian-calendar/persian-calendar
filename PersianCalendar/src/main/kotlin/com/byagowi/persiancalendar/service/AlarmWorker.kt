@@ -6,8 +6,8 @@ import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
 import com.byagowi.persiancalendar.entities.PrayTime
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.startAthan
-import com.byagowi.persiancalendar.variants.debugLog
 import kotlinx.coroutines.coroutineScope
 
 class AlarmWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {

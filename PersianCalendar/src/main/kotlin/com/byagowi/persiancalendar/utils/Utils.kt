@@ -4,6 +4,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.annotation.VisibleForTesting
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
@@ -88,3 +89,10 @@ val HighLatitudesMethod.titleStringId
         HighLatitudesMethod.OneSeventh -> R.string.high_latitudes_one_seventh
         HighLatitudesMethod.None -> R.string.none
     }
+
+inline val <T> T.debugAssertNotNull: T
+    inline get() = if (BuildConfig.DEVELOPMENT) checkNotNull(this) else this
+
+fun debugLog(vararg message: Any?) {
+    if (BuildConfig.DEVELOPMENT) Log.d(LOG_TAG, message.joinToString(", "))
+}

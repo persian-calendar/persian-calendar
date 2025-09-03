@@ -5,9 +5,9 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.variants.debugLog
 
 /**
  * The Calendar Service that updates widget time and clock and build/update

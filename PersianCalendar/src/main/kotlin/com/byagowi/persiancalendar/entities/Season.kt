@@ -4,8 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.Coordinates

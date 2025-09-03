@@ -66,7 +66,7 @@ import com.byagowi.persiancalendar.ui.calendar.times.SunViewColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
