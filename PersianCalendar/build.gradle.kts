@@ -37,7 +37,7 @@ android {
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
             "ne", "zh-rCN", "ru", "pt", "it", "ta", "de",
         )
-        setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitInfo")
+        base.archivesName.set("PersianCalendar-$versionName-$gitInfo")
     }
 
     signingConfigs {
