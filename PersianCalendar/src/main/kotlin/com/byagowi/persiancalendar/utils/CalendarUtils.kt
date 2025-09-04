@@ -153,7 +153,7 @@ fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar
 
 fun GregorianCalendar.formatDateAndTime(): String {
     return language.value.timeAndDateFormat.format(
-        Clock(this).toFormattedString(forcedIn12 = true),
+        Clock(this).toFormattedString(),
         formatDate(Jdn(this.toCivilDate()) on mainCalendar, forceNonNumerical = true)
     )
 }
