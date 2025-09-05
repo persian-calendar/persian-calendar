@@ -147,6 +147,7 @@ import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.astronomy.PlanetaryHoursDialog
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerState
@@ -978,6 +979,14 @@ private fun SharedTransitionScope.Menu(
         ) { viewModel.refreshCalendar() }
     }
 
+    val coordinates by coordinates.collectAsState()
+
+    var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
+    if (showPlanetaryHoursDialog) coordinates?.also {
+        val now by viewModel.now.collectAsState()
+        PlanetaryHoursDialog(it, now) { showPlanetaryHoursDialog = false }
+    }
+
     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
         AppDropdownMenuItem({ Text(stringResource(R.string.select_date)) }) {
             closeMenu()
@@ -992,13 +1001,18 @@ private fun SharedTransitionScope.Menu(
             viewModel.setShiftWorkViewModel(dialogViewModel)
         }
 
-        val coordinates by coordinates.collectAsState()
         if (coordinates != null) AppDropdownMenuItem(text = { Text(stringResource(R.string.month_pray_times)) }) {
             closeMenu()
             val selectedMonthOffset = viewModel.selectedMonthOffset.value
             val selectedMonth =
                 mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
+        }
+        if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem({
+            Text(stringResource(R.string.planetary_hours))
+        }) {
+            showPlanetaryHoursDialog = true
+            closeMenu()
         }
 
         HorizontalDivider()

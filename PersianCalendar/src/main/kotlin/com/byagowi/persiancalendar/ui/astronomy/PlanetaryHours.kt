@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.NightlightRound
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -144,6 +145,7 @@ fun PlanetaryHoursDialog(
                 AutoSizedText(stringResource(row.planet.body.titleStringId), 1f)
                 AutoSizedText(if (language.isArabicScript) row.planet.fa else row.planet.en, 1f)
             }
+            HorizontalDivider()
         }
     }
 }
