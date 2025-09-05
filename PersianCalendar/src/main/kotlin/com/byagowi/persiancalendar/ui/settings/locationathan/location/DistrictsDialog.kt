@@ -32,14 +32,16 @@ import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
 
 @Composable
-fun ProvincesDialog(onDismissRequest: () -> Unit) {
+fun ProvincesDialog(onDismissRequest: () -> Unit, navigateUp: () -> Unit) {
     var province by rememberSaveable { mutableStateOf<String?>(null) }
-    if (province != null) return DistrictsDialog(province.orEmpty()) {
-        province = null
-    }
+    if (province != null) return DistrictsDialog(
+        province = province.orEmpty(),
+        onSuccess = onDismissRequest,
+        navigateUp = { province = null },
+    )
     AppDialogWithLazyColumn(
         title = { Text("انتخاب استان") },
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = navigateUp,
     ) {
         items(districtsStore.keys.toList()) { provinceName ->
             Box(
@@ -55,7 +57,7 @@ fun ProvincesDialog(onDismissRequest: () -> Unit) {
 }
 
 @Composable
-fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
+fun DistrictsDialog(onSuccess: () -> Unit, navigateUp: () -> Unit, province: String) {
     val districts = remember {
         (districtsStore[province] ?: emptyList()).flatMap { county ->
             val countyDetails = county.split(";")
@@ -63,14 +65,14 @@ fun DistrictsDialog(province: String, onDismissRequest: () -> Unit) {
         }.sortedBy { (district, _) -> language.value.prepareForSort(district[0/*district name*/]) }
     }
     val context = LocalContext.current
-    AppDialogWithLazyColumn(title = { Text(province) }, onDismissRequest = onDismissRequest) {
+    AppDialogWithLazyColumn(title = { Text(province) }, onDismissRequest = navigateUp) {
         itemsIndexed(districts, { _, (district, _) -> district }) { index, (district, county) ->
             Box(
                 contentAlignment = Alignment.CenterStart,
                 modifier = Modifier
                     .fillMaxWidth()
                     .clickable {
-                        onDismissRequest()
+                        onSuccess()
                         val coordinates = Coordinates(
                             districts[index].first[1/*latitude*/].toDoubleOrNull() ?: 0.0,
                             districts[index].first[2/*longitude*/].toDoubleOrNull() ?: 0.0,
