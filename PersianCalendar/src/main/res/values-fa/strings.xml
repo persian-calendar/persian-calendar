@@ -161,7 +161,10 @@
     <string name="animal_year_name_horse">اسب</string>
     <string name="animal_year_name_goat">بز</string>
     <string name="level">تراز</string>
-    <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر حسگر قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی سه محور به جلو و عقب بچرخانید.</string>
+    <string name="calibrate_compass_summary">"جهت عملکرد دقیق‌تر حسگر قطب‌نما:
+- از اشیاء مغناطیسی دور شوید.
+- دستگاه را برگردانید و آن را روی سطح مسطحی مانند میز چند بار بچرخانید.
+- در ساختمان‌های فلزی قطب نما عملکرد دقیقی نخواهد داشت."</string>
     <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
     <string name="moon_in_scorpio">ایام قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
