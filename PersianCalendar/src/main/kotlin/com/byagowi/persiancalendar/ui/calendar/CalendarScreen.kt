@@ -195,6 +195,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
 import java.util.GregorianCalendar
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
@@ -984,7 +985,13 @@ private fun SharedTransitionScope.Menu(
     var showPlanetaryHoursDialog by rememberSaveable { mutableStateOf(false) }
     if (showPlanetaryHoursDialog) coordinates?.also {
         val now by viewModel.now.collectAsState()
-        PlanetaryHoursDialog(it, now) { showPlanetaryHoursDialog = false }
+        val today by viewModel.today.collectAsState()
+        val selectedDay by viewModel.selectedDay.collectAsState()
+        PlanetaryHoursDialog(
+            coordinates = it,
+            now = now + (selectedDay - today).days.inWholeMilliseconds,
+            isToday = today == selectedDay,
+        ) { showPlanetaryHoursDialog = false }
     }
 
     ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->

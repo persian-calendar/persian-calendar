@@ -18,19 +18,23 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
+import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
 import io.github.cosinekitty.astronomy.Body
@@ -77,7 +81,11 @@ data class PlanetaryHourRow(
 )
 
 @VisibleForTesting
-fun getDaySplits(now: Long, coordinates: Coordinates): List<PlanetaryHourRow> {
+fun getDaySplits(
+    now: Long,
+    coordinates: Coordinates,
+    isToday: Boolean,
+): List<PlanetaryHourRow> {
     val nowClock = Clock(GregorianCalendar().also { it.timeInMillis = now }) + Clock(24.0)
     return buildList {
         val days = (-1..1).map { day ->
@@ -105,7 +113,7 @@ fun getDaySplits(now: Long, coordinates: Coordinates): List<PlanetaryHourRow> {
                     isDay = isDay,
                     from = Clock(from % 24),
                     to = Clock(to % 24),
-                    highlighted = nowClock.value in from..to,
+                    highlighted = isToday && nowClock.value in from..to,
                 )
             })
             clock
@@ -117,11 +125,21 @@ fun getDaySplits(now: Long, coordinates: Coordinates): List<PlanetaryHourRow> {
 fun PlanetaryHoursDialog(
     coordinates: Coordinates,
     now: Long = System.currentTimeMillis(),
+    isToday: Boolean = true,
     onDismissRequest: () -> Unit,
 ) {
     val language by language.collectAsState()
     AppDialog(onDismissRequest = onDismissRequest) {
-        getDaySplits(now, coordinates).forEach { row ->
+        Text(
+            formatDate(
+                Jdn(GregorianCalendar().also { it.timeInMillis = now }
+                    .toCivilDate()) on mainCalendar
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        getDaySplits(now, coordinates, isToday).forEach { row ->
+            HorizontalDivider()
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -145,7 +163,6 @@ fun PlanetaryHoursDialog(
                 AutoSizedText(stringResource(row.planet.body.titleStringId), 1f)
                 AutoSizedText(if (language.isArabicScript) row.planet.fa else row.planet.en, 1f)
             }
-            HorizontalDivider()
         }
     }
 }
