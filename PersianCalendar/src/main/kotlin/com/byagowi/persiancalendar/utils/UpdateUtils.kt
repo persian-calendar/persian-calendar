@@ -1104,17 +1104,7 @@ private fun create2x2RemoteViews(
     remoteViews.setupForegroundTextColors(
         R.id.time_2x2, R.id.date_2x2, R.id.event_2x2, R.id.owghat_2x2
     )
-    if (isWidgetClock) {
-        remoteViews.setupForegroundTextColors(R.id.time_header_2x2)
-        if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
-            R.id.time_header_2x2,
-            android.R.attr.colorAccent,
-        )
-        remoteViews.setTextViewTextOrHideIfEmpty(
-            R.id.time_header_2x2,
-            if (language.value.isTamil) clock.timeSlot.tamilName else "",
-        )
-    }
+    remoteViews.setupTamilTimeSlot(clock, R.id.time_header_2x2)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.time_2x2, android.R.attr.colorAccent
     )
@@ -1147,6 +1137,20 @@ private val widget4x2TimesViewsIds = listOf(
     R.id.textPlaceholder4owghat_5_4x2
 )
 
+private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
+    if (isWidgetClock) {
+        setupForegroundTextColors(id)
+        if (prefersWidgetsDynamicColors) setDynamicTextColor(
+            id,
+            android.R.attr.colorAccent,
+        )
+        setTextViewTextOrHideIfEmpty(
+            id,
+            if (language.value.isTamil) clock.timeSlot.tamilName else "",
+        )
+    }
+}
+
 private fun create4x2RemoteViews(
     context: Context,
     width: Int,
@@ -1177,6 +1181,7 @@ private fun create4x2RemoteViews(
         R.id.textPlaceholder4owghat_5_4x2,
         R.id.event_4x2
     )
+    remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x2)
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.textPlaceholder0_4x2, android.R.attr.colorAccent
     )
@@ -1218,9 +1223,8 @@ private fun create4x2RemoteViews(
         }
 
         val difference = timeClock - clock
-        val tamilExtra = if (language.value.isTamil) clock.timeSlot.tamilName + spacedComma else ""
         remoteViews.setTextViewText(
-            R.id.textPlaceholder2_4x2, tamilExtra + context.getString(
+            R.id.textPlaceholder2_4x2, context.getString(
                 R.string.n_till,
                 (if (difference.value < .0) difference + Clock(24.0) else difference).asRemainingTime(
                     context.resources, short = language.value.isTamil,
