@@ -46,7 +46,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
@@ -73,6 +75,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
@@ -83,6 +86,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
+import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.isOldEra
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.logException
@@ -155,7 +159,7 @@ fun SharedTransitionScope.CalendarsOverview(
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
         }
         Spacer(Modifier.height(8.dp))
-        CalendarsFlow(shownCalendars, jdn)
+        CalendarsFlow(shownCalendars, jdn, isExpanded)
         Spacer(Modifier.height(4.dp))
 
         val date = jdn on selectedCalendar
@@ -393,7 +397,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
 }
 
 @Composable
-private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
+private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded: Boolean) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
@@ -424,18 +428,21 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
                         style = MaterialTheme.typography.displayMedium,
                         modifier = Modifier.animateContentSize(),
                     )
+                    val userHasAnyEnabledAthan = getEnabledAlarms(LocalContext.current).isNotEmpty()
+                    val backgroundColor by animateColor(
+                        color = when {
+                            !userHasAnyEnabledAthan -> Color.Transparent
+                            !isExpanded || date !is IslamicDate -> Color.Transparent
+                            date.isSacredMonths -> MaterialTheme.colorScheme.error.copy(alpha = .15f)
+                            else -> MaterialTheme.colorScheme.inverseSurface.copy(alpha = .05f)
+                        }
+                    )
                     Text(
                         date.monthName,
                         modifier = Modifier
                             .animateContentSize()
-                            .then(
-                                if (date is IslamicDate && date.isSacredMonths && isAstronomicalExtraFeaturesEnabled)
-                                    Modifier.background(
-                                        MaterialTheme.colorScheme.errorContainer.copy(alpha = .3f),
-                                        MaterialTheme.shapes.small,
-                                    )
-                                else Modifier
-                            )
+                            .background(backgroundColor, MaterialTheme.shapes.small)
+                            .padding(horizontal = 4.dp)
                     )
                 }
                 SelectionContainer {
