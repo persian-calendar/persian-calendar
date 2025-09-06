@@ -13,6 +13,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -93,6 +94,7 @@ import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
+import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -422,7 +424,19 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
                         style = MaterialTheme.typography.displayMedium,
                         modifier = Modifier.animateContentSize(),
                     )
-                    Text(date.monthName, modifier = Modifier.animateContentSize())
+                    Text(
+                        date.monthName,
+                        modifier = Modifier
+                            .animateContentSize()
+                            .then(
+                                if (date is IslamicDate && date.isSacredMonths && isAstronomicalExtraFeaturesEnabled)
+                                    Modifier.background(
+                                        MaterialTheme.colorScheme.errorContainer.copy(alpha = .3f),
+                                        MaterialTheme.shapes.small,
+                                    )
+                                else Modifier
+                            )
+                    )
                 }
                 SelectionContainer {
                     Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
@@ -431,3 +445,10 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn) {
         }
     }
 }
+
+// https://en.wikipedia.org/wiki/Sacred_months
+private val IslamicDate.isSacredMonths
+    get() = when (this.month) {
+        1, 7, 11, 12 -> true
+        else -> false
+    }
