@@ -171,6 +171,7 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
+import com.byagowi.persiancalendar.ui.settings.common.ColorPickerDialog2
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -214,6 +215,7 @@ fun SharedTransitionScope.CalendarScreen(
     animatedContentScope: AnimatedContentScope,
     isCurrentDestination: Boolean,
 ) {
+    ColorPickerDialog2()
     val snackbarHostState = remember { SnackbarHostState() }
     val isYearView by viewModel.isYearView.collectAsState()
     val context = LocalContext.current

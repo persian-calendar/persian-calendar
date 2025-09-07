@@ -3,18 +3,23 @@ package com.byagowi.persiancalendar.ui.settings.common
 import android.content.res.Configuration
 import androidx.compose.animation.Animatable
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.LocalMinimumInteractiveComponentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
@@ -33,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Canvas
 import androidx.compose.ui.graphics.Color
@@ -40,10 +46,12 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.PaintingStyle
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
@@ -237,4 +245,56 @@ private fun createCheckerBoard(tileSize: Float): ShaderBrush {
     canvas.drawRect(0f, 0f, tileSize, tileSize, fill)
     canvas.drawRect(tileSize, tileSize, tileSize * 2, tileSize * 2, fill)
     return ShaderBrush(ImageShader(image, TileMode.Repeated, TileMode.Repeated))
+}
+
+private fun Color.Companion.fromHsv(
+    hue: Float,
+    saturation: Float,
+    value: Float
+): Color = Color(android.graphics.Color.HSVToColor(floatArrayOf(hue, saturation, value)))
+
+@Composable
+fun ColorPickerDialog2() {
+    AppDialog(onDismissRequest = {}) {
+        rememberDraggableState {  }
+        val minTouchSize = LocalMinimumInteractiveComponentSize.current
+        Canvas(
+            Modifier
+                .fillMaxSize()
+                .aspectRatio(1f),
+        ) {
+            val rect = this.size.toRect()
+            clipPath(Path().also {
+                it.addArc(rect, 0f, 360f)
+                it.addArc(rect.deflate(minTouchSize.toPx()), 0f, -360f)
+            }) {
+                val colors = (0..<360 step 30).map {
+                    Color.fromHsv(it.toFloat(), 1f, 1f)
+                }.let { it + it[0] }
+                drawRect(Brush.sweepGradient(colors))
+            }
+            clipPath(Path().also {
+                it.addArc(rect.deflate(minTouchSize.toPx() * 1.2f), 0f, 360f)
+            }) {
+                drawArc(
+                    Brush.verticalGradient(
+                        listOf(
+                            Color.fromHsv(20f, 1f, 1f),
+                            Color.fromHsv(20f, 1f, 0f),
+                        ),
+                    ),
+                    0f, 360f, useCenter = true
+                )
+                drawArc(
+                    Brush.horizontalGradient(
+                        listOf(
+                            Color.White.copy(alpha = 1f),
+                            Color.White.copy(alpha = 0f),
+                        ),
+                    ),
+                    0f, 360f, useCenter = true
+                )
+            }
+        }
+    }
 }
