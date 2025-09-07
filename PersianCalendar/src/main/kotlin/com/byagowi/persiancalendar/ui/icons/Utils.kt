@@ -31,13 +31,10 @@ fun makeIconFromPath(
         defaultHeight = defaultHeight,
         viewportWidth = viewportWidth,
         viewportHeight = viewportHeight,
-    ).run {
-        addPath(
-            pathData = addPathNodes(path),
-            name = "",
-            fill = fillBrush,
-            stroke = strokeBrush,
-        )
-        build()
-    }
+    ).addPath(
+        pathData = addPathNodes(path),
+        name = "",
+        fill = fillBrush,
+        stroke = strokeBrush,
+    ).build()
 }
