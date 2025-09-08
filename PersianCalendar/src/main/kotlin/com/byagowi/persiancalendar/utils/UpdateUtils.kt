@@ -1182,6 +1182,10 @@ private fun create4x2RemoteViews(
         R.id.event_4x2
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x2)
+    if (isWidgetClock) remoteViews.setTextViewTextSize(
+        R.id.textPlaceholder0_4x2, TypedValue.COMPLEX_UNIT_SP,
+        if (language.value.isTamil) 22f else 48f
+    )
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.textPlaceholder0_4x2, android.R.attr.colorAccent
     )
