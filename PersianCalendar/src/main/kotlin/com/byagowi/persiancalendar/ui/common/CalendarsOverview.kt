@@ -30,10 +30,15 @@ import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,6 +51,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
@@ -98,6 +104,7 @@ import com.byagowi.persiancalendar.utils.toLinearDate
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.seasons
 import io.github.cosinekitty.astronomy.sunPosition
+import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.launch
@@ -428,22 +435,9 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded:
                         style = MaterialTheme.typography.displayMedium,
                         modifier = Modifier.animateContentSize(),
                     )
-                    val userHasAnyEnabledAthan = getEnabledAlarms(LocalContext.current).isNotEmpty()
-                    val backgroundColor by animateColor(
-                        color = when {
-                            !userHasAnyEnabledAthan -> Color.Transparent
-                            !isExpanded || date !is IslamicDate -> Color.Transparent
-                            date.isSacredMonths -> MaterialTheme.colorScheme.error.copy(alpha = .15f)
-                            else -> MaterialTheme.colorScheme.inverseSurface.copy(alpha = .05f)
-                        }
-                    )
-                    Text(
-                        date.monthName,
-                        modifier = Modifier
-                            .animateContentSize()
-                            .background(backgroundColor, MaterialTheme.shapes.small)
-                            .padding(horizontal = 4.dp)
-                    )
+                    HandleSacredMonth(isExpanded, date) {
+                        Text(date.monthName, modifier = Modifier.animateContentSize())
+                    }
                 }
                 SelectionContainer {
                     Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
@@ -451,6 +445,42 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded:
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HandleSacredMonth(
+    isExpanded: Boolean,
+    date: AbstractDate,
+    content: @Composable () -> Unit
+) {
+    val displaySacredness = isExpanded && date is IslamicDate && date.isSacredMonths && run {
+        val userHasAnyEnabledAthan = getEnabledAlarms(LocalContext.current).isNotEmpty()
+        val language by language.collectAsState()
+        userHasAnyEnabledAthan && language.isUserAbleToReadPersian
+    }
+    val backgroundColor by animateColor(
+        if (displaySacredness) MaterialTheme.colorScheme.error.copy(alpha = .1f)
+        else Color.Transparent
+    )
+    val tooltipState = rememberTooltipState()
+    val coroutine = rememberCoroutineScope()
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = { PlainTooltip { Text("ماه حرام") } },
+        state = tooltipState,
+        enableUserInput = false,
+        modifier = Modifier
+            .background(color = backgroundColor, shape = MaterialTheme.shapes.small)
+            .then(
+                if (displaySacredness) Modifier
+                    .clip(shape = MaterialTheme.shapes.small)
+                    .clickable { coroutine.launch { tooltipState.show() } }
+                else Modifier,
+            )
+            .padding(horizontal = 4.dp),
+        content = content,
+    )
 }
 
 // https://en.wikipedia.org/wiki/Sacred_months
