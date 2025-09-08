@@ -19,6 +19,7 @@
             android:id="@+id/first_header"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:layout_marginEnd="50dp"
             android:autoSizeMaxTextSize="18sp"
             android:autoSizeMinTextSize="9sp"
             android:autoSizeTextType="uniform"
@@ -26,7 +27,6 @@
             android:paddingStart="12dp"
             android:paddingTop="12dp"
             android:paddingEnd="0dp"
-            android:layout_marginEnd="50dp"
             android:textColor="@color/widget_modern_text"
             android:textSize="18sp"
             tools:ignore="UnusedAttribute" />
