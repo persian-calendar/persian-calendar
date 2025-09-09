@@ -562,7 +562,8 @@ fun updateStoredPreference(context: Context) {
     whatToShowOnWidgets =
         preferences.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
-    isAstronomicalExtraFeaturesEnabled_.value = preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
+    isAstronomicalExtraFeaturesEnabled_.value =
+        preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
     numericalDatePreferred = preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?
