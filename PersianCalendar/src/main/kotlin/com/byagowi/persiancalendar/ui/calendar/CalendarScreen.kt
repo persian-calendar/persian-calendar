@@ -496,6 +496,7 @@ private fun SharedTransitionScope.detailsTabs(
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
     val hasTimesTab = enableTimesTab(context) && !removeThirdTab
+    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
     return listOfNotNull(
@@ -1015,6 +1016,7 @@ private fun SharedTransitionScope.Menu(
                 mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), selectedMonthOffset)
             context.openHtmlInBrowser(prayTimeHtmlReport(resources, selectedMonth))
         }
+        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         if (coordinates != null && isAstronomicalExtraFeaturesEnabled) AppDropdownMenuItem({
             Text(stringResource(R.string.planetary_hours))
         }) {

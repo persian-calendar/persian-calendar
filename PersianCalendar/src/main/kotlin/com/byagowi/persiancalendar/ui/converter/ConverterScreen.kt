@@ -550,6 +550,7 @@ private fun ColumnScope.ConverterAndDistance(
     }
 
     val secondJdn by viewModel.secondSelectedDate.collectAsState()
+    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     this.AnimatedVisibility(
         isAstronomicalExtraFeaturesEnabled && screenMode == ConverterScreenMode.DISTANCE &&
                 !(secondJdn == jdn && jdn == today)

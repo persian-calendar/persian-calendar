@@ -187,6 +187,7 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         val language by language.collectAsState()
+        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
 
         val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
             moonInScorpioState(jdn) else null
@@ -454,6 +455,7 @@ private fun HandleSacredMonth(
 ) {
     val displaySacredness = isExpanded && date is IslamicDate && date.isSacredMonths && run {
         val language by language.collectAsState()
+        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         isAstronomicalExtraFeaturesEnabled && language.isUserAbleToReadPersian
     }
     val backgroundColor by animateColor(

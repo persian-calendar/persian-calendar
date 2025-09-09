@@ -340,6 +340,7 @@ private fun EquinoxCountDown(
         if (showHoroscopeDialog) YearHoroscopeDialog(event.date.year + 1) {
             showHoroscopeDialog = false
         }
+        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         if (isAstronomicalExtraFeaturesEnabled) TooltipBox(
             positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
             tooltip = { PlainTooltip { Text(stringResource(R.string.horoscope)) } },
@@ -425,6 +426,7 @@ fun readEvents(
     val resources = LocalResources.current
     val events = sortEvents(eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList())
 
+    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
     if (mainCalendar == Calendar.SHAMSI || isAstronomicalExtraFeaturesEnabled) {
         val date = jdn.toPersianDate()
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {

@@ -125,7 +125,7 @@ fun getA11yDaySummary(
             .append(resources.getString(R.string.nth_week_of_year, formatNumber(weekOfYearStart)))
     }
 
-    if (withZodiac && isAstronomicalExtraFeaturesEnabled) {
+    if (withZodiac && isAstronomicalExtraFeaturesEnabled.value) {
         appendLine().appendLine()
             .appendLine(generateYearName(resources, jdn, withEmoji = false))
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))

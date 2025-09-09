@@ -241,6 +241,7 @@ fun SharedTransitionScope.CompassScreen(
                             context.preferences.edit { putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, it) }
                         }
                         val language by language.collectAsState()
+                        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
                         if (isAstronomicalExtraFeaturesEnabled && language.isPersian) {
                             var value by remember { mutableStateOf<String?>(null) }
                             AppDropdownMenuItem({

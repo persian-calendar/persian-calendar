@@ -129,7 +129,7 @@ class DayPainter(
         this.jdn = jdn
         this.isWeekNumber = isWeekNumber
         this.header = listOfNotNull(
-            if (isAstronomicalExtraFeaturesEnabled && jdn != null && isMoonInScorpio(jdn))
+            if (isAstronomicalExtraFeaturesEnabled.value && jdn != null && isMoonInScorpio(jdn))
                 paints.scorpioSign else null,
             if (secondaryCalendar == null || jdn == null) null else
                 formatNumber(jdn.on(secondaryCalendar).dayOfMonth, secondaryCalendarDigits),
