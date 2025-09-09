@@ -54,7 +54,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
@@ -92,7 +91,6 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.isOldEra
 import com.byagowi.persiancalendar.utils.jalaliAndHistoricalName
 import com.byagowi.persiancalendar.utils.logException
@@ -455,9 +453,8 @@ private fun HandleSacredMonth(
     content: @Composable () -> Unit
 ) {
     val displaySacredness = isExpanded && date is IslamicDate && date.isSacredMonths && run {
-        val userHasAnyEnabledAthan = getEnabledAlarms(LocalContext.current).isNotEmpty()
         val language by language.collectAsState()
-        userHasAnyEnabledAthan && language.isUserAbleToReadPersian
+        isAstronomicalExtraFeaturesEnabled && language.isUserAbleToReadPersian
     }
     val backgroundColor by animateColor(
         if (displaySacredness) MaterialTheme.colorScheme.error.copy(alpha = .1f)
