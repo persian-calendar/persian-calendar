@@ -249,7 +249,7 @@ fun update(context: Context, updateDate: Boolean) {
             create1x1RemoteViews(context, width, height, date)
         }
         updateFromRemoteViews<Widget4x1>(context, now) { width, height, _, _ ->
-            create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle)
+            create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, clock)
         }
         updateFromRemoteViews<Widget2x2>(context, now) { width, height, _, _ ->
             create2x2RemoteViews(
@@ -1039,7 +1039,8 @@ private fun create4x1RemoteViews(
     jdn: Jdn,
     date: AbstractDate,
     widgetTitle: String,
-    subtitle: String
+    subtitle: String,
+    clock: Clock,
 ): RemoteViews {
     val weekDayName = jdn.weekDayName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
@@ -1051,6 +1052,7 @@ private fun create4x1RemoteViews(
             if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
+    remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x1)
     if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     remoteViews.setRoundBackground(R.id.widget_layout4x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x1, context.resources)

@@ -23,6 +23,16 @@
         android:paddingRight="6dp"
         android:paddingBottom="2dp">
 
+        <TextView
+            android:id="@+id/time_header_4x1"
+            style="@style/WidgetTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="start"
+            android:textAlignment="viewStart"
+            android:textSize="22sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
