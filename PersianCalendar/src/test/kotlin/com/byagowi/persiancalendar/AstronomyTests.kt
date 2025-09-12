@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.TIGER
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.houses
+import com.byagowi.persiancalendar.ui.astronomy.toAbjad
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -472,5 +473,45 @@ class AstronomyTests {
         ).forEachIndexed { i, element ->
             assertEquals(element, ChineseZodiac.entries[i].fixedElement)
         }
+    }
+
+    @Test
+    fun `Check Abjad conversion`() {
+        listOf(
+            1 to "ا",
+            2 to "ب",
+            3 to "ج",
+            4 to "د",
+            5 to "ه",
+            6 to "و",
+            7 to "ز",
+            8 to "ح",
+            9 to "ط",
+            10 to "ی",
+            11 to "یا",
+            12 to "یب",
+            13 to "یج",
+            14 to "ید",
+            15 to "یه",
+            16 to "یو",
+            17 to "یز",
+            18 to "یح",
+            19 to "یط",
+            20 to "ک",
+            21 to "کا",
+            22 to "کب",
+            23 to "کج",
+            24 to "کد",
+            25 to "که",
+            26 to "کو",
+            27 to "کز",
+            28 to "کح",
+            29 to "کط",
+            30 to "ل",
+            31 to "لا",
+            //360 to "سش"
+        ).map { (input, expected) ->
+            { assertEquals(expected, toAbjad(input), "$input") }
+        }.let(::assertAll)
     }
 }

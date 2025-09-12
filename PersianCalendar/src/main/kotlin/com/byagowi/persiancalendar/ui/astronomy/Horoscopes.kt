@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.absoluteOffset
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
@@ -23,6 +26,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -39,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
 import com.byagowi.persiancalendar.global.cityName
@@ -69,9 +74,10 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
 
-private fun formatAngle(value: Double): String {
+private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     val degrees = value.toInt()
     val minutes = (value % 1 * 60).roundToInt()
+    if (isAbjad) return toAbjad(degrees) + " " + toAbjad(minutes)
     return formatNumber("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
@@ -279,7 +285,11 @@ private val ascendantBodies = listOf(
 )
 
 @Composable
-private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox: Boolean) {
+private fun ColumnScope.AscendantZodiac(
+    time: Time,
+    coordinates: Coordinates,
+    isYearEquinox: Boolean,
+) {
     val bodiesZodiac = ascendantBodies.map { body ->
         if (body == Body.Sun && isYearEquinox) {
             // Sometimes 359.99 put it in a incorrect house so let's just hardcode it
@@ -292,13 +302,37 @@ private fun AscendantZodiac(time: Time, coordinates: Coordinates, isYearEquinox:
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalResources.current
+    var abjad by remember { mutableStateOf(false) }
     EasternHoroscopePattern { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
         val secondLine = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
             it.format(resources, withEmoji = false, short = true)
-        } + NBSP + formatAngle(houses[i] % 30)
+        } + NBSP + formatAngle(houses[i] % 30, abjad)
         zodiac.emoji + "\n" + secondLine + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
-            resources.getString(body.titleStringId) + NBSP + formatAngle(longitude % 30)
+            resources.getString(body.titleStringId) + NBSP + formatAngle(longitude % 30, abjad)
         }?.let { "\n" + it }.orEmpty()
+    }
+    val language by language.collectAsState()
+    if (language.isIranExclusive && BuildConfig.DEVELOPMENT) Box(Modifier.align(Alignment.CenterHorizontally)) {
+        IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
+    }
+}
+
+private val abjadMap = mapOf(
+    1 to "ا", 2 to "ب", 3 to "ج", 4 to "د", 5 to "ه", 6 to "و", 7 to "ز", 8 to "ح", 9 to "ط",
+    10 to "ی", 20 to "ک", 30 to "ل", 40 to "م", 50 to "ن", 60 to "س", 70 to "ع", 80 to "ف",
+    90 to "ص", 100 to "ق", 200 to "ر", 300 to "ش", 400 to "ت", 500 to "ث", 600 to "خ", 700 to "ذ",
+    800 to "ض", 900 to "ظ", 1000 to "غ", 1000_000 to "غ غ",
+).toSortedMap { x, y -> y compareTo x }
+
+@VisibleForTesting
+fun toAbjad(number: Int): String {
+    if (number == 0) return "ها" // It's like ها in Nastaliq https://imgur.com/a/0eMBO2c
+    var n = number
+    return buildString {
+        for (value in abjadMap.keys) while (n >= value) {
+            append(abjadMap[value])
+            n -= value
+        }
     }
 }
