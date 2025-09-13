@@ -315,31 +315,27 @@ private fun ColumnScope.AscendantZodiac(
     val language by language.collectAsState()
     val meanApogee = meanApogee(time)
     val meanApogeeZodiac = Zodiac.fromTropical(meanApogee)
-    fun AnnotatedString.Builder.appendAngle(value: Double) =
+    fun AnnotatedString.Builder.appendAngle(title: String, value: Double) {
+        appendLine()
+        append(title + NBSP)
         withStyle(numFontStyle) { append(formatAngle(value % 30, abjad)) }
+    }
     EasternHoroscopePattern { i ->
         buildAnnotatedString {
             val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-            appendLine(zodiac.emoji)
-            append(setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
+            append(zodiac.emoji)
+            val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
                 it.format(resources, withEmoji = false, short = true)
-            })
-            append(NBSP)
-            appendAngle(houses[i])
+            }
+            appendAngle(house, houses[i])
             val bodies = bodiesZodiac[zodiac] ?: emptyList()
-            bodies.forEachIndexed { i, (body, longitude) ->
-                if (i < bodies.size) appendLine()
-                append(resources.getString(body.titleStringId))
-                append(NBSP)
-                appendAngle(longitude)
+            bodies.forEach { (body, longitude) ->
+                appendAngle(resources.getString(body.titleStringId), longitude)
             }
-            if (language.isArabicScript && zodiac == meanApogeeZodiac) {
-                appendLine()
-                // append("⚸$NBSP")
-                append(if (language.isArabicScript) "قمرالاسود" else "Lilith")
-                append(NBSP)
-                appendAngle(meanApogee % 30)
-            }
+            if (zodiac == meanApogeeZodiac) appendAngle(
+                /*"⚸" + */if (language.isArabicScript) "قمرالاسود" else "Lilith",
+                meanApogee
+            )
         }
     }
     if (language.isIranExclusive) Box(Modifier.align(Alignment.CenterHorizontally)) {
