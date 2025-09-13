@@ -60,7 +60,7 @@ fun SharedTransitionScope.Times(
             times.forEach { prayTime ->
                 if (isExpandedState || prayTime.isAlwaysShown(isJafari)) Column(
                     modifier = Modifier
-                        .padding(horizontal = 4.dp)
+                        .padding(horizontal = 2.dp)
                         .defaultMinSize(minWidth = ItemWidth.dp)
                         .sharedBounds(
                             rememberSharedContentState(

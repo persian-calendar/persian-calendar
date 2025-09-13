@@ -313,7 +313,7 @@ private fun ColumnScope.AscendantZodiac(
         }?.let { "\n" + it }.orEmpty()
     }
     val language by language.collectAsState()
-    if (language.isIranExclusive && BuildConfig.DEVELOPMENT) Box(Modifier.align(Alignment.CenterHorizontally)) {
+    if (language.isIranExclusive) Box(Modifier.align(Alignment.CenterHorizontally)) {
         IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
     }
 }
