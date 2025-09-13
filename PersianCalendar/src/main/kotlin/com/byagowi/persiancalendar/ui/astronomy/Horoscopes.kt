@@ -41,6 +41,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
@@ -48,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
@@ -310,7 +313,7 @@ private fun ColumnScope.AscendantZodiac(
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalResources.current
     var abjad by rememberSaveable { mutableStateOf(false) }
-    val numFontStyle = SpanStyle() // to be used later, hopefully
+    val numFontStyle = SpanStyle(fontFamily = FontFamily(Font(R.font.abjad)).takeIf { abjad })
     val language by language.collectAsState()
     val meanApogee = meanApogee(time)
     val meanApogeeZodiac = Zodiac.fromTropical(meanApogee)
@@ -366,7 +369,7 @@ private val abjadMap = mapOf(
 
 @VisibleForTesting
 fun toAbjad(number: Int): String {
-    if (number == 0) return "ها" // It's like ها in Nastaliq https://imgur.com/a/0eMBO2c
+    if (number == 0) return "۰" // It's like ها in Nastaliq https://imgur.com/a/0eMBO2c
     var n = number
     return buildString {
         for (value in abjadMap.keys) while (n >= value) {
