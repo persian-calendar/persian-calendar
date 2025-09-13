@@ -39,11 +39,14 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.AU_IN_KM
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
 import com.byagowi.persiancalendar.global.cityName
@@ -183,7 +186,10 @@ private val easternHoroscopePositions = listOf(
 )
 
 @Composable
-private fun EasternHoroscopePattern(modifier: Modifier = Modifier, cellLabel: (Int) -> String) {
+private fun EasternHoroscopePattern(
+    modifier: Modifier = Modifier,
+    cellLabel: (Int) -> AnnotatedString,
+) {
     val outline = MaterialTheme.colorScheme.outline
     val textDirection = LocalLayoutDirection.current
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
@@ -238,9 +244,11 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
         EasternHoroscopePattern { i ->
             val date = PersianDate(persianYear + i, 1, 1)
-            ChineseZodiac.fromPersianCalendar(date).formatForHoroscope(
-                resources = resources,
-                isPersian = language.isPersian,
+            AnnotatedString(
+                ChineseZodiac.fromPersianCalendar(date).formatForHoroscope(
+                    resources = resources,
+                    isPersian = language.isPersian,
+                )
             )
         }
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
@@ -303,14 +311,24 @@ private fun ColumnScope.AscendantZodiac(
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalResources.current
     var abjad by remember { mutableStateOf(false) }
+    val numFontStyle = SpanStyle() // to be used later, hopefully
     EasternHoroscopePattern { i ->
-        val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-        val secondLine = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
-            it.format(resources, withEmoji = false, short = true)
-        } + NBSP + formatAngle(houses[i] % 30, abjad)
-        zodiac.emoji + "\n" + secondLine + bodiesZodiac[zodiac]?.joinToString("\n") { (body, longitude) ->
-            resources.getString(body.titleStringId) + NBSP + formatAngle(longitude % 30, abjad)
-        }?.let { "\n" + it }.orEmpty()
+        buildAnnotatedString {
+            val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
+            appendLine(zodiac.emoji)
+            append(setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
+                it.format(resources, withEmoji = false, short = true)
+            })
+            append(NBSP)
+            withStyle(numFontStyle) { append(formatAngle(houses[i] % 30, abjad)) }
+            val bodies = bodiesZodiac[zodiac] ?: return@buildAnnotatedString
+            bodies.forEachIndexed { i, (body, longitude) ->
+                if (i < bodies.size) appendLine()
+                append(resources.getString(body.titleStringId))
+                append(NBSP)
+                withStyle(numFontStyle) { append(formatAngle(longitude % 30, abjad)) }
+            }
+        }
     }
     val language by language.collectAsState()
     if (language.isIranExclusive) Box(Modifier.align(Alignment.CenterHorizontally)) {
