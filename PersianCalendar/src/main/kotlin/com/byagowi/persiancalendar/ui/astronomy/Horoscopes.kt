@@ -26,7 +26,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -310,7 +309,7 @@ private fun ColumnScope.AscendantZodiac(
     val houses = houses(coordinates.latitude, coordinates.longitude, time)
     val ascendantZodiac = Zodiac.fromTropical(houses[0])
     val resources = LocalResources.current
-    var abjad by remember { mutableStateOf(false) }
+    var abjad by rememberSaveable { mutableStateOf(false) }
     val numFontStyle = SpanStyle() // to be used later, hopefully
     val language by language.collectAsState()
     val meanApogee = meanApogee(time)
