@@ -312,6 +312,11 @@ private fun ColumnScope.AscendantZodiac(
     val resources = LocalResources.current
     var abjad by remember { mutableStateOf(false) }
     val numFontStyle = SpanStyle() // to be used later, hopefully
+    val language by language.collectAsState()
+    val meanApogee = meanApogee(time)
+    val meanApogeeZodiac = Zodiac.fromTropical(meanApogee)
+    fun AnnotatedString.Builder.appendAngle(value: Double) =
+        withStyle(numFontStyle) { append(formatAngle(value % 30, abjad)) }
     EasternHoroscopePattern { i ->
         buildAnnotatedString {
             val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
@@ -320,21 +325,42 @@ private fun ColumnScope.AscendantZodiac(
                 it.format(resources, withEmoji = false, short = true)
             })
             append(NBSP)
-            withStyle(numFontStyle) { append(formatAngle(houses[i] % 30, abjad)) }
-            val bodies = bodiesZodiac[zodiac] ?: return@buildAnnotatedString
+            appendAngle(houses[i])
+            val bodies = bodiesZodiac[zodiac] ?: emptyList()
             bodies.forEachIndexed { i, (body, longitude) ->
                 if (i < bodies.size) appendLine()
                 append(resources.getString(body.titleStringId))
                 append(NBSP)
-                withStyle(numFontStyle) { append(formatAngle(longitude % 30, abjad)) }
+                appendAngle(longitude)
+            }
+            if (language.isArabicScript && zodiac == meanApogeeZodiac) {
+                appendLine()
+                // append("⚸$NBSP")
+                append(if (language.isArabicScript) "قمرالاسود" else "Lilith")
+                append(NBSP)
+                appendAngle(meanApogee % 30)
             }
         }
     }
-    val language by language.collectAsState()
     if (language.isIranExclusive) Box(Modifier.align(Alignment.CenterHorizontally)) {
         IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
     }
 }
+
+@VisibleForTesting
+fun meanApogee(time: Time): Double {
+    val t = time.tt / 36525.0
+    // https://ftp.space.dtu.dk/pub/DTU10/DTU10_TIDEMODEL/SOFTWARE/test_perth3.f#:~:text=lunar%20perigee
+    val meanPerigee = ((-1.249172e-5 * t - 1.032e-2) * t + 4069.0137287) * t + 83.3532465
+    return (meanPerigee + 180) % 360
+}
+
+// True apogee's time is calculatable like this though not related to our usecase
+// eclipticGeoMoon(
+//     lunarApsidesAfter(time)
+//         .first { it.kind == ApsisKind.Apocenter }
+//         .time
+// ).lon
 
 private val abjadMap = mapOf(
     1 to "ا", 2 to "ب", 3 to "ج", 4 to "د", 5 to "ه", 6 to "و", 7 to "ز", 8 to "ح", 9 to "ط",

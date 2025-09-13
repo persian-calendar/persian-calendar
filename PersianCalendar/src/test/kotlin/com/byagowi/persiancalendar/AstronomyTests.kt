@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac.TIGER
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.houses
+import com.byagowi.persiancalendar.ui.astronomy.meanApogee
 import com.byagowi.persiancalendar.ui.astronomy.toAbjad
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
@@ -261,6 +262,21 @@ class AstronomyTests {
         }
     }
 
+    fun Zodiac.with(degrees: Int, minutes: Int): Double = ordinal * 30 + degrees + minutes / 60.0
+
+    @Test
+    fun `Check black moon values`() {
+        listOf(
+            1398 to Zodiac.AQUARIUS.with(25, 7),
+            1400 to Zodiac.TAURUS.with(16, 42),
+            1402 to Zodiac.LEO.with(7, 59),
+            1403 to Zodiac.VIRGO.with(18, 46),
+        ).map { (year, expected) ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            { assertEquals(expected, meanApogee(time), .15, "$year") }
+        }.run(::assertAll)
+    }
+
     @Test
     fun `Test known ascendants`() {
         assertAll(
@@ -342,7 +358,7 @@ class AstronomyTests {
     }
 
     @Test
-    fun `Test against known ascedants`() {
+    fun `Test against known ascendants`() {
         val time = seasons(CivilDate(PersianDate(1404, 1, 1)).year).marchEquinox
         // These numbers are from swisseph and brought here just for the sake of test
         val expectations = listOf(
