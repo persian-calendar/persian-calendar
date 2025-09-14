@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
@@ -171,8 +172,9 @@ private class Paints(
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
-    val scorpioSign =
-        resources.getString(R.string.scorpio).first() + if (isArabicScript) ZWJ else ""
+    val scorpioSign = if (isArabicScript) {
+        resources.getString(R.string.scorpio).first() + ZWJ
+    } else Zodiac.SCORPIO.emoji
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
