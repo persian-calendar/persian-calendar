@@ -172,4 +172,5 @@
     <string name="pref_widget">Widget</string>
     <string name="native_digits">Cifre native</string>
     <string name="enable_native_digits">Abilita cifre native</string>
+    <string name="events_summary">Eventi da mostrare</string>
 </resources>
