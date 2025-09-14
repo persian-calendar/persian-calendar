@@ -160,4 +160,15 @@
     <string name="december">Dicembre</string>
     <string name="saturday_short">S</string>
     <string name="time_zones">Fusi orari</string>
+    <string name="nothing_scheduled">Nessun evento programmato</string>
+    <string name="n_hours_minutes">%1$so %2$sm</string>
+    <string name="imsak">Imsak</string>
+    <string name="fajr">Fajr</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Iscia</string>
+    <string name="qibla">Qibla</string>
+    <string name="pref_widget">Widget</string>
+    <string name="native_digits">Cifre native</string>
 </resources>
