@@ -247,14 +247,14 @@ class AstronomyTests {
             329.96107258615484, 61.762612284235615, 145.29968044985748,
             234.77117761711645, 318.8433129667867
         )
-        assertAll((1380..1420).mapIndexed { i, year ->
+        (1380..1420).mapIndexed { i, year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
             val houses = houses(35.68, 51.42, time);
             {
                 assertEquals(ascendants[i], houses[0], 1.0e-5, "$year")
                 assertEquals(midheavens[i], houses[9], 1.0e-5, "$year")
             }
-        })
+        }.run(::assertAll)
         // Smoke test
         (1300..1500).forEach { year ->
             val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
@@ -279,82 +279,80 @@ class AstronomyTests {
 
     @Test
     fun `Test known ascendants`() {
-        assertAll(
-            listOf(
-                1225 to Zodiac.CAPRICORN, // https://w.wiki/EhPH
-                1243 to Zodiac.CANCER, // https://w.wiki/EhPK https://w.wiki/EhPN
-                1269 to Zodiac.LIBRA, // https://w.wiki/EhPQ
+        listOf(
+            1225 to Zodiac.CAPRICORN, // https://w.wiki/EhPH
+            1243 to Zodiac.CANCER, // https://w.wiki/EhPK https://w.wiki/EhPN
+            1269 to Zodiac.LIBRA, // https://w.wiki/EhPQ
 
-                1272 to Zodiac.CANCER, // https://w.wiki/EhPc
-                // 1273 to Zodiac.VIRGO, // doesn't match https://w.wiki/EhPY
-                1274 to Zodiac.SAGITTARIUS, // https://w.wiki/EhPX
-                1275 to Zodiac.PISCES, // https://w.wiki/EhPV but doesn't match with https://w.wiki/EhPR
-                1276 to Zodiac.CANCER,
-                1277 to Zodiac.VIRGO,
-                1278 to Zodiac.SAGITTARIUS,
-                1279 to Zodiac.PISCES,
-                1280 to Zodiac.GEMINI,
-                1281 to Zodiac.VIRGO,
-                1282 to Zodiac.SCORPIO,
-                1283 to Zodiac.AQUARIUS,
-                1284 to Zodiac.GEMINI,
-                1285 to Zodiac.VIRGO, // implied
-                1286 to Zodiac.SCORPIO,
-                1287 to Zodiac.AQUARIUS,
-                1288 to Zodiac.GEMINI,
-                1289 to Zodiac.LEO,
-                1290 to Zodiac.SCORPIO,
-                1291 to Zodiac.CAPRICORN,
-                1292 to Zodiac.TAURUS,
-                1293 to Zodiac.LEO,
-                1294 to Zodiac.LIBRA,
-                1295 to Zodiac.CAPRICORN,
-                1296 to Zodiac.TAURUS,
-                1297 to Zodiac.LEO,
-                1298 to Zodiac.LIBRA,
-                1299 to Zodiac.CAPRICORN,
-                1300 to Zodiac.ARIES, // implied
-                1301 to Zodiac.CANCER, // implied
-                1302 to Zodiac.LIBRA, // implied
-                1303 to Zodiac.SAGITTARIUS,
-                1304 to Zodiac.ARIES,
-                1305 to Zodiac.CANCER,
-                1306 to Zodiac.LIBRA, // implied
-                1307 to Zodiac.SAGITTARIUS, // implied hardly
-                1308 to Zodiac.PISCES, // implied
-                1309 to Zodiac.CANCER,
-                1310 to Zodiac.VIRGO,
-                1311 to Zodiac.SAGITTARIUS,
-                1312 to Zodiac.PISCES,
-                1313 to Zodiac.GEMINI,
-                1314 to Zodiac.VIRGO,
-                1315 to Zodiac.SCORPIO,
-                1316 to Zodiac.AQUARIUS,
-                1317 to Zodiac.GEMINI,
-                1318 to Zodiac.VIRGO,
-                1319 to Zodiac.SCORPIO,
-                1320 to Zodiac.AQUARIUS,
-                1321 to Zodiac.GEMINI,
-                1322 to Zodiac.LEO,
-                1323 to Zodiac.SCORPIO,
-                1324 to Zodiac.CAPRICORN,
-                // 1325 to Zodiac.TAURUS, doesn't match
-                1326 to Zodiac.LEO,
-                1327 to Zodiac.LIBRA,
-                1328 to Zodiac.CAPRICORN, // implied
-                1329 to Zodiac.TAURUS,
-                1330 to Zodiac.LEO,
+            1272 to Zodiac.CANCER, // https://w.wiki/EhPc
+            // 1273 to Zodiac.VIRGO, // doesn't match https://w.wiki/EhPY
+            1274 to Zodiac.SAGITTARIUS, // https://w.wiki/EhPX
+            1275 to Zodiac.PISCES, // https://w.wiki/EhPV but doesn't match with https://w.wiki/EhPR
+            1276 to Zodiac.CANCER,
+            1277 to Zodiac.VIRGO,
+            1278 to Zodiac.SAGITTARIUS,
+            1279 to Zodiac.PISCES,
+            1280 to Zodiac.GEMINI,
+            1281 to Zodiac.VIRGO,
+            1282 to Zodiac.SCORPIO,
+            1283 to Zodiac.AQUARIUS,
+            1284 to Zodiac.GEMINI,
+            1285 to Zodiac.VIRGO, // implied
+            1286 to Zodiac.SCORPIO,
+            1287 to Zodiac.AQUARIUS,
+            1288 to Zodiac.GEMINI,
+            1289 to Zodiac.LEO,
+            1290 to Zodiac.SCORPIO,
+            1291 to Zodiac.CAPRICORN,
+            1292 to Zodiac.TAURUS,
+            1293 to Zodiac.LEO,
+            1294 to Zodiac.LIBRA,
+            1295 to Zodiac.CAPRICORN,
+            1296 to Zodiac.TAURUS,
+            1297 to Zodiac.LEO,
+            1298 to Zodiac.LIBRA,
+            1299 to Zodiac.CAPRICORN,
+            1300 to Zodiac.ARIES, // implied
+            1301 to Zodiac.CANCER, // implied
+            1302 to Zodiac.LIBRA, // implied
+            1303 to Zodiac.SAGITTARIUS,
+            1304 to Zodiac.ARIES,
+            1305 to Zodiac.CANCER,
+            1306 to Zodiac.LIBRA, // implied
+            1307 to Zodiac.SAGITTARIUS, // implied hardly
+            1308 to Zodiac.PISCES, // implied
+            1309 to Zodiac.CANCER,
+            1310 to Zodiac.VIRGO,
+            1311 to Zodiac.SAGITTARIUS,
+            1312 to Zodiac.PISCES,
+            1313 to Zodiac.GEMINI,
+            1314 to Zodiac.VIRGO,
+            1315 to Zodiac.SCORPIO,
+            1316 to Zodiac.AQUARIUS,
+            1317 to Zodiac.GEMINI,
+            1318 to Zodiac.VIRGO,
+            1319 to Zodiac.SCORPIO,
+            1320 to Zodiac.AQUARIUS,
+            1321 to Zodiac.GEMINI,
+            1322 to Zodiac.LEO,
+            1323 to Zodiac.SCORPIO,
+            1324 to Zodiac.CAPRICORN,
+            // 1325 to Zodiac.TAURUS, doesn't match
+            1326 to Zodiac.LEO,
+            1327 to Zodiac.LIBRA,
+            1328 to Zodiac.CAPRICORN, // implied
+            1329 to Zodiac.TAURUS,
+            1330 to Zodiac.LEO,
 
-                // 1402 to Zodiac.CANCER, // implied
-                // 1403 to Zodiac.LEO, // implied
-                1404 to Zodiac.CANCER
-            ).map { (year, sign) ->
-                val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
-                val ascendant = houses(35.68, 51.42, time)[0]
-                println("$year: ${ascendant % 30}");
-                { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
-            }
-        )
+            // 1402 to Zodiac.CANCER, // implied
+            // 1403 to Zodiac.LEO, // implied
+            1404 to Zodiac.CANCER
+        ).map { (year, sign) ->
+            val time = seasons(CivilDate(PersianDate(year, 1, 1)).year).marchEquinox
+            val ascendant = houses(35.68, 51.42, time)[0]
+            println("$year: ${ascendant % 30}");
+            { assertEquals(sign, Zodiac.fromTropical(ascendant), "$year") }
+        }.run(::assertAll)
     }
 
     @Test
@@ -367,11 +365,9 @@ class AstronomyTests {
             290.08328836357674, 311.14478018790146, 335.40614507331907,
             5.351511497078217, 41.0773712487118, 77.73659794974952,
         )
-        assertAll(
-            expectations.zip(houses(35.68, 51.42, time)) { expected, actual ->
-                { assertEquals(expected, actual, 0.025) }
-            },
-        )
+        expectations.zip(houses(35.68, 51.42, time)) { expected, actual ->
+            { assertEquals(expected, actual, 0.025) }
+        }.run(::assertAll)
     }
 
     @Test
