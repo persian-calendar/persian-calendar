@@ -405,7 +405,6 @@ fun SharedTransitionScope.DaysScreen(
                                 suggestedPagerSize = pagerSize,
                                 addEvent = addEvent,
                                 monthColors = monthColors,
-                                animatedContentScope = appAnimatedContentScope,
                                 onlyWeek = week,
                                 today = today,
                                 isHighlighted = isHighlighted,

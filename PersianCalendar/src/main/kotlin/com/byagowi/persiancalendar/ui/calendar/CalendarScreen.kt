@@ -350,7 +350,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 addEvent = addEvent,
                                 suggestedPagerSize = pagerSize,
                                 navigateToDays = navigateToDays,
-                                animatedContentScope = animatedContentScope,
                             )
                         }
                         ScreenSurface(animatedContentScope, materialCornerExtraLargeNoBottomEnd()) {
@@ -407,7 +406,6 @@ fun SharedTransitionScope.CalendarScreen(
                                         addEvent = addEvent,
                                         suggestedPagerSize = pagerSize,
                                         navigateToDays = navigateToDays,
-                                        animatedContentScope = animatedContentScope,
                                     )
                                 }
 

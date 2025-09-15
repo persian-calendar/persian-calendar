@@ -1,8 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import androidx.compose.animation.AnimatedContentScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -30,16 +27,14 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.CalendarPager(
+fun CalendarPager(
     viewModel: CalendarViewModel,
     pagerState: PagerState,
     addEvent: (AddEventData) -> Unit,
     today: Jdn,
     suggestedPagerSize: DpSize,
     navigateToDays: (Jdn, Boolean) -> Unit,
-    animatedContentScope: AnimatedContentScope,
 ) {
     val selectedMonthOffsetCommand by viewModel.selectedMonthOffsetCommand.collectAsState()
     LaunchedEffect(key1 = selectedMonthOffsetCommand) {
@@ -82,7 +77,6 @@ fun SharedTransitionScope.CalendarPager(
             suggestedPagerSize = suggestedPagerSize,
             addEvent = addEvent,
             monthColors = monthColors,
-            animatedContentScope = animatedContentScope,
             today = today,
             isHighlighted = isHighlighted,
             refreshToken = refreshToken,

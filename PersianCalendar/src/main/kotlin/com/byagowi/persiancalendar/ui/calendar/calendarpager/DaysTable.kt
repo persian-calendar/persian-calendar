@@ -1,9 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -45,8 +42,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_JDN
-import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_WEEK_NUMBER
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -75,13 +70,11 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.min
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.DaysTable(
+fun DaysTable(
     suggestedPagerSize: DpSize,
     addEvent: (AddEventData) -> Unit,
     monthColors: MonthColors,
-    animatedContentScope: AnimatedContentScope,
     today: Jdn,
     isHighlighted: Boolean,
     selectedDay: Jdn,
@@ -216,12 +209,6 @@ fun SharedTransitionScope.DaysTable(
                 Box(
                     Modifier
                         .fillMaxSize()
-                        .sharedBounds(
-                            rememberSharedContentState(
-                                "$SHARED_CONTENT_KEY_WEEK_NUMBER$monthStartJdn-$weekNumber"
-                            ),
-                            animatedVisibilityScope = animatedContentScope,
-                        )
                         .then(
                             if (onWeekClick != null) Modifier.clickable(
                                 onClickLabel = stringResource(R.string.week_view),
@@ -259,10 +246,6 @@ fun SharedTransitionScope.DaysTable(
                 modifier = cellsSizeModifier
                     .offset(
                         pagerArrowSizeAndPadding.dp + cellWidth * column, cellHeight * (row + 1)
-                    )
-                    .sharedBounds(
-                        rememberSharedContentState(SHARED_CONTENT_KEY_JDN + day.value),
-                        animatedVisibilityScope = animatedContentScope,
                     )
                     .combinedClickable(
                         indication = null,
