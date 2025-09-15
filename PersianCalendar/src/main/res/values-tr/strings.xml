@@ -189,7 +189,7 @@
     <string name="pray_methods">Hesaplama yöntemleri</string>
     <string name="in_city_time">%1$s içinde</string>
     <string name="athan">Ezan</string>
-    <string name="coordination">Koordinatlar</string>
+    <string name="coordinates">Koordinatlar</string>
     <string name="altitude_praytime">metre cinsinden (isteğe bağlı)</string>
     <string name="altitude">Rakım (Yükseklik)</string>
     <string name="longitude">Boylam</string>

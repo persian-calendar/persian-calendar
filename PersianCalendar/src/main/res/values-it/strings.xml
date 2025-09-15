@@ -194,7 +194,7 @@
     <string name="longitude">Longitudine</string>
     <string name="altitude">Latitudine</string>
     <string name="altitude_praytime">in metri (opzionale)</string>
-    <string name="coordination">Coordinate</string>
+    <string name="coordinates">Coordinate</string>
     <string name="athan">Athan</string>
     <string name="in_city_time">a %1$s</string>
     <string name="pray_methods">Metodi di calcolo</string>

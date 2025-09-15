@@ -71,7 +71,7 @@ fun CoordinatesDialog(
     // and no need to save as below remember also isn't saved
     var changeCounter by remember { mutableIntStateOf(0) }
     AppDialog(
-        title = { Text(stringResource(R.string.coordination)) },
+        title = { Text(stringResource(R.string.coordinates)) },
         neutralButton = {
             navigateToMap?.also {
                 TextButton(onClick = {

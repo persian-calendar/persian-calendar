@@ -100,7 +100,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     val context = LocalContext.current
     val resources = LocalResources.current
     val cityName by cityName.collectAsState()
-    SettingsClickable(stringResource(R.string.coordination), cityName) { onDismissRequest ->
+    SettingsClickable(stringResource(R.string.coordinates), cityName) { onDismissRequest ->
         CoordinatesDialog(navigateToMap = navigateToMap, onDismissRequest = onDismissRequest)
     }
 

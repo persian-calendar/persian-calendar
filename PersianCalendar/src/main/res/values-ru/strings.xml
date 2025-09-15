@@ -248,7 +248,7 @@
     <string name="longitude">Долгота</string>
     <string name="altitude">Высота</string>
     <string name="altitude_praytime">в метрах (необязательно)</string>
-    <string name="coordination">Координаты</string>
+    <string name="coordinates">Координаты</string>
     <string name="athan">Азан</string>
     <string name="in_city_time">в %1$s</string>
     <string name="pray_methods">Методы расчета</string>

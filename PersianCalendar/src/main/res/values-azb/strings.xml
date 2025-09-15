@@ -29,7 +29,7 @@
     <string name="pray_methods_calculation">شرعی اوقات‌ین مرجع‌ین تعیین ائتمک</string>
     <string name="altitude">ائنلم</string>
     <string name="altitude_praytime">متیر (ایستدینیز)</string>
-    <string name="coordination">جوگرافی مختصاتلار</string>
+    <string name="coordinates">جوگرافی مختصاتلار</string>
     <string name="gps_location">جی‌پی‌اس‌دن مختصات آلماق</string>
     <string name="gps_location_help">اوتوماتیک تنظیم اؤلور موقعیت‌ینیز</string>
     <string name="location">شهر</string>

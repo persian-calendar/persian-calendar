@@ -142,7 +142,7 @@
     <string name="latitude">纬度</string>
     <string name="altitude">海拔</string>
     <string name="altitude_praytime">单位为米（可选）</string>
-    <string name="coordination">坐标</string>
+    <string name="coordinates">坐标</string>
     <string name="athan">宣礼</string>
     <string name="pray_methods">计算方式</string>
     <string name="pray_methods_calculation">礼拜时间和朝向指南针的计算方式</string>

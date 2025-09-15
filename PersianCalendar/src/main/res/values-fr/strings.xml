@@ -239,7 +239,7 @@
     <string name="athan_gap_summary">Combien de temps avant l’Athan doit-on déclencher l’alarme (en minutes)</string>
     <string name="athan_gap">Écart d’Athan</string>
     <string name="pray_methods_calculation">Méthodes de calcul des heures de prière et de la boussole Qibla</string>
-    <string name="coordination">Coordination</string>
+    <string name="coordinates">Coordonnées</string>
     <string name="isha">Icha</string>
     <string name="maghrib">Maghrib</string>
     <string name="asr">Asr</string>

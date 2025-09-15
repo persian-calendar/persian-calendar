@@ -29,7 +29,7 @@
     <string name="pray_methods_calculation">礼拝時刻の計算方法</string>
     <string name="altitude">高さ</string>
     <string name="altitude_praytime">メートルで（任意）</string>
-    <string name="coordination">地理座標</string>
+    <string name="coordinates">地理座標</string>
     <string name="gps_location">GPSから情報を得る</string>
     <string name="gps_location_help">この方法がうまくいけば、他の設定は不要です</string>
     <string name="location">場所</string>

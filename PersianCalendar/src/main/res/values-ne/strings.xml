@@ -158,7 +158,7 @@
     <string name="longitude">देशान्तर</string>
     <string name="altitude">उचाइ</string>
     <string name="altitude_praytime">मिटरमा (वैकल्पिक)</string>
-    <string name="coordination">समन्वय</string>
+    <string name="coordinates">निर्देशांकहरू</string>
     <string name="athan">एथन</string>
     <string name="in_city_time">%1$s मा</string>
     <string name="pray_methods">गणना विधिहरू</string>

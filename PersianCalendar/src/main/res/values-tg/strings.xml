@@ -96,7 +96,7 @@
     <string name="longitude">Тӯл</string>
     <string name="altitude">Баландӣ</string>
     <string name="altitude_praytime">дар метр (ихтиёрӣ)</string>
-    <string name="coordination">Ҳамоҳангсозӣ</string>
+    <string name="coordinates">Координатхо</string>
     <string name="athan">Азон</string>
     <string name="in_city_time">дар %1$s</string>
     <string name="pray_methods_calculation">Усулҳои ҳисоб барои вақти намоз ва қутбнамои қибла</string>

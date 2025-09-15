@@ -396,7 +396,7 @@
     <string name="longitude">நெடுங்கோடு</string>
     <string name="altitude">குத்துயரம்</string>
     <string name="altitude_praytime">மீட்டரில் (விரும்பினால்)</string>
-    <string name="coordination">ஒருங்கிணைப்பு</string>
+    <string name="coordinates">ஒருங்கிணைப்பு</string>
     <string name="athan">இறைஅழைப்பு</string>
     <string name="in_city_time">%1$s இல்</string>
     <string name="pray_methods">கணக்கீட்டு முறைகள்</string>

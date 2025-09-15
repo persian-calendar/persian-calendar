@@ -72,7 +72,7 @@
     <string name="notify_date_lock_screen">Mostrar notificação no ecrã de bloqueio</string>
     <string name="gps_location">Obter localização através do GPS ou internet</string>
     <string name="longitude">Longitude</string>
-    <string name="coordination">Coordenadas</string>
+    <string name="coordinates">Coordenadas</string>
     <string name="athan_alarm">Alarme Athan</string>
     <string name="custom_athan">Selecionar Athan</string>
     <string name="athan_volume">Athan Volume</string>
