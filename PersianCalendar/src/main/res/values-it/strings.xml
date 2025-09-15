@@ -243,4 +243,15 @@
     <string name="location">Localizzazione</string>
     <string name="location_help">Se nessuno di questi, specificarlo di seguito</string>
     <string name="latitude">Latitudine</string>
+    <string name="spaced_and">" e "</string>
+    <string name="spaced_or">" oppure "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
+    <string name="device_information">Informazioni sul dispositivo</string>
+    <string name="center_align_widgets_summary">Allineamento centrale dei widget 4x1 e 2x2</string>
+    <string name="center_align_widgets">Allineamento centrale dei widget</string>
+    <string name="n_till">%1$s fino a %2$s</string>
+    <string name="recurs">Ricorre</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
 </resources>
