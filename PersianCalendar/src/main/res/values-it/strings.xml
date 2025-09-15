@@ -239,7 +239,7 @@
     <string name="ask_user_to_set_location">Imposta la posizione nelle impostazioni per visualizzare correttamente questo luogo</string>
     <string name="notify_date">Attiva la notifica della data</string>
     <string name="gps_internet_desc">Attiva il GPS e la connessione Internet del dispositivo per individuare la tua posizione.\n\nL\'app richiede questa autorizzazione solo una volta, tuttavia, se ti sposti in una nuova posizione, sarà necessario accedere nuovamente al GPS e a Internet.</string>
-    <string name="wait_for_gps">attendi! per favore... Se dopo un minuto non è apparso nulla, probabilmente dovresti provare altre opzioni</string>
+    <string name="wait_for_gps">attendi! per favore… Se dopo un minuto non è apparso nulla, probabilmente dovresti provare altre opzioni</string>
     <string name="location">Localizzazione</string>
     <string name="location_help">Se nessuno di questi, specificarlo di seguito</string>
     <string name="latitude">Latitudine</string>
