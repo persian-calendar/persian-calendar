@@ -317,4 +317,85 @@
     <string name="jumada_al_awwal">Jumada al-awwal</string>
     <string name="jumada_al_thani">Jumada al-Thani</string>
     <string name="rajab">Rajab</string>
+    <string name="shaban">Sha\'ban</string>
+    <string name="ramadan">Ramadan</string>
+    <string name="shawwal">Shawwal</string>
+    <string name="dhu_al_qidah">Dhu al-Qidah</string>
+    <string name="dhu_al_hijjah">Dhu al-Hijjah</string>
+    <string name="sun_view">Vista del Sole</string>
+    <string name="asr_hanafi_juristic">Metodo Hanafi Asr Juristic</string>
+    <string name="enable_new_interface">Attiva la interfaccia nuova</string>
+    <string name="are_you_sure">Sei sicuro?</string>
+    <string name="month_pray_times">Orari di preghiera del mese</string>
+    <string name="high_latitudes_method">Metodo delle alte latitudini</string>
+    <string name="high_latitudes_night_middle">Centro della notte</string>
+    <string name="high_latitudes_angle_based">Basato sull\'angolo</string>
+    <string name="high_latitudes_one_seventh">Un settimo</string>
+    <string name="none">Nessun</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Mostra il percorso del Sole e della Luna in 24 ore</string>
+    <string name="widget_prefer_device_colors">Segui la colorazione dei dispositivi nei widget</string>
+    <string name="nepali_calendar">Calendario nepalese</string>
+    <string name="nepali_calendar_short">Nepali</string>
+    <string name="country_emoji">🇺🇸🇬🇧</string>
+    <string name="show_secondary_calendar">Mostra calendario secondario</string>
+    <string name="nepal">Nepal</string>
+    <string name="solar_eclipse">Eclissi Solare</string>
+    <string name="lunar_eclipse">Eclissi Lunare</string>
+    <string name="add_quick_settings_tile">Aggiungi riquadro Impostazioni rapide</string>
+    <string name="true_north">Nord geografico</string>
+    <string name="lock">Blocco</string>
+    <string name="full_screen">Schermo intero</string>
+    <string name="exit_full_screen">Esci dalla modalità a schermo intero</string>
+    <string name="color_gradient">Sfumatura di colore</string>
+    <string name="qr_code">Codice QR</string>
+    <string name="navigate_up">Torna su</string>
+    <string name="open_drawer">Apri menu di navigazione</string>
+    <string name="more_options">Altre opzioni</string>
+    <string name="yes">Sì</string>
+    <string name="sample_inputs">Esempi di input</string>
+    <string name="year_view">Vista annuale</string>
+    <string name="month_view">Vista mensile</string>
+    <string name="daily_schedule">Routine quotidiana</string>
+    <string name="exempt_app_battery_optimization">Desideri aggiungere l\'app all\'eccezione di ottimizzazione della batteria per una corretta funzionalità delle notifiche?</string>
+    <string name="widget_background_transparency">Trasparenza dello sfondo del widget</string>
+    <string name="save">Salva</string>
+    <string name="holidays_in_red">Vacanze in colore rosso</string>
+    <string name="add_widget">Aggiungi widget</string>
+    <string name="vibration">Vibrazione</string>
+    <string name="schedule">Agenda</string>
+    <string name="print">Stampa</string>
+    <string name="week_view">Vista settimanale</string>
+    <string name="day_view">Vista giornaliera</string>
+    <string name="horoscope">Oroscopo</string>
+    <string name="planetary_hours">Ore planetarie</string>
+    <plurals name="shift_work_record_title">
+        <item quantity="one">%1$s %2$s giorno</item>
+        <item quantity="many">%1$s %2$s giorni</item>
+        <item quantity="other">%1$s %2$s giorni</item>
+    </plurals>
+    <plurals name="work_days">
+        <item quantity="one">%1$s giorno lavorativo</item>
+        <item quantity="many">%1$s giorni lavorativi</item>
+        <item quantity="other">%1$s giorni lavorativi</item>
+    </plurals>
+    <plurals name="seconds">
+        <item quantity="one">%1$s secondo</item>
+        <item quantity="many">%1$s secondi</item>
+        <item quantity="other">%1$s secondi</item>
+    </plurals>
+    <plurals name="minutes">
+        <item quantity="one">%1$s minuto</item>
+        <item quantity="many">%1$s minuti</item>
+        <item quantity="other">%1$s minuti</item>
+    </plurals>
+    <plurals name="hours">
+        <item quantity="one">%1$s ora</item>
+        <item quantity="many">%1$s ore</item>
+        <item quantity="other">%1$s ore</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">%1$s giorno</item>
+        <item quantity="many">%1$s giorni</item>
+        <item quantity="other">%1$s giorni</item>
+    </plurals>
 </resources>
