@@ -515,7 +515,6 @@ private fun SharedTransitionScope.detailsTabs(
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
                 bottomPadding = bottomPadding,
-                isOnlyEventsTab = isOnlyEventsTab,
             )
         },
         // The optional third tab

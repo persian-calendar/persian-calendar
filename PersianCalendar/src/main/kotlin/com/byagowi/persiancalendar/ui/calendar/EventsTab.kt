@@ -113,18 +113,11 @@ fun SharedTransitionScope.EventsTab(
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     bottomPadding: Dp,
-    isOnlyEventsTab: Boolean,
 ) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
 
         val jdn by viewModel.selectedDay.collectAsState()
-
-        if (isOnlyEventsTab) AutoSizedBodyText(
-            jdn.weekDayName + spacedComma + formatDate(jdn on mainCalendar),
-            textStyle = MaterialTheme.typography.titleMedium,
-            topPadding = 12.dp,
-        )
 
         val refreshToken by viewModel.refreshToken.collectAsState()
         val shiftWorkTitle = remember(jdn, refreshToken) { getShiftWorkTitle(jdn) }
