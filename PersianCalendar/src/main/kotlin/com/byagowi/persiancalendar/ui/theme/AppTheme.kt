@@ -170,6 +170,13 @@ private fun appColorScheme(): ColorScheme {
 }
 
 @Composable
+fun needsScreenSurfaceBorder(): Boolean = when (effectiveTheme()) {
+    Theme.BLACK -> true
+    Theme.MODERN -> !isGradient.collectAsState().value
+    else -> false
+}
+
+@Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun appTopAppBarColors(): TopAppBarColors {
     return TopAppBarDefaults.topAppBarColors(
