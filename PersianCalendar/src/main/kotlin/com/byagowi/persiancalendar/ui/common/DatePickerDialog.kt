@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
@@ -81,7 +82,10 @@ fun DatePickerDialog(
         },
     ) {
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
-        CalendarsTypesPicker(current = calendar) { calendar = it }
+        CalendarsTypesPicker(
+            calendarsList = enabledCalendars,
+            current = calendar,
+        ) { calendar = it }
 
         DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
         var showNumberEdit by remember { mutableStateOf(false) }

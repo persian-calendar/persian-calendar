@@ -291,7 +291,9 @@ private fun SharedTransitionScope.ConverterScreenShareActionButton(
             ConverterScreenMode.CONVERTER -> {
                 val jdn = viewModel.selectedDate.value
                 val selectedCalendar = viewModel.calendar.value
-                val otherCalendars = enabledCalendars - selectedCalendar
+                val calendarsList =
+                    enabledCalendars.takeIf { it.size > 1 } ?: language.value.defaultCalendars
+                val otherCalendars = calendarsList - selectedCalendar
                 context.shareText(
                     listOf(
                         dayTitleSummary(jdn, jdn on selectedCalendar),
@@ -482,16 +484,15 @@ private fun ColumnScope.ConverterAndDistance(
     val screenMode by viewModel.screenMode.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
     val calendar by viewModel.calendar.collectAsState()
-    if (calendar !in enabledCalendars) viewModel.changeCalendar(mainCalendar)
+    val language by language.collectAsState()
+    val calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars
+    if (calendar !in calendarsList) viewModel.changeCalendar(mainCalendar)
     val jdn by viewModel.selectedDate.collectAsState()
     val today by viewModel.today.collectAsState()
-    val language by language.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
-    val shownCalendars =
-        (enabledCalendars - calendar).ifEmpty { language.defaultCalendars - calendar }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
-            CalendarsTypesPicker(calendar, viewModel::changeCalendar)
+            CalendarsTypesPicker(calendar, calendarsList, viewModel::changeCalendar)
             DatePicker(
                 calendar = calendar,
                 jdn = jdn,
@@ -513,7 +514,7 @@ private fun ColumnScope.ConverterAndDistance(
                         jdn = jdn,
                         today = today,
                         selectedCalendar = calendar,
-                        shownCalendars = shownCalendars,
+                        shownCalendars = calendarsList - calendar,
                         isExpanded = isExpanded,
                         navigateToAstronomy = navigateToAstronomy,
                         animatedContentScope = animatedContentScope,
@@ -525,7 +526,7 @@ private fun ColumnScope.ConverterAndDistance(
             }
         }
     } else {
-        CalendarsTypesPicker(calendar, viewModel::changeCalendar)
+        CalendarsTypesPicker(calendar, calendarsList, viewModel::changeCalendar)
         DatePicker(
             calendar = calendar,
             jdn = jdn,
@@ -546,7 +547,7 @@ private fun ColumnScope.ConverterAndDistance(
                             jdn = jdn,
                             today = today,
                             selectedCalendar = calendar,
-                            shownCalendars = shownCalendars,
+                            shownCalendars = calendarsList - calendar,
                             isExpanded = isExpanded,
                             navigateToAstronomy = navigateToAstronomy,
                             animatedContentScope = animatedContentScope,
