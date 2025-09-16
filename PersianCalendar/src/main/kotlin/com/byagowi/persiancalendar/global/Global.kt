@@ -523,10 +523,11 @@ fun updateStoredPreference(context: Context) {
 
     runCatching {
         val mainCalendar = Calendar.valueOf(
-            preferences.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar
+            preferences.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultCalendars[0].name
         )
         val otherCalendars = (preferences.getString(PREF_OTHER_CALENDARS_KEY, null)
-            ?: language.defaultOtherCalendars).splitFilterNotEmpty(",").map(Calendar::valueOf)
+            ?: language.defaultCalendars.drop(1).joinToString(",") { it.name }
+                ).splitFilterNotEmpty(",").map(Calendar::valueOf)
         enabledCalendars = (listOf(mainCalendar) + otherCalendars).distinct()
         secondaryCalendarEnabled = preferences.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE

@@ -217,24 +217,16 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    val defaultMainCalendar
+    val defaultCalendars
         get() = when {
-            this == FA -> Calendar.SHAMSI.name
-            prefersGregorianCalendar -> Calendar.GREGORIAN.name
-            prefersIslamicCalendar -> Calendar.ISLAMIC.name
-            prefersPersianCalendar -> Calendar.SHAMSI.name
-            prefersNepaliCalendar -> Calendar.NEPALI.name
-            else -> Calendar.SHAMSI.name
-        }
+            this == FA -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            prefersGregorianCalendar ->
+                listOf(Calendar.GREGORIAN, Calendar.ISLAMIC, Calendar.SHAMSI)
 
-    val defaultOtherCalendars
-        get() = when {
-            this == FA -> "${Calendar.GREGORIAN.name},${Calendar.ISLAMIC.name}"
-            prefersGregorianCalendar -> "${Calendar.ISLAMIC.name},${Calendar.SHAMSI.name}"
-            prefersIslamicCalendar -> "${Calendar.GREGORIAN.name},${Calendar.SHAMSI.name}"
-            prefersPersianCalendar -> "${Calendar.GREGORIAN.name},${Calendar.ISLAMIC.name}"
-            prefersNepaliCalendar -> Calendar.GREGORIAN.name
-            else -> "${Calendar.GREGORIAN.name},${Calendar.ISLAMIC.name}"
+            prefersIslamicCalendar -> listOf(Calendar.ISLAMIC, Calendar.GREGORIAN, Calendar.SHAMSI)
+            prefersPersianCalendar -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
+            prefersNepaliCalendar -> listOf(Calendar.NEPALI, Calendar.GREGORIAN)
+            else -> listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
         }
 
     val defaultWeekStart

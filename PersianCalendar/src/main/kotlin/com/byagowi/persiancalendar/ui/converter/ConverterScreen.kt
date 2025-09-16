@@ -476,7 +476,10 @@ private fun ColumnScope.ConverterAndDistance(
     if (calendar !in enabledCalendars) viewModel.changeCalendar(mainCalendar)
     val jdn by viewModel.selectedDate.collectAsState()
     val today by viewModel.today.collectAsState()
+    val language by language.collectAsState()
     var isExpanded by rememberSaveable { mutableStateOf(true) }
+    val shownCalendars =
+        (enabledCalendars - calendar).ifEmpty { language.defaultCalendars - calendar }
     if (isLandscape) Row {
         Column(Modifier.weight(1f)) {
             CalendarsTypesPicker(calendar, viewModel::changeCalendar)
@@ -501,7 +504,7 @@ private fun ColumnScope.ConverterAndDistance(
                         jdn = jdn,
                         today = today,
                         selectedCalendar = calendar,
-                        shownCalendars = enabledCalendars - calendar,
+                        shownCalendars = shownCalendars,
                         isExpanded = isExpanded,
                         navigateToAstronomy = navigateToAstronomy,
                         animatedContentScope = animatedContentScope,
@@ -534,7 +537,7 @@ private fun ColumnScope.ConverterAndDistance(
                             jdn = jdn,
                             today = today,
                             selectedCalendar = calendar,
-                            shownCalendars = enabledCalendars - calendar,
+                            shownCalendars = shownCalendars,
                             isExpanded = isExpanded,
                             navigateToAstronomy = navigateToAstronomy,
                             animatedContentScope = animatedContentScope,
@@ -562,7 +565,6 @@ private fun ColumnScope.ConverterAndDistance(
             } else ChineseZodiac.fromChineseCalendar(ChineseCalendar(it.toGregorianCalendar().time))
         }
         val resources = LocalResources.current
-        val language by language.collectAsState()
         TextWithSlideAnimation(
             zodiacs.joinToString(spacedComma) { it.format(resources, true, isPersian) } +
                     spacedColon + language.formatCompatibility(zodiacs[0] compatibilityWith zodiacs[1])
