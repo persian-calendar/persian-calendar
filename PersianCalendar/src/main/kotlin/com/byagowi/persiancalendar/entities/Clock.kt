@@ -53,6 +53,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
         val (hours, minutes) = toHoursAndMinutesPair()
         val pairs = listOf(R.plurals.hours to hours, R.plurals.minutes to minutes)
             .filter { (_, n) -> n != 0 }
+            .ifEmpty { listOf(R.plurals.minutes to 0) }
         // if both present special casing the short form makes sense
         return if (pairs.size == 2 && short) resources.getString(
             R.string.n_hours_minutes, formatNumber(hours), formatNumber(minutes)
