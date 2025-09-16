@@ -197,33 +197,9 @@ fun SharedTransitionScope.ConverterScreen(
                     Column(Modifier.verticalScroll(scrollState)) {
                         Spacer(modifier = Modifier.height(24.dp))
 
-                        val isLandscape =
-                            LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
                         // Timezones
                         this.AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
-                            val zones = remember {
-                                TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
-                                    .sortedBy { it.rawOffset }
-                            }
-                            if (isLandscape) Row(Modifier.padding(horizontal = 24.dp)) {
-                                Box(Modifier.weight(1f)) {
-                                    TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
-                                }
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Box(Modifier.weight(1f)) {
-                                    TimezoneClock(
-                                        viewModel,
-                                        zones,
-                                        pendingConfirms,
-                                        isFirst = false
-                                    )
-                                }
-                            } else Column(Modifier.padding(horizontal = 24.dp)) {
-                                TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
-                                Spacer(modifier = Modifier.height(8.dp))
-                                TimezoneClock(viewModel, zones, pendingConfirms, isFirst = false)
-                            }
+                            TimeZones(viewModel, pendingConfirms)
                         }
 
                         this.AnimatedVisibility(
@@ -263,6 +239,39 @@ fun SharedTransitionScope.ConverterScreen(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun TimeZones(
+    viewModel: ConverterViewModel,
+    pendingConfirms: MutableCollection<() -> Unit>,
+) {
+    val zones = remember {
+        TimeZone.getAvailableIDs().map(TimeZone::getTimeZone)
+            .sortedBy { it.rawOffset }
+    }
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val difference = run {
+        val firstTimeZone by viewModel.firstTimeZone.collectAsState()
+        val secondTimeZone by viewModel.secondTimeZone.collectAsState()
+        val distance = secondTimeZone.rawOffset.milliseconds - firstTimeZone.rawOffset.milliseconds
+        Clock(abs(distance.inWholeMinutes / 60.0)).asRemainingTime(LocalResources.current)
+    }
+    if (isLandscape) Column {
+        Row(Modifier.padding(horizontal = 24.dp)) {
+            TimezoneClock(viewModel, zones, pendingConfirms, Modifier.weight(1f), isFirst = true)
+            Spacer(modifier = Modifier.width(8.dp))
+            TimezoneClock(viewModel, zones, pendingConfirms, Modifier.weight(1f), isFirst = false)
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        TextWithSlideAnimation(difference)
+    } else Column(Modifier.padding(horizontal = 24.dp)) {
+        TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
+        Spacer(modifier = Modifier.height(4.dp))
+        TextWithSlideAnimation(difference)
+        Spacer(modifier = Modifier.height(4.dp))
+        TimezoneClock(viewModel, zones, pendingConfirms, isFirst = false)
     }
 }
 
@@ -624,12 +633,13 @@ private fun TimezoneClock(
     viewModel: ConverterViewModel,
     zones: List<TimeZone>,
     pendingConfirms: MutableCollection<() -> Unit>,
+    modifier: Modifier = Modifier,
     isFirst: Boolean,
 ) {
     val timeZone by (if (isFirst) viewModel.firstTimeZone else viewModel.secondTimeZone).collectAsState()
     val clock by viewModel.clock.collectAsState()
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier) {
             val view = LocalView.current
             NumberPicker(
                 modifier = Modifier.weight(3f),
