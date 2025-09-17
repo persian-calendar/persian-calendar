@@ -91,6 +91,7 @@ import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -342,7 +343,7 @@ private fun EquinoxCountDown(
             Surface(
                 shape = CircleShape,
                 modifier = Modifier.clickable { showHoroscopeDialog = true },
-                color = contentColor,
+                color = contentColor.copy(alpha = .9f),
                 contentColor = backgroundColor,
             ) {
                 Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
