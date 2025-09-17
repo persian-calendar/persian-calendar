@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
@@ -82,8 +84,9 @@ fun DatePickerDialog(
         },
     ) {
         var calendar by rememberSaveable { mutableStateOf(mainCalendar) }
+        val language by language.collectAsState()
         CalendarsTypesPicker(
-            calendarsList = enabledCalendars,
+            calendarsList = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
             current = calendar,
         ) { calendar = it }
 
