@@ -20,6 +20,7 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
@@ -36,6 +37,7 @@ fun SharedTransitionScope.ScreenSurface(
     // Actually this can be simplified into a simple Box inside a Surface when that resolved
     workaroundClipBug: Boolean = false,
     disableSharedContent: Boolean = false,
+    needsLandscapeBorder: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
@@ -52,7 +54,10 @@ fun SharedTransitionScope.ScreenSurface(
                     val density = LocalDensity.current
                     val outlineColor = MaterialTheme.colorScheme.outline
                     Modifier.drawBehind {
-                        translate(0f, -.5.dp.toPx()) {
+                        val left = if (needsLandscapeBorder) {
+                            if (layoutDirection == LayoutDirection.Rtl) .5 else -.5
+                        } else .0
+                        translate(left.dp.toPx(), -.5.dp.toPx()) {
                             val outline = shape.createOutline(size, layoutDirection, density)
                             drawOutline(outline, outlineColor)
                         }

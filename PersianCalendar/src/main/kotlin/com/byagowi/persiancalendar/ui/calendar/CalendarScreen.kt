@@ -352,7 +352,11 @@ fun SharedTransitionScope.CalendarScreen(
                                 navigateToDays = navigateToDays,
                             )
                         }
-                        ScreenSurface(animatedContentScope, materialCornerExtraLargeNoBottomEnd()) {
+                        ScreenSurface(
+                            animatedContentScope,
+                            materialCornerExtraLargeNoBottomEnd(),
+                            needsLandscapeBorder = true,
+                        ) {
                             Details(
                                 viewModel = viewModel,
                                 tabs = detailsTabs,
