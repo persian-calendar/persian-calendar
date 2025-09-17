@@ -342,7 +342,7 @@ private fun EquinoxCountDown(
             Surface(
                 shape = CircleShape,
                 modifier = Modifier.clickable { showHoroscopeDialog = true },
-                color = MaterialTheme.colorScheme.secondaryContainer,
+                color = contentColor,
                 contentColor = backgroundColor,
             ) {
                 Box(Modifier.size(40.dp), contentAlignment = Alignment.Center) {
