@@ -222,7 +222,7 @@ class MonthTileService : TileService() {
                         ModifiersBuilders.Modifiers.Builder()
                             .setBackground(
                                 ModifiersBuilders.Background.Builder()
-                                    .setColor(colorScheme.primary.prop)
+                                    .setColor(colorScheme.primary.colorProp())
                                     .setCorner(shapes.full)
                                     .build()
                             )
