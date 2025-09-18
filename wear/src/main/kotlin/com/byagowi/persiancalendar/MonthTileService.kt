@@ -1,142 +1,188 @@
 package com.byagowi.persiancalendar
 
+import android.content.ComponentName
 import android.os.Build
-import android.util.Log
 import android.util.TypedValue
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.glance.GlanceComposable
-import androidx.glance.GlanceModifier
-import androidx.glance.Image
-import androidx.glance.ImageProvider
-import androidx.glance.action.actionStartActivity
-import androidx.glance.action.clickable
-import androidx.glance.layout.Alignment
-import androidx.glance.layout.Box
-import androidx.glance.layout.Column
-import androidx.glance.layout.Row
-import androidx.glance.layout.Spacer
-import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
-import androidx.glance.layout.padding
-import androidx.glance.layout.size
-import androidx.glance.text.FontWeight
-import androidx.glance.text.Text
-import androidx.glance.text.TextAlign
-import androidx.glance.text.TextStyle
-import androidx.glance.wear.tiles.GlanceTileService
-import androidx.glance.wear.tiles.curved.CurvedRow
-import androidx.glance.wear.tiles.curved.CurvedTextStyle
+import androidx.wear.protolayout.ActionBuilders.launchAction
+import androidx.wear.protolayout.DimensionBuilders
+import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.DimensionBuilders.wrap
+import androidx.wear.protolayout.LayoutElementBuilders
+import androidx.wear.protolayout.ModifiersBuilders
+import androidx.wear.protolayout.ResourceBuilders
+import androidx.wear.protolayout.TimelineBuilders
+import androidx.wear.protolayout.layout.basicText
+import androidx.wear.protolayout.material3.MaterialScope
+import androidx.wear.protolayout.material3.Typography
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.EventBuilders
+import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.TileBuilders
+import androidx.wear.tiles.TileService
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
 import io.github.persiancalendar.calendar.PersianDate
 import kotlin.math.ceil
 import kotlin.math.min
 
-class MonthTileService : GlanceTileService() {
-
-    override fun onDestroy() {
-        runCatching { super.onDestroy() }.onFailure { Log.e("", "", it) }
-    }
-
-    override fun onTileEnterEvent(requestParams: EventBuilders.TileEnterEvent) {
-        super.onTileEnterEvent(requestParams)
-        getUpdater(this).requestUpdate(MonthTileService::class.java)
-    }
-
-    private fun dpToSp(dp: Float): Float {
-        val displayMetrics = resources.displayMetrics
-        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            TypedValue.convertPixelsToDimension(TypedValue.COMPLEX_UNIT_SP, px, displayMetrics)
-        } else @Suppress("DEPRECATION") {
-            px / displayMetrics.scaledDensity
+class MonthTileService : TileService() {
+    override fun onRecentInteractionEventsAsync(
+        events: MutableList<EventBuilders.TileInteractionEvent?>
+    ): ListenableFuture<Void?> {
+        if (events.any { it?.eventType == EventBuilders.TileInteractionEvent.ENTER }) {
+            getUpdater(this).requestUpdate(MainTileService::class.java)
         }
+        return super.onRecentInteractionEventsAsync(events)
     }
 
-    @Composable
-    @GlanceComposable
-    override fun Content() {
-        Box(contentAlignment = Alignment.Center) {
-            // LocalConfiguration doesn't work here
-            val configuration = resources.configuration
-            val screenHeightDp = configuration.screenHeightDp
-            val screenMinDp = min(
-                configuration.screenHeightDp,
-                configuration.screenWidthDp,
-            )
-            val localeUtils = LocaleUtils()
-            val today = Jdn.today()
-            val persianDate = today.toPersianDate()
-            val monthStartJdn = Jdn(PersianDate(persianDate.year, persianDate.month, 1))
-            val monthEndJdn = Jdn(persianDate.monthStartOfMonthsDistance(1))
-            val monthLength = monthEndJdn - monthStartJdn
-            val startingDay = ((monthStartJdn.value + 2) % 7).toInt()
+    private fun tileLayout(requestParams: RequestBuilders.TileRequest) = materialScope(
+        applicationContext,
+        deviceConfiguration = requestParams.deviceConfiguration,
+    ) {
+        val localeUtils = LocaleUtils()
+        val today = Jdn.today()
+        val root = LayoutElementBuilders.Box.Builder()
+        root.addContent(curvedText(localeUtils.format(today.toCivilDate()), 45f))
+        root.addContent(curvedText(localeUtils.format(today.toIslamicDate()), -45f))
 
-            Text(
-                localeUtils.persianMonth(persianDate) + " " + localeUtils.format(persianDate.year),
-                modifier = GlanceModifier.padding(bottom = (screenHeightDp / 1.7).dp),
-                style = TextStyle(
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = ResourceColorProvider(R.color.tile_default_color),
-                ),
+        val persianDate = today.toPersianDate()
+        val month = localeUtils.persianMonth(persianDate)
+        root.addContent(
+            primaryLayout(
+                titleSlot = {
+                    text(
+                        (month + " " + localeUtils.format(persianDate.year)).layoutString,
+                        typography = Typography.TITLE_LARGE,
+                    )
+                },
+                mainSlot = { emptyLayout() }
             )
-            Column(GlanceModifier.clickable(actionStartActivity(MainActivity::class.java))) {
-                Spacer(GlanceModifier.height(24.dp))
-                repeat(1 + ceil((monthLength + startingDay) / 7f).toInt()) { y ->
-                    Box(contentAlignment = Alignment.Center) {
-                        if (y == 0) Image(
-                            provider = ImageProvider(R.drawable.month_weekday_row),
-                            contentDescription = null,
-                            modifier = GlanceModifier
-                                .fillMaxWidth()
-                                .height((screenMinDp / 11.3).dp)
+        )
+        root.addContent(
+            LayoutElementBuilders.Box.Builder()
+                .setWidth(expand())
+                .setHeight(expand())
+                .setModifiers(
+                    ModifiersBuilders.Modifiers.Builder()
+                        .setClickable(
+                            clickable(
+                                launchAction(
+                                    ComponentName(applicationContext, MainActivity::class.java)
+                                )
+                            )
                         )
-                        Row(GlanceModifier.padding(start = 3.dp, end = 6.dp)) {
-                            repeat(7) { x ->
-                                Box(contentAlignment = Alignment.Center) {
-                                    CalendarCell(
-                                        x,
-                                        y,
-                                        startingDay,
-                                        localeUtils,
-                                        monthLength,
-                                        monthStartJdn,
-                                        today,
-                                        screenMinDp
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            val style = CurvedTextStyle(
-                color = ResourceColorProvider(R.color.month_tile_other_calendars),
-                fontSize = dpToSp(12f).sp,
-            )
-            CurvedRow(anchorDegrees = 270 + 45f) {
-                curvedText(localeUtils.format(today.toCivilDate()), style = style)
-            }
-            CurvedRow(anchorDegrees = 270 - 45f) {
-                curvedText(localeUtils.format(today.toIslamicDate()), style = style)
-            }
-        }
+                        .setPadding(
+                            ModifiersBuilders.Padding.Builder()
+                                .setTop(DimensionBuilders.DpProp.Builder(36f).build())
+                                .setStart(DimensionBuilders.DpProp.Builder(32f).build())
+                                .setEnd(DimensionBuilders.DpProp.Builder(32f).build())
+                                .build()
+                        )
+                        .build()
+                )
+                .addContent(calendarTable(today, persianDate, localeUtils))
+                .build()
+        )
+        root.build()
     }
 
-    @Composable
-    private fun CalendarCell(
+    private fun emptyLayout() = LayoutElementBuilders.Box.Builder().build()
+
+    private fun MaterialScope.curvedText(text: String, angle: Float): LayoutElementBuilders.Arc {
+        val arcText = LayoutElementBuilders.ArcText.Builder()
+            .setText(text)
+            .setFontStyle(
+                LayoutElementBuilders.FontStyle.Builder()
+                    .setColor(colorScheme.onSurface.prop)
+                    .setSize(DimensionBuilders.SpProp.Builder().setValue(12f).build())
+                    .build()
+            )
+            .build()
+
+        return LayoutElementBuilders.Arc.Builder()
+            .setAnchorAngle(DimensionBuilders.DegreesProp.Builder(angle).build())
+            .addContent(arcText)
+            .build()
+    }
+
+    private fun MaterialScope.calendarTable(
+        today: Jdn,
+        persianDate: PersianDate,
+        localeUtils: LocaleUtils,
+    ): LayoutElementBuilders.Column {
+        val column = LayoutElementBuilders.Column.Builder()
+            .setWidth(expand())
+            .setHeight(wrap())
+            .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
+
+        val configuration = resources.configuration
+        val screenMinDp = min(
+            configuration.screenHeightDp,
+            configuration.screenWidthDp,
+        )
+
+        val monthStartJdn = Jdn(PersianDate(persianDate.year, persianDate.month, 1))
+        val monthEndJdn = Jdn(persianDate.monthStartOfMonthsDistance(1))
+        val monthLength = monthEndJdn - monthStartJdn
+        val startingDay = ((monthStartJdn.value + 2) % 7).toInt()
+        repeat(1 + ceil((monthLength + startingDay) / 7f).toInt()) { y ->
+            val row = LayoutElementBuilders.Row.Builder()
+                .setWidth(expand())
+                .setHeight(wrap())
+                .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
+            row.setModifiers(
+                ModifiersBuilders.Modifiers.Builder()
+                    .also {
+                        if (y == 0) it.setBackground(
+                            ModifiersBuilders.Background.Builder()
+                                .setColor(colorScheme.secondaryContainer.prop)
+                                .setCorner(shapes.full)
+                                .build()
+                        )
+                        it.setPadding(
+                            ModifiersBuilders.Padding.Builder()
+                                .setStart(DimensionBuilders.DpProp.Builder(4f).build())
+                                .setEnd(DimensionBuilders.DpProp.Builder(4f).build())
+                                .build()
+                        )
+                    }
+                    .build()
+            )
+            val cellFontSize = dpToSp(screenMinDp / (if (y == 0) 17f else 19.5f))
+            repeat(7) { x ->
+                row.addContent(
+                    tableCell(
+                        cellFontSize,
+                        x,
+                        y,
+                        localeUtils,
+                        today,
+                        startingDay,
+                        monthLength,
+                        monthStartJdn,
+                    )
+                )
+            }
+            column.addContent(row.build())
+        }
+        return column.build()
+    }
+
+    private fun MaterialScope.tableCell(
+        cellFontSize: Float,
         x: Int,
         y: Int,
-        startingDay: Int,
         localeUtils: LocaleUtils,
+        today: Jdn,
+        startingDay: Int,
         monthLength: Int,
         monthStartJdn: Jdn,
-        today: Jdn,
-        screenMinDp: Int
-    ) {
+    ): LayoutElementBuilders.Box {
         val day = 7 - x + (y - 1) * 7 - 1 - startingDay
         val text = when {
             y == 0 -> localeUtils.narrowWeekdays[((7 - x) + 5) % 7 + 1]
@@ -150,29 +196,96 @@ class MonthTileService : GlanceTileService() {
             civilDate = jdn.toCivilDate(),
         ).any { it.type == EntryType.Holiday }
         val isToday = jdn == today
-        if (isToday) Image(
-            provider = ImageProvider(R.drawable.month_today_indicator),
-            contentDescription = "امروز",
-            modifier = GlanceModifier.size((screenMinDp / 12.5).dp),
+
+        return LayoutElementBuilders.Box.Builder()
+            .setWidth(expand())
+            .setHeight(wrap())
+            .addContent(run {
+                val element = basicText(
+                    text.layoutString,
+                    LayoutElementBuilders.FontStyle.Builder()
+                        .setSize(
+                            DimensionBuilders.SpProp.Builder()
+                                .setValue(cellFontSize)
+                                .build()
+                        )
+                        .setColor(
+                            when {
+                                y == 0 -> colorScheme.onSecondaryContainer
+                                isToday -> colorScheme.onPrimary
+                                isHoliday -> colorScheme.primary
+                                else -> colorScheme.onBackground
+                            }.prop
+                        )
+                        .build(),
+                )
+                if (isToday) LayoutElementBuilders.Box.Builder()
+                    .setModifiers(
+                        ModifiersBuilders.Modifiers.Builder()
+                            .setBackground(
+                                ModifiersBuilders.Background.Builder()
+                                    .setColor(colorScheme.primary.prop)
+                                    .setCorner(shapes.full)
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .setWidth(wrap())
+                    .setHeight(wrap())
+                    .addContent(element)
+                    .addContent(
+                        LayoutElementBuilders.Box.Builder()
+                            .setModifiers(
+                                ModifiersBuilders.Modifiers.Builder()
+                                    .setPadding(
+                                        ModifiersBuilders.Padding.Builder()
+                                            .setStart(DimensionBuilders.DpProp.Builder(20f).build())
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .setWidth(wrap())
+                            .setHeight(wrap())
+                            .addContent(emptyLayout())
+                            .build()
+                    )
+                    .build()
+                else element
+            })
+            .build()
+    }
+
+    private fun dpToSp(dp: Float): Float {
+        val displayMetrics = resources.displayMetrics
+        val px = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            TypedValue.convertPixelsToDimension(TypedValue.COMPLEX_UNIT_SP, px, displayMetrics)
+        } else @Suppress("DEPRECATION") {
+            px / displayMetrics.scaledDensity
+        }
+    }
+
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> {
+        return Futures.immediateFuture(
+            TileBuilders.Tile.Builder()
+                .setResourcesVersion(RESOURCES_VERSION)
+                .setTileTimeline(
+                    TimelineBuilders.Timeline.fromLayoutElement(tileLayout(requestParams))
+                )
+                .build()
         )
-        Text(
-            text,
-            style = TextStyle(
-                textAlign = TextAlign.Center,
-                color = ResourceColorProvider(
-                    resId = when {
-                        y == 0 -> R.color.month_tile_on_weekdays
-                        isToday -> R.color.tile_on_button_color
-                        isHoliday -> R.color.tile_holidays
-                        else -> R.color.tile_default_color
-                    }
-                ),
-                fontSize = dpToSp(screenMinDp / (if (y == 0) 15.2f else 14.2f)).sp,
-            ),
-            modifier = GlanceModifier.size(
-                width = (screenMinDp / 9.5).dp,
-                height = (screenMinDp / (if (y == 0) 10.3 else 12.5)).dp,
-            ),
+    }
+
+    override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest)
+            : ListenableFuture<ResourceBuilders.Resources> {
+        return Futures.immediateFuture(
+            ResourceBuilders.Resources.Builder()
+                .setVersion(RESOURCES_VERSION)
+                .build()
         )
+    }
+
+    companion object {
+        private const val RESOURCES_VERSION = "1"
     }
 }

@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.wear.compose.material3)
     implementation(libs.wear.compose.navigation)
     implementation(libs.wear.tooling.preview)
-    implementation(libs.wear.glance.tiles)
     implementation(libs.wear.guava)
     implementation(libs.wear.tiles)
     implementation(libs.wear.watchface.complications.data.source.ktx)

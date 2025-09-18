@@ -29,7 +29,6 @@ work-manager = "2.10.4"
 watchface-complications-data-source-ktx = "1.2.1"
 wear-compose = "1.5.1"
 wear-compose-material3 = "1.5.1"
-wear-glance-tiles = "1.0.0-alpha07"
 wear-guava = "33.5.0-android" # Only used in Wear even though it isn't limited to it
 wear-protolayout = "1.3.0"
 wear-tiles = "1.5.0"
@@ -77,7 +76,6 @@ test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "and
 test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
 test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 work-manager-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-manager" }
-wear-glance-tiles = { group = "androidx.glance", name = "glance-wear-tiles", version.ref = "wear-glance-tiles" }
 wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wear-tooling-preview" }
 wear-watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchface-complications-data-source-ktx" }
 wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wear-compose" }
