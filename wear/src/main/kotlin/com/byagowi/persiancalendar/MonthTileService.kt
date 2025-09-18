@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.os.Build
 import android.util.TypedValue
 import androidx.wear.protolayout.ActionBuilders.launchAction
+import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DimensionBuilders
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.wrap
@@ -18,6 +19,7 @@ import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.EventBuilders
 import androidx.wear.tiles.RequestBuilders
@@ -93,12 +95,14 @@ class MonthTileService : TileService() {
 
     private fun emptyLayout() = LayoutElementBuilders.Box.Builder().build()
 
+    private fun LayoutColor.colorProp() = ColorBuilders.ColorProp.Builder(staticArgb).build()
+
     private fun MaterialScope.curvedText(text: String, angle: Float): LayoutElementBuilders.Arc {
         val arcText = LayoutElementBuilders.ArcText.Builder()
             .setText(text)
             .setFontStyle(
                 LayoutElementBuilders.FontStyle.Builder()
-                    .setColor(colorScheme.onSurface.prop)
+                    .setColor(colorScheme.onSurface.colorProp())
                     .setSize(DimensionBuilders.SpProp.Builder().setValue(12f).build())
                     .build()
             )
@@ -134,7 +138,7 @@ class MonthTileService : TileService() {
                     .also {
                         if (y == 0) it.setBackground(
                             ModifiersBuilders.Background.Builder()
-                                .setColor(colorScheme.secondaryContainer.prop)
+                                .setColor(colorScheme.secondaryContainer.colorProp())
                                 .setCorner(shapes.full)
                                 .build()
                         )
@@ -209,7 +213,7 @@ class MonthTileService : TileService() {
                                 isToday -> colorScheme.onPrimary
                                 isHoliday -> colorScheme.primary
                                 else -> colorScheme.onBackground
-                            }.prop
+                            }.colorProp()
                         )
                         .build(),
                 )
