@@ -119,13 +119,7 @@ class MonthTileService : TileService() {
             .setWidth(expand())
             .setHeight(wrap())
             .setHorizontalAlignment(LayoutElementBuilders.HORIZONTAL_ALIGN_CENTER)
-
-        val configuration = resources.configuration
-        val screenMinDp = min(
-            configuration.screenHeightDp,
-            configuration.screenWidthDp,
-        )
-
+        val screenMinDp = resources.configuration.run { min(screenHeightDp, screenWidthDp) }
         val monthStartJdn = Jdn(PersianDate(persianDate.year, persianDate.month, 1))
         val monthEndJdn = Jdn(persianDate.monthStartOfMonthsDistance(1))
         val monthLength = monthEndJdn - monthStartJdn
