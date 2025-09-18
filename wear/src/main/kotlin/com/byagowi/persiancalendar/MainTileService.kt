@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar
 
-import android.content.Intent
+import android.content.ComponentName
 import androidx.wear.protolayout.ActionBuilders.launchAction
 import androidx.wear.protolayout.DimensionBuilders.expand
 import androidx.wear.protolayout.DimensionBuilders.wrap
@@ -67,14 +67,13 @@ class MainTileService : TileService() {
                 column.build()
             },
             bottomSlot = {
-                Intent(
-                    applicationContext,
-                    MainActivity::class.java
-                ).component?.let {
-                    textEdgeButton(
-                        onClick = clickable(launchAction(it))
-                    ) { text("تقویم".layoutString, typography = Typography.BODY_SMALL) }
-                } ?: text("".layoutString)
+                textEdgeButton(
+                    onClick = clickable(
+                        launchAction(
+                            ComponentName(applicationContext, MainActivity::class.java)
+                        )
+                    ),
+                ) { text("تقویم".layoutString, typography = Typography.BODY_SMALL) }
             }
         )
     }
