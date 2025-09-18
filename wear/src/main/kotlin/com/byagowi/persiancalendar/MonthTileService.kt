@@ -62,7 +62,7 @@ class MonthTileService : TileService() {
                         typography = Typography.TITLE_LARGE,
                     )
                 },
-                mainSlot = { emptyLayout() }
+                mainSlot = { LayoutElementBuilders.Box.Builder().build() }
             )
         )
         root.addContent(
@@ -92,8 +92,6 @@ class MonthTileService : TileService() {
         )
         root.build()
     }
-
-    private fun emptyLayout() = LayoutElementBuilders.Box.Builder().build()
 
     private fun LayoutColor.colorProp() = ColorBuilders.ColorProp.Builder(staticArgb).build()
 
@@ -163,6 +161,7 @@ class MonthTileService : TileService() {
                         startingDay,
                         monthLength,
                         monthStartJdn,
+                        screenMinDp,
                     )
                 )
             }
@@ -180,6 +179,7 @@ class MonthTileService : TileService() {
         startingDay: Int,
         monthLength: Int,
         monthStartJdn: Jdn,
+        screenMinDp: Int,
     ): LayoutElementBuilders.Box {
         val day = 7 - x + (y - 1) * 7 - 1 - startingDay
         val text = when {
@@ -228,25 +228,9 @@ class MonthTileService : TileService() {
                             )
                             .build()
                     )
-                    .setWidth(wrap())
-                    .setHeight(wrap())
+                    .setWidth(DimensionBuilders.dp(screenMinDp / 12f))
+                    .setHeight(DimensionBuilders.dp(screenMinDp / 12f))
                     .addContent(element)
-                    .addContent(
-                        LayoutElementBuilders.Box.Builder()
-                            .setModifiers(
-                                ModifiersBuilders.Modifiers.Builder()
-                                    .setPadding(
-                                        ModifiersBuilders.Padding.Builder()
-                                            .setStart(DimensionBuilders.DpProp.Builder(20f).build())
-                                            .build()
-                                    )
-                                    .build()
-                            )
-                            .setWidth(wrap())
-                            .setHeight(wrap())
-                            .addContent(emptyLayout())
-                            .build()
-                    )
                     .build()
                 else element
             })
