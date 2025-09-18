@@ -84,9 +84,7 @@ wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-nav
 wear-guava = { module = "com.google.guava:guava", version.ref = "wear-guava" }
 wear-protolayout = { module = "androidx.wear.protolayout:protolayout", version.ref = "wear-protolayout" }
 wear-protolayout-material3 = { module = "androidx.wear.protolayout:protolayout-material3", version.ref = "wear-protolayout" }
-wear-protolayout-proto = { module = "androidx.wear.protolayout:protolayout-proto", version.ref = "wear-protolayout" }
 wear-tiles = { module = "androidx.wear.tiles:tiles", version.ref = "wear-tiles" }
-wear-tiles-proto = { module = "androidx.wear.tiles:tiles-proto", version.ref = "wear-tiles" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
