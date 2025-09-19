@@ -135,8 +135,6 @@ dependencies {
     implementation(libs.compose.material.icons.extended)
     androidTestImplementation(libs.compose.ui.test.junit4)
     debugImplementation(libs.compose.ui.test.manifest)
-//    implementation(libs.androidx.app.projected)
-//    implementation(libs.androidx.app)
     debugImplementation(libs.compose.ui.tooling)
 
     testImplementation(libs.junit)
