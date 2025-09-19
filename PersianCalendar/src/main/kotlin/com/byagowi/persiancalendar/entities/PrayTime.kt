@@ -70,11 +70,8 @@ enum class PrayTime(@get:StringRes val stringRes: Int, val tint: Color = Color.G
         fun pairFromMidnightMethod(method: MidnightMethod): List<PrayTime> {
             return when (method) {
                 MidnightMethod.MidSunsetToSunrise -> listOf(SUNSET, SUNRISE)
-
                 MidnightMethod.MidSunsetToFajr -> listOf(SUNSET, FAJR)
-
                 MidnightMethod.MidMaghribToSunrise -> listOf(MAGHRIB, SUNRISE)
-
                 MidnightMethod.MidMaghribToFajr -> listOf(MAGHRIB, FAJR)
             }
         }
