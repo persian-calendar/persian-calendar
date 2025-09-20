@@ -200,11 +200,11 @@ fun update(context: Context, updateDate: Boolean) {
         latestJdnUpdate = jdn
         readAndStoreDeviceCalendarEventsOfTheDay(context)
 
-//        // Quick tile
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
-//            TileService.requestListeningState(context, tileComponent)
-//        }
+        // Quick tile
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
+            TileService.requestListeningState(context, tileComponent)
+        }
     }
 
     val date = jdn on mainCalendar
