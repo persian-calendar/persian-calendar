@@ -40,6 +40,7 @@ class MainTileService : TileService() {
     ) {
         val localeUtils = LocaleUtils()
         val todayEntries = run {
+            // Doesn't worth to use coroutine and stuff just to retrieve this I think
             val preferences = runBlocking { dataStore.data.firstOrNull() }
             val enabledEvents = preferences?.get(enabledEventsKey) ?: emptySet()
             generateEntries(localeUtils, Jdn.today(), enabledEvents, 1, false)
@@ -67,13 +68,10 @@ class MainTileService : TileService() {
                 column.build()
             },
             bottomSlot = {
-                textEdgeButton(
-                    onClick = clickable(
-                        launchAction(
-                            ComponentName(applicationContext, MainActivity::class.java)
-                        )
-                    ),
-                ) { text("تقویم".layoutString, typography = Typography.BODY_SMALL) }
+                val activityComponent = ComponentName(applicationContext, MainActivity::class.java)
+                textEdgeButton(onClick = clickable(launchAction(activityComponent))) {
+                    text("تقویم".layoutString, typography = Typography.BODY_SMALL)
+                }
             }
         )
     }

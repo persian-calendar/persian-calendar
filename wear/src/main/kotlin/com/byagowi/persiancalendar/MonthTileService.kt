@@ -19,6 +19,7 @@ import androidx.wear.protolayout.material3.materialScope
 import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.modifiers.clickable
+import androidx.wear.protolayout.modifiers.padding
 import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.EventBuilders
@@ -65,26 +66,15 @@ class MonthTileService : TileService() {
                 mainSlot = { LayoutElementBuilders.Box.Builder().build() }
             )
         )
+        val activityComponent = ComponentName(applicationContext, MainActivity::class.java)
         root.addContent(
             LayoutElementBuilders.Box.Builder()
                 .setWidth(expand())
                 .setHeight(expand())
                 .setModifiers(
                     ModifiersBuilders.Modifiers.Builder()
-                        .setClickable(
-                            clickable(
-                                launchAction(
-                                    ComponentName(applicationContext, MainActivity::class.java)
-                                )
-                            )
-                        )
-                        .setPadding(
-                            ModifiersBuilders.Padding.Builder()
-                                .setTop(DimensionBuilders.DpProp.Builder(36f).build())
-                                .setStart(DimensionBuilders.DpProp.Builder(32f).build())
-                                .setEnd(DimensionBuilders.DpProp.Builder(32f).build())
-                                .build()
-                        )
+                        .setClickable(clickable(launchAction(activityComponent)))
+                        .setPadding(padding(start = 32f, end = 32f, top = 36f))
                         .build()
                 )
                 .addContent(calendarTable(today, persianDate, localeUtils))
@@ -132,22 +122,14 @@ class MonthTileService : TileService() {
                 .setHeight(wrap())
                 .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
             row.setModifiers(
-                ModifiersBuilders.Modifiers.Builder()
-                    .also {
-                        if (y == 0) it.setBackground(
-                            ModifiersBuilders.Background.Builder()
-                                .setColor(colorScheme.secondaryContainer.colorProp())
-                                .setCorner(shapes.full)
-                                .build()
-                        )
-                        it.setPadding(
-                            ModifiersBuilders.Padding.Builder()
-                                .setStart(DimensionBuilders.DpProp.Builder(4f).build())
-                                .setEnd(DimensionBuilders.DpProp.Builder(4f).build())
-                                .build()
-                        )
-                    }
-                    .build()
+                ModifiersBuilders.Modifiers.Builder().also {
+                    if (y == 0) it.setBackground(
+                        ModifiersBuilders.Background.Builder()
+                            .setColor(colorScheme.secondaryContainer.colorProp())
+                            .setCorner(shapes.full).build()
+                    )
+                    it.setPadding(padding(horizontal = 4f, vertical = 0f))
+                }.build()
             )
             val cellFontSize = dpToSp(screenMinDp / (if (y == 0) 17f else 19.5f))
             repeat(7) { x ->
