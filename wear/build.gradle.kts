@@ -54,7 +54,6 @@ dependencies {
     implementation(libs.wear.compose.material3)
     implementation(libs.wear.compose.navigation)
     implementation(libs.wear.datastore.preferences)
-    implementation(libs.wear.guava.listenablefuture)
     implementation(libs.wear.protolayout)
     implementation(libs.wear.protolayout.material3)
     implementation(libs.wear.tiles)
