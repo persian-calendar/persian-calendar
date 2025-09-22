@@ -87,22 +87,20 @@ class MonthTileService : TileService() {
     private fun MaterialScope.curvedText(
         text: String,
         angle: Float,
-    ): LayoutElementBuilders.LayoutElement {
-        val arcText = LayoutElementBuilders.ArcText.Builder()
-            .setText(text)
-            .setFontStyle(
-                LayoutElementBuilders.FontStyle.Builder()
-                    .setColor(colorScheme.secondaryDim.colorProp())
-                    .setSize(DimensionBuilders.SpProp.Builder().setValue(12f).build())
-                    .build()
-            )
-            .build()
-
-        return LayoutElementBuilders.Arc.Builder()
-            .setAnchorAngle(DimensionBuilders.DegreesProp.Builder(angle).build())
-            .addContent(arcText)
-            .build()
-    }
+    ): LayoutElementBuilders.LayoutElement = LayoutElementBuilders.Arc.Builder()
+        .setAnchorAngle(DimensionBuilders.DegreesProp.Builder(angle).build())
+        .addContent(
+            LayoutElementBuilders.ArcText.Builder()
+                .setText(text)
+                .setFontStyle(
+                    LayoutElementBuilders.FontStyle.Builder()
+                        .setColor(colorScheme.secondaryDim.colorProp())
+                        .setSize(DimensionBuilders.SpProp.Builder().setValue(12f).build())
+                        .build()
+                )
+                .build()
+        )
+        .build()
 
     private fun MaterialScope.calendarTable(
         today: Jdn,
