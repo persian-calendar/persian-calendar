@@ -171,7 +171,7 @@ class MonthTileService : TileService() {
             else -> ""
         }
         val jdn = monthStartJdn + day
-        val isHoliday = x == 0 || getEventsOfDay(
+        val isHoliday = text != "" && getEventsOfDay(
             enabledEvents = emptySet(),
             civilDate = jdn.toCivilDate(),
         ).any { it.type == EntryType.Holiday }
@@ -193,7 +193,8 @@ class MonthTileService : TileService() {
                             when {
                                 y == 0 -> colorScheme.onSecondaryContainer
                                 isToday -> colorScheme.onPrimary
-                                isHoliday -> colorScheme.primary
+                                // x == 0 means it's Friday
+                                isHoliday || x == 0 -> colorScheme.primary
                                 else -> colorScheme.onBackground
                             }.colorProp()
                         )
@@ -216,6 +217,36 @@ class MonthTileService : TileService() {
                     .build()
                 else element
             })
+            .apply {
+                if (isHoliday) addContent(
+                    LayoutElementBuilders.Box.Builder()
+                        .setModifiers(
+                            ModifiersBuilders.Modifiers.Builder()
+                                .setPadding(padding(top = screenMinDp / 18f))
+                                .build()
+                        )
+                        .addContent(
+                            LayoutElementBuilders.Box.Builder()
+                                .setModifiers(
+                                    ModifiersBuilders.Modifiers.Builder()
+                                        .setBackground(
+                                            ModifiersBuilders.Background.Builder()
+                                                .setColor(
+                                                    (if (isToday) colorScheme.onPrimary
+                                                    else colorScheme.primary).colorProp()
+                                                )
+                                                .setCorner(shapes.full)
+                                                .build()
+                                        )
+                                        .build()
+                                )
+                                .setWidth(DimensionBuilders.dp(2f))
+                                .setHeight(DimensionBuilders.dp(2f))
+                                .build()
+                        )
+                        .build()
+                )
+            }
             .build()
     }
 
