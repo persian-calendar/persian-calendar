@@ -21,10 +21,12 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
@@ -189,6 +191,29 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         }
     }
 
+    private val directions = (0..<24).map {
+        when {
+            it % 6 == 0 -> if (language.value.isArabicScript) resources.getString(
+                when (it) {
+                    0 -> R.string.north
+                    6 -> R.string.east
+                    12 -> R.string.south
+                    18 -> R.string.west
+                    else -> R.string.empty
+                }
+            ) else when (it) {
+                0 -> "N"
+                6 -> "E"
+                12 -> "S"
+                18 -> "W"
+                else -> ""
+            }
+
+            it % 3 == 0 -> formatNumber(it * 15) // Draw the text every alternate 45deg
+            else -> ""
+        }
+    }
+
     private fun Canvas.drawDial() {
         // Draw the background
         drawCircle(cx, cy, radius, circlePaint)
@@ -203,19 +228,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             withRotation(15f * it, cx, cy) {
                 drawLine(cx, cy - radius, cx, cy - radius * .975f, markerPaint)
                 // Draw the cardinal points
-                if (it % 6 == 0) {
-                    val dirString = when (it) {
-                        0 -> "N"
-                        6 -> "E"
-                        12 -> "S"
-                        18 -> "W"
-                        else -> ""
-                    }
-                    drawText(dirString, cardinalX, cardinalY, textPaint)
-                } else if (it % 3 == 0) {
-                    // Draw the text every alternate 45deg
-                    drawText((it * 15).toString(), cardinalX, cardinalY, textPaint)
-                }
+                drawText(directions[it], cardinalX, cardinalY, textPaint)
             }
         }
     }
