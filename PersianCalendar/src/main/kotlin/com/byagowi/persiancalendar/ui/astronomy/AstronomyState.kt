@@ -64,7 +64,7 @@ class AstronomyState(val date: GregorianCalendar) {
             searchLunarEclipse(time).run {
                 Triple(R.string.lunar_eclipse, kind, peak)
             },
-        ).sortedBy { (_, _, peak) -> peak.ut }.map { (title, kind, peak) ->
+        ).sortedBy { (_, _, peak) -> peak }.map { (title, kind, peak) ->
             val formattedDate =
                 Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
             val isSolar = title == R.string.solar_eclipse
