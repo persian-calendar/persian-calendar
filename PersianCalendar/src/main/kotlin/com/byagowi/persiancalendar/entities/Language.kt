@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
@@ -15,6 +16,7 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import com.byagowi.persiancalendar.utils.logException
@@ -23,6 +25,7 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import org.jetbrains.annotations.VisibleForTesting
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.math.roundToLong
 
 
 enum class Language(val code: String, val nativeName: String) {
@@ -488,6 +491,18 @@ enum class Language(val code: String, val nativeName: String) {
             NE, TA -> true
             else -> false
         }
+
+    fun formatAuAsKm(value: Double) = formatKm((value * AU_IN_KM).roundToLong())
+
+    fun formatKm(value: Long): String = when {
+        isArabicScript -> formatNumber("%,d".format(Locale.ENGLISH, value)).let {
+            if (isArabicDigitSelected) it else it
+                // Arabic Thousand Separator
+                .replace(",", "٬")
+        } + " کیلومتر"
+
+        else -> "%,d km".format(Locale.ENGLISH, value)
+    }
 
     companion object {
         @SuppressLint("ConstantLocale")

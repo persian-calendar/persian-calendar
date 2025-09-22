@@ -1,20 +1,20 @@
 package com.byagowi.persiancalendar.entities
 
 import android.location.Location
-import java.util.Locale
+import com.byagowi.persiancalendar.global.language
 import kotlin.math.PI
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.pow
-import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 data class EarthPosition(val latitude: Double, val longitude: Double) {
     class EarthHeading(metres: Float, val heading: Float) {
-        val km = "%,d km".format(Locale.ENGLISH, (metres / 1000).roundToInt())
+        val km = language.value.formatKm((metres / 1000).roundToLong())
     }
 
     fun toEarthHeading(target: EarthPosition): EarthHeading {

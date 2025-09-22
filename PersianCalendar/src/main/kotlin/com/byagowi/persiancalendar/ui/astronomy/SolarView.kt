@@ -18,19 +18,17 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
-import com.byagowi.persiancalendar.AU_IN_KM
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import java.util.GregorianCalendar
-import java.util.Locale
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 import kotlin.math.sign
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
@@ -87,7 +85,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             if (mode == AstronomyMode.MOON) {
                 val radius = min(width, height) / 2f
                 canvas.drawText(
-                    "%,d km".format(Locale.ENGLISH, (state.moon.dist * AU_IN_KM).roundToLong()),
+                    language.value.formatAuAsKm(state.moon.dist),
                     radius, radius * 1.7f, moonTextPaint
                 )
             }

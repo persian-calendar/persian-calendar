@@ -45,9 +45,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
+import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
@@ -71,10 +71,8 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.Date
-import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 
 private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     val degrees = value.toInt()
@@ -101,17 +99,22 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
         Spacer(Modifier.height(SettingsHorizontalPaddingItem.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             var mode by rememberSaveable { mutableStateOf(AstronomyMode.EARTH) }
-            @Suppress("SimplifiableCallChain") Text(
-                when (mode) {
+            val language by language.collectAsState()
+
+            @Composable
+            fun format(body: Body, longitude: Double, distance: Double): String {
+                return stringResource(body.titleStringId) + ": %s %s %s%s".format(
+                    formatAngle(longitude % 30), // Remaining angle
+                    Zodiac.fromTropical(longitude).emoji,
+                    if (language.isArabicScript) RLM else "",
+                    language.formatAuAsKm(distance)
+                )
+            }
+            Text(
+                @Suppress("SimplifiableCallChain") when (mode) {
                     AstronomyMode.EARTH -> geocentricDistanceBodies.map { body ->
                         val (longitude, distance) = geocentricLongitudeAndDistanceOfBody(body, time)
-                        stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
-                            Locale.ENGLISH,
-                            LRM,
-                            formatAngle(longitude % 30), // Remaining angle
-                            Zodiac.fromTropical(longitude).emoji,
-                            (distance * AU_IN_KM).roundToLong()
-                        )
+                        format(body, longitude, distance)
                     }.joinToString("\n")
 
                     AstronomyMode.SUN -> heliocentricDistanceBodies.map { body ->
@@ -119,13 +122,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                             // See also eclipticLongitude of the astronomy library
                             equatorialToEcliptic(it).elon to it.length()
                         }
-                        stringResource(body.titleStringId) + ": %s%s %s %,d km".format(
-                            Locale.ENGLISH,
-                            LRM,
-                            formatAngle(longitude % 30), // Remaining angle
-                            Zodiac.fromTropical(longitude).emoji,
-                            (distance * AU_IN_KM).roundToLong()
-                        )
+                        format(body, longitude, distance)
                     }.joinToString("\n")
 
                     else -> ""
