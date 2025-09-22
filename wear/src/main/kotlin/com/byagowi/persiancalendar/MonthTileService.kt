@@ -230,7 +230,7 @@ class MonthTileService : TileService() {
     }
 
     override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> {
-        return Futures.immediateFuture(
+        return ImmediateFuture(
             TileBuilders.Tile.Builder()
                 .setResourcesVersion(RESOURCES_VERSION)
                 .setTileTimeline(
@@ -242,7 +242,7 @@ class MonthTileService : TileService() {
 
     override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest)
             : ListenableFuture<ResourceBuilders.Resources> {
-        return Futures.immediateFuture(
+        return ImmediateFuture(
             ResourceBuilders.Resources.Builder()
                 .setVersion(RESOURCES_VERSION)
                 .build()
