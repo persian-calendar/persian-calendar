@@ -19,7 +19,6 @@ import androidx.wear.tiles.RequestBuilders
 import androidx.wear.tiles.TileBuilders
 import androidx.wear.tiles.TileService
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
