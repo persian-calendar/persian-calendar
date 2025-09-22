@@ -3,8 +3,8 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.content.res.Resources
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
@@ -53,7 +53,7 @@ class AstronomyState(val date: GregorianCalendar) {
         solarSystemPlanets.map { it.titleStringId to equatorialToEcliptic(helioVector(it, time)) }
     }
 
-    fun generateHeader(resources: Resources, jdn: Jdn): List<String> {
+    fun generateHeader(resources: Resources, language: Language, jdn: Jdn): List<String> {
         val observer = coordinates.value?.toObserver()
         return listOf(
             if (observer != null) searchLocalSolarEclipse(time, observer).run { kind to peak.time }
@@ -64,12 +64,15 @@ class AstronomyState(val date: GregorianCalendar) {
                 Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
             val isSolar = i == 0
             val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
-            (language.value.tryTranslateEclipseType(isSolar, kind)
-                ?: resources.getString(title)) + spacedColon + formattedDate
+            val type = language.tryTranslateEclipseType(isSolar, kind) ?: resources.getString(title)
+            when (language) {
+                Language.FA, Language.FA_AF -> "$type بعدی"
+                else -> resources.getString(R.string.next_x, type)
+            } + spacedColon + formattedDate
         } + generateYearName(
             resources = resources,
             jdn = jdn,
-            withOldEraName = language.value.isPersian,
+            withOldEraName = language.isPersian,
             withEmoji = true,
             time = date
         )

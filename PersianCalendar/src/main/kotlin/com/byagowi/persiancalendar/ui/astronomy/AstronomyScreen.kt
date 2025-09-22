@@ -86,6 +86,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -502,8 +503,9 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
     else Zodiac.fromIau(state.moon.lon)
 
     val resources = LocalResources.current
-    val headerCache = remember(resources) {
-        lruCache(1024, create = { jdn: Jdn -> state.generateHeader(resources, jdn) })
+    val language by language.collectAsState()
+    val headerCache = remember(resources, language) {
+        lruCache(1024, create = { jdn: Jdn -> state.generateHeader(resources, language, jdn) })
     }
 
     Column(modifier) {
