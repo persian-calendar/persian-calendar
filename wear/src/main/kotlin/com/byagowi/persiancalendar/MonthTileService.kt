@@ -89,7 +89,7 @@ class MonthTileService : TileService() {
             .setText(text)
             .setFontStyle(
                 LayoutElementBuilders.FontStyle.Builder()
-                    .setColor(colorScheme.onSurface.colorProp())
+                    .setColor(colorScheme.secondaryDim.colorProp())
                     .setSize(DimensionBuilders.SpProp.Builder().setValue(12f).build())
                     .build()
             )
