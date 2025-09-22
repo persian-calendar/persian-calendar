@@ -56,14 +56,18 @@ class AstronomyState(val date: GregorianCalendar) {
     fun generateHeader(resources: Resources, language: Language, jdn: Jdn): List<String> {
         val observer = coordinates.value?.toObserver()
         return listOf(
-            if (observer != null) searchLocalSolarEclipse(time, observer).run { kind to peak.time }
-            else searchGlobalSolarEclipse(time).run { kind to peak },
-            searchLunarEclipse(time).run { kind to peak },
-        ).mapIndexed { i, (kind, peak) ->
+            if (observer != null) searchLocalSolarEclipse(time, observer).run {
+                Triple(R.string.solar_eclipse, kind, peak.time)
+            } else searchGlobalSolarEclipse(time).run {
+                Triple(R.string.solar_eclipse, kind, peak)
+            },
+            searchLunarEclipse(time).run {
+                Triple(R.string.lunar_eclipse, kind, peak)
+            },
+        ).sortedBy { (_, _, peak) -> peak.ut }.map { (title, kind, peak) ->
             val formattedDate =
                 Date(peak.toMillisecondsSince1970()).toGregorianCalendar().formatDateAndTime()
-            val isSolar = i == 0
-            val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
+            val isSolar = title == R.string.solar_eclipse
             val type = language.tryTranslateEclipseType(isSolar, kind) ?: resources.getString(title)
             when (language) {
                 Language.FA, Language.FA_AF -> "$type بعدی"
