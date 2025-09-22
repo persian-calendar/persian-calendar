@@ -84,7 +84,10 @@ class MonthTileService : TileService() {
 
     private fun LayoutColor.colorProp() = ColorBuilders.ColorProp.Builder(staticArgb).build()
 
-    private fun MaterialScope.curvedText(text: String, angle: Float): LayoutElementBuilders.Arc {
+    private fun MaterialScope.curvedText(
+        text: String,
+        angle: Float,
+    ): LayoutElementBuilders.LayoutElement {
         val arcText = LayoutElementBuilders.ArcText.Builder()
             .setText(text)
             .setFontStyle(
@@ -105,7 +108,7 @@ class MonthTileService : TileService() {
         today: Jdn,
         persianDate: PersianDate,
         localeUtils: LocaleUtils,
-    ): LayoutElementBuilders.Column {
+    ): LayoutElementBuilders.LayoutElement {
         val column = LayoutElementBuilders.Column.Builder()
             .setWidth(expand())
             .setHeight(wrap())
@@ -161,7 +164,7 @@ class MonthTileService : TileService() {
         monthLength: Int,
         monthStartJdn: Jdn,
         screenMinDp: Int,
-    ): LayoutElementBuilders.Box {
+    ): LayoutElementBuilders.LayoutElement {
         val day = 7 - x + (y - 1) * 7 - 1 - startingDay
         val text = when {
             y == 0 -> localeUtils.narrowWeekdays[((7 - x) + 5) % 7 + 1]
