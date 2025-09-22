@@ -54,7 +54,6 @@ dependencies {
     implementation(libs.wear.compose.material3)
     implementation(libs.wear.compose.navigation)
     implementation(libs.wear.datastore.preferences)
-    implementation(libs.wear.protolayout)
     implementation(libs.wear.protolayout.material3)
     implementation(libs.wear.tiles)
     implementation(libs.wear.tooling.preview)
