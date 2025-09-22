@@ -63,7 +63,7 @@ class MonthTileService : TileService() {
                         typography = Typography.TITLE_LARGE,
                     )
                 },
-                mainSlot = { LayoutElementBuilders.Box.Builder().build() }
+                mainSlot = { LayoutElementBuilders.Box.Builder().build() },
             )
         )
         val activityComponent = ComponentName(applicationContext, MainActivity::class.java)

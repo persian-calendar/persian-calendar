@@ -72,7 +72,7 @@ class MainTileService : TileService() {
                 textEdgeButton(onClick = clickable(launchAction(activityComponent))) {
                     text("تقویم".layoutString, typography = Typography.BODY_SMALL)
                 }
-            }
+            },
         )
     }
 
