@@ -15,7 +15,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -60,6 +60,7 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -265,26 +266,24 @@ fun DayEvents(events: List<CalendarEvent<*>>, refreshCalendar: () -> Unit) {
                     .padding(vertical = 4.dp)
                     .clip(MaterialTheme.shapes.medium)
                     .background(backgroundColor)
-                    .combinedClickable(
-                        enabled = event is CalendarEvent.DeviceCalendarEvent,
-                        onClick = {
-                            if (event is CalendarEvent.DeviceCalendarEvent) {
-                                launcher.viewEvent(event, context)
-                            }
-                        },
+                    .then(
+                        if (event is CalendarEvent.DeviceCalendarEvent) Modifier.clickable(
+                            onClick = { launcher.viewEvent(event, context) },
+                        ) else Modifier
                     )
-                    .padding(8.dp)
+                    .focusable(true)
                     .semantics {
                         this.contentDescription = if (event.isHoliday) context.getString(
                             R.string.holiday_reason, event.oneLinerTitleWithTime
                         ) else event.oneLinerTitleWithTime
-                    },
+                    }
+                    .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 val contentColor by animateColor(eventTextColor(backgroundColor))
                 Column(modifier = Modifier.weight(1f, fill = false)) {
-                    SelectionContainer {
+                    SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                         Text(
                             title,
                             color = contentColor,
