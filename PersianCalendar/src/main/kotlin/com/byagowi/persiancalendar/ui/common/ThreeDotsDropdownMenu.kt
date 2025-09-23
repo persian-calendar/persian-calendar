@@ -16,8 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.LayoutDirection
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
 
@@ -35,15 +37,19 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
     ) {
         var expanded by rememberSaveable { mutableStateOf(false) }
         run {
-            val scaleY by animateFloatAsState(
-                if (expanded) 1.2f else 1f,
-                animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+            val rotation by animateFloatAsState(
+                targetValue = if (!expanded) 0f
+                else if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f,
+                animationSpec = spring(
+                    stiffness = Spring.StiffnessMediumLow,
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                ),
                 label = "scale y",
             )
             AppIconButton(
                 icon = Icons.Default.MoreVert,
                 title = stringResource(R.string.more_options),
-                modifier = Modifier.scale(1f, scaleY),
+                modifier = Modifier.rotate(rotation),
             ) { expanded = !expanded }
         }
         AppDropdownMenu(
