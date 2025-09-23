@@ -15,6 +15,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -302,6 +303,7 @@ fun SharedTransitionScope.CalendarsOverview(
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier
+                            .focusable(true)
                             .semantics {
                                 this.contentDescription = "$title$spacedColon$current / $max"
                             }
@@ -316,6 +318,7 @@ fun SharedTransitionScope.CalendarsOverview(
                             label = "progress"
                         )
                         CircularProgressIndicator(
+                            modifier = Modifier.semantics { this.hideFromAccessibility() },
                             progress = { progress },
                             strokeWidth = indicatorStrokeWidth
                         )
@@ -432,13 +435,20 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded:
                     Text(
                         formatNumber(date.dayOfMonth),
                         style = MaterialTheme.typography.displayMedium,
-                        modifier = Modifier.animateContentSize(),
+                        modifier = Modifier
+                            .animateContentSize()
+                            .semantics { this.hideFromAccessibility() },
                     )
                     HandleSacredMonth(isExpanded, date) {
-                        Text(date.monthName, modifier = Modifier.animateContentSize())
+                        Text(
+                            date.monthName,
+                            modifier = Modifier
+                                .animateContentSize()
+                                .semantics { this.hideFromAccessibility() }
+                        )
                     }
                 }
-                SelectionContainer {
+                SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
                     Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
                 }
             }
