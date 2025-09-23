@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
@@ -114,10 +115,12 @@ fun DaysTable(
     val daysRowsCount = ceil((monthLength + startingWeekDay) / 7f).toInt()
 
     Box(
-        modifier.height(
-            if (onlyWeek != null) suggestedHeight + 8.dp
-            else (cellHeight * (daysRowsCount + 1) + 12.dp)
-        )
+        modifier
+            .height(
+                if (onlyWeek != null) suggestedHeight + 8.dp
+                else (cellHeight * (daysRowsCount + 1) + 12.dp)
+            )
+            .semantics { this.isTraversalGroup = true }
     ) {
         run {
             val highlightedDayOfMonth = selectedDay - monthStartJdn
@@ -196,127 +199,132 @@ fun DaysTable(
             val isBeforeMonth = dayOffset < startingWeekDay
             val isAfterMonth = dayOffset + 1 > startingWeekDay + monthLength
             val column = dayOffset % 7
-            if (column == 0) AnimatedVisibility(
-                isShowWeekOfYearEnabled,
-                modifier = Modifier
-                    .offset(
-                        (16 - 4).dp, cellHeight * (1 + if (onlyWeek == null) row else 0)
-                    )
-                    .size((24 + 8).dp, cellHeight),
-                label = "week number",
+            Box(
+                Modifier
+                    .offset(0.dp, cellHeight * (row + 1))
+                    .semantics { this.isTraversalGroup = true }
             ) {
-                val weekNumber = onlyWeek ?: (monthStartWeekOfYear + row)
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .then(
-                            if (onWeekClick != null) Modifier.clickable(
-                                onClickLabel = stringResource(R.string.week_view),
-                                indication = ripple(bounded = false),
-                                interactionSource = null,
-                            ) {
-                                onWeekClick(
-                                    when {
-                                        selectedDay - day in 0..<7 -> selectedDay
-                                        onlyWeek != null -> day
-                                        row == 0 -> monthStartJdn
-                                        // Select first non weekend day of the week
-                                        else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd }
-                                            ?: 0)
-                                    },
-                                    true,
-                                )
-                            } else Modifier,
-                        ),
-                    contentAlignment = Alignment.Center,
+                if (column == 0) AnimatedVisibility(
+                    isShowWeekOfYearEnabled,
+                    modifier = Modifier
+                        .offset((16 - 4).dp, 0.dp)
+                        .size((24 + 8).dp, cellHeight),
+                    label = "week number",
                 ) {
-                    val formattedWeekNumber = formatNumber(weekNumber)
-                    val description = stringResource(R.string.nth_week_of_year, formattedWeekNumber)
-                    Text(
-                        formattedWeekNumber,
-                        fontSize = with(density) { (daysTextSize * .625f).toSp() },
-                        modifier = Modifier
-                            .alpha(AppBlendAlpha)
-                            .semantics { this.contentDescription = description },
-                    )
-                }
-            }
-            if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Box(
-                contentAlignment = Alignment.Center,
-                modifier = cellsSizeModifier
-                    .offset(
-                        pagerArrowSizeAndPadding.dp + cellWidth * column, cellHeight * (row + 1)
-                    )
-                    .combinedClickable(
-                        indication = null,
-                        interactionSource = null,
-                        onClick = { setSelectedDay(day) },
-                        onClickLabel = stringResource(R.string.select_day),
-                        onLongClickLabel = stringResource(R.string.add_event),
-                        onLongClick = {
-                            setSelectedDay(day)
-                            addEvent(AddEventData.fromJdn(day))
-                        },
-                    )
-                    .semantics {
-                        if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
-                            resources,
-                            day,
-                            isToday,
-                            EventsStore.empty(),
-                            withZodiac = isToday,
-                            withOtherCalendars = false,
-                            withTitle = true,
-                            withWeekOfYear = false,
+                    val weekNumber = onlyWeek ?: (monthStartWeekOfYear + row)
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .then(
+                                if (onWeekClick != null) Modifier.clickable(
+                                    onClickLabel = stringResource(R.string.week_view),
+                                    indication = ripple(bounded = false),
+                                    interactionSource = null,
+                                ) {
+                                    onWeekClick(
+                                        when {
+                                            selectedDay - day in 0..<7 -> selectedDay
+                                            onlyWeek != null -> day
+                                            row == 0 -> monthStartJdn
+                                            // Select first non weekend day of the week
+                                            else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd }
+                                                ?: 0)
+                                        },
+                                        true,
+                                    )
+                                } else Modifier,
+                            ),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        val formattedWeekNumber = formatNumber(weekNumber)
+                        val description =
+                            stringResource(R.string.nth_week_of_year, formattedWeekNumber)
+                        Text(
+                            formattedWeekNumber,
+                            fontSize = with(density) { (daysTextSize * .625f).toSp() },
+                            modifier = Modifier
+                                .alpha(AppBlendAlpha)
+                                .semantics { this.contentDescription = description },
                         )
                     }
-                    .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
-            ) {
-                val isSelected = isHighlighted && selectedDay == day
-                val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
-                val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
-                Canvas(cellsSizeModifier) {
-                    val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
-                    val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
-                    val shiftWorkTitle = getShiftWorkTitle(day, true)
-                    dayPainter.setDayOfMonthItem(
-                        isToday = false,
-                        isSelected = isSelected,
-                        hasEvent = hasEvents,
-                        hasAppointment = hasAppointments,
-                        isHoliday = isHoliday,
-                        jdn = day,
-                        dayOfMonth = "",
-                        header = shiftWorkTitle,
-                        secondaryCalendar = secondaryCalendar,
-                    )
-                    drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
-                    if (isToday) drawCircle(
-                        monthColors.currentDay,
-                        radius = cellRadius,
-                        style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
-                    )
-                    if (isHighTextContrastEnabled && isHoliday) drawCircle(
-                        monthColors.holidays.copy(alpha = .25f), radius = cellRadius, style = Fill,
+                }
+                if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = cellsSizeModifier
+                        .offset(pagerArrowSizeAndPadding.dp + cellWidth * column, 0.dp)
+                        .combinedClickable(
+                            indication = null,
+                            interactionSource = null,
+                            onClick = { setSelectedDay(day) },
+                            onClickLabel = stringResource(R.string.select_day),
+                            onLongClickLabel = stringResource(R.string.add_event),
+                            onLongClick = {
+                                setSelectedDay(day)
+                                addEvent(AddEventData.fromJdn(day))
+                            },
+                        )
+                        .semantics {
+                            if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
+                                resources,
+                                day,
+                                isToday,
+                                EventsStore.empty(),
+                                withZodiac = isToday,
+                                withOtherCalendars = false,
+                                withTitle = true,
+                                withWeekOfYear = false,
+                            )
+                        }
+                        .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
+                ) {
+                    val isSelected = isHighlighted && selectedDay == day
+                    val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
+                    val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
+                    Canvas(cellsSizeModifier) {
+                        val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
+                        val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
+                        val shiftWorkTitle = getShiftWorkTitle(day, true)
+                        dayPainter.setDayOfMonthItem(
+                            isToday = false,
+                            isSelected = isSelected,
+                            hasEvent = hasEvents,
+                            hasAppointment = hasAppointments,
+                            isHoliday = isHoliday,
+                            jdn = day,
+                            dayOfMonth = "",
+                            header = shiftWorkTitle,
+                            secondaryCalendar = secondaryCalendar,
+                        )
+                        drawIntoCanvas { dayPainter.drawDay(it.nativeCanvas) }
+                        if (isToday) drawCircle(
+                            monthColors.currentDay,
+                            radius = cellRadius,
+                            style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
+                        )
+                        if (isHighTextContrastEnabled && isHoliday) drawCircle(
+                            monthColors.holidays.copy(alpha = .25f),
+                            radius = cellRadius,
+                            style = Fill,
+                        )
+                    }
+                    Text(
+                        text = formatNumber(
+                            if (previousMonthLength != null && isBeforeMonth) {
+                                previousMonthLength - (startingWeekDay - dayOffset) + 1
+                            } else if (onlyWeek != null && isAfterMonth) {
+                                dayOffset + 1 - monthLength - startingWeekDay
+                            } else dayOffset + 1 - startingWeekDay,
+                            mainCalendarDigits,
+                        ),
+                        color = when {
+                            isHoliday -> monthColors.holidays
+                            isSelected -> monthColors.textDaySelected
+                            else -> contentColor
+                        },
+                        style = daysStyle,
+                        modifier = Modifier.padding(top = cellHeight / 15),
                     )
                 }
-                Text(
-                    text = formatNumber(
-                        if (previousMonthLength != null && isBeforeMonth) {
-                            previousMonthLength - (startingWeekDay - dayOffset) + 1
-                        } else if (onlyWeek != null && isAfterMonth) {
-                            dayOffset + 1 - monthLength - startingWeekDay
-                        } else dayOffset + 1 - startingWeekDay,
-                        mainCalendarDigits,
-                    ),
-                    color = when {
-                        isHoliday -> monthColors.holidays
-                        isSelected -> monthColors.textDaySelected
-                        else -> contentColor
-                    },
-                    style = daysStyle,
-                    modifier = Modifier.padding(top = cellHeight / 15),
-                )
             }
         }
 
