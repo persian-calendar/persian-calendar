@@ -173,8 +173,7 @@ fun DaysTable(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = cellsSizeModifier.offset(
-                    pagerArrowSizeAndPadding.dp + cellWidth * column,
-                    0.dp
+                    x = pagerArrowSizeAndPadding.dp + cellWidth * column
                 )
             ) {
                 val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
@@ -201,13 +200,13 @@ fun DaysTable(
             val column = dayOffset % 7
             Box(
                 Modifier
-                    .offset(0.dp, cellHeight * (row + 1))
+                    .offset(y = cellHeight * (row + 1))
                     .semantics { this.isTraversalGroup = true }
             ) {
                 if (column == 0) AnimatedVisibility(
                     isShowWeekOfYearEnabled,
                     modifier = Modifier
-                        .offset((16 - 4).dp, 0.dp)
+                        .offset(x = (16 - 4).dp)
                         .size((24 + 8).dp, cellHeight),
                     label = "week number",
                 ) {
@@ -251,7 +250,7 @@ fun DaysTable(
                 if (previousMonthLength != null || (!isBeforeMonth && !isAfterMonth)) Box(
                     contentAlignment = Alignment.Center,
                     modifier = cellsSizeModifier
-                        .offset(pagerArrowSizeAndPadding.dp + cellWidth * column, 0.dp)
+                        .offset(x = pagerArrowSizeAndPadding.dp + cellWidth * column)
                         .combinedClickable(
                             indication = null,
                             interactionSource = null,
@@ -354,7 +353,8 @@ private fun PagerArrow(
         } else stringResource(R.string.nth_week_of_year, week + if (isPrevious) -1 else 1),
         modifier = Modifier
             .offset(
-                if (isPrevious) 16.dp else (screenWidth - pagerArrowSize.dp), arrowOffsetY
+                x = if (isPrevious) 16.dp else (screenWidth - pagerArrowSize.dp),
+                y = arrowOffsetY
             )
             .then(
                 if (week == null) Modifier.combinedClickable(
