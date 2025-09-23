@@ -32,6 +32,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
@@ -73,13 +75,25 @@ fun DatePickerDialog(
                     TextButton(onClick = {
                         onDismissRequest()
                         onSuccess(jdn)
-                    }) { Text(title) }
+                    }) {
+                        val description = stringResource(R.string.select_date)
+                        Text(
+                            title,
+                            modifier = Modifier.semantics { this.contentDescription = description }
+                        )
+                    }
                 }
             }
         },
         neutralButton = {
             AnimatedVisibility(visible = jdn != today, enter = fadeIn(), exit = fadeOut()) {
-                TextButton(onClick = { jdn = today }) { Text(stringResource(R.string.today)) }
+                TextButton(onClick = { jdn = today }) {
+                    val description = stringResource(R.string.return_to_today)
+                    Text(
+                        stringResource(R.string.today),
+                        modifier = Modifier.semantics { this.contentDescription = description }
+                    )
+                }
             }
         },
     ) {

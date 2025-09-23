@@ -69,7 +69,7 @@ private fun RowScope.DatePickerContent(
         label = daysFormat,
         range = 1..monthsLength,
         value = date.dayOfMonth,
-        onClickLabel = stringResource(R.string.day),
+        onClickLabel = stringResource(R.string.select_day),
         pendingConfirms = pendingConfirms,
     ) {
         setJdn(Jdn(calendar, date.year, date.month, it))
@@ -81,7 +81,7 @@ private fun RowScope.DatePickerContent(
         label = monthsFormat,
         range = 1..yearMonths,
         value = date.month,
-        onClickLabel = stringResource(R.string.month),
+        onClickLabel = stringResource(R.string.select_month),
         pendingConfirms = pendingConfirms,
     ) { month ->
         val day = date.dayOfMonth.coerceIn(1, calendar.getMonthLength(date.year, month))
@@ -93,7 +93,7 @@ private fun RowScope.DatePickerContent(
         modifier = Modifier.weight(1f),
         range = startYear..startYear + yearsLimit,
         value = date.year,
-        onClickLabel = stringResource(R.string.year),
+        onClickLabel = stringResource(R.string.select_year),
         pendingConfirms = pendingConfirms,
     ) { year ->
         val month = date.month.coerceIn(1, calendar.getYearMonths(year))
