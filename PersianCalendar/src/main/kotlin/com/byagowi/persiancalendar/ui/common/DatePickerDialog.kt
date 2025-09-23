@@ -120,7 +120,7 @@ fun DatePickerDialog(
                 },
                 label = "days distance",
             ) { state ->
-                Box(
+                if (state != null) Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(
@@ -130,7 +130,7 @@ fun DatePickerDialog(
                         ) { showNumberEdit = true },
                     contentAlignment = Alignment.Center,
                 ) {
-                    if (state != null) SelectionContainer {
+                    SelectionContainer {
                         Text(
                             state,
                             modifier = Modifier.fillMaxSize(),

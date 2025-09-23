@@ -143,9 +143,9 @@ fun NumberPicker(
             ) {
                 if (indexOfElement > 0) Label(
                     text = label(range.first + indexOfElement - 1),
+                    hideFromAccessibility = true,
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics { this.hideFromAccessibility() }
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
@@ -181,6 +181,7 @@ fun NumberPicker(
                 }
                 if (indexOfElement < range.last - range.first) Label(
                     text = label(range.first + indexOfElement + 1),
+                    hideFromAccessibility = true,
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
                         .semantics { this.hideFromAccessibility() }
@@ -255,9 +256,8 @@ fun NumberEdit(
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 color = LocalContentColor.current,
-                background =
-                    if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
-                    else Color.Transparent,
+                background = if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
+                else Color.Transparent,
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)
@@ -282,10 +282,11 @@ private fun getItemIndexForOffset(
 }
 
 @Composable
-private fun Label(text: String, modifier: Modifier) {
+private fun Label(text: String, modifier: Modifier, hideFromAccessibility: Boolean = false) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
         val contentColor = LocalContentColor.current
         BasicText(
+            modifier = Modifier.semantics { if (hideFromAccessibility) this.hideFromAccessibility() },
             text = text,
             color = { contentColor },
             style = LocalTextStyle.current,
