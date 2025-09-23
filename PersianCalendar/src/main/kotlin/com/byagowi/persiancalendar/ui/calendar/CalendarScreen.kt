@@ -1079,9 +1079,6 @@ private fun SharedTransitionScope.Menu(
             ) { (if (preferredSwipeDownAction == item) SwipeDownAction.None else item).name }
         }
 
-        // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
-        if (isTalkBackEnabled || enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
-
         HorizontalDivider()
 
         val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
@@ -1093,6 +1090,9 @@ private fun SharedTransitionScope.Menu(
                 closeMenu()
             },
         )
+
+        // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
+        if (isTalkBackEnabled || enabledCalendars.size == 1) return@ThreeDotsDropdownMenu
 
         var showSecondaryCalendarSubMenu by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuExpandableItem(
