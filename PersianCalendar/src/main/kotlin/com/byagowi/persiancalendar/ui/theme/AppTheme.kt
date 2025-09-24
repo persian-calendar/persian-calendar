@@ -54,6 +54,7 @@ import androidx.core.content.getSystemService
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.isVazirEnabled
@@ -70,9 +71,32 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    val isVazirEnabled by isVazirEnabled.collectAsState()
     val language by language.collectAsState()
-    val typography = if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
+    MaterialTheme(colorScheme = appColorScheme(), typography = resolveTypography(language)) {
+        val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
+
+        val isRtl =
+            language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
+        CompositionLocalProvider(
+            LocalContentColor provides contentColor,
+            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
+        ) {
+            Box(
+                Modifier
+                    // Don't draw behind sides insets in landscape, we don't have any plan to use it
+                    .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
+                    .clipToBounds()
+                    // Don't move this upper to top of the chain so .clipToBounds can be applied to it
+                    .background(appBackground()),
+            ) { content() }
+        }
+    }
+}
+
+@Composable
+fun resolveTypography(language: Language): Typography {
+    val isVazirEnabled by isVazirEnabled.collectAsState()
+    return if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
         val font = FontFamily(Font(R.font.vazirmatn))
         Typography(
             displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
@@ -96,25 +120,6 @@ fun AppTheme(content: @Composable () -> Unit) {
             labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = font)
         )
     } else MaterialTheme.typography
-    MaterialTheme(colorScheme = appColorScheme(), typography = typography) {
-        val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
-
-        val isRtl =
-            language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
-        CompositionLocalProvider(
-            LocalContentColor provides contentColor,
-            LocalLayoutDirection provides if (isRtl) LayoutDirection.Rtl else LayoutDirection.Ltr,
-        ) {
-            Box(
-                Modifier
-                    // Don't draw behind sides insets in landscape, we don't have any plan to use it
-                    .windowInsetsPadding(WindowInsets.systemBars.only(WindowInsetsSides.Horizontal))
-                    .clipToBounds()
-                    // Don't move this upper to top of the chain so .clipToBounds can be applied to it
-                    .background(appBackground()),
-            ) { content() }
-        }
-    }
 }
 
 // The app's theme after custom dark/light theme is applied

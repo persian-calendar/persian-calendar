@@ -10,8 +10,11 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import com.byagowi.persiancalendar.global.language
 
 // Best effort theme matching system, used for widget and wallpaper configuration activities,
 // meant to be not affected by app's internals and match the system
@@ -24,7 +27,8 @@ fun SystemTheme(content: @Composable () -> Unit) {
     } else {
         if (isInDarkMode) DefaultDarkColorScheme else DefaultLightColorScheme
     }
-    MaterialTheme(colorScheme = colorScheme) {
+    val language by language.collectAsState()
+    MaterialTheme(colorScheme = colorScheme, typography = resolveTypography(language)) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
         //  We update the LocalContentColor to match our onBackground. This allows the default
         //  content color to be more appropriate to the theme background
