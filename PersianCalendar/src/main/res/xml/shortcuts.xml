@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:targetApi="25">
 
-    <!-- It should be in sync with Shortcut.kt -->
+    <!-- It should be in sync with ShortcutActivity.kt -->
 
     <shortcut
         android:enabled="true"
