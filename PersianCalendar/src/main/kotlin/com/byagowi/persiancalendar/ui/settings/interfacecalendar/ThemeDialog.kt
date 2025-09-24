@@ -67,7 +67,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         title = { Text(stringResource(R.string.select_skin)) },
         onDismissRequest = onDismissRequest,
         dismissButton = {
-            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
+            TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.accept)) }
         },
         neutralButton = {
             AnimatedVisibility(visible = !showMore && (anyThemeHasGradient || anyThemeIsDynamicColors)) {
