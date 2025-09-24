@@ -89,10 +89,10 @@ fun SharedTransitionScope.LevelScreen(
     navigateToCompass: () -> Unit,
     animatedContentScope: AnimatedContentScope,
 ) {
-    var isStopped by remember { mutableStateOf(false) }
+    var isStopped by rememberSaveable { mutableStateOf(false) }
     var orientationProvider by remember { mutableStateOf<OrientationProvider?>(null) }
     val announcer = remember { SensorEventAnnouncer(R.string.level) }
-    var cmInchFlip by remember { mutableStateOf(false) }
+    var cmInchFlip by rememberSaveable { mutableStateOf(false) }
     var isFullscreen by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val activity = LocalActivity.current
