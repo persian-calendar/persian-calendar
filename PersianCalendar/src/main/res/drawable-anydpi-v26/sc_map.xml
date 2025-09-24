@@ -6,4 +6,9 @@
             android:drawable="@drawable/sc_map_foreground"
             android:inset="30%" />
     </foreground>
+    <monochrome>
+        <inset
+            android:drawable="@drawable/sc_map_monochrome"
+            android:inset="30%" />
+    </monochrome>
 </adaptive-icon>
