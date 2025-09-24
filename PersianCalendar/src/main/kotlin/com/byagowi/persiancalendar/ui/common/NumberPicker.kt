@@ -54,6 +54,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -243,6 +244,10 @@ fun NumberEdit(
     fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
 
     Box(modifier, contentAlignment = Alignment.Center) {
+        val textBackground by animateColor(
+            if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
+            else Color.Transparent
+        )
         BasicTextField(
             value = value,
             interactionSource = interactionSource,
@@ -256,8 +261,7 @@ fun NumberEdit(
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
                 color = LocalContentColor.current,
-                background = if (resolveValue() == null) MaterialTheme.colorScheme.error.copy(alpha = .1f)
-                else Color.Transparent,
+                background = textBackground,
             ),
             modifier = Modifier
                 .focusRequester(focusRequester)
