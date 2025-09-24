@@ -10,6 +10,7 @@ import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.byagowi.persiancalendar.R
 
+// It should be in sync with res/xml/shortcuts.xml
 abstract class Shortcut(
     private val action: String,
     @get:StringRes private val stringId: Int,

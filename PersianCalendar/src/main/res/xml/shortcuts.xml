@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:targetApi="25">
 
+    <!-- It should be in sync with Shortcut.kt -->
+
     <shortcut
         android:enabled="true"
         android:icon="@drawable/sc_converter"
