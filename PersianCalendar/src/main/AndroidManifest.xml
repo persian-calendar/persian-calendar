@@ -103,7 +103,8 @@
             android:name=".ui.ConverterShortcutActivity"
             android:exported="true"
             android:icon="@drawable/sc_converter"
-            android:label="@string/converter">
+            android:label="@string/converter"
+            android:roundIcon="@drawable/sc_converter">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
@@ -113,7 +114,8 @@
             android:name=".ui.CompassShortcutActivity"
             android:exported="true"
             android:icon="@drawable/sc_compass"
-            android:label="@string/compass">
+            android:label="@string/compass"
+            android:roundIcon="@drawable/sc_compass">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
@@ -123,7 +125,8 @@
             android:name=".ui.LevelShortcutActivity"
             android:exported="true"
             android:icon="@drawable/sc_level"
-            android:label="@string/level">
+            android:label="@string/level"
+            android:roundIcon="@drawable/sc_level">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
@@ -133,7 +136,8 @@
             android:name=".ui.AstronomyShortcutActivity"
             android:exported="true"
             android:icon="@drawable/sc_astronomy"
-            android:label="@string/astronomy">
+            android:label="@string/astronomy"
+            android:roundIcon="@drawable/sc_astronomy">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
@@ -143,7 +147,8 @@
             android:name=".ui.MapShortcutActivity"
             android:exported="true"
             android:icon="@drawable/sc_map"
-            android:label="@string/map">
+            android:label="@string/map"
+            android:roundIcon="@drawable/sc_map">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
             </intent-filter>
