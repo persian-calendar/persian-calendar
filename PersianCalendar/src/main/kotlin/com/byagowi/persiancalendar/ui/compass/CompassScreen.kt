@@ -150,7 +150,7 @@ fun SharedTransitionScope.CompassScreen(
         it.time = baseTime
         it.add(GregorianCalendar.MINUTE, (sliderValue * 60f).roundToInt())
     }
-    var isStopped by remember { mutableStateOf(false) }
+    var isStopped by rememberSaveable { mutableStateOf(false) }
     var compassView by remember { mutableStateOf<CompassView?>(null) }
 
     val snackbarHostState = remember { SnackbarHostState() }
