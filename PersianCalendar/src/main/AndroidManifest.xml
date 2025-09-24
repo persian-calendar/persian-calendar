@@ -407,9 +407,10 @@
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
 
-<!--            <meta-data-->
-<!--                android:name="android.service.quicksettings.ACTIVE_TILE"-->
-<!--                android:value="true" />-->
+            <!-- Disabled due to https://github.com/persian-calendar/persian-calendar/issues/1700 -->
+            <!--<meta-data-->
+            <!--    android:name="android.service.quicksettings.ACTIVE_TILE"-->
+            <!--    android:value="true" />-->
         </service>
 
         <service
