@@ -14,10 +14,15 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.key
@@ -71,6 +76,7 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.min
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DaysTable(
     suggestedPagerSize: DpSize,
@@ -170,23 +176,28 @@ fun DaysTable(
         PagerArrow(arrowOffsetY, coroutineScope, pagerState, page, width, true, onlyWeek)
 
         repeat(7) { column ->
+            val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
+            val weekDayName = getWeekDayName(weekDayPosition)
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = cellsSizeModifier.offset(
-                    x = pagerArrowSizeAndPadding.dp + cellWidth * column
-                )
+                modifier = cellsSizeModifier.offset(x = pagerArrowSizeAndPadding.dp + cellWidth * column),
             ) {
-                val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
-                val description = stringResource(
-                    R.string.week_days_name_column, getWeekDayName(weekDayPosition)
-                )
-                Text(
-                    getInitialOfWeekDay(weekDayPosition),
-                    fontSize = with(density) { (diameter * .5f).toSp() },
-                    modifier = Modifier
-                        .alpha(AppBlendAlpha)
-                        .semantics { this.contentDescription = description },
-                )
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = { PlainTooltip { Text(weekDayName) } },
+                    state = rememberTooltipState(),
+                ) {
+                    val description = stringResource(
+                        R.string.week_days_name_column, weekDayName
+                    )
+                    Text(
+                        getInitialOfWeekDay(weekDayPosition),
+                        fontSize = with(density) { (diameter * .5f).toSp() },
+                        modifier = Modifier
+                            .alpha(AppBlendAlpha)
+                            .semantics { this.contentDescription = description },
+                    )
+                }
             }
         }
 
