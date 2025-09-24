@@ -17,13 +17,13 @@ class ThemeDialogTest {
     @Test
     fun cancelButtonTest() {
         var showDialog = true
-        var cancelString = ""
+        var acceptString = ""
         composeTestRule.setContent {
-            cancelString = stringResource(R.string.cancel)
+            acceptString = stringResource(R.string.accept)
             if (showDialog) ThemeDialog { showDialog = false }
         }
         assert(showDialog)
-        composeTestRule.onNodeWithText(cancelString)
+        composeTestRule.onNodeWithText(acceptString)
             .assertHasClickAction()
             .performClick()
         assert(!showDialog)
