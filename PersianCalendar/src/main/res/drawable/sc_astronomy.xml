@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/sc_astrology_horoscope_foreground" />
+    <item android:drawable="@drawable/sc_astronomy_foreground" />
 </layer-list>

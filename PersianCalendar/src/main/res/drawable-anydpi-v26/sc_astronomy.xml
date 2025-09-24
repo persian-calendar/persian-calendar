@@ -3,7 +3,7 @@
     <background android:drawable="@color/shortcut_background" />
     <foreground>
         <inset
-            android:drawable="@drawable/sc_astrology_horoscope_foreground"
+            android:drawable="@drawable/sc_astronomy_foreground"
             android:inset="30%" />
     </foreground>
 </adaptive-icon>

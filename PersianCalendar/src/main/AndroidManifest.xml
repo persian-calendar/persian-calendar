@@ -100,6 +100,56 @@
         </activity>
 
         <activity
+            android:name=".ui.ConverterShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/sc_converter"
+            android:label="@string/converter">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.CompassShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/sc_compass"
+            android:label="@string/compass">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.LevelShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/sc_level"
+            android:label="@string/level">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.AstronomyShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/sc_astronomy"
+            android:label="@string/astronomy">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.MapShortcutActivity"
+            android:exported="true"
+            android:icon="@drawable/sc_map"
+            android:label="@string/map">
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".service.ToggleTileActivity"
             android:exported="true">
             <intent-filter>
