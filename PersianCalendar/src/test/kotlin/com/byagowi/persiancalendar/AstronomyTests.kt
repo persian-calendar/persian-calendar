@@ -269,6 +269,7 @@ class AstronomyTests {
         listOf(
             1398 to Zodiac.AQUARIUS.with(25, 7),
             1400 to Zodiac.TAURUS.with(16, 42),
+            1401 to Zodiac.GEMINI.with(27, 11),
             1402 to Zodiac.LEO.with(7, 59),
             1403 to Zodiac.VIRGO.with(18, 46),
         ).map { (year, expected) ->
