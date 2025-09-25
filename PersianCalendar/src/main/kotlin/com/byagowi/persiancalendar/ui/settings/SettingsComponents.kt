@@ -368,13 +368,7 @@ private fun SettingsSwitchLayout(
         title = title,
         summary = summary,
         extraWidget = extraWidget,
-        modifier = Modifier.toggleable(
-            value = value,
-            onValueChange = toggle,
-            role = Role.Switch,
-            interactionSource = null,
-            indication = null,
-        )
+        modifier = Modifier.toggleable(value = value, onValueChange = toggle, role = Role.Switch)
     ) { Switch(checked = value, onCheckedChange = null) }
 }
 
