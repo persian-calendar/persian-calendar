@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -37,6 +38,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
@@ -270,9 +272,9 @@ fun SettingsSwitchWithInnerState(
     var currentValue by remember {
         mutableStateOf(context.preferences.getBoolean(key, defaultValue))
     }
-    val toggle = {
-        currentValue = !currentValue
-        context.preferences.edit { putBoolean(key, currentValue) }
+    val toggle = { newValue: Boolean ->
+        currentValue = newValue
+        context.preferences.edit { putBoolean(key, newValue) }
     }
     SettingsSwitchLayout(toggle, title, summary, currentValue)
 }
@@ -287,9 +289,9 @@ fun SettingsSwitch(
     onBeforeToggle: (Boolean) -> Boolean = { it },
 ) {
     val context = LocalContext.current
-    val toggle = {
-        val newValue = onBeforeToggle(!value)
-        if (value != newValue) context.preferences.edit { putBoolean(key, newValue) }
+    val toggle = { newValue: Boolean ->
+        val finalValue = onBeforeToggle(newValue)
+        if (value != finalValue) context.preferences.edit { putBoolean(key, finalValue) }
     }
     SettingsSwitchLayout(toggle, title, summary, value, extraWidget = extraWidget)
 }
@@ -299,11 +301,12 @@ private fun SettingsLayout(
     onClick: () -> Unit,
     title: String,
     summary: String?,
+    modifier: Modifier = Modifier,
     extraWidget: (@Composable () -> Unit)? = null,
     widget: (@Composable () -> Unit)? = null,
 ) {
     Box(
-        Modifier
+        modifier
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .padding(horizontal = 8.dp),
@@ -353,7 +356,7 @@ private fun SettingsLayout(
 
 @Composable
 private fun SettingsSwitchLayout(
-    toggle: () -> Unit,
+    toggle: (Boolean) -> Unit,
     title: String,
     summary: String?,
     value: Boolean,
@@ -361,10 +364,17 @@ private fun SettingsSwitchLayout(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     SettingsLayout(
-        onClick = { hapticFeedback.performLongPress(); toggle() },
+        onClick = { hapticFeedback.performLongPress(); toggle(!value) },
         title = title,
         summary = summary,
         extraWidget = extraWidget,
+        modifier = Modifier.toggleable(
+            value = value,
+            onValueChange = toggle,
+            role = Role.Switch,
+            interactionSource = null,
+            indication = null,
+        )
     ) { Switch(checked = value, onCheckedChange = null) }
 }
 
