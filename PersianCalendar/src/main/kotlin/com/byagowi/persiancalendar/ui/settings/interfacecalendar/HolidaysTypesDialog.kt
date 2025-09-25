@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -124,7 +128,9 @@ fun HolidaysTypesDialog(onDismissRequest: () -> Unit) {
             ) {
                 Text(
                     stringResource(R.string.other_holidays),
-                    modifier = Modifier.padding(horizontal = SettingsHorizontalPaddingItem.dp),
+                    modifier = Modifier
+                        .padding(horizontal = SettingsHorizontalPaddingItem.dp)
+                        .semantics { this.hideFromAccessibility() },
                 )
             }
             if (!language.isAfghanistanExclusive) IndentedCheckBox(
@@ -159,6 +165,7 @@ fun CountryEvents(
     Row(
         Modifier
             .fillMaxWidth()
+            .semantics { this.hideFromAccessibility() }
             .clickable {
                 if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
                     enabledTypes.remove(holidaysKey)
@@ -186,9 +193,14 @@ fun CountryEvents(
         )
         Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
-            Text(calendarCenterName, modifier = Modifier.align(Alignment.CenterVertically))
+            Text(
+                calendarCenterName,
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .semantics { this.hideFromAccessibility() }
+            )
             if (sourceLink.isNotEmpty()) {
-                Text(spacedComma)
+                Text(spacedComma, modifier = Modifier.semantics { this.hideFromAccessibility() })
                 Text(
                     buildAnnotatedString {
                         withLink(
@@ -203,7 +215,9 @@ fun CountryEvents(
                             ),
                         ) { append(stringResource(R.string.view_source)) }
                     },
-                    modifier = Modifier.align(Alignment.CenterVertically),
+                    modifier = Modifier
+                        .semantics { this.hideFromAccessibility() }
+                        .align(Alignment.CenterVertically),
                 )
             }
         }
@@ -218,12 +232,14 @@ private fun IndentedCheckBox(
     enabledTypes: MutableCollection<String>,
     key: String,
 ) {
+    val onChange: (Boolean) -> Unit = { newValue: Boolean ->
+        if (newValue) enabledTypes.add(key) else enabledTypes.remove(key)
+    }
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable {
-                if (key in enabledTypes) enabledTypes.remove(key) else enabledTypes.add(key)
-            }
+            .toggleable(key in enabledTypes, onValueChange = onChange, role = Role.Checkbox)
+            .clickable { onChange(key !in enabledTypes) }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(
                 start = (24/*checkbox size*/ + HolidaysHorizontalPaddingItem + SettingsHorizontalPaddingItem).dp,
