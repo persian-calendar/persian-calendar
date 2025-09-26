@@ -6,6 +6,7 @@ import android.provider.CalendarContract
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +39,9 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -94,11 +98,17 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             val currentKey = context.preferences.getString(PREF_THEME, null)
             Theme.entries.firstOrNull { it.key == currentKey } ?: Theme.SYSTEM_DEFAULT
         }.title)
-        SettingsClickable(
-            title = stringResource(R.string.select_skin),
-            summary = themeDisplayName,
-            defaultOpen = destination == PREF_THEME,
-        ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
+        Box(
+            Modifier
+                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                .clearAndSetSemantics {}
+        ) {
+            SettingsClickable(
+                title = stringResource(R.string.select_skin),
+                summary = themeDisplayName,
+                defaultOpen = destination == PREF_THEME,
+            ) { onDismissRequest -> ThemeDialog(onDismissRequest) }
+        }
     }
     val language by language.collectAsState()
     SettingsClickable(
