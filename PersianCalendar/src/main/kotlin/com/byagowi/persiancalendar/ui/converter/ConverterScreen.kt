@@ -63,6 +63,9 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
@@ -129,6 +132,7 @@ fun SharedTransitionScope.ConverterScreen(
                         Modifier
                             .clip(MaterialTheme.shapes.extraLarge)
                             .background(LocalContentColor.current.copy(alpha = .175f))
+                            .semantics { this.role = Role.DropdownList }
                             .clickable {
                                 showMenu = !showMenu
                                 if (showMenu) hapticFeedback.performLongPress()
