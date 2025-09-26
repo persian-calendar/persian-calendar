@@ -241,15 +241,20 @@ fun SettingsMultiSelect(
             },
         ) {
             entries.zip(entryValues) { entry, entryValue ->
+                fun onValueChange(value: Boolean) {
+                    if (value) result.add(entryValue) else result.remove(entryValue)
+                }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(SettingsItemHeight.dp)
-                        .clickable {
-                            if (entryValue in result) result.remove(entryValue)
-                            else result.add(entryValue)
-                        }
+                        .toggleable(
+                            value = entryValue in result,
+                            onValueChange = ::onValueChange,
+                            role = Role.Checkbox
+                        )
+                        .clickable { onValueChange(entryValue !in result) }
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
                     Checkbox(checked = entryValue in result, onCheckedChange = null)

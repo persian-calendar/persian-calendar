@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
@@ -53,18 +55,26 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
     ) {
-        PrayTime.athans.forEach {
+        PrayTime.athans.forEach { alarm ->
+            fun onValueChange(value: Boolean) {
+                if (value) alarms.add(alarm) else alarms.remove(alarm)
+            }
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .clickable { if (it in alarms) alarms.remove(it) else alarms.add(it) }
+                    .toggleable(
+                        value = alarm in alarms,
+                        onValueChange = ::onValueChange,
+                        role = Role.Checkbox
+                    )
+                    .clickable { onValueChange(alarm !in alarms) }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     .height(SettingsItemHeight.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Checkbox(checked = it in alarms, onCheckedChange = null)
+                Checkbox(checked = alarm in alarms, onCheckedChange = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
-                Text(stringResource(it.stringRes), Modifier.weight(1f, fill = true))
+                Text(stringResource(alarm.stringRes), Modifier.weight(1f, fill = true))
             }
         }
     }
