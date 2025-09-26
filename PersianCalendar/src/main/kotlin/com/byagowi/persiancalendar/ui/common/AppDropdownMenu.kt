@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -11,6 +13,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -33,6 +36,7 @@ fun AppDropdownMenu(
 @Composable
 fun AppDropdownMenuItem(
     text: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     trailingIcon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
     onClick: () -> Unit,
@@ -46,6 +50,7 @@ fun AppDropdownMenuItem(
             trailingIcon = trailingIcon,
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 0.dp),
             enabled = enabled,
+            modifier = modifier,
         )
     }
 }
@@ -54,24 +59,30 @@ fun AppDropdownMenuItem(
 fun AppDropdownMenuRadioItem(
     text: String,
     isSelected: Boolean,
-    setSelected: (Boolean) -> Unit,
+    setSelected: () -> Unit,
 ) {
     AppDropdownMenuItem(
+        modifier = Modifier.selectable(isSelected, onClick = setSelected, role = Role.RadioButton),
         text = { Text(text) },
         trailingIcon = { RadioButton(selected = isSelected, onClick = null) },
-    ) { setSelected(!isSelected) }
+    ) { setSelected() }
 }
 
 @Composable
 fun AppDropdownMenuCheckableItem(
     text: String,
     isChecked: Boolean,
-    setChecked: (Boolean) -> Unit,
+    onValueChange: (Boolean) -> Unit,
 ) {
     AppDropdownMenuItem(
+        modifier = Modifier.toggleable(
+            value = isChecked,
+            onValueChange = onValueChange,
+            role = Role.Checkbox
+        ),
         text = { Text(text) },
         trailingIcon = { Checkbox(checked = isChecked, onCheckedChange = null) },
-    ) { setChecked(!isChecked) }
+    ) { onValueChange(!isChecked) }
 }
 
 @Composable

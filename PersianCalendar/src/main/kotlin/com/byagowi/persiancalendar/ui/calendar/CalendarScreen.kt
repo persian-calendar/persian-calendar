@@ -1085,7 +1085,7 @@ private fun SharedTransitionScope.Menu(
         AppDropdownMenuCheckableItem(
             text = stringResource(R.string.week_number),
             isChecked = isShowWeekOfYearEnabled,
-            setChecked = {
+            onValueChange = {
                 context.preferences.edit { putBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, it) }
                 closeMenu()
             },
@@ -1105,7 +1105,7 @@ private fun SharedTransitionScope.Menu(
             this.AnimatedVisibility(showSecondaryCalendarSubMenu) {
                 AppDropdownMenuRadioItem(
                     stringResource(calendar?.title ?: R.string.none), calendar == secondaryCalendar
-                ) { _ ->
+                ) {
                     context.preferences.edit {
                         if (calendar == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
                         else {
