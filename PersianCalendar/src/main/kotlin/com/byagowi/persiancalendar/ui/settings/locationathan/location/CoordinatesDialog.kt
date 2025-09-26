@@ -54,7 +54,7 @@ fun CoordinatesDialog(
     inputCoordinates: Coordinates? = null,
     notifyChange: (Coordinates) -> Unit = {},
     saveCoordinates: Boolean = true,
-    toggleSaveCoordinates: () -> Unit = {},
+    toggleSaveCoordinates: (Boolean) -> Unit = {},
     onDismissRequest: () -> Unit,
 ) {
     val coordinates = inputCoordinates ?: coordinates.collectAsState().value
@@ -79,7 +79,7 @@ fun CoordinatesDialog(
                     navigateToMap()
                 }) { Text(stringResource(R.string.map)) }
             } ?: SwitchWithLabel(stringResource(R.string.save), checked = saveCoordinates) {
-                toggleSaveCoordinates()
+                toggleSaveCoordinates(it)
             }
         },
         dismissButton = {

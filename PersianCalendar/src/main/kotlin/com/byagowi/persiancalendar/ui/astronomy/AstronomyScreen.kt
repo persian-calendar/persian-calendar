@@ -166,7 +166,7 @@ fun SharedTransitionScope.AstronomyScreen(
                             label = stringResource(R.string.tropical),
                             checked = isTropical,
                             labelBeforeSwitch = true,
-                            toggle = viewModel::toggleIsTropical,
+                            onValueChange = viewModel::toggleIsTropical,
                         )
                     }
 

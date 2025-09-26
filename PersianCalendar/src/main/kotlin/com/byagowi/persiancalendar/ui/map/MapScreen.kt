@@ -131,7 +131,7 @@ fun SharedTransitionScope.MapScreen(
         inputCoordinates = clickedCoordinates,
         onDismissRequest = { showCoordinatesDialog = false },
         saveCoordinates = saveCoordinates,
-        toggleSaveCoordinates = { saveCoordinates = !saveCoordinates },
+        toggleSaveCoordinates = { saveCoordinates = it },
         notifyChange = viewModel::changeCurrentCoordinates,
     )
 

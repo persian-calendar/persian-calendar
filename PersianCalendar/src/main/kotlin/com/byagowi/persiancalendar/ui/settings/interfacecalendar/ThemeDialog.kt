@@ -144,7 +144,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             SwitchWithLabel(
                 label = stringResource(R.string.color_gradient),
                 checked = isGradient,
-            ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, !isGradient) } }
+            ) { context.preferences.edit { putBoolean(PREF_THEME_GRADIENT, it) } }
         }
         this.AnimatedVisibility(
             visible = showMore && anyThemeIsDynamicColors,
@@ -154,7 +154,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             SwitchWithLabel(
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
-            ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, !isRedHolidays) } }
+            ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
         val language by language.collectAsState()
         this.AnimatedVisibility(
@@ -165,7 +165,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             SwitchWithLabel(
                 label = "وزیر",
                 checked = isVazirEnabled,
-            ) { context.preferences.edit { putBoolean(PREF_VAZIR_ENABLED, !isVazirEnabled) } }
+            ) { context.preferences.edit { putBoolean(PREF_VAZIR_ENABLED, it) } }
         }
     }
 }

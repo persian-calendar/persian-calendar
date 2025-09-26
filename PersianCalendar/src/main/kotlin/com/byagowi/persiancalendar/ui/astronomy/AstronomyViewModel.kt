@@ -62,8 +62,8 @@ class AstronomyViewModel : ViewModel() {
         _mode.value = mode
     }
 
-    fun toggleIsTropical() {
-        _isTropical.value = !_isTropical.value
+    fun toggleIsTropical(value: Boolean) {
+        _isTropical.value = value
     }
 
     fun animateToAbsoluteMinutesOffset(value: Int) {
