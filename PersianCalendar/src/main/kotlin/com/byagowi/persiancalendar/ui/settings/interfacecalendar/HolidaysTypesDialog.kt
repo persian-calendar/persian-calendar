@@ -162,12 +162,18 @@ fun CountryEvents(
     enabledTypes: MutableCollection<String>,
     holidaysKey: String,
     nonHolidaysKey: String,
+    hideFromAccessibility: Boolean = true,
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-            .clearAndSetSemantics {}
+            .then(
+                if (hideFromAccessibility)
+                    Modifier
+                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        .clearAndSetSemantics {}
+                else Modifier
+            )
             .clickable {
                 if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
                     enabledTypes.remove(holidaysKey)
