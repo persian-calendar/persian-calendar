@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.state.ToggleableState
@@ -165,7 +166,8 @@ fun CountryEvents(
     Row(
         Modifier
             .fillMaxWidth()
-            .semantics { this.hideFromAccessibility() }
+            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+            .clearAndSetSemantics {}
             .clickable {
                 if (holidaysKey in enabledTypes && nonHolidaysKey in enabledTypes) {
                     enabledTypes.remove(holidaysKey)
@@ -195,12 +197,10 @@ fun CountryEvents(
         FlowRow(verticalArrangement = Arrangement.Center) {
             Text(
                 calendarCenterName,
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-                    .semantics { this.hideFromAccessibility() }
+                modifier = Modifier.align(Alignment.CenterVertically)
             )
             if (sourceLink.isNotEmpty()) {
-                Text(spacedComma, modifier = Modifier.semantics { this.hideFromAccessibility() })
+                Text(spacedComma)
                 Text(
                     buildAnnotatedString {
                         withLink(
@@ -215,9 +215,7 @@ fun CountryEvents(
                             ),
                         ) { append(stringResource(R.string.view_source)) }
                     },
-                    modifier = Modifier
-                        .semantics { this.hideFromAccessibility() }
-                        .align(Alignment.CenterVertically),
+                    modifier = Modifier.align(Alignment.CenterVertically),
                 )
             }
         }
