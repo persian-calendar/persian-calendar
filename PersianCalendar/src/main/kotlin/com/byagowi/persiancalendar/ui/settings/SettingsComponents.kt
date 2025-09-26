@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
@@ -184,7 +185,7 @@ fun SettingsSingleSelect(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(SettingsItemHeight.dp)
-                        .clickable {
+                        .selectable(entryValue == currentValue, role = Role.RadioButton) {
                             onDismissRequest()
                             context.preferences.edit { putString(key, entryValue) }
                             if (summaryResId == null) summary = entry
