@@ -13,19 +13,11 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
 import com.byagowi.persiancalendar.ui.theme.animateColor
-import com.byagowi.persiancalendar.ui.theme.needsScreenSurfaceBorder
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -48,21 +40,22 @@ fun SharedTransitionScope.ScreenSurface(
             modifier = (if (disableSharedContent) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
-            )).then(
-                if (needsScreenSurfaceBorder()) {
-                    val layoutDirection = LocalLayoutDirection.current
-                    val density = LocalDensity.current
-                    val outlineColor = MaterialTheme.colorScheme.outline
-                    Modifier.drawBehind {
-                        val left = if (needsLandscapeBorder) {
-                            if (layoutDirection == LayoutDirection.Rtl) .5 else -.5
-                        } else .0
-                        translate(left.dp.toPx(), -.5.dp.toPx()) {
-                            val outline = shape.createOutline(size, layoutDirection, density)
-                            drawOutline(outline, outlineColor)
-                        }
-                    }
-                } else Modifier),
+            )),
+//                .then(
+//                if (needsScreenSurfaceBorder()) {
+//                    val layoutDirection = LocalLayoutDirection.current
+//                    val density = LocalDensity.current
+//                    val outlineColor = MaterialTheme.colorScheme.outline
+//                    Modifier.drawBehind {
+//                        val left = if (needsLandscapeBorder) {
+//                            if (layoutDirection == LayoutDirection.Rtl) .5 else -.5
+//                        } else .0
+//                        translate(left.dp.toPx(), -.5.dp.toPx()) {
+//                            val outline = shape.createOutline(size, layoutDirection, density)
+//                            drawOutline(outline, outlineColor)
+//                        }
+//                    }
+//                } else Modifier)
         ) {}
         // Content
         Box(
