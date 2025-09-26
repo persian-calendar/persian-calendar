@@ -69,6 +69,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -545,7 +546,8 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
             .height(196.dp)
             .clip(MaterialTheme.shapes.extraLarge)
-            .semantics { this.hideFromAccessibility() },
+            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+            .clearAndSetSemantics {},
         pageSpacing = 8.dp,
     ) {
         val season = Season.entries[it % 4]
