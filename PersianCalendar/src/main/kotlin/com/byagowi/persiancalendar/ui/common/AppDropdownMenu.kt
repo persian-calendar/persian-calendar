@@ -59,12 +59,13 @@ fun AppDropdownMenuItem(
 fun AppDropdownMenuRadioItem(
     text: String,
     isSelected: Boolean,
+    withRadio: Boolean = true,
     setSelected: () -> Unit,
 ) {
     AppDropdownMenuItem(
         modifier = Modifier.selectable(isSelected, onClick = setSelected, role = Role.RadioButton),
         text = { Text(text) },
-        trailingIcon = { RadioButton(selected = isSelected, onClick = null) },
+        trailingIcon = { if (withRadio) RadioButton(selected = isSelected, onClick = null) },
     ) { setSelected() }
 }
 

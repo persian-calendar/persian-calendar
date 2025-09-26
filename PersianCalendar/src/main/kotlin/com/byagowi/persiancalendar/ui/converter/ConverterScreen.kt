@@ -83,7 +83,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
-import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
@@ -156,7 +156,11 @@ fun SharedTransitionScope.ConverterScreen(
                             minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
                         ) {
                             ConverterScreenMode.entries.forEach {
-                                AppDropdownMenuItem({ Text(stringResource(it.title)) }) {
+                                AppDropdownMenuRadioItem(
+                                    stringResource(it.title),
+                                    screenMode == it,
+                                    withRadio = false,
+                                ) {
                                     showMenu = false
                                     hapticFeedback.performLongPress()
                                     viewModel.changeScreenMode(it)
