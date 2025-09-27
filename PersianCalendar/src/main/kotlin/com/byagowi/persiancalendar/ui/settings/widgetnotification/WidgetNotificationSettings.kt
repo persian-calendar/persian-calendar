@@ -208,9 +208,15 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
                 .collect { context.preferences.edit { putFloat(PREF_WIDGET_TRANSPARENCY, it) } }
         }
         val widgetTransparency by widgetTransparencyFlow.collectAsState()
-        SettingsSlider(
-            title = stringResource(R.string.widget_background_transparency),
-            value = widgetTransparency,
-        ) { widgetTransparencyFlow.value = it }
+        Box(
+            Modifier
+                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                .clearAndSetSemantics {},
+        ) {
+            SettingsSlider(
+                title = stringResource(R.string.widget_background_transparency),
+                value = widgetTransparency,
+            ) { widgetTransparencyFlow.value = it }
+        }
     }
 }
