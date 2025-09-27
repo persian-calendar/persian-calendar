@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
@@ -26,13 +25,12 @@ fun SwitchWithLabel(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     Row(
-        Modifier
-            .toggleable(checked, onValueChange = onValueChange, role = Role.Switch)
-            .clickable(
-                indication = ripple(bounded = false),
-                interactionSource = null,
-                onClick = { hapticFeedback.performLongPress(); onValueChange(!checked) },
-            ),
+        Modifier.toggleable(
+            value = checked,
+            indication = ripple(bounded = false),
+            interactionSource = null,
+            role = Role.Switch
+        ) { hapticFeedback.performLongPress(); onValueChange(it) },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         if (labelBeforeSwitch) {
