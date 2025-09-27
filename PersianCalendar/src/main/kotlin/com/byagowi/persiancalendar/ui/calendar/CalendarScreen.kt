@@ -237,6 +237,16 @@ fun SharedTransitionScope.CalendarScreen(
         SwipeDownAction.YearView to { viewModel.openYearView() },
     )
 
+    val detailsTabs = detailsTabs(
+        viewModel = viewModel,
+        navigateToHolidaysSettings = navigateToHolidaysSettings,
+        navigateToSettingsLocationTab = navigateToSettingsLocationTab,
+        navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
+        navigateToAstronomy = navigateToAstronomy,
+        animatedContentScope = animatedContentScope,
+        today = today,
+    )
+
     Scaffold(
         modifier = Modifier.onKeyEvent { keyEvent ->
             if (!viewModel.isYearView.value && keyEvent.type == KeyEventType.KeyDown) {
@@ -285,8 +295,10 @@ fun SharedTransitionScope.CalendarScreen(
         },
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+            val isOnlyEventsTab = detailsTabs.size == 1
             AnimatedVisibility(
-                visible = selectedTabIndex == EVENTS_TAB && !isYearView && isCurrentDestination,
+                visible = (selectedTabIndex == EVENTS_TAB || isOnlyEventsTab)
+                        && !isYearView && isCurrentDestination,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .renderInSharedTransitionScopeOverlay(
@@ -324,17 +336,6 @@ fun SharedTransitionScope.CalendarScreen(
 
                 // To preserve pager's state even in year view where calendar isn't in the tree
                 val pagerState = calendarPagerState()
-
-                val detailsTabs = detailsTabs(
-                    viewModel = viewModel,
-                    navigateToHolidaysSettings = navigateToHolidaysSettings,
-                    navigateToSettingsLocationTab = navigateToSettingsLocationTab,
-                    navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
-                    navigateToAstronomy = navigateToAstronomy,
-                    animatedContentScope = animatedContentScope,
-                    bottomPadding = bottomPaddingWithMinimum,
-                    today = today,
-                )
                 val detailsPagerState = detailsPagerState(viewModel = viewModel, tabs = detailsTabs)
 
                 this.AnimatedVisibility(
@@ -362,6 +363,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 pagerState = detailsPagerState,
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
+                                bottomPadding = bottomPaddingWithMinimum,
                                 modifier = Modifier.fillMaxHeight(),
                             )
                         }
@@ -423,6 +425,7 @@ fun SharedTransitionScope.CalendarScreen(
                                         tabs = detailsTabs,
                                         pagerState = detailsPagerState,
                                         contentMinHeight = detailsMinHeight,
+                                        bottomPadding = bottomPaddingWithMinimum,
                                         modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
                                     )
                                 }
@@ -484,7 +487,10 @@ fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highligh
     ).show()
 }
 
-private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource, Dp) -> Unit>
+private typealias DetailsTab = Pair<
+        Int,
+        @Composable (interactionSource: MutableInteractionSource, minHeight: Dp, bottomPadding: Dp)
+        -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -495,7 +501,6 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToSettingsLocationTabSetAthanAlarm: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
-    bottomPadding: Dp,
     today: Jdn,
 ): List<DetailsTab> {
     val context = LocalContext.current
@@ -505,7 +510,7 @@ private fun SharedTransitionScope.detailsTabs(
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
     return listOfNotNull(
-        if (!isOnlyEventsTab) R.string.calendar to { interactionSource, minHeight ->
+        if (!isOnlyEventsTab) R.string.calendar to { interactionSource, minHeight, bottomPadding ->
             CalendarsTab(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
@@ -516,7 +521,7 @@ private fun SharedTransitionScope.detailsTabs(
                 animatedContentScope = animatedContentScope,
             )
         } else null,
-        R.string.events to { _, _ ->
+        R.string.events to { _, _, bottomPadding ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
@@ -525,7 +530,7 @@ private fun SharedTransitionScope.detailsTabs(
             )
         },
         // The optional third tab
-        if (hasTimesTab) R.string.times to { interactionSource, minHeight ->
+        if (hasTimesTab) R.string.times to { interactionSource, minHeight, bottomPadding ->
             TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -564,6 +569,7 @@ private fun Details(
     pagerState: PagerState,
     contentMinHeight: Dp,
     modifier: Modifier,
+    bottomPadding: Dp,
     scrollableTabs: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -598,7 +604,7 @@ private fun Details(
                 // Currently scrollable tabs only happen on landscape layout
                 val scrollState = if (scrollableTabs) rememberScrollState() else null
                 Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
-                    tabs[index].second(interactionSource, tabMinHeight)
+                    tabs[index].second(interactionSource, tabMinHeight, bottomPadding)
                 }
                 if (scrollState != null) {
                     ScrollShadow(scrollState, top = true)
