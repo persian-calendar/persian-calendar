@@ -32,15 +32,15 @@ enum class ChineseZodiac(
     RAT(R.string.animal_year_name_rat, "🐀", "فاره", "سیچقان ئیل"),
     OX(R.string.animal_year_name_ox, "🐂", "بقر", "اود ئیل"),
     TIGER(R.string.animal_year_name_tiger, "🐅", "نمر", "بارس ئیل", "🐆", "پلنگ"),
-    RABBIT(R.string.animal_year_name_rabbit, "🐇", "ارنب", "توشقان ئیل"),
+    RABBIT(R.string.animal_year_name_rabbit, "🐇", "ارنب", "تَوِشقان ئیل"),
     DRAGON(R.string.animal_year_name_dragon, "🐲", "تمساح\n(ثعبان)", "لوی ئیل", "🐊", "نهنگ"),
     SNAKE(R.string.animal_year_name_snake, "🐍", "حیه", "ئیلان ئیل"),
     HORSE(R.string.animal_year_name_horse, "🐎", "فرس", "یونت ئیل"),
-    GOAT(R.string.animal_year_name_goat, "🐐", "غنم", "قوی ئیل", "🐑", "گوسفند"),
+    GOAT(R.string.animal_year_name_goat, "🐐", "غنم", "قُوی ئیل", "🐑", "گوسفند"),
     MONKEY(R.string.animal_year_name_monkey, "🐒", "حمدونه\n(قرده)", "پیچی ئیل"),
-    ROOSTER(R.string.animal_year_name_rooster, "🐓", "دجاجه"/*?داقوی*/, "تخاقوی ئیل", "🐔", "مرغ"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐓", "دجاجه"/*?داقوی*/, "تُخاقوی ئیل", "🐔", "مرغ"),
     DOG(R.string.animal_year_name_dog, "🐕", "کلب", "ایت ئیل"),
-    PIG(R.string.animal_year_name_pig, "🐖", "خنزیر", "تنگوز ئیل");
+    PIG(R.string.animal_year_name_pig, "🐖", "خنزیر", "تُنگوز ئیل");
 
     fun format(
         resources: Resources,
