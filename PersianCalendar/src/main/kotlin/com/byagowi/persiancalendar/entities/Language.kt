@@ -504,6 +504,18 @@ enum class Language(val code: String, val nativeName: String) {
         else -> "%,d km".format(Locale.ENGLISH, value)
     }
 
+    val moveUp
+        get() = when {
+            isPersian || isDari -> "انتقال به بالا"
+            else -> "Move up"
+        }
+
+    val moveDown
+        get() = when {
+            isPersian || isDari -> "انتقال به پایین"
+            else -> "Move down"
+        }
+
     companion object {
         @SuppressLint("ConstantLocale")
         val userDeviceLanguage = Locale.getDefault().language ?: "en"
