@@ -247,10 +247,9 @@ fun SettingsMultiSelect(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(SettingsItemHeight.dp)
-                        .toggleable(
-                            value = entryValue in result,
-                            role = Role.Checkbox
-                        ) { if (it) result.add(entryValue) else result.remove(entryValue) }
+                        .toggleable(value = entryValue in result, role = Role.Checkbox) {
+                            if (it) result.add(entryValue) else result.remove(entryValue)
+                        }
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
                     Checkbox(checked = entryValue in result, onCheckedChange = null)

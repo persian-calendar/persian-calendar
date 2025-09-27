@@ -239,10 +239,9 @@ private fun IndentedCheckBox(
     Row(
         Modifier
             .fillMaxWidth()
-            .toggleable(
-                value = key in enabledTypes,
-                role = Role.Checkbox,
-            ) { if (it) enabledTypes.add(key) else enabledTypes.remove(key) }
+            .toggleable(value = key in enabledTypes, role = Role.Checkbox) {
+                if (it) enabledTypes.add(key) else enabledTypes.remove(key)
+            }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(
                 start = (24/*checkbox size*/ + HolidaysHorizontalPaddingItem + SettingsHorizontalPaddingItem).dp,

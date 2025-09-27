@@ -56,18 +56,12 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
         },
     ) {
         PrayTime.athans.forEach { alarm ->
-            fun onValueChange(value: Boolean) {
-                if (value) alarms.add(alarm) else alarms.remove(alarm)
-            }
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .toggleable(
-                        value = alarm in alarms,
-                        onValueChange = ::onValueChange,
-                        role = Role.Checkbox
-                    )
-                    .clickable { onValueChange(alarm !in alarms) }
+                    .toggleable(value = alarm in alarms, role = Role.Checkbox) {
+                        if (it) alarms.add(alarm) else alarms.remove(alarm)
+                    }
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
                     .height(SettingsItemHeight.dp),
                 verticalAlignment = Alignment.CenterVertically,
