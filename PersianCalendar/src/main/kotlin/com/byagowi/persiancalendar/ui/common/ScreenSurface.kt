@@ -13,11 +13,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
 import com.byagowi.persiancalendar.ui.theme.animateColor
+import com.byagowi.persiancalendar.ui.theme.needsScreenSurfaceBorder
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -29,7 +35,7 @@ fun SharedTransitionScope.ScreenSurface(
     // Actually this can be simplified into a simple Box inside a Surface when that resolved
     workaroundClipBug: Boolean = false,
     disableSharedContent: Boolean = false,
-    needsLandscapeBorder: Boolean = false,
+    mayNeedDragHandleToDivide: Boolean = false,
     content: @Composable () -> Unit,
 ) {
     Layout(content = {
@@ -40,22 +46,20 @@ fun SharedTransitionScope.ScreenSurface(
             modifier = (if (disableSharedContent) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
-            )),
-//                .then(
-//                if (needsScreenSurfaceBorder()) {
-//                    val layoutDirection = LocalLayoutDirection.current
-//                    val density = LocalDensity.current
-//                    val outlineColor = MaterialTheme.colorScheme.outline
-//                    Modifier.drawBehind {
-//                        val left = if (needsLandscapeBorder) {
-//                            if (layoutDirection == LayoutDirection.Rtl) .5 else -.5
-//                        } else .0
-//                        translate(left.dp.toPx(), -.5.dp.toPx()) {
-//                            val outline = shape.createOutline(size, layoutDirection, density)
-//                            drawOutline(outline, outlineColor)
-//                        }
-//                    }
-//                } else Modifier)
+            )).then(
+                if (mayNeedDragHandleToDivide && needsScreenSurfaceBorder()) {
+                    val outlineColor = MaterialTheme.colorScheme.outline
+                    Modifier.drawBehind {
+                        drawRoundRect(
+                            outlineColor,
+                            Offset(size.width / 2f - 24.dp.toPx(), -6.dp.toPx()),
+                            Size(48.dp.toPx(), 4.dp.toPx()),
+                            CornerRadius(4.dp.toPx()),
+                            alpha = .375f,
+                        )
+                    }
+                } else Modifier,
+            ),
         ) {}
         // Content
         Box(

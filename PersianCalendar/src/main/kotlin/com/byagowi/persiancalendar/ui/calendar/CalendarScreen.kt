@@ -355,7 +355,6 @@ fun SharedTransitionScope.CalendarScreen(
                         ScreenSurface(
                             animatedContentScope,
                             materialCornerExtraLargeNoBottomEnd(),
-                            needsLandscapeBorder = true,
                         ) {
                             Details(
                                 viewModel = viewModel,
@@ -414,7 +413,11 @@ fun SharedTransitionScope.CalendarScreen(
                                 }
 
                                 val detailsMinHeight = maxHeight - calendarHeight
-                                ScreenSurface(animatedContentScope, workaroundClipBug = true) {
+                                ScreenSurface(
+                                    animatedContentScope,
+                                    workaroundClipBug = true,
+                                    mayNeedDragHandleToDivide = true,
+                                ) {
                                     Details(
                                         viewModel = viewModel,
                                         tabs = detailsTabs,

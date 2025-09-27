@@ -424,6 +424,7 @@ fun SharedTransitionScope.DaysScreen(
                             )
 
                             if (isWeekViewState) ScreenSurface(
+                                mayNeedDragHandleToDivide = !isLandscape,
                                 animatedContentScope = appAnimatedContentScope,
                                 disableSharedContent = initiallySelectedDay - weekStart !in 0..<7,
                             ) {
@@ -459,7 +460,10 @@ fun SharedTransitionScope.DaysScreen(
                         }
                     }
 
-                    if (!isWeekViewState) ScreenSurface(appAnimatedContentScope) {
+                    if (!isWeekViewState) ScreenSurface(
+                        appAnimatedContentScope,
+                        mayNeedDragHandleToDivide = !isLandscape,
+                    ) {
                         HorizontalPager(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
