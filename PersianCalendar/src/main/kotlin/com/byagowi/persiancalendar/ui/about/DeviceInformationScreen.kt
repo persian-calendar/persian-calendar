@@ -25,7 +25,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
@@ -63,6 +62,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
@@ -150,8 +152,14 @@ fun SharedTransitionScope.DeviceInformationScreen(
                 Box {
                     val listState = rememberLazyListState()
                     LazyColumn(state = listState) {
-                        item { Spacer(Modifier.height(16.dp)) }
-                        item { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
+                        item {
+                            Box(
+                                Modifier
+                                    .padding(top = 16.dp)
+                                    .semantics(mergeDescendants = true) { hideFromAccessibility() }
+                                    .clearAndSetSemantics {},
+                            ) { OverviewTopBar(Modifier.padding(horizontal = 16.dp)) }
+                        }
                         itemsIndexed(items) { i, item ->
                             if (i > 0) HorizontalDivider(
                                 Modifier.padding(horizontal = 20.dp),

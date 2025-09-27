@@ -51,6 +51,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -83,7 +86,10 @@ fun SharedTransitionScope.LicensesScreen(
                 ScreenSurface(animatedContentScope) {
                     Box { Licenses(paddingValues.calculateBottomPadding()) }
                     Box(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                            .clearAndSetSemantics {},
                         contentAlignment = Alignment.CenterEnd,
                     ) { Sidebar(modifier = Modifier.padding(end = 8.dp, top = 12.dp)) }
                 }
@@ -178,7 +184,7 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                     ExpandArrow(
                         isExpanded = expandedItem == i,
                         tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = stringResource(R.string.more),
+                        contentDescription = null,
                         isLineStart = true,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
