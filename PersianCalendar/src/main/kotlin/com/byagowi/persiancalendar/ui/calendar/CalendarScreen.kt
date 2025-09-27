@@ -237,6 +237,10 @@ fun SharedTransitionScope.CalendarScreen(
         SwipeDownAction.YearView to { viewModel.openYearView() },
     )
 
+
+    val density = LocalDensity.current
+    var fabHeight by remember { mutableStateOf(54.dp) }
+
     val detailsTabs = detailsTabs(
         viewModel = viewModel,
         navigateToHolidaysSettings = navigateToHolidaysSettings,
@@ -245,6 +249,7 @@ fun SharedTransitionScope.CalendarScreen(
         navigateToAstronomy = navigateToAstronomy,
         animatedContentScope = animatedContentScope,
         today = today,
+        fabHeight = fabHeight,
     )
 
     Scaffold(
@@ -301,6 +306,7 @@ fun SharedTransitionScope.CalendarScreen(
                         && !isYearView && isCurrentDestination,
                 modifier = Modifier
                     .padding(end = 8.dp)
+                    .onSizeChanged { fabHeight = with(density) { it.height.toDp() } }
                     .renderInSharedTransitionScopeOverlay(
                         renderInOverlay = { isCurrentDestination && isTransitionActive },
                     ),
@@ -395,7 +401,6 @@ fun SharedTransitionScope.CalendarScreen(
                                 var calendarHeight by remember {
                                     mutableStateOf(pagerSize.height / 7 * 6)
                                 }
-                                val density = LocalDensity.current
                                 Box(
                                     Modifier
                                         .offset { IntOffset(0, scrollState.value * 3 / 4) }
@@ -487,10 +492,8 @@ fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highligh
     ).show()
 }
 
-private typealias DetailsTab = Pair<
-        Int,
-        @Composable (interactionSource: MutableInteractionSource, minHeight: Dp, bottomPadding: Dp)
-        -> Unit>
+private typealias DetailsTab =
+        Pair<Int, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -502,6 +505,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToAstronomy: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
     today: Jdn,
+    fabHeight: Dp,
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
@@ -527,6 +531,7 @@ private fun SharedTransitionScope.detailsTabs(
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
                 bottomPadding = bottomPadding,
+                fabHeight = fabHeight,
             )
         },
         // The optional third tab

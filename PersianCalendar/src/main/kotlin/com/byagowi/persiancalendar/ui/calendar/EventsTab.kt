@@ -93,6 +93,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
+import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
@@ -114,6 +115,7 @@ fun SharedTransitionScope.EventsTab(
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
     bottomPadding: Dp,
+    fabHeight: Dp,
 ) {
     Column(Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(8.dp))
@@ -207,7 +209,7 @@ fun SharedTransitionScope.EventsTab(
         }
 
         // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(Modifier.height(54.dp + bottomPadding))
+        Spacer(Modifier.height(fabHeight + 16.dp + bottomPadding))
     }
 }
 
