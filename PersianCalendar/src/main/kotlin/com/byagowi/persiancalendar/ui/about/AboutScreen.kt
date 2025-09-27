@@ -374,7 +374,7 @@ private fun AboutScreenButton(
             Icon(
                 modifier = Modifier.padding(end = 4.dp),
                 imageVector = icon,
-                contentDescription = stringResource(title),
+                contentDescription = null,
             )
             Column {
                 Text(stringResource(title), style = MaterialTheme.typography.bodyMedium)
