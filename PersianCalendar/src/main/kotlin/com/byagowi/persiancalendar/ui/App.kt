@@ -432,7 +432,11 @@ private fun DrawerContent(
             .verticalScroll(scrollState)
             .windowInsetsPadding(WindowInsets.systemBars)
     ) {
-        Box {
+        Box(
+            Modifier
+                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                .clearAndSetSemantics {},
+        ) {
             DrawerSeasonsPager(drawerState)
             DrawerDarkModeToggle()
         }
@@ -545,9 +549,7 @@ private fun DrawerSeasonsPager(drawerState: DrawerState) {
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 16.dp)
             .height(196.dp)
-            .clip(MaterialTheme.shapes.extraLarge)
-            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-            .clearAndSetSemantics {},
+            .clip(MaterialTheme.shapes.extraLarge),
         pageSpacing = 8.dp,
     ) {
         val season = Season.entries[it % 4]
