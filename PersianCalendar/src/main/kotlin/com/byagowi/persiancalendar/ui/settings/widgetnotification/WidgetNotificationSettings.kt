@@ -6,14 +6,19 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
@@ -180,7 +185,11 @@ fun ColumnScope.WidgetConfiguration() {
 @Composable
 fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: Boolean) {
     val userSetTheme by userSetTheme.collectAsState()
-    if (userSetTheme.isDynamicColors) {
+    if (userSetTheme.isDynamicColors) Box(
+        Modifier
+            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+            .clearAndSetSemantics {},
+    ) {
         SettingsSwitch(
             key = PREF_WIDGETS_PREFER_SYSTEM_COLORS,
             value = prefersWidgetsDynamicColors,

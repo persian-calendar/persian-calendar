@@ -40,6 +40,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
@@ -131,7 +134,14 @@ fun SettingsColor(
         )
         mutableStateOf(initialColor)
     }
-    SettingsLayout(title, summary, Modifier.clickable { showDialog = true }) {
+    SettingsLayout(
+        title = title,
+        summary = summary,
+        modifier = Modifier
+            .clickable { showDialog = true }
+            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+            .clearAndSetSemantics {},
+    ) {
         ColorBox(
             color = animateColor(persistedColor).value,
             size = widgetSize.dp,
