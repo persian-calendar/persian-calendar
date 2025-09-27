@@ -103,7 +103,11 @@ fun SettingsClickable(
     dialog: @Composable (onDismissRequest: () -> Unit) -> Unit,
 ) {
     var showDialog by rememberSaveable { mutableStateOf(defaultOpen) }
-    SettingsLayout(onClick = { showDialog = true }, title = title, summary = summary)
+    SettingsLayout(
+        modifier = Modifier.clickable { showDialog = true },
+        title = title,
+        summary = summary,
+    )
     if (showDialog) dialog { showDialog = false }
 }
 
@@ -127,7 +131,7 @@ fun SettingsColor(
         )
         mutableStateOf(initialColor)
     }
-    SettingsLayout({ showDialog = true }, title, summary) {
+    SettingsLayout(title, summary, Modifier.clickable { showDialog = true }) {
         ColorBox(
             color = animateColor(persistedColor).value,
             size = widgetSize.dp,
@@ -298,17 +302,16 @@ fun SettingsSwitch(
 
 @Composable
 private fun SettingsLayout(
-    onClick: () -> Unit,
     title: String,
     summary: String?,
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     extraWidget: (@Composable () -> Unit)? = null,
     widget: (@Composable () -> Unit)? = null,
 ) {
     Box(
-        modifier
+        Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .then(modifier)
             .padding(horizontal = 8.dp),
     ) {
         val endPadding = 16 + (if (widget != null) widgetSize + 16f else 0f) +
@@ -364,11 +367,13 @@ private fun SettingsSwitchLayout(
 ) {
     val hapticFeedback = LocalHapticFeedback.current
     SettingsLayout(
-        onClick = { hapticFeedback.performLongPress(); toggle(!value) },
         title = title,
         summary = summary,
         extraWidget = extraWidget,
-        modifier = Modifier.toggleable(value = value, onValueChange = toggle, role = Role.Switch)
+        modifier = Modifier.toggleable(value, role = Role.Switch) {
+            hapticFeedback.performLongPress()
+            toggle(it)
+        },
     ) { Switch(checked = value, onCheckedChange = null) }
 }
 
