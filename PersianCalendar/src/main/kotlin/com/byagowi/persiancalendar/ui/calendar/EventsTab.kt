@@ -207,8 +207,7 @@ fun SharedTransitionScope.EventsTab(
         }
 
         // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(Modifier.height(76.dp))
-        Spacer(Modifier.height(bottomPadding))
+        Spacer(Modifier.height(54.dp + bottomPadding))
     }
 }
 
