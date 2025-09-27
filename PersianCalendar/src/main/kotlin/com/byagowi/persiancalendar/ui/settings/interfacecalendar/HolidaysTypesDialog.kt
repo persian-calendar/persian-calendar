@@ -236,14 +236,13 @@ private fun IndentedCheckBox(
     enabledTypes: MutableCollection<String>,
     key: String,
 ) {
-    val onChange: (Boolean) -> Unit = { newValue: Boolean ->
-        if (newValue) enabledTypes.add(key) else enabledTypes.remove(key)
-    }
     Row(
         Modifier
             .fillMaxWidth()
-            .toggleable(key in enabledTypes, onValueChange = onChange, role = Role.Checkbox)
-            .clickable { onChange(key !in enabledTypes) }
+            .toggleable(
+                value = key in enabledTypes,
+                role = Role.Checkbox,
+            ) { if (it) enabledTypes.add(key) else enabledTypes.remove(key) }
             .defaultMinSize(minHeight = HolidaysSettingsItemHeight.dp)
             .padding(
                 start = (24/*checkbox size*/ + HolidaysHorizontalPaddingItem + SettingsHorizontalPaddingItem).dp,
