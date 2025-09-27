@@ -66,6 +66,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -122,11 +125,17 @@ fun SharedTransitionScope.SettingsScreen(
                 navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
                 actions = {
                     var showAddWidgetDialog by rememberSaveable { mutableStateOf(false) }
-                    ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
-                        MenuItems(
-                            openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
-                            closeMenu = closeMenu,
-                        )
+                    Box(
+                        Modifier
+                            .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                            .clearAndSetSemantics {}
+                    ) {
+                        ThreeDotsDropdownMenu(animatedContentScope) { closeMenu ->
+                            MenuItems(
+                                openAddWidgetDialog = { closeMenu(); showAddWidgetDialog = true },
+                                closeMenu = closeMenu,
+                            )
+                        }
                     }
                     if (showAddWidgetDialog) AddWidgetDialog { showAddWidgetDialog = false }
                 },
