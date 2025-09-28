@@ -155,14 +155,6 @@
         </activity>
 
         <activity
-            android:name=".service.ToggleTileActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".ui.athan.AthanActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
