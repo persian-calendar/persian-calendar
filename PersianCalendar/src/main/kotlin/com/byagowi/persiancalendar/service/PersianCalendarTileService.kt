@@ -12,7 +12,9 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_TILE_STATE
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.launchAppPendingIntent
@@ -47,8 +49,13 @@ class PersianCalendarTileService : TileService() {
         val jdn = Jdn.today()
         val today = jdn on mainCalendar
         tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
-        tile.label = jdn.weekDayName
-        tile.contentDescription = today.monthName
+        val weekDayName = jdn.weekDayName
+        tile.label = weekDayName
+        tile.contentDescription = weekDayName + spacedComma + language.value.dmy.format(
+            today.dayOfMonth,
+            today.monthName,
+            today.year,
+        )
         tile.state = preferredState
         tile.updateTile()
     }
