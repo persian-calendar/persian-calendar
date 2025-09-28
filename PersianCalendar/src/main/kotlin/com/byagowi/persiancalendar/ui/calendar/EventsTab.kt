@@ -93,7 +93,6 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
@@ -114,12 +113,13 @@ fun SharedTransitionScope.EventsTab(
     navigateToHolidaysSettings: () -> Unit,
     viewModel: CalendarViewModel,
     animatedContentScope: AnimatedContentScope,
-    bottomPadding: Dp,
-    fabHeight: Dp,
+    fabPlaceholderHeight: Dp,
 ) {
-    Column(Modifier.fillMaxWidth()) {
-        Spacer(Modifier.height(8.dp))
-
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = fabPlaceholderHeight),
+    ) {
         val jdn by viewModel.selectedDay.collectAsState()
 
         val refreshToken by viewModel.refreshToken.collectAsState()
@@ -207,9 +207,6 @@ fun SharedTransitionScope.EventsTab(
                 acceptAction = { showDialog = true },
             )
         }
-
-        // Events addition fab placeholder, so events can be scrolled after it
-        Spacer(Modifier.height(fabHeight + 16.dp + bottomPadding))
     }
 }
 

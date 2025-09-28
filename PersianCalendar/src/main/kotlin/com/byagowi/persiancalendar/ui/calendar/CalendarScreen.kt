@@ -12,6 +12,7 @@ import android.provider.CalendarContract
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -102,7 +103,9 @@ import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -239,7 +242,7 @@ fun SharedTransitionScope.CalendarScreen(
 
 
     val density = LocalDensity.current
-    var fabHeight by remember { mutableStateOf(54.dp) }
+    var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
 
     val detailsTabs = detailsTabs(
         viewModel = viewModel,
@@ -249,7 +252,7 @@ fun SharedTransitionScope.CalendarScreen(
         navigateToAstronomy = navigateToAstronomy,
         animatedContentScope = animatedContentScope,
         today = today,
-        fabHeight = fabHeight,
+        fabPlaceholderHeight = fabPlaceholderHeight,
     )
 
     Scaffold(
@@ -301,12 +304,23 @@ fun SharedTransitionScope.CalendarScreen(
         floatingActionButton = {
             val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
             val isOnlyEventsTab = detailsTabs.size == 1
+
+            // Window height fallback for older device isn't consistent, let's just
+            // use some hardcoded value in detailsTabs() instead
+            val windowHeightPx = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                LocalActivity.current?.windowManager?.currentWindowMetrics?.bounds?.height()
+            } else null
+
             AnimatedVisibility(
                 visible = (selectedTabIndex == EVENTS_TAB || isOnlyEventsTab)
                         && !isYearView && isCurrentDestination,
                 modifier = Modifier
                     .padding(end = 8.dp)
-                    .onSizeChanged { fabHeight = with(density) { it.height.toDp() } }
+                    .onGloballyPositioned {
+                        if (windowHeightPx != null) fabPlaceholderHeight = with(density) {
+                            (windowHeightPx - it.positionInWindow().y).toDp()
+                        } + 4.dp
+                    }
                     .renderInSharedTransitionScopeOverlay(
                         renderInOverlay = { isCurrentDestination && isTransitionActive },
                     ),
@@ -505,7 +519,7 @@ private fun SharedTransitionScope.detailsTabs(
     navigateToAstronomy: (Jdn) -> Unit,
     animatedContentScope: AnimatedContentScope,
     today: Jdn,
-    fabHeight: Dp,
+    fabPlaceholderHeight: Dp?,
 ): List<DetailsTab> {
     val context = LocalContext.current
     val removeThirdTab by viewModel.removedThirdTab.collectAsState()
@@ -530,8 +544,8 @@ private fun SharedTransitionScope.detailsTabs(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
                 animatedContentScope = animatedContentScope,
-                bottomPadding = bottomPadding,
-                fabHeight = fabHeight,
+                // See the comment in floatingActionButton
+                fabPlaceholderHeight = fabPlaceholderHeight ?: (bottomPadding + 76.dp),
             )
         },
         // The optional third tab
