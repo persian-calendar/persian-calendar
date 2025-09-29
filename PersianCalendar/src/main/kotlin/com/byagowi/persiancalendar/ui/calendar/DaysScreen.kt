@@ -97,6 +97,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -688,7 +689,8 @@ private fun DaysView(
                         .animateContentSize(),
                 ) {
                     val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
-                        lineHeight = 24.sp
+                        lineHeight = 24.sp,
+                        textDirection = TextDirection.Content,
                     )
                     eventsWithoutTime.forEachIndexed { i, dayEvents ->
                         Column(Modifier.weight(1f)) {
@@ -847,7 +849,9 @@ private fun DaysView(
                             " " + event.title,
                             color = eventTextColor(color),
                             maxLines = 1,
-                            style = MaterialTheme.typography.bodySmall,
+                            style = MaterialTheme.typography.bodySmall.copy(
+                                textDirection = TextDirection.Content,
+                            ),
                             modifier = Modifier
                                 .offset {
                                     IntOffset(
