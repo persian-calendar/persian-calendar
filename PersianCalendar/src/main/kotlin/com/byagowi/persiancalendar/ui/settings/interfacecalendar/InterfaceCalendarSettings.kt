@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Checkbox
@@ -39,6 +40,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
@@ -324,16 +326,16 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                     )
                 }
             }
-            values.forEach {
-                val visibility = it.id !in idsToExclude
-                val isHoliday = it.id in holidaysIds
+            values.forEach { entry ->
+                val visibility = entry.id !in idsToExclude
+                val isHoliday = entry.id in holidaysIds
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .clickable {
-                            if (visibility) idsToExclude.add(it.id) else {
-                                idsToExclude.remove(it.id)
-                                if (isHoliday) holidaysIds.remove(it.id)
+                        .toggleable(visibility, role = Role.Checkbox) {
+                            if (!it) idsToExclude.add(entry.id) else {
+                                idsToExclude.remove(entry.id)
+                                if (isHoliday) holidaysIds.remove(entry.id)
                             }
                         }
                         .height(42.dp),
@@ -344,20 +346,20 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                             onCheckedChange = null,
                             modifier = Modifier.padding(start = 24.dp, end = 16.dp),
                             colors = CheckboxDefaults.colors().let { colors ->
-                                if (it.color != null) colors.copy(
-                                    checkedBorderColor = it.color,
-                                    checkedBoxColor = it.color,
-                                    uncheckedBorderColor = it.color,
+                                if (entry.color != null) colors.copy(
+                                    checkedBorderColor = entry.color,
+                                    checkedBoxColor = entry.color,
+                                    uncheckedBorderColor = entry.color,
                                 ) else colors
                             },
                         )
-                        Text(it.displayName)
+                        Text(entry.displayName)
                     }
                     this.AnimatedVisibility(showHolidaysToggles && visibility) {
                         Checkbox(
                             checked = isHoliday,
                             onCheckedChange = { value ->
-                                if (value) holidaysIds.add(it.id) else holidaysIds.remove(it.id)
+                                if (value) holidaysIds.add(entry.id) else holidaysIds.remove(entry.id)
                             },
                             modifier = Modifier
                                 .width(holidayTextWidth)
