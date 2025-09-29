@@ -91,7 +91,7 @@
     <string name="latitude">Breitengrad</string>
     <string name="longitude">Längengrad</string>
     <string name="location_help">Falls nicht, geben Sie dies unten an</string>
-    <string name="coordinates">Koordinierung</string>
+    <string name="coordinates">Koordinaten</string>
     <string name="athan_gap">Adhan Lücke</string>
     <string name="athan_gap_summary">Wie lange vor dem Adhan soll der Alarm ausgelöst werden (in Minuten)</string>
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
