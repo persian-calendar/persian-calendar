@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RemoveCircleOutline
 import androidx.compose.material3.BasicAlertDialog
@@ -44,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
@@ -115,7 +117,7 @@ fun ColumnScope.ShiftWorkDialogContent(
     Row(
         Modifier
             .fillMaxWidth()
-            .clickable { viewModel.changeRecurs(!recurs) }
+            .toggleable(recurs, role = Role.Checkbox) { viewModel.changeRecurs(it) }
             .padding(horizontal = SettingsHorizontalPaddingItem.dp)
             .height(SettingsItemHeight.dp),
         verticalAlignment = Alignment.CenterVertically,
