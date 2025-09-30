@@ -3,11 +3,19 @@ package com.byagowi.persiancalendar
 import android.graphics.Color
 import android.os.Build
 
+/**
+ * Centralized app constants and default preference keys/values used across the project.
+ *
+ * Kept intentionally simple — only constants, no runtime logic — to avoid initialization side-effects.
+ */
+
 const val LOG_TAG = "PersianCalendar"
 
+// --- General keys -----------------------------------------------------------
 const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
 const val EXPANDED_TIME_STATE_KEY = "ExpandedTimeState"
 
+// --- Preferences keys ------------------------------------------------------
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"
 const val PREF_OTHER_CALENDARS_KEY = "otherCalendarTypes"
 const val PREF_SECONDARY_CALENDAR_IN_TABLE = "secondaryCalendarShown"
@@ -81,6 +89,23 @@ const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 const val PREF_SWIPE_DOWN_ACTION = "SwipeDownAction"
 const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
 
+// --- Additional (new) preferences ------------------------------------------
+const val PREF_AUTO_BACKUP_ENABLED = "AutoBackupEnabled"
+const val PREF_AUTO_BACKUP_FREQUENCY = "AutoBackupFrequency"
+const val PREF_CUSTOM_NOTIFICATIONS = "CustomNotifications"
+const val PREF_DEFAULT_VIEW_MODE = "DefaultViewMode"
+const val PREF_FAVORITE_LOCATIONS = "FavoriteLocations"
+const val PREF_ENABLE_WIDGET_ANIMATIONS = "EnableWidgetAnimations"
+const val PREF_SHOW_ISLAMIC_EVENTS = "ShowIslamicEvents"
+const val PREF_SHOW_SOLAR_EVENTS = "ShowSolarEvents"
+const val PREF_SHOW_GREGORIAN_EVENTS = "ShowGregorianEvents"
+const val PREF_ALLOW_HAPTIC_FEEDBACK = "AllowHapticFeedback"
+const val PREF_BACKUP_PATH = "BackupPath"
+const val PREF_EVENT_REMINDERS = "EventReminders"
+const val PREF_THEME_CUSTOM_COLOR = "ThemeCustomColor"
+const val PREF_WIDGET_CORNER_RADIUS = "WidgetCornerRadius"
+
+// --- Default values --------------------------------------------------------
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
 const val DEFAULT_HIGH_LATITUDES_METHOD = "NightMiddle"
@@ -90,7 +115,10 @@ const val DEFAULT_WIDGET_IN_24 = false
 const val DEFAULT_IRAN_TIME = false
 const val DEFAULT_LOCAL_DIGITS = true
 const val DEFAULT_WIDGET_CLOCK = true
+
+// NOTE: this depends on runtime SDK so it must be a 'val' not a 'const'
 val DEFAULT_NOTIFY_DATE = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
+
 const val DEFAULT_ASCENDING_ATHAN_VOLUME = false
 const val DEFAULT_ATHAN_VIBRATION = true
 const val DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true
@@ -109,8 +137,25 @@ const val DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS = false
 const val DEFAULT_WIDGET_TRANSPARENCY = 0f
 const val DEFAULT_ATHAN_CHANNEL_ID = 3005
 
+// New default values
+const val DEFAULT_AUTO_BACKUP_ENABLED = true
+const val DEFAULT_AUTO_BACKUP_FREQUENCY = "Weekly"
+const val DEFAULT_CUSTOM_NOTIFICATIONS = false
+const val DEFAULT_DEFAULT_VIEW_MODE = "Month"
+val DEFAULT_FAVORITE_LOCATIONS: List<String> = emptyList()
+const val DEFAULT_ENABLE_WIDGET_ANIMATIONS = true
+const val DEFAULT_SHOW_ISLAMIC_EVENTS = true
+const val DEFAULT_SHOW_SOLAR_EVENTS = true
+const val DEFAULT_SHOW_GREGORIAN_EVENTS = true
+const val DEFAULT_ALLOW_HAPTIC_FEEDBACK = true
+const val DEFAULT_BACKUP_PATH = "/storage/emulated/0/PersianCalendar/backup/"
+const val DEFAULT_EVENT_REMINDERS = true
+const val DEFAULT_THEME_CUSTOM_COLOR = Color.BLUE
+const val DEFAULT_WIDGET_CORNER_RADIUS = 16
+
 const val ALARMS_BASE_ID = 2000
 
+// --- Broadcasts ------------------------------------------------------------
 const val BROADCAST_ALARM = "BROADCAST_ALARM"
 const val ADD_EVENT = "ADD_EVENT"
 const val MONTH_RESET_COMMAND = "MONTH_RESET_COMMAND"
@@ -121,6 +166,7 @@ const val BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP"
 const val KEY_EXTRA_PRAYER = "prayer_name"
 const val KEY_EXTRA_PRAYER_TIME = "prayer_time"
 
+// --- Unicode helpers --------------------------------------------------------
 const val NBSP = "\u00A0"
 const val ZWNJ = "\u200C"
 const val ZWJ = "\u200D"
@@ -133,7 +179,7 @@ const val DEFAULT_AM = "ق.ظ"
 const val DEFAULT_PM = "ب.ظ"
 const val DEFAULT_HOLIDAY = "تعطیل"
 
-// WorkManager tags, should be unique
+// --- WorkManager tags -----------------------------------------------------
 const val CHANGE_DATE_TAG = "changeDate"
 const val ALARM_TAG = "alarmTag"
 const val UPDATE_TAG = "update"
@@ -141,37 +187,42 @@ const val UPDATE_TAG = "update"
 const val LAST_PLAYED_ATHAN_KEY = "LAST_PLAYED_ATHAN_KEY"
 const val LAST_PLAYED_ATHAN_JDN = "LAST_PLAYED_ATHAN_JDN"
 
+// --- Misc keys -------------------------------------------------------------
 const val OTHER_CALENDARS_KEY = "other_calendars"
 const val NON_HOLIDAYS_EVENTS_KEY = "non_holiday_events"
 const val OWGHAT_KEY = "owghat"
 const val OWGHAT_LOCATION_KEY = "owghat_location"
 
-// A new one can't be added and should be default off unfortunately as users might have set it already
 val DEFAULT_WIDGET_CUSTOMIZATIONS = setOf(
     OTHER_CALENDARS_KEY, NON_HOLIDAYS_EVENTS_KEY, OWGHAT_KEY, OWGHAT_LOCATION_KEY
 )
 
+// --- Qibla coordinates -----------------------------------------------------
 const val QIBLA_LATITUDE = 21.422522
 const val QIBLA_LONGITUDE = 39.826181
 
+// --- Astronomy -------------------------------------------------------------
 const val AU_IN_KM = 149597871L // astronomical unit, ~earth/sun distance
 
+// --- Timezones -------------------------------------------------------------
 const val IRAN_TIMEZONE_ID = "Asia/Tehran"
 const val AFGHANISTAN_TIMEZONE_ID = "Asia/Kabul"
 const val NEPAL_TIMEZONE_ID = "Asia/Kathmandu"
 
-const val SHARED_CONTENT_KEY_CARD = "card" // Common card animation
-const val SHARED_CONTENT_KEY_CARD_CONTENT = "cardContent" // Common card content animation
-const val SHARED_CONTENT_KEY_STOP = "stop" // Make sure stop only in bottom app bar is stay put
-const val SHARED_CONTENT_KEY_OPEN_DRAWER = "openDrawer" // Make sure open drawer icon is stay put
-const val SHARED_CONTENT_KEY_EVENTS = "events" // Make sure schedule events animates nicely
-const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots" // Make sure menu icon is stay put
-const val SHARED_CONTENT_KEY_SHARE_BUTTON = "shareButton" // Animate placement of share button
-const val SHARED_CONTENT_KEY_MAP = "map" // Turns map icon into an actual map
-const val SHARED_CONTENT_KEY_TIME_BAR = "time" // to share time bar of astronomy and map screens
-const val SHARED_CONTENT_KEY_LEVEL = "level" // Turns level icon to a level
-const val SHARED_CONTENT_KEY_COMPASS = "compass" // Turns compass icon to a compass
-const val SHARED_CONTENT_KEY_MOON = "moon" // Turns moon view of calendar screen to astronomy's
-const val SHARED_CONTENT_KEY_TIME = "time" // a prefix
+// --- Shared content keys --------------------------------------------------
+const val SHARED_CONTENT_KEY_CARD = "card"
+const val SHARED_CONTENT_KEY_CARD_CONTENT = "cardContent"
+const val SHARED_CONTENT_KEY_STOP = "stop"
+const val SHARED_CONTENT_KEY_OPEN_DRAWER = "openDrawer"
+const val SHARED_CONTENT_KEY_EVENTS = "events"
+const val SHARED_CONTENT_KEY_THREE_DOTS_MENU = "threeDots"
+const val SHARED_CONTENT_KEY_SHARE_BUTTON = "shareButton"
+const val SHARED_CONTENT_KEY_MAP = "map"
+const val SHARED_CONTENT_KEY_TIME_BAR = "time"
+const val SHARED_CONTENT_KEY_LEVEL = "level"
+const val SHARED_CONTENT_KEY_COMPASS = "compass"
+const val SHARED_CONTENT_KEY_MOON = "moon"
+const val SHARED_CONTENT_KEY_TIME = "time"
 const val SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT = "daysScreenSurfaceContent"
 const val SHARED_CONTENT_KEY_DAYS_SCREEN_ICON = "daysScreenIcon"
+ 
