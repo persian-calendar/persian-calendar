@@ -12,13 +12,16 @@ import com.byagowi.persiancalendar.utils.update
 
 abstract class WidgetProvider : AppWidgetProvider() {
 
-    // onReceive will be called on any kind of calls to widget provider
-    // such as onUpdate so no need to implement that specifically
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
-        context ?: return
-        startWorker(context)
-        update(context, false)
+        context?.let {
+            try {
+                startWorker(it)
+                update(it, false)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     override fun onAppWidgetOptionsChanged(
@@ -26,9 +29,60 @@ abstract class WidgetProvider : AppWidgetProvider() {
         newOptions: Bundle?
     ) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
-        // set updateDate to make sure it passes throttle and gets updated
-        update(context ?: return, true)
+        context?.let {
+            try {
+                update(it, true)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
+
+    fun forceUpdateAllWidgets(context: Context?, widgetIds: IntArray?) {
+        context?.let {
+            widgetIds?.forEach { id ->
+                try {
+                    update(it, false)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+    }
+
+    fun resetWidgetPreferences(context: Context?, widgetIds: IntArray?) {
+        context?.preferences?.edit {
+            widgetIds?.forEach { id ->
+                remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + id)
+                remove(PREF_SELECTED_WIDGET_TEXT_COLOR + id)
+                remove(PREF_SELECTED_DATE_AGE_WIDGET + id)
+                remove(PREF_SELECTED_DATE_AGE_WIDGET_START + id)
+                remove(PREF_TITLE_AGE_WIDGET + id)
+            }
+        }
+    }
+
+    fun updateWidget(context: Context?, widgetId: Int, force: Boolean = false) {
+        context?.let {
+            try {
+                update(it, force)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    fun clearWidgetPreferences(context: Context?, widgetId: Int) {
+        context?.preferences?.edit {
+            remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId)
+            remove(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
+            remove(PREF_SELECTED_DATE_AGE_WIDGET + widgetId)
+            remove(PREF_SELECTED_DATE_AGE_WIDGET_START + widgetId)
+            remove(PREF_TITLE_AGE_WIDGET + widgetId)
+        }
+    }
+
+    // Improved UI hooks could be added here if widgets supported them
 }
 
 class Widget1x1 : WidgetProvider()
@@ -45,15 +99,40 @@ class WidgetWeekView : WidgetProvider()
 
 class AgeWidget : WidgetProvider() {
     override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
-        if (context == null || appWidgetIds == null || appWidgetIds.isEmpty()) return
-        context.preferences.edit {
-            appWidgetIds.forEach {
-                remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + it)
-                remove(PREF_SELECTED_WIDGET_TEXT_COLOR + it)
-                remove(PREF_SELECTED_DATE_AGE_WIDGET + it)
-                remove(PREF_SELECTED_DATE_AGE_WIDGET_START + it)
-                remove(PREF_TITLE_AGE_WIDGET + it)
+        context?.preferences?.edit {
+            appWidgetIds?.forEach { id ->
+                remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + id)
+                remove(PREF_SELECTED_WIDGET_TEXT_COLOR + id)
+                remove(PREF_SELECTED_DATE_AGE_WIDGET + id)
+                remove(PREF_SELECTED_DATE_AGE_WIDGET_START + id)
+                remove(PREF_TITLE_AGE_WIDGET + id)
+            }
+        }
+    }
+
+    fun clearSingleWidget(context: Context?, widgetId: Int) {
+        clearWidgetPreferences(context, widgetId)
+    }
+
+    fun duplicateWidgetPreferences(context: Context?, sourceId: Int, targetId: Int) {
+        context?.let {
+            val prefs = it.preferences
+            prefs.getInt(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + sourceId, 0).let { bg ->
+                prefs.edit { putInt(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + targetId, bg) }
+            }
+            prefs.getInt(PREF_SELECTED_WIDGET_TEXT_COLOR + sourceId, 0).let { tc ->
+                prefs.edit { putInt(PREF_SELECTED_WIDGET_TEXT_COLOR + targetId, tc) }
+            }
+            prefs.getString(PREF_SELECTED_DATE_AGE_WIDGET + sourceId, null)?.let { dw ->
+                prefs.edit { putString(PREF_SELECTED_DATE_AGE_WIDGET + targetId, dw) }
+            }
+            prefs.getString(PREF_SELECTED_DATE_AGE_WIDGET_START + sourceId, null)?.let { ds ->
+                prefs.edit { putString(PREF_SELECTED_DATE_AGE_WIDGET_START + targetId, ds) }
+            }
+            prefs.getString(PREF_TITLE_AGE_WIDGET + sourceId, null)?.let { t ->
+                prefs.edit { putString(PREF_TITLE_AGE_WIDGET + targetId, t) }
             }
         }
     }
 }
+ 
