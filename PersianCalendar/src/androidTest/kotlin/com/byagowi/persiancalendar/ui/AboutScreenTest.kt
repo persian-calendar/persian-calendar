@@ -1,12 +1,18 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
@@ -16,27 +22,35 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-// Have a look at https://developer.android.com/static/images/jetpack/compose/compose-testing-cheatsheet.pdf
 @OptIn(ExperimentalSharedTransitionApi::class)
 @RunWith(AndroidJUnit4::class)
 class AboutScreenTest {
+
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    private fun setContentWithTheme(content: @Composable () -> Unit) {
+        composeTestRule.setContent {
+            MaterialTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    content()
+                }
+            }
+        }
+    }
 
     @Test
     fun aboutScreenNavigateToDeviceInformation() {
         var navigateToDeviceInformationIsCalled = false
-        var deviceInformationString = ""
-        composeTestRule.setContentWithParent { scope ->
-            deviceInformationString = stringResource(R.string.device_information)
+        setContentWithTheme {
             AboutScreen(
-                animatedContentScope = scope,
+                animatedContentScope = it,
                 openDrawer = {},
                 navigateToDeviceInformation = { navigateToDeviceInformationIsCalled = true },
                 navigateToLicenses = { assert(false) },
             )
         }
-        composeTestRule.onNodeWithContentDescription(deviceInformationString)
+        composeTestRule.onNodeWithContentDescription(stringResource(R.string.device_information))
             .assertHasClickAction()
             .performClick()
         assert(navigateToDeviceInformationIsCalled)
@@ -45,17 +59,15 @@ class AboutScreenTest {
     @Test
     fun aboutScreenNavigateToLicenses() {
         var navigateToLicensesIsCalled = false
-        var licensesString = ""
-        composeTestRule.setContentWithParent { scope ->
-            licensesString = stringResource(R.string.about_license_title)
+        setContentWithTheme {
             AboutScreen(
-                animatedContentScope = scope,
+                animatedContentScope = it,
                 openDrawer = {},
                 navigateToDeviceInformation = { assert(false) },
                 navigateToLicenses = { navigateToLicensesIsCalled = true },
             )
         }
-        composeTestRule.onNodeWithText(licensesString)
+        composeTestRule.onNodeWithText(stringResource(R.string.about_license_title))
             .assertHasClickAction()
             .performClick()
         assert(navigateToLicensesIsCalled)
@@ -63,13 +75,88 @@ class AboutScreenTest {
 
     @Test
     fun deviceInformationSmokeTest() {
-        composeTestRule.setContentWithParent { scope ->
-            DeviceInformationScreen({}, scope)
+        setContentWithTheme {
+            DeviceInformationScreen({}, it)
         }
     }
 
     @Test
     fun licensesSmokeTest() {
-        composeTestRule.setContentWithParent { scope -> LicensesScreen(scope) {} }
+        setContentWithTheme {
+            LicensesScreen(it) {}
+        }
+    }
+
+    @Test
+    fun testAboutScreenDrawerOpen() {
+        var drawerOpened = false
+        setContentWithTheme {
+            AboutScreen(
+                animatedContentScope = it,
+                openDrawer = { drawerOpened = true },
+                navigateToDeviceInformation = {},
+                navigateToLicenses = {},
+            )
+        }
+        composeTestRule.onNodeWithContentDescription("Open Drawer")
+            .assertHasClickAction()
+            .performClick()
+        assert(drawerOpened)
+    }
+
+    @Test
+    fun testDeviceInformationContentVisible() {
+        setContentWithTheme {
+            DeviceInformationScreen({}, it)
+        }
+        composeTestRule.onNodeWithText(stringResource(R.string.device_information))
+            .assertHasClickAction()
+    }
+
+    @Test
+    fun testLicensesContentVisible() {
+        setContentWithTheme {
+            LicensesScreen(it) {}
+        }
+        composeTestRule.onNodeWithText(stringResource(R.string.about_license_title))
+            .assertHasClickAction()
+    }
+
+    @Test
+    fun testScrollThroughDeviceInformation() {
+        setContentWithTheme {
+            DeviceInformationScreen({}, it)
+        }
+        composeTestRule.onNodeWithText(stringResource(R.string.device_information))
+            .performScrollTo()
+    }
+
+    @Test
+    fun testScrollThroughLicenses() {
+        setContentWithTheme {
+            LicensesScreen(it) {}
+        }
+        composeTestRule.onNodeWithText(stringResource(R.string.about_license_title))
+            .performScrollTo()
+    }
+
+    @Test
+    fun testAboutScreenMultipleClicks() {
+        var deviceInfoClicked = false
+        var licensesClicked = false
+        setContentWithTheme {
+            AboutScreen(
+                animatedContentScope = it,
+                openDrawer = {},
+                navigateToDeviceInformation = { deviceInfoClicked = true },
+                navigateToLicenses = { licensesClicked = true },
+            )
+        }
+        composeTestRule.onNodeWithContentDescription(stringResource(R.string.device_information))
+            .performClick()
+        composeTestRule.onNodeWithText(stringResource(R.string.about_license_title))
+            .performClick()
+        assert(deviceInfoClicked && licensesClicked)
     }
 }
+ 
