@@ -376,6 +376,7 @@ fun SharedTransitionScope.CalendarScreen(
                         ScreenSurface(
                             animatedContentScope,
                             materialCornerExtraLargeNoBottomEnd(),
+                            drawBehindSurface = false,
                         ) {
                             Details(
                                 viewModel = viewModel,

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
 import com.byagowi.persiancalendar.ui.theme.animateColor
-import com.byagowi.persiancalendar.ui.theme.needsScreenSurfaceBorder
+import com.byagowi.persiancalendar.ui.theme.needsScreenSurfaceDragHandle
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
@@ -37,31 +37,34 @@ fun SharedTransitionScope.ScreenSurface(
     workaroundClipBug: Boolean = false,
     disableSharedContent: Boolean = false,
     mayNeedDragHandleToDivide: Boolean = false,
+    drawBehindSurface: Boolean = true,
     content: @Composable () -> Unit,
 ) {
+    val outlineColor = MaterialTheme.colorScheme.outline
+    val needsScreenSurfaceDragHandle = mayNeedDragHandleToDivide && needsScreenSurfaceDragHandle()
+    val surfaceColor by animateColor(MaterialTheme.colorScheme.surface)
     Layout(content = {
         // Parent
         Surface(
             shape = shape,
-            color = animateColor(MaterialTheme.colorScheme.surface).value,
+            color = surfaceColor,
             modifier = (if (disableSharedContent) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
                 boundsTransform = appBoundsTransform,
-            )).then(
-                if (mayNeedDragHandleToDivide && needsScreenSurfaceBorder()) {
-                    val outlineColor = MaterialTheme.colorScheme.outline
-                    Modifier.drawBehind {
-                        drawRoundRect(
-                            outlineColor,
-                            Offset(size.width / 2f - 24.dp.toPx(), -6.dp.toPx()),
-                            Size(48.dp.toPx(), 4.dp.toPx()),
-                            CornerRadius(4.dp.toPx()),
-                            alpha = .375f,
-                        )
-                    }
-                } else Modifier,
-            ),
+            )).drawBehind {
+                if (needsScreenSurfaceDragHandle) drawRoundRect(
+                    outlineColor,
+                    Offset(size.width / 2f - 24.dp.toPx(), -6.dp.toPx()),
+                    Size(48.dp.toPx(), 4.dp.toPx()),
+                    CornerRadius(4.dp.toPx()),
+                    alpha = .375f,
+                )
+                // Ugly but in order to support overshoot animations let's draw surface color
+                // under the content
+                if (drawBehindSurface)
+                    drawRect(surfaceColor, Offset(0f, size.height / 2), size)
+            },
         ) {}
         // Content
         Box(

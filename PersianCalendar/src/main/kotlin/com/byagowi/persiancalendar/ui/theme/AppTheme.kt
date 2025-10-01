@@ -175,7 +175,7 @@ private fun appColorScheme(): ColorScheme {
 }
 
 @Composable
-fun needsScreenSurfaceBorder(): Boolean = when (effectiveTheme()) {
+fun needsScreenSurfaceDragHandle(): Boolean = when (effectiveTheme()) {
     Theme.BLACK -> true
     Theme.MODERN -> !isGradient.collectAsState().value
     else -> false
