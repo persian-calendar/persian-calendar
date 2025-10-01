@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material3.Icon
@@ -26,7 +28,14 @@ fun ExpandArrow(
         !isExpanded && isLineStart -> -90f
         else -> 0f
     } * if (LocalLayoutDirection.current == LayoutDirection.Rtl) -1 else 1
-    val angle by animateFloatAsState(targetValue = targetValue, label = "angle")
+    val angle by animateFloatAsState(
+        targetValue = targetValue,
+        label = "angle",
+        animationSpec = spring(
+            stiffness = Spring.StiffnessMediumLow,
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+        ),
+    )
     Icon(
         imageVector = Icons.Default.ExpandMore,
         contentDescription = contentDescription,
