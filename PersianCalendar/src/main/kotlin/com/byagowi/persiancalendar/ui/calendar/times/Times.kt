@@ -32,6 +32,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.nextTimeColor
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.Date
@@ -67,6 +68,7 @@ fun SharedTransitionScope.Times(
                                 key = SHARED_CONTENT_KEY_TIME + prayTime.name
                             ),
                             animatedVisibilityScope = this@AnimatedContent,
+                            boundsTransform = appBoundsTransform,
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {

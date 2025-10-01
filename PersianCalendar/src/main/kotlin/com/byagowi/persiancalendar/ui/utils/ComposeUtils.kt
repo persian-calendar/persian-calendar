@@ -1,7 +1,12 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import androidx.compose.animation.BoundsTransform
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.ZeroCornerSize
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +15,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
 import com.byagowi.persiancalendar.entities.Jdn
@@ -41,6 +47,15 @@ fun materialCornerExtraLargeTop(): CornerBasedShape {
 @Stable
 fun materialCornerExtraLargeNoBottomEnd(): CornerBasedShape {
     return MaterialTheme.shapes.extraLarge.copy(bottomEnd = ZeroCornerSize)
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+val appBoundsTransform = BoundsTransform { _, _ ->
+    spring(
+        stiffness = Spring.StiffnessMediumLow,
+        dampingRatio = Spring.DampingRatioLowBouncy,
+        visibilityThreshold = Rect.VisibilityThreshold
+    )
 }
 
 val JdnSaver = Saver<MutableState<Jdn>, Long>(

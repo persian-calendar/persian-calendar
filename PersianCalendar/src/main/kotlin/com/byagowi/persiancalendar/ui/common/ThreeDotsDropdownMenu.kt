@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.LayoutDirection
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_THREE_DOTS_MENU
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -33,6 +34,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
         Modifier.sharedElement(
             rememberSharedContentState(key = SHARED_CONTENT_KEY_THREE_DOTS_MENU),
             animatedVisibilityScope = animatedContentScope,
+            boundsTransform = appBoundsTransform,
         )
     ) {
         var expanded by rememberSaveable { mutableStateOf(false) }

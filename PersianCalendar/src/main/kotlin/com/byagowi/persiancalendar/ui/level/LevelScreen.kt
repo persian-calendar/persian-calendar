@@ -77,6 +77,7 @@ import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.ExtraLargeShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.debugLog
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.minutes
@@ -205,6 +206,7 @@ fun SharedTransitionScope.LevelScreen(
                             .sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = appBoundsTransform,
                             ),
                         factory = {
                             val levelView = LevelView(it)
@@ -233,6 +235,7 @@ fun SharedTransitionScope.LevelScreen(
                                 modifier = Modifier.sharedBounds(
                                     rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                     animatedVisibilityScope = animatedContentScope,
+                                    boundsTransform = appBoundsTransform,
                                 ),
                                 onClick = navigateToCompass,
                             )
@@ -241,6 +244,7 @@ fun SharedTransitionScope.LevelScreen(
                                 Modifier.sharedElement(
                                     rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
                                     animatedVisibilityScope = animatedContentScope,
+                                    boundsTransform = appBoundsTransform,
                                 )
                             ) { StopButton(isStopped) { isStopped = it } }
                         }

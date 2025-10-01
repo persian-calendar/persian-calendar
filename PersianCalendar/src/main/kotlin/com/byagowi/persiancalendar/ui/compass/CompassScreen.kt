@@ -91,6 +91,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.preferences
@@ -302,6 +303,7 @@ fun SharedTransitionScope.CompassScreen(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
                                 animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = appBoundsTransform,
                             ),
                             factory = {
                                 CompassView(it).also { view ->
@@ -340,6 +342,7 @@ fun SharedTransitionScope.CompassScreen(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
                                 animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = appBoundsTransform,
                             ),
                             onClick = navigateToLevel,
                         )
@@ -349,6 +352,7 @@ fun SharedTransitionScope.CompassScreen(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                                 animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = appBoundsTransform,
                             ),
                             onClick = navigateToMap,
                         )
@@ -371,6 +375,7 @@ fun SharedTransitionScope.CompassScreen(
                             Modifier.sharedElement(
                                 rememberSharedContentState(SHARED_CONTENT_KEY_STOP),
                                 animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = appBoundsTransform,
                             )
                         ) { StopButton(isStopped) { isStopped = it } }
                     }

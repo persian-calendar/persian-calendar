@@ -99,6 +99,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -346,6 +347,7 @@ private fun SharedTransitionScope.SliderBar(
                 .sharedElement(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
                     animatedVisibilityScope = animatedContentScope,
+                    boundsTransform = appBoundsTransform,
                 ),
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -479,6 +481,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 .sharedBounds(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = animatedContentScope,
+                    boundsTransform = appBoundsTransform,
                 ),
             selected = false,
             onClick = navigateToMap,
@@ -606,6 +609,7 @@ private fun SharedTransitionScope.MoonIcon(
             .sharedBounds(
                 rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
                 animatedVisibilityScope = animatedContentScope,
+                boundsTransform = appBoundsTransform,
             )
             .drawBehind {
                 drawIntoCanvas {

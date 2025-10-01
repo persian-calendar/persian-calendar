@@ -3,9 +3,6 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.LocalContentColor
@@ -19,7 +16,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
@@ -28,6 +24,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_CARD_CONTENT
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.needsScreenSurfaceBorder
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -50,13 +47,7 @@ fun SharedTransitionScope.ScreenSurface(
             modifier = (if (disableSharedContent) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
-                boundsTransform = { _, _ ->
-                    spring(
-                        stiffness = Spring.StiffnessMediumLow,
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        visibilityThreshold = Rect.VisibilityThreshold
-                    )
-                },
+                boundsTransform = appBoundsTransform,
             )).then(
                 if (mayNeedDragHandleToDivide && needsScreenSurfaceBorder()) {
                     val outlineColor = MaterialTheme.colorScheme.outline
@@ -77,6 +68,7 @@ fun SharedTransitionScope.ScreenSurface(
             (if (disableSharedContent) Modifier else Modifier.sharedBounds(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD_CONTENT),
                 animatedVisibilityScope = animatedContentScope,
+                boundsTransform = appBoundsTransform,
             )).clip(if (workaroundClipBug) MaterialTheme.shapes.extraLarge else shape)
         ) {
             val onSurface by animateColor(MaterialTheme.colorScheme.onSurface)

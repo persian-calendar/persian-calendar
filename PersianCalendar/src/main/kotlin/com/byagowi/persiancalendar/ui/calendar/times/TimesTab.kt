@@ -53,6 +53,7 @@ import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -191,6 +192,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
                     .sharedBounds(
                         rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
                         animatedVisibilityScope = animatedContentScope,
+                        boundsTransform = appBoundsTransform,
                     )
                     .clickable(
                         indication = ripple(bounded = false),

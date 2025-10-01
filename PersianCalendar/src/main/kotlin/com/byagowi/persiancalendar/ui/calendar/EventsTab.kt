@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -176,6 +177,7 @@ fun SharedTransitionScope.EventsTab(
                 Modifier.sharedBounds(
                     rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
                     animatedVisibilityScope = animatedContentScope,
+                    boundsTransform = appBoundsTransform,
                 )
             ) { DayEvents(events) { viewModel.refreshCalendar() } }
         }

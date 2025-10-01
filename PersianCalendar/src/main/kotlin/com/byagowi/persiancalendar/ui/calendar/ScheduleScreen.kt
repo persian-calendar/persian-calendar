@@ -66,6 +66,7 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -272,6 +273,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         if (baseJdn == jdn) Modifier.sharedBounds(
                                             rememberSharedContentState(SHARED_CONTENT_KEY_EVENTS),
                                             animatedVisibilityScope = animatedContentScope,
+                                            boundsTransform = appBoundsTransform,
                                         ) else Modifier,
                                     ) { DayEvents(events) {} }
                                 }

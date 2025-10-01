@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_OPEN_DRAWER
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -24,6 +25,7 @@ fun SharedTransitionScope.NavigationOpenDrawerIcon(
         modifier = Modifier.sharedElement(
             rememberSharedContentState(SHARED_CONTENT_KEY_OPEN_DRAWER),
             animatedVisibilityScope = animatedContentScope,
+            boundsTransform = appBoundsTransform,
         ),
         onClick = openDrawer,
     )

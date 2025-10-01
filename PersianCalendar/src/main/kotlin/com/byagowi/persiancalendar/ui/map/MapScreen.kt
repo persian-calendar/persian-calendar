@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.Coordinate
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -233,6 +234,7 @@ fun SharedTransitionScope.MapScreen(
                 .sharedBounds(
                     rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
                     animatedVisibilityScope = animatedContentScope,
+                    boundsTransform = appBoundsTransform,
                 ),
             factory = {
                 val root = ZoomableView(it)
@@ -375,6 +377,7 @@ fun SharedTransitionScope.MapScreen(
                             .sharedElement(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_TIME_BAR),
                                 animatedVisibilityScope = animatedContentScope,
+                                boundsTransform = appBoundsTransform,
                             ),
                         color = MaterialTheme.colorScheme.onSurface,
                     )

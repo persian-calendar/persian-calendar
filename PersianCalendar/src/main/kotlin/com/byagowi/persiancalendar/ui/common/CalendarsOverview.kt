@@ -85,6 +85,7 @@ import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
@@ -151,6 +152,7 @@ fun SharedTransitionScope.CalendarsOverview(
                         .sharedBounds(
                             rememberSharedContentState(key = SHARED_CONTENT_KEY_MOON),
                             animatedVisibilityScope = animatedContentScope,
+                            boundsTransform = appBoundsTransform,
                         )
                         .clickable { navigateToAstronomy(jdn) }
                         .size(20.dp)

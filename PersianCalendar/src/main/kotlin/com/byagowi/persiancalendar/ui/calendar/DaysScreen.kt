@@ -146,6 +146,7 @@ import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
+import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -327,6 +328,7 @@ fun SharedTransitionScope.DaysScreen(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_ICON),
                                 animatedVisibilityScope = this@AnimatedContent,
+                                boundsTransform = appBoundsTransform,
                             ),
                         ) {
                             val title = if (isWeekView) stringResource(R.string.day_view)
@@ -433,6 +435,7 @@ fun SharedTransitionScope.DaysScreen(
                                     modifier = if (weekPagerState.currentPage == page) Modifier.sharedBounds(
                                         rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
                                         animatedVisibilityScope = this@AnimatedContent,
+                                        boundsTransform = appBoundsTransform,
                                     ) else Modifier,
                                     bottomPadding = bottomPadding,
                                     setAddAction = {
@@ -469,6 +472,7 @@ fun SharedTransitionScope.DaysScreen(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_DAYS_SCREEN_SURFACE_CONTENT),
                                 animatedVisibilityScope = this@AnimatedContent,
+                                boundsTransform = appBoundsTransform,
                             ),
                             state = dayPagerState,
                             verticalAlignment = Alignment.Top,
