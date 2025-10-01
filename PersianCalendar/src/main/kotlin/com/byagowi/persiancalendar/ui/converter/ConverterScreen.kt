@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -143,6 +144,7 @@ fun SharedTransitionScope.ConverterScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .padding(vertical = 4.dp)
+                                .defaultMinSize(minHeight = 38.dp)
                                 .onSizeChanged { dropDownWidth = it.width },
                         ) {
                             Spacer(Modifier.width(16.dp))
