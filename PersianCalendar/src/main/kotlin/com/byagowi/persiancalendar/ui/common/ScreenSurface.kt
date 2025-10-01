@@ -3,6 +3,9 @@ package com.byagowi.persiancalendar.ui.common
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.material3.LocalContentColor
@@ -16,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.unit.Constraints
@@ -46,6 +50,13 @@ fun SharedTransitionScope.ScreenSurface(
             modifier = (if (disableSharedContent) Modifier else Modifier.sharedElement(
                 rememberSharedContentState(SHARED_CONTENT_KEY_CARD),
                 animatedVisibilityScope = animatedContentScope,
+                boundsTransform = { _, _ ->
+                    spring(
+                        stiffness = Spring.StiffnessMediumLow,
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        visibilityThreshold = Rect.VisibilityThreshold
+                    )
+                },
             )).then(
                 if (mayNeedDragHandleToDivide && needsScreenSurfaceBorder()) {
                     val outlineColor = MaterialTheme.colorScheme.outline
