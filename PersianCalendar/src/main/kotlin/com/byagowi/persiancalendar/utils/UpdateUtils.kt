@@ -18,7 +18,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
-import android.service.quicksettings.TileService
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -108,7 +107,6 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.service.BroadcastReceivers
-import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.service.ScheduleWidgetService
 import com.byagowi.persiancalendar.service.widgetWidthCellKey
 import com.byagowi.persiancalendar.ui.MainActivity
