@@ -233,3 +233,15 @@ MIT License
   LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   SOFTWARE.
+
+----
+DSEG - SIL
+https://github.com/keshikan/DSEG
+
+SIL OPEN FONT LICENSE Version 1.1
+
+  Copyright (c) 2020, keshikan (https://www.keshikan.net)
+
+  This Font Software is licensed under the SIL Open Font License, Version 1.1.
+  This license is copied below, and is also available with a FAQ at:
+  https://openfontlicense.org
