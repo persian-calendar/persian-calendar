@@ -16,10 +16,12 @@ class AngleDisplay(
     resources: Resources, defaultFormat: String = "00.0",
     private val backgroundText: String = "88.8"
 ) {
-    private val lcd =
-        // ResourcesCompat.getFont could also be used for better compatibility
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) resources.getFont(R.font.lcd)
-        else null
+    // ResourcesCompat.getFont could also be used for better compatibility
+    private val lcd = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) resources.getFont(
+        R.font.dseg7classicminibolditalic
+    ) else null
+    // The characters '!' is a whitespace on the font
+    private val whiteSpace = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) '!' else ' '
     private val lcdTextSize = 20 * resources.dp
     private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF00FF00.toInt()
@@ -64,7 +66,7 @@ class AngleDisplay(
                 lcdBackgroundPaint
             )
             drawText(
-                displayFormat.format(angle).padStart(backgroundText.length),
+                displayFormat.format(angle).padStart(backgroundText.length, whiteSpace),
                 displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
                 lcdForegroundPaint
             )
