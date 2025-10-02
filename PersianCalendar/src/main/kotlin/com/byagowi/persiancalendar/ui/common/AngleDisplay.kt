@@ -18,8 +18,9 @@ class AngleDisplay(
 ) {
     // ResourcesCompat.getFont could also be used for better compatibility
     private val lcd = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) resources.getFont(
-        R.font.dseg7classicminibolditalic
+        R.font.dseg7classicminibolditalicsubset
     ) else null
+
     // The characters '!' is a whitespace on the font
     private val whiteSpace = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) '!' else ' '
     private val lcdTextSize = 20 * resources.dp
