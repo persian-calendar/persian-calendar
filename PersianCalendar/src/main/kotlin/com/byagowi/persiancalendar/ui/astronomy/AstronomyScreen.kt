@@ -100,6 +100,7 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -626,7 +627,7 @@ private fun SharedTransitionScope.MoonIcon(
 @Composable
 private fun Cell(modifier: Modifier, color: Color, label: String, value: String) {
     Row(
-        modifier.animateContentSize(),
+        modifier.animateContentSize(appContentSizeAnimationSpec),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(

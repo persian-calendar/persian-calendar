@@ -147,6 +147,7 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
 import com.byagowi.persiancalendar.ui.utils.SmallShapeCornerSize
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -667,7 +668,7 @@ private fun DaysView(
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp)
                 )
-                Column(Modifier.animateContentSize()) {
+                Column(Modifier.animateContentSize(appContentSizeAnimationSpec)) {
                     DayEvents(eventsWithoutTime[0].let { if (isExpanded) it else it.take(3) }) {
                         refreshCalendar()
                     }
@@ -690,7 +691,7 @@ private fun DaysView(
                 Row(
                     Modifier
                         .padding(end = pagerArrowSizeAndPadding.dp)
-                        .animateContentSize(),
+                        .animateContentSize(appContentSizeAnimationSpec),
                 ) {
                     val headerTextStyle = MaterialTheme.typography.bodySmall.copy(
                         lineHeight = 24.sp,

@@ -176,6 +176,7 @@ import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeNoBottomEnd
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
@@ -422,7 +423,7 @@ fun SharedTransitionScope.CalendarScreen(
                                         .onSizeChanged {
                                             calendarHeight = with(density) { it.height.toDp() }
                                         }
-                                        .animateContentSize(),
+                                        .animateContentSize(appContentSizeAnimationSpec),
                                 ) {
                                     CalendarPager(
                                         viewModel = viewModel,

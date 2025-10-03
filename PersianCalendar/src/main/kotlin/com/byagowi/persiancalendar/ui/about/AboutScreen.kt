@@ -104,6 +104,7 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -342,7 +343,7 @@ private fun HelpItems() {
                         ).value
                     )
                     .fillMaxWidth()
-                    .animateContentSize(),
+                    .animateContentSize(appContentSizeAnimationSpec),
             ) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Spacer(modifier = Modifier.width(16.dp))

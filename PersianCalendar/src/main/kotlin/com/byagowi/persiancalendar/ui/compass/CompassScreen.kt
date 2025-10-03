@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.preferences
@@ -248,7 +249,7 @@ fun SharedTransitionScope.CompassScreen(
                             AppDropdownMenuItem({
                                 Crossfade(
                                     value ?: "مزبوره/مذکوره",
-                                    Modifier.animateContentSize(),
+                                    Modifier.animateContentSize(appContentSizeAnimationSpec),
                                 ) { Text(it) }
                             }) {
                                 val dayOfMonth = Jdn.today().toIslamicDate().dayOfMonth

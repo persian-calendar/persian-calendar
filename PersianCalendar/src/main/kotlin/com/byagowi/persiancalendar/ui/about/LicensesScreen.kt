@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -178,12 +179,7 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                         bottom = verticalPadding,
                     )
                     .fillMaxWidth()
-                    .animateContentSize(
-                        animationSpec = spring(
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                            stiffness = Spring.StiffnessLow
-                        )
-                    ),
+                    .animateContentSize(appContentSizeAnimationSpec),
             ) {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     ExpandArrow(

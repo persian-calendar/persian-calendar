@@ -103,6 +103,7 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -154,7 +155,10 @@ fun SharedTransitionScope.ConverterScreen(
                                 .onSizeChanged { dropDownWidth = it.width },
                         ) {
                             Spacer(Modifier.width(16.dp))
-                            Text(stringResource(screenMode.title), Modifier.animateContentSize())
+                            Text(
+                                stringResource(screenMode.title),
+                                Modifier.animateContentSize(appContentSizeAnimationSpec)
+                            )
                             ExpandArrow(isExpanded = showMenu)
                             Spacer(Modifier.width(8.dp))
                         }

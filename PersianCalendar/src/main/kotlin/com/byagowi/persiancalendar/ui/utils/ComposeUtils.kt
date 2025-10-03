@@ -18,6 +18,7 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.unit.IntSize
 import com.byagowi.persiancalendar.entities.Jdn
 
 /**
@@ -57,6 +58,12 @@ val appBoundsTransform = BoundsTransform { _, _ ->
         visibilityThreshold = Rect.VisibilityThreshold
     )
 }
+
+val appContentSizeAnimationSpec = spring(
+    stiffness = Spring.StiffnessMediumLow,
+    dampingRatio = Spring.DampingRatioLowBouncy,
+    visibilityThreshold = IntSize.VisibilityThreshold,
+)
 
 val JdnSaver = Saver<MutableState<Jdn>, Long>(
     save = { it.value.value },

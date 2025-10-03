@@ -86,6 +86,7 @@ import com.byagowi.persiancalendar.ui.theme.animateColor
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.ItemWidth
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
+import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.utils.MoonInScorpioState
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
@@ -383,7 +384,7 @@ fun AutoSizedBodyText(
                 text = text,
                 color = { contextColor },
                 style = textStyle,
-                modifier = Modifier.animateContentSize(),
+                modifier = Modifier.animateContentSize(appContentSizeAnimationSpec),
                 maxLines = 1,
                 softWrap = false,
                 autoSize = TextAutoSize.StepBased(
@@ -439,20 +440,23 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded:
                         formatNumber(date.dayOfMonth),
                         style = MaterialTheme.typography.displayMedium,
                         modifier = Modifier
-                            .animateContentSize()
+                            .animateContentSize(appContentSizeAnimationSpec)
                             .semantics { this.hideFromAccessibility() },
                     )
                     HandleSacredMonth(isExpanded, date) {
                         Text(
                             date.monthName,
                             modifier = Modifier
-                                .animateContentSize()
+                                .animateContentSize(appContentSizeAnimationSpec)
                                 .semantics { this.hideFromAccessibility() }
                         )
                     }
                 }
                 SelectionContainer(Modifier.semantics { this.hideFromAccessibility() }) {
-                    Text(date.toLinearDate(), modifier = Modifier.animateContentSize())
+                    Text(
+                        date.toLinearDate(),
+                        modifier = Modifier.animateContentSize(appContentSizeAnimationSpec)
+                    )
                 }
             }
         }
