@@ -383,10 +383,12 @@ enum class Language(val code: String, val nativeName: String) {
             else -> '/'
         }
         val needsZeroPad = when (this) {
+            FR, IT, NE, PT, RU, TR, KMR -> true
             // According to the dated on the first page of https://calendar.ut.ac.ir/documents/2139738/7092644/Calendar-1404.pdf
             // It seems it's a zero padded locale
-            FA -> true
-            FR, IT, NE, PT, RU, TR, KMR -> true
+            // But according to نیازهای شرایط محلی برای زبان فارسی ایران it's not
+            // http://mohsen.banan.1.byname.net/content/republished/doc.public/standards/communication/iran/locale/Locale-12.pdf
+            FA -> false
             else -> false
         }
         val format = when (this) {
