@@ -578,13 +578,15 @@ fun updateStoredPreference(context: Context) {
     shiftWorkStartingJdn = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
     shiftWorkRecurs = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
 
-    isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
+    val accessibilityService = context.getSystemService<AccessibilityManager>()
+
+    isTalkBackEnabled = accessibilityService?.let {
         it.isEnabled && it.isTouchExplorationEnabled
     } == true
 
     // https://stackoverflow.com/a/61599809
     isHighTextContrastEnabled = runCatching {
-        context.getSystemService<AccessibilityManager>()?.let {
+        accessibilityService?.let {
             if (Build.VERSION.SDK_INT >= 36) {
                 it.isHighContrastTextEnabled
             } else it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
