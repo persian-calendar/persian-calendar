@@ -174,7 +174,7 @@ private class Paints(
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
     val scorpioSign = if (isArabicScript) {
         resources.getString(R.string.scorpio).first() + ZWJ
-    } else Zodiac.SCORPIO.emoji
+    } else Zodiac.SCORPIO.symbol
     private val zodiacFont = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         resources.getFont(R.font.notosanssymbolsregularzodiacsubset)
     } else null

@@ -105,7 +105,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
             fun format(body: Body, longitude: Double, distance: Double): String {
                 return stringResource(body.titleStringId) + ": %s %s %s%s".format(
                     formatAngle(longitude % 30), // Remaining angle
-                    Zodiac.fromTropical(longitude).emoji,
+                    Zodiac.fromTropical(longitude).symbol,
                     if (language.isArabicScript) RLM else "",
                     language.formatAuAsKm(distance)
                 )
@@ -319,7 +319,7 @@ private fun ColumnScope.AscendantZodiac(
     EasternHoroscopePattern { i ->
         buildAnnotatedString {
             val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-            append(zodiac.emoji)
+            append(zodiac.symbol)
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
                 it.format(resources, withEmoji = false, short = true)
             }

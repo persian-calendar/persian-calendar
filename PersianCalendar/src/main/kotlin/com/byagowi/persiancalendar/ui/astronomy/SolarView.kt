@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -18,6 +19,7 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
@@ -72,6 +74,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private val ranges = iauRanges.map { it.toFloatArray() }
 
     private val labels = Zodiac.entries.map { it.format(resources, false, short = true) }
+    private val symbols = Zodiac.entries.map { it.symbol }
 
     init {
         onDraw = { canvas, matrix ->
@@ -210,6 +213,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             }
             canvas.withRotation(-(start + end) / 2 + 90, radius, radius) {
                 drawText(labels[index], radius, radius * .12f, zodiacPaint)
+                drawText(symbols[index], radius, radius * .55f, zodiacSymbolPaint)
             }
         }
         val cr = radius / 8f
@@ -292,6 +296,15 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.strokeWidth = 1 * dp
         it.textSize = 10 * dp
         it.textAlign = Paint.Align.CENTER
+    }
+    private val zodiacSymbolPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x38808080
+        it.strokeWidth = 1 * dp
+        it.textSize = 25 * dp
+        it.textAlign = Paint.Align.CENTER
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            it.typeface = resources.getFont(R.font.notosanssymbolsregularzodiacsubset)
+        }
     }
     private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
