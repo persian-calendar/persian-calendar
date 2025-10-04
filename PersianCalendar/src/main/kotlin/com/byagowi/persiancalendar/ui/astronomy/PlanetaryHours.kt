@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
@@ -16,7 +15,6 @@ import androidx.compose.material.icons.filled.Brightness7
 import androidx.compose.material.icons.filled.NightlightRound
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -172,10 +170,8 @@ fun PlanetaryHoursDialog(
 private fun RowScope.AutoSizedText(text: String, weight: Float) {
     Box(Modifier.weight(weight), contentAlignment = Alignment.Center) {
         SelectionContainer {
-            val contentColor = LocalContentColor.current
-            BasicText(
-                text,
-                color = { contentColor },
+            Text(
+                text = text,
                 style = LocalTextStyle.current,
                 maxLines = 1,
                 softWrap = false,

@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
@@ -523,13 +522,11 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
 
     Column(modifier) {
         val jdn by remember { derivedStateOf { Jdn(state.date.toCivilDate()) } }
-        val contentColor = LocalContentColor.current
         headerCache[jdn].fastForEach { line ->
             AnimatedContent(targetState = line, label = "line", transitionSpec = appCrossfadeSpec) {
                 SelectionContainer {
-                    BasicText(
-                        it,
-                        color = { contentColor },
+                    Text(
+                        text = it,
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1,
                         softWrap = false,
@@ -652,11 +649,9 @@ private fun Cell(modifier: Modifier, color: Color, label: String, value: String)
             color = Color.White,
         )
         SelectionContainer {
-            val contentColor = LocalContentColor.current
-            BasicText(
+            Text(
                 value,
                 style = LocalTextStyle.current,
-                color = { contentColor },
                 modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                 maxLines = 1,
                 softWrap = false,

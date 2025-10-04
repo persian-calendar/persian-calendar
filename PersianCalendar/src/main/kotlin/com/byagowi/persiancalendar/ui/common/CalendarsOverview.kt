@@ -27,12 +27,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -399,7 +397,6 @@ private fun AutoSizedBodyText(
     topPadding: Dp = 4.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
 ) {
-    val contextColor = LocalContentColor.current
     Box(
         modifier = Modifier
             .padding(top = topPadding, start = 24.dp, end = 24.dp)
@@ -407,9 +404,8 @@ private fun AutoSizedBodyText(
         contentAlignment = Alignment.Center
     ) {
         SelectionContainer {
-            BasicText(
+            Text(
                 text = text,
-                color = { contextColor },
                 style = textStyle,
                 modifier = Modifier.animateContentSize(appContentSizeAnimationSpec),
                 maxLines = 1,

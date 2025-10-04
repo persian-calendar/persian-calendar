@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -27,6 +26,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -288,11 +288,9 @@ private fun getItemIndexForOffset(
 @Composable
 private fun Label(text: String, modifier: Modifier, hideFromAccessibility: Boolean = false) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
-        val contentColor = LocalContentColor.current
-        BasicText(
+        Text(
             modifier = Modifier.semantics { if (hideFromAccessibility) this.hideFromAccessibility() },
             text = text,
-            color = { contentColor },
             style = LocalTextStyle.current,
             maxLines = 1,
             softWrap = false,
