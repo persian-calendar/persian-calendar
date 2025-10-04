@@ -33,6 +33,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.ProgressIndicatorDefaults
@@ -63,6 +64,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -198,18 +204,39 @@ fun SharedTransitionScope.CalendarsOverview(
         val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
             moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
-            AutoSizedBodyText(
-                if (language.isPersian) when (val state = moonInScorpioState) {
-                    MoonInScorpioState.Borji -> "قمر در برج عقرب"
-                    MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
-                    is MoonInScorpioState.Start ->
-                        "${state.clock.toFormattedString()} قمر وارد برج عقرب می‌شود"
+            Text(
+                buildAnnotatedString {
+                    if (language.isPersian) append(
+                        when (val state = moonInScorpioState) {
+                            MoonInScorpioState.Borji -> "قمر در برج عقرب"
+                            MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
+                            is MoonInScorpioState.Start ->
+                                "${state.clock.toFormattedString()} قمر وارد برج عقرب می‌شود"
 
-                    is MoonInScorpioState.End ->
-                        "${state.clock.toFormattedString()} قمر از صورت فلکی عقرب خارج می‌شود"
+                            is MoonInScorpioState.End ->
+                                "${state.clock.toFormattedString()} قمر از صورت فلکی عقرب خارج می‌شود"
 
-                    else -> ""
-                } else stringResource(R.string.moon_in_scorpio)
+                            else -> ""
+                        }
+                    ) else {
+                        append(stringResource(R.string.moon_in_scorpio))
+                        if (!language.isArabicScript) {
+                            append(" ")
+                            withStyle(
+                                MaterialTheme.typography.bodyMedium.toSpanStyle().copy(
+                                    fontFamily = FontFamily(
+                                        Font(R.font.notosanssymbolsregularzodiacsubset)
+                                    ),
+                                )
+                            ) { append(Zodiac.SCORPIO.emoji) }
+                        }
+                    }
+                },
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(top = 4.dp, start = 24.dp, end = 24.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center,
             )
         }
 
@@ -368,7 +395,7 @@ fun SharedTransitionScope.CalendarsOverview(
 }
 
 @Composable
-fun AutoSizedBodyText(
+private fun AutoSizedBodyText(
     text: String,
     topPadding: Dp = 4.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,

@@ -175,6 +175,9 @@ private class Paints(
     val scorpioSign = if (isArabicScript) {
         resources.getString(R.string.scorpio).first() + ZWJ
     } else Zodiac.SCORPIO.emoji
+    private val zodiacFont = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        resources.getFont(R.font.notosanssymbolsregularzodiacsubset)
+    } else null
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
@@ -233,6 +236,7 @@ private class Paints(
         it.textSize = headerTextSize
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (!isArabicScript && isAstronomicalExtraFeaturesEnabled.value) it.typeface = zodiacFont
     }
 
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -240,6 +244,7 @@ private class Paints(
         it.textSize = headerTextSize
         it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (!isArabicScript && isAstronomicalExtraFeaturesEnabled.value) it.typeface = zodiacFont
     }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
