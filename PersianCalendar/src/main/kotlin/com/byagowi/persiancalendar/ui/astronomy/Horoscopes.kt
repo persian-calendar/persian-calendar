@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -80,6 +79,7 @@ import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.abs
@@ -246,7 +246,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     val resources = LocalResources.current
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
         val animationProgress = remember { Animatable(0f) }
-        LaunchedEffect(Unit) { animationProgress.animateTo(1f, tween(delayMillis = 750)) }
+        LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
         val coroutineScope = rememberCoroutineScope()
         val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
         val modifier = if (isTalkBackEnabled) Modifier else Modifier.clickable(
