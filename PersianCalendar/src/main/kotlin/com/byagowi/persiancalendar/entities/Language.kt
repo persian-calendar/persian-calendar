@@ -521,6 +521,8 @@ enum class Language(val code: String, val nativeName: String) {
             else -> "Move down"
         }
 
+    val lilith get() = if (isArabicScript) "قمرالاسود" else "Lilith"
+
     companion object {
         @SuppressLint("ConstantLocale")
         val userDeviceLanguage = Locale.getDefault().language ?: "en"

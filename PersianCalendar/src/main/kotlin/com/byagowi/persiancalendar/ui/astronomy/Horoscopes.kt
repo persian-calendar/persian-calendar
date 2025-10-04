@@ -328,10 +328,7 @@ private fun ColumnScope.AscendantZodiac(
             bodies.forEach { (body, longitude) ->
                 appendAngle(resources.getString(body.titleStringId), longitude)
             }
-            if (zodiac == meanApogeeZodiac) appendAngle(
-                /*"⚸" + */if (language.isArabicScript) "قمرالاسود" else "Lilith",
-                meanApogee
-            )
+            if (zodiac == meanApogeeZodiac) appendAngle(/*"⚸" + */language.lilith, meanApogee)
         }
     }
     if (language.isIranExclusive) Box(Modifier.align(Alignment.CenterHorizontally)) {
