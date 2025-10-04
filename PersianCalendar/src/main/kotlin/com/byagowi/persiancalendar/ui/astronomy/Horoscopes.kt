@@ -253,8 +253,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             indication = null, interactionSource = null
         ) {
             coroutineScope.launch {
-                animationProgress.snapTo(0f)
-                animationProgress.animateTo(1f, tween(delayMillis = 2000))
+                animationProgress.animateTo(if (animationProgress.value > .5f) 0f else 1f)
             }
         }
         EasternHoroscopePattern(modifier) { i ->
