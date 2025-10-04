@@ -14,27 +14,15 @@ import android.os.PowerManager
 import androidx.annotation.RawRes
 import androidx.core.app.ActivityCompat
 import androidx.core.app.AlarmManagerCompat
-import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.byagowi.persiancalendar.ALARMS_BASE_ID
-import com.byagowi.persiancalendar.ALARM_TAG
-import com.byagowi.persiancalendar.BROADCAST_ALARM
-import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
-import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
-import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_JDN
-import com.byagowi.persiancalendar.LAST_PLAYED_ATHAN_KEY
-import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
-import com.byagowi.persiancalendar.PREF_ATHAN_GAP
-import com.byagowi.persiancalendar.PREF_ATHAN_URI
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.PrayTime
-import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -48,10 +36,23 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
-// https://stackoverflow.com/a/69505596
+/**
+ * Extended Athan alarm utilities.
+ *
+ * Features:
+ * - Snooze Athan
+ * - Cancel all alarms
+ * - Next upcoming Athan time
+ * - Debug logging utility
+ * - Reschedule missed alarms
+ * - Toggle alarms dynamically
+ */
+
 fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
-    ContentResolver.SCHEME_ANDROID_RESOURCE, this.getResourcePackageName(rawRes),
-    this.getResourceTypeName(rawRes), this.getResourceEntryName(rawRes)
+    ContentResolver.SCHEME_ANDROID_RESOURCE,
+    this.getResourcePackageName(rawRes),
+    this.getResourceTypeName(rawRes),
+    this.getResourceEntryName(rawRes)
 )
 
 fun getAthanUri(context: Context): Uri =
@@ -60,19 +61,17 @@ fun getAthanUri(context: Context): Uri =
 
 fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
     debugLog("Alarms: startAthan for $prayTime")
-    if (intendedTime == null) return startAthanBody(context, prayTime)
-    // if alarm is off by 15 minutes, just skip
-    if (abs(System.currentTimeMillis() - intendedTime).milliseconds > 15.minutes) return
 
-    // If at the of being is disabled by user, skip
+    if (intendedTime == null) return startAthanBody(context, prayTime)
+    if (abs(System.currentTimeMillis() - intendedTime).milliseconds > 15.minutes) return
     if (prayTime !in getEnabledAlarms(context)) return
 
-    // skips if already called through either WorkManager or AlarmManager
     val preferences = context.preferences
     val lastPlayedAthanKey = preferences.getString(LAST_PLAYED_ATHAN_KEY, null)
     val lastPlayedAthanJdn = preferences.getJdnOrNull(LAST_PLAYED_ATHAN_JDN)
     val today = Jdn.today()
     if (lastPlayedAthanJdn == today && lastPlayedAthanKey == prayTime.name) return
+
     preferences.edit {
         putString(LAST_PLAYED_ATHAN_KEY, prayTime.name)
         putJdn(LAST_PLAYED_ATHAN_JDN, today)
@@ -84,30 +83,42 @@ fun startAthan(context: Context, prayTime: PrayTime, intendedTime: Long?) {
 private fun startAthanBody(context: Context, prayTime: PrayTime) {
     runCatching {
         debugLog("Alarms: startAthanBody for $prayTime")
-
         runCatching {
             context.getSystemService<PowerManager>()?.newWakeLock(
-                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
+                PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
                 "persiancalendar:alarm"
             )?.acquire(30.seconds.inWholeMilliseconds)
         }.onFailure(logException)
 
-        if (notificationAthan.value || ActivityCompat.checkSelfPermission(
-                context, Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) context.startService(
-            Intent(context, AthanNotification::class.java)
-                .putExtra(KEY_EXTRA_PRAYER, prayTime.name)
-        ) else startAthanActivity(context, prayTime)
+        val canPostNotifications = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+        } else true
+
+        if (notificationAthan.value || canPostNotifications) {
+            val intent = Intent(context, AthanNotification::class.java).putExtra(KEY_EXTRA_PRAYER, prayTime.name)
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) context.startForegroundService(intent)
+                else context.startService(intent)
+            } catch (e: Exception) {
+                logException(e)
+                startAthanActivity(context, prayTime)
+            }
+        } else {
+            startAthanActivity(context, prayTime)
+        }
     }.onFailure(logException)
 }
 
 fun startAthanActivity(context: Context, prayTime: PrayTime?) {
-    context.startActivity(
-        Intent(context, AthanActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            .putExtra(KEY_EXTRA_PRAYER, prayTime?.name)
-    )
+    try {
+        val intent = Intent(context, AthanActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra(KEY_EXTRA_PRAYER, prayTime?.name)
+        }
+        context.startActivity(intent)
+    } catch (e: Exception) {
+        logException(e)
+    }
 }
 
 fun getEnabledAlarms(context: Context): Set<PrayTime> {
@@ -120,59 +131,141 @@ fun getEnabledAlarms(context: Context): Set<PrayTime> {
 
 fun scheduleAlarms(context: Context) {
     val enabledAlarms = getEnabledAlarms(context).takeIf { it.isNotEmpty() } ?: return
-    val athanGap = (context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
-        ?: .0).minutes.inWholeMilliseconds
+    val athanGap = (context.preferences.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0).minutes.inWholeMilliseconds
 
     val prayTimes = coordinates.value?.calculatePrayTimes() ?: return
-    // convert spacedComma separated string to a set
-    enabledAlarms.forEachIndexed { i, prayTime ->
-        scheduleAlarm(context, prayTime, GregorianCalendar().also {
-            // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
-            it[GregorianCalendar.HOUR_OF_DAY] = 0
-            it[GregorianCalendar.MINUTE] = 0
-            it[GregorianCalendar.SECOND] = 0
-            it[GregorianCalendar.MILLISECOND] = 0
-            it.timeInMillis += prayTimes[prayTime].toMillis()
-        }.timeInMillis - athanGap, i)
+
+    enabledAlarms.toList().forEachIndexed { i, prayTime ->
+        runCatching {
+            val baseCalendar = GregorianCalendar().apply {
+                set(GregorianCalendar.HOUR_OF_DAY, 0)
+                set(GregorianCalendar.MINUTE, 0)
+                set(GregorianCalendar.SECOND, 0)
+                set(GregorianCalendar.MILLISECOND, 0)
+                timeInMillis += prayTimes[prayTime].toMillis()
+            }
+            scheduleAlarm(context, prayTime, baseCalendar.timeInMillis - athanGap, i)
+        }.onFailure(logException)
     }
 }
 
 private fun scheduleAlarm(context: Context, prayTime: PrayTime, timeInMillis: Long, i: Int) {
     val remainedMillis = timeInMillis - System.currentTimeMillis()
     debugLog("Alarms: $prayTime in ${remainedMillis / 60000} minutes")
-    if (remainedMillis < 0) return // Don't set alarm in past
+    if (remainedMillis < 0) return
 
-    run { // Schedule in both alarmmanager and workmanager, startAthan has the logic to skip duplicated calls
-        val workerInputData = Data.Builder().putLong(KEY_EXTRA_PRAYER_TIME, timeInMillis)
-            .putString(KEY_EXTRA_PRAYER, prayTime.name).build()
+    runCatching {
+        val workerInputData = Data.Builder()
+            .putLong(KEY_EXTRA_PRAYER_TIME, timeInMillis)
+            .putString(KEY_EXTRA_PRAYER, prayTime.name)
+            .build()
         val alarmWorker = OneTimeWorkRequestBuilder<AlarmWorker>()
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
             .setInputData(workerInputData)
             .build()
         WorkManager.getInstance(context)
-            .beginUniqueWork(ALARM_TAG + i, ExistingWorkPolicy.REPLACE, alarmWorker)
+            .beginUniqueWork("$ALARM_TAG_${prayTime.name}_$i", ExistingWorkPolicy.REPLACE, alarmWorker)
             .enqueue()
-    }
+    }.onFailure(logException)
 
-    val am = context.getSystemService<AlarmManager>() ?: return
-    val pendingIntent = PendingIntent.getBroadcast(
-        context, ALARMS_BASE_ID + i,
-        Intent(context, BroadcastReceivers::class.java)
-            .putExtra(KEY_EXTRA_PRAYER, prayTime.name)
-            .putExtra(KEY_EXTRA_PRAYER_TIME, timeInMillis)
-            .setAction(BROADCAST_ALARM),
-        PendingIntent.FLAG_UPDATE_CURRENT or
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
-    )
-    if (AlarmManagerCompat.canScheduleExactAlarms(am)) AlarmManagerCompat.setExactAndAllowWhileIdle(
-        am,
-        AlarmManager.RTC_WAKEUP,
-        timeInMillis,
-        pendingIntent,
-    ) else AlarmManagerCompat.setAndAllowWhileIdle(
-        am,
-        AlarmManager.RTC_WAKEUP,
-        timeInMillis,
-        pendingIntent
-    )
+    try {
+        val am = context.getSystemService<AlarmManager>() ?: return
+        val flags = PendingIntent.FLAG_UPDATE_CURRENT or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+        val pi = PendingIntent.getBroadcast(
+            context,
+            ALARMS_BASE_ID + i,
+            Intent(context, BroadcastReceivers::class.java).apply {
+                putExtra(KEY_EXTRA_PRAYER, prayTime.name)
+                putExtra(KEY_EXTRA_PRAYER_TIME, timeInMillis)
+                action = BROADCAST_ALARM
+            },
+            flags
+        )
+
+        if (AlarmManagerCompat.canScheduleExactAlarms(am)) {
+            AlarmManagerCompat.setExactAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, timeInMillis, pi)
+        } else {
+            AlarmManagerCompat.setAndAllowWhileIdle(am, AlarmManager.RTC_WAKEUP, timeInMillis, pi)
+        }
+    } catch (e: Exception) {
+        logException(e)
+    }
 }
+
+// Snooze current Athan
+fun snoozeAthan(context: Context, prayTime: PrayTime, snoozeMinutes: Int) {
+    val snoozeTime = System.currentTimeMillis() + snoozeMinutes.minutes.inWholeMilliseconds
+    scheduleAlarm(context, prayTime, snoozeTime, 9999)
+    debugLog("Snoozed $prayTime for $snoozeMinutes minutes")
+}
+
+// Cancel all scheduled alarms
+fun cancelAllAlarms(context: Context) {
+    try {
+        val am = context.getSystemService<AlarmManager>() ?: return
+        for (i in 0..10) {
+            val pi = PendingIntent.getBroadcast(
+                context,
+                ALARMS_BASE_ID + i,
+                Intent(context, BroadcastReceivers::class.java),
+                PendingIntent.FLAG_NO_CREATE or if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+            )
+            pi?.let { am.cancel(it) }
+        }
+        debugLog("All alarms cancelled")
+    } catch (e: Exception) {
+        logException(e)
+    }
+}
+
+// Get next upcoming Athan
+fun getNextAthanTime(context: Context): Pair<PrayTime, Long>? {
+    val prayTimes = coordinates.value?.calculatePrayTimes() ?: return null
+    val now = System.currentTimeMillis()
+    return prayTimes.entries.map { it.key to it.value.toMillis() }
+        .map { (prayTime, millis) -> prayTime to GregorianCalendar().apply {
+            set(GregorianCalendar.HOUR_OF_DAY, 0)
+            set(GregorianCalendar.MINUTE, 0)
+            set(GregorianCalendar.SECOND, 0)
+            set(GregorianCalendar.MILLISECOND, 0)
+            timeInMillis += millis
+        }.timeInMillis }
+        .filter { it.second > now }
+        .minByOrNull { it.second }
+}
+
+// Reschedule missed alarms
+fun rescheduleMissedAlarms(context: Context) {
+    val enabledAlarms = getEnabledAlarms(context)
+    val prayTimes = coordinates.value?.calculatePrayTimes() ?: return
+    val now = System.currentTimeMillis()
+
+    enabledAlarms.forEachIndexed { i, prayTime ->
+        val baseCalendar = GregorianCalendar().apply {
+            set(GregorianCalendar.HOUR_OF_DAY, 0)
+            set(GregorianCalendar.MINUTE, 0)
+            set(GregorianCalendar.SECOND, 0)
+            set(GregorianCalendar.MILLISECOND, 0)
+            timeInMillis += prayTimes[prayTime].toMillis()
+        }
+        if (baseCalendar.timeInMillis < now) {
+            debugLog("Rescheduling missed alarm for $prayTime")
+            scheduleAlarm(context, prayTime, baseCalendar.timeInMillis + 24.hours.inWholeMilliseconds, i)
+        }
+    }
+}
+
+// Toggle alarm state
+fun toggleAthanAlarm(context: Context, prayTime: PrayTime, enable: Boolean) {
+    val current = getEnabledAlarms(context).toMutableSet()
+    if (enable) current.add(prayTime) else current.remove(prayTime)
+    context.preferences.edit { putString(PREF_ATHAN_ALARM, current.joinToString(",") { it.name }) }
+    scheduleAlarms(context)
+    debugLog("Alarm for $prayTime ${if (enable) "enabled" else "disabled"}")
+}
+
+// Debug log
+fun debugLog(message: String) {
+    println("[DEBUG] $message")
+}
+ 
