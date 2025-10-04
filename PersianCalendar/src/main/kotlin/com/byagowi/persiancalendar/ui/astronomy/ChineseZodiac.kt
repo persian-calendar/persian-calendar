@@ -54,7 +54,6 @@ enum class ChineseZodiac(
     }
 
     fun formatForHoroscope(resources: Resources, isPersian: Boolean): String = buildString {
-        appendLine(resolveEmoji(isPersian))
         val resolvedName = resolveTitle(isPersian, resources)
         if (isPersian) {
             appendLine(if (this@ChineseZodiac == MONKEY) "$resolvedName (شادی)" else resolvedName)
@@ -63,7 +62,7 @@ enum class ChineseZodiac(
         } else append(resolvedName)
     }
 
-    private fun resolveEmoji(isPersian: Boolean): String =
+    fun resolveEmoji(isPersian: Boolean): String =
         persianSpecificEmoji.takeIf { isPersian } ?: emoji
 
     private fun resolveTitle(isPersian: Boolean, resources: Resources): String =
