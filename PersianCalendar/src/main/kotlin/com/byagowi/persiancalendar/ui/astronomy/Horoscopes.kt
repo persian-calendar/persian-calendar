@@ -265,12 +265,8 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
                 fontSize = 40.sp,
                 modifier = Modifier.alpha(1 - animationProgress.value * .8f),
             )
-            val text = chineseZodiac.formatForHoroscope(
-                resources = resources,
-                isPersian = language.isPersian,
-            )
             Text(
-                text,
+                chineseZodiac.formatForHoroscope(resources, language.isPersian),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.alpha(animationProgress.value * 1f),
             )
@@ -347,11 +343,7 @@ private fun ColumnScope.AscendantZodiac(
     }
     EasternHoroscopePattern(modifier) { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-        Text(
-            zodiac.symbol,
-            fontSize = 40.sp,
-            modifier = Modifier.alpha(1 - progress * .9f),
-        )
+        Text(zodiac.symbol, Modifier.alpha(1 - progress * .9f), fontSize = 40.sp)
         val text = buildAnnotatedString {
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
                 it.format(resources, withEmoji = false, short = true)
