@@ -158,7 +158,7 @@ fun SharedTransitionScope.DeviceInformationScreen(
                     LazyColumn(
                         state = listState,
                         modifier = Modifier.windowInsetsPadding(
-                        WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
+                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
                         ),
                     ) {
                         item {
