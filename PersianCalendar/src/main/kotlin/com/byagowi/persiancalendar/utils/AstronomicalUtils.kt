@@ -13,26 +13,16 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
-import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.Body
-import io.github.cosinekitty.astronomy.EquatorEpoch
-import io.github.cosinekitty.astronomy.Observer
-import io.github.cosinekitty.astronomy.Refraction
-import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.eclipticGeoMoon
-import io.github.cosinekitty.astronomy.equator
-import io.github.cosinekitty.astronomy.horizon
-import io.github.cosinekitty.astronomy.rotationEqdHor
-import io.github.cosinekitty.astronomy.search
-import io.github.cosinekitty.astronomy.sunPosition
+import io.github.cosinekitty.astronomy.*
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.toDegrees
 
 private fun lunarLongitude(jdn: Jdn, setIranTime: Boolean = false, hourOfDay: Int): Double =
     eclipticGeoMoon(jdn.toAstronomyTime(hourOfDay, setIranTime)).lon
 
-// This only checks the midday, useful for calendar table where fast calculation is needed
 fun isMoonInScorpio(jdn: Jdn, hourOfDay: Int = 12, setIranTime: Boolean = false): Boolean =
     lunarLongitude(jdn, setIranTime, hourOfDay) in Zodiac.scorpioRange
 
@@ -59,19 +49,16 @@ fun searchMoonAgeTime(jdn: Jdn, targetDegrees: Double): Clock? {
     }
 }
 
-// setIranTime should be used only for tests
 private fun searchLunarLongitude(jdn: Jdn, targetLon: Double, setIranTime: Boolean): Clock {
     val startTime = jdn.toAstronomyTime(hourOfDay = 0, setIranTime = setIranTime)
     val endTime = startTime.addDays(1.0)
     return search(startTime, endTime, 1.0) { time ->
         (eclipticGeoMoon(time).lon - targetLon).withMaxDegreeValue(+180.0)
     }?.toMillisecondsSince1970()?.let { timeInMillis ->
-        Clock(
-            GregorianCalendar().also {
-                if (setIranTime) it.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
-                it.timeInMillis = timeInMillis
-            }
-        )
+        Clock(GregorianCalendar().also {
+            if (setIranTime) it.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+            it.timeInMillis = timeInMillis
+        })
     } ?: Clock.zero
 }
 
@@ -82,15 +69,12 @@ fun moonInScorpioState(jdn: Jdn, setIranTime: Boolean = false): MoonInScorpioSta
         start && end ->
             if (lunarLongitude(jdn, setIranTime, hourOfDay = 12) <= Zodiac.SCORPIO.tropicalRange[1])
                 MoonInScorpioState.Borji else MoonInScorpioState.Falaki
-
         start -> MoonInScorpioState.Start(
             searchLunarLongitude(jdn, Zodiac.scorpioRange.start, setIranTime)
         )
-
         end -> MoonInScorpioState.End(
             searchLunarLongitude(jdn, Zodiac.scorpioRange.endInclusive, setIranTime)
         )
-
         else -> null
     }
 }
@@ -129,17 +113,15 @@ fun generateYearName(
     return "${resources.getString(R.string.year_name)}$spacedColon${yearNames}"
 }
 
-// https://github.com/cosinekitty/astronomy/blob/0547aaf/demo/csharp/camera/camera.cs#L98
 fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
     val moonEquator = equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
     val sunEquator = equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
-    val moonHorizontal =
-        horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+    val moonHorizontal = horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
     val vec = rotationEqdHor(time, observer)
         .pivot(2, moonHorizontal.azimuth)
         .pivot(1, moonHorizontal.altitude)
         .rotate(sunEquator.vec)
-    return Math.toDegrees(atan2(vec.z, vec.y))
+    return toDegrees(atan2(vec.z, vec.y))
 }
 
 val Body.titleStringId
@@ -158,3 +140,41 @@ val Body.titleStringId
         Body.Moon -> R.string.moon
         else -> R.string.empty
     }
+
+fun isMoonFull(jdn: Jdn, toleranceDegrees: Double = 5.0): Boolean {
+    val phaseAngle = (eclipticGeoMoon(jdn.toAstronomyTime(12)).lon - sunPosition(jdn.toAstronomyTime(12)).elon).mod(360.0)
+    return phaseAngle in (180 - toleranceDegrees)..(180 + toleranceDegrees)
+}
+
+fun isMoonNew(jdn: Jdn, toleranceDegrees: Double = 5.0): Boolean {
+    val phaseAngle = (eclipticGeoMoon(jdn.toAstronomyTime(12)).lon - sunPosition(jdn.toAstronomyTime(12)).elon).mod(360.0)
+    return phaseAngle < toleranceDegrees || phaseAngle > (360 - toleranceDegrees)
+}
+
+fun moonPhaseName(jdn: Jdn): String {
+    val diff = (eclipticGeoMoon(jdn.toAstronomyTime(12)).lon - sunPosition(jdn.toAstronomyTime(12)).elon).mod(360.0)
+    return when {
+        diff < 45 -> "New Moon"
+        diff < 90 -> "First Quarter"
+        diff < 135 -> "Waxing Gibbous"
+        diff < 180 -> "Full Moon"
+        diff < 225 -> "Waning Gibbous"
+        diff < 270 -> "Last Quarter"
+        diff < 315 -> "Waning Crescent"
+        else -> "New Moon"
+    }
+}
+
+fun approximateMoonIllumination(jdn: Jdn): Double {
+    val moonLon = eclipticGeoMoon(jdn.toAstronomyTime(12)).lon
+    val sunLon = sunPosition(jdn.toAstronomyTime(12)).elon
+    val phaseAngle = (moonLon - sunLon).mod(360.0)
+    return (1 - cos(Math.toRadians(phaseAngle))) / 2
+}
+
+fun isMoonWaxing(jdn: Jdn): Boolean {
+    val diffToday = (eclipticGeoMoon(jdn.toAstronomyTime(12)).lon - sunPosition(jdn.toAstronomyTime(12)).elon).mod(360.0)
+    val diffTomorrow = (eclipticGeoMoon((jdn + 1).toAstronomyTime(12)).lon - sunPosition((jdn + 1).toAstronomyTime(12)).elon).mod(360.0)
+    return diffTomorrow > diffToday
+}
+ 
