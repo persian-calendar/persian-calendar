@@ -19,10 +19,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -86,10 +90,17 @@ fun SharedTransitionScope.LicensesScreen(
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
                 ScreenSurface(animatedContentScope) {
-                    Box { Licenses(paddingValues.calculateBottomPadding()) }
+                    Box(
+                        modifier = Modifier.windowInsetsPadding(
+                            WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
+                        ),
+                    ) { Licenses(paddingValues.calculateBottomPadding()) }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .windowInsetsPadding(
+                                WindowInsets.displayCutout.only(WindowInsetsSides.Horizontal)
+                            )
                             .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                             .clearAndSetSemantics {},
                         contentAlignment = Alignment.CenterEnd,

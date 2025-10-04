@@ -40,14 +40,19 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -345,7 +350,11 @@ fun SharedTransitionScope.CalendarScreen(
         val bottomPaddingWithMinimum = bottomPadding
             // For screens without navigation bar, at least make sure it has some bottom padding
             .coerceAtLeast(24.dp)
-        BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
+        BoxWithConstraints(
+            Modifier
+                .padding(top = paddingValues.calculateTopPadding())
+                .windowInsetsPadding(WindowInsets.displayCutout.only(WindowInsetsSides.Start))
+        ) {
             val maxWidth = this.maxWidth
             val maxHeight = this.maxHeight
             val pagerSize = calendarPagerSize(isLandscape, maxWidth, maxHeight, bottomPadding)
@@ -386,7 +395,13 @@ fun SharedTransitionScope.CalendarScreen(
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
                                 bottomPadding = bottomPaddingWithMinimum,
-                                modifier = Modifier.fillMaxHeight(),
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .windowInsetsPadding(
+                                        WindowInsets.displayCutout.only(
+                                            WindowInsetsSides.End
+                                        )
+                                    ),
                             )
                         }
                     } else {
