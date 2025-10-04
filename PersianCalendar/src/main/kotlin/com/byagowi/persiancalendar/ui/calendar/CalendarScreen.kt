@@ -510,7 +510,7 @@ fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highligh
     viewModel.changeSelectedMonthOffsetCommand(mainCalendar.getMonthsDistance(today, jdn))
 
     // a11y
-    if (isTalkBackEnabled && jdn != today) Toast.makeText(
+    if (isTalkBackEnabled.value && jdn != today) Toast.makeText(
         context, getA11yDaySummary(
             context.resources,
             jdn,
@@ -1070,6 +1070,7 @@ private fun SharedTransitionScope.Menu(
             closeMenu()
         }
 
+        val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
         HorizontalDivider()
 
         @Composable

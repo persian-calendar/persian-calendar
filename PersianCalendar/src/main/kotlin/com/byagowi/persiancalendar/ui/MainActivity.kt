@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.view.accessibility.AccessibilityManager
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -14,10 +15,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalView
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.updateAccessibilityFlows
 import com.byagowi.persiancalendar.ui.theme.AppTheme
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -133,6 +136,42 @@ class MainActivity : ComponentActivity() {
         update(applicationContext, false)
         ++resumeToken_.value
     }
+
+    override fun onStart() {
+        super.onStart()
+        val accessibilityService = getSystemService<AccessibilityManager>()
+        accessibilityService?.addTouchExplorationStateChangeListener(
+            touchExplorationStateChangeListener
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
+            accessibilityService?.addHighContrastTextStateChangeListener(
+                mainExecutor, it
+            )
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        val accessibilityService = getSystemService<AccessibilityManager>()
+        accessibilityService?.removeTouchExplorationStateChangeListener(
+            touchExplorationStateChangeListener
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) highContrastTextStateChangeListener?.let {
+            accessibilityService?.removeHighContrastTextStateChangeListener(it)
+        }
+    }
+
+    private val touchExplorationStateChangeListener =
+        AccessibilityManager.TouchExplorationStateChangeListener {
+            getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
+            update(this, true)
+        }
+    private val highContrastTextStateChangeListener =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {
+            AccessibilityManager.HighContrastTextStateChangeListener {
+                getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
+            }
+        } else null
 }
 
 private val resumeToken_ = MutableStateFlow(0)

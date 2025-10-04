@@ -20,6 +20,8 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -267,6 +269,8 @@ fun DaysTable(
                     val isSelected = isHighlighted && selectedDay == day
                     val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                     val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
+                    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+                    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
                     Canvas(cellsSizeModifier) {
                         val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
                         val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }

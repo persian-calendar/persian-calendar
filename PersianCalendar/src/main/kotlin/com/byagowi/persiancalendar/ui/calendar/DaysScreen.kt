@@ -776,6 +776,7 @@ private fun DaysView(
 
                 // Time cells and table
                 val outlineVariant = MaterialTheme.colorScheme.outlineVariant
+                val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 Row(
                     Modifier.drawBehind {
                         val topLineY = 2.dp.toPx()

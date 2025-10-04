@@ -80,7 +80,7 @@ fun getA11yDaySummary(
     withWeekOfYear: Boolean = isShowWeekOfYearEnabled.value,
 ): String = buildString {
     // It has some expensive calculations, lets not do that when not needed
-    if (!isTalkBackEnabled) return@buildString
+    if (!isTalkBackEnabled.value) return@buildString
 
     if (isToday) appendLine(resources.getString(R.string.today))
 

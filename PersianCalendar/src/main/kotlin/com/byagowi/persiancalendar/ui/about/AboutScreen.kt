@@ -433,6 +433,7 @@ private fun Developers() {
     }
     var refreshToken by remember { mutableIntStateOf(0) }
     val developers = remember(refreshToken) { developersBeforeShuffle.shuffled() }
+    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
 
     Text(
         stringResource(R.string.about_developers),

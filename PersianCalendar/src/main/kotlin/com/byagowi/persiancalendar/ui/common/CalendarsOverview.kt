@@ -125,6 +125,7 @@ fun SharedTransitionScope.CalendarsOverview(
 ) {
     val resources = LocalResources.current
     val isToday = today == jdn
+    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     Column(
         Modifier.semantics {
             if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(

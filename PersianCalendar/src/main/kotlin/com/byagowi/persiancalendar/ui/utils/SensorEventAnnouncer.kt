@@ -14,11 +14,13 @@ class SensorEventAnnouncer(@get:StringRes private val text: Int, initialState: B
     private var lastAnnounce = -1L
 
     fun check(context: Context, newState: Boolean) {
-        if (!isTalkBackEnabled) return
+        if (!isTalkBackEnabled.value) return
         if (newState && !state) {
             val now = System.currentTimeMillis()
             if (now - lastAnnounce > 2000L) { // 2 seconds
-                if (isTalkBackEnabled) Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                if (isTalkBackEnabled.value) {
+                    Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                }
                 // https://stackoverflow.com/a/29423018
                 context.getSystemService<AudioManager>()
                     ?.playSoundEffect(AudioManager.FX_KEY_CLICK)

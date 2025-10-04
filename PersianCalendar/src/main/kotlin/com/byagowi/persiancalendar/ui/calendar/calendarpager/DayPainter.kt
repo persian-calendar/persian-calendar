@@ -100,7 +100,7 @@ class DayPainter(
                 paints.eventIndicatorRadius, when {
                     dayIsSelected -> paints.headerTextSelectedPaint
                     // use textPaint for holiday event when a11y's high contrast is enabled
-                    isHighTextContrastEnabled && holiday && paint == paints.eventIndicatorPaint ->
+                    isHighTextContrastEnabled.value && holiday && paint == paints.eventIndicatorPaint ->
                         paints.dayOfMonthNumberTextHolidayPaint
 
                     else -> paint
@@ -138,7 +138,7 @@ class DayPainter(
         ).joinToString(" ")
         this.indicators = listOf(
             hasAppointment to paints.appointmentIndicatorPaint,
-            (hasEvent || (isHighTextContrastEnabled && holiday)) to paints.eventIndicatorPaint
+            (hasEvent || (isHighTextContrastEnabled.value && holiday)) to paints.eventIndicatorPaint
         ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
     }
 

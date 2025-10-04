@@ -880,7 +880,7 @@ private fun createMonthViewRemoteViews(
         val action = jdnActionKey + jdn.value
         remoteViews.setOnClickPendingIntent(id, context.launchAppPendingIntent(action))
         remoteViews.setInt(id, "setBackgroundResource", R.drawable.widget_month_day_ripple)
-        if (isTalkBackEnabled) {
+        if (isTalkBackEnabled.value) {
             val daySummary = getA11yDaySummary(
                 context.resources, jdn, jdn == today, monthDeviceEvents,
                 withZodiac = false, withOtherCalendars = false, withTitle = true,
@@ -1365,10 +1365,10 @@ private fun setEventsInWidget(
         compact = true,
         showDeviceCalendarEvents = true,
         insertRLM = resources.isRtl,
-        addIsHoliday = isHighTextContrastEnabled
+        addIsHoliday = isHighTextContrastEnabled.value,
     )
     remoteViews.setTextViewTextOrHideIfEmpty(holidaysId, holidays)
-    if (isTalkBackEnabled) remoteViews.setContentDescription(
+    if (isTalkBackEnabled.value) remoteViews.setContentDescription(
         holidaysId, resources.getString(R.string.holiday_reason, holidays)
     )
 
@@ -1419,8 +1419,8 @@ private fun updateNotification(
         timesToShow = timesToShow,
         isRtl = context.resources.isRtl,
         events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
-        isTalkBackEnabled = isTalkBackEnabled,
-        isHighTextContrastEnabled = isHighTextContrastEnabled,
+        isTalkBackEnabled = isTalkBackEnabled.value,
+        isHighTextContrastEnabled = isHighTextContrastEnabled.value,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
         whatToShowOnWidgets = whatToShowOnWidgets,

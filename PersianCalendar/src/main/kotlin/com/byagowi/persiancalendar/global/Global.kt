@@ -285,10 +285,12 @@ var whatToShowOnWidgets = emptySet<String>()
 private val isAstronomicalExtraFeaturesEnabled_ = MutableStateFlow(false)
 val isAstronomicalExtraFeaturesEnabled: StateFlow<Boolean> get() = isAstronomicalExtraFeaturesEnabled_
 
-var isTalkBackEnabled = false
-    private set
-var isHighTextContrastEnabled = false
-    private set
+val isTalkBackEnabled_ = MutableStateFlow(false)
+val isTalkBackEnabled: StateFlow<Boolean> get() = isTalkBackEnabled_
+
+var isHighTextContrastEnabled_ = MutableStateFlow(false)
+val isHighTextContrastEnabled: StateFlow<Boolean> get() = isHighTextContrastEnabled_
+
 var shiftWorkTitles = emptyMap<String, String>()
     private set
 var shiftWorkStartingJdn: Jdn? = null
@@ -578,19 +580,18 @@ fun updateStoredPreference(context: Context) {
     shiftWorkStartingJdn = preferences.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
     shiftWorkRecurs = preferences.getBoolean(PREF_SHIFT_WORK_RECURS, true)
 
-    val accessibilityService = context.getSystemService<AccessibilityManager>()
+    context.getSystemService<AccessibilityManager>()?.updateAccessibilityFlows()
+}
 
-    isTalkBackEnabled = accessibilityService?.let {
-        it.isEnabled && it.isTouchExplorationEnabled
-    } == true
+fun AccessibilityManager.updateAccessibilityFlows() {
+    isTalkBackEnabled_.value = isEnabled && isTouchExplorationEnabled
 
     // https://stackoverflow.com/a/61599809
-    isHighTextContrastEnabled = runCatching {
-        accessibilityService?.let {
-            if (Build.VERSION.SDK_INT >= 36) {
-                it.isHighContrastTextEnabled
-            } else it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
-        }
+    isHighTextContrastEnabled_.value = runCatching {
+        if (Build.VERSION.SDK_INT >= 36) {
+            isHighContrastTextEnabled
+        } else this@updateAccessibilityFlows.javaClass.getMethod("isHighTextContrastEnabled")
+            .invoke(this) as? Boolean
     }.onFailure(logException).getOrNull() == true
 }
 

@@ -172,7 +172,7 @@ fun SharedTransitionScope.ConverterScreen(
                             onDismissRequest = { showMenu = false },
                             minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
                         ) {
-                            var entered by remember { mutableStateOf(isTalkBackEnabled) }
+                            var entered by remember { mutableStateOf(isTalkBackEnabled.value) }
                             LaunchedEffect(Unit) { entered = true }
                             ConverterScreenMode.entries.forEach { entry ->
                                 AnimatedVisibility(

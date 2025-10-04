@@ -204,6 +204,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 val context = LocalContext.current
                 val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
                 val isVazirEnabled by isVazirEnabled.collectAsState()
+                val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
                     if (mainCalendarDigitsIsArabic || isVazirEnabled) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge

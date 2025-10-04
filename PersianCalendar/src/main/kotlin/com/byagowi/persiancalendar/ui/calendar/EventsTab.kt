@@ -375,7 +375,7 @@ private fun EquinoxCountDownContent(
             .509f to Color.Transparent,
             .51f to contentColor,
         )
-
+        val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
         countDownTimeParts.map { (pluralId, interval) ->
             val x = (remainedTime / interval).toInt()
             remainedTime -= interval * x
