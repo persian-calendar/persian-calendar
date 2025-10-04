@@ -262,18 +262,6 @@ fun DaysTable(
                                 addEvent(AddEventData.fromJdn(day))
                             },
                         )
-                        .semantics {
-                            if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
-                                resources,
-                                day,
-                                isToday,
-                                EventsStore.empty(),
-                                withZodiac = isToday,
-                                withOtherCalendars = false,
-                                withTitle = true,
-                                withWeekOfYear = false,
-                            )
-                        }
                         .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
                 ) {
                     val isSelected = isHighlighted && selectedDay == day
@@ -321,7 +309,20 @@ fun DaysTable(
                             else -> contentColor
                         },
                         style = daysStyle,
-                        modifier = Modifier.padding(top = cellHeight / 15),
+                        modifier = Modifier
+                            .padding(top = cellHeight / 15)
+                            .semantics {
+                                if (isTalkBackEnabled) this.contentDescription = getA11yDaySummary(
+                                    resources = resources,
+                                    jdn = day,
+                                    isToday = isToday,
+                                    deviceCalendarEvents = EventsStore.empty(),
+                                    withZodiac = isToday,
+                                    withOtherCalendars = false,
+                                    withTitle = true,
+                                    withWeekOfYear = false,
+                                )
+                            },
                     )
                 }
             }
