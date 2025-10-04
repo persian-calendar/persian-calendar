@@ -246,11 +246,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
     val resources = LocalResources.current
     AppDialog(onDismissRequest = onDismissRequest) appDialog@{
         val animationProgress = remember { Animatable(0f) }
-        LaunchedEffect(Unit) {
-            animationProgress.animateTo(
-                1f, tween(delayMillis = 750)
-            )
-        }
+        LaunchedEffect(Unit) { animationProgress.animateTo(1f, tween(delayMillis = 750)) }
         val coroutineScope = rememberCoroutineScope()
         val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
         val modifier = if (isTalkBackEnabled) Modifier else Modifier.clickable(
@@ -258,10 +254,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         ) {
             coroutineScope.launch {
                 animationProgress.snapTo(0f)
-                animationProgress.animateTo(
-                    1f,
-                    tween(delayMillis = 2000)
-                )
+                animationProgress.animateTo(1f, tween(delayMillis = 2000))
             }
         }
         EasternHoroscopePattern(modifier) { i ->
