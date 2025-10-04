@@ -98,7 +98,7 @@ fun CoordinatesDialog(
                         when (i) {
                             0 -> abs(it) <= 90 // Valid latitudes
                             1 -> abs(it) <= 180 // Valid longitudes
-                            else -> it in -418.0..848.0 // Altitude, from Dead Sea to Mount Everest
+                            else -> it in -418.0..8_849.0 // Altitude, from Dead Sea to Mount Everest
                         }
                     }
                 }
