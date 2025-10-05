@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar
 
 import android.content.ComponentName
+import android.graphics.Color
 import android.os.Build
 import android.util.TypedValue
+import androidx.core.graphics.ColorUtils
 import androidx.wear.protolayout.ActionBuilders.launchAction
 import androidx.wear.protolayout.ColorBuilders
 import androidx.wear.protolayout.DimensionBuilders
@@ -123,15 +125,17 @@ class MonthTileService : TileService() {
                 .setVerticalAlignment(LayoutElementBuilders.VERTICAL_ALIGN_CENTER)
             row.setModifiers(
                 ModifiersBuilders.Modifiers.Builder().also {
-                    if (y == 0) it.setBackground(
-                        ModifiersBuilders.Background.Builder()
-                            .setColor(colorScheme.secondaryContainer.colorProp())
-                            .setCorner(shapes.full).build()
-                    )
-                    it.setPadding(padding(horizontal = 4f, vertical = 0f))
+                    if (y == 0) {
+                        it.setBackground(
+                            ModifiersBuilders.Background.Builder()
+                                .setColor(colorScheme.secondaryContainer.colorProp())
+                                .setCorner(shapes.full).build()
+                        )
+                        it.setPadding(padding(start = 4f, end = 4f, bottom = 4f))
+                    } else it.setPadding(padding(start = 4f, end = 4f, top = 1f))
                 }.build()
             )
-            val cellFontSize = dpToSp(screenMinDp / (if (y == 0) 17f else 19.5f))
+            val cellFontSize = dpToSp(screenMinDp / (if (y == 0) 17f else 16.5f))
             repeat(7) { x ->
                 row.addContent(
                     tableCell(
@@ -171,7 +175,7 @@ class MonthTileService : TileService() {
             else -> ""
         }
         val jdn = monthStartJdn + day
-        val isHoliday = text != "" && getEventsOfDay(
+        val isHoliday = text != "" && y != 0 && getEventsOfDay(
             enabledEvents = emptySet(),
             civilDate = jdn.toCivilDate(),
         ).any { it.type == EntryType.Holiday }
@@ -180,43 +184,55 @@ class MonthTileService : TileService() {
         return LayoutElementBuilders.Box.Builder()
             .setWidth(expand())
             .setHeight(wrap())
-            .addContent(run {
-                val element = basicText(
-                    text.layoutString,
-                    LayoutElementBuilders.FontStyle.Builder()
-                        .setSize(
-                            DimensionBuilders.SpProp.Builder()
-                                .setValue(cellFontSize)
-                                .build()
-                        )
-                        .setColor(
-                            when {
-                                y == 0 -> colorScheme.onSecondaryContainer
-                                isToday -> colorScheme.onPrimary
-                                // x == 0 means it's Friday
-                                isHoliday || x == 0 -> colorScheme.primary
-                                else -> colorScheme.onBackground
-                            }.colorProp()
-                        )
-                        .build(),
-                )
-                if (isToday) LayoutElementBuilders.Box.Builder()
+            .addContent(
+                LayoutElementBuilders.Box.Builder()
                     .setModifiers(
-                        ModifiersBuilders.Modifiers.Builder()
-                            .setBackground(
-                                ModifiersBuilders.Background.Builder()
+                        ModifiersBuilders.Modifiers.Builder().also {
+                            if (isToday) it.setBorder(
+                                ModifiersBuilders.Border.Builder()
+                                    .setWidth(DimensionBuilders.dp(2f))
                                     .setColor(colorScheme.primary.colorProp())
-                                    .setCorner(shapes.full)
                                     .build()
                             )
-                            .build()
+                            val background = ModifiersBuilders.Background.Builder()
+                            background.setCorner(shapes.full)
+                            background.setColor(
+                                ColorBuilders.ColorProp.Builder(
+                                    when {
+                                        isToday -> colorScheme.primary.staticArgb
+                                        (isHoliday || x == 0) && y != 0 && text.isNotEmpty() ->
+                                            ColorUtils.setAlphaComponent(
+                                                colorScheme.primaryContainer.staticArgb,
+                                                180
+                                            )
+
+                                        else -> Color.TRANSPARENT
+                                    }
+                                ).build()
+                            )
+                            it.setBackground(background.build())
+                        }.build()
                     )
                     .setWidth(DimensionBuilders.dp(screenMinDp / 12f))
                     .setHeight(DimensionBuilders.dp(screenMinDp / 12f))
-                    .addContent(element)
+                    .addContent(
+                        basicText(
+                            text.layoutString,
+                            LayoutElementBuilders.FontStyle.Builder()
+                                .setSize(DimensionBuilders.sp(cellFontSize))
+                                .setColor(
+                                    when {
+                                        y == 0 -> colorScheme.onSecondaryContainer
+                                        isToday -> colorScheme.onPrimary
+                                        isHoliday || x == 0 -> colorScheme.onPrimaryContainer
+                                        else -> colorScheme.onBackground
+                                    }.colorProp()
+                                )
+                                .build(),
+                        )
+                    )
                     .build()
-                else element
-            })
+            )
             .apply {
                 if (isHoliday) addContent(
                     LayoutElementBuilders.Box.Builder()
@@ -233,7 +249,7 @@ class MonthTileService : TileService() {
                                             ModifiersBuilders.Background.Builder()
                                                 .setColor(
                                                     (if (isToday) colorScheme.onPrimary
-                                                    else colorScheme.primary).colorProp()
+                                                    else colorScheme.onPrimaryContainer).colorProp()
                                                 )
                                                 .setCorner(shapes.full)
                                                 .build()
