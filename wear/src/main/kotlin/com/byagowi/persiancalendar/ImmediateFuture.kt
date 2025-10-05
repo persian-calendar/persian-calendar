@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar;
+package com.byagowi.persiancalendar
 
 import android.util.Log
 import com.google.common.util.concurrent.ListenableFuture
