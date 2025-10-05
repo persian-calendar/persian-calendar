@@ -386,6 +386,7 @@ private fun AboutScreenButton(
         modifier = Modifier
             .clickable { action(context) }
             .padding(start = 20.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
+            .fillMaxWidth()
             .then(modifier),
     ) {
         Row {
