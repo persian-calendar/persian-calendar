@@ -28,7 +28,7 @@ class ConverterScreenTest {
     @Test
     fun converterScreenSmokeTest() {
         composeTestRule.setContentWithParent { scope ->
-            ConverterScreen(scope, {}, {}, viewModel())
+            ConverterScreen(scope, {}, {}, viewModel(), null)
         }
     }
 
@@ -37,7 +37,7 @@ class ConverterScreenTest {
         composeTestRule.setContentWithParent { scope ->
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.CONVERTER)
-            ConverterScreen(scope, {}, {}, viewModel)
+            ConverterScreen(scope, {}, {}, viewModel, null)
         }
     }
 
@@ -46,7 +46,7 @@ class ConverterScreenTest {
         composeTestRule.setContentWithParent { scope ->
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.DISTANCE)
-            ConverterScreen(scope, {}, {}, viewModel)
+            ConverterScreen(scope, {}, {}, viewModel, null)
         }
     }
 
@@ -55,7 +55,7 @@ class ConverterScreenTest {
         composeTestRule.setContentWithParent { scope ->
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.CALCULATOR)
-            ConverterScreen(scope, {}, {}, viewModel)
+            ConverterScreen(scope, {}, {}, viewModel, null)
         }
     }
 
@@ -64,7 +64,7 @@ class ConverterScreenTest {
         composeTestRule.setContentWithParent { scope ->
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.QR_CODE)
-            ConverterScreen(scope, {}, {}, viewModel)
+            ConverterScreen(scope, {}, {}, viewModel, null)
         }
     }
 
@@ -73,7 +73,7 @@ class ConverterScreenTest {
         composeTestRule.setContentWithParent { scope ->
             val viewModel = viewModel<ConverterViewModel>()
             viewModel.changeScreenMode(ConverterScreenMode.TIME_ZONES)
-            ConverterScreen(scope, {}, {}, viewModel)
+            ConverterScreen(scope, {}, {}, viewModel, null)
         }
     }
 

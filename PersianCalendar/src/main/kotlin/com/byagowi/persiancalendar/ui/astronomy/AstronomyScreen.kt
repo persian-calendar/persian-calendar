@@ -94,6 +94,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -127,6 +128,7 @@ fun SharedTransitionScope.AstronomyScreen(
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
+    preferredNavigateUp: (() -> Unit)?,
 ) {
     LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
@@ -159,7 +161,10 @@ fun SharedTransitionScope.AstronomyScreen(
                     )
                 },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
+                navigationIcon = {
+                    if (preferredNavigateUp != null) NavigationNavigateUpIcon(preferredNavigateUp)
+                    else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                },
                 actions = {
                     val minutesOffset by viewModel.minutesOffset.collectAsState()
                     val isTropical by viewModel.isTropical.collectAsState()

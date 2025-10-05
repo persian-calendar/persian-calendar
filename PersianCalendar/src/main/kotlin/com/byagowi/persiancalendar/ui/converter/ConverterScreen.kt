@@ -101,6 +101,7 @@ import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -130,6 +131,7 @@ fun SharedTransitionScope.ConverterScreen(
     openDrawer: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     viewModel: ConverterViewModel,
+    preferredNavigateUp: (() -> Unit)?,
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
@@ -196,7 +198,10 @@ fun SharedTransitionScope.ConverterScreen(
                     }
                 },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
+                navigationIcon = {
+                    if (preferredNavigateUp != null) NavigationNavigateUpIcon(preferredNavigateUp)
+                    else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()

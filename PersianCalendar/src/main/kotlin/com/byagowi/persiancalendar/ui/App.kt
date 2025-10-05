@@ -316,7 +316,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToAstronomy = ::navigateToAstronomy,
-                        viewModel = viewModel<ConverterViewModel>()
+                        viewModel = viewModel<ConverterViewModel>(),
+                        preferredNavigateUp = { navigateUp(converterRoute) }.takeIf {
+                            navController.previousBackStackEntry == null
+                        },
                     )
                 }
 
@@ -327,6 +330,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToLevel = { navController.navigate(levelRoute) },
                         navigateToMap = { navController.navigate(mapRoute) },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
+                        preferredNavigateUp = { navigateUp(compassRoute) }.takeIf {
+                            navController.previousBackStackEntry == null
+                        },
                     )
                 }
 
@@ -348,6 +354,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToMap = { navController.navigate(mapRoute) },
                         viewModel = viewModel,
+                        preferredNavigateUp = { navigateUp(astronomyRoute) }.takeIf {
+                            navController.previousBackStackEntry == null
+                        },
                     )
                 }
 

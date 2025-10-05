@@ -84,6 +84,7 @@ import com.byagowi.persiancalendar.ui.common.AppBottomAppBar
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.StopButton
@@ -114,6 +115,7 @@ fun SharedTransitionScope.CompassScreen(
     navigateToMap: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     animatedContentScope: AnimatedContentScope,
+    preferredNavigateUp: (() -> Unit)?,
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
@@ -209,7 +211,10 @@ fun SharedTransitionScope.CompassScreen(
                     }
                 },
                 colors = appTopAppBarColors(),
-                navigationIcon = { NavigationOpenDrawerIcon(animatedContentScope, openDrawer) },
+                navigationIcon = {
+                    if (preferredNavigateUp != null) NavigationNavigateUpIcon(preferredNavigateUp)
+                    else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
+                },
                 actions = {
                     if (coordinates != null) AppIconButton(
                         icon = In24HoursIcon,
