@@ -35,7 +35,7 @@ class CompassScreenTest {
                 navigateToMap = { assert(false) },
                 navigateToSettingsLocationTab = {},
                 animatedContentScope = scope,
-                preferredNavigateUp = null,
+                noBackStackAction = null,
             )
         }
         assert(!navigateToLevelIsCalled)
@@ -57,7 +57,7 @@ class CompassScreenTest {
                 navigateToMap = { navigateToMapIsCalled = true },
                 navigateToSettingsLocationTab = {},
                 animatedContentScope = scope,
-                preferredNavigateUp = null,
+                noBackStackAction = null,
             )
         }
         assert(!navigateToMapIsCalled)

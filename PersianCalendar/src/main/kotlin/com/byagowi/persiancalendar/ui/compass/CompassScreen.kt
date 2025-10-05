@@ -115,7 +115,7 @@ fun SharedTransitionScope.CompassScreen(
     navigateToMap: () -> Unit,
     navigateToSettingsLocationTab: () -> Unit,
     animatedContentScope: AnimatedContentScope,
-    preferredNavigateUp: (() -> Unit)?,
+    noBackStackAction: (() -> Unit)?,
 ) {
     val context = LocalContext.current
     val orientation = remember(LocalConfiguration.current) {
@@ -212,7 +212,7 @@ fun SharedTransitionScope.CompassScreen(
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
-                    if (preferredNavigateUp != null) NavigationNavigateUpIcon(preferredNavigateUp)
+                    if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
                     else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
                 },
                 actions = {

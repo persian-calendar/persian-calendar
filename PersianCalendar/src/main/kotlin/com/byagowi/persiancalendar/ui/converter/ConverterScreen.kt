@@ -131,7 +131,7 @@ fun SharedTransitionScope.ConverterScreen(
     openDrawer: () -> Unit,
     navigateToAstronomy: (Jdn) -> Unit,
     viewModel: ConverterViewModel,
-    preferredNavigateUp: (() -> Unit)?,
+    noBackStackAction: (() -> Unit)?,
 ) {
     var qrShareAction by remember { mutableStateOf({}) }
     val screenMode by viewModel.screenMode.collectAsState()
@@ -199,7 +199,7 @@ fun SharedTransitionScope.ConverterScreen(
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
-                    if (preferredNavigateUp != null) NavigationNavigateUpIcon(preferredNavigateUp)
+                    if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
                     else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
                 },
                 actions = {

@@ -128,7 +128,7 @@ fun SharedTransitionScope.AstronomyScreen(
     openDrawer: () -> Unit,
     navigateToMap: () -> Unit,
     viewModel: AstronomyViewModel,
-    preferredNavigateUp: (() -> Unit)?,
+    noBackStackAction: (() -> Unit)?,
 ) {
     LaunchedEffect(Unit) {
         // Default animation screen enter, only if minutes offset is at it's default
@@ -162,7 +162,7 @@ fun SharedTransitionScope.AstronomyScreen(
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {
-                    if (preferredNavigateUp != null) NavigationNavigateUpIcon(preferredNavigateUp)
+                    if (noBackStackAction != null) NavigationNavigateUpIcon(noBackStackAction)
                     else NavigationOpenDrawerIcon(animatedContentScope, openDrawer)
                 },
                 actions = {
