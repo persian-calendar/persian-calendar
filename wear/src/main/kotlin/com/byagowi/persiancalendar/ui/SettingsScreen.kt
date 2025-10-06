@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -29,6 +30,7 @@ import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SwitchButton
 import androidx.wear.compose.material3.Text
 import androidx.wear.tooling.preview.devices.WearDevices
+import com.byagowi.persiancalendar.complicationHideWeekDay
 import com.byagowi.persiancalendar.complicationMonthNumber
 import com.byagowi.persiancalendar.complicationWeekdayInitial
 import com.byagowi.persiancalendar.editPreferences
@@ -100,24 +102,37 @@ fun SettingsScreen(preferences: Preferences?) {
                 }
             }
             item {
-                ComplicationSwitch(complicationWeekdayInitial) { checked ->
-                    Column {
-                        Text("روز هفتهٔ کوتاه")
-                        AnimatedContent(
-                            if (checked) "چ" else "چهارشنبه",
-                            transitionSpec = appCrossfadeSpec
-                        ) { Text(it) }
+                ComplicationSwitch(complicationHideWeekDay) { checked ->
+                    Text("عدم نمایش روز هفته")
+                }
+            }
+            item {
+                Column {
+                    AnimatedVisibility(preferences?.get(complicationHideWeekDay) != true) {
+                        ComplicationSwitch(complicationWeekdayInitial) { checked ->
+                            Column {
+                                Text("روز هفتهٔ کوتاه")
+                                AnimatedContent(
+                                    if (checked) "چ" else "چهارشنبه",
+                                    transitionSpec = appCrossfadeSpec
+                                ) { Text(it) }
+                            }
+                        }
                     }
                 }
             }
             item {
-                ComplicationSwitch(complicationMonthNumber) { checked ->
-                    Column {
-                        Text("نمایش عددی ماه")
-                        AnimatedContent(
-                            if (checked) "۱/۳۱" else "۳۱ فروردین",
-                            transitionSpec = appCrossfadeSpec
-                        ) { Text(it) }
+                Column {
+                    AnimatedVisibility(preferences?.get(complicationHideWeekDay) != true) {
+                        ComplicationSwitch(complicationMonthNumber) { checked ->
+                            Column {
+                                Text("نمایش عددی ماه")
+                                AnimatedContent(
+                                    if (checked) "۱/۳۱" else "۳۱ فروردین",
+                                    transitionSpec = appCrossfadeSpec
+                                ) { Text(it) }
+                            }
+                        }
                     }
                 }
             }

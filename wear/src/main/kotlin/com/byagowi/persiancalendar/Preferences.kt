@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 
 val complicationWeekdayInitial = booleanPreferencesKey("ComplicationWeekdayInitial")
+val complicationHideWeekDay = booleanPreferencesKey("ComplicationHideWeekDay")
 val complicationMonthNumber = booleanPreferencesKey("ComplicationMonthNumber")
 val enabledEventsKey = stringSetPreferencesKey("Events")
 

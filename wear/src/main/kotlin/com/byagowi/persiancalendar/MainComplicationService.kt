@@ -29,17 +29,17 @@ class MainComplicationService : SuspendingComplicationDataSourceService() {
         val calendar = Calendar.getInstance(locale)
         val date = Date()
         val preferences = dataStore.data.firstOrNull()
-        val title = run {
-            val format = if (preferences?.get(complicationWeekdayInitial) == true) "EEEEE"
-            else DateFormat.WEEKDAY
-            DateFormat.getPatternInstance(calendar, format, locale).format(date)
-        }
-        val body = run {
-            val format =
-                if (preferences?.get(complicationMonthNumber) == true) DateFormat.NUM_MONTH_DAY
-                else DateFormat.ABBR_MONTH_DAY
-            DateFormat.getPatternInstance(calendar, format, locale).format(date)
-        }
+        val hideWeekDay = preferences?.get(complicationHideWeekDay) == true
+        val title = when {
+            hideWeekDay -> DateFormat.DAY
+            preferences?.get(complicationWeekdayInitial) == true -> "EEEEE"
+            else -> DateFormat.WEEKDAY
+        }.let { DateFormat.getPatternInstance(calendar, it, locale).format(date) }
+        val body = when {
+            hideWeekDay -> DateFormat.MONTH
+            preferences?.get(complicationMonthNumber) == true -> DateFormat.NUM_MONTH_DAY
+            else -> DateFormat.ABBR_MONTH_DAY
+        }.let { DateFormat.getPatternInstance(calendar, it, locale).format(date) }
         val dataBuilder = createComplicationData(title, body).setTapAction(
             PendingIntent.getActivity(
                 this,
