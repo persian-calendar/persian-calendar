@@ -235,7 +235,7 @@ MIT License
   SOFTWARE.
 
 ----
-DSEG - SIL
+DSEG - OFL
 https://github.com/keshikan/DSEG
 
 SIL OPEN FONT LICENSE Version 1.1
@@ -243,5 +243,16 @@ SIL OPEN FONT LICENSE Version 1.1
   Copyright (c) 2020, keshikan (https://www.keshikan.net)
 
   This Font Software is licensed under the SIL Open Font License, Version 1.1.
+  This license is copied below, and is also available with a FAQ at:
+  https://openfontlicense.org
+
+----
+Noto Sans Symbols - OFL
+https://github.com/notofonts/symbols
+
+SIL OPEN FONT LICENSE Version 1.1
+
+  Copyright 2022 The Noto Project Authors
+  This Font Software is licensed under the SIL Open Font License, Version 1.1 .
   This license is copied below, and is also available with a FAQ at:
   https://openfontlicense.org
