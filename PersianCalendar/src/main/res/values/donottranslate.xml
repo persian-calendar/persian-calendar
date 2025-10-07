@@ -72,6 +72,7 @@ adenoxi: Adel Noruzi"</string>
     <string name="not_set_time" translatable="false">--:--</string>
     <string name="moazzenzadeh" translatable="false">رحیم مؤذن‌زاده اردبیلی</string>
     <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
+    <string name="notification_athan_help" translatable="false">برای تنظیم حجم صدای اذان، هنگام زدن دکمهٔ فیزیکی تنظیم صدای گوشی، در قسمت سه‌نقطه آن پنجره، حجم صدای کانال اعلان (Notification) دستگاه را تغییر دهید.</string>
     <string name="empty" translatable="false" />
     <!--  Map  -->
     <string name="show_direct_path_label" translatable="false">Direct path</string>

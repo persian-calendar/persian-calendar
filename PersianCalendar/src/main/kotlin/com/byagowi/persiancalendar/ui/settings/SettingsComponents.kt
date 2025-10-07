@@ -345,7 +345,7 @@ private fun SettingsLayout(
                     Text(
                         state,
                         style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.alpha(AppBlendAlpha)
+                        modifier = Modifier.alpha(AppBlendAlpha),
                     )
                 }
             }

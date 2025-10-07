@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -74,6 +76,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.athan.PrayerSelectP
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.CoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.LocationDialog
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.isHighLatitude
@@ -233,6 +236,15 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
                     false
                 } else value
             },
+        )
+    }
+    this.AnimatedVisibility(isLocationSet && notificationAthan && language.isPersian) {
+        Text(
+            stringResource(R.string.notification_athan_help),
+            Modifier
+                .alpha(AppBlendAlpha)
+                .padding(horizontal = 24.dp, vertical = 16.dp),
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
     this.AnimatedVisibility(isLocationSet && !notificationAthan) {
