@@ -105,8 +105,7 @@ fun getDaySplits(
             if (dayIndex == currentDayIndex) addAll((0..<12).mapNotNull {
                 val from = previous + distance * it
                 val to = previous + distance * (it + 1)
-                val planet =
-                    chaldeanOrder[(chaldeanIndex + it + groupOffset) % chaldeanOrder.size]
+                val planet = chaldeanOrder[(chaldeanIndex + it + groupOffset) % chaldeanOrder.size]
                 PlanetaryHourRow(
                     planet = planet,
                     isDay = isDay,
@@ -132,10 +131,12 @@ fun PlanetaryHoursDialog(
         Text(
             formatDate(
                 Jdn(GregorianCalendar().also { it.timeInMillis = now }
-                    .toCivilDate()) on mainCalendar
+                    .toCivilDate()) on mainCalendar,
             ),
             textAlign = TextAlign.Center,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 2.dp),
         )
         getDaySplits(now, coordinates, isToday).forEach { row ->
             HorizontalDivider()
@@ -154,7 +155,7 @@ fun PlanetaryHoursDialog(
             ) {
                 AutoSizedText(
                     row.from.toFormattedString() + " - " + row.to.toFormattedString(),
-                    2f
+                    2f,
                 )
                 Icon(
                     if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
