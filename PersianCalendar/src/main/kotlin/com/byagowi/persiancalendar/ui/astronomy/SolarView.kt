@@ -8,12 +8,12 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.compose.ui.util.lerp
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
@@ -312,9 +312,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.strokeWidth = 1 * dp
         it.textSize = 25 * dp
         it.textAlign = Paint.Align.CENTER
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            it.typeface = resources.getFont(R.font.notosanssymbolsregularzodiacsubset)
-        }
+        it.typeface = ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
     }
     private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE

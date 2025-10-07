@@ -1,10 +1,11 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.content.res.Resources
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -13,17 +14,15 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 class AngleDisplay(
-    resources: Resources, defaultFormat: String = "00.0",
+    context: Context, defaultFormat: String = "00.0",
     private val backgroundText: String = "88.8"
 ) {
-    // ResourcesCompat.getFont could also be used for better compatibility
-    private val lcd = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) resources.getFont(
-        R.font.dseg7classicminibolditalicsubset
-    ) else null
+    private val lcd = ResourcesCompat.getFont(context, R.font.dseg7classicminibolditalicsubset)
 
     // The characters '!' is a whitespace on the font
     private val whiteSpace = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) '!' else ' '
-    private val lcdTextSize = 20 * resources.dp
+    private val dp = context.resources.dp
+    private val lcdTextSize = 20 * dp
     private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF00FF00.toInt()
         it.textSize = lcdTextSize
@@ -41,12 +40,12 @@ class AngleDisplay(
     }
     private val lcdWidth = displayRect.width()
     val lcdHeight = displayRect.height()
-    private val displayDrawable = resources.getDrawable(R.drawable.display, null)
+    private val displayDrawable = context.resources.getDrawable(R.drawable.display, null)
     private val displayFormat = DecimalFormat(defaultFormat).also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
-    private val displayPadding = (8 * resources.dp).toInt()
-    val displayGap = (24 * resources.dp).toInt()
+    private val displayPadding = (8 * dp).toInt()
+    val displayGap = (24 * dp).toInt()
 
     fun updatePlacement(x: Int, y: Int) {
         displayRect.set(

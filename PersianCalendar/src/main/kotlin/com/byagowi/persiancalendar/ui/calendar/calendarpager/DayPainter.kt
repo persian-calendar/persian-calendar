@@ -36,10 +36,11 @@ class DayPainter(
     isWidget: Boolean = false,
     isYearView: Boolean = false,
     selectedDayColor: Int? = null,
+    zodiacFont: Typeface?,
 ) {
     private val paints = Paints(
         resources, min(width, height), colors, isWidget, isYearView,
-        selectedDayColor, fontFile?.let(Typeface::createFromFile)
+        selectedDayColor, fontFile?.let(Typeface::createFromFile), zodiacFont,
     )
     private var text = ""
     private var today = false
@@ -170,6 +171,7 @@ private class Paints(
     isYearView: Boolean,
     @ColorInt selectedDayColor: Int?,
     typeface: Typeface?,
+    zodiacFont: Typeface?,
 ) {
     private val dp = resources.dp
     val circlePadding = .5f * dp
@@ -181,9 +183,6 @@ private class Paints(
     val scorpioSign = if (isArabicScript) {
         resources.getString(R.string.scorpio).first() + ZWJ
     } else Zodiac.SCORPIO.symbol
-    private val zodiacFont = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        resources.getFont(R.font.notosanssymbolsregularzodiacsubset)
-    } else null
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)

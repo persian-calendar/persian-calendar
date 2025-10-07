@@ -29,7 +29,6 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_HAS_CUSTOM_FONT
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME

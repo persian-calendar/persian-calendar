@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -113,6 +114,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
     val monthColors = appMonthColors()
     val fontFile = resolveFontFile()
+    val context = LocalContext.current
     val dayPainter = remember(monthColors, widthInPx) {
         lruCache(4, create = { height: Float ->
             DayPainter(
@@ -121,9 +123,13 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 height = height / 7,/* rows count*/
                 isRtl = isRtl,
                 colors = monthColors,
+                fontFile = fontFile,
                 isYearView = true,
                 selectedDayColor = monthColors.indicator.toArgb(),
-                fontFile = fontFile,
+                zodiacFont = ResourcesCompat.getFont(
+                    context,
+                    R.font.notosanssymbolsregularzodiacsubset
+                )
             )
         })
     }
@@ -166,7 +172,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
         }
     }
 
-    val context = LocalContext.current
     LazyColumn(state = lazyListState, modifier = detectZoom) {
         items(halfPages * 2) {
             val yearOffset = it - halfPages

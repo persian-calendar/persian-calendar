@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.ColorUtils
@@ -801,7 +802,10 @@ private fun createMonthViewRemoteViews(
             height = cellHeight,
             isRtl = isRtl,
             colors = colors,
-            isWidget = true
+            isWidget = true,
+            zodiacFont = ResourcesCompat.getFont(
+                context, R.font.notosanssymbolsregularzodiacsubset
+            ),
         ),
         width = width.toFloat(),
         canvas = canvas,

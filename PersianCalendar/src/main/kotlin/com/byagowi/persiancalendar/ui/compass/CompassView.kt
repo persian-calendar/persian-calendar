@@ -11,7 +11,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.Typeface
-import android.graphics.Typeface.createFromFile
 import android.util.AttributeSet
 import android.util.TypedValue
 import androidx.annotation.ColorInt
@@ -147,7 +146,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         textStrokePaint.color = color
     }
 
-    private val angleDisplay = AngleDisplay(resources, "0", "888")
+    private val angleDisplay = AngleDisplay(context, "0", "888")
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -44,6 +45,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -144,6 +146,7 @@ fun DaysTable(
         }
 
         val resources = LocalResources.current
+        val context = LocalContext.current
         val diameter = min(cellWidth, cellHeight)
         val fontFile = resolveFontFile()
         val dayPainter = remember(
@@ -156,6 +159,10 @@ fun DaysTable(
                 isRtl = isRtl,
                 colors = monthColors,
                 fontFile = fontFile,
+                zodiacFont = ResourcesCompat.getFont(
+                    context,
+                    R.font.notosanssymbolsregularzodiacsubset
+                )
             )
         }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
