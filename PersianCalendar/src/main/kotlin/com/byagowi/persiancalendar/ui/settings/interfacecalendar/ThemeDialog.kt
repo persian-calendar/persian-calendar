@@ -177,7 +177,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 context.preferences.edit {
                     putString(
                         PREF_CUSTOM_FONT_NAME,
-                        "${Random.nextDouble()}/${getFileName(context, uri)}"
+                        "${Random.nextDouble()}/${getFileName(context, uri)}",
                     )
                 }
             }
@@ -198,7 +198,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }) { Text(stringResource(R.string.select_font)) }
                 this.AnimatedVisibility(
                     customFontToken != null,
-                    Modifier.padding(start = 8.dp)
+                    Modifier.padding(start = 8.dp),
                 ) {
                     OutlinedIconButton({
                         context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
