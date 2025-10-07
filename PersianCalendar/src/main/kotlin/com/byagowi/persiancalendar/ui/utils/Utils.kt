@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
@@ -8,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
+import android.provider.OpenableColumns
 import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
@@ -49,7 +51,7 @@ fun Bitmap.toPngByteArray(): ByteArray {
 //fun Bitmap.toPngBase64(): String =
 //    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
 
-private inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
+inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
         applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action)
     )
@@ -84,6 +86,22 @@ fun Context.shareTextFile(text: String, fileName: String, mime: String) =
 
 fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
     shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
+
+fun getFileName(context: Context, uri: Uri): String? {
+    if (uri.scheme == ContentResolver.SCHEME_CONTENT) context.contentResolver.query(
+        uri, null, null, null, null
+    )?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (index != -1) return cursor.getString(index)
+        }
+    }
+
+    return uri.path?.let {
+        val cut = it.lastIndexOf('/')
+        if (cut != -1) it.substring(cut + 1) else it
+    }
+}
 
 fun createFlingDetector(
     context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean

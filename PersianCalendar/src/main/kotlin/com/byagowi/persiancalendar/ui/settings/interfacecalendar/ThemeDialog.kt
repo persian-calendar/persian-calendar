@@ -51,7 +51,6 @@ import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
@@ -60,6 +59,7 @@ import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
+import com.byagowi.persiancalendar.ui.utils.getFileName
 import com.byagowi.persiancalendar.utils.preferences
 import java.io.File
 import kotlin.random.Random
@@ -171,7 +171,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
 
-        val language by language.collectAsState()
         val customFontToken by customFontName.collectAsState()
         val fontPicker = rememberLauncherForActivityResult(
             ActivityResultContracts.OpenDocument()
@@ -215,21 +214,5 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 Text((customFontToken ?: "").split("/").last().split(".").first())
             }
         }
-    }
-}
-
-private fun getFileName(context: Context, uri: Uri): String? {
-    if (uri.scheme == ContentResolver.SCHEME_CONTENT) context.contentResolver.query(
-        uri, null, null, null, null
-    )?.use { cursor ->
-        if (cursor.moveToFirst()) {
-            val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            if (index != -1) return cursor.getString(index)
-        }
-    }
-
-    return uri.path?.let {
-        val cut = it.lastIndexOf('/')
-        if (cut != -1) it.substring(cut + 1) else it
     }
 }

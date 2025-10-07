@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,10 +30,13 @@ import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.STORED_ATHAN_NAME
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
+import com.byagowi.persiancalendar.ui.utils.getFileName
+import com.byagowi.persiancalendar.ui.utils.saveAsFile
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -41,7 +45,7 @@ import com.byagowi.persiancalendar.utils.preferences
 fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
     val resources = LocalResources.current
-    val launcher = rememberLauncherForActivityResult(PickRingtoneContract()) callback@{ uri ->
+    val deviceRingtone = rememberLauncherForActivityResult(PickRingtoneContract()) callback@{ uri ->
         onDismissRequest()
         uri ?: return@callback
         AthanNotification.invalidateChannel(context)
@@ -51,6 +55,23 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
         context.preferences.edit {
             putString(PREF_ATHAN_NAME, ringtoneTitle)
             putString(PREF_ATHAN_URI, uri)
+        }
+        Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
+    }
+    val soundFilePicker = rememberLauncherForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) callback@{ uri ->
+        onDismissRequest()
+        uri ?: return@callback
+        AthanNotification.invalidateChannel(context)
+        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            val storedUri = context.saveAsFile(STORED_ATHAN_NAME) {
+                it.outputStream().use { inputStream.copyTo(it) }
+            }
+            context.preferences.edit {
+                putString(PREF_ATHAN_NAME, getFileName(context, uri))
+                putString(PREF_ATHAN_URI, storedUri.toString())
+            }
         }
         Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
     }
@@ -77,10 +98,19 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                     }
                     onDismissRequest()
                 }
-            } + (R.string.more to {
-                runCatching { launcher.launch(Unit) }
-                    .onFailure(logException).onFailure { onDismissRequest() }
-            })
+            } + listOf(
+                R.string.theme_default to {
+                    runCatching { deviceRingtone.launch(Unit) }
+                        .onFailure(logException).onFailure { onDismissRequest() }
+                },
+                R.string.more to {
+                    runCatching {
+                        soundFilePicker.launch(
+                            arrayOf("audio/mpeg")
+                        )
+                    }.onFailure(logException).onFailure { onDismissRequest() }
+                },
+            )
         }.forEach { (stringId, callback) ->
             Box(
                 contentAlignment = Alignment.CenterStart,
