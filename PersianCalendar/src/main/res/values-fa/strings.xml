@@ -23,7 +23,7 @@
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ویجت</string>
     <string name="notify_date">روشن کردن اعلان</string>
     <string name="enable_notify">اعلان همیشگی برای تاریخ‌ها</string>
-    <string name="select_skin">انتخاب پوسته</string>
+    <string name="select_skin">تنظیم پوسته</string>
     <string name="skin">پوسته</string>
     <string name="pray_methods">شیوه‌های محاسبه</string>
     <string name="pray_methods_calculation">شیوه‌های محاسبهٔ اوقات شرعی</string>

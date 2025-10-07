@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -138,18 +145,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
-        val language by language.collectAsState()
-        val hasCustomFont by hasCustomFont.collectAsState()
-        this.AnimatedVisibility(
-            visible = hasCustomFont,
-            modifier = Modifier.padding(horizontal = 24.dp),
-        ) {
-            val context = LocalContext.current
-            OutlinedButton({
-                context.preferences.edit { remove(PREF_HAS_CUSTOM_FONT) }
-                File(context.externalCacheDir, STORED_FONT_NAME).delete()
-            }) { Text(language.removeCustomFontString) }
-        }
         this.AnimatedVisibility(
             visible = showMore && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -169,6 +164,40 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
+        }
+
+        val language by language.collectAsState()
+        val hasCustomFont by hasCustomFont.collectAsState()
+        val fontPicker = rememberLauncherForActivityResult(
+            ActivityResultContracts.OpenDocument()
+        ) { uri ->
+            if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                File(context.externalCacheDir, STORED_FONT_NAME)
+                    .outputStream().use { inputStream.copyTo(it) }
+                context.preferences.edit { putBoolean(PREF_HAS_CUSTOM_FONT, true) }
+            }
+        }
+        this.AnimatedVisibility(showMore || hasCustomFont, Modifier.padding(start = 24.dp)) {
+            Row {
+                Button(onClick = {
+                    fontPicker.launch(
+                        arrayOf(
+                            "font/ttf",
+                            "font/otf",
+                            "font/truetype",
+                            "font/opentype",
+                            "application/x-font-ttf",
+                            "application/x-font-otf",
+                        )
+                    )
+                }) { Text(language.chooseFont) }
+                this.AnimatedVisibility(hasCustomFont, Modifier.padding(start = 8.dp)) {
+                    OutlinedIconButton({
+                        context.preferences.edit { remove(PREF_HAS_CUSTOM_FONT) }
+                        File(context.externalCacheDir, STORED_FONT_NAME).delete()
+                    }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                }
+            }
         }
     }
 }

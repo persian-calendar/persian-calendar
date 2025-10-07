@@ -175,19 +175,6 @@
         </receiver>
 
         <activity
-            android:name=".ui.settings.interfacecalendar.ReceiveShareActivity"
-            android:exported="true">
-
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="font/ttf" />
-                <data android:mimeType="font/truetype" />
-                <data android:mimeType="font/opentype" />
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name=".ui.settings.widgetnotification.WidgetConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"

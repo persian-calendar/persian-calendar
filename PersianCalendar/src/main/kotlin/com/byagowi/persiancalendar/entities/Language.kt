@@ -521,10 +521,10 @@ enum class Language(val code: String, val nativeName: String) {
             else -> "Move down"
         }
 
-    val removeCustomFontString
+    val chooseFont
         get() = when {
-            isArabicScript -> "حذف قلم سفارشی"
-            else -> "Disable custom font"
+            isArabicScript -> "انتخاب قلم"
+            else -> "Choose Font"
         }
 
     val lilith get() = if (isArabicScript) "قمرالاسود" else "Lilith"
