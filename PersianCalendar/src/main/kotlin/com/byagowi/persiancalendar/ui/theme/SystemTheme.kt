@@ -27,8 +27,7 @@ fun SystemTheme(content: @Composable () -> Unit) {
     } else {
         if (isInDarkMode) DefaultDarkColorScheme else DefaultLightColorScheme
     }
-    val language by language.collectAsState()
-    MaterialTheme(colorScheme = colorScheme, typography = resolveTypography(language)) {
+    MaterialTheme(colorScheme = colorScheme, typography = resolveTypography()) {
         // Brought from: https://github.com/google/accompanist/blob/03a0a0a0/themeadapter-material3/src/main/java/com/google/accompanist/themeadapter/material3/Mdc3Theme.kt#L113-L118
         //  We update the LocalContentColor to match our onBackground. This allows the default
         //  content color to be more appropriate to the theme background

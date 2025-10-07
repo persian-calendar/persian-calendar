@@ -52,14 +52,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.text.layoutDirection
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.hasCustomFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
-import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
@@ -75,10 +72,10 @@ import java.io.File
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    val language by language.collectAsState()
-    MaterialTheme(colorScheme = appColorScheme(), typography = resolveTypography(language)) {
+    MaterialTheme(colorScheme = appColorScheme(), typography = resolveTypography()) {
         val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
 
+        val language by language.collectAsState()
         val isRtl =
             language.isLessKnownRtl || language.asSystemLocale().layoutDirection == View.LAYOUT_DIRECTION_RTL
         CompositionLocalProvider(
@@ -98,11 +95,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun resolveFont(language: Language): FontFamily? {
-    val isVazirEnabled by isVazirEnabled.collectAsState()
-    if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
-        return FontFamily(Font(R.font.vazirmatn))
-    }
+fun resolveFont(): FontFamily? {
     val hasCustomFont by hasCustomFont.collectAsState()
     if (hasCustomFont) runCatching {
         val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
@@ -112,8 +105,8 @@ private fun resolveFont(language: Language): FontFamily? {
 }
 
 @Composable
-fun resolveTypography(language: Language): Typography {
-    return resolveFont(language)?.let { font ->
+fun resolveTypography(): Typography {
+    return resolveFont()?.let { font ->
         Typography(
             displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
             displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = font),

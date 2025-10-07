@@ -36,13 +36,11 @@ import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
-import com.byagowi.persiancalendar.PREF_VAZIR_ENABLED
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.global.hasCustomFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
-import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
@@ -143,9 +141,8 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         }
         val language by language.collectAsState()
         val hasCustomFont by hasCustomFont.collectAsState()
-        val isVazirEnabled by isVazirEnabled.collectAsState()
         this.AnimatedVisibility(
-            visible = hasCustomFont && !isVazirEnabled,
+            visible = hasCustomFont,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
             val context = LocalContext.current
@@ -173,15 +170,6 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 label = stringResource(R.string.holidays_in_red),
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
-        }
-        this.AnimatedVisibility(
-            visible = showMore && BuildConfig.DEVELOPMENT && language.isArabicScript,
-            modifier = Modifier.padding(horizontal = 24.dp),
-        ) {
-            SwitchWithLabel(
-                label = "وزیر",
-                checked = isVazirEnabled,
-            ) { context.preferences.edit { putBoolean(PREF_VAZIR_ENABLED, it) } }
         }
     }
 }
