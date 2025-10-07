@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -360,8 +361,10 @@ private fun ColumnScope.AscendantZodiac(
         }
         Text(text, textAlign = TextAlign.Center, modifier = Modifier.alpha(progress * 1f))
     }
-    if (language.isIranExclusive) Box(Modifier.align(Alignment.CenterHorizontally)) {
-        IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
+    if (language.isArabicScript) Column(Modifier.align(Alignment.CenterHorizontally)) {
+        AnimatedVisibility(progress != 0f) {
+            IconToggleButton(abjad, { abjad = it }) { Text("ابجد") }
+        }
     }
 }
 
