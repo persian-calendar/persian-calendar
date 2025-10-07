@@ -148,7 +148,8 @@ fun PlanetaryHoursDialog(
                             MaterialTheme.colorScheme.surfaceContainerLowest,
                             MaterialTheme.shapes.medium,
                         ) else Modifier
-                    ),
+                    )
+                    .padding(vertical = 2.dp),
                 horizontalArrangement = Arrangement.Center,
             ) {
                 AutoSizedText(
