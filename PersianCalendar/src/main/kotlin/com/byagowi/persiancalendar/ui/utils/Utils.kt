@@ -49,7 +49,7 @@ fun Bitmap.toPngByteArray(): ByteArray {
 //fun Bitmap.toPngBase64(): String =
 //    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
 
-private inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
+inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
         applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action)
     )

@@ -54,7 +54,9 @@ import androidx.core.content.getSystemService
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.hasStoredFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.isVazirEnabled
@@ -68,6 +70,8 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
+import com.byagowi.persiancalendar.utils.logException
+import java.io.File
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
@@ -94,9 +98,22 @@ fun AppTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun resolveTypography(language: Language): Typography {
+private fun resolveFont(language: Language): Font? {
+    val hasStoredFont by hasStoredFont.collectAsState()
+    if (hasStoredFont) runCatching {
+        val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
+        if (file.exists()) return Font(file)
+    }.onFailure(logException)
     val isVazirEnabled by isVazirEnabled.collectAsState()
-    return if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
+    if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
+        return Font(R.font.vazirmatn)
+    }
+    return null
+}
+
+@Composable
+fun resolveTypography(language: Language): Typography {
+    return resolveFont(language)?.let { font ->
         val font = FontFamily(Font(R.font.vazirmatn))
         Typography(
             displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
@@ -119,7 +136,7 @@ fun resolveTypography(language: Language): Typography {
             labelMedium = MaterialTheme.typography.labelMedium.copy(fontFamily = font),
             labelSmall = MaterialTheme.typography.labelSmall.copy(fontFamily = font)
         )
-    } else MaterialTheme.typography
+    } ?: MaterialTheme.typography
 }
 
 // The app's theme after custom dark/light theme is applied

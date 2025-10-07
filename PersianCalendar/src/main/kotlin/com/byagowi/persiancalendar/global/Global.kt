@@ -74,6 +74,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
+import com.byagowi.persiancalendar.PREF_HAS_STORED_FONT
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
@@ -214,6 +215,9 @@ val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
 
 private val isVazirEnabled_ = MutableStateFlow(DEFAULT_VAZIR_ENABLED)
 val isVazirEnabled: StateFlow<Boolean> get() = isVazirEnabled_
+
+private val hasStoredFont_ = MutableStateFlow(false)
+val hasStoredFont: StateFlow<Boolean> get() = hasStoredFont_
 
 private var alternativeGregorianMonths = false
 private var alternativePersianMonthsInAzeri = false
@@ -433,6 +437,7 @@ fun updateStoredPreference(context: Context) {
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     isVazirEnabled_.value = preferences.getBoolean(PREF_VAZIR_ENABLED, DEFAULT_VAZIR_ENABLED)
+    hasStoredFont_.value = preferences.getBoolean(PREF_HAS_STORED_FONT, false)
     alternativeGregorianMonths = when {
         language.isPersian -> preferences.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS

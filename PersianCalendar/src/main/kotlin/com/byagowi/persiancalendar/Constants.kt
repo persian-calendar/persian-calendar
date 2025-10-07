@@ -80,6 +80,8 @@ const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
 const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 const val PREF_SWIPE_DOWN_ACTION = "SwipeDownAction"
 const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
+const val PREF_HAS_STORED_FONT = "HasStoredFont"
+const val STORED_FONT_NAME = "font.ttf"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
