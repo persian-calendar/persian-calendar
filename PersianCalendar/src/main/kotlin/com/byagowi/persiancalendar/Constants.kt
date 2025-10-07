@@ -79,7 +79,7 @@ const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
 const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 const val PREF_SWIPE_DOWN_ACTION = "SwipeDownAction"
 const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
-const val PREF_HAS_CUSTOM_FONT = "HasCustomFont"
+const val PREF_CUSTOM_FONT_NAME = "CustomFontName"
 const val STORED_FONT_NAME = "font.ttf"
 
 const val DEFAULT_CITY = "CUSTOM"
@@ -100,7 +100,6 @@ const val DEFAULT_ISLAMIC_OFFSET = "0"
 const val DEFAULT_SECONDARY_CALENDAR_IN_TABLE = false
 const val DEFAULT_THEME_GRADIENT = true
 const val DEFAULT_RED_HOLIDAYS = false
-const val DEFAULT_HAS_CUSTOM_FONT = false
 const val DEFAULT_WALLPAPER_DARK = true
 const val DEFAULT_WALLPAPER_AUTOMATIC = false
 const val DEFAULT_DREAM_NOISE = false

@@ -121,7 +121,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.hasCustomFont
+import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -360,7 +360,7 @@ fun SharedTransitionScope.DaysScreen(
                     val now by calendarViewModel.now.collectAsState()
                     val refreshToken by calendarViewModel.refreshToken.collectAsState()
                     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
-                    val hasCustomFont by hasCustomFont.collectAsState()
+                    val customFontName by customFontName.collectAsState()
                     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
 
                     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
@@ -423,7 +423,7 @@ fun SharedTransitionScope.DaysScreen(
                                 page = page,
                                 coroutineScope = coroutineScope,
                                 deviceEvents = weekDeviceEvents,
-                                hasCustomFont = hasCustomFont,
+                                hasCustomFont = customFontName != null,
                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
 

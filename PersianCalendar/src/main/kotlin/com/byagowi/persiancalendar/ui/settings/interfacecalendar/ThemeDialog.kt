@@ -1,11 +1,16 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import android.content.ContentResolver
+import android.content.Context
+import android.net.Uri
+import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -36,7 +40,7 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.PREF_HAS_CUSTOM_FONT
+import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
@@ -44,7 +48,7 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
-import com.byagowi.persiancalendar.global.hasCustomFont
+import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
@@ -58,6 +62,7 @@ import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
 import java.io.File
+import kotlin.random.Random
 
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
@@ -167,17 +172,22 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
         }
 
         val language by language.collectAsState()
-        val hasCustomFont by hasCustomFont.collectAsState()
+        val customFontToken by customFontName.collectAsState()
         val fontPicker = rememberLauncherForActivityResult(
             ActivityResultContracts.OpenDocument()
         ) { uri ->
             if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 File(context.externalCacheDir, STORED_FONT_NAME)
                     .outputStream().use { inputStream.copyTo(it) }
-                context.preferences.edit { putBoolean(PREF_HAS_CUSTOM_FONT, true) }
+                context.preferences.edit {
+                    putString(
+                        PREF_CUSTOM_FONT_NAME,
+                        "${Random.nextDouble()}/${getFileName(context, uri)}"
+                    )
+                }
             }
         }
-        this.AnimatedVisibility(showMore || hasCustomFont, Modifier.padding(start = 24.dp)) {
+        Column(Modifier.padding(start = 24.dp)) {
             Row {
                 Button(onClick = {
                     fontPicker.launch(
@@ -191,13 +201,35 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                         )
                     )
                 }) { Text(language.chooseFont) }
-                this.AnimatedVisibility(hasCustomFont, Modifier.padding(start = 8.dp)) {
+                this.AnimatedVisibility(
+                    customFontToken != null,
+                    Modifier.padding(start = 8.dp)
+                ) {
                     OutlinedIconButton({
-                        context.preferences.edit { remove(PREF_HAS_CUSTOM_FONT) }
+                        context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
                         File(context.externalCacheDir, STORED_FONT_NAME).delete()
                     }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
                 }
             }
+            AnimatedVisibility(customFontToken != null) {
+                Text((customFontToken ?: "").split("/").last().split(".").first())
+            }
         }
+    }
+}
+
+private fun getFileName(context: Context, uri: Uri): String? {
+    if (uri.scheme == ContentResolver.SCHEME_CONTENT) context.contentResolver.query(
+        uri, null, null, null, null
+    )?.use { cursor ->
+        if (cursor.moveToFirst()) {
+            val index = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            if (index != -1) return cursor.getString(index)
+        }
+    }
+
+    return uri.path?.let {
+        val cut = it.lastIndexOf('/')
+        if (cut != -1) it.substring(cut + 1) else it
     }
 }

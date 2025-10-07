@@ -54,7 +54,7 @@ import androidx.core.content.getSystemService
 import androidx.core.text.layoutDirection
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
-import com.byagowi.persiancalendar.global.hasCustomFont
+import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
@@ -96,8 +96,8 @@ fun AppTheme(content: @Composable () -> Unit) {
 
 @Composable
 fun resolveFontFile(): File? {
-    val hasCustomFont by hasCustomFont.collectAsState()
-    if (hasCustomFont) runCatching {
+    val customFontName by customFontName.collectAsState()
+    if (customFontName != null) runCatching {
         val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
         if (file.exists()) return file
     }.onFailure(logException)

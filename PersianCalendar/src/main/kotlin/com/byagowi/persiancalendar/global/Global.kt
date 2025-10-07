@@ -17,7 +17,6 @@ import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
-import com.byagowi.persiancalendar.DEFAULT_HAS_CUSTOM_FONT
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
@@ -48,11 +47,11 @@ import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
+import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
-import com.byagowi.persiancalendar.PREF_HAS_CUSTOM_FONT
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
@@ -211,8 +210,8 @@ val isGradient: StateFlow<Boolean> get() = isGradient_
 private val isRedHolidays_ = MutableStateFlow(DEFAULT_RED_HOLIDAYS)
 val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
 
-private val hasCustomFont_ = MutableStateFlow(DEFAULT_HAS_CUSTOM_FONT)
-val hasCustomFont: StateFlow<Boolean> get() = hasCustomFont_
+private val customFontName_ = MutableStateFlow<String?>(null)
+val customFontName: StateFlow<String?> get() = customFontName_
 
 private var alternativeGregorianMonths = false
 private var alternativePersianMonthsInAzeri = false
@@ -431,7 +430,7 @@ fun updateStoredPreference(context: Context) {
     } ?: Theme.LIGHT
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
-    hasCustomFont_.value = preferences.getBoolean(PREF_HAS_CUSTOM_FONT, DEFAULT_HAS_CUSTOM_FONT)
+    customFontName_.value = preferences.getString(PREF_CUSTOM_FONT_NAME, null)
     alternativeGregorianMonths = when {
         language.isPersian -> preferences.getBoolean(
             PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS

@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.hasCustomFont
+import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
@@ -60,7 +60,7 @@ fun CalendarPager(
     val selectedDay by viewModel.selectedDay.collectAsState()
     val refreshToken by viewModel.refreshToken.collectAsState()
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
-    val hasCustomFont by hasCustomFont.collectAsState()
+    val customFontName by customFontName.collectAsState()
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
     val context = LocalContext.current
 
@@ -88,7 +88,7 @@ fun CalendarPager(
             pagerState = pagerState,
             page = page,
             deviceEvents = monthDeviceEvents,
-            hasCustomFont = hasCustomFont,
+            hasCustomFont = customFontName != null,
             isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
         )
     }
