@@ -213,7 +213,8 @@ private class Paints(
     }
 
     private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-    private val textSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
+    private val textSize =
+        diameter * (if (mainCalendarDigitsIsArabic || typeface != null) 18 else 25) / 40
     val dayOffsetY = if (mainCalendarDigitsIsArabic) 0f else diameter * 3 / 40
 
     private val secondaryCalendarDigitsIsArabic = secondaryCalendarDigits === Language.ARABIC_DIGITS
@@ -225,6 +226,7 @@ private class Paints(
         it.textSize = textSize
         it.color = colors.holidays.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (typeface != null) it.typeface = typeface
     }
 
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
