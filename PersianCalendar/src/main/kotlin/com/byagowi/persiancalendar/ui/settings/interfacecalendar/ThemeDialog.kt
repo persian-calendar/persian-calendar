@@ -1,9 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
-import android.content.ContentResolver
-import android.content.Context
-import android.net.Uri
-import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -176,8 +172,8 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ActivityResultContracts.OpenDocument()
         ) { uri ->
             if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                File(context.externalCacheDir, STORED_FONT_NAME)
-                    .outputStream().use { inputStream.copyTo(it) }
+                File(context.externalCacheDir, STORED_FONT_NAME).outputStream()
+                    .use(inputStream::copyTo)
                 context.preferences.edit {
                     putString(
                         PREF_CUSTOM_FONT_NAME,

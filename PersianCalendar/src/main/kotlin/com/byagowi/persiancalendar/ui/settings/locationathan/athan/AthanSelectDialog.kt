@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Parcelable
+import android.net.Uri
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,8 +25,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.IntentCompat
 import androidx.core.content.edit
-import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
@@ -44,36 +45,38 @@ import com.byagowi.persiancalendar.utils.preferences
 @Composable
 fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     val context = LocalContext.current
-    val resources = LocalResources.current
-    val deviceRingtone = rememberLauncherForActivityResult(PickRingtoneContract()) callback@{ uri ->
+
+    fun commonDialogCallback(uri: Uri?, action: (Uri) -> (Pair<String, Uri>?)) {
         onDismissRequest()
-        uri ?: return@callback
+        uri ?: return
         AthanNotification.invalidateChannel(context)
-        // If no ringtone has been found better to skip touching preferences store
-        val ringtone = RingtoneManager.getRingtone(context, uri.toUri()) ?: return@callback
-        val ringtoneTitle = ringtone.getTitle(context).orEmpty()
+        val (title, uri) = action(uri) ?: return
         context.preferences.edit {
-            putString(PREF_ATHAN_NAME, ringtoneTitle)
-            putString(PREF_ATHAN_URI, uri)
+            putString(PREF_ATHAN_NAME, title)
+            putString(PREF_ATHAN_URI, uri.toString())
+        }
+        Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
+    }
+
+    val deviceRingtone = rememberLauncherForActivityResult(PickRingtoneContract()) {
+        commonDialogCallback(it) callback@{ uri ->
+            // If no ringtone has been found better to skip touching preferences store
+            val ringtone = RingtoneManager.getRingtone(context, uri) ?: return@callback null
+            ringtone.getTitle(context).orEmpty() to uri
         }
         Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
     }
     val soundFilePicker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
-    ) callback@{ uri ->
-        onDismissRequest()
-        uri ?: return@callback
-        AthanNotification.invalidateChannel(context)
-        context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            val storedUri = context.saveAsFile(STORED_ATHAN_NAME) {
-                it.outputStream().use { inputStream.copyTo(it) }
-            }
-            context.preferences.edit {
-                putString(PREF_ATHAN_NAME, getFileName(context, uri))
-                putString(PREF_ATHAN_URI, storedUri.toString())
+    ) {
+        commonDialogCallback(it) callback@{ uri ->
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                val storedUri = context.saveAsFile(STORED_ATHAN_NAME) { file ->
+                    file.outputStream().use(inputStream::copyTo)
+                }
+                (getFileName(context, uri) ?: return@callback null) to storedUri
             }
         }
-        Toast.makeText(context, R.string.custom_notification_is_set, Toast.LENGTH_SHORT).show()
     }
 
     AppDialog(
@@ -81,8 +84,9 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
         dismissButton = {
             TextButton(onClick = onDismissRequest) { Text(stringResource(R.string.cancel)) }
         },
-        title = { Text(stringResource(R.string.custom_athan)) }
+        title = { Text(stringResource(R.string.custom_athan)) },
     ) {
+        val resources = LocalResources.current
         remember<List<Pair<Int, () -> Unit>>> {
             listOf(
                 R.string.default_athan to R.raw.special,
@@ -100,14 +104,13 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
                 }
             } + listOf(
                 R.string.theme_default to {
-                    runCatching { deviceRingtone.launch(Unit) }
-                        .onFailure(logException).onFailure { onDismissRequest() }
+                    runCatching {
+                        deviceRingtone.launch(Unit)
+                    }.onFailure(logException).onFailure { onDismissRequest() }
                 },
                 R.string.more to {
                     runCatching {
-                        soundFilePicker.launch(
-                            arrayOf("audio/mpeg")
-                        )
+                        soundFilePicker.launch(arrayOf("audio/mpeg"))
                     }.onFailure(logException).onFailure { onDismissRequest() }
                 },
             )
@@ -124,19 +127,22 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     }
 }
 
-private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
+private class PickRingtoneContract : ActivityResultContract<Unit, Uri?>() {
     override fun createIntent(context: Context, input: Unit): Intent =
-        Intent(RingtoneManager.ACTION_RINGTONE_PICKER).putExtra(
-            RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL
-        ).putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-            .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true).putExtra(
-                RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                Settings.System.DEFAULT_NOTIFICATION_URI
+        Intent(RingtoneManager.ACTION_RINGTONE_PICKER).putExtras(
+            bundleOf(
+                RingtoneManager.EXTRA_RINGTONE_TYPE to RingtoneManager.TYPE_ALL,
+                RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT to true,
+                RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT to true,
+                RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI to Settings.System.DEFAULT_NOTIFICATION_URI,
             )
+        )
 
-    override fun parseResult(resultCode: Int, intent: Intent?): String? =
-        if (resultCode == Activity.RESULT_OK) intent?.getParcelableExtra<Parcelable?>(
-            RingtoneManager.EXTRA_RINGTONE_PICKED_URI
-        )?.toString()
-        else null
+    override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+        return if (resultCode == Activity.RESULT_OK) IntentCompat.getParcelableExtra(
+            intent ?: return null,
+            RingtoneManager.EXTRA_RINGTONE_PICKED_URI,
+            Uri::class.java,
+        ) else null
+    }
 }
