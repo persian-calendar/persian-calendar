@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.Typeface
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
@@ -22,6 +23,7 @@ import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
+import java.io.File
 import kotlin.math.min
 
 class DayPainter(
@@ -30,12 +32,15 @@ class DayPainter(
     val height: Float,
     private val isRtl: Boolean,
     colors: MonthColors,
+    fontFile: File? = null,
     isWidget: Boolean = false,
     isYearView: Boolean = false,
     selectedDayColor: Int? = null,
 ) {
-    private val paints =
-        Paints(resources, min(width, height), colors, isWidget, isYearView, selectedDayColor)
+    private val paints = Paints(
+        resources, min(width, height), colors, isWidget, isYearView,
+        selectedDayColor, fontFile?.let(Typeface::createFromFile)
+    )
     private var text = ""
     private var today = false
     private var dayIsSelected = false
@@ -164,6 +169,7 @@ private class Paints(
     isWidget: Boolean,
     isYearView: Boolean,
     @ColorInt selectedDayColor: Int?,
+    typeface: Typeface?,
 ) {
     private val dp = resources.dp
     val circlePadding = .5f * dp
@@ -186,20 +192,24 @@ private class Paints(
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.appointments.toArgb()
+        if (typeface != null) it.typeface = typeface
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = colors.eventIndicator.toArgb()
+        if (typeface != null) it.typeface = typeface
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1 * dp
         it.color = colors.currentDay.toArgb()
+        if (typeface != null) it.typeface = typeface
     }
     val selectedDayPaint = selectedDayColor?.let {
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
             it.color = selectedDayColor
+            if (typeface != null) it.typeface = typeface
         }
     }
 
@@ -223,6 +233,7 @@ private class Paints(
         it.textSize = textSize
         it.color = colors.contentColor.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (typeface != null) it.typeface = typeface
     }
 
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -230,12 +241,14 @@ private class Paints(
         it.textSize = textSize
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (typeface != null) it.typeface = typeface
     }
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (typeface != null) it.typeface = typeface
         if (!isArabicScript && isAstronomicalExtraFeaturesEnabled.value) it.typeface = zodiacFont
     }
 
@@ -244,18 +257,21 @@ private class Paints(
         it.textSize = headerTextSize
         it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
+        if (typeface != null) it.typeface = typeface
         if (!isArabicScript && isAstronomicalExtraFeaturesEnabled.value) it.typeface = zodiacFont
     }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = if (isYearView) textSize else headerTextSize
         it.color = colors.colorTextDayName.toArgb()
+        if (typeface != null) it.typeface = typeface
         if (isWidget) addShadowIfNeeded(it)
     }
     val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = diameter * 20 / 40
         it.color = colors.colorTextDayName.toArgb()
+        if (typeface != null) it.typeface = typeface
         if (isWidget) addShadowIfNeeded(it)
     }
 }

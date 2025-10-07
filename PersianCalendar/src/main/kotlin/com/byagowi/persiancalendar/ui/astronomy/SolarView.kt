@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.Typeface
 import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
@@ -25,6 +26,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
+import java.io.File
 import java.util.GregorianCalendar
 import kotlin.math.PI
 import kotlin.math.atan2
@@ -297,6 +299,14 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.textSize = 10 * dp
         it.textAlign = Paint.Align.CENTER
     }
+
+    fun setFont(file: File?) {
+        val typeface = file?.let(Typeface::createFromFile)
+        colorTextPaint.typeface = typeface
+        zodiacPaint.typeface = typeface
+        moonTextPaint.typeface = typeface
+    }
+
     private val zodiacSymbolPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x38808080
         it.strokeWidth = 1 * dp

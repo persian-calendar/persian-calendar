@@ -91,6 +91,7 @@ import com.byagowi.persiancalendar.ui.common.StopButton
 import com.byagowi.persiancalendar.ui.common.ThreeDotsDropdownMenu
 import com.byagowi.persiancalendar.ui.icons.In24HoursIcon
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
@@ -305,6 +306,7 @@ fun SharedTransitionScope.CompassScreen(
                 Column {
                     Box(Modifier.weight(1f, fill = false)) {
                         val surfaceColor = MaterialTheme.colorScheme.surface
+                        val fontFile = resolveFontFile()
                         AndroidView(
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_COMPASS),
@@ -318,6 +320,7 @@ fun SharedTransitionScope.CompassScreen(
                                 }
                             },
                             update = {
+                                it.setFont(fontFile)
                                 it.setSurfaceColor(surfaceColor.toArgb())
                                 it.setTime(time)
                             },

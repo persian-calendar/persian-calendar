@@ -53,6 +53,7 @@ import com.byagowi.persiancalendar.ui.calendar.EncourageActionLayout
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.MoonView
 import com.byagowi.persiancalendar.ui.theme.appSunViewColors
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.preferences
@@ -169,9 +170,11 @@ private fun SharedTransitionScope.AstronomicalOverview(
             .height(100.dp),
     ) { state ->
         val sunViewColors = appSunViewColors()
+        val fontFile = resolveFontFile()
         if (state) AndroidView(
             factory = ::SunView,
             update = {
+                it.setFont(fontFile)
                 it.colors = sunViewColors
                 it.prayTimes = prayTimes
                 it.setTime(now)

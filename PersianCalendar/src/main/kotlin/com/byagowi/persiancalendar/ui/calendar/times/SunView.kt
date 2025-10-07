@@ -7,6 +7,7 @@ import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Shader
+import android.graphics.Typeface
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
@@ -25,6 +26,7 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.PrayTimes
+import java.io.File
 import java.util.GregorianCalendar
 import kotlin.math.PI
 import kotlin.math.cos
@@ -73,6 +75,12 @@ class SunView(context: Context) : View(context) {
         language.value.isTamil -> 11f
         else -> 11.5f
     } * resources.dp
+
+    fun setFont(file: File?) {
+        val typeface = file?.let(Typeface::createFromFile)
+        paint.typeface = typeface
+        dayPaint.typeface = typeface
+    }
 
     fun setTime(date: Long) {
         val time = Time.fromMillisecondsSince1970(date)

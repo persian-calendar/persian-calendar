@@ -58,6 +58,7 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -144,16 +145,19 @@ fun DaysTable(
 
         val resources = LocalResources.current
         val diameter = min(cellWidth, cellHeight)
-        val dayPainter =
-            remember(cellWidthPx, suggestedHeight, refreshToken, monthColors, resources) {
-                DayPainter(
-                    resources = resources,
-                    width = cellWidthPx,
-                    height = cellHeightPx,
-                    isRtl = isRtl,
-                    colors = monthColors
-                )
-            }
+        val fontFile = resolveFontFile()
+        val dayPainter = remember(
+            cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile
+        ) {
+            DayPainter(
+                resources = resources,
+                width = cellWidthPx,
+                height = cellHeightPx,
+                isRtl = isRtl,
+                colors = monthColors,
+                fontFile = fontFile,
+            )
+        }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
         val daysTextSize = diameter * when {
             mainCalendarDigitsIsArabic || hasCustomFont -> 18

@@ -95,18 +95,19 @@ fun AppTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun resolveFont(): FontFamily? {
+fun resolveFontFile(): File? {
     val hasCustomFont by hasCustomFont.collectAsState()
     if (hasCustomFont) runCatching {
         val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
-        if (file.exists()) return FontFamily(Font(file))
+        if (file.exists()) return file
     }.onFailure(logException)
     return null
 }
 
 @Composable
 fun resolveTypography(): Typography {
-    return resolveFont()?.let { font ->
+    return resolveFontFile()?.let { fontFile ->
+        val font = FontFamily(Font(fontFile))
         Typography(
             displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
             displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = font),

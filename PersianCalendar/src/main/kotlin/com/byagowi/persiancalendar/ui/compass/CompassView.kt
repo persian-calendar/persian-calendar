@@ -10,6 +10,8 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.Typeface
+import android.graphics.Typeface.createFromFile
 import android.util.AttributeSet
 import android.util.TypedValue
 import androidx.annotation.ColorInt
@@ -28,6 +30,7 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.toObserver
+import java.io.File
 import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
@@ -50,7 +53,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
 
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = 0xFFFF0000.toInt()
+        it.color = Color.RED
         it.style = Paint.Style.FILL
     }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
@@ -132,6 +135,12 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.strokeWidth = 5 * dp
         it.style = Paint.Style.STROKE
         it.textAlign = Paint.Align.CENTER
+    }
+
+    fun setFont(file: File?) {
+        val typeface = file?.let(Typeface::createFromFile)
+        textPaint.typeface = typeface
+        textStrokePaint.typeface = typeface
     }
 
     fun setSurfaceColor(@ColorInt color: Int) {

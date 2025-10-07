@@ -104,6 +104,7 @@ import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
@@ -466,6 +467,7 @@ private fun SharedTransitionScope.SolarDisplay(
         }
         val surfaceColor = MaterialTheme.colorScheme.surface
         val contentColor = LocalContentColor.current
+        val fontFile = resolveFontFile()
         AndroidView(
             factory = {
                 val solarView = SolarView(it)
@@ -484,6 +486,7 @@ private fun SharedTransitionScope.SolarDisplay(
                 it.setContentColor(contentColor.toArgb())
                 it.isTropicalDegree = isTropical
                 it.setTime(state)
+                it.setFont(fontFile)
                 it.mode = mode
             },
         )
