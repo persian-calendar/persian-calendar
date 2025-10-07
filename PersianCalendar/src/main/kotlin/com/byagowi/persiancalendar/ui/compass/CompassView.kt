@@ -140,6 +140,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         val typeface = file?.let(Typeface::createFromFile)
         textPaint.typeface = typeface
         textStrokePaint.typeface = typeface
+        planetsPaint.typeface = typeface
     }
 
     fun setSurfaceColor(@ColorInt color: Int) {
