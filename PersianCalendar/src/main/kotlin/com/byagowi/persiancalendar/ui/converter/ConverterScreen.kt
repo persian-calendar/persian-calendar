@@ -10,11 +10,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,7 +47,6 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -88,7 +83,6 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
-import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
@@ -174,24 +168,15 @@ fun SharedTransitionScope.ConverterScreen(
                             onDismissRequest = { showMenu = false },
                             minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
                         ) {
-                            var entered by remember { mutableStateOf(isTalkBackEnabled.value) }
-                            LaunchedEffect(Unit) { entered = true }
                             ConverterScreenMode.entries.forEach { entry ->
-                                AnimatedVisibility(
-                                    entered,
-                                    enter = fadeIn() + expandVertically(
-                                        spring(stiffness = Spring.StiffnessLow)
-                                    ),
+                                AppDropdownMenuRadioItem(
+                                    stringResource(entry.title),
+                                    screenMode == entry,
+                                    withRadio = false,
                                 ) {
-                                    AppDropdownMenuRadioItem(
-                                        stringResource(entry.title),
-                                        screenMode == entry,
-                                        withRadio = false,
-                                    ) {
-                                        showMenu = false
-                                        hapticFeedback.performLongPress()
-                                        viewModel.changeScreenMode(entry)
-                                    }
+                                    showMenu = false
+                                    hapticFeedback.performLongPress()
+                                    viewModel.changeScreenMode(entry)
                                 }
                             }
                         }
