@@ -426,4 +426,5 @@
     <string name="day_view">نمای روز</string>
     <string name="horoscope">زایچه</string>
     <string name="planetary_hours">ساعات کواکب</string>
+    <string name="select_font">انتخاب قلم</string>
 </resources>

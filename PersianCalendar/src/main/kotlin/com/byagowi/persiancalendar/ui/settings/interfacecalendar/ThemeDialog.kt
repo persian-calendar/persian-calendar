@@ -200,7 +200,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                             "application/x-font-otf",
                         )
                     )
-                }) { Text(language.chooseFont) }
+                }) { Text(stringResource(R.string.select_font)) }
                 this.AnimatedVisibility(
                     customFontToken != null,
                     Modifier.padding(start = 8.dp)

@@ -416,6 +416,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="horoscope">Horoscope</string>
     <!-- https://en.wikipedia.org/wiki/Planetary_hours -->
     <string name="planetary_hours">Planetary hours</string>
+    <string name="select_font">Select font</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

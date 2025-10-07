@@ -521,12 +521,6 @@ enum class Language(val code: String, val nativeName: String) {
             else -> "Move down"
         }
 
-    val chooseFont
-        get() = when {
-            isArabicScript -> "انتخاب قلم"
-            else -> "Choose Font"
-        }
-
     val lilith get() = if (isArabicScript) "قمرالاسود" else "Lilith"
 
     companion object {
