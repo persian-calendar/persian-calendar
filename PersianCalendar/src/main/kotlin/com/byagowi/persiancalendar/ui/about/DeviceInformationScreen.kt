@@ -390,9 +390,14 @@ private fun createItemsList(activity: Activity, primaryColor: Color) = listOf(
     Item("Display", Build.DISPLAY),
     Item("Device Fingerprints", Build.FINGERPRINT),
     Item(
-        "RAM", humanReadableByteCountBin(ActivityManager.MemoryInfo().also {
-            activity.getSystemService<ActivityManager>()?.getMemoryInfo(it)
-        }.totalMem)
+        "RAM",
+        buildString {
+            val activityManager = activity.getSystemService<ActivityManager>()
+            appendLine(humanReadableByteCountBin(ActivityManager.MemoryInfo().also {
+                activityManager?.getMemoryInfo(it)
+            }.totalMem))
+            append("Is Low Ram Device: ${activityManager?.isLowRamDevice}")
+        }
     ),
     Item(
         "Battery",
