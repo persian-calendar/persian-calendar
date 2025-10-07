@@ -175,7 +175,7 @@
         </receiver>
 
         <activity
-            android:name=".ReceiveShareActivity"
+            android:name=".ui.settings.interfacecalendar.ReceiveShareActivity"
             android:exported="true">
 
             <intent-filter>

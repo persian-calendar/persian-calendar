@@ -56,7 +56,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.hasStoredFont
+import com.byagowi.persiancalendar.global.hasCustomFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.isVazirEnabled
@@ -98,23 +98,22 @@ fun AppTheme(content: @Composable () -> Unit) {
 }
 
 @Composable
-private fun resolveFont(language: Language): Font? {
-    val hasStoredFont by hasStoredFont.collectAsState()
-    if (hasStoredFont) runCatching {
-        val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
-        if (file.exists()) return Font(file)
-    }.onFailure(logException)
+private fun resolveFont(language: Language): FontFamily? {
     val isVazirEnabled by isVazirEnabled.collectAsState()
     if (isVazirEnabled && BuildConfig.DEVELOPMENT && language.isArabicScript) {
-        return Font(R.font.vazirmatn)
+        return FontFamily(Font(R.font.vazirmatn))
     }
+    val hasCustomFont by hasCustomFont.collectAsState()
+    if (hasCustomFont) runCatching {
+        val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
+        if (file.exists()) return FontFamily(Font(file))
+    }.onFailure(logException)
     return null
 }
 
 @Composable
 fun resolveTypography(language: Language): Typography {
     return resolveFont(language)?.let { font ->
-        val font = FontFamily(Font(R.font.vazirmatn))
         Typography(
             displayLarge = MaterialTheme.typography.displayLarge.copy(fontFamily = font),
             displayMedium = MaterialTheme.typography.displayMedium.copy(fontFamily = font),

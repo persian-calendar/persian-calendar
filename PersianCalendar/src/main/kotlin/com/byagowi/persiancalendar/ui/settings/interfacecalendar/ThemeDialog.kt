@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -29,6 +30,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.PREF_HAS_CUSTOM_FONT
 import com.byagowi.persiancalendar.PREF_RED_HOLIDAYS
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
@@ -36,6 +38,8 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_VAZIR_ENABLED
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.STORED_FONT_NAME
+import com.byagowi.persiancalendar.global.hasCustomFont
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.isVazirEnabled
@@ -49,6 +53,7 @@ import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.preferences
+import java.io.File
 
 @Composable
 fun ThemeDialog(onDismissRequest: () -> Unit) {
@@ -136,6 +141,19 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
+        val language by language.collectAsState()
+        val hasCustomFont by hasCustomFont.collectAsState()
+        val isVazirEnabled by isVazirEnabled.collectAsState()
+        this.AnimatedVisibility(
+            visible = hasCustomFont && !isVazirEnabled,
+            modifier = Modifier.padding(horizontal = 24.dp),
+        ) {
+            val context = LocalContext.current
+            OutlinedButton({
+                context.preferences.edit { remove(PREF_HAS_CUSTOM_FONT) }
+                File(context.externalCacheDir, STORED_FONT_NAME).delete()
+            }) { Text(language.removeCustomFontString) }
+        }
         this.AnimatedVisibility(
             visible = showMore && anyThemeHasGradient,
             modifier = Modifier.padding(horizontal = 24.dp),
@@ -156,12 +174,10 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 checked = isRedHolidays,
             ) { context.preferences.edit { putBoolean(PREF_RED_HOLIDAYS, it) } }
         }
-        val language by language.collectAsState()
         this.AnimatedVisibility(
             visible = showMore && BuildConfig.DEVELOPMENT && language.isArabicScript,
             modifier = Modifier.padding(horizontal = 24.dp),
         ) {
-            val isVazirEnabled by isVazirEnabled.collectAsState()
             SwitchWithLabel(
                 label = "وزیر",
                 checked = isVazirEnabled,

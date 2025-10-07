@@ -121,10 +121,10 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.hasCustomFont
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
-import com.byagowi.persiancalendar.global.isVazirEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredDigits
@@ -360,7 +360,7 @@ fun SharedTransitionScope.DaysScreen(
                     val now by calendarViewModel.now.collectAsState()
                     val refreshToken by calendarViewModel.refreshToken.collectAsState()
                     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
-                    val isVazirEnabled by isVazirEnabled.collectAsState()
+                    val hasCustomFont by hasCustomFont.collectAsState()
                     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
 
                     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
@@ -423,7 +423,7 @@ fun SharedTransitionScope.DaysScreen(
                                 page = page,
                                 coroutineScope = coroutineScope,
                                 deviceEvents = weekDeviceEvents,
-                                isVazirEnabled = isVazirEnabled,
+                                hasCustomFont = hasCustomFont,
                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
                             )
 

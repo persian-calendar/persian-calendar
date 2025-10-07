@@ -87,7 +87,7 @@ fun DaysTable(
     coroutineScope: CoroutineScope,
     pagerState: PagerState,
     page: Int,
-    isVazirEnabled: Boolean,
+    hasCustomFont: Boolean,
     isShowWeekOfYearEnabled: Boolean,
     deviceEvents: DeviceCalendarEventsStore,
     monthStartDate: AbstractDate,
@@ -156,7 +156,7 @@ fun DaysTable(
             }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
         val daysTextSize = diameter * when {
-            mainCalendarDigitsIsArabic || isVazirEnabled -> 18
+            mainCalendarDigitsIsArabic || hasCustomFont -> 18
             isTamilDigitSelected -> 16
             else -> 25
         } / 40

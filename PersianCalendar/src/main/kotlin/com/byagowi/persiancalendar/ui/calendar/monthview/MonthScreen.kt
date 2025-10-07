@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.isVazirEnabled
+import com.byagowi.persiancalendar.global.hasCustomFont
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
@@ -121,9 +121,9 @@ fun SharedTransitionScope.MonthScreen(
             val density = LocalDensity.current
             val diameter = min(cellWidth, cellHeight)
             val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-            val isVazirEnabled by isVazirEnabled.collectAsState()
+            val hasCustomFont by hasCustomFont.collectAsState()
             val daysTextSize = diameter * when {
-                mainCalendarDigitsIsArabic || isVazirEnabled -> 18
+                mainCalendarDigitsIsArabic || hasCustomFont -> 18
                 isTamilDigitSelected -> 16
                 else -> 25
             } / 40
