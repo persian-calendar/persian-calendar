@@ -98,7 +98,7 @@ fun AppTheme(content: @Composable () -> Unit) {
 fun resolveFontFile(): File? {
     val customFontName by customFontName.collectAsState()
     if (customFontName != null) runCatching {
-        val file = File(LocalContext.current.externalCacheDir, STORED_FONT_NAME)
+        val file = File(LocalContext.current.filesDir, STORED_FONT_NAME)
         if (file.exists()) return file
     }.onFailure(logException)
     return null

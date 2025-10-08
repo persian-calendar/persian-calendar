@@ -51,7 +51,7 @@ fun Bitmap.toPngByteArray(): ByteArray {
 //fun Bitmap.toPngBase64(): String =
 //    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
 
-inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
+inline fun Context.saveAsCacheFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
         applicationContext, "$packageName.provider", File(externalCacheDir, fileName).also(action)
     )
@@ -61,7 +61,7 @@ fun Context.openHtmlInBrowser(html: String) {
     runCatching {
         CustomTabsIntent.Builder().build()
             .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-            .launchUrl(this, saveAsFile("persian-calendar.html") { it.writeText(html) })
+            .launchUrl(this, saveAsCacheFile("persian-calendar.html") { it.writeText(html) })
     }.onFailure(logException)
 }
 
@@ -82,10 +82,10 @@ private fun Context.shareUriFile(uri: Uri, mime: String) {
 }
 
 fun Context.shareTextFile(text: String, fileName: String, mime: String) =
-    shareUriFile(saveAsFile(fileName) { it.writeText(text) }, mime)
+    shareUriFile(saveAsCacheFile(fileName) { it.writeText(text) }, mime)
 
 fun Context.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
-    shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
+    shareUriFile(saveAsCacheFile(fileName) { it.writeBytes(binary) }, mime)
 
 fun getFileName(context: Context, uri: Uri): String? {
     if (uri.scheme == ContentResolver.SCHEME_CONTENT) context.contentResolver.query(

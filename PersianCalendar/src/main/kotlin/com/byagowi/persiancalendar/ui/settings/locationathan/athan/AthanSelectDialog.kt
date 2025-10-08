@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.Environment
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -25,22 +26,22 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 import androidx.core.content.IntentCompat
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.STORED_ATHAN_NAME
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.getFileName
-import com.byagowi.persiancalendar.ui.utils.saveAsFile
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import java.io.File
 
 @Composable
 fun AthanSelectDialog(onDismissRequest: () -> Unit) {
@@ -71,10 +72,15 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     ) {
         commonDialogCallback(it) callback@{ uri ->
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                val storedUri = context.saveAsFile(STORED_ATHAN_NAME) { file ->
-                    file.outputStream().use(inputStream::copyTo)
-                }
-                (getFileName(context, uri) ?: return@callback null) to storedUri
+                val fileName = getFileName(context, uri)
+                (fileName ?: return@callback null) to FileProvider.getUriForFile(
+                    context.applicationContext,
+                    "${context.packageName}.provider",
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_ALARMS),
+                        fileName,
+                    ).also { it.outputStream().use(inputStream::copyTo) },
+                )
             }
         }
     }

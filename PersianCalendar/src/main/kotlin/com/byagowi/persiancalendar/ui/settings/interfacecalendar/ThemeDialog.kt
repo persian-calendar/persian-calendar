@@ -172,7 +172,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ActivityResultContracts.OpenDocument()
         ) { uri ->
             if (uri != null) context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                File(context.externalCacheDir, STORED_FONT_NAME).outputStream()
+                File(context.filesDir, STORED_FONT_NAME).outputStream()
                     .use(inputStream::copyTo)
                 context.preferences.edit {
                     putString(
@@ -202,7 +202,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 ) {
                     OutlinedIconButton({
                         context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
-                        File(context.externalCacheDir, STORED_FONT_NAME).delete()
+                        File(context.filesDir, STORED_FONT_NAME).delete()
                     }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
                 }
             }
