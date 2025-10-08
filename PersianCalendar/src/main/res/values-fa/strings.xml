@@ -427,4 +427,7 @@
     <string name="horoscope">زایچه</string>
     <string name="planetary_hours">ساعات کواکب</string>
     <string name="select_font">انتخاب قلم</string>
+    <string name="move_up">انتقال به بالا</string>
+    <string name="move_down">انتقال به پایین</string>
+    <string name="lilith">قمرالاسود</string>
 </resources>

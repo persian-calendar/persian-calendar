@@ -56,6 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.NBSP
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
@@ -356,7 +357,7 @@ private fun ColumnScope.AscendantZodiac(
             }
             if (zodiac == meanApogeeZodiac) {
                 appendLine()
-                appendAngle(/*"⚸" + */language.lilith, meanApogee)
+                appendAngle(/*"⚸" + */stringResource(R.string.lilith), meanApogee)
             }
         }
         Text(text, textAlign = TextAlign.Center, modifier = Modifier.alpha(progress * 1f))

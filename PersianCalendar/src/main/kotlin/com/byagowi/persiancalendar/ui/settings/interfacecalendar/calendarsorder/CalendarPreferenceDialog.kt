@@ -21,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
@@ -88,7 +87,6 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
         onDismissRequest = onDismissRequest,
     ) {
         var dragStarted by remember { mutableStateOf(false) }
-        val language by language.collectAsState()
         fun onSettle(fromIndex: Int, toIndex: Int) {
             list = list.toMutableList().apply { add(toIndex, removeAt(fromIndex)) }
         }
@@ -105,6 +103,8 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
             key(calendar) {
                 val blur by animateDpAsState(if (dragStarted) 2.dp else 0.dp, label = "blur")
                 val interactionSource = remember(calendar) { MutableInteractionSource() }
+                val moveUp = stringResource(R.string.move_up)
+                val moveDown = stringResource(R.string.move_down)
                 Row(
                     modifier = Modifier
                         .blur(if (dragStarted && !isDragging) blur else 0.dp)
@@ -120,11 +120,11 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                         }
                         .semantics {
                             customActions = listOfNotNull(
-                                CustomAccessibilityAction(language.moveUp) {
+                                CustomAccessibilityAction(moveUp) {
                                     onSettle(i, i - 1)
                                     true
                                 }.takeIf { i > 0 },
-                                CustomAccessibilityAction(language.moveDown) {
+                                CustomAccessibilityAction(moveDown) {
                                     onSettle(i, i + 1)
                                     true
                                 }.takeIf { i < list.size - 1 },

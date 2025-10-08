@@ -416,7 +416,14 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="horoscope">Horoscope</string>
     <!-- https://en.wikipedia.org/wiki/Planetary_hours -->
     <string name="planetary_hours">Planetary hours</string>
+    <!-- Used in theme select dialog, the 'more' button -->
     <string name="select_font">Select font</string>
+    <!-- Used in blind people interface to move up an item in calendars priority dialog -->
+    <string name="move_up">Move up</string>
+    <!-- Used in blind people interface to move down an item in calendars priority dialog -->
+    <string name="move_down">Move down</string>
+    <!-- It's a concept in astrology used in the app's horoscope https://en.wikipedia.org/wiki/Lilith_(fictitious_moon) -->
+    <string name="lilith">Lilith</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
