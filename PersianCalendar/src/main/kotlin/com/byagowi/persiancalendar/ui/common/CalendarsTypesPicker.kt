@@ -8,6 +8,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -42,6 +43,7 @@ fun CalendarsTypesPicker(
             val view = LocalView.current
             Tab(
                 text = { Text(title) },
+                modifier = Modifier.clip(MaterialTheme.shapes.large),
                 selected = current == calendar,
                 unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                 onClick = {

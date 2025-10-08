@@ -626,6 +626,7 @@ private fun Details(
             tabs.forEachIndexed { index, (titlesResId, _) ->
                 Tab(
                     text = { Text(stringResource(titlesResId)) },
+                    modifier = Modifier.clip(MaterialTheme.shapes.large),
                     selected = pagerState.currentPage == index,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurface,
                     onClick = { coroutineScope.launch { pagerState.animateScrollToPage(index) } },
