@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.getFileName
+import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -51,7 +52,8 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
         onDismissRequest()
         uri ?: return
         AthanNotification.invalidateChannel(context)
-        val (title, uri) = action(uri) ?: return
+        val (title, uri) = runCatching { action(uri) }.onFailure(logException).getOrNull()
+            .debugAssertNotNull ?: return
         context.preferences.edit {
             putString(PREF_ATHAN_NAME, title)
             putString(PREF_ATHAN_URI, uri.toString())
