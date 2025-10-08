@@ -33,7 +33,7 @@
     <string name="gps_location">دریافت مختصات از مکان‌یاب (GPS)</string>
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
-    <string name="location_help">اگر در فهرست نبود، مختصات را در زیر وارد کنید</string>
+    <string name="location_help">اگر موقعیتتان در این فهرست نبود، مختصات را در گزینهٔ بعدی وارد کنید</string>
     <string name="showing_iran_time">نمایش ویجت و اعلان برنامه به‌وقت ایران در همه‌جا، مناسب ایرانیان خارج از ایران</string>
     <string name="iran_time">وقت ایران</string>
     <string name="compass">قطب‌نما</string>
@@ -119,7 +119,7 @@
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
-    <string name="gps_internet_desc">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
+    <string name="gps_internet_desc">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید.
 \n
 \nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
@@ -165,7 +165,7 @@
 - از اشیاء مغناطیسی دور شوید.
 - دستگاه را برگردانید و آن را روی سطح مسطحی مانند میز، چند بار بچرخانید.
 - در ساختمان‌های با اسکلت فلزی، قطب نما عملکرد دقیقی نخواهد داشت."</string>
-    <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
+    <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد کنید.</string>
     <string name="moon_in_scorpio">ایام قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
@@ -196,7 +196,7 @@
     <string name="update">بروزرسانی</string>
     <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
-    <string name="ask_user_to_set_location">برای نمایش صحیح این بخش مکان خود را در تنظیمات انتخاب نمایید</string>
+    <string name="ask_user_to_set_location">برای نمایش صحیح این بخش مکان خود را در تنظیمات انتخاب کنید</string>
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>

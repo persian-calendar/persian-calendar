@@ -33,7 +33,6 @@
     <string name="gps_location">دریافت مختصات از جی‌پی‌اس</string>
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">مقام</string>
-    <string name="location_help">اگر در فهرست نبود، مختصات را در زیر وارد کنید</string>
     <string name="showing_iran_time">نمایش ویجت‌ها، نوار اعلان و برنامه به وقت ایران در همه جا</string>
     <string name="iran_time">ایرانی وقت</string>
     <string name="compass">قطب نما</string>
@@ -117,7 +116,6 @@
     <string name="about_developers">توسعه‌دهندگان</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسندگان برنامه</string>
-    <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید. برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
@@ -157,7 +155,6 @@
     <string name="animal_year_name_goat">بکری</string>
     <string name="level">تراز</string>
     <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی سه محور به جلو و عقب بچرخانید.</string>
-    <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
     <string name="moon_in_scorpio">ایام قمر در عقرب</string>
     <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
@@ -188,7 +185,6 @@
     <string name="update">بروزرسانی</string>
     <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
-    <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %1$s است.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
