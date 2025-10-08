@@ -357,7 +357,7 @@ private fun ColumnScope.AscendantZodiac(
             }
             if (zodiac == meanApogeeZodiac) {
                 appendLine()
-                appendAngle(/*"⚸" + */stringResource(R.string.lilith), meanApogee)
+                appendAngle(/*"⚸" + */stringResource(R.string.black_moon), meanApogee)
             }
         }
         Text(text, textAlign = TextAlign.Center, modifier = Modifier.alpha(progress * 1f))
