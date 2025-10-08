@@ -72,8 +72,8 @@ fun AthanSelectDialog(onDismissRequest: () -> Unit) {
     ) {
         commonDialogCallback(it) callback@{ uri ->
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
-                val fileName = getFileName(context, uri)
-                (fileName ?: return@callback null) to FileProvider.getUriForFile(
+                val fileName = getFileName(context, uri) ?: return@callback null
+                fileName to FileProvider.getUriForFile(
                     context.applicationContext,
                     "${context.packageName}.provider",
                     File(
