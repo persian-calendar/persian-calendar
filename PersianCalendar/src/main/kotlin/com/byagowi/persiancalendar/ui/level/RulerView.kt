@@ -4,10 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
+import java.io.File
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val dp = resources.dp
@@ -28,6 +30,10 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
             field = value
             invalidate()
         }
+
+    fun setFont(file: File?) {
+        paint.typeface = file?.let(Typeface::createFromFile)
+    }
 
     override fun onDraw(canvas: Canvas) {
         val dpi = if (resources.isLandscape)
