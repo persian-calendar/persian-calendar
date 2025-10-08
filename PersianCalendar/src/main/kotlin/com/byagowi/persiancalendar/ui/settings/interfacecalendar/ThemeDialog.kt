@@ -182,32 +182,34 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                 }
             }
         }
-        Column(Modifier.padding(start = 24.dp)) {
-            Row {
-                Button(onClick = {
-                    fontPicker.launch(
-                        arrayOf(
-                            "font/ttf",
-                            "font/otf",
-                            "font/truetype",
-                            "font/opentype",
-                            "application/x-font-ttf",
-                            "application/x-font-otf",
+        this.AnimatedVisibility(visible = showMore || customFontToken != null) {
+            Column(Modifier.padding(start = 24.dp)) {
+                Row {
+                    Button(onClick = {
+                        fontPicker.launch(
+                            arrayOf(
+                                "font/ttf",
+                                "font/otf",
+                                "font/truetype",
+                                "font/opentype",
+                                "application/x-font-ttf",
+                                "application/x-font-otf",
+                            )
                         )
-                    )
-                }) { Text(stringResource(R.string.select_font)) }
-                this.AnimatedVisibility(
-                    customFontToken != null,
-                    Modifier.padding(start = 8.dp),
-                ) {
-                    OutlinedIconButton({
-                        context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
-                        File(context.filesDir, STORED_FONT_NAME).delete()
-                    }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                    }) { Text(stringResource(R.string.select_font)) }
+                    this.AnimatedVisibility(
+                        customFontToken != null,
+                        Modifier.padding(start = 8.dp),
+                    ) {
+                        OutlinedIconButton({
+                            context.preferences.edit { remove(PREF_CUSTOM_FONT_NAME) }
+                            File(context.filesDir, STORED_FONT_NAME).delete()
+                        }) { Icon(Icons.Default.Delete, stringResource(R.string.remove)) }
+                    }
                 }
-            }
-            AnimatedVisibility(customFontToken != null) {
-                Text((customFontToken ?: "").split("/").last().split(".").first())
+                AnimatedVisibility(customFontToken != null) {
+                    Text((customFontToken ?: "").split("/").last().split(".").first())
+                }
             }
         }
     }
