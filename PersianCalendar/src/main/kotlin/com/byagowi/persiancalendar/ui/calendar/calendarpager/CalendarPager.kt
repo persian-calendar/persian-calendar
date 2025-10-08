@@ -18,8 +18,10 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
@@ -61,6 +63,8 @@ fun CalendarPager(
     val refreshToken by viewModel.refreshToken.collectAsState()
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
     val customFontName by customFontName.collectAsState()
+    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
+    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
     val context = LocalContext.current
 
@@ -90,6 +94,8 @@ fun CalendarPager(
             deviceEvents = monthDeviceEvents,
             hasCustomFont = customFontName != null,
             isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
+            isTalkBackEnabled = isTalkBackEnabled,
+            isHighTextContrastEnabled = isHighTextContrastEnabled,
         )
     }
 }
