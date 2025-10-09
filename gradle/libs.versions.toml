@@ -31,6 +31,8 @@ wear-compose = "1.5.4"
 wear-protolayout = "1.3.0"
 wear-tiles = "1.5.0"
 wear-tooling-preview = "1.0.0"
+tv-foundation = "1.0.0-alpha12"
+tv-material = "1.0.1"
 
 [libraries]
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
@@ -81,6 +83,9 @@ wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-nav
 wear-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 wear-protolayout-material3 = { group = "androidx.wear.protolayout", name = "protolayout-material3", version.ref = "wear-protolayout" }
 wear-tiles = { group = "androidx.wear.tiles", name = "tiles", version.ref = "wear-tiles" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-tv-foundation = { group = "androidx.tv", name = "tv-foundation", version.ref = "tv-foundation" }
+androidx-tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tv-material" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
