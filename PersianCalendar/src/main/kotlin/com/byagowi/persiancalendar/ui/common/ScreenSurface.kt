@@ -70,7 +70,7 @@ fun SharedTransitionScope.ScreenSurface(
                 }
                 // Ugly but in order to support overshoot animations let's draw surface color
                 // under the content
-                if (drawBehindSurface) drawRect(surfaceColor, Offset(0f, size.height / 2), size)
+                if (drawBehindSurface) drawRect(surfaceColor, Offset(0f, size.height), size)
             }
         }
         // Content
