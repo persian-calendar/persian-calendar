@@ -122,8 +122,8 @@
     <string name="gps_internet_desc">لطفاً مکان‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن کنید.
 \n
 \nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
-    <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
-    <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
+    <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از آغاز سال</string>
+    <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا پایان سال</string>
     <!-- Sun Info -->
     <string name="sunrise_sun_view">طلوع</string>
     <string name="midday_sun_view">ظهر</string>
