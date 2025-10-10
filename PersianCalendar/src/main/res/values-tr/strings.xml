@@ -407,4 +407,19 @@
     <string name="save">Kaydet</string>
     <string name="holidays_in_red">Tatiller kırmızı renkte</string>
     <string name="add_widget">Widget ekle</string>
+    <string name="nothing_scheduled">Planlanan bir şey yok</string>
+    <string name="starting_date">Başlangıç tarihi</string>
+    <string name="month_view">Ay görünümü</string>
+    <string name="daily_schedule">Günlük plan</string>
+    <string name="vibration">Titreşim</string>
+    <string name="schedule">Plan</string>
+    <string name="print">Yazdır</string>
+    <string name="week_view">Hafta görünümü</string>
+    <string name="day_view">Gün görünümü</string>
+    <string name="horoscope">Burç</string>
+    <string name="planetary_hours">Gezegen saatleri</string>
+    <string name="select_font">Yazı tipi seç</string>
+    <string name="move_up">Yukarı taşı</string>
+    <string name="move_down">Aşağı taşı</string>
+    <string name="black_moon">Lilith</string>
 </resources>
