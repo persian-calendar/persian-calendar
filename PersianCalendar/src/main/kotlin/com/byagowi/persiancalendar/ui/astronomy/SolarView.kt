@@ -223,7 +223,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 //                textPath.addArc(textPathRect, 0f, 180f)
 //                drawTextOnPath(labels[(index + 6) % 12], textPath, 0f, 0f, zodiacPaint)
                 drawText(labels[index], radius, radius * .12f, zodiacPaint)
-                drawText(symbols[index], radius, radius * .15f, zodiacSymbolPaint)
+                drawText(symbols[index], radius, radius * .25f, zodiacSymbolPaint)
             }
         }
         val cr = radius / 8f
@@ -339,7 +339,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private val zodiacSymbolPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x38808080
         it.strokeWidth = 1 * dp
-        it.textSize = 14 * dp
+        it.textSize = 20 * dp
         it.textAlign = Paint.Align.CENTER
         it.typeface = ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
     }
