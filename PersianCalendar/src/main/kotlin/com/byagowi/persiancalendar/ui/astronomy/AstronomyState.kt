@@ -20,6 +20,7 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
+import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
@@ -49,8 +50,22 @@ class AstronomyState(val date: GregorianCalendar) {
             equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.Corrected)
         horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.Normal).altitude
     }
-    val planets by lazy(LazyThreadSafetyMode.NONE) {
-        solarSystemPlanets.map { it.titleStringId to equatorialToEcliptic(helioVector(it, time)) }
+    val heliocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
+        heliocentricPlanetsList.map {
+            it.titleStringId to equatorialToEcliptic(
+                helioVector(
+                    it,
+                    time
+                )
+            )
+        }
+    }
+    val geocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
+        geocentricPlanetsList.map {
+            it.titleStringId to equatorialToEcliptic(
+                geoVector(it, time, Aberration.Corrected)
+            )
+        }
     }
 
     fun generateHeader(resources: Resources, language: Language, jdn: Jdn): List<String> {
@@ -83,9 +98,35 @@ class AstronomyState(val date: GregorianCalendar) {
     }
 
     companion object {
-        private val solarSystemPlanets = listOf(
+        private val heliocentricPlanetsList = listOf(
             Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter, Body.Saturn,
             Body.Uranus, Body.Neptune
+        )
+
+        // سنایی، فی صفة الافلاک:
+        // فلک تاسع است بر ز افلاک
+        // کین فلکها بود درو چو مغاک
+        // فلک ثامن است جای بروج
+        // واندر آن هفت را دخول و خروج
+        // فلک سابع است آنِ کیوانست
+        // که مر او را بسان ایوانست
+        // فلک سادس است زاوش را
+        // که دهنده است دانش و هُش را
+        // فلک خامس آنِ بهرامست
+        // آنکه در فعل و رای خودکامست
+        // فلک رابع آنِ خورشیدست
+        // که به ملک اندر آن چو جمشیدست
+        // فلک ثالث آنِ ناهیدست
+        // زهره کز نور او جهان شیدست
+        // فلک ثانی آنِ تیر آمد
+        // آن عُطارد که وی دبیر آمد
+        // فلک اوّل آنِ ماه آمد
+        // که اثیر اندر آن پناه آمد
+        private val geocentricPlanetsList = listOf(
+            // Body.Moon,
+            Body.Mercury, Body.Venus,
+            // Body.Sun,
+            Body.Mars, Body.Jupiter, Body.Saturn,
         )
     }
 }
