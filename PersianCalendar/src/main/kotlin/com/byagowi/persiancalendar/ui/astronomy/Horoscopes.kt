@@ -19,9 +19,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
@@ -123,23 +125,29 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                     language.formatAuAsKm(distance)
                 )
             }
+            val text = @Suppress("SimplifiableCallChain") when (mode) {
+                AstronomyMode.EARTH -> geocentricDistanceBodies.map { body ->
+                    val (longitude, distance) = geocentricLongitudeAndDistanceOfBody(body, time)
+                    format(body, longitude, distance)
+                }.joinToString("\n")
+
+                AstronomyMode.SUN -> heliocentricDistanceBodies.map { body ->
+                    val (longitude, distance) = helioVector(body, time).let {
+                        // See also eclipticLongitude of the astronomy library
+                        equatorialToEcliptic(it).elon to it.length()
+                    }
+                    format(body, longitude, distance)
+                }.joinToString("\n")
+
+                else -> ""
+            }
             Text(
-                @Suppress("SimplifiableCallChain") when (mode) {
-                    AstronomyMode.EARTH -> geocentricDistanceBodies.map { body ->
-                        val (longitude, distance) = geocentricLongitudeAndDistanceOfBody(body, time)
-                        format(body, longitude, distance)
-                    }.joinToString("\n")
-
-                    AstronomyMode.SUN -> heliocentricDistanceBodies.map { body ->
-                        val (longitude, distance) = helioVector(body, time).let {
-                            // See also eclipticLongitude of the astronomy library
-                            equatorialToEcliptic(it).elon to it.length()
-                        }
-                        format(body, longitude, distance)
-                    }.joinToString("\n")
-
-                    else -> ""
-                },
+                text,
+                maxLines = text.lines().size,
+                autoSize = TextAutoSize.StepBased(
+                    minFontSize = 9.sp,
+                    maxFontSize = LocalTextStyle.current.fontSize,
+                ),
                 modifier = Modifier
                     .weight(1f)
                     .padding(start = SettingsHorizontalPaddingItem.dp),
