@@ -38,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -45,7 +46,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
@@ -70,6 +76,8 @@ fun NumberPicker(
     range: IntRange,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
+    onPreviousLabel: String? = null,
+    onNextLabel: String? = null,
     pendingConfirms: MutableCollection<() -> Unit>,
     value: Int,
     setValue: (Int) -> Unit,
@@ -144,13 +152,16 @@ fun NumberPicker(
             ) {
                 if (indexOfElement > 0) Label(
                     text = label(range.first + indexOfElement - 1),
-                    hideFromAccessibility = true,
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
                         .offset(y = -halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
-                        ),
+                        )
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable(onClickLabel = onPreviousLabel) { setValue(value - 1) }
+                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        .clearAndSetSemantics {},
                 )
                 var showTextEdit by remember { mutableStateOf(false) }
                 Crossfade(showTextEdit, label = "edit toggle") { isInNumberEdit ->
@@ -164,6 +175,21 @@ fun NumberPicker(
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
+                            .semantics {
+                                this.role = Role.ValuePicker
+                                this.customActions = listOfNotNull(
+                                    onPreviousLabel?.takeIf {
+                                        indexOfElement > 0
+                                    }?.let {
+                                        CustomAccessibilityAction(it) { setValue(value - 1); true }
+                                    },
+                                    onNextLabel?.takeIf {
+                                        indexOfElement < range.last - range.first
+                                    }?.let {
+                                        CustomAccessibilityAction(it) { setValue(value + 1); true }
+                                    },
+                                )
+                            }
                             .height(numbersColumnHeight / 3)
                             .alpha(
                                 maxOf(
@@ -182,14 +208,16 @@ fun NumberPicker(
                 }
                 if (indexOfElement < range.last - range.first) Label(
                     text = label(range.first + indexOfElement + 1),
-                    hideFromAccessibility = true,
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
-                        .semantics { this.hideFromAccessibility() }
                         .offset(y = halfNumbersColumnHeight)
                         .alpha(
                             maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
-                        ),
+                        )
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable(onClickLabel = onNextLabel) { setValue(value + 1) }
+                        .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                        .clearAndSetSemantics {},
                 )
             }
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
@@ -286,10 +314,9 @@ private fun getItemIndexForOffset(
 }
 
 @Composable
-private fun Label(text: String, modifier: Modifier, hideFromAccessibility: Boolean = false) {
+private fun Label(text: String, modifier: Modifier) {
     Box(contentAlignment = Alignment.Center, modifier = modifier.fillMaxWidth()) {
         Text(
-            modifier = Modifier.semantics { if (hideFromAccessibility) this.hideFromAccessibility() },
             text = text,
             style = LocalTextStyle.current,
             maxLines = 1,
