@@ -164,12 +164,8 @@ fun NumberPicker(
                             indication = null,
                             interactionSource = null,
                         ) {
-                            if (pendingConfirms.isEmpty()) {
-                                setValue(value - 1)
-                            } else {
-                                pendingConfirms.forEach { it() }
-                                pendingConfirms.clear()
-                            }
+                            if (pendingConfirms.isEmpty()) setValue(value - 1)
+                            else pendingConfirms.forEach { it() }
                         }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
@@ -226,12 +222,8 @@ fun NumberPicker(
                             indication = null,
                             interactionSource = null,
                         ) {
-                            if (pendingConfirms.isEmpty()) {
-                                setValue(value + 1)
-                            } else {
-                                pendingConfirms.forEach { it() }
-                                pendingConfirms.clear()
-                            }
+                            if (pendingConfirms.isEmpty()) setValue(value + 1)
+                            else pendingConfirms.forEach { it() }
                         }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},

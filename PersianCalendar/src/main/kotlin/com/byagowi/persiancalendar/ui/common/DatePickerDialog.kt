@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -67,11 +68,12 @@ fun DatePickerDialog(
         confirmButton = {
             Row {
                 val title = stringResource(R.string.accept)
-                val anyPendingAccept = pendingConfirms.isNotEmpty()
-                AnimatedVisibility(anyPendingAccept) {
+                val anyPendingConfirm = pendingConfirms.isNotEmpty()
+                if (anyPendingConfirm) BackHandler { pendingConfirms.forEach { it() } }
+                AnimatedVisibility(anyPendingConfirm) {
                     AppIconButton(Icons.Default.Done, title) { pendingConfirms.forEach { it() } }
                 }
-                AnimatedVisibility(!anyPendingAccept) {
+                AnimatedVisibility(!anyPendingConfirm) {
                     TextButton(onClick = {
                         onDismissRequest()
                         onSuccess(jdn)
