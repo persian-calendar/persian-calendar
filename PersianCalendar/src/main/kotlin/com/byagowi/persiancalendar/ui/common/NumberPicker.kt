@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -150,7 +149,9 @@ fun NumberPicker(
                     .padding(vertical = verticalMargin)
                     .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) },
             ) {
-                if (indexOfElement > 0) Label(
+                fun previousItemExists() = indexOfElement > 0
+                fun nextItemExists() = indexOfElement < range.last - range.first
+                if (previousItemExists()) Label(
                     text = label(range.first + indexOfElement - 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
@@ -158,8 +159,11 @@ fun NumberPicker(
                         .alpha(
                             maxOf(minimumAlpha, coercedAnimatedOffset / halfNumbersColumnHeightPx)
                         )
-                        .clip(MaterialTheme.shapes.medium)
-                        .clickable(onClickLabel = onPreviousLabel) { setValue(value - 1) }
+                        .clickable(
+                            onClickLabel = onPreviousLabel,
+                            indication = null,
+                            interactionSource = null,
+                        ) { setValue(value - 1) }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 )
@@ -178,14 +182,10 @@ fun NumberPicker(
                             .semantics {
                                 this.role = Role.ValuePicker
                                 this.customActions = listOfNotNull(
-                                    onPreviousLabel?.takeIf {
-                                        indexOfElement > 0
-                                    }?.let {
+                                    onPreviousLabel?.takeIf { previousItemExists() }?.let {
                                         CustomAccessibilityAction(it) { setValue(value - 1); true }
                                     },
-                                    onNextLabel?.takeIf {
-                                        indexOfElement < range.last - range.first
-                                    }?.let {
+                                    onNextLabel?.takeIf { nextItemExists() }?.let {
                                         CustomAccessibilityAction(it) { setValue(value + 1); true }
                                     },
                                 )
@@ -206,7 +206,7 @@ fun NumberPicker(
                             ),
                     )
                 }
-                if (indexOfElement < range.last - range.first) Label(
+                if (nextItemExists()) Label(
                     text = label(range.first + indexOfElement + 1),
                     modifier = Modifier
                         .height(numbersColumnHeight / 3)
@@ -214,8 +214,11 @@ fun NumberPicker(
                         .alpha(
                             maxOf(minimumAlpha, -coercedAnimatedOffset / halfNumbersColumnHeightPx)
                         )
-                        .clip(MaterialTheme.shapes.medium)
-                        .clickable(onClickLabel = onNextLabel) { setValue(value + 1) }
+                        .clickable(
+                            onClickLabel = onNextLabel,
+                            indication = null,
+                            interactionSource = null,
+                        ) { setValue(value + 1) }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 )
