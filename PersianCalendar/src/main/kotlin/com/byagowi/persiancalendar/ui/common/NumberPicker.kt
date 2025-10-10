@@ -163,7 +163,14 @@ fun NumberPicker(
                             onClickLabel = onPreviousLabel,
                             indication = null,
                             interactionSource = null,
-                        ) { setValue(value - 1) }
+                        ) {
+                            if (pendingConfirms.isEmpty()) {
+                                setValue(value - 1)
+                            } else {
+                                pendingConfirms.forEach { it() }
+                                pendingConfirms.clear()
+                            }
+                        }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 )
@@ -218,7 +225,14 @@ fun NumberPicker(
                             onClickLabel = onNextLabel,
                             indication = null,
                             interactionSource = null,
-                        ) { setValue(value + 1) }
+                        ) {
+                            if (pendingConfirms.isEmpty()) {
+                                setValue(value + 1)
+                            } else {
+                                pendingConfirms.forEach { it() }
+                                pendingConfirms.clear()
+                            }
+                        }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
                         .clearAndSetSemantics {},
                 )
