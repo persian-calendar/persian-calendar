@@ -232,14 +232,12 @@ fun SharedTransitionScope.DaysScreen(
 
     var addAction by remember { mutableStateOf({}) }
 
-    val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
     val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-    val swipeDownModifier = Modifier.detectSwipe {
-        { isUp ->
-            if (!isLandscape && !isUp) when (preferredSwipeUpAction) {
-                SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
-                else -> {}
-            }
+    val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
+    fun onSwipeDown(isUp: Boolean) {
+        if (!isLandscape && !isUp) when (preferredSwipeUpAction) {
+            SwipeUpAction.WeekView, SwipeUpAction.DayView -> navigateUp()
+            else -> {}
         }
     }
 
@@ -262,7 +260,7 @@ fun SharedTransitionScope.DaysScreen(
             },
             topBar = {
                 @OptIn(ExperimentalMaterial3Api::class) TopAppBar(
-                    modifier = swipeDownModifier,
+                    modifier = Modifier.detectSwipe { ::onSwipeDown },
                     title = {
                         Column(
                             Modifier.clickable(
@@ -371,6 +369,10 @@ fun SharedTransitionScope.DaysScreen(
                     val initialScroll =
                         with(density) { (cellHeight * 7 * scale.value - 16.dp).roundToPx() }
                     val scrollState = rememberScrollState(initialScroll)
+                    val swipeDownOnScrollableModifier = Modifier.detectSwipe {
+                        val wasAtTop = scrollState.value == 0
+                        { isUp: Boolean -> if (wasAtTop) onSwipeDown(isUp) }
+                    }
 
                     HorizontalPager(
                         state = weekPagerState,
@@ -409,7 +411,7 @@ fun SharedTransitionScope.DaysScreen(
                             }
 
                             if (hasWeeksPager) DaysTable(
-                                modifier = swipeDownModifier,
+                                modifier = Modifier.detectSwipe { ::onSwipeDown },
                                 monthStartDate = monthStartDate,
                                 monthStartJdn = monthStartJdn,
                                 suggestedPagerSize = pagerSize,
@@ -443,6 +445,7 @@ fun SharedTransitionScope.DaysScreen(
                                         animatedVisibilityScope = this@AnimatedContent,
                                         boundsTransform = appBoundsTransform,
                                     ) else Modifier,
+                                    scrollableModifier = swipeDownOnScrollableModifier,
                                     bottomPadding = bottomPadding,
                                     setAddAction = {
                                         if (weekPagerState.currentPage == page) addAction = it
@@ -529,6 +532,7 @@ fun SharedTransitionScope.DaysScreen(
                                 scale = scale,
                                 initialScroll = initialScroll,
                                 cellHeight = cellHeight,
+                                scrollableModifier = swipeDownOnScrollableModifier,
                             )
                         }
                     }
@@ -597,6 +601,7 @@ private fun DaysView(
     initialScroll: Int,
     cellHeight: Dp,
     modifier: Modifier = Modifier,
+    scrollableModifier: Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = LocalDensity.current
@@ -761,7 +766,11 @@ private fun DaysView(
 
         // Time cells, table and indicators
         Box {
-            Box(Modifier.verticalScroll(scrollState)) {
+            Box(
+                Modifier
+                    .verticalScroll(scrollState)
+                    .then(scrollableModifier),
+            ) {
                 val firstColumnPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
                 val oneDayTableWidthPx = with(density) { (tableWidth + 24.dp).toPx() }
                 val tableWidthPx = with(density) { tableWidth.toPx() }
