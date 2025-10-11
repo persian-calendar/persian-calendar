@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.converter
 import android.content.res.Configuration
 import android.icu.util.ChineseCalendar
 import android.os.Build
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -190,7 +189,6 @@ fun SharedTransitionScope.ConverterScreen(
                 },
                 actions = {
                     val anyPendingConfirm = pendingConfirms.isNotEmpty()
-                    if (anyPendingConfirm) BackHandler { pendingConfirms.forEach { it() } }
                     val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                     TodayActionButton(visible = todayButtonVisibility && !anyPendingConfirm) {
                         val todayJdn = Jdn.today()

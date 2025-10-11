@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationResult
@@ -277,6 +278,7 @@ fun NumberEdit(
         pendingConfirms.add(clearFocus)
         onDispose { pendingConfirms.remove(clearFocus) }
     }
+    BackHandler { clearFocus() }
 
     fun resolveValue() = value.text.toIntOrNull()?.takeIf(isValid)
 
