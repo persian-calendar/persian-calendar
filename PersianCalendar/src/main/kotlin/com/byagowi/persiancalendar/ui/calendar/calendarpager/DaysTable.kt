@@ -154,7 +154,7 @@ fun daysTable(
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val holidayColor = monthColors.holidays.copy(alpha = .25f)
-    val holidayColorStops = arrayOf(.5f to holidayColor, 1f to Color.Transparent)
+    val holidayColorStops = arrayOf(.6f to holidayColor, 1f to Color.Transparent)
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
