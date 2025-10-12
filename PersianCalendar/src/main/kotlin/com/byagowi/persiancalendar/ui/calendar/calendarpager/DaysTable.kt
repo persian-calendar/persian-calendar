@@ -153,6 +153,8 @@ fun daysTable(
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
+    val holidayColor = monthColors.holidays.copy(alpha = .25f)
+    val holidayColorStops = arrayOf(.5f to holidayColor, 1f to Color.Transparent)
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
@@ -354,13 +356,11 @@ fun daysTable(
                 }
             }
 
-            if (isHighTextContrastEnabled) Canvas(
+            Canvas(
                 Modifier
                     .fillMaxSize()
                     .zIndex(-1f)
             ) {
-                val color = monthColors.holidays.copy(alpha = .25f)
-                val colorStops = arrayOf(.5f to color, 1f to Color.Transparent)
                 holidaysPositions.forEach { (column, row) ->
                     val center = Offset(
                         x = cellWidthPx * (
@@ -370,11 +370,15 @@ fun daysTable(
                         y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
                     )
                     if (isGradient && !isHighTextContrastEnabled) drawCircle(
-                        Brush.radialGradient(*colorStops, center = center, radius = cellRadius),
+                        Brush.radialGradient(
+                            *holidayColorStops,
+                            center = center,
+                            radius = cellRadius
+                        ),
                         center = center,
                         radius = cellRadius,
                         style = Fill,
-                    ) else drawCircle(color, center = center, radius = cellRadius)
+                    ) else drawCircle(holidayColor, center = center, radius = cellRadius)
                 }
             }
 
