@@ -18,6 +18,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -30,9 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
@@ -59,8 +57,8 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.eventsRepository
-import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
@@ -114,7 +112,6 @@ fun daysTable(
     val cellRadius = min(cellWidthPx, cellHeightPx) / 2 - with(density) { .5f.dp.toPx() }
     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
-    val isGradient by isGradient.collectAsState()
     val fontFile = resolveFontFile()
     val language by language.collectAsState()
     val monthColors = appMonthColors()
@@ -153,8 +150,7 @@ fun daysTable(
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
-    val holidayColor = monthColors.holidays.copy(alpha = .25f)
-    val holidayColorStops = arrayOf(.6f to holidayColor, 1f to Color.Transparent)
+    val holidayColor = monthColors.holidays.copy(alpha = .15f)
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
@@ -369,16 +365,7 @@ fun daysTable(
                         // +1 for weekday names initials row, .5f for center of the circle
                         y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
                     )
-                    if (isGradient && !isHighTextContrastEnabled) drawCircle(
-                        Brush.radialGradient(
-                            *holidayColorStops,
-                            center = center,
-                            radius = cellRadius
-                        ),
-                        center = center,
-                        radius = cellRadius,
-                        style = Fill,
-                    ) else drawCircle(holidayColor, center = center, radius = cellRadius)
+                    drawCircle(holidayColor, center = center, radius = cellRadius)
                 }
             }
 
