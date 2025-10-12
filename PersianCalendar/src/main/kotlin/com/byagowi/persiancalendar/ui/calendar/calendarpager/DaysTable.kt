@@ -114,15 +114,13 @@ fun daysTable(
     val pagerArrowSizeAndPaddingPx = with(density) { pagerArrowSizeAndPadding.dp.toPx() }
     val isGradient by isGradient.collectAsState()
     val fontFile = resolveFontFile()
-    val context = LocalContext.current
-    val zodiacFont =
-        ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
     val language by language.collectAsState()
     val monthColors = appMonthColors()
     val coroutineScope = rememberCoroutineScope()
 
     val resources = LocalResources.current
     val diameter = min(cellWidth, cellHeight)
+    val context = LocalContext.current
     val dayPainter = remember(
         cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile
     ) {
@@ -133,7 +131,10 @@ fun daysTable(
             isRtl = isRtl,
             colors = monthColors,
             fontFile = fontFile,
-            zodiacFont = zodiacFont,
+            zodiacFont = ResourcesCompat.getFont(
+                context,
+                R.font.notosanssymbolsregularzodiacsubset
+            ),
         )
     }
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
