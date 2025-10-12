@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import androidx.collection.IntIntPair
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -26,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -43,6 +46,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
+import androidx.compose.ui.zIndex
 import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -93,6 +97,7 @@ fun DaysTable(
     monthStartJdn: Jdn,
     isTalkBackEnabled: Boolean,
     isHighTextContrastEnabled: Boolean,
+    isGradient: Boolean,
     modifier: Modifier = Modifier,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     onlyWeek: Int? = null,
@@ -201,6 +206,8 @@ fun DaysTable(
             }
         }
 
+        val holidaysPositions = remember { mutableSetOf<IntIntPair>() }
+
         repeat(daysRowsCount * 7) { dayOffset ->
             if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
             val row = if (onlyWeek == null) dayOffset / 7 else 0
@@ -278,6 +285,7 @@ fun DaysTable(
                     val isSelected = isHighlighted && selectedDay == day
                     val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                     val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
+                    if (isHoliday) holidaysPositions.add(IntIntPair(column, row))
                     Canvas(cellsSizeModifier) {
                         val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
                         val hasAppointments = events.any { it is CalendarEvent.DeviceCalendarEvent }
@@ -298,11 +306,6 @@ fun DaysTable(
                             monthColors.currentDay,
                             radius = cellRadius,
                             style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
-                        )
-                        if (isHighTextContrastEnabled && isHoliday) drawCircle(
-                            monthColors.holidays.copy(alpha = .25f),
-                            radius = cellRadius,
-                            style = Fill,
                         )
                     }
                     Text(
@@ -336,6 +339,30 @@ fun DaysTable(
                             },
                     )
                 }
+            }
+        }
+
+        if (isHighTextContrastEnabled) Canvas(
+            Modifier
+                .fillMaxSize()
+                .zIndex(-1f)
+        ) {
+            val color = monthColors.holidays.copy(alpha = .25f)
+            val colorStops = arrayOf(.5f to color, 1f to Color.Transparent)
+            holidaysPositions.forEach { (column, row) ->
+                val center = Offset(
+                    x = cellWidthPx * (
+                            .5f + if (isRtl) 6 - column else column
+                            ) + pagerArrowSizeAndPaddingPx,
+                    // +1 for weekday names initials row, .5f for center of the circle
+                    y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
+                )
+                if (isGradient && !isHighTextContrastEnabled) drawCircle(
+                    Brush.radialGradient(*colorStops, center = center, radius = cellRadius),
+                    center = center,
+                    radius = cellRadius,
+                    style = Fill,
+                ) else drawCircle(color, center = center, radius = cellRadius)
             }
         }
 

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -66,6 +67,7 @@ fun CalendarPager(
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
+    val isGradient by isGradient.collectAsState()
     val context = LocalContext.current
 
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
@@ -96,6 +98,7 @@ fun CalendarPager(
             isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
             isTalkBackEnabled = isTalkBackEnabled,
             isHighTextContrastEnabled = isHighTextContrastEnabled,
+            isGradient = isGradient,
         )
     }
 }
