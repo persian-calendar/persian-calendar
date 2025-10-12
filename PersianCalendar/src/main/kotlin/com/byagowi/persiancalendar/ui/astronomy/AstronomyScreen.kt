@@ -465,6 +465,25 @@ private fun SharedTransitionScope.SolarDisplay(
                 )
             }
         }
+        val map = stringResource(R.string.map)
+        NavigationRailItem(
+            modifier = Modifier
+                .size(56.dp)
+                .align(Alignment.CenterEnd)
+                .sharedBounds(
+                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
+                    animatedVisibilityScope = animatedContentScope,
+                    boundsTransform = appBoundsTransform,
+                ),
+            selected = false,
+            onClick = navigateToMap,
+            icon = {
+                Text(
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
+                    modifier = Modifier.semantics { this.contentDescription = map },
+                )
+            },
+        )
         val surfaceColor = MaterialTheme.colorScheme.surface
         val contentColor = LocalContentColor.current
         val fontFile = resolveFontFile()
@@ -488,25 +507,6 @@ private fun SharedTransitionScope.SolarDisplay(
                 it.setTime(state)
                 it.setFont(fontFile)
                 it.mode = mode
-            },
-        )
-        val map = stringResource(R.string.map)
-        NavigationRailItem(
-            modifier = Modifier
-                .size(56.dp)
-                .align(Alignment.CenterEnd)
-                .sharedBounds(
-                    rememberSharedContentState(key = SHARED_CONTENT_KEY_MAP),
-                    animatedVisibilityScope = animatedContentScope,
-                    boundsTransform = appBoundsTransform,
-                ),
-            selected = false,
-            onClick = navigateToMap,
-            icon = {
-                Text(
-                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) "m" else "🗺",
-                    modifier = Modifier.semantics { this.contentDescription = map },
-                )
             },
         )
     }
