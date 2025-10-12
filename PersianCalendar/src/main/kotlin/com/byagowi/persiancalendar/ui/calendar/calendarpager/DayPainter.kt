@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Calendar
@@ -36,11 +37,13 @@ class DayPainter(
     isWidget: Boolean = false,
     isYearView: Boolean = false,
     selectedDayColor: Int? = null,
+    holidayCircleColor: Int? = null,
     zodiacFont: Typeface?,
 ) {
     private val paints = Paints(
         resources, min(width, height), colors, isWidget, isYearView,
-        selectedDayColor, fontFile?.let(Typeface::createFromFile), zodiacFont,
+        selectedDayColor, holidayCircleColor,
+        fontFile?.let(Typeface::createFromFile), zodiacFont,
     )
     private var text = ""
     private var today = false
@@ -60,6 +63,14 @@ class DayPainter(
     }
 
     private fun drawCircle(canvas: Canvas) {
+        if (holiday) paints.holidayPaint?.let {
+            canvas.drawCircle(
+                width / 2,
+                height / 2,
+                min(width, height) / 2 - paints.circlePadding,
+                it,
+            )
+        }
         if (dayIsSelected) paints.selectedDayPaint?.let { selectedDayPaint ->
             canvas.drawCircle(
                 width / 2,
@@ -170,6 +181,7 @@ private class Paints(
     isWidget: Boolean,
     isYearView: Boolean,
     @ColorInt selectedDayColor: Int?,
+    @ColorInt holidayCircleColor: Int?,
     typeface: Typeface?,
     zodiacFont: Typeface?,
 ) {
@@ -209,6 +221,12 @@ private class Paints(
             it.style = Paint.Style.FILL
             it.color = selectedDayColor
             if (typeface != null) it.typeface = typeface
+        }
+    }
+    val holidayPaint = holidayCircleColor?.let { color ->
+        Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.style = Paint.Style.FILL
+            it.color = ColorUtils.setAlphaComponent(color, 64)
         }
     }
 
