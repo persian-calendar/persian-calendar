@@ -105,6 +105,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.util.lruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -144,6 +145,7 @@ import com.byagowi.persiancalendar.ui.theme.appFabElevation
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
@@ -365,6 +367,10 @@ fun SharedTransitionScope.DaysScreen(
                     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
                     val isGradient by isGradient.collectAsState()
+                    val fontFile = resolveFontFile()
+                    val context = LocalContext.current
+                    val zodiacFont =
+                        ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
 
                     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
                     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -424,6 +430,8 @@ fun SharedTransitionScope.DaysScreen(
                                 isHighlighted = isHighlighted,
                                 selectedDay = selectedDay,
                                 refreshToken = refreshToken,
+                                fontFile = fontFile,
+                                zodiacFont = zodiacFont,
                                 setSelectedDay = setSelectedDayInWeekPager,
                                 language = language,
                                 pagerState = weekPagerState,

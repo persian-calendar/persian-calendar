@@ -15,6 +15,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
@@ -28,6 +30,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
+import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 
 @Composable
@@ -69,6 +72,8 @@ fun CalendarPager(
     val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
     val isGradient by isGradient.collectAsState()
     val context = LocalContext.current
+    val fontFile = resolveFontFile()
+    val zodiacFont = ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
 
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
@@ -86,6 +91,8 @@ fun CalendarPager(
             today = today,
             isHighlighted = isHighlighted,
             refreshToken = refreshToken,
+            fontFile = fontFile,
+            zodiacFont = zodiacFont,
             selectedDay = selectedDay,
             setSelectedDay = { viewModel.changeSelectedDay(it) },
             onWeekClick = navigateToDays,

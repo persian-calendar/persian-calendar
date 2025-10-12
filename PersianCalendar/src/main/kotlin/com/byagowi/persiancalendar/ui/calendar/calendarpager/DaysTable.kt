@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import android.graphics.Typeface
 import androidx.collection.IntIntPair
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
@@ -33,7 +34,6 @@ import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -47,7 +47,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.zIndex
-import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -60,7 +59,6 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -73,6 +71,7 @@ import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.math.ceil
 import kotlin.math.min
 
@@ -85,6 +84,8 @@ fun DaysTable(
     isHighlighted: Boolean,
     selectedDay: Jdn,
     refreshToken: Int,
+    fontFile: File?,
+    zodiacFont: Typeface?,
     setSelectedDay: (Jdn) -> Unit,
     language: Language,
     coroutineScope: CoroutineScope,
@@ -149,9 +150,7 @@ fun DaysTable(
         }
 
         val resources = LocalResources.current
-        val context = LocalContext.current
         val diameter = min(cellWidth, cellHeight)
-        val fontFile = resolveFontFile()
         val dayPainter = remember(
             cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile
         ) {
@@ -162,10 +161,7 @@ fun DaysTable(
                 isRtl = isRtl,
                 colors = monthColors,
                 fontFile = fontFile,
-                zodiacFont = ResourcesCompat.getFont(
-                    context,
-                    R.font.notosanssymbolsregularzodiacsubset
-                )
+                zodiacFont = zodiacFont,
             )
         }
         val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
