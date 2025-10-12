@@ -125,6 +125,7 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                     language.formatAuAsKm(distance)
                 )
             }
+
             val text = @Suppress("SimplifiableCallChain") when (mode) {
                 AstronomyMode.EARTH -> geocentricDistanceBodies.map { body ->
                     val (longitude, distance) = geocentricLongitudeAndDistanceOfBody(body, time)
