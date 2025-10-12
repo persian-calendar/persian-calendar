@@ -86,6 +86,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.ceil
 import kotlin.math.min
 
+// For performance reasons it has two phases, a initiation phase that should be called outside
+// the pager which creates a callback that should be invoked inside the pager.
 @Composable
 fun daysTable(
     suggestedPagerSize: DpSize,
