@@ -8,29 +8,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
-import androidx.core.content.res.ResourcesCompat
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.customFontName
-import com.byagowi.persiancalendar.global.isGradient
-import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
-import com.byagowi.persiancalendar.global.isTalkBackEnabled
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
-import com.byagowi.persiancalendar.ui.theme.appMonthColors
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 
 @Composable
@@ -56,25 +45,23 @@ fun CalendarPager(
         viewModel.changeSelectedMonthOffsetCommand(null)
     }
 
-    val language by language.collectAsState()
-    val monthColors = appMonthColors()
-
     viewModel.notifySelectedMonthOffset(-applyOffset(pagerState.currentPage))
 
-    val coroutineScope = rememberCoroutineScope()
-    val isHighlighted by viewModel.isHighlighted.collectAsState()
-    val selectedDay by viewModel.selectedDay.collectAsState()
     val refreshToken by viewModel.refreshToken.collectAsState()
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
-    val customFontName by customFontName.collectAsState()
-    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
-    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-    val isGradient by isGradient.collectAsState()
-    val context = LocalContext.current
-    val fontFile = resolveFontFile()
-    val zodiacFont = ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+    val daysTable = daysTable(
+        suggestedPagerSize = suggestedPagerSize,
+        addEvent = addEvent,
+        today = today,
+        refreshToken = refreshToken,
+        setSelectedDay = viewModel::changeSelectedDay,
+        onWeekClick = navigateToDays,
+        pagerState = pagerState,
+    )
 
+    val selectedDay by viewModel.selectedDay.collectAsState()
+    val isHighlighted by viewModel.isHighlighted.collectAsState()
+    val context = LocalContext.current
     HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { page ->
         val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, -applyOffset(page))
         val monthStartJdn = Jdn(monthStartDate)
@@ -82,30 +69,14 @@ fun CalendarPager(
             if (isShowDeviceCalendarEvents) context.readMonthDeviceEvents(monthStartJdn)
             else EventsStore.empty()
         }
-        DaysTable(
-            monthStartDate = monthStartDate,
-            monthStartJdn = monthStartJdn,
-            suggestedPagerSize = suggestedPagerSize,
-            addEvent = addEvent,
-            monthColors = monthColors,
-            today = today,
-            isHighlighted = isHighlighted,
-            refreshToken = refreshToken,
-            fontFile = fontFile,
-            zodiacFont = zodiacFont,
-            selectedDay = selectedDay,
-            setSelectedDay = { viewModel.changeSelectedDay(it) },
-            onWeekClick = navigateToDays,
-            language = language,
-            coroutineScope = coroutineScope,
-            pagerState = pagerState,
-            page = page,
-            deviceEvents = monthDeviceEvents,
-            hasCustomFont = customFontName != null,
-            isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-            isTalkBackEnabled = isTalkBackEnabled,
-            isHighTextContrastEnabled = isHighTextContrastEnabled,
-            isGradient = isGradient,
+        daysTable(
+            page,
+            monthStartDate,
+            monthStartJdn,
+            monthDeviceEvents,
+            null,
+            isHighlighted,
+            selectedDay,
         )
     }
 }

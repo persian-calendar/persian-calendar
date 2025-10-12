@@ -105,7 +105,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.util.lruCache
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -122,19 +121,15 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.customFontName
-import com.byagowi.persiancalendar.global.isGradient
-import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
-import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.DaysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.daysTable
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.pagerArrowSizeAndPadding
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -142,10 +137,8 @@ import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appFabElevation
-import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
-import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AnimatableFloatSaver
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.JdnSaver
@@ -351,7 +344,6 @@ fun SharedTransitionScope.DaysScreen(
                 )
             },
         ) { paddingValues ->
-            val monthColors = appMonthColors()
             val bottomPadding = paddingValues.calculateBottomPadding().coerceAtLeast(16.dp)
             BoxWithConstraints(Modifier.padding(top = paddingValues.calculateTopPadding())) {
                 val screenWidth = this.maxWidth
@@ -362,15 +354,16 @@ fun SharedTransitionScope.DaysScreen(
                     val now by calendarViewModel.now.collectAsState()
                     val refreshToken by calendarViewModel.refreshToken.collectAsState()
                     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
-                    val customFontName by customFontName.collectAsState()
-                    val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
-                    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-                    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
-                    val isGradient by isGradient.collectAsState()
-                    val fontFile = resolveFontFile()
-                    val context = LocalContext.current
-                    val zodiacFont =
-                        ResourcesCompat.getFont(context, R.font.notosanssymbolsregularzodiacsubset)
+                    val daysTable = daysTable(
+                        modifier = Modifier.detectSwipe { ::onSwipeDown },
+                        suggestedPagerSize = pagerSize,
+                        addEvent = addEvent,
+                        today = today,
+                        refreshToken = refreshToken,
+                        setSelectedDay = setSelectedDayInWeekPager,
+                        pagerState = weekPagerState,
+                        isWeekMode = true,
+                    )
 
                     val scale = rememberSaveable(saver = AnimatableFloatSaver) { Animatable(1f) }
                     val cellHeight by remember(scale.value) { mutableStateOf((64 * scale.value).dp) }
@@ -418,31 +411,14 @@ fun SharedTransitionScope.DaysScreen(
                                 } else EventsStore.empty()
                             }
 
-                            if (hasWeeksPager) DaysTable(
-                                modifier = Modifier.detectSwipe { ::onSwipeDown },
-                                monthStartDate = monthStartDate,
-                                monthStartJdn = monthStartJdn,
-                                suggestedPagerSize = pagerSize,
-                                addEvent = addEvent,
-                                monthColors = monthColors,
-                                onlyWeek = week,
-                                today = today,
-                                isHighlighted = isHighlighted,
-                                selectedDay = selectedDay,
-                                refreshToken = refreshToken,
-                                fontFile = fontFile,
-                                zodiacFont = zodiacFont,
-                                setSelectedDay = setSelectedDayInWeekPager,
-                                language = language,
-                                pagerState = weekPagerState,
-                                page = page,
-                                coroutineScope = coroutineScope,
-                                deviceEvents = weekDeviceEvents,
-                                hasCustomFont = customFontName != null,
-                                isShowWeekOfYearEnabled = isShowWeekOfYearEnabled,
-                                isTalkBackEnabled = isTalkBackEnabled,
-                                isHighTextContrastEnabled = isHighTextContrastEnabled,
-                                isGradient = isGradient,
+                            if (hasWeeksPager) daysTable(
+                                page,
+                                monthStartDate,
+                                monthStartJdn,
+                                weekDeviceEvents,
+                                week,
+                                isHighlighted,
+                                selectedDay,
                             )
 
                             if (isWeekViewState) ScreenSurface(
