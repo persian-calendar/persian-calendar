@@ -75,7 +75,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private val iauRanges = Zodiac.entries.map { it.iauRange.map(Double::toFloat) }
     private val ranges = iauRanges.map { it.toFloatArray() }
 
-    private val labels = Zodiac.entries.map { it.format(resources, false, short = true) }
+    private val labels = Zodiac.entries.map { it.format(resources, short = true) }
     private val symbols = Zodiac.entries.map { it.symbol }
 
     init {

@@ -552,17 +552,17 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                 Box(Modifier.weight(1f)) {
                     Cell(
                         Modifier.align(Alignment.Center),
-                        Color(0xcceaaa00),
-                        stringResource(R.string.sun),
-                        sunZodiac.format(resources, true) // ☉☀️
+                        color = Color(0xcceaaa00),
+                        label = stringResource(R.string.sun),
+                        value = sunZodiac.symbol + " " + sunZodiac.format(resources) // ☉☀️
                     )
                 }
                 Box(Modifier.weight(1f)) {
                     Cell(
                         Modifier.align(Alignment.Center),
-                        Color(0xcc606060),
-                        stringResource(R.string.moon),
-                        moonZodiac.format(resources, true) // ☽it.moonPhaseEmoji
+                        color = Color(0xcc606060),
+                        label = stringResource(R.string.moon),
+                        value = moonZodiac.symbol + " " + moonZodiac.format(resources) // ☽it.moonPhaseEmoji
                     )
                 }
             }
@@ -599,9 +599,9 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
                     val (time, title) = equinoxes[cell + row * 2]
                     Cell(
                         Modifier.clickable { viewModel.animateToTime(time) },
-                        seasonsOrder[cell + row * 2].color,
-                        stringResource(seasonsOrder[cell + row * 2].nameStringId),
-                        title,
+                        color = seasonsOrder[cell + row * 2].color,
+                        label = stringResource(seasonsOrder[cell + row * 2].nameStringId),
+                        value = title,
                     )
                 }
             }

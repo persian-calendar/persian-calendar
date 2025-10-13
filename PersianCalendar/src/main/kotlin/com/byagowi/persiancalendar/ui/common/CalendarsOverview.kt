@@ -251,8 +251,8 @@ fun SharedTransitionScope.CalendarsOverview(
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val zodiac = Zodiac.fromTropical(sunPosition(jdn.toAstronomyTime(hourOfDay = 12)).elon)
             AutoSizedBodyText(
-                stringResource(R.string.zodiac) + spacedColon +
-                        zodiac.format(LocalResources.current, true)
+                stringResource(R.string.zodiac) + spacedColon + zodiac.symbol + " " +
+                        zodiac.format(LocalResources.current)
             )
         }
 

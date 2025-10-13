@@ -356,7 +356,7 @@ private fun ColumnScope.AscendantZodiac(
         Text(zodiac.symbol, Modifier.alpha(1 - progress * .9f), fontSize = 40.sp)
         val text = buildAnnotatedString {
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
-                it.format(resources, withEmoji = false, short = true)
+                it.format(resources, short = true)
             }
             appendAngle(house, houses[i])
             val bodies = bodiesZodiac[zodiac] ?: emptyList()

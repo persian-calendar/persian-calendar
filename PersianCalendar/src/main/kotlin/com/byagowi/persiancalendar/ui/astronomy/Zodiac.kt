@@ -55,12 +55,7 @@ enum class Zodiac(
     AQUARIUS(311.72, "♒", R.string.aquarius), // 300-330
     PISCES(348.58, "♓", R.string.pisces); // 330-360
 
-    fun format(
-        resources: Resources,
-        withEmoji: Boolean,
-        short: Boolean = false
-    ) = buildString {
-        if (withEmoji) append("$symbol ")
+    fun format(resources: Resources, short: Boolean = false) = buildString {
         val result = resources.getString(title)
         append(if (short) result.split(" (")[0] else result)
     }
