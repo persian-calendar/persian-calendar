@@ -273,10 +273,8 @@ fun <T> ReorderableColumn(
                             start = cord.positionInParent().y, size = cord.size.height
                         )
                     }
-                    .graphicsLayer {
-                        translationY = reorderableListState.itemOffsets[i].value
-                    }
-                    .zIndex(if (isAnimating) 1f else 0f),
+                    .graphicsLayer { translationY = reorderableListState.itemOffsets[i].value }
+                    .then(if (isAnimating) Modifier.zIndex(1f) else Modifier),
             ) {
                 ReorderableScopeImpl(
                     state = reorderableListState,
