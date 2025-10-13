@@ -54,7 +54,6 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -135,9 +134,8 @@ fun daysTable(
         )
     }
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-    val customFontName by customFontName.collectAsState()
     val daysTextSize = diameter * when {
-        mainCalendarDigitsIsArabic || customFontName != null -> 18
+        mainCalendarDigitsIsArabic || fontFile != null -> 18
         isTamilDigitSelected -> 16
         else -> 25
     } / 40
