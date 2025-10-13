@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import androidx.collection.IntIntPair
+import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -210,8 +210,7 @@ fun daysTable(
                 }
             }
 
-            val holidaysPositions = remember { mutableSetOf<IntIntPair>() }
-
+            val holidaysPositions = remember { mutableIntSetOf() }
             repeat(daysRowsCount * 7) { dayOffset ->
                 if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
                 val row = if (onlyWeek == null) dayOffset / 7 else 0
@@ -289,7 +288,7 @@ fun daysTable(
                         val isSelected = isHighlighted && selectedDay == day
                         val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                         val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
-                        if (isHoliday) holidaysPositions.add(IntIntPair(column, row))
+                        if (isHoliday) holidaysPositions.add(TablePositionPair(column, row).value)
                         Canvas(cellsSizeModifier) {
                             val hasEvents = events.any { it !is CalendarEvent.DeviceCalendarEvent }
                             val hasAppointments =
@@ -353,11 +352,10 @@ fun daysTable(
                     .fillMaxSize()
                     .zIndex(-1f)
             ) {
-                holidaysPositions.forEach { (column, row) ->
+                holidaysPositions.forEach {
+                    val (column, row) = TablePositionPair(it)
                     val center = Offset(
-                        x = cellWidthPx * (
-                                .5f + if (isRtl) 6 - column else column
-                                ) + pagerArrowSizeAndPaddingPx,
+                        x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
                         // +1 for weekday names initials row, .5f for center of the circle
                         y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
                     )
@@ -368,6 +366,14 @@ fun daysTable(
             PagerArrow(arrowOffsetY, coroutineScope, pagerState, page, width, false, onlyWeek)
         }
     }
+}
+
+@JvmInline
+private value class TablePositionPair(val value: Int) {
+    constructor(x: Int, y: Int) : this(x * 16 + y)
+
+    operator fun component1() = value / 16
+    operator fun component2() = value % 16
 }
 
 private const val pagerArrowSize = MaterialIconDimension + 8 * 2
@@ -393,7 +399,7 @@ private fun PagerArrow(
         modifier = Modifier
             .offset(
                 x = if (isPrevious) 16.dp else (screenWidth - pagerArrowSize.dp),
-                y = arrowOffsetY
+                y = arrowOffsetY,
             )
             .then(
                 if (week == null) Modifier.combinedClickable(
