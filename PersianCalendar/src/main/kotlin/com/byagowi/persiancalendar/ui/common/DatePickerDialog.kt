@@ -11,7 +11,6 @@ import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
@@ -106,51 +105,53 @@ fun DatePickerDialog(
 
         DatePicker(calendar, pendingConfirms, jdn) { jdn = it }
         var showNumberEdit by remember { mutableStateOf(false) }
-        Crossfade(showNumberEdit, label = "edit toggle") { isInNumberEdit ->
+        Crossfade(targetState = showNumberEdit, label = "edit toggle") { isInNumberEdit ->
             if (isInNumberEdit) NumberEdit(
                 dismissNumberEdit = { showNumberEdit = false },
                 initialValue = jdn - today,
                 isValid = { abs(it) < 100_000 },
                 modifier = Modifier.fillMaxWidth(),
                 pendingConfirms = pendingConfirms,
-            ) { jdn = today + it } else AnimatedContent(
-                targetState = if (jdn == today) null else listOf(
-                    stringResource(R.string.days_distance), spacedColon,
-                    calculateDaysDifference(
-                        LocalResources.current,
-                        jdn,
-                        today,
-                        calendar = calendar,
-                    ),
-                ).joinToString(""),
-                transitionSpec = {
-                    slideIntoContainer(
-                        towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(500)
-                    ) togetherWith slideOutOfContainer(
-                        towards = AnimatedContentTransitionScope.SlideDirection.Up,
-                        animationSpec = tween(500)
-                    )
-                },
-                label = "days distance",
-            ) { state ->
-                if (state != null) Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable(
-                            indication = null,
-                            interactionSource = null,
-                            onClickLabel = stringResource(R.string.days_distance),
-                        ) { showNumberEdit = true },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    SelectionContainer {
-                        Text(
-                            state,
-                            modifier = Modifier.fillMaxSize(),
-                            style = MaterialTheme.typography.bodySmall,
-                            textAlign = TextAlign.Center,
+            ) { jdn = today + it } else AnimatedVisibility(jdn != today) {
+                AnimatedContent(
+                    targetState = listOf(
+                        stringResource(R.string.days_distance), spacedColon,
+                        calculateDaysDifference(
+                            LocalResources.current,
+                            jdn,
+                            today,
+                            calendar = calendar,
+                        ),
+                    ).joinToString(""),
+                    transitionSpec = {
+                        slideIntoContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(500)
+                        ) togetherWith slideOutOfContainer(
+                            towards = AnimatedContentTransitionScope.SlideDirection.Up,
+                            animationSpec = tween(500)
                         )
+                    },
+                    label = "days distance",
+                ) { state ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable(
+                                indication = null,
+                                interactionSource = null,
+                                onClickLabel = stringResource(R.string.days_distance),
+                            ) { showNumberEdit = true },
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        SelectionContainer {
+                            Text(
+                                text = state,
+                                modifier = Modifier.fillMaxWidth(),
+                                style = MaterialTheme.typography.bodySmall,
+                                textAlign = TextAlign.Center,
+                            )
+                        }
                     }
                 }
             }
