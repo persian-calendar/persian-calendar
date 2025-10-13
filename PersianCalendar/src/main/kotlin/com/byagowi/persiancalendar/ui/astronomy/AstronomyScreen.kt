@@ -549,25 +549,22 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
         Seasons(jdn, viewModel)
         this.AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
             Row(Modifier.padding(top = 8.dp)) {
-                Box(Modifier.weight(1f)) {
-                    val sunZodiacTitle = stringResource(sunZodiac.titleId)
-                    Cell(
-                        Modifier.align(Alignment.Center),
-                        color = Color(0xcceaaa00),
-                        label = stringResource(R.string.sun),
-                        value = sunZodiac.symbol + " " + sunZodiacTitle, // ☉☀️
-                        valueContentDescription = sunZodiacTitle,
-                    )
-                }
-                Box(Modifier.weight(1f)) {
-                    val moonZodiacTitle = stringResource(moonZodiac.titleId)
-                    Cell(
-                        Modifier.align(Alignment.Center),
-                        color = Color(0xcc606060),
-                        label = stringResource(R.string.moon),
-                        value = moonZodiac.symbol + " " + moonZodiacTitle, // ☽it.moonPhaseEmoji
-                        valueContentDescription = moonZodiacTitle,
-                    )
+                listOf(
+                    // ☉☀️
+                    Triple(sunZodiac, R.string.sun, Color(0xcceaaa00)),
+                    // ☽it.moonPhaseEmoji
+                    Triple(moonZodiac, R.string.moon, Color(0xcc606060)),
+                ).forEach { (zodiac, titleId, color) ->
+                    Box(Modifier.weight(1f)) {
+                        val title = stringResource(zodiac.titleId)
+                        Cell(
+                            Modifier.align(Alignment.Center),
+                            color = color,
+                            label = stringResource(titleId),
+                            value = sunZodiac.symbol + " " + title,
+                            valueContentDescription = title,
+                        )
+                    }
                 }
             }
         }
