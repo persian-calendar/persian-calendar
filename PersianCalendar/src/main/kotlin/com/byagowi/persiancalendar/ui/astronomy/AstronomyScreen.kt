@@ -550,19 +550,23 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
         this.AnimatedVisibility(visible = mode == AstronomyMode.EARTH) {
             Row(Modifier.padding(top = 8.dp)) {
                 Box(Modifier.weight(1f)) {
+                    val sunZodiacTitle = stringResource(sunZodiac.titleId)
                     Cell(
                         Modifier.align(Alignment.Center),
                         color = Color(0xcceaaa00),
                         label = stringResource(R.string.sun),
-                        value = sunZodiac.symbol + " " + sunZodiac.format(resources) // ☉☀️
+                        value = sunZodiac.symbol + " " + sunZodiacTitle, // ☉☀️
+                        valueContentDescription = sunZodiacTitle,
                     )
                 }
                 Box(Modifier.weight(1f)) {
+                    val moonZodiacTitle = stringResource(moonZodiac.titleId)
                     Cell(
                         Modifier.align(Alignment.Center),
                         color = Color(0xcc606060),
                         label = stringResource(R.string.moon),
-                        value = moonZodiac.symbol + " " + moonZodiac.format(resources) // ☽it.moonPhaseEmoji
+                        value = moonZodiac.symbol + " " + moonZodiacTitle, // ☽it.moonPhaseEmoji
+                        valueContentDescription = moonZodiacTitle,
                     )
                 }
             }
@@ -639,7 +643,13 @@ private fun SharedTransitionScope.MoonIcon(
 
 @Stable
 @Composable
-private fun Cell(modifier: Modifier, color: Color, label: String, value: String) {
+private fun Cell(
+    modifier: Modifier,
+    color: Color,
+    label: String,
+    value: String,
+    valueContentDescription: String? = null,
+) {
     Row(
         modifier.animateContentSize(appContentSizeAnimationSpec),
         verticalAlignment = Alignment.CenterVertically,
@@ -660,7 +670,13 @@ private fun Cell(modifier: Modifier, color: Color, label: String, value: String)
             Text(
                 value,
                 style = LocalTextStyle.current,
-                modifier = Modifier.padding(start = 8.dp, end = 4.dp),
+                modifier = Modifier
+                    .padding(start = 8.dp, end = 4.dp)
+                    .then(
+                        if (valueContentDescription != null) Modifier.semantics {
+                            this.contentDescription = valueContentDescription
+                        } else Modifier
+                    ),
                 maxLines = 1,
                 softWrap = false,
                 autoSize = TextAutoSize.StepBased(

@@ -40,7 +40,9 @@ import kotlin.math.floor
  * See also: https://en.wikipedia.org/wiki/Lunar_station#Arabic_manzil
  */
 enum class Zodiac(
-    private val iauRangeStart: Double, val symbol: String, @get:StringRes private val title: Int
+    private val iauRangeStart: Double,
+    val symbol: String,
+    @get:StringRes val titleId: Int,
 ) {
     ARIES(33.18, "♈", R.string.aries), // 0-30 (Tropical)
     TAURUS(51.16, "♉", R.string.taurus), // 30-60
@@ -55,9 +57,10 @@ enum class Zodiac(
     AQUARIUS(311.72, "♒", R.string.aquarius), // 300-330
     PISCES(348.58, "♓", R.string.pisces); // 330-360
 
-    fun format(resources: Resources, short: Boolean = false) = buildString {
-        val result = resources.getString(title)
-        append(if (short) result.split(" (")[0] else result)
+    // Some language have translation of Zodiac signs in a parenthesis which isn't always needed
+    fun shortTitle(resources: Resources) = buildString {
+        val result = resources.getString(titleId)
+        append(result.split(" (")[0])
     }
 
     private val iauNextRangeStart: Double

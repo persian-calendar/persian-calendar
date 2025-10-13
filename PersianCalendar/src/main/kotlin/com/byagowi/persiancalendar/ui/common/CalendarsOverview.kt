@@ -249,10 +249,12 @@ fun SharedTransitionScope.CalendarsOverview(
         }
 
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
+            val zodiacString = stringResource(R.string.zodiac)
             val zodiac = Zodiac.fromTropical(sunPosition(jdn.toAstronomyTime(hourOfDay = 12)).elon)
+            val zodiacTitle = stringResource(zodiac.titleId)
             AutoSizedBodyText(
-                stringResource(R.string.zodiac) + spacedColon + zodiac.symbol + " " +
-                        zodiac.format(LocalResources.current)
+                text = zodiacString + spacedColon + zodiac.symbol + " " + zodiacTitle,
+                contentDescriptionOverride = zodiacString + spacedColon + zodiacTitle,
             )
         }
 
@@ -396,6 +398,7 @@ private fun AutoSizedBodyText(
     text: String,
     topPadding: Dp = 4.dp,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    contentDescriptionOverride: String? = null,
 ) {
     Box(
         modifier = Modifier
@@ -407,7 +410,11 @@ private fun AutoSizedBodyText(
             Text(
                 text = text,
                 style = textStyle,
-                modifier = Modifier.animateContentSize(appContentSizeAnimationSpec),
+                modifier = Modifier
+                    .animateContentSize(appContentSizeAnimationSpec)
+                    .then(if (contentDescriptionOverride != null) Modifier.semantics {
+                        this.contentDescription = contentDescriptionOverride
+                    } else Modifier),
                 maxLines = 1,
                 softWrap = false,
                 autoSize = TextAutoSize.StepBased(
