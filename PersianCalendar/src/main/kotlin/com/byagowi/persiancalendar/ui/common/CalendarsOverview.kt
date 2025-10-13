@@ -201,24 +201,29 @@ fun SharedTransitionScope.CalendarsOverview(
         val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
             moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
-            Text(
-                buildAnnotatedString {
-                    if (language.isPersian) append(
-                        when (val state = moonInScorpioState) {
-                            MoonInScorpioState.Borji -> "قمر در برج عقرب"
-                            MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
-                            is MoonInScorpioState.Start ->
-                                "${state.clock.toFormattedString()} قمر وارد برج عقرب می‌شود"
+            val text = if (language.isPersian || language.isDari) when (moonInScorpioState) {
+                MoonInScorpioState.Borji -> "قمر در برج عقرب"
+                MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
+                is MoonInScorpioState.Start -> {
+                    "${moonInScorpioState.clock.toFormattedString()} ورود قمر به صورت فلکی عقرب"
+                }
 
-                            is MoonInScorpioState.End ->
-                                "${state.clock.toFormattedString()} قمر از صورت فلکی عقرب خارج می‌شود"
+                is MoonInScorpioState.End -> {
+                    "${moonInScorpioState.clock.toFormattedString()} خروجی قمر از صورت فلکی عقرب"
+                }
 
-                            else -> ""
-                        }
-                    ) else {
-                        append(stringResource(R.string.moon_in_scorpio))
-                        if (!language.isArabicScript) {
-                            append(" ")
+                else -> ""
+            } else stringResource(R.string.moon_in_scorpio)
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
+            ) {
+                SelectionContainer {
+                    Text(
+                        text = buildAnnotatedString {
+                            append("$text ")
                             withStyle(
                                 MaterialTheme.typography.bodyMedium.toSpanStyle().copy(
                                     fontFamily = FontFamily(
@@ -226,15 +231,15 @@ fun SharedTransitionScope.CalendarsOverview(
                                     ),
                                 )
                             ) { append(Zodiac.SCORPIO.symbol) }
-                        }
-                    }
-                },
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier
-                    .padding(top = 4.dp, start = 24.dp, end = 24.dp)
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Center,
-            )
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .animateContentSize(appContentSizeAnimationSpec)
+                            .semantics { this.contentDescription = text },
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
         }
 
         val persianDate = jdn.toPersianDate()

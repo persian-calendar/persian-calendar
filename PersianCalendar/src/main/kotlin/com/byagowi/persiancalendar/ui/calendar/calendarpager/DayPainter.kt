@@ -10,8 +10,6 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.graphics.ColorUtils
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -53,6 +51,7 @@ class DayPainter(
     var jdn: Jdn? = null
         private set
     private var isWeekNumber = false
+    private var isMoonInScorpio = false
     private var header = ""
 
     fun drawDay(canvas: Canvas) {
@@ -127,10 +126,21 @@ class DayPainter(
     }
 
     private fun drawHeader(canvas: Canvas) {
-        if (header.isEmpty()) return
-        canvas.drawText(
-            header, width / 2f, height / 2 + paints.headerYOffset,
+        // Make scorpio sign to not overlap with rest of the header, ugly but works more or less
+        val xOffset = if (header.isNotEmpty() && isMoonInScorpio) {
+            (width / 16f) * (header.length + 1)
+        } else 0f
+        val x = width / 2f
+        val y = height / 2 + paints.headerYOffset
+        if (header.isNotEmpty()) canvas.drawText(
+            header, x - xOffset, y,
             if (dayIsSelected) paints.headerTextSelectedPaint else paints.headerTextPaint
+        )
+        if (isMoonInScorpio) canvas.drawText(
+            Zodiac.SCORPIO.symbol,
+            x + xOffset,
+            y,
+            if (dayIsSelected) paints.zodiacHeaderTextSelectedPaint else paints.zodiacHeaderTextPaint,
         )
     }
 
@@ -146,9 +156,9 @@ class DayPainter(
         this.holiday = isHoliday
         this.jdn = jdn
         this.isWeekNumber = isWeekNumber
+        this.isMoonInScorpio =
+            isAstronomicalExtraFeaturesEnabled.value && jdn != null && isMoonInScorpio(jdn)
         this.header = listOfNotNull(
-            if (isAstronomicalExtraFeaturesEnabled.value && jdn != null && isMoonInScorpio(jdn))
-                paints.scorpioSign else null,
             if (secondaryCalendar == null || jdn == null) null else
                 formatNumber(jdn.on(secondaryCalendar).dayOfMonth, secondaryCalendarDigits),
             header,
@@ -192,9 +202,6 @@ private class Paints(
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
-    val scorpioSign = if (isArabicScript) {
-        resources.getString(R.string.scorpio).first() + ZWJ
-    } else Zodiac.SCORPIO.symbol
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
@@ -237,6 +244,7 @@ private class Paints(
 
     private val secondaryCalendarDigitsIsArabic = secondaryCalendarDigits === Language.ARABIC_DIGITS
     private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)
+    private val zodiacHeaderTextSize = diameter / 40 * 10
     val headerYOffset = -diameter * (if (secondaryCalendarDigitsIsArabic) 10 else 7) / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -268,7 +276,13 @@ private class Paints(
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
-        if (!isArabicScript && isAstronomicalExtraFeaturesEnabled.value) it.typeface = zodiacFont
+    }
+    val zodiacHeaderTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = zodiacHeaderTextSize
+        it.color = colors.textDaySelected.toArgb()
+        if (isWidget) addShadowIfNeeded(it)
+        it.typeface = zodiacFont
     }
 
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -277,7 +291,13 @@ private class Paints(
         it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
-        if (!isArabicScript && isAstronomicalExtraFeaturesEnabled.value) it.typeface = zodiacFont
+    }
+    val zodiacHeaderTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = zodiacHeaderTextSize
+        it.color = colors.colorTextDayName.toArgb()
+        if (isWidget) addShadowIfNeeded(it)
+        it.typeface = zodiacFont
     }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
