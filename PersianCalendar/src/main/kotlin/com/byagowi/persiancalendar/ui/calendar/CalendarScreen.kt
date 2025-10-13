@@ -296,7 +296,10 @@ fun SharedTransitionScope.CalendarScreen(
             BackHandler(enabled = searchBoxIsOpen, onBack = viewModel::closeSearch)
 
             Crossfade(searchBoxIsOpen, label = "toolbar") {
-                if (it) Search(viewModel) else Toolbar(
+                if (it) Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                ) { Search(viewModel) } else Toolbar(
                     animatedContentScope = animatedContentScope,
                     openDrawer = openDrawer,
                     swipeUpActions = swipeUpActions,
