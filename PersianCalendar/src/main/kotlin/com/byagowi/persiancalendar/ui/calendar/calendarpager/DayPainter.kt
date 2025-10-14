@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
@@ -9,7 +10,9 @@ import android.graphics.Typeface
 import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -26,6 +29,7 @@ import java.io.File
 import kotlin.math.min
 
 class DayPainter(
+    context: Context,
     resources: Resources,
     val width: Float,
     val height: Float,
@@ -36,12 +40,15 @@ class DayPainter(
     isYearView: Boolean = false,
     selectedDayColor: Int? = null,
     holidayCircleColor: Int? = null,
-    zodiacFont: Typeface?,
 ) {
     private val paints = Paints(
         resources, min(width, height), colors, isWidget, isYearView,
         selectedDayColor, holidayCircleColor,
-        fontFile?.let(Typeface::createFromFile), zodiacFont,
+        typeface = fontFile?.let(Typeface::createFromFile),
+        zodiacFont = ResourcesCompat.getFont(
+            context,
+            R.font.notosanssymbolsregularzodiacsubset
+        )
     )
     private var text = ""
     private var today = false

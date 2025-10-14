@@ -121,16 +121,13 @@ fun daysTable(
         cellWidthPx, suggestedHeight, refreshToken, monthColors, resources, fontFile
     ) {
         DayPainter(
+            context = context,
             resources = resources,
             width = cellWidthPx,
             height = cellHeightPx,
             isRtl = isRtl,
             colors = monthColors,
             fontFile = fontFile,
-            zodiacFont = ResourcesCompat.getFont(
-                context,
-                R.font.notosanssymbolsregularzodiacsubset
-            ),
         )
     }
     val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS

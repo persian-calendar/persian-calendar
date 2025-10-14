@@ -53,7 +53,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -118,6 +117,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
     val dayPainter = remember(monthColors, widthInPx) {
         lruCache(4, create = { height: Float ->
             DayPainter(
+                context = context,
                 resources = resources,
                 width = (widthInPx - paddingInPx * 2f) / if (isShowWeekOfYearEnabled.value) 8 else 7,
                 height = height / 7,/* rows count*/
@@ -127,10 +127,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 isYearView = true,
                 selectedDayColor = monthColors.indicator.toArgb(),
                 holidayCircleColor = monthColors.holidays.toArgb(),
-                zodiacFont = ResourcesCompat.getFont(
-                    context,
-                    R.font.notosanssymbolsregularzodiacsubset
-                )
             )
         })
     }
