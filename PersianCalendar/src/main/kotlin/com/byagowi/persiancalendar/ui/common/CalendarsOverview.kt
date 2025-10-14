@@ -209,7 +209,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 }
 
                 is MoonInScorpioState.End -> {
-                    "${moonInScorpioState.clock.toFormattedString()} خروجی قمر از صورت فلکی عقرب"
+                    "${moonInScorpioState.clock.toFormattedString()} خروج قمر از صورت فلکی عقرب"
                 }
 
                 else -> ""
