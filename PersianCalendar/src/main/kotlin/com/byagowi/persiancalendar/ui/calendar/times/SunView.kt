@@ -230,6 +230,7 @@ class SunView(context: Context) : View(context) {
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
 
     fun initiate() {
+        if (animator.isRunning) return
         val prayTimes = prayTimes ?: return
 
         val sunset = prayTimes.sunset

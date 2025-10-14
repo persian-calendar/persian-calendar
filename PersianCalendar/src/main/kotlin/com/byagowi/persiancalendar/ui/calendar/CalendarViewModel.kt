@@ -16,7 +16,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -51,9 +50,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     private val _shiftWorkViewModel = MutableStateFlow<ShiftWorkViewModel?>(null)
     val shiftWorkViewModel: StateFlow<ShiftWorkViewModel?> get() = _shiftWorkViewModel
-
-    private val _sunViewNeedAnimation = MutableStateFlow(false)
-    val sunViewNeedsAnimation: StateFlow<Boolean> get() = _sunViewNeedAnimation
 
     private val _now = MutableStateFlow(System.currentTimeMillis())
     val now: StateFlow<Long> get() = _now
@@ -134,14 +130,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _shiftWorkViewModel.value = shiftWorkViewModel
     }
 
-    fun clearNeedsAnimation() {
-        _sunViewNeedAnimation.value = false
-    }
-
-    fun astronomicalOverviewLaunched() {
-        _sunViewNeedAnimation.value = true
-    }
-
     fun openYearView() {
         _isYearView.value = true
     }
@@ -184,11 +172,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             val preferences = application.preferences
             changeSelectedTabIndex(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
             selectedTabIndex.collectLatest { preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it) } }
-        }
-        viewModelScope.launch {
-            selectedTabIndex.combine(selectedDay) { tabIndex, day ->
-                tabIndex == TIMES_TAB && day == today.value
-            }.collect { if (it) _sunViewNeedAnimation.value = true }
         }
         viewModelScope.launch {
             while (true) {
