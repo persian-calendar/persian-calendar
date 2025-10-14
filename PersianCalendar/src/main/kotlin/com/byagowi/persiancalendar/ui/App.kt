@@ -167,9 +167,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             ) {
                 fun Route.navigate() = navController.navigate(route)
                 fun Route.navigate(bundle: Bundle) {
-                    navController.graph.findNode(this)?.let { destination ->
-                        navController.navigate(destination.id, bundle)
-                    }
+                    val destination = navController.graph.findNode(this) ?: return
+                    navController.navigate(destination.id, bundle)
                 }
 
                 fun isCurrentDestination(backStackEntry: NavBackStackEntry) =
