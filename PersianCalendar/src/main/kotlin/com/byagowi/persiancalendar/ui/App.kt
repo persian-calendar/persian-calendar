@@ -72,6 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -171,12 +172,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                 }
 
-                fun Route.isCurrentDestination() =
-                    navController.currentDestination?.route == route
+                fun isCurrentDestination(backStackEntry: NavBackStackEntry) =
+                    navController.currentDestination == backStackEntry.destination
 
-                fun Route.navigateUp() {
+                fun navigateUp(backStackEntry: NavBackStackEntry) {
                     // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
-                    if (!this.isCurrentDestination()) return
+                    if (!isCurrentDestination(backStackEntry)) return
                     // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
                     if (!navController.popBackStack()) finish()
                 }
@@ -187,7 +188,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 fun navigateToAstronomy(jdn: Jdn) =
                     Route.Astronomy.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
 
-                composable(Route.Calendar.route) {
+                composable(Route.Calendar.route) { backStackEntry ->
                     val viewModel = viewModel<CalendarViewModel>()
                     appInitialJdn?.let {
                         viewModel.changeSelectedMonthOffsetCommand(
@@ -225,7 +226,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
                         animatedContentScope = this,
-                        isCurrentDestination = Route.Calendar.isCurrentDestination(),
+                        isCurrentDestination = isCurrentDestination(backStackEntry),
                     )
                 }
 
@@ -242,7 +243,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     MonthScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
-                        navigateUp = { Route.Month.navigateUp() },
+                        navigateUp = { navigateUp(backStackEntry) },
                         initiallySelectedDay = jdn,
                     )
                 }
@@ -260,7 +261,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     ScheduleScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
-                        navigateUp = { Route.Schedule.navigateUp() },
+                        navigateUp = { navigateUp(backStackEntry) },
                         initiallySelectedDay = jdn,
                     )
                 }
@@ -280,22 +281,22 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         initiallySelectedDay = jdn,
                         appAnimatedContentScope = this,
                         isInitiallyWeek = isWeek,
-                        navigateUp = { Route.Days.navigateUp() },
+                        navigateUp = { navigateUp(backStackEntry) },
                     )
                 }
 
-                composable(Route.Converter.route) {
+                composable(Route.Converter.route) { backStackEntry ->
                     ConverterScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel<ConverterViewModel>(),
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
-                        else ({ Route.Converter.navigateUp() }),
+                        else ({ navigateUp(backStackEntry) }),
                     )
                 }
 
-                composable(Route.Compass.route) {
+                composable(Route.Compass.route) { backStackEntry ->
                     CompassScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
@@ -303,14 +304,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToMap = { Route.Map.navigate() },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
-                        else ({ Route.Compass.navigateUp() }),
+                        else ({ navigateUp(backStackEntry) }),
                     )
                 }
 
-                composable(Route.Level.route) {
+                composable(Route.Level.route) { backStackEntry ->
                     LevelScreen(
                         animatedContentScope = this,
-                        navigateUp = { Route.Level.navigateUp() },
+                        navigateUp = { navigateUp(backStackEntry) },
                         navigateToCompass = { Route.Compass.navigate() },
                     )
                 }
@@ -326,11 +327,11 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToMap = { Route.Map.navigate() },
                         viewModel = viewModel,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
-                        else ({ Route.Astronomy.navigateUp() }),
+                        else ({ navigateUp(backStackEntry) }),
                     )
                 }
 
-                composable(Route.Map.route) {
+                composable(Route.Map.route) { backStackEntry ->
                     val viewModel = viewModel<MapViewModel>()
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
@@ -343,7 +344,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                     MapScreen(
                         animatedContentScope = this,
-                        navigateUp = { Route.Map.navigateUp() },
+                        navigateUp = { navigateUp(backStackEntry) },
                         fromSettings = previousRoute == Route.Settings.route,
                         viewModel = viewModel,
                     )
@@ -368,13 +369,13 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
 
-                composable(Route.Licenses.route) {
-                    LicensesScreen(animatedContentScope = this) { Route.Licenses.navigateUp() }
+                composable(Route.Licenses.route) { backStackEntry ->
+                    LicensesScreen(animatedContentScope = this) { navigateUp(backStackEntry) }
                 }
 
-                composable(Route.DeviceInformation.route) {
+                composable(Route.DeviceInformation.route) { backStackEntry ->
                     DeviceInformationScreen(
-                        { Route.DeviceInformation.navigateUp() },
+                        navigateUp = { navigateUp(backStackEntry) },
                         animatedContentScope = this,
                     )
                 }
