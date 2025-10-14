@@ -170,16 +170,20 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navController.navigate(destination.id, bundle)
                     }
                 }
+
                 fun Route.isCurrentDestination() =
                     navController.currentDestination?.route == route
+
                 fun Route.navigateUp() {
                     // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
                     if (!this.isCurrentDestination()) return
                     // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
                     if (!navController.popBackStack()) finish()
                 }
+
                 fun navigateToSettingsLocationTab() =
                     Route.Settings.navigate(bundleOf(tabKey to LOCATION_ATHAN_TAB))
+
                 fun navigateToAstronomy(jdn: Jdn) =
                     Route.Astronomy.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
 
@@ -199,7 +203,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 bundleOf(
                                     tabKey to INTERFACE_CALENDAR_TAB,
                                     settingsKey to PREF_HOLIDAY_TYPES,
-                                ),
+                                )
                             )
                         },
                         navigateToSettingsLocationTabSetAthanAlarm = {
