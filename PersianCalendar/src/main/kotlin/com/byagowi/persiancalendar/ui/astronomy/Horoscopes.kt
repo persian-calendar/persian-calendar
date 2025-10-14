@@ -48,6 +48,11 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
+import androidx.compose.ui.semantics.isTraversalGroup
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.traversalIndex
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -221,6 +226,10 @@ private fun EasternHoroscopePattern(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .absoluteOffset(this.maxWidth * x, this.maxHeight * y)
+                        .semantics {
+                            this.traversalIndex = i + 1f
+                            this.isTraversalGroup = true
+                        }
                         .size(this.maxWidth / 3),
                 ) { CompositionLocalProvider(LocalLayoutDirection provides textDirection) { cell(i) } }
             }
@@ -260,20 +269,32 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         LaunchedEffect(Unit) { delay(700); animationProgress.animateTo(1f) }
         val coroutineScope = rememberCoroutineScope()
         val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
-        val modifier = if (isTalkBackEnabled) Modifier else Modifier.clickable(
+        val horoscopeString = stringResource(R.string.horoscope)
+        val yearNameString = stringResource(R.string.year_name)
+        val clickableModifier = Modifier.clickable(
             indication = null, interactionSource = null
         ) {
             coroutineScope.launch {
                 animationProgress.animateTo(if (animationProgress.value > .5f) 0f else 1f)
             }
         }
-        EasternHoroscopePattern(modifier) { i ->
+        val yearNameModifier = if (isTalkBackEnabled) Modifier.semantics {
+            this.contentDescription = yearNameString
+            this.isTraversalGroup = true
+        } else clickableModifier
+        val planetaryModifier = if (isTalkBackEnabled) Modifier.semantics {
+            this.contentDescription = horoscopeString
+            this.isTraversalGroup = true
+        } else clickableModifier
+        EasternHoroscopePattern(yearNameModifier) { i ->
             val date = PersianDate(persianYear + i, 1, 1)
             val chineseZodiac = ChineseZodiac.fromPersianCalendar(date)
             Text(
                 chineseZodiac.resolveEmoji(language.isPersian),
                 fontSize = 40.sp,
-                modifier = Modifier.alpha(1 - animationProgress.value * .8f),
+                modifier = Modifier
+                    .semantics { this.hideFromAccessibility() }
+                    .alpha(1 - animationProgress.value * .8f),
             )
             Text(
                 chineseZodiac.formatForHoroscope(resources, language.isPersian),
@@ -304,7 +325,13 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val time = seasons(gregorianYear).marchEquinox
-        AscendantZodiac(time, coordinates, modifier, animationProgress.value, isYearEquinox = true)
+        AscendantZodiac(
+            time,
+            coordinates,
+            planetaryModifier,
+            animationProgress.value,
+            isYearEquinox = true
+        )
     }
 }
 
@@ -353,7 +380,13 @@ private fun ColumnScope.AscendantZodiac(
     }
     EasternHoroscopePattern(modifier) { i ->
         val zodiac = Zodiac.entries[(i + ascendantZodiac.ordinal) % 12]
-        Text(zodiac.symbol, Modifier.alpha(1 - progress * .9f), fontSize = 40.sp)
+        Text(
+            zodiac.symbol,
+            Modifier
+                .semantics { this.hideFromAccessibility() }
+                .alpha(1 - progress * .9f),
+            fontSize = 40.sp
+        )
         val text = buildAnnotatedString {
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {
                 it.shortTitle(resources)

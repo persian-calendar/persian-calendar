@@ -72,6 +72,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
@@ -91,6 +92,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
@@ -556,13 +558,18 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                     Triple(moonZodiac, R.string.moon, Color(0xcc606060)),
                 ).forEach { (zodiac, titleId, color) ->
                     Box(Modifier.weight(1f)) {
-                        val title = stringResource(zodiac.titleId)
+                        val title = stringResource(titleId)
+                        val value = stringResource(zodiac.titleId)
                         Cell(
-                            Modifier.align(Alignment.Center),
+                            Modifier
+                                .semantics(mergeDescendants = true) {
+                                    this.contentDescription = title + spacedColon + value
+                                }
+                                .clearAndSetSemantics {}
+                                .align(Alignment.Center),
                             color = color,
-                            label = stringResource(titleId),
-                            value = sunZodiac.symbol + " " + title,
-                            valueContentDescription = title,
+                            title = title,
+                            value = sunZodiac.symbol + " " + value,
                         )
                     }
                 }
@@ -597,12 +604,20 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
         Row(Modifier.padding(top = 8.dp)) {
             repeat(2) { cell ->
                 Box(Modifier.weight(1f)) {
-                    val (time, title) = equinoxes[cell + row * 2]
+                    val title = stringResource(seasonsOrder[cell + row * 2].nameStringId)
+                    val (time, formattedTime) = equinoxes[cell + row * 2]
                     Cell(
-                        Modifier.clickable { viewModel.animateToTime(time) },
+                        Modifier
+                            .semantics(true) {
+                                this.contentDescription = title + spacedComma + formattedTime
+                            }
+                            .clickable(onClickLabel = stringResource(R.string.select_date)) {
+                                viewModel.animateToTime(time)
+                            }
+                            .clearAndSetSemantics {},
                         color = seasonsOrder[cell + row * 2].color,
-                        label = stringResource(seasonsOrder[cell + row * 2].nameStringId),
-                        value = title,
+                        title = title,
+                        value = formattedTime,
                     )
                 }
             }
@@ -643,16 +658,15 @@ private fun SharedTransitionScope.MoonIcon(
 private fun Cell(
     modifier: Modifier,
     color: Color,
-    label: String,
+    title: String,
     value: String,
-    valueContentDescription: String? = null,
 ) {
     Row(
         modifier.animateContentSize(appContentSizeAnimationSpec),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            label,
+            title,
             modifier = Modifier
                 .background(
                     if (isDynamicGrayscale()) Color(0xcc808080) else color,
@@ -667,13 +681,7 @@ private fun Cell(
             Text(
                 value,
                 style = LocalTextStyle.current,
-                modifier = Modifier
-                    .padding(start = 8.dp, end = 4.dp)
-                    .semantics {
-                        if (valueContentDescription != null) {
-                            this.contentDescription = valueContentDescription
-                        }
-                    },
+                modifier = Modifier.padding(start = 8.dp, end = 4.dp),
                 maxLines = 1,
                 softWrap = false,
                 autoSize = TextAutoSize.StepBased(
