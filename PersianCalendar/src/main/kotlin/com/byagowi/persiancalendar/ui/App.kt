@@ -170,18 +170,18 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navController.navigate(destination.id, bundle)
                     }
                 }
+                fun Route.isCurrentDestination() =
+                    navController.currentDestination?.route == route
+                fun Route.navigateUp() {
+                    // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
+                    if (!this.isCurrentDestination()) return
+                    // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
+                    if (!navController.popBackStack()) finish()
+                }
                 fun navigateToSettingsLocationTab() =
                     Route.Settings.navigate(bundleOf(tabKey to LOCATION_ATHAN_TAB))
                 fun navigateToAstronomy(jdn: Jdn) =
                     Route.Astronomy.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
-                fun isCurrentDestination(route: Route) =
-                    navController.currentDestination?.route == route.route
-                fun Route.navigateUp() {
-                    // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
-                    if (!isCurrentDestination(this)) return
-                    // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
-                    if (!navController.popBackStack()) finish()
-                }
 
                 composable(Route.Calendar.route) {
                     val viewModel = viewModel<CalendarViewModel>()
@@ -221,7 +221,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
                         animatedContentScope = this,
-                        isCurrentDestination = isCurrentDestination(Route.Calendar),
+                        isCurrentDestination = Route.Calendar.isCurrentDestination(),
                     )
                 }
 
