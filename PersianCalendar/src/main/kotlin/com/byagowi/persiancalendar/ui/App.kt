@@ -176,9 +176,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     Route.Astronomy.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
                 fun isCurrentDestination(route: Route) =
                     navController.currentDestination?.route == route.route
-                fun navigateUp(currentRoute: Route) {
+                fun Route.navigateUp() {
                     // If we aren't in the screen that this wasn't supposed to be called, just ignore, happens while transition
-                    if (!isCurrentDestination(currentRoute)) return
+                    if (!isCurrentDestination(this)) return
                     // if there wasn't anything to pop, just exit the app, happens if the app is entered from the map widget
                     if (!navController.popBackStack()) finish()
                 }
@@ -238,7 +238,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     MonthScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
-                        navigateUp = { navigateUp(Route.Month) },
+                        navigateUp = { Route.Month.navigateUp() },
                         initiallySelectedDay = jdn,
                     )
                 }
@@ -256,7 +256,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     ScheduleScreen(
                         calendarViewModel = viewModel,
                         animatedContentScope = this,
-                        navigateUp = { navigateUp(Route.Schedule) },
+                        navigateUp = { Route.Schedule.navigateUp() },
                         initiallySelectedDay = jdn,
                     )
                 }
@@ -276,7 +276,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         initiallySelectedDay = jdn,
                         appAnimatedContentScope = this,
                         isInitiallyWeek = isWeek,
-                        navigateUp = { navigateUp(Route.Days) },
+                        navigateUp = { Route.Days.navigateUp() },
                     )
                 }
 
@@ -287,7 +287,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel<ConverterViewModel>(),
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
-                        else ({ navigateUp(Route.Converter) }),
+                        else ({ Route.Converter.navigateUp() }),
                     )
                 }
 
@@ -299,14 +299,14 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToMap = { Route.Map.navigate() },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
-                        else ({ navigateUp(Route.Compass) }),
+                        else ({ Route.Compass.navigateUp() }),
                     )
                 }
 
                 composable(Route.Level.route) {
                     LevelScreen(
                         animatedContentScope = this,
-                        navigateUp = { navigateUp(Route.Level) },
+                        navigateUp = { Route.Level.navigateUp() },
                         navigateToCompass = { Route.Compass.navigate() },
                     )
                 }
@@ -322,7 +322,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         navigateToMap = { Route.Map.navigate() },
                         viewModel = viewModel,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
-                        else ({ navigateUp(Route.Astronomy) }),
+                        else ({ Route.Astronomy.navigateUp() }),
                     )
                 }
 
@@ -339,7 +339,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                     MapScreen(
                         animatedContentScope = this,
-                        navigateUp = { navigateUp(Route.Map) },
+                        navigateUp = { Route.Map.navigateUp() },
                         fromSettings = previousRoute == Route.Settings.route,
                         viewModel = viewModel,
                     )
@@ -365,12 +365,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
 
                 composable(Route.Licenses.route) {
-                    LicensesScreen(animatedContentScope = this) { navigateUp(Route.Licenses) }
+                    LicensesScreen(animatedContentScope = this) { Route.Licenses.navigateUp() }
                 }
 
                 composable(Route.DeviceInformation.route) {
                     DeviceInformationScreen(
-                        { navigateUp(Route.DeviceInformation) },
+                        { Route.DeviceInformation.navigateUp() },
                         animatedContentScope = this,
                     )
                 }
