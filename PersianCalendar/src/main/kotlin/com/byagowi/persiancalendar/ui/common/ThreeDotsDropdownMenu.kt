@@ -41,7 +41,7 @@ fun SharedTransitionScope.ThreeDotsDropdownMenu(
         run {
             val rotation by animateFloatAsState(
                 targetValue = if (!expanded) 0f
-                else if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f,
+                else if (LocalLayoutDirection.current == LayoutDirection.Rtl) -90f else 90f,
                 animationSpec = spring(
                     stiffness = Spring.StiffnessMediumLow,
                     dampingRatio = Spring.DampingRatioMediumBouncy,
