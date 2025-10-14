@@ -164,16 +164,16 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 navController = navController,
                 startDestination = Route.fromShortcutIds(intentStartDestination).route,
             ) {
-                fun navigate(route: Route) = navController.navigate(route.route)
-                fun navigate(route: Route, bundle: Bundle) {
-                    navController.graph.findNode(route)?.let { destination ->
+                fun Route.navigate() = navController.navigate(route)
+                fun Route.navigate(bundle: Bundle) {
+                    navController.graph.findNode(this)?.let { destination ->
                         navController.navigate(destination.id, bundle)
                     }
                 }
                 fun navigateToSettingsLocationTab() =
-                    navigate(Route.Settings, bundleOf(tabKey to LOCATION_ATHAN_TAB))
+                    Route.Settings.navigate(bundleOf(tabKey to LOCATION_ATHAN_TAB))
                 fun navigateToAstronomy(jdn: Jdn) =
-                    navigate(Route.Astronomy, bundleOf(daysOffsetKey to jdn - Jdn.today()))
+                    Route.Astronomy.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
                 fun isCurrentDestination(route: Route) =
                     navController.currentDestination?.route == route.route
                 fun navigateUp(currentRoute: Route) {
@@ -195,8 +195,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     CalendarScreen(
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToHolidaysSettings = {
-                            navigate(
-                                Route.Settings,
+                            Route.Settings.navigate(
                                 bundleOf(
                                     tabKey to INTERFACE_CALENDAR_TAB,
                                     settingsKey to PREF_HOLIDAY_TYPES,
@@ -204,22 +203,20 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             )
                         },
                         navigateToSettingsLocationTabSetAthanAlarm = {
-                            navigate(
-                                Route.Settings,
+                            Route.Settings.navigate(
                                 bundleOf(
                                     tabKey to LOCATION_ATHAN_TAB,
                                     settingsKey to PREF_ATHAN_ALARM,
-                                ),
+                                )
                             )
                         },
-                        navigateToSchedule = { navigate(Route.Schedule) },
+                        navigateToSchedule = { Route.Schedule.navigate() },
                         navigateToDays = { jdn, isWeek ->
-                            navigate(
-                                Route.Days,
+                            Route.Days.navigate(
                                 bundleOf(selectedDayKey to jdn.value, isWeekKey to isWeek)
                             )
                         },
-                        navigateToMonthView = { navigate(Route.Month) },
+                        navigateToMonthView = { Route.Month.navigate() },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
@@ -298,8 +295,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     CompassScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToLevel = { navigate(Route.Level) },
-                        navigateToMap = { navigate(Route.Map) },
+                        navigateToLevel = { Route.Level.navigate() },
+                        navigateToMap = { Route.Map.navigate() },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
                         else ({ navigateUp(Route.Compass) }),
@@ -310,7 +307,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     LevelScreen(
                         animatedContentScope = this,
                         navigateUp = { navigateUp(Route.Level) },
-                        navigateToCompass = { navigate(Route.Compass) },
+                        navigateToCompass = { Route.Compass.navigate() },
                     )
                 }
 
@@ -322,7 +319,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AstronomyScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToMap = { navigate(Route.Map) },
+                        navigateToMap = { Route.Map.navigate() },
                         viewModel = viewModel,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
                         else ({ navigateUp(Route.Astronomy) }),
@@ -352,7 +349,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     SettingsScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToMap = { navigate(Route.Map) },
+                        navigateToMap = { Route.Map.navigate() },
                         initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
                         destination = backStackEntry.arguments?.getString(settingsKey).orEmpty()
                     )
@@ -362,8 +359,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AboutScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToLicenses = { navigate(Route.Licenses) },
-                        navigateToDeviceInformation = { navigate(Route.DeviceInformation) },
+                        navigateToLicenses = { Route.Licenses.navigate() },
+                        navigateToDeviceInformation = { Route.DeviceInformation.navigate() },
                     )
                 }
 
