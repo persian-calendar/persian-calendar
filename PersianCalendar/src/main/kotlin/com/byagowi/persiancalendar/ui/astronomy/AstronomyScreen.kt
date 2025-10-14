@@ -59,6 +59,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -614,7 +615,8 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
                             .clickable(onClickLabel = stringResource(R.string.select_date)) {
                                 viewModel.animateToTime(time)
                             }
-                            .clearAndSetSemantics {},
+                            .clearAndSetSemantics {}
+                            .clip(MaterialTheme.shapes.small),
                         color = seasonsOrder[cell + row * 2].color,
                         title = title,
                         value = formattedTime,
