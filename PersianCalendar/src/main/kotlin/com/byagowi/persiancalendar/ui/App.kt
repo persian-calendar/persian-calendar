@@ -30,7 +30,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ModeNight
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.SwapVerticalCircle
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
@@ -61,6 +67,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.imageResource
@@ -106,6 +113,7 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
+import com.byagowi.persiancalendar.ui.icons.AstrologyIcon
 import com.byagowi.persiancalendar.ui.level.LevelScreen
 import com.byagowi.persiancalendar.ui.map.MapScreen
 import com.byagowi.persiancalendar.ui.map.MapViewModel
@@ -378,6 +386,41 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         animatedContentScope = this,
                     )
                 }
+            }
+        }
+    }
+}
+
+private enum class Route(
+    val route: String,
+    val drawerIcon: ImageVector? = null,
+    val titleId: Int,
+) {
+    Calendar("calendar", Icons.Default.DateRange, R.string.calendar),
+    Month("monthView", null, R.string.month_view),
+    Schedule("schedule", null, R.string.schedule),
+    Days("days", null, R.string.day_view),
+    Converter("converter", Icons.Default.SwapVerticalCircle, R.string.date_converter),
+    Compass("compass", Icons.Default.Explore, R.string.compass),
+    Level("level", null, R.string.level),
+    Astronomy("astronomy", AstrologyIcon, R.string.astronomy),
+    Map("map", null, R.string.map),
+    Settings("settings", Icons.Default.Settings, R.string.settings),
+    About("about", Icons.Default.Info, R.string.about),
+    Licenses("license", null, R.string.licenses),
+    DeviceInformation("device", null, R.string.device_information),
+    Exit("", Icons.Default.Cancel, R.string.exit);
+
+    companion object {
+        fun fromShortcutIds(value: String?): Route {
+            // See xml/shortcuts.xml and ShortcutActivity.kt
+            return when (value) {
+                "COMPASS" -> Calendar
+                "LEVEL" -> Level
+                "CONVERTER" -> Converter
+                "ASTRONOMY" -> Astronomy
+                "MAP" -> Map
+                else -> entries[0]
             }
         }
     }
