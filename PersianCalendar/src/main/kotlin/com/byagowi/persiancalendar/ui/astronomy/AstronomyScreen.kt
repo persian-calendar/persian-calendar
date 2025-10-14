@@ -609,14 +609,14 @@ private fun Seasons(jdn: Jdn, viewModel: AstronomyViewModel) {
                     val (time, formattedTime) = equinoxes[cell + row * 2]
                     Cell(
                         Modifier
+                            .clip(MaterialTheme.shapes.small)
                             .semantics(true) {
                                 this.contentDescription = title + spacedComma + formattedTime
                             }
                             .clickable(onClickLabel = stringResource(R.string.select_date)) {
                                 viewModel.animateToTime(time)
                             }
-                            .clearAndSetSemantics {}
-                            .clip(MaterialTheme.shapes.small),
+                            .clearAndSetSemantics {},
                         color = seasonsOrder[cell + row * 2].color,
                         title = title,
                         value = formattedTime,
