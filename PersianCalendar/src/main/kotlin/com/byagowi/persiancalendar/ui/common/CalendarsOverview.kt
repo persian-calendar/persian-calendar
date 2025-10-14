@@ -417,9 +417,11 @@ private fun AutoSizedBodyText(
                 style = textStyle,
                 modifier = Modifier
                     .animateContentSize(appContentSizeAnimationSpec)
-                    .then(if (contentDescriptionOverride != null) Modifier.semantics {
-                        this.contentDescription = contentDescriptionOverride
-                    } else Modifier),
+                    .semantics {
+                        if (contentDescriptionOverride != null) {
+                            this.contentDescription = contentDescriptionOverride
+                        }
+                    },
                 maxLines = 1,
                 softWrap = false,
                 autoSize = TextAutoSize.StepBased(

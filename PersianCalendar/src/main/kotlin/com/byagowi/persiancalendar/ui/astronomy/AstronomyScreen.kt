@@ -669,11 +669,11 @@ private fun Cell(
                 style = LocalTextStyle.current,
                 modifier = Modifier
                     .padding(start = 8.dp, end = 4.dp)
-                    .then(
-                        if (valueContentDescription != null) Modifier.semantics {
+                    .semantics {
+                        if (valueContentDescription != null) {
                             this.contentDescription = valueContentDescription
-                        } else Modifier
-                    ),
+                        }
+                    },
                 maxLines = 1,
                 softWrap = false,
                 autoSize = TextAutoSize.StepBased(

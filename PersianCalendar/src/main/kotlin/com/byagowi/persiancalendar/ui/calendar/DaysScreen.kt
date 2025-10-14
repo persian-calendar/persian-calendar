@@ -821,10 +821,12 @@ private fun DaysView(
                                                 duration = cellHeightPx / scale.value
                                                 setSelectedDay(startingDay + column - 1)
                                             }
-                                            .then(if (isTalkBackEnabled) Modifier.semantics {
-                                                this.contentDescription =
-                                                    (startingDay + (column - 1)).weekDayName + " " + clockCache[row * 60] + " " + clockCache[(row + 1) * 60]
-                                            } else Modifier)
+                                            .semantics {
+                                                if (isTalkBackEnabled) {
+                                                    this.contentDescription =
+                                                        (startingDay + (column - 1)).weekDayName + " " + clockCache[row * 60] + " " + clockCache[(row + 1) * 60]
+                                                }
+                                            }
                                     }.size(
                                         if (column == 0 || column == days + 1) pagerArrowSizeAndPadding.dp
                                         else cellWidth,
