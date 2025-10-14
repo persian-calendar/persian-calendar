@@ -52,19 +52,12 @@ class AstronomyState(val date: GregorianCalendar) {
     }
     val heliocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
         heliocentricPlanetsList.map {
-            it.titleStringId to equatorialToEcliptic(
-                helioVector(
-                    it,
-                    time
-                )
-            )
+            it.titleStringId to equatorialToEcliptic(helioVector(it, time))
         }
     }
     val geocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
         geocentricPlanetsList.map {
-            it.titleStringId to equatorialToEcliptic(
-                geoVector(it, time, Aberration.Corrected)
-            )
+            equatorialToEcliptic(geoVector(it, time, Aberration.Corrected))
         }
     }
 
@@ -99,8 +92,14 @@ class AstronomyState(val date: GregorianCalendar) {
 
     companion object {
         private val heliocentricPlanetsList = listOf(
-            Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter, Body.Saturn,
-            Body.Uranus, Body.Neptune
+            Body.Mercury,
+            Body.Venus,
+            Body.Earth,
+            Body.Mars,
+            Body.Jupiter,
+            Body.Saturn,
+            Body.Uranus,
+            Body.Neptune
         )
 
         // سنایی، فی صفة الافلاک:
@@ -113,7 +112,7 @@ class AstronomyState(val date: GregorianCalendar) {
         // فلک ثالث آنِ ناهیدست - زهره کز نور او جهان شیدست
         // فلک ثانی آنِ تیر آمد - آن عُطارد که وی دبیر آمد
         // فلک اوّل آنِ ماه آمد - که اثیر اندر آن پناه آمد
-        private val geocentricPlanetsList = listOf(
+        val geocentricPlanetsList = listOf(
             // Body.Moon,
             Body.Mercury, Body.Venus,
             // Body.Sun,

@@ -26,6 +26,8 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.symbol
+import com.byagowi.persiancalendar.utils.titleStringId
 import java.io.File
 import java.util.GregorianCalendar
 import kotlin.math.PI
@@ -195,6 +197,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.color = Color.GRAY
     }
 
+    val planetsTitles = AstronomyState.geocentricPlanetsList.map {
+        resources.getString(it.titleStringId) + " " + it.symbol
+    }
+
     private fun drawGeoCentricView(canvas: Canvas) {
         val radius = min(width, height) / 2f
         (0..12).forEach {
@@ -249,7 +255,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         }
         colorTextPaint.textSize = radius / 15
         colorTextPaint.alpha = 120
-        state.geocentricPlanets.forEachIndexed { i, (label, ecliptic) ->
+        state.geocentricPlanets.forEachIndexed { i, ecliptic ->
             canvas.withRotation(-ecliptic.elon.toFloat() + 270, radius, radius) {
                 val r = when (i) {
                     0 -> 2.5f
@@ -265,7 +271,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize
                 )
                 textPath.addArc(textPathRect, 0f, 180f)
-                canvas.drawTextOnPath(resources.getString(label), textPath, 0f, 0f, colorTextPaint)
+                canvas.drawTextOnPath(planetsTitles[i], textPath, 0f, 0f, colorTextPaint)
             }
         }
     }

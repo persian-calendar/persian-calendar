@@ -34,6 +34,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.symbol
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toCivilDate
 import io.github.cosinekitty.astronomy.Body
@@ -161,7 +162,10 @@ fun PlanetaryHoursDialog(
                     if (row.isDay) Icons.Default.Brightness7 else Icons.Default.NightlightRound,
                     null
                 )
-                AutoSizedText(stringResource(row.planet.body.titleStringId), 1f)
+                AutoSizedText(
+                    stringResource(row.planet.body.titleStringId) + " " + row.planet.body.symbol,
+                    1f,
+                )
                 AutoSizedText(if (language.isArabicScript) row.planet.fa else row.planet.en, 1f)
             }
         }

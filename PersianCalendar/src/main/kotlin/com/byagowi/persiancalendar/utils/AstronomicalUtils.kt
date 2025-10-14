@@ -158,3 +158,15 @@ val Body.titleStringId
         Body.Moon -> R.string.moon
         else -> R.string.empty
     }
+
+val Body.symbol
+    get() = when (this) {
+        Body.Sun -> "☉"
+        Body.Moon -> "☽"
+        Body.Mars -> "♂"
+        Body.Mercury -> "☿"
+        Body.Jupiter -> "♃"
+        Body.Venus -> "♀"
+        Body.Saturn -> "♄"
+        else -> ""
+    }
