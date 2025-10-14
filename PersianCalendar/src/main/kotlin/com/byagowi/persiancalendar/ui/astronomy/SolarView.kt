@@ -197,7 +197,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.color = Color.GRAY
     }
 
-    val planetsTitles = AstronomyState.geocentricPlanetsList.map {
+    private val planetsTitles = AstronomyState.geocentricPlanetsList.map {
         resources.getString(it.titleStringId) + " " + it.symbol
     }
 
