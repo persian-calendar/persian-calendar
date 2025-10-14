@@ -823,8 +823,11 @@ private fun DaysView(
                                             }
                                             .semantics {
                                                 if (isTalkBackEnabled) {
-                                                    this.contentDescription =
-                                                        (startingDay + (column - 1)).weekDayName + " " + clockCache[row * 60] + " " + clockCache[(row + 1) * 60]
+                                                    this.contentDescription = listOf(
+                                                        (startingDay + (column - 1)).weekDayName,
+                                                        clockCache[row * 60],
+                                                        clockCache[(row + 1) * 60]
+                                                    ).joinToString(" ")
                                                 }
                                             }
                                     }.size(
