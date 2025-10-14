@@ -133,9 +133,8 @@ class DayPainter(
     }
 
     private fun drawHeader(canvas: Canvas) {
-        // Make scorpio sign to not overlap with rest of the header, ugly but works more or less
         val xOffset = if (header.isNotEmpty() && isMoonInScorpio) {
-            (width / 16f) * (header.length + 1)
+            paints.headerTextSelectedPaint.measureText(" $header") / 2
         } else 0f
         val x = width / 2f
         val y = height / 2 + paints.headerYOffset
