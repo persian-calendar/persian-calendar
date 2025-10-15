@@ -9,6 +9,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -101,6 +102,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -280,8 +282,27 @@ fun update(context: Context, updateDate: Boolean) {
         }
     }
 
-    // Notification
     updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
+
+    updateDynamicIcon(date.dayOfMonth, context)
+}
+
+private fun updateDynamicIcon(dayOfMonth: Int, context: Context) {
+    val isPersianDigits = preferredDigits === Language.PERSIAN_DIGITS
+    val states = (1..31).asSequence().map {
+        val flag = if (it == dayOfMonth && isPersianDigits) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        ComponentName(context, "com.byagowi.persiancalendar.Day$it") to flag
+    }
+    val pm = context.packageManager
+    val flags = PackageManager.DONT_KILL_APP
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pm.setComponentEnabledSettings(
+        states.map { (name, newState) ->
+            PackageManager.ComponentEnabledSetting(name, newState, flags)
+        }.toList()
+    ) else states.forEach { (name, newState) ->
+        pm.setComponentEnabledSetting(name, newState, flags)
+    }
 }
 
 private fun PrayTimes.getNextPrayTime(clock: Clock): PrayTime {
