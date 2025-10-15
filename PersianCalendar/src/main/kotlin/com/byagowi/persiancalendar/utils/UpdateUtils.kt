@@ -288,6 +288,7 @@ fun update(context: Context, updateDate: Boolean) {
 }
 
 private fun updateDynamicIcon(dayOfMonth: Int, context: Context) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
     val isPersianDigits = preferredDigits === Language.PERSIAN_DIGITS
     val states = (1..31).asSequence().map {
         val flag = if (it == dayOfMonth && isPersianDigits) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
