@@ -104,7 +104,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -293,11 +292,14 @@ fun update(context: Context, updateDate: Boolean) {
 private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
     val isDynamicIconEnabled = isDynamicIconEnabled.value
-    val states = (1..31).asSequence().map {
-        val flag = if (it == dayOfMonth && isDynamicIconEnabled) {
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-        } else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-        ComponentName(context, "com.byagowi.persiancalendar.Day$it") to flag
+    val states = (0..31).asSequence().map {
+        val flag = if (
+            (it == dayOfMonth && isDynamicIconEnabled) || (it == 0 && !isDynamicIconEnabled)
+        ) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        val cls = if (it == 0) "com.byagowi.persiancalendar.ui.MainActivity"
+        else "com.byagowi.persiancalendar.Day$it"
+        ComponentName(context, cls) to flag
     }
     val pm = context.packageManager
     val flags = PackageManager.DONT_KILL_APP
