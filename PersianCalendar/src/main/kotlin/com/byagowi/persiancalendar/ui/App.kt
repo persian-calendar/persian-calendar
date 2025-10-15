@@ -473,9 +473,8 @@ private fun DrawerContent(
                 colors = navItemColors,
                 label = { Text(stringResource(titleId)) },
                 selected = item == Route.fromName(navBackStackEntry?.destination?.route).parent,
-                onClick = onClick@{
-                    if (item == Route.EXIT) return@onClick finish()
-                    coroutineScope.launch {
+                onClick = {
+                    if (item == Route.EXIT) finish() else coroutineScope.launch {
                         drawerState.close()
                         if (navBackStackEntry?.destination?.route != item.name) {
                             navController.navigate(item.name)
