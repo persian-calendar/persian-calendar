@@ -134,6 +134,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
@@ -502,6 +503,8 @@ private fun enableTimesTab(context: Context): Boolean {
             (language.value.isPersian && // The placeholder isn't translated to other languages
                     // The user is already dismissed the third tab
                     !preferences.getBoolean(PREF_DISABLE_OWGHAT, false) &&
+                    // The user explicitly set "None" as their city
+                    preferences.getString(PREF_SELECTED_LOCATION, null) != "CUSTOM" &&
                     // Try to not show the placeholder to established users
                     PREF_APP_LANGUAGE !in preferences)
 }
