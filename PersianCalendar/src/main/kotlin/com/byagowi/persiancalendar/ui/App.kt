@@ -391,13 +391,25 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
 
 // Don't ever change the name of the ones that are mentioned xml/shortcuts.xml and ShortcutActivity.kt
 private enum class Route(val drawerEntry: Pair<ImageVector, Int>? = null) {
-    CALENDAR(Icons.Default.DateRange to R.string.calendar), MONTH, SCHEDULE, DAYS,
+    CALENDAR(Icons.Default.DateRange to R.string.calendar), SCHEDULE, DAYS, MONTH,
     CONVERTER(Icons.Default.SwapVerticalCircle to R.string.date_converter),
     COMPASS(Icons.Default.Explore to R.string.compass), LEVEL,
     ASTRONOMY(AstrologyIcon to R.string.astronomy), MAP,
     SETTINGS(Icons.Default.Settings to R.string.settings),
     ABOUT(Icons.Default.Info to R.string.about), LICENSES, DEVICE,
     EXIT(Icons.Default.Cancel to R.string.exit);
+
+    // Which item needs to be highlighted when user is on the screen
+    val parent
+        get() = when (this) {
+            CALENDAR, SCHEDULE, DAYS, MONTH -> CALENDAR
+            CONVERTER -> CONVERTER
+            COMPASS, LEVEL -> COMPASS
+            ASTRONOMY, MAP -> ASTRONOMY
+            SETTINGS -> SETTINGS
+            ABOUT, LICENSES, DEVICE -> ABOUT
+            EXIT -> EXIT
+        }
 
     companion object {
         fun fromName(value: String?) = entries.firstOrNull { it.name == value } ?: entries[0]
@@ -460,12 +472,7 @@ private fun DrawerContent(
                 icon = { Icon(icon, contentDescription = null) },
                 colors = navItemColors,
                 label = { Text(stringResource(titleId)) },
-                selected = when (val route = navBackStackEntry?.destination?.route) {
-                    Route.LEVEL.name -> Route.COMPASS.name
-                    Route.MAP.name -> Route.ASTRONOMY.name
-                    Route.DEVICE.name, Route.LICENSES.name -> Route.ABOUT.name
-                    else -> route ?: Route.CALENDAR.name
-                } == item.name,
+                selected = item == Route.fromName(navBackStackEntry?.destination?.route).parent,
                 onClick = onClick@{
                     if (item == Route.EXIT) return@onClick finish()
                     coroutineScope.launch {
