@@ -389,10 +389,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     }
 }
 
-private enum class Route(
-    val route: String,
-    val drawerEntry: Pair<ImageVector, Int>? = null,
-) {
+private enum class Route(val route: String, val drawerEntry: Pair<ImageVector, Int>? = null) {
     Calendar("calendar", Icons.Default.DateRange to R.string.calendar),
     Month("monthView"), Schedule("schedule"), Days("days"),
     Converter("converter", Icons.Default.SwapVerticalCircle to R.string.date_converter),
