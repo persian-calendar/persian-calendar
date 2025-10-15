@@ -90,6 +90,8 @@ import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isCenterAlignWidgets
+import com.byagowi.persiancalendar.global.isDynamicIconEnabled
+import com.byagowi.persiancalendar.global.isDynamicIconEverEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isNotifyDate
@@ -289,11 +291,12 @@ fun update(context: Context, updateDate: Boolean) {
 }
 
 private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-    val isPersianDigits = preferredDigits === Language.PERSIAN_DIGITS
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
+    val isDynamicIconEnabled = isDynamicIconEnabled.value
     val states = (1..31).asSequence().map {
-        val flag = if (it == dayOfMonth && isPersianDigits) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-        else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+        val flag = if (it == dayOfMonth && isDynamicIconEnabled) {
+            PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+        } else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
         ComponentName(context, "com.byagowi.persiancalendar.Day$it") to flag
     }
     val pm = context.packageManager

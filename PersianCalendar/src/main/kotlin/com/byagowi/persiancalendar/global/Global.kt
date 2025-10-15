@@ -49,6 +49,7 @@ import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_TO_EXCLUDE
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
 import com.byagowi.persiancalendar.PREF_DREAM_NOISE
+import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
@@ -150,6 +151,12 @@ var preferredDigits = Language.PERSIAN_DIGITS
     private set
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
+
+var isDynamicIconEverEnabled = false
+    private set
+
+private val isDynamicIconEnabled_ = MutableStateFlow(false)
+val isDynamicIconEnabled: StateFlow<Boolean> get() = isDynamicIconEnabled_
 
 private val isForcedIranTimeEnabled_ = MutableStateFlow(DEFAULT_IRAN_TIME)
 val isForcedIranTimeEnabled: StateFlow<Boolean> get() = isForcedIranTimeEnabled_
@@ -462,6 +469,8 @@ fun updateStoredPreference(context: Context) {
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
+    isDynamicIconEverEnabled = PREF_DYNAMIC_ICON_ENABLED in preferences
+    isDynamicIconEnabled_.value = preferences.getBoolean(PREF_DYNAMIC_ICON_ENABLED, false)
     isNotifyDateOnLockScreen_.value = preferences.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     )

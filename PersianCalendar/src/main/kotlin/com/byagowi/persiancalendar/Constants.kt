@@ -79,6 +79,7 @@ const val PREF_WIDGET_TRANSPARENCY = "WidgetTransparency"
 const val PREF_SWIPE_UP_ACTION = "SwipeUpAction"
 const val PREF_SWIPE_DOWN_ACTION = "SwipeDownAction"
 const val PREF_ATHAN_CHANNEL_ID = "AthanChannelId"
+const val PREF_DYNAMIC_ICON_ENABLED = "DynamicIconEnabled"
 const val PREF_CUSTOM_FONT_NAME = "CustomFontName"
 const val STORED_FONT_NAME = "font.ttf"
 

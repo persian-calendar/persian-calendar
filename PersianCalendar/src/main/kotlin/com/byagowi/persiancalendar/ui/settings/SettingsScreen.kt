@@ -60,6 +60,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -81,7 +82,9 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
+import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
 import com.byagowi.persiancalendar.ui.about.DynamicColorsDialog
@@ -89,6 +92,7 @@ import com.byagowi.persiancalendar.ui.about.IconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.ScheduleAlarm
 import com.byagowi.persiancalendar.ui.about.ShapesDemoDialog
 import com.byagowi.persiancalendar.ui.about.TypographyDemoDialog
+import com.byagowi.persiancalendar.ui.common.AppDropdownMenuCheckableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -298,6 +302,13 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             text = { Text(stringResource(R.string.add_widget)) },
             onClick = openAddWidgetDialog,
         )
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val isChecked by isDynamicIconEnabled.collectAsState()
+        AppDropdownMenuCheckableItem(stringResource(R.string.dynamic_icon), isChecked) {
+            closeMenu()
+            context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, !isChecked) }
+        }
     }
 
     if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
