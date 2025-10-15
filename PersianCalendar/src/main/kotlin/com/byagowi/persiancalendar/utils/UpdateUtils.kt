@@ -194,7 +194,9 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     val jdn = Jdn.today()
+    val date = jdn on mainCalendar
     if (jdn != latestJdnUpdate || updateDate) {
+
         debugLog("UpdateUtils: date has changed")
         scheduleAlarms(context)
         latestJdnUpdate = jdn
@@ -205,9 +207,10 @@ fun update(context: Context, updateDate: Boolean) {
 //            val tileComponent = ComponentName(context, PersianCalendarTileService::class.java)
 //            TileService.requestListeningState(context, tileComponent)
 //        }
+
+        updateLauncherIcon(date.dayOfMonth, context)
     }
 
-    val date = jdn on mainCalendar
     val shiftWorkTitle = getShiftWorkTitle(jdn)
     val title =
         dayTitleSummary(jdn, date) + if (shiftWorkTitle == null) "" else " ($shiftWorkTitle)"
@@ -283,11 +286,9 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
-
-    updateDynamicIcon(date.dayOfMonth, context)
 }
 
-private fun updateDynamicIcon(dayOfMonth: Int, context: Context) {
+private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
     val isPersianDigits = preferredDigits === Language.PERSIAN_DIGITS
     val states = (1..31).asSequence().map {
