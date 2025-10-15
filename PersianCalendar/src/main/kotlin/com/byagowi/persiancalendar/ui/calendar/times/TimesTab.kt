@@ -41,7 +41,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
-import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
+import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
@@ -79,7 +79,7 @@ fun SharedTransitionScope.TimesTab(
             modifier = Modifier.padding(top = 24.dp),
             header = stringResource(R.string.ask_user_to_set_location),
             discardAction = {
-                context.preferences.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+                context.preferences.edit { putBoolean(PREF_DISMISSED_OWGHAT, true) }
                 viewModel.removeThirdTab()
             },
             acceptAction = navigateToSettingsLocationTab,

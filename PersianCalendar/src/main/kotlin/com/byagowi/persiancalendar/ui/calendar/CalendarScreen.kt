@@ -128,13 +128,12 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_BATTERY_OPTIMIZATION_IGNORED_COUNT
-import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
+import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
-import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
@@ -502,9 +501,7 @@ private fun enableTimesTab(context: Context): Boolean {
     return coordinates.value != null || // if coordinates is set, should be shown
             (language.value.isPersian && // The placeholder isn't translated to other languages
                     // The user is already dismissed the third tab
-                    !preferences.getBoolean(PREF_DISABLE_OWGHAT, false) &&
-                    // The user explicitly set "None" as their city
-                    preferences.getString(PREF_SELECTED_LOCATION, null) != "CUSTOM" &&
+                    !preferences.getBoolean(PREF_DISMISSED_OWGHAT, false) &&
                     // Try to not show the placeholder to established users
                     PREF_APP_LANGUAGE !in preferences)
 }

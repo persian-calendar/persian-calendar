@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
+import com.byagowi.persiancalendar.PREF_DISMISSED_OWGHAT
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
@@ -50,6 +51,7 @@ val SharedPreferences.athanVolume: Int get() = getInt(PREF_ATHAN_VOLUME, DEFAULT
 
 fun SharedPreferences.saveCity(city: CityItem) = edit {
     listOf(PREF_GEOCODED_CITYNAME, PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).forEach(::remove)
+    if (city.key == "CUSTOM") putBoolean(PREF_DISMISSED_OWGHAT, true)
     putString(PREF_SELECTED_LOCATION, city.key)
 }
 
