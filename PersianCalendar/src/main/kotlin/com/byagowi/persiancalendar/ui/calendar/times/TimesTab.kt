@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
+import android.graphics.Typeface
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -159,11 +160,7 @@ private fun SharedTransitionScope.AstronomicalOverview(
     animatedContentScope: AnimatedContentScope,
 ) {
     val jdn by viewModel.selectedDay.collectAsState()
-    var needsAnimation by remember { mutableStateOf(false) }
-    DisposableEffect(isToday) {
-        needsAnimation = isToday
-        onDispose { needsAnimation = isToday }
-    }
+    var needsAnimation by remember(isToday) { mutableStateOf(isToday) }
 
     Crossfade(
         targetState = isToday,
@@ -174,10 +171,11 @@ private fun SharedTransitionScope.AstronomicalOverview(
     ) { state ->
         val sunViewColors = appSunViewColors()
         val fontFile = resolveFontFile()
+        val typeface = remember(fontFile) { fontFile?.let(Typeface::createFromFile) }
         if (state) AndroidView(
             factory = ::SunView,
             update = {
-                it.setFont(fontFile)
+                it.setFont(typeface)
                 it.colors = sunViewColors
                 it.prayTimes = prayTimes
                 it.setTime(now)

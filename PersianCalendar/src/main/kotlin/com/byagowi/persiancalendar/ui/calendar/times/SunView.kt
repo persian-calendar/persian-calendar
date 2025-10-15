@@ -76,8 +76,7 @@ class SunView(context: Context) : View(context) {
         else -> 11.5f
     } * resources.dp
 
-    fun setFont(file: File?) {
-        val typeface = file?.let(Typeface::createFromFile)
+    fun setFont(typeface: Typeface?) {
         paint.typeface = typeface
         dayPaint.typeface = typeface
     }
