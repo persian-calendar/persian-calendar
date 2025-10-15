@@ -175,7 +175,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
             ) {
                 fun Route.navigate() = navController.navigate(route)
                 fun Route.navigate(bundle: Bundle) {
-                    val destination = navController.graph.findNode(this) ?: return
+                    val destination = navController.graph.findNode(this.route) ?: return
                     navController.navigate(destination.id, bundle)
                 }
 
