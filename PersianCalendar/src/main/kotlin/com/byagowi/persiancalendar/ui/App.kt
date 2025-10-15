@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui
 
 import android.os.Bundle
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -121,7 +120,6 @@ import com.byagowi.persiancalendar.ui.settings.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.theme.animateColor
-import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.isLight
 import com.byagowi.persiancalendar.utils.preferences
@@ -393,23 +391,19 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
 
 private enum class Route(
     val route: String,
-    val drawerIcon: ImageVector? = null,
-    val titleId: Int,
+    val drawerEntry: Pair<ImageVector, Int>? = null,
 ) {
-    Calendar("calendar", Icons.Default.DateRange, R.string.calendar),
-    Month("monthView", null, R.string.month_view),
-    Schedule("schedule", null, R.string.schedule),
-    Days("days", null, R.string.day_view),
-    Converter("converter", Icons.Default.SwapVerticalCircle, R.string.date_converter),
-    Compass("compass", Icons.Default.Explore, R.string.compass),
-    Level("level", null, R.string.level),
-    Astronomy("astronomy", AstrologyIcon, R.string.astronomy),
-    Map("map", null, R.string.map),
-    Settings("settings", Icons.Default.Settings, R.string.settings),
-    About("about", Icons.Default.Info, R.string.about),
-    Licenses("license", null, R.string.licenses),
-    DeviceInformation("device", null, R.string.device_information),
-    Exit("", Icons.Default.Cancel, R.string.exit);
+    Calendar("calendar", Icons.Default.DateRange to R.string.calendar),
+    Month("monthView"), Schedule("schedule"), Days("days"),
+    Converter("converter", Icons.Default.SwapVerticalCircle to R.string.date_converter),
+    Compass("compass", Icons.Default.Explore to R.string.compass),
+    Level("level"),
+    Astronomy("astronomy", AstrologyIcon to R.string.astronomy),
+    Map("map"),
+    Settings("settings", Icons.Default.Settings to R.string.settings),
+    About("about", Icons.Default.Info to R.string.about),
+    Licenses("license"), DeviceInformation("device"),
+    Exit("", Icons.Default.Cancel to R.string.exit);
 
     companion object {
         fun fromShortcutIds(value: String?): Route {
@@ -476,20 +470,12 @@ private fun DrawerContent(
         val coroutineScope = rememberCoroutineScope()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         Route.entries.forEach { item ->
-            val icon = item.drawerIcon ?: return@forEach
+            val (icon, titleId) = item.drawerEntry ?: return@forEach
             NavigationDrawerItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 icon = { Icon(icon, contentDescription = null) },
                 colors = navItemColors,
-                label = {
-                    // Apparently language strings isn't applied immediately in drawer
-                    // items titles but only when drawer opens so let's animate it!
-                    AnimatedContent(
-                        targetState = stringResource(item.titleId),
-                        label = "title",
-                        transitionSpec = appCrossfadeSpec,
-                    ) { state -> Text(state) }
-                },
+                label = { Text(stringResource(titleId)) },
                 selected = when (val route = navBackStackEntry?.destination?.route) {
                     Route.Level.route -> Route.Compass.route
                     Route.Map.route -> Route.Astronomy.route
