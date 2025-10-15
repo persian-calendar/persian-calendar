@@ -33,8 +33,12 @@ class BroadcastReceivers : BroadcastReceiver() {
             BROADCAST_RESTART_APP -> startWorker(context)
 
             Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> update(context, true)
-            Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON, BROADCAST_UPDATE_APP ->
-                update(context, false)
+            Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON -> update(context, false)
+
+            BROADCAST_UPDATE_APP -> {
+                debugLog("AlarmManager invoked an update")
+                update(context, true)
+            }
 
             ADD_EVENT -> runCatching {
                 val addEventIntent = AddEventData.upcoming().asIntent()
