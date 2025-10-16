@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.BROADCAST_ALARM
 import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
+import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
 import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
