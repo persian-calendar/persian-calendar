@@ -8,7 +8,6 @@ import android.widget.Toast
 import com.byagowi.persiancalendar.ADD_EVENT
 import com.byagowi.persiancalendar.BROADCAST_ALARM
 import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
-import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
 import com.byagowi.persiancalendar.MONTH_NEXT_COMMAND
@@ -35,10 +34,7 @@ class BroadcastReceivers : BroadcastReceiver() {
             Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> update(context, true)
             Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON -> update(context, false)
 
-            BROADCAST_UPDATE_APP -> {
-                debugLog("AlarmManager invoked an update")
-                update(context, true)
-            }
+//            BROADCAST_UPDATE_APP -> update(context, true)
 
             ADD_EVENT -> runCatching {
                 val addEventIntent = AddEventData.upcoming().asIntent()
