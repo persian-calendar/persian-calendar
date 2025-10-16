@@ -289,6 +289,8 @@ fun update(context: Context, updateDate: Boolean) {
     updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
 }
 
+private const val dynamicIconActivityNamePrefix = "com.byagowi.persiancalendar.Day"
+
 private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
     val isDynamicIconEnabled = isDynamicIconEnabled.value
@@ -303,7 +305,7 @@ private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
             val flag =
                 if (it == dayOfMonth && isDynamicIconEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
                 else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-            add(ComponentName(context, "com.byagowi.persiancalendar.Day$it") to flag)
+            add(ComponentName(context, "$dynamicIconActivityNamePrefix$it") to flag)
         }
     }
     val pm = context.packageManager
@@ -1709,10 +1711,16 @@ fun Context.launchAppPendingIntent(
     action: String? = null,
     isMutable: Boolean = false,
 ): PendingIntent? {
+    val activityIntent = if (isDynamicIconEnabled.value) {
+        val (_, _, dayOfMonth) = Jdn.today() on mainCalendar
+        Intent.makeMainActivity(
+            ComponentName(this, "$dynamicIconActivityNamePrefix$dayOfMonth")
+        )
+    } else Intent(this, MainActivity::class.java)
     return PendingIntent.getActivity(
         this,
         0,
-        Intent(this, MainActivity::class.java).setAction(action)
+        activityIntent.setAction(action)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK.let {
                 if (action != null) it or Intent.FLAG_ACTIVITY_CLEAR_TASK else it
             }),
