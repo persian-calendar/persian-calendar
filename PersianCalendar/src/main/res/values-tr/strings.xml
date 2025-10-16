@@ -422,4 +422,5 @@
     <string name="move_up">Yukarı taşı</string>
     <string name="move_down">Aşağı taşı</string>
     <string name="black_moon">Lilith</string>
+    <string name="dynamic_icon">Değişken simge</string>
 </resources>
