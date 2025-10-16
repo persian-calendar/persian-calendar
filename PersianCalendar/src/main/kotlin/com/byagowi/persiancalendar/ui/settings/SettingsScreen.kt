@@ -303,15 +303,15 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             onClick = openAddWidgetDialog,
         )
     }
-
-    if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val isChecked by isDynamicIconEnabled.collectAsState()
-        AppDropdownMenuCheckableItem("Dynamic icon", isChecked) {
+        AppDropdownMenuCheckableItem(stringResource(R.string.dynamic_icon), isChecked) {
             closeMenu()
             context.preferences.edit { putBoolean(PREF_DYNAMIC_ICON_ENABLED, !isChecked) }
         }
     }
+
+    if (!BuildConfig.DEVELOPMENT) return // Rest are development only functionalities
     run {
         var showDialog by rememberSaveable { mutableStateOf(false) }
         AppDropdownMenuItem({ Text("Static vs generated icons") }) { showDialog = true }

@@ -209,7 +209,7 @@ fun update(context: Context, updateDate: Boolean) {
 //            TileService.requestListeningState(context, tileComponent)
 //        }
 
-//        updateLauncherIcon(date.dayOfMonth, context)
+        updateLauncherIcon(date.dayOfMonth, context)
     }
 
     val shiftWorkTitle = getShiftWorkTitle(jdn)
@@ -289,28 +289,33 @@ fun update(context: Context, updateDate: Boolean) {
     updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
 }
 
-/*private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
+private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
     val isDynamicIconEnabled = isDynamicIconEnabled.value
-    val states = (0..31).asSequence().map {
-        val flag = if (
-            (it == dayOfMonth && isDynamicIconEnabled) || (it == 0 && !isDynamicIconEnabled)
-        ) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
-        else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
-        val cls = if (it == 0) "com.byagowi.persiancalendar.ui.MainActivity"
-        else "com.byagowi.persiancalendar.Day$it"
-        ComponentName(context, cls) to flag
+    val actions = buildList {
+        add(
+            ComponentName(context, MainActivity::class.java) to
+                    (if (!isDynamicIconEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                    else PackageManager.COMPONENT_ENABLED_STATE_DISABLED)
+        )
+
+        (1..31).forEach {
+            val flag =
+                if (it == dayOfMonth && isDynamicIconEnabled) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                else PackageManager.COMPONENT_ENABLED_STATE_DISABLED
+            add(ComponentName(context, "com.byagowi.persiancalendar.Day$it") to flag)
+        }
     }
     val pm = context.packageManager
     val flags = PackageManager.DONT_KILL_APP
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) pm.setComponentEnabledSettings(
-        states.map { (name, newState) ->
+        actions.map { (name, newState) ->
             PackageManager.ComponentEnabledSetting(name, newState, flags)
         }.toList()
-    ) else states.forEach { (name, newState) ->
+    ) else actions.forEach { (name, newState) ->
         pm.setComponentEnabledSetting(name, newState, flags)
     }
-}*/
+}
 
 private fun PrayTimes.getNextPrayTime(clock: Clock): PrayTime {
     val isJafari = calculationMethod.value.isJafari
