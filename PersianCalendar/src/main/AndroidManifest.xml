@@ -441,7 +441,7 @@
             android:name=".service.ScheduleWidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity-alias
+        <!--activity-alias
             android:name=".Day1"
             android:enabled="false"
             android:exported="true"
@@ -888,7 +888,7 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity-alias>
+        </activity-alias-->
 
     </application>
 

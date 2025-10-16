@@ -290,7 +290,7 @@ fun update(context: Context, updateDate: Boolean) {
 }
 
 private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
+/*    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
     val isDynamicIconEnabled = isDynamicIconEnabled.value
     val states = (0..31).asSequence().map {
         val flag = if (
@@ -308,7 +308,7 @@ private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
             PackageManager.ComponentEnabledSetting(name, newState, flags)
         }.toList()
     ) else states.forEach { (name, newState) ->
-        pm.setComponentEnabledSetting(name, newState, flags)
+        pm.setComponentEnabledSetting(name, newState, flags)*/
     }
 }
 
