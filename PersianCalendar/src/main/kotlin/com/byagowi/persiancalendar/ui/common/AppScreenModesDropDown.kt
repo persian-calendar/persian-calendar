@@ -26,7 +26,6 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.lerp
@@ -38,7 +37,7 @@ import com.byagowi.persiancalendar.ui.utils.performLongPress
 fun <T> AppScreenModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
-    entryTitle: @Composable (T) -> String,
+    label: @Composable (T) -> String,
     values: Iterable<T>,
     small: Boolean = false,
 ) {
@@ -63,7 +62,7 @@ fun <T> AppScreenModesDropDown(
                 .onSizeChanged { dropDownWidth = it.width },
         ) {
             Text(
-                entryTitle(value),
+                label(value),
                 style = lerp(
                     MaterialTheme.typography.titleMedium,
                     MaterialTheme.typography.titleLarge,
@@ -72,6 +71,7 @@ fun <T> AppScreenModesDropDown(
                         label = "fraction"
                     ).value,
                 ),
+                maxLines = 1,
                 modifier = Modifier
                     .semantics { this.role = Role.DropdownList }
                     .animateContentSize(appContentSizeAnimationSpec),
@@ -88,7 +88,7 @@ fun <T> AppScreenModesDropDown(
         ) {
             values.forEach { entry ->
                 AppDropdownMenuRadioItem(
-                    entryTitle(entry),
+                    label(entry),
                     value == entry,
                     withRadio = false,
                 ) {

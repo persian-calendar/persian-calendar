@@ -125,7 +125,7 @@ fun SharedTransitionScope.ConverterScreen(
                     AppScreenModesDropDown(
                         value = screenMode,
                         onValueChange = { viewModel.changeScreenMode(it) },
-                        entryTitle = { stringResource(it.title) },
+                        label = { stringResource(it.title) },
                         values = ConverterScreenMode.entries,
                     )
                 },
