@@ -5,13 +5,15 @@
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:2.2.20 (c)
 +--- com.github.persian-calendar:calendar:574ca6ef98845104b6cb09bca92582ae126e7430
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
-+--- com.github.persian-calendar:praytimes:1a85332ff232b0595da0d6ece789148ca21140a7 FAILED
++--- com.github.persian-calendar:praytimes:1a85332ff232b0595da0d6ece789148ca21140a7
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.2.20
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
+|    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.20
+|    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20 (c)
 +--- com.github.persian-calendar:calculator:13a660cb0e5a5943ec7c496f4ff4c2c4631f9fcf
 |    +--- org.antlr:antlr4-runtime:4.9.3
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10 -> 2.2.20
-|         +--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
-|         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.20
-|              \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10 -> 2.2.20 (*)
 +--- com.github.persian-calendar:qr:d957fbf5d99c1c71c279efbb71b89a5f0ac7d7ba
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.2.20 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20 (c)
