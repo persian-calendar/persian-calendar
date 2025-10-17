@@ -1,14 +1,14 @@
 package com.byagowi.persiancalendar.ui.common
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,16 +28,18 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performLongPress
 
 @Composable
-fun <T> ModesDropDown(
+fun <T> AppScreenModesDropDown(
     value: T,
     onValueChange: (T) -> Unit,
-    title: @Composable (T) -> String,
+    entryTitle: @Composable (T) -> String,
     values: Iterable<T>,
+    small: Boolean = false,
 ) {
     var showMenu by rememberSaveable { mutableStateOf(false) }
     val hapticFeedback = LocalHapticFeedback.current
@@ -55,14 +57,27 @@ fun <T> ModesDropDown(
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(vertical = 4.dp)
-                .defaultMinSize(minHeight = 38.dp)
+                .padding(vertical = if (small) 0.dp else 4.dp)
+                .padding(start = if (small) 8.dp else 16.dp, end = if (small) 2.dp else 8.dp)
+                .defaultMinSize(minHeight = if (small) 0.dp else 38.dp)
                 .onSizeChanged { dropDownWidth = it.width },
         ) {
-            Spacer(Modifier.width(16.dp))
-            Text(title(value), Modifier.animateContentSize(appContentSizeAnimationSpec))
-            ExpandArrow(isExpanded = showMenu)
-            Spacer(Modifier.width(8.dp))
+            Text(
+                entryTitle(value),
+                style = lerp(
+                    MaterialTheme.typography.titleMedium,
+                    MaterialTheme.typography.titleLarge,
+                    animateFloatAsState(
+                        targetValue = if (small) 0f else 1f,
+                        label = "fraction"
+                    ).value,
+                ),
+                modifier = Modifier.animateContentSize(appContentSizeAnimationSpec),
+            )
+            ExpandArrow(
+                isExpanded = showMenu,
+                modifier = if (small) Modifier.size(16.dp) else Modifier,
+            )
         }
         AppDropdownMenu(
             expanded = showMenu,
@@ -71,7 +86,7 @@ fun <T> ModesDropDown(
         ) {
             values.forEach { entry ->
                 AppDropdownMenuRadioItem(
-                    title(entry),
+                    entryTitle(entry),
                     value == entry,
                     withRadio = false,
                 ) {

@@ -48,6 +48,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
@@ -171,10 +172,10 @@ import com.byagowi.persiancalendar.ui.common.AppDropdownMenuExpandableItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
-import com.byagowi.persiancalendar.ui.common.ModesDropDown
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -197,10 +198,10 @@ import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.otherCalendarFormat
 import com.byagowi.persiancalendar.utils.preferences
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.utils.yearViewYearFormat
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import java.util.Date
@@ -862,7 +863,6 @@ private fun SharedTransitionScope.Toolbar(
     val context = LocalContext.current
 
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
-    val todayDate = remember(today, mainCalendar) { today on mainCalendar }
     val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
     val isYearView by viewModel.isYearView.collectAsState()
     val yearViewOffset by viewModel.yearViewOffset.collectAsState()
@@ -877,6 +877,8 @@ private fun SharedTransitionScope.Toolbar(
             refreshToken.run {}
 
             val secondaryCalendar = secondaryCalendar
+            val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
+            val language by language.collectAsState()
             val title: String
             val subtitle: String
             if (isYearView) {
@@ -884,30 +886,28 @@ private fun SharedTransitionScope.Toolbar(
                     if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
                 )
                 subtitle = if (yearViewOffset == 0 || yearViewIsInYearSelection) "" else {
-                    yearViewYearFormat(todayDate.year + yearViewOffset, secondaryCalendar)
+                    val yearViewYear = (today on yearViewCalendar).year + yearViewOffset
+                    val formattedYear = formatNumber(yearViewYear)
+                    if (secondaryCalendar == null || yearViewCalendar != mainCalendar) {
+                        formattedYear
+                    } else {
+                        val secondaryTitle =
+                            otherCalendarFormat(yearViewYear, mainCalendar, secondaryCalendar)
+                        language.inParentheses.format(formattedYear, secondaryTitle)
+                    }
                 }
             } else if (secondaryCalendar == null) {
                 title = selectedMonth.monthName
                 subtitle = formatNumber(selectedMonth.year)
             } else {
-                val language by language.collectAsState()
                 title = language.my.format(
                     selectedMonth.monthName, formatNumber(selectedMonth.year)
                 )
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
             }
-            Crossfade(isYearView && subtitle.isEmpty()) { showYearViewModes ->
-                if (showYearViewModes) {
-                    val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
-                    val language by language.collectAsState()
-                    ModesDropDown(
-                        yearViewCalendar,
-                        viewModel::changeYearViewCalendar,
-                        title = { stringResource(it.title) },
-                        values = enabledCalendars.takeIf { it.size > 1 }
-                            ?: language.defaultCalendars)
-                } else Column(
-                    Modifier.clickable(
+            Column(
+                Modifier
+                    .clickable(
                         indication = ripple(bounded = false),
                         interactionSource = null,
                         onClickLabel = stringResource(
@@ -917,40 +917,41 @@ private fun SharedTransitionScope.Toolbar(
                     ) {
                         if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
                         else viewModel.openYearView()
-                    },
-                ) {
-                    Crossfade(title, label = "title") { title ->
+                    }
+                    .then(if (isYearView) Modifier.heightIn(max = toolbarHeight) else Modifier),
+            ) {
+                Crossfade(isYearView) { isYearView ->
+                    if (isYearView) AppScreenModesDropDown(
+                        yearViewCalendar,
+                        onValueChange = viewModel::changeYearViewCalendar,
+                        entryTitle = { stringResource(it.title) },
+                        values = enabledCalendars.takeIf { it.size > 1 }
+                            ?: language.defaultCalendars,
+                        small = subtitle.isNotEmpty(),
+                    ) else Crossfade(title, label = "title") { title ->
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleLarge,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                }
+                this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
+                    Crossfade(subtitle, label = "subtitle") { state ->
                         val fraction by animateFloatAsState(
-                            targetValue = if (isYearView && subtitle.isNotEmpty()) 1f else 0f,
-                            label = "font size"
+                            targetValue = if (isYearView) 1f else 0f, label = "font size"
                         )
                         Text(
-                            title,
+                            state,
                             style = lerp(
-                                MaterialTheme.typography.titleLarge,
                                 MaterialTheme.typography.titleMedium,
+                                MaterialTheme.typography.titleLarge,
                                 fraction,
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
-                    }
-                    this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
-                        Crossfade(subtitle, label = "subtitle") { state ->
-                            val fraction by animateFloatAsState(
-                                targetValue = if (isYearView) 1f else 0f, label = "font size"
-                            )
-                            Text(
-                                state,
-                                style = lerp(
-                                    MaterialTheme.typography.titleMedium,
-                                    MaterialTheme.typography.titleLarge,
-                                    fraction,
-                                ),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
                     }
                 }
             }

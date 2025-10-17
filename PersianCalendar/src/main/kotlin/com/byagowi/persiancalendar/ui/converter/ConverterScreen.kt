@@ -80,10 +80,10 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.common.AppIconButton
+import com.byagowi.persiancalendar.ui.common.AppScreenModesDropDown
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
-import com.byagowi.persiancalendar.ui.common.ModesDropDown
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
@@ -122,11 +122,11 @@ fun SharedTransitionScope.ConverterScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    ModesDropDown(
+                    AppScreenModesDropDown(
                         value = screenMode,
                         onValueChange = { viewModel.changeScreenMode(it) },
+                        entryTitle = { stringResource(it.title) },
                         values = ConverterScreenMode.entries,
-                        title = { stringResource(it.title) },
                     )
                 },
                 colors = appTopAppBarColors(),

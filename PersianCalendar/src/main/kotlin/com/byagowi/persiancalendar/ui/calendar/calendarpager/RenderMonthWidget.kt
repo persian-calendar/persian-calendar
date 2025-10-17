@@ -3,12 +3,12 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import android.graphics.Canvas
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
@@ -30,12 +30,13 @@ fun renderMonthWidget(
     isRtl: Boolean,
     isShowWeekOfYearEnabled: Boolean,
     selectedDay: Jdn?,
+    calendar: Calendar,
     setWeekNumberText: ((i: Int, text: String) -> Unit)? = null,
     setText: ((i: Int, text: String, isHoliday: Boolean) -> Unit)? = null,
 ): String {
     val monthStartJdn = Jdn(baseDate)
     val startingWeekDay = monthStartJdn.weekDay
-    val monthLength = mainCalendar.getMonthLength(baseDate.year, baseDate.month)
+    val monthLength = calendar.getMonthLength(baseDate.year, baseDate.month)
 
     val cellWidth = dayPainter.width
     val cellHeight = dayPainter.height
@@ -92,7 +93,7 @@ fun renderMonthWidget(
             }
         }
         if (isShowWeekOfYearEnabled) {
-            val startOfYearJdn = Jdn(mainCalendar, baseDate.year, 1, 1)
+            val startOfYearJdn = Jdn(calendar, baseDate.year, 1, 1)
             val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
             val weeksCount = (monthStartJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
                     weekOfYearStart + 1

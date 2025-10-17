@@ -95,23 +95,30 @@ fun getA11yDaySummary(
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars.isNotEmpty()) {
             appendLine().appendLine().append(resources.getString(R.string.equivalent_to))
-                .append(" ")
-                .append(otherCalendars)
+                .append(" ").append(otherCalendars)
         }
     }
 
     val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
     val holidays = getEventsTitle(
-        events, true,
-        compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
+        events,
+        true,
+        compact = true,
+        showDeviceCalendarEvents = true,
+        insertRLM = false,
+        addIsHoliday = false
     )
     if (holidays.isNotEmpty()) {
         appendLine().appendLine().appendLine(resources.getString(R.string.holiday_reason, holidays))
     }
 
     val nonHolidays = getEventsTitle(
-        events, false,
-        compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
+        events,
+        false,
+        compact = true,
+        showDeviceCalendarEvents = true,
+        insertRLM = false,
+        addIsHoliday = false
     )
     if (nonHolidays.isNotEmpty()) {
         appendLine().appendLine().appendLine(resources.getString(R.string.events))
@@ -126,8 +133,7 @@ fun getA11yDaySummary(
     }
 
     if (withZodiac && isAstronomicalExtraFeaturesEnabled.value) {
-        appendLine().appendLine()
-            .appendLine(generateYearName(resources, jdn, withEmoji = false))
+        appendLine().appendLine().appendLine(generateYearName(resources, jdn, withEmoji = false))
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))
     }
 }
@@ -145,8 +151,8 @@ fun GregorianCalendar.toCivilDate(): CivilDate {
 
 fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
     val calendar = GregorianCalendar()
-    if (!forceLocalTime && isForcedIranTimeEnabled.value)
-        calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+    if (!forceLocalTime && isForcedIranTimeEnabled.value) calendar.timeZone =
+        TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     calendar.time = this
     return calendar
 }
@@ -163,64 +169,61 @@ private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULT
 
 private fun readDeviceEvents(
     context: Context, startingDate: GregorianCalendar, duration: Duration
-): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents.value ||
-    ActivityCompat.checkSelfPermission(
-        context, Manifest.permission.READ_CALENDAR
-    ) != PackageManager.PERMISSION_GRANTED
-) emptyList() else runCatching {
-    context.contentResolver.query(
-        CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
-            ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
-            ContentUris.appendId(
-                this,
-                startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds
-            )
-        }.build(), arrayOf(
-            CalendarContract.Instances.EVENT_ID, // 0
-            CalendarContract.Instances.TITLE, // 1
-            CalendarContract.Instances.DESCRIPTION, // 2
-            CalendarContract.Instances.BEGIN, // 3
-            CalendarContract.Instances.END, // 4
-            CalendarContract.Instances.VISIBLE, // 5
-            CalendarContract.Instances.ALL_DAY, // 6
-            CalendarContract.Instances.EVENT_COLOR, // 7
-            CalendarContract.Instances.DISPLAY_COLOR, // 8
-            CalendarContract.Instances.CALENDAR_ID, // 9
-        ), null, null, null
-    )?.use {
-        generateSequence { if (it.moveToNext()) it else null }.filter {
-            it.getString(5) == "1" && // is visible
-                    it.getLong(9) !in eventCalendarsIdsToExclude.value
-        }.map {
-            val start = Date(it.getLong(3)).toGregorianCalendar()
-            val end = Date(it.getLong(4)).toGregorianCalendar()
-            CalendarEvent.DeviceCalendarEvent(
-                id = it.getLong(0),
-                title = it.getString(1),
-                time = if (it.getString(6/*ALL_DAY*/) == "1") null else
-                    Clock(start).toBasicFormatString() +
-                            (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                                " $EN_DASH ${Clock(end).toBasicFormatString()}"
-                            else ""),
-                start = start,
-                end = end,
-                description = it.getString(2)?.replace(descriptionCleaningPattern, "").orEmpty(),
-                date = start.toCivilDate(),
-                color = it.getString(7) ?: it.getString(8).orEmpty(),
-                isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
-            )
-        }.take(1000 /* let's put some limitation */).toList()
-    }
-}.onFailure(logException).getOrNull() ?: emptyList()
+): List<CalendarEvent.DeviceCalendarEvent> =
+    if (!isShowDeviceCalendarEvents.value || ActivityCompat.checkSelfPermission(
+            context, Manifest.permission.READ_CALENDAR
+        ) != PackageManager.PERMISSION_GRANTED
+    ) emptyList() else runCatching {
+        context.contentResolver.query(
+            CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
+                ContentUris.appendId(this, startingDate.timeInMillis - 1.days.inWholeMilliseconds)
+                ContentUris.appendId(
+                    this, startingDate.timeInMillis + (duration + 1.days).inWholeMilliseconds
+                )
+            }.build(), arrayOf(
+                CalendarContract.Instances.EVENT_ID, // 0
+                CalendarContract.Instances.TITLE, // 1
+                CalendarContract.Instances.DESCRIPTION, // 2
+                CalendarContract.Instances.BEGIN, // 3
+                CalendarContract.Instances.END, // 4
+                CalendarContract.Instances.VISIBLE, // 5
+                CalendarContract.Instances.ALL_DAY, // 6
+                CalendarContract.Instances.EVENT_COLOR, // 7
+                CalendarContract.Instances.DISPLAY_COLOR, // 8
+                CalendarContract.Instances.CALENDAR_ID, // 9
+            ), null, null, null
+        )?.use {
+            generateSequence { if (it.moveToNext()) it else null }.filter {
+                it.getString(5) == "1" && // is visible
+                        it.getLong(9) !in eventCalendarsIdsToExclude.value
+            }.map {
+                val start = Date(it.getLong(3)).toGregorianCalendar()
+                val end = Date(it.getLong(4)).toGregorianCalendar()
+                CalendarEvent.DeviceCalendarEvent(
+                    id = it.getLong(0),
+                    title = it.getString(1),
+                    time = if (it.getString(6/*ALL_DAY*/) == "1") null else Clock(start).toBasicFormatString() + (if (it.getLong(
+                            3
+                        ) != it.getLong(4) && it.getLong(4) != 0L
+                    ) " $EN_DASH ${Clock(end).toBasicFormatString()}"
+                    else ""),
+                    start = start,
+                    end = end,
+                    description = it.getString(2)?.replace(descriptionCleaningPattern, "")
+                        .orEmpty(),
+                    date = start.toCivilDate(),
+                    color = it.getString(7) ?: it.getString(8).orEmpty(),
+                    isHoliday = it.getLong(9) in eventCalendarsIdsAsHoliday.value,
+                )
+            }.take(1000 /* let's put some limitation */).toList()
+        }
+    }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun Context.readDaysDeviceEvents(jdn: Jdn, duration: Duration) =
-    DeviceCalendarEventsStore(
-        readDeviceEvents(
-            this,
-            jdn.toGregorianCalendar(),
-            duration
-        )
+fun Context.readDaysDeviceEvents(jdn: Jdn, duration: Duration) = DeviceCalendarEventsStore(
+    readDeviceEvents(
+        this, jdn.toGregorianCalendar(), duration
     )
+)
 
 fun Context.readDayDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 1.days)
 fun Context.readWeekDeviceEvents(jdn: Jdn) = readDaysDeviceEvents(jdn, 7.days)
@@ -236,25 +239,29 @@ fun createMonthEventsList(context: Context, date: AbstractDate): Map<Jdn, List<C
 }
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
-    this, GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
+    this,
+    GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
     (365L * 2L).days // all the events of previous and next year from today
 )
 
 fun getEventsTitle(
-    dayEvents: List<CalendarEvent<*>>, holiday: Boolean, compact: Boolean,
-    showDeviceCalendarEvents: Boolean, insertRLM: Boolean, addIsHoliday: Boolean
-) = dayEvents
-    .filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
-    .map {
-        val title = when {
-            it is CalendarEvent.DeviceCalendarEvent -> it.oneLinerTitleWithTime
-            compact -> it.title.replace(Regex(" \\([^)]+\\)$"), "")
-            else -> it.title
-        }
+    dayEvents: List<CalendarEvent<*>>,
+    holiday: Boolean,
+    compact: Boolean,
+    showDeviceCalendarEvents: Boolean,
+    insertRLM: Boolean,
+    addIsHoliday: Boolean
+) =
+    dayEvents.filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
+        .map {
+            val title = when {
+                it is CalendarEvent.DeviceCalendarEvent -> it.oneLinerTitleWithTime
+                compact -> it.title.replace(Regex(" \\([^)]+\\)$"), "")
+                else -> it.title
+            }
 
-        if (addIsHoliday && it.isHoliday) "$title ($holidayString)" else title
-    }
-    .joinToString("\n") { if (insertRLM) RLM + it else it }
+            if (addIsHoliday && it.isHoliday) "$title ($holidayString)" else title
+        }.joinToString("\n") { if (insertRLM) RLM + it else it }
 
 val AbstractDate.calendar: Calendar
     get() = when (this) {
@@ -299,37 +306,35 @@ fun calculateDaysDifference(
     val result = listOfNotNull(
         if (months == 0 && years == 0) null
         else listOf(
-            R.plurals.years to years,
-            R.plurals.months to months,
-            R.plurals.days to daysOfMonth
+            R.plurals.years to years, R.plurals.months to months, R.plurals.days to daysOfMonth
         ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
             resources.getQuantityString(pluralId, n, formatNumber(n))
-        },
-        if (weeks == 0) null
-        else (if (days % 7 == 0) "" else "~")
-                + resources.getQuantityString(R.plurals.weeks, weeks, formatNumber(weeks)),
-        run {
+        }, if (weeks == 0) null
+        else (if (days % 7 == 0) "" else "~") + resources.getQuantityString(
+            R.plurals.weeks,
+            weeks,
+            formatNumber(weeks)
+        ), run {
             if (years != 0 || isInWidget) return@run null
             val workDays = eventsRepository?.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn, if (baseJdn > jdn) baseJdn else jdn
             ) ?: 0
             if (workDays == days || workDays == 0) return@run null
             resources.getQuantityString(R.plurals.work_days, workDays, formatNumber(workDays))
-        }
-    )
+        })
     if (result.isEmpty()) return daysString
     return language.value.inParentheses.format(daysString, result.joinToString(spacedOr))
 }
 
 fun formatDate(
     date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
-): String = if (numericalDatePreferred && !forceNonNumerical)
-    (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
-else language.value.dmy.format(
-    formatNumber(date.dayOfMonth),
-    date.monthName,
-    formatNumber(date.year)
-)
+): String =
+    if (numericalDatePreferred && !forceNonNumerical) (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(
+        date
+    )) else "").trim()
+    else language.value.dmy.format(
+        formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year)
+    )
 
 fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) =
     language.value.allNumericsDateFormat(year, month, dayOfMonth, digits)
@@ -345,8 +350,7 @@ fun monthFormatForSecondaryCalendar(
     ) on secondaryCalendar
     val to = Jdn(
         mainCalendar.createDate(
-            date.year, date.month,
-            date.calendar.getMonthLength(date.year, date.month)
+            date.year, date.month, date.calendar.getMonthLength(date.year, date.month)
         )
     ) on secondaryCalendar
     val separator = if (spaced) " $EN_DASH " else EN_DASH
@@ -364,25 +368,18 @@ fun monthFormatForSecondaryCalendar(
         else -> language.value.my.format(
             (from.month..to.month).joinToString(separator) { month ->
                 from.calendar.createDate(from.year, month, 1).monthName
-            },
-            formatNumber(from.year)
+            }, formatNumber(from.year)
         )
     }
 }
 
-fun yearViewYearFormat(mainCalendarYear: Int, secondaryCalendar: Calendar?): String {
-    val formattedYear = formatNumber(mainCalendarYear)
-    return if (secondaryCalendar == null) formattedYear else {
-        val secondaryTitle = otherCalendarFormat(mainCalendarYear, secondaryCalendar)
-        language.value.inParentheses.format(formattedYear, secondaryTitle)
-    }
-}
-
-fun otherCalendarFormat(mainCalendarYear: Int, calendar: Calendar): String {
-    val startOfYear = Jdn(mainCalendar.createDate(mainCalendarYear, 1, 1)).on(calendar).year
+fun otherCalendarFormat(
+    yearViewYear: Int, calendar: Calendar, otherCalendar: Calendar
+): String {
+    val startOfYear = Jdn(calendar.createDate(yearViewYear, 1, 1)).on(otherCalendar).year
     val endOfYear = (Jdn(
-        mainCalendar.createDate(mainCalendarYear + 1, 1, 1)
-    ) - 1).on(calendar).year
+        calendar.createDate(yearViewYear + 1, 1, 1)
+    ) - 1).on(otherCalendar).year
     return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) { formatNumber(it) }
 }
 

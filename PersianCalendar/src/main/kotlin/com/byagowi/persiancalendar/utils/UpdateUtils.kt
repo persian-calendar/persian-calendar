@@ -840,6 +840,7 @@ private fun createMonthViewRemoteViews(
             colors = colors,
             isWidget = true,
         ),
+        calendar = mainCalendar,
         width = width.toFloat(),
         canvas = canvas,
         baseDate = baseDate,

@@ -251,6 +251,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                 isRtl = isRtl,
                                                 isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value,
                                                 selectedDay = viewModel.selectedDay.value,
+                                                calendar = calendar,
                                             )
                                         }
                                     }
@@ -263,13 +264,16 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 val alpha = (.15f * (1 - scale.value)).coerceIn(0f, .15f)
                 Spacer(Modifier.height(space))
                 if (yearOffset != halfPages - 1) Box(Modifier.align(Alignment.CenterHorizontally)) {
-                    val year = yearOffset + todayDate.year + 1
-                    val tooltip = enabledCalendars.let { if (it.size > 1) it.drop(1) else it }
-                        .map { calendar ->
+                    val yearViewYear = yearOffset + todayDate.year + 1
+
+                    @Suppress("SimplifiableCallChain")
+                    val tooltip = enabledCalendars.let { if (it.size > 1) it - calendar else it }
+                        .map { otherCalendar ->
                             otherCalendarFormat(
-                                year,
-                                calendar
-                            ) + " " + stringResource(calendar.title)
+                                yearViewYear,
+                                calendar,
+                                otherCalendar,
+                            ) + " " + stringResource(otherCalendar.title)
                         }.joinToString("\n")
                     @OptIn(ExperimentalMaterial3Api::class)
                     TooltipBox(
@@ -280,7 +284,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                         state = rememberTooltipState(),
                     ) {
                         Text(
-                            formatNumber(year),
+                            formatNumber(yearViewYear),
                             style = MaterialTheme.typography.headlineMedium,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
