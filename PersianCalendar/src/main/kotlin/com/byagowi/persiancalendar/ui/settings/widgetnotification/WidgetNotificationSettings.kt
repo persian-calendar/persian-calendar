@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.OWGHAT_KEY
 import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
+import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
@@ -42,6 +43,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
+import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.language
@@ -103,6 +105,14 @@ fun ColumnScope.NotificationSettings() {
             value = isNotifyDateOnLockScreen,
             title = stringResource(R.string.notify_date_lock_screen),
             summary = stringResource(R.string.notify_date_lock_screen_summary)
+        )
+    }
+    this.AnimatedVisibility(isNotifyDate) {
+        val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification.collectAsState()
+        SettingsSwitch(
+            key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
+            value = isLargeDayNumberOnNotification,
+            title = stringResource(R.string.large_day_number_on_notification),
         )
     }
 }

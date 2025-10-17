@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.preferredDigits
 
 // Dynamic icon generation, currently unused
-fun createStatusIcon(dayOfMonth: Int): Bitmap {
+fun createStatusIcon(dayOfMonth: Int, color: Int = Color.WHITE): Bitmap {
     val text = formatNumber(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = when {
@@ -20,7 +20,7 @@ fun createStatusIcon(dayOfMonth: Int): Bitmap {
             else -> 90f
         }
         it.textAlign = Paint.Align.CENTER
-        it.color = Color.WHITE
+        it.color = color
     }
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)

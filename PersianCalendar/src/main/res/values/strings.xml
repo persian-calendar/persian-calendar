@@ -425,6 +425,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!-- Black moon or lilith is a concept in astrology used in the app's horoscope https://en.wikipedia.org/wiki/Lilith_(fictitious_moon) -->
     <string name="black_moon">Lilith</string>
     <string name="dynamic_icon">Dynamic icon</string>
+    <string name="large_day_number_on_notification">Large day number on notification</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

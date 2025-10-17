@@ -18,6 +18,7 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -41,6 +42,7 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri
@@ -94,6 +96,7 @@ import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.isDynamicIconEverEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -1458,6 +1461,7 @@ private fun updateNotification(
         isTalkBackEnabled = isTalkBackEnabled.value,
         isHighTextContrastEnabled = isHighTextContrastEnabled.value,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
+        isLargeDayNumberOnNotification = isLargeDayNumberOnNotification.value,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
         whatToShowOnWidgets = whatToShowOnWidgets,
         spacedComma = spacedComma,
@@ -1490,6 +1494,7 @@ private data class NotificationData(
     private val isTalkBackEnabled: Boolean,
     private val isHighTextContrastEnabled: Boolean,
     private val isNotifyDateOnLockScreen: Boolean,
+    private val isLargeDayNumberOnNotification: Boolean,
     private val deviceCalendarEventsList: List<CalendarEvent.DeviceCalendarEvent>,
     private val whatToShowOnWidgets: Set<String>,
     private val spacedComma: String,
@@ -1542,6 +1547,9 @@ private data class NotificationData(
             builder.setSmallIcon(icon)
         } else {
             builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
+        }
+        if (isLargeDayNumberOnNotification) {
+            builder.setLargeIcon(createStatusIcon(date.dayOfMonth, Color.GRAY))
         }
 
         // Night mode doesn't like our custom notifications in Samsung and HTC One UI,

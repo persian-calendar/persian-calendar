@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_LARGE_ICON_ON_NOTIFICATION
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_DIGITS
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
@@ -56,6 +57,7 @@ import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_LONGITUDE
@@ -163,6 +165,9 @@ val isForcedIranTimeEnabled: StateFlow<Boolean> get() = isForcedIranTimeEnabled_
 
 private val isNotifyDateOnLockScreen_ = MutableStateFlow(DEFAULT_NOTIFY_DATE_LOCK_SCREEN)
 val isNotifyDateOnLockScreen: StateFlow<Boolean> get() = isNotifyDateOnLockScreen_
+
+private val isLargeDayNumberOnNotification_ = MutableStateFlow(DEFAULT_LARGE_ICON_ON_NOTIFICATION)
+val isLargeDayNumberOnNotification: StateFlow<Boolean> get() = isLargeDayNumberOnNotification_
 
 private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
 val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> get() = prefersWidgetsDynamicColors_
@@ -473,6 +478,9 @@ fun updateStoredPreference(context: Context) {
     isDynamicIconEnabled_.value = preferences.getBoolean(PREF_DYNAMIC_ICON_ENABLED, false)
     isNotifyDateOnLockScreen_.value = preferences.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN, DEFAULT_NOTIFY_DATE_LOCK_SCREEN
+    )
+    isLargeDayNumberOnNotification_.value = preferences.getBoolean(
+        PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION, DEFAULT_LARGE_ICON_ON_NOTIFICATION
     )
     isWidgetClock = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
