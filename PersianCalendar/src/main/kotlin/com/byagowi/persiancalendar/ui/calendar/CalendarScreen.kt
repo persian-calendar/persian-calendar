@@ -922,22 +922,20 @@ private fun SharedTransitionScope.Toolbar(
                     }
                     .then(if (isYearView) Modifier.heightIn(max = toolbarHeight) else Modifier),
             ) {
-                Crossfade(isYearView) { isYearView ->
-                    if (isYearView) AppScreenModesDropDown(
-                        yearViewCalendar,
-                        onValueChange = viewModel::changeYearViewCalendar,
-                        entryTitle = { stringResource(it.title) },
-                        values = enabledCalendars.takeIf { it.size > 1 }
-                            ?: language.defaultCalendars,
-                        small = subtitle.isNotEmpty(),
-                    ) else Crossfade(title, label = "title") { title ->
-                        Text(
-                            text = title,
-                            style = MaterialTheme.typography.titleLarge,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
+                if (isYearView) AppScreenModesDropDown(
+                    yearViewCalendar,
+                    onValueChange = viewModel::changeYearViewCalendar,
+                    entryTitle = { stringResource(it.title) },
+                    values = enabledCalendars.takeIf { it.size > 1 }
+                        ?: language.defaultCalendars,
+                    small = subtitle.isNotEmpty(),
+                ) else Crossfade(title, label = "title") { title ->
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleLarge,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 }
                 this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
                     Crossfade(subtitle, label = "subtitle") { state ->
