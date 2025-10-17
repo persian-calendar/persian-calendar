@@ -18,7 +18,6 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
-import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -42,7 +41,6 @@ import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.drawable.toBitmapOrNull
 import androidx.core.graphics.toColorInt
 import androidx.core.graphics.withClip
 import androidx.core.net.toUri

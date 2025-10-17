@@ -430,6 +430,6 @@
     <string name="move_up">انتقال به بالا</string>
     <string name="move_down">انتقال به پایین</string>
     <string name="black_moon">قمرالاسود</string>
-    <string name="dynamic_icon">نمایش روز در آیکون</string>
+    <string name="dynamic_icon">نمایش عدد روز در آیکون</string>
     <string name="large_day_number_on_notification">عدد روز بزرگ در اعلان</string>
 </resources>
