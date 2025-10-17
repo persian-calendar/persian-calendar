@@ -11,7 +11,11 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.preferredDigits
 
 // Dynamic icon generation, currently unused
-fun createStatusIcon(dayOfMonth: Int, color: Int = Color.WHITE): Bitmap {
+fun createStatusIcon(
+    dayOfMonth: Int,
+    color: Int = Color.WHITE,
+    addShadow: Boolean = false,
+): Bitmap {
     val text = formatNumber(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = when {
@@ -21,9 +25,14 @@ fun createStatusIcon(dayOfMonth: Int, color: Int = Color.WHITE): Bitmap {
         }
         it.textAlign = Paint.Align.CENTER
         it.color = color
+        if (addShadow) it.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
     val bounds = Rect()
     paint.getTextBounds(text, 0, text.length, bounds)
+    if (bounds.width() > 90f) {
+        paint.textSize = paint.textSize * .9f
+        paint.getTextBounds(text, 0, text.length, bounds)
+    }
     return createBitmap(90, 90).applyCanvas {
         val y = when {
             isTamilDigitSelected -> if (text.length == 1) 62.5f else 55f

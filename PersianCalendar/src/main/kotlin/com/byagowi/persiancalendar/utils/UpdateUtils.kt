@@ -1547,7 +1547,13 @@ private data class NotificationData(
             builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
         }
         if (isLargeDayNumberOnNotification) {
-            builder.setLargeIcon(createStatusIcon(date.dayOfMonth, Color.GRAY))
+            builder.setLargeIcon(
+                createStatusIcon(
+                    dayOfMonth = date.dayOfMonth,
+                    color = 0xFF929292.toInt(),
+                    addShadow = true
+                )
+            )
         }
 
         // Night mode doesn't like our custom notifications in Samsung and HTC One UI,
