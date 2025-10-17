@@ -868,6 +868,7 @@ private fun SharedTransitionScope.Toolbar(
     val isYearView by viewModel.isYearView.collectAsState()
     val yearViewOffset by viewModel.yearViewOffset.collectAsState()
     val yearViewIsInYearSelection by viewModel.yearViewIsInYearSelection.collectAsState()
+    val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
 
     BackHandler(enabled = isYearView, onBack = viewModel::onYearViewBackPressed)
 
@@ -878,34 +879,38 @@ private fun SharedTransitionScope.Toolbar(
             refreshToken.run {}
 
             val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
-            val secondaryCalendar =
-                yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
             val language by language.collectAsState()
             val title: String
             val subtitle: String
-            if (isYearView) {
-                title = stringResource(
-                    if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
-                )
-                subtitle = if (yearViewOffset == 0 || yearViewIsInYearSelection) "" else {
-                    val yearViewYear = (today on yearViewCalendar).year + yearViewOffset
-                    val formattedYear = formatNumber(yearViewYear)
-                    if (secondaryCalendar == null || yearViewCalendar != mainCalendar) {
-                        formattedYear
-                    } else {
-                        val secondaryTitle =
-                            otherCalendarFormat(yearViewYear, mainCalendar, secondaryCalendar)
-                        language.inParentheses.format(formattedYear, secondaryTitle)
+            run {
+                val secondaryCalendar =
+                    yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
+                if (isYearView) {
+                    title = stringResource(
+                        if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
+                    )
+                    subtitle = if (!isTalkBackEnabled && run {
+                            yearViewOffset == 0 || yearViewIsInYearSelection
+                        }) "" else {
+                        val yearViewYear = (today on yearViewCalendar).year + yearViewOffset
+                        val formattedYear = formatNumber(yearViewYear)
+                        if (secondaryCalendar == null || yearViewCalendar != mainCalendar) {
+                            formattedYear
+                        } else {
+                            val secondaryTitle =
+                                otherCalendarFormat(yearViewYear, mainCalendar, secondaryCalendar)
+                            language.inParentheses.format(formattedYear, secondaryTitle)
+                        }
                     }
+                } else if (secondaryCalendar == null) {
+                    title = selectedMonth.monthName
+                    subtitle = formatNumber(selectedMonth.year)
+                } else {
+                    title = language.my.format(
+                        selectedMonth.monthName, formatNumber(selectedMonth.year)
+                    )
+                    subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
                 }
-            } else if (secondaryCalendar == null) {
-                title = selectedMonth.monthName
-                subtitle = formatNumber(selectedMonth.year)
-            } else {
-                title = language.my.format(
-                    selectedMonth.monthName, formatNumber(selectedMonth.year)
-                )
-                subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
             }
             Column(
                 Modifier
@@ -926,8 +931,7 @@ private fun SharedTransitionScope.Toolbar(
                     yearViewCalendar,
                     onValueChange = viewModel::changeYearViewCalendar,
                     entryTitle = { stringResource(it.title) },
-                    values = enabledCalendars.takeIf { it.size > 1 }
-                        ?: language.defaultCalendars,
+                    values = enabledCalendars.takeIf { it.size > 1 } ?: language.defaultCalendars,
                     small = subtitle.isNotEmpty(),
                 ) else Crossfade(title, label = "title") { title ->
                     Text(
@@ -938,12 +942,13 @@ private fun SharedTransitionScope.Toolbar(
                     )
                 }
                 this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
-                    Crossfade(subtitle, label = "subtitle") { state ->
+                    Crossfade(subtitle, label = "subtitle") { subtitle ->
                         val fraction by animateFloatAsState(
                             targetValue = if (isYearView) 1f else 0f, label = "font size"
                         )
                         Text(
-                            state,
+                            if (isTalkBackEnabled && isYearView) "$subtitle ${stringResource(R.string.year_view)}"
+                            else subtitle,
                             style = lerp(
                                 MaterialTheme.typography.titleMedium,
                                 MaterialTheme.typography.titleLarge,
@@ -951,14 +956,15 @@ private fun SharedTransitionScope.Toolbar(
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = if (isYearView || yearViewCalendar == mainCalendar) Modifier
-                            else Modifier
+                            modifier = if (isYearView) Modifier else if (run {
+                                    yearViewCalendar == mainCalendar || yearViewCalendar == secondaryCalendar
+                                }) Modifier else Modifier
                                 .clip(MaterialTheme.shapes.extraLarge)
                                 .background(LocalContentColor.current.copy(alpha = .175f))
                                 .clickable(onClickLabel = stringResource(R.string.cancel)) {
                                     viewModel.changeYearViewCalendar(mainCalendar)
                                 }
-                                .padding(horizontal = 8.dp)
+                                .padding(horizontal = 8.dp),
                         )
                     }
                 }
@@ -1012,6 +1018,7 @@ private fun SharedTransitionScope.Toolbar(
                     isLandscape = isLandscape,
                     swipeUpActions = swipeUpActions,
                     swipeDownActions = swipeDownActions,
+                    isTalkBackEnabled = isTalkBackEnabled,
                 )
             }
         },
@@ -1026,6 +1033,7 @@ private fun SharedTransitionScope.Menu(
     swipeDownActions: Map<SwipeDownAction, () -> Unit>,
     viewModel: CalendarViewModel,
     isLandscape: Boolean,
+    isTalkBackEnabled: Boolean,
 ) {
     val context = LocalContext.current
     val resources = LocalResources.current
@@ -1091,7 +1099,6 @@ private fun SharedTransitionScope.Menu(
             closeMenu()
         }
 
-        val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
         HorizontalDivider()
 
         @Composable

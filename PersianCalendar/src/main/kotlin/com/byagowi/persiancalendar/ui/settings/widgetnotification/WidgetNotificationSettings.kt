@@ -108,12 +108,18 @@ fun ColumnScope.NotificationSettings() {
         )
     }
     this.AnimatedVisibility(isNotifyDate) {
-        val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification.collectAsState()
-        SettingsSwitch(
-            key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
-            value = isLargeDayNumberOnNotification,
-            title = stringResource(R.string.large_day_number_on_notification),
-        )
+        Box(
+            Modifier
+                .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
+                .clearAndSetSemantics {},
+        ) {
+            val isLargeDayNumberOnNotification by isLargeDayNumberOnNotification.collectAsState()
+            SettingsSwitch(
+                key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
+                value = isLargeDayNumberOnNotification,
+                title = stringResource(R.string.large_day_number_on_notification),
+            )
+        }
     }
 }
 

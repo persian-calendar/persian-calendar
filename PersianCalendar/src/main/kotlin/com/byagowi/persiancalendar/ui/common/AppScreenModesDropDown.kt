@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.lerp
@@ -47,7 +48,6 @@ fun <T> AppScreenModesDropDown(
         Modifier
             .clip(MaterialTheme.shapes.extraLarge)
             .background(LocalContentColor.current.copy(alpha = .175f))
-            .semantics { this.role = Role.DropdownList }
             .clickable {
                 showMenu = !showMenu
                 if (showMenu) hapticFeedback.performLongPress()
@@ -72,7 +72,9 @@ fun <T> AppScreenModesDropDown(
                         label = "fraction"
                     ).value,
                 ),
-                modifier = Modifier.animateContentSize(appContentSizeAnimationSpec),
+                modifier = Modifier
+                    .semantics { this.role = Role.DropdownList }
+                    .animateContentSize(appContentSizeAnimationSpec),
             )
             ExpandArrow(
                 isExpanded = showMenu,
