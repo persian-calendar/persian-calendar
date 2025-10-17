@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -78,7 +78,7 @@ fun <T> AppScreenModesDropDown(
             )
             ExpandArrow(
                 isExpanded = showMenu,
-                modifier = if (small) Modifier.size(16.dp) else Modifier,
+                modifier = Modifier.requiredSize(if (small) 16.dp else 24.dp),
             )
         }
         AppDropdownMenu(
