@@ -894,9 +894,11 @@ private fun SharedTransitionScope.Toolbar(
                         }) "" else {
                         val yearViewYear = (today on yearViewCalendar).year + yearViewOffset
                         val formattedYear = formatNumber(yearViewYear)
-                        if (secondaryCalendar == null || yearViewCalendar != mainCalendar) {
-                            formattedYear
-                        } else {
+                        if (yearViewCalendar != mainCalendar) {
+                            val mainCalendarTitle =
+                                otherCalendarFormat(yearViewYear, yearViewCalendar, mainCalendar)
+                            language.inParentheses.format(formattedYear, mainCalendarTitle)
+                        } else if (secondaryCalendar == null) formattedYear else {
                             val secondaryTitle =
                                 otherCalendarFormat(yearViewYear, mainCalendar, secondaryCalendar)
                             language.inParentheses.format(formattedYear, secondaryTitle)
