@@ -32,6 +32,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -878,7 +879,7 @@ private fun SharedTransitionScope.Toolbar(
 
             val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
             val secondaryCalendar =
-                secondaryCalendar ?: yearViewCalendar.takeIf { it != mainCalendar }
+                yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
             val language by language.collectAsState()
             val title: String
             val subtitle: String
@@ -952,6 +953,12 @@ private fun SharedTransitionScope.Toolbar(
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
+                            modifier = if (isYearView || yearViewCalendar == mainCalendar) Modifier
+                            else Modifier
+                                .clip(MaterialTheme.shapes.extraLarge)
+                                .background(LocalContentColor.current.copy(alpha = .175f))
+                                .clickable { viewModel.changeYearViewCalendar(mainCalendar) }
+                                .padding(horizontal = 8.dp)
                         )
                     }
                 }

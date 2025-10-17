@@ -59,7 +59,7 @@ fun CalendarPager(
         setSelectedDay = viewModel::changeSelectedDay,
         onWeekClick = navigateToDays,
         pagerState = pagerState,
-        secondaryCalendar = secondaryCalendar ?: yearViewCalendar.takeIf { it != mainCalendar },
+        secondaryCalendar = yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar,
     )
 
     val selectedDay by viewModel.selectedDay.collectAsState()
