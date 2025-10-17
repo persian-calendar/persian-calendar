@@ -239,7 +239,7 @@ private class Paints(
     val holidayPaint = holidayCircleColor?.let { color ->
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
-            it.color = ColorUtils.setAlphaComponent(color, 64)
+            it.color = color
         }
     }
 

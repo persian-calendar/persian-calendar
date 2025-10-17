@@ -796,16 +796,18 @@ private fun createMonthViewRemoteViews(
             else -> selectedWidgetTextColor
         }
     )
+    val holidaysColor = androidx.compose.ui.graphics.Color(
+        if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
+        else 0xFFE51C23.toInt()
+    )
     val colors = MonthColors(
         contentColor = contentColor,
         appointments = androidx.compose.ui.graphics.Color(
             if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
             else 0xFF376E9F.toInt()
         ),
-        holidays = androidx.compose.ui.graphics.Color(
-            if (prefersWidgetsDynamicColors) context.getColor(android.R.color.system_accent1_300)
-            else 0xFFE51C23.toInt()
-        ),
+        holidays = holidaysColor,
+        holidaysCircle = holidaysColor.copy(alpha = .15f),
         eventIndicator = contentColor,
         currentDay = contentColor,
         textDaySelected = contentColor,
@@ -839,6 +841,7 @@ private fun createMonthViewRemoteViews(
             isRtl = isRtl,
             colors = colors,
             isWidget = true,
+            holidayCircleColor = colors.holidaysCircle.toArgb(),
         ),
         calendar = mainCalendar,
         width = width.toFloat(),

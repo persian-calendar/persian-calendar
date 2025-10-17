@@ -11,6 +11,7 @@ data class MonthColors(
     val currentDay: Color,
     val textDaySelected: Color,
     val indicator: Color,
+    val holidaysCircle: Color,
 ) {
     val colorTextDayName = contentColor.copy(alpha = AppBlendAlpha)
 }

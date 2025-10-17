@@ -313,6 +313,21 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color(0xFFE51C23)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
+    val holidayCircleAlpha = if (theme.isDynamicColors && !isRedHolidays) when (theme) {
+        Theme.LIGHT -> .125f
+        Theme.DARK -> .1f
+        Theme.BLACK -> .2f
+        Theme.MODERN -> .1f
+        else -> null.debugAssertNotNull ?: 0f
+    } else when (theme) {
+        Theme.LIGHT -> .10f
+        Theme.DARK -> .10f
+        Theme.BLACK -> .2f
+        Theme.AQUA -> .15f
+        Theme.MODERN -> .075f
+        else -> null.debugAssertNotNull ?: 0f
+    }
+    val colorHolidaysCircle = colorHolidays.copy(alpha = holidayCircleAlpha)
     val colorCurrentDay = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_accent1_400))
         Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_accent1_200))
@@ -352,8 +367,9 @@ fun appMonthColors(): MonthColors {
     }
     val indicator = if (theme.isDynamicColors) when (theme) {
         Theme.LIGHT -> Color(context.getColor(android.R.color.system_neutral1_800))
-        Theme.DARK, Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_600))
-        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_100))
+        Theme.DARK -> Color(context.getColor(android.R.color.system_neutral1_500))
+        Theme.BLACK -> Color(context.getColor(android.R.color.system_neutral1_600))
+        Theme.MODERN -> Color(context.getColor(android.R.color.system_accent2_200))
         else -> null.debugAssertNotNull ?: Color.Transparent
     } else when (theme) {
         Theme.LIGHT -> Color(0xFFEFF2F1)
@@ -366,6 +382,7 @@ fun appMonthColors(): MonthColors {
         contentColor = contentColor,
         appointments = colorAppointments,
         holidays = colorHolidays,
+        holidaysCircle = colorHolidaysCircle,
         currentDay = colorCurrentDay,
         eventIndicator = colorEventIndicator,
         textDaySelected = colorTextDaySelected,

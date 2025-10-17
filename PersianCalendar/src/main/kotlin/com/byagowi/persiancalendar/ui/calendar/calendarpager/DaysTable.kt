@@ -61,7 +61,6 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarDigits
-import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
@@ -144,7 +143,6 @@ fun daysTable(
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
-    val holidayColor = monthColors.holidays.copy(alpha = .15f)
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
@@ -357,7 +355,7 @@ fun daysTable(
                         // +1 for weekday names initials row, .5f for center of the circle
                         y = cellHeightPx * (1.5f + if (onlyWeek == null) row else 0),
                     )
-                    drawCircle(holidayColor, center = center, radius = cellRadius)
+                    drawCircle(monthColors.holidaysCircle, center = center, radius = cellRadius)
                 }
             }
 
