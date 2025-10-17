@@ -462,8 +462,7 @@ private fun Developers() {
                     modifier = Modifier
                         .padding(all = 4.dp),
                     onClick = click@{
-                        val notInGitHub = listOf("ImanSoltanian", "SeyedHamed")
-                        if (username in notInGitHub) return@click // The only person without GitHub account
+                        if (username in listOf("ImanSoltanian", "SeyedHamed")) return@click
                         runCatching {
                             val uri = "https://github.com/$username".toUri()
                             CustomTabsIntent.Builder().build().launchUrl(context, uri)
