@@ -17,8 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.selection.SelectionContainer
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -64,6 +62,7 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
+import com.byagowi.persiancalendar.ui.settings.SettingsHelp
 import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
@@ -238,13 +237,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
         )
     }
     this.AnimatedVisibility(isLocationSet && notificationAthan && language.isPersian) {
-        SelectionContainer {
-            Text(
-                stringResource(R.string.notification_athan_help),
-                Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        }
+        SettingsHelp(stringResource(R.string.notification_athan_help))
     }
     this.AnimatedVisibility(isLocationSet && !notificationAthan) {
         SettingsSwitch(

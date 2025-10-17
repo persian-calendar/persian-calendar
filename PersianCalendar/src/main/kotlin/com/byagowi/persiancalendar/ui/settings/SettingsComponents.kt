@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
@@ -311,7 +314,24 @@ fun SettingsSwitch(
 }
 
 @Composable
-private fun SettingsLayout(
+fun SettingsHelp(title: String) {
+    SettingsLayout(
+        title = title,
+        summary = null,
+        modifier = Modifier,
+        widget = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.Help,
+                contentDescription = null,
+                modifier = Modifier.size(40.dp),
+                tint = MaterialTheme.colorScheme.primary,
+            )
+        }
+    )
+}
+
+@Composable
+fun SettingsLayout(
     title: String,
     summary: String?,
     modifier: Modifier,
