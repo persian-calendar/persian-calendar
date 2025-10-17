@@ -5,8 +5,10 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.ShiftWorkViewModel
 import com.byagowi.persiancalendar.ui.calendar.yearview.YearViewCommand
@@ -75,7 +77,14 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _daysScreenSelectedDay = MutableStateFlow<Jdn?>(null)
     val daysScreenSelectedDay: StateFlow<Jdn?> get() = _daysScreenSelectedDay
 
+    private val _yearViewCalendar = MutableStateFlow(mainCalendar)
+    val yearViewCalendar: StateFlow<Calendar> get() = _yearViewCalendar
+
     // Commands
+    fun changeYearViewCalendar(calendar: Calendar) {
+        _yearViewCalendar.value = calendar
+    }
+
     fun changeDaysScreenSelectedDay(jdn: Jdn?) {
         jdn?.let { changeSelectedDay(it) }
         _daysScreenSelectedDay.value = jdn

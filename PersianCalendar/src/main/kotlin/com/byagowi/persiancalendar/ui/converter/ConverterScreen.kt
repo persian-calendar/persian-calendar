@@ -9,10 +9,8 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +19,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,18 +57,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
@@ -88,13 +79,11 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
-import com.byagowi.persiancalendar.ui.common.AppDropdownMenu
-import com.byagowi.persiancalendar.ui.common.AppDropdownMenuRadioItem
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.CalendarsTypesPicker
 import com.byagowi.persiancalendar.ui.common.DatePicker
-import com.byagowi.persiancalendar.ui.common.ExpandArrow
+import com.byagowi.persiancalendar.ui.common.ModesDropDown
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.NumberPicker
@@ -103,9 +92,7 @@ import com.byagowi.persiancalendar.ui.common.ScrollShadow
 import com.byagowi.persiancalendar.ui.common.ShareActionButton
 import com.byagowi.persiancalendar.ui.common.TodayActionButton
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
-import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
-import com.byagowi.persiancalendar.ui.utils.performLongPress
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -135,52 +122,12 @@ fun SharedTransitionScope.ConverterScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    var showMenu by rememberSaveable { mutableStateOf(false) }
-                    val hapticFeedback = LocalHapticFeedback.current
-                    Box(
-                        Modifier
-                            .clip(MaterialTheme.shapes.extraLarge)
-                            .background(LocalContentColor.current.copy(alpha = .175f))
-                            .semantics { this.role = Role.DropdownList }
-                            .clickable {
-                                showMenu = !showMenu
-                                if (showMenu) hapticFeedback.performLongPress()
-                            },
-                    ) {
-                        var dropDownWidth by remember { mutableIntStateOf(0) }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier
-                                .padding(vertical = 4.dp)
-                                .defaultMinSize(minHeight = 38.dp)
-                                .onSizeChanged { dropDownWidth = it.width },
-                        ) {
-                            Spacer(Modifier.width(16.dp))
-                            Text(
-                                stringResource(screenMode.title),
-                                Modifier.animateContentSize(appContentSizeAnimationSpec)
-                            )
-                            ExpandArrow(isExpanded = showMenu)
-                            Spacer(Modifier.width(8.dp))
-                        }
-                        AppDropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false },
-                            minWidth = with(LocalDensity.current) { dropDownWidth.toDp() },
-                        ) {
-                            ConverterScreenMode.entries.forEach { entry ->
-                                AppDropdownMenuRadioItem(
-                                    stringResource(entry.title),
-                                    screenMode == entry,
-                                    withRadio = false,
-                                ) {
-                                    showMenu = false
-                                    hapticFeedback.performLongPress()
-                                    viewModel.changeScreenMode(entry)
-                                }
-                            }
-                        }
-                    }
+                    ModesDropDown(
+                        value = screenMode,
+                        onValueChange = { viewModel.changeScreenMode(it) },
+                        values = ConverterScreenMode.entries,
+                        title = { stringResource(it.title) },
+                    )
                 },
                 colors = appTopAppBarColors(),
                 navigationIcon = {

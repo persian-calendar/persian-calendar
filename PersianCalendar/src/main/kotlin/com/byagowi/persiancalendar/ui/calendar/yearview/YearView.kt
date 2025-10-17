@@ -82,10 +82,11 @@ import kotlin.math.floor
 @Composable
 fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPadding: Dp) {
     val today by viewModel.today.collectAsState()
-    val todayDate = today on mainCalendar
+    val calendar by viewModel.yearViewCalendar.collectAsState()
+    val todayDate = today on calendar
     val selectedMonthOffset by viewModel.selectedMonthOffset.collectAsState()
     val yearOffsetInMonths = run {
-        val selectedMonth = mainCalendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
+        val selectedMonth = calendar.getMonthStartFromMonthsDistance(today, selectedMonthOffset)
         selectedMonth.year - todayDate.year
     }
 
@@ -178,8 +179,8 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                     val yearDeviceEvents: DeviceCalendarEventsStore =
                         remember(yearOffset, today) {
                             val yearStartJdn = Jdn(
-                                mainCalendar.createDate(
-                                    today.on(mainCalendar).year + yearOffset, 1, 1
+                                calendar.createDate(
+                                    today.on(calendar).year + yearOffset, 1, 1
                                 )
                             )
                             if (isShowDeviceCalendarEvents.value) {
@@ -195,7 +196,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                 val month = 1 + column + row * if (isLandscape) 4 else 3
                                 val offset = yearOffset * 12 + month - todayDate.month
                                 val monthDate =
-                                    mainCalendar.getMonthStartFromMonthsDistance(today, offset)
+                                    calendar.getMonthStartFromMonthsDistance(today, offset)
                                 val title = language.value.my.format(
                                     monthDate.monthName,
                                     formatNumber(yearOffset + todayDate.year),
@@ -208,7 +209,19 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                         .then(detectZoom)
                                         .clickable(onClickLabel = stringResource(R.string.select_month)) {
                                             viewModel.closeYearView()
-                                            viewModel.changeSelectedMonthOffsetCommand(offset)
+                                            if (mainCalendar == calendar) {
+                                                viewModel.changeSelectedMonthOffsetCommand(offset)
+                                            } else {
+                                                val jdn = Jdn(monthDate)
+                                                viewModel.changeSelectedMonthOffsetCommand(
+                                                    mainCalendar.getMonthsDistance(
+                                                        Jdn.today(),
+                                                        jdn
+                                                    )
+                                                )
+                                                viewModel.changeSelectedDay(jdn)
+                                                viewModel.changeYearViewCalendar(mainCalendar)
+                                            }
                                         }
                                         .background(LocalContentColor.current.copy(alpha = .1f))
                                         .then(

@@ -174,6 +174,7 @@ import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.CalendarsOverview
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
+import com.byagowi.persiancalendar.ui.common.ModesDropDown
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.common.ScrollShadow
@@ -321,8 +322,7 @@ fun SharedTransitionScope.CalendarScreen(
             } else null
 
             AnimatedVisibility(
-                visible = (selectedTabIndex == EVENTS_TAB || isOnlyEventsTab)
-                        && !isYearView && isCurrentDestination,
+                visible = (selectedTabIndex == EVENTS_TAB || isOnlyEventsTab) && !isYearView && isCurrentDestination,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -478,9 +478,7 @@ fun SharedTransitionScope.CalendarScreen(
     }
 
     LaunchedEffect(today) {
-        if (mainCalendar == Calendar.SHAMSI && isIranHolidaysEnabled && today
-                .toPersianDate().year > supportedYearOfIranCalendar
-        ) {
+        if (mainCalendar == Calendar.SHAMSI && isIranHolidaysEnabled && today.toPersianDate().year > supportedYearOfIranCalendar) {
             if (snackbarHostState.showSnackbar(
                     context.getString(R.string.outdated_app),
                     duration = SnackbarDuration.Long,
@@ -526,8 +524,7 @@ fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highligh
     ).show()
 }
 
-private typealias DetailsTab =
-        Pair<Int, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
+private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -899,50 +896,61 @@ private fun SharedTransitionScope.Toolbar(
                 )
                 subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
             }
-            Column(
-                Modifier.clickable(
-                    indication = ripple(bounded = false),
-                    interactionSource = null,
-                    onClickLabel = stringResource(
-                        if (isYearView && !yearViewIsInYearSelection) R.string.select_year
-                        else R.string.year_view
-                    ),
-                ) {
-                    if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
-                    else viewModel.openYearView()
-                },
-            ) {
-                Crossfade(title, label = "title") { state ->
-                    val fraction by animateFloatAsState(
-                        targetValue = if (isYearView && subtitle.isNotEmpty()) 1f else 0f,
-                        label = "font size"
-                    )
-                    Text(
-                        state,
-                        style = lerp(
-                            MaterialTheme.typography.titleLarge,
-                            MaterialTheme.typography.titleMedium,
-                            fraction,
+            Crossfade(isYearView && subtitle.isEmpty()) { showYearViewModes ->
+                if (showYearViewModes) {
+                    val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
+                    val language by language.collectAsState()
+                    ModesDropDown(
+                        yearViewCalendar,
+                        viewModel::changeYearViewCalendar,
+                        title = { stringResource(it.title) },
+                        values = enabledCalendars.takeIf { it.size > 1 }
+                            ?: language.defaultCalendars)
+                } else Column(
+                    Modifier.clickable(
+                        indication = ripple(bounded = false),
+                        interactionSource = null,
+                        onClickLabel = stringResource(
+                            if (isYearView && !yearViewIsInYearSelection) R.string.select_year
+                            else R.string.year_view
                         ),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                }
-                this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
-                    Crossfade(subtitle, label = "subtitle") { state ->
+                    ) {
+                        if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
+                        else viewModel.openYearView()
+                    },
+                ) {
+                    Crossfade(title, label = "title") { title ->
                         val fraction by animateFloatAsState(
-                            targetValue = if (isYearView) 1f else 0f, label = "font size"
+                            targetValue = if (isYearView && subtitle.isNotEmpty()) 1f else 0f,
+                            label = "font size"
                         )
                         Text(
-                            state,
+                            title,
                             style = lerp(
-                                MaterialTheme.typography.titleMedium,
                                 MaterialTheme.typography.titleLarge,
+                                MaterialTheme.typography.titleMedium,
                                 fraction,
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
+                    }
+                    this.AnimatedVisibility(visible = subtitle.isNotEmpty()) {
+                        Crossfade(subtitle, label = "subtitle") { state ->
+                            val fraction by animateFloatAsState(
+                                targetValue = if (isYearView) 1f else 0f, label = "font size"
+                            )
+                            Text(
+                                state,
+                                style = lerp(
+                                    MaterialTheme.typography.titleMedium,
+                                    MaterialTheme.typography.titleLarge,
+                                    fraction,
+                                ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
                     }
                 }
             }
@@ -1187,8 +1195,7 @@ data class AddEventData(
     fun asIntent(): Intent {
         return Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI).also {
             if (description != null) it.putExtra(
-                CalendarContract.Events.DESCRIPTION,
-                description
+                CalendarContract.Events.DESCRIPTION, description
             )
         }.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.time)
             .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.time)
