@@ -220,7 +220,6 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                     )
                                                 )
                                                 viewModel.changeSelectedDay(jdn)
-                                                viewModel.changeYearViewCalendar(mainCalendar)
                                             }
                                         }
                                         .background(LocalContentColor.current.copy(alpha = .1f))

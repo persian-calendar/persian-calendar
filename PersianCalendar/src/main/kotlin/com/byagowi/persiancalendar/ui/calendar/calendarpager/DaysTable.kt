@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.zIndex
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
@@ -91,6 +92,7 @@ fun daysTable(
     setSelectedDay: (Jdn) -> Unit,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
+    secondaryCalendar: Calendar? = null,
     onWeekClick: ((Jdn, Boolean) -> Unit)? = null,
     isWeekMode: Boolean = false,
 ): @Composable (

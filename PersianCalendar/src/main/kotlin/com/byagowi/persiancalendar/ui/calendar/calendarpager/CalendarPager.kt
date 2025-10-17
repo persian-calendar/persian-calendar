@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
@@ -49,6 +50,7 @@ fun CalendarPager(
 
     val refreshToken by viewModel.refreshToken.collectAsState()
     val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
+    val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
     val daysTable = daysTable(
         suggestedPagerSize = suggestedPagerSize,
         addEvent = addEvent,
@@ -57,6 +59,7 @@ fun CalendarPager(
         setSelectedDay = viewModel::changeSelectedDay,
         onWeekClick = navigateToDays,
         pagerState = pagerState,
+        secondaryCalendar = secondaryCalendar ?: yearViewCalendar.takeIf { it != mainCalendar },
     )
 
     val selectedDay by viewModel.selectedDay.collectAsState()
