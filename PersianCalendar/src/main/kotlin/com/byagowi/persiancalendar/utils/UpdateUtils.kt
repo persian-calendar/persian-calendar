@@ -1441,8 +1441,11 @@ private fun updateNotification(
         return
     }
 
+    val isLargeDayNumberOnNotification = isLargeDayNumberOnNotification.value
     val timesToShow = if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
-        timesToShow(clock, prayTimes)
+        if (isLargeDayNumberOnNotification) listOf(
+            PrayTime.FAJR, PrayTime.DHUHR, PrayTime.MAGHRIB
+        ) else timesToShow(clock, prayTimes)
     } else null
 
     val nextPrayTime =
@@ -1463,7 +1466,7 @@ private fun updateNotification(
         isTalkBackEnabled = isTalkBackEnabled.value,
         isHighTextContrastEnabled = isHighTextContrastEnabled.value,
         isNotifyDateOnLockScreen = isNotifyDateOnLockScreen.value,
-        isLargeDayNumberOnNotification = isLargeDayNumberOnNotification.value,
+        isLargeDayNumberOnNotification = isLargeDayNumberOnNotification,
         deviceCalendarEventsList = deviceCalendarEvents.getAllEvents(),
         whatToShowOnWidgets = whatToShowOnWidgets,
         spacedComma = spacedComma,
@@ -1480,6 +1483,9 @@ private fun updateNotification(
 private val notificationTimesViewsIds = listOf(
     R.id.head1 to R.id.time1, R.id.head2 to R.id.time2, R.id.head3 to R.id.time3,
     R.id.head4 to R.id.time4, R.id.head5 to R.id.time5,
+)
+private val notificationTimesColumnsIds = listOf(
+    R.id.column1, R.id.column2, R.id.column3, R.id.column4, R.id.column5
 )
 
 private data class NotificationData(
@@ -1616,20 +1622,27 @@ private data class NotificationData(
                         it.setViewVisibility(
                             R.id.times, if (timesToShow == null) View.GONE else View.VISIBLE
                         )
-                        if (timesToShow != null && prayTimes != null) notificationTimesViewsIds.zip(
-                            timesToShow,
-                        ) { (headViewId, timeViewId), prayTime ->
-                            it.setTextViewText(
-                                headViewId, context.getString(prayTime.stringRes)
-                            )
-                            it.setTextViewText(
-                                timeViewId, prayTimes[prayTime].toFormattedString(printAmPm = false)
-                            )
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                                val alpha = if (prayTime == nextPrayTime) 1f else .6f
-                                it.setAlpha(headViewId, alpha)
-                                it.setAlpha(timeViewId, alpha)
+                        if (timesToShow != null && prayTimes != null) {
+                            notificationTimesViewsIds.zip(
+                                timesToShow,
+                            ) { (headViewId, timeViewId), prayTime ->
+                                it.setTextViewText(
+                                    headViewId, context.getString(prayTime.stringRes)
+                                )
+                                it.setTextViewText(
+                                    timeViewId,
+                                    prayTimes[prayTime].toFormattedString(printAmPm = false)
+                                )
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                    val alpha = if (prayTime == nextPrayTime) 1f else .6f
+                                    it.setAlpha(headViewId, alpha)
+                                    it.setAlpha(timeViewId, alpha)
+                                }
                             }
+                            val lastColumnsVisibility =
+                                if (isLargeDayNumberOnNotification) View.GONE else View.VISIBLE
+                            it.setViewVisibility(R.id.column4, lastColumnsVisibility)
+                            it.setViewVisibility(R.id.column5, lastColumnsVisibility)
                         }
                     },
                 )

@@ -48,6 +48,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/column1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
@@ -76,6 +77,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/column2"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
@@ -104,6 +106,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/column3"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
@@ -132,6 +135,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/column4"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
@@ -160,6 +164,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/column5"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginStart="6dp"
