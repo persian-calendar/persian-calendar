@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
-import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
@@ -19,6 +18,7 @@ import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.createMonthEventsList
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEventsTitle
+import com.byagowi.persiancalendar.utils.getSecondaryCalendarDigits
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
@@ -127,7 +127,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                         listOfNotNull(
                             secondaryCalendar?.let {
                                 val secondaryDateDay = jdn.on(it).dayOfMonth
-                                val digits = secondaryCalendarDigits
+                                val digits = getSecondaryCalendarDigits(it)
                                 formatNumber(secondaryDateDay, digits)
                             }, getShiftWorkTitle(jdn)
                         ).joinToString(" ").takeIf { it.isNotEmpty() }?.let { sup { +" $it" } }

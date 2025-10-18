@@ -249,12 +249,6 @@ val mainCalendarDigits
     }
 val secondaryCalendar
     get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
-val secondaryCalendarDigits
-    get() = when {
-        !language.value.canHaveLocalDigits -> Language.ARABIC_DIGITS
-        preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
-        else -> secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS
-    }
 var isCenterAlignWidgets = true
     private set
 var weekStartOffset = 0

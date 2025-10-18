@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -371,6 +372,12 @@ fun monthFormatForSecondaryCalendar(
             }, formatNumber(from.year)
         )
     }
+}
+
+fun getSecondaryCalendarDigits(secondaryCalendar: Calendar?) = when {
+    !language.value.canHaveLocalDigits -> Language.ARABIC_DIGITS
+    preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
+    else -> secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS
 }
 
 fun otherCalendarFormat(
