@@ -911,7 +911,20 @@ private fun SharedTransitionScope.Toolbar(
                     title = language.my.format(
                         selectedMonth.monthName, formatNumber(selectedMonth.year)
                     )
-                    subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
+                    val selectedDay by viewModel.selectedDay.collectAsState()
+                    val selectedDate = selectedDay on mainCalendar
+                    val isCurrentMonth =
+                        selectedDate.year == selectedMonth.year && selectedDate.month == selectedMonth.month
+                    val isHighlighted by viewModel.isHighlighted.collectAsState()
+                    if (isHighlighted && isCurrentMonth) {
+                        val selectedSecondaryDate = selectedDay on secondaryCalendar
+                        subtitle = language.my.format(
+                            selectedSecondaryDate.monthName,
+                            formatNumber(selectedSecondaryDate.year)
+                        )
+                    } else {
+                        subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)
+                    }
                 }
             }
             Column(
