@@ -971,15 +971,18 @@ private fun SharedTransitionScope.Toolbar(
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = if (isYearView) Modifier else if (run {
-                                    yearViewCalendar == mainCalendar || yearViewCalendar == secondaryCalendar
-                                }) Modifier else Modifier
-                                .clip(MaterialTheme.shapes.extraLarge)
-                                .background(LocalContentColor.current.copy(alpha = .175f))
-                                .clickable(onClickLabel = stringResource(R.string.cancel)) {
-                                    viewModel.changeYearViewCalendar(mainCalendar)
-                                }
-                                .padding(horizontal = 8.dp),
+                            modifier = when {
+                                isYearView -> Modifier
+                                yearViewCalendar == mainCalendar -> Modifier
+                                yearViewCalendar == secondaryCalendar -> Modifier
+                                else -> Modifier
+                                    .clip(MaterialTheme.shapes.extraLarge)
+                                    .background(LocalContentColor.current.copy(alpha = .175f))
+                                    .clickable(onClickLabel = stringResource(R.string.cancel)) {
+                                        viewModel.changeYearViewCalendar(mainCalendar)
+                                    }
+                                    .padding(horizontal = 8.dp)
+                            },
                         )
                     }
                 }
