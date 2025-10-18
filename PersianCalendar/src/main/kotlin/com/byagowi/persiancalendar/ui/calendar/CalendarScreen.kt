@@ -998,6 +998,7 @@ private fun SharedTransitionScope.Toolbar(
         actions = {
             this.AnimatedVisibility(isYearView) {
                 TodayActionButton(yearViewOffset != 0 && !yearViewIsInYearSelection) {
+                    viewModel.changeYearViewCalendar(mainCalendar)
                     viewModel.commandYearView(YearViewCommand.TodayMonth)
                 }
             }
@@ -1017,6 +1018,7 @@ private fun SharedTransitionScope.Toolbar(
             this.AnimatedVisibility(!isYearView) {
                 val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                 TodayActionButton(todayButtonVisibility) {
+                    viewModel.changeYearViewCalendar(mainCalendar)
                     bringDate(viewModel, Jdn.today(), context, highlight = false)
                 }
             }
