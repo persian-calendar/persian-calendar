@@ -11,9 +11,9 @@
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:2.2.20
 |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20 (c)
-+--- com.github.persian-calendar:calculator:13a660cb0e5a5943ec7c496f4ff4c2c4631f9fcf
-|    +--- org.antlr:antlr4-runtime:4.9.3
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10 -> 2.2.20 (*)
++--- com.github.persian-calendar:calculator:bf8954c7c88b59fb6b5aaab8cdaf6644c35e2dd3
+|    +--- org.antlr:antlr4-runtime:4.13.2
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.20 (*)
 +--- com.github.persian-calendar:qr:d957fbf5d99c1c71c279efbb71b89a5f0ac7d7ba
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8 -> 2.2.20 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.20 (c)
