@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.horizontalDrag
 import androidx.compose.foundation.gestures.verticalDrag
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -29,6 +30,31 @@ fun Modifier.detectSwipe(
             yAccumulation += it.positionChange().y
             if (!disable && abs(yAccumulation) > thresholdPx) {
                 detectorInstance(yAccumulation < 0f)
+                disable = true
+            }
+        }
+    }
+}
+
+fun Modifier.detectHorizontalSwipe(
+    threshold: Dp = 80.dp,
+    // Detector has a two phase execution, right after the first down and after pass of the
+    // threshold, this is needed for a screen with its own scrollable content and state.
+    // In retrospect maybe this could be implemented based on Modifier.nestedScroll also.
+    detector: () -> ((isLeft: Boolean) -> Unit),
+) = this then Modifier.pointerInput(Unit) {
+    val thresholdPx = threshold.toPx()
+    awaitEachGesture {
+        var disable = false
+        var xAccumulation = 0f
+        // Don't inline the following line into horizontalDrag, detector should be instanced
+        // right after the first down
+        val downId = awaitFirstDown(requireUnconsumed = false).id
+        val detectorInstance = detector()
+        horizontalDrag(downId) {
+            xAccumulation += it.positionChange().x
+            if (!disable && abs(xAccumulation) > thresholdPx) {
+                detectorInstance(xAccumulation < 0f)
                 disable = true
             }
         }

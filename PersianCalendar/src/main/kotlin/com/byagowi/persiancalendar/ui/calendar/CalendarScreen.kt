@@ -116,12 +116,14 @@ import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -639,7 +641,19 @@ private fun Details(
         HorizontalPager(state = pagerState, verticalAlignment = Alignment.Top) { index ->
             /** See [androidx.compose.material3.SmallTabHeight] for 48.dp */
             val tabMinHeight = contentMinHeight - (if (isOnlyEventsTab) 0 else 48).dp
-            Box {
+            Box(
+                if (isOnlyEventsTab) run {
+                    val context = LocalContext.current
+                    val jdn by viewModel.selectedDay.collectAsState()
+                    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
+                    Modifier.detectHorizontalSwipe {
+                        { isLeft ->
+                            val newJdn = jdn + if (isLeft xor isRtl) -1 else 1
+                            bringDate(viewModel, newJdn, context)
+                        }
+                    }
+                } else Modifier
+            ) {
                 // Currently scrollable tabs only happen on landscape layout
                 val scrollState = if (scrollableTabs) rememberScrollState() else null
                 Box(if (scrollState != null) Modifier.verticalScroll(scrollState) else Modifier) {
