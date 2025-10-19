@@ -649,12 +649,14 @@ private fun Details(
                     val context = LocalContext.current
                     val jdn by viewModel.selectedDay.collectAsState()
                     val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
-                    Modifier.detectHorizontalSwipe {
-                        { isLeft ->
-                            val newJdn = jdn + if (isLeft xor isRtl) -1 else 1
-                            bringDate(viewModel, newJdn, context)
+                    Modifier
+                        .detectHorizontalSwipe {
+                            { isLeft ->
+                                val newJdn = jdn + if (isLeft xor isRtl) -1 else 1
+                                bringDate(viewModel, newJdn, context)
+                            }
                         }
-                    }
+                        .then(modifier)
                 } else Modifier
             ) {
                 // Currently scrollable tabs only happen on landscape layout
