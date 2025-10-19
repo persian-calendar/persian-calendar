@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import android.graphics.RenderEffect
+import android.graphics.RuntimeShader
+import android.os.Build
 import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
@@ -35,8 +38,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -149,6 +154,54 @@ fun daysTable(
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
 
+    // Initialize the RuntimeShader with the AGSL source code.
+    val shader = remember {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val shader = RuntimeShader(SHADER_SRC)
+            shader.setFloatUniform(
+                "iResolution",
+                with(density) { width.toPx() },
+                with(density) { suggestedHeight.toPx() },
+            )
+            // State to store the Index of Refraction (IOR) value, defaulting to 1.33 for water/glass.
+            val iorValue = 1.33f
+            val highlightStrengthValue = 1f
+            // State to store the normalized width of the bevel highlight band.
+            val bevelWidthValue = 0.04f
+            // State to store the perceived thickness of the glass for distortion scaling.
+            val thicknessValue = 0.1f
+            // State to store the intensity of the cast shadow.
+            val shadowIntensityValue = 0.1f
+            // State to store the chromatic aberration strength.
+            val chromaticAberrationStrength = 0.002f
+            // State to store the frosted glass blur radius.
+            val frostedGlassBlurRadius = 0.001f
+            shader.setFloatUniform(
+                "ior", iorValue
+            ) // Pass the current IOR value to the shader.
+            shader.setFloatUniform(
+                "highlightStrength", highlightStrengthValue
+            ) // Pass the highlight strength.
+            shader.setFloatUniform(
+                "bevelWidth", bevelWidthValue
+            ) // Pass the bevel width.
+            shader.setFloatUniform(
+                "thickness", thicknessValue
+            ) // Pass the thickness.
+            shader.setFloatUniform(
+                "shadowIntensity", shadowIntensityValue
+            ) // Pass the shadow intensity.
+            shader.setFloatUniform(
+                "chromaticAberrationStrength", chromaticAberrationStrength
+            ) // Pass the chromatic aberration strength.
+            shader.setFloatUniform(
+                "frostedGlassBlurRadius", frostedGlassBlurRadius
+            ) // Pass the frosted glass blur radius.
+
+            shader
+        } else null
+    }
+
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
         val previousMonthLength =
@@ -227,9 +280,22 @@ fun daysTable(
             }
 
             val holidaysPositions = remember { mutableIntSetOf() }
-            Box(Modifier.fillMaxSize()) {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .graphicsLayer {
+                        if (shader != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                            val normalizedCenterX = animatedCenter.value.x / width.toPx()
+                            val normalizedCenterY = animatedCenter.value.y / suggestedHeight.toPx()
+                            shader.setFloatUniform("center", normalizedCenterX, normalizedCenterY)
+                            shader.setFloatUniform("radius", animatedRadius.value * .06f)
+                            renderEffect = RenderEffect.createRuntimeShaderEffect(shader, "content")
+                                .asComposeRenderEffect()
+                        }
+                    },
+            ) {
                 // Invalidate the indicator state on table size changes
-                key(width, suggestedHeight) {
+                if (shader == null) key(width, suggestedHeight) {
                     Canvas(Modifier.fillMaxSize()) {
                         val radiusFraction = animatedRadius.value
                         if (radiusFraction > 0f) drawCircle(
@@ -464,3 +530,188 @@ private fun PagerArrow(
             .alpha(.9f),
     )
 }
+
+@org.intellij.lang.annotations.Language("AGSL")
+const val SHADER_SRC = """
+uniform float2 iResolution;   // layer size in px
+uniform shader content;       // original composable content
+uniform float  radius;        // normalized (0..1), e.g., 0.3
+uniform float2 center;        // normalized (0..1), e.g., (0.5, 0.5)
+uniform float  ior;           // Index of Refraction, e.g., 1.33 for water/glass
+uniform float  highlightStrength; // Intensity of the specular highlight
+uniform float  bevelWidth;    // Normalized width of the bevel highlight band
+uniform float  thickness;     // Perceived thickness of the glass for distortion scaling
+uniform float  shadowIntensity; // Intensity of the cast shadow
+uniform float  chromaticAberrationStrength; // Strength of chromatic aberration effect
+uniform float  frostedGlassBlurRadius; // Radius for the frosted glass blur effect
+
+const float PI = 3.14159265359;
+// Light direction for casting the shadow (from top-right-front)
+const vec3 LIGHT_DIR_SHADOW = normalize(vec3(0.5, 0.5, 1.0));
+// Light direction for the specular highlight (from top-right-front)
+const vec3 LIGHT_DIR_HIGHLIGHT = normalize(vec3(0.5, 0.5, 1.0));
+// Viewer direction (looking straight down onto the surface)
+const vec3 VIEW_DIR = vec3(0.0, 0.0, -1.0);
+
+// Helper function for blurring content samples (used for frosted glass)
+half4 getBlurredColor(float2 coord, float blur_radius_px) {
+    if (blur_radius_px <= 0.0) {
+        return content.eval(coord); // No blur if radius is zero or less
+    }
+
+    // Number of samples per dimension for the box blur (e.g., 2 means a 5x5 grid)
+    const int num_samples_per_dim = 12; // Changed to const int
+    float step_size = blur_radius_px / float(num_samples_per_dim); // Distance between samples
+
+    half4 sum_color = half4(0.0);
+    float total_weight = 0.0;
+
+    // Loop through a grid of samples around the given coordinate
+    for (int i = -num_samples_per_dim; i <= num_samples_per_dim; i++) {
+        for (int j = -num_samples_per_dim; j <= num_samples_per_dim; j++) {
+            float2 offset = float2(float(i), float(j)) * step_size;
+            sum_color += content.eval(coord + offset); // Sample content at offset
+            total_weight += 1.0;
+        }
+    }
+    return sum_color / total_weight; // Return averaged color
+}
+
+half4 main(float2 fragCoord) {
+    // Convert fragment coordinate to normalized UV (0..1)
+    float2 uv = fragCoord / iResolution;
+
+    // Calculate position relative to the circle's center, and aspect-correct it
+    // This ensures the circle appears round on non-square surfaces.
+    float2 p = uv - center;
+    p.x *= iResolution.x / iResolution.y;
+
+    // Calculate the distance from the center of the circle (in aspect-corrected space)
+    float d = length(p);
+
+    // --- Shadow Calculation ---
+    // Calculate the 2D light direction for the shadow, aspect-corrected
+    float2 shadow_light_dir_2d = normalize(LIGHT_DIR_SHADOW.xy);
+    shadow_light_dir_2d.x *= iResolution.x / iResolution.y;
+
+    // Determine the shadow offset based on light direction and a fixed magnitude
+    float shadow_offset_magnitude = 0.04;
+    float2 shadowOffset_p_space = -shadow_light_dir_2d * shadow_offset_magnitude;
+
+    // Calculate the distance from the center of the shadow circle
+    float shadowDist = length(p - shadowOffset_p_space) - radius;
+
+    // Smoothly apply the shadow based on its distance and intensity
+    float shadowAmount = smoothstep(0.0, 0.15, shadowDist) * shadowIntensity; // 0.15 is softness
+    half4 bgColor = content.eval(fragCoord); // Original background color
+    half4 shadowColor = half4(0.0, 0.0, 0.0, bgColor.a); // Black shadow
+    half4 backgroundWithShadow = mix(bgColor, shadowColor, shadowAmount);
+
+    half4 finalColor;
+
+    // --- Glass Effect Calculation (only inside the circle) ---
+    if (d < radius) {
+        float inner_radius = radius - bevelWidth;
+
+        // Determine the 3D normal vector based on position within the circle:
+        // Flat normal for the center, and a smoothly rounded normal for the bevel.
+        vec3 normal_3d;
+        if (d < inner_radius) {
+            normal_3d = vec3(0.0, 0.0, 1.0); // Flat normal (pointing straight out of screen)
+        } else {
+            // Bevel region: smooth transition from flat to angled normal
+            float t = (d - inner_radius) / bevelWidth;
+            t = clamp(t, 0.0, 1.0); // 't' goes from 0 (inner bevel) to 1 (outer bevel)
+
+            // Use trigonometric functions to create a smooth, quarter-circle profile for the normal
+            float z_comp = cos(t * PI * 0.5); // Z component goes from 1 (flat) to 0 (horizontal)
+            vec2 xy_comp = normalize(p) * sin(t * PI * 0.5); // XY component scales radially
+            normal_3d = normalize(vec3(xy_comp, z_comp));
+        }
+
+        // Calculate the cosine of the angle of incidence between the view direction and the normal
+        float cos_theta_i = dot(-VIEW_DIR, normal_3d);
+
+        // Ensure the normal always points towards the view direction for correct refraction/reflection
+        if (cos_theta_i < 0.0) {
+            normal_3d = -normal_3d;
+            cos_theta_i = dot(-VIEW_DIR, normal_3d);
+        }
+
+        // Refraction calculation using Snell's Law
+        float eta = 1.0 / ior; // Ratio of refractive indices (air to glass)
+        float k = 1.0 - eta * eta * (1.0 - cos_theta_i * cos_theta_i);
+        vec3 refracted_ray_3d = (k < 0.0) ? vec3(0.0) : eta * VIEW_DIR + (eta * cos_theta_i - sqrt(k)) * normal_3d;
+        refracted_ray_3d = normalize(refracted_ray_3d);
+
+        // Reflection calculation using the built-in 'reflect' function
+        vec3 reflected_ray_3d = reflect(VIEW_DIR, normal_3d);
+
+        // Fresnel term (Schlick's approximation) to blend between refraction and reflection
+        // Glass appears more reflective at grazing angles.
+        float R0 = ((1.0 - ior) / (1.0 + ior));
+        R0 *= R0; // Reflectance at normal incidence
+        float fresnel_term = R0 + (1.0 - R0) * pow((1.0 - cos_theta_i), 5.0);
+
+        // Calculate distorted coordinates for sampling the background content for refraction.
+        // Distortion is scaled by 'thickness', 'iResolution.y', and 'normal_3d.z' for perspective.
+        // 'distortion_factor' ensures distortion is primarily at the bevel.
+        float distortion_factor = smoothstep(inner_radius, radius, d); // 0 in center, 1 at edge
+        float2 distorted_fragCoord_refract = fragCoord + refracted_ray_3d.xy * thickness * iResolution.y / max(0.001, normal_3d.z) * distortion_factor;
+
+        half4 refracted_color;
+        // Apply chromatic aberration if strength is greater than 0
+        if (chromaticAberrationStrength > 0.0) {
+            float2 ab_offset_px = refracted_ray_3d.xy * chromaticAberrationStrength * iResolution.y; // Pixel offset based on ray direction
+
+            // Sample content for R, G, B channels with slight offsets, applying blur if frosted glass is active
+            half4 r_sample = getBlurredColor(distorted_fragCoord_refract + ab_offset_px, frostedGlassBlurRadius * iResolution.y);
+            half4 g_sample = getBlurredColor(distorted_fragCoord_refract, frostedGlassBlurRadius * iResolution.y);
+            half4 b_sample = getBlurredColor(distorted_fragCoord_refract - ab_offset_px, frostedGlassBlurRadius * iResolution.y);
+
+            refracted_color.rgb = half3(r_sample.r, g_sample.g, b_sample.b);
+            refracted_color.a = g_sample.a; // Maintain alpha from green channel
+        } else {
+            // If no chromatic aberration, just get the (potentially blurred) color
+            refracted_color = getBlurredColor(distorted_fragCoord_refract, frostedGlassBlurRadius * iResolution.y);
+        }
+
+        // Calculate distorted coordinates for sampling the background content for reflection.
+        float2 distorted_fragCoord_reflect = fragCoord + reflected_ray_3d.xy * thickness * iResolution.y / max(0.001, normal_3d.z) * distortion_factor;
+        half4 reflected_color = content.eval(distorted_fragCoord_reflect); // Reflection is not blurred or aberrated
+
+        // Simulate a specular highlight to give the illusion of a flat bevel/thickness.
+        float shininess = 200.0; // Controls the sharpness of the highlight (higher for sharper bevel)
+        // Calculate base specular intensity based on light reflection off the normal
+        float specular_base = pow(max(0.0, dot(reflect(-LIGHT_DIR_HIGHLIGHT, normal_3d), -VIEW_DIR)), shininess);
+
+        // Create a mask to concentrate the highlight at the edge (bevel effect).
+        // This smoothstep makes the highlight primarily visible in a narrow band at the circle's edge.
+        float bevel_mask = smoothstep(radius - bevelWidth, radius, d);
+        float specular = specular_base * highlightStrength * bevel_mask;
+        half3 highlight_color = half3(1.0, 1.0, 1.0) * specular; // White highlight
+
+        // Combine refracted and reflected colors using the Fresnel term, then add the highlight.
+        half3 glass_rgb = mix(refracted_color.rgb, reflected_color.rgb, fresnel_term);
+        glass_rgb += highlight_color;
+
+        // Final color inside the circle
+        finalColor = half4(glass_rgb, refracted_color.a);
+
+    } else {
+        // Outside the circle, apply the background with the cast shadow
+        finalColor = backgroundWithShadow;
+    }
+
+    // Smoothstep for anti-aliasing the circle's edge, blending the inside glass effect
+    // with the outside background+shadow.
+    float edgeSoftness = 0.01; // Small value for a sharp visual edge
+    finalColor = mix(
+        backgroundWithShadow, // Color outside the circle
+        finalColor,           // Color inside the circle
+        smoothstep(edgeSoftness, -edgeSoftness, d - radius) // 'd - radius' serves as the SDF value
+    );
+
+    return finalColor;
+}
+"""
