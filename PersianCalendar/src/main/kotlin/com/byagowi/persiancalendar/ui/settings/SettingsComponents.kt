@@ -431,9 +431,10 @@ fun SettingsSlider(
                 modifier = Modifier.weight(1f),
             )
             Spacer(Modifier.width(16.dp))
-            Text(formatNumber((value * 100).roundToInt()))
-            AnimatedVisibility(value == 0f) { Spacer(Modifier.width(16.dp)) }
-            AnimatedVisibility(value != 0f) {
+            val roundedValue = (value * 100).roundToInt()
+            Text(formatNumber(roundedValue))
+            AnimatedVisibility(roundedValue == 0) { Spacer(Modifier.width(16.dp)) }
+            AnimatedVisibility(roundedValue != 0) {
                 IconButton(onClick = { onValueChange(defaultValue) }) {
                     Icon(Icons.Default.SettingsBackupRestore, stringResource(R.string.cancel))
                 }
