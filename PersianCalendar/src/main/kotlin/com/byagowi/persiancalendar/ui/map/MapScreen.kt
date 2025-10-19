@@ -158,10 +158,13 @@ fun SharedTransitionScope.MapScreen(
 
     class MenuItem(
         val icon: ImageVector,
-        @get:StringRes val title: Int,
+        @get:StringRes val titleId: Int,
         val isEnabled: () -> Boolean = { false },
         val onClick: () -> Unit
-    )
+    ) {
+        val title
+            @Composable get() = language.mapButtons(titleId) ?: stringResource(titleId)
+    }
 
     val context = LocalContext.current
     val menu = listOf(
@@ -314,14 +317,14 @@ fun SharedTransitionScope.MapScreen(
                             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                                 TooltipAnchorPosition.Above
                             ),
-                            tooltip = { PlainTooltip { Text(text = stringResource(it.title)) } },
+                            tooltip = { PlainTooltip { Text(it.title) } },
                             state = rememberTooltipState()
                         ) {
                             val tint by animateColor(
                                 if (it.isEnabled()) MaterialTheme.colorScheme.inversePrimary
                                 else LocalContentColor.current
                             )
-                            Icon(it.icon, stringResource(it.title), tint = tint)
+                            Icon(it.icon, it.title, tint = tint)
                         }
                     },
                 )

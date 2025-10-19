@@ -527,6 +527,23 @@ enum class Language(val code: String, val nativeName: String) {
                 MapType.MORNING_YALLOP -> null
                 MapType.MORNING_ODEH -> null
             }
+
+            else -> null
+        }
+    }
+
+    fun mapButtons(stringId: Int): String? {
+        return when (this) {
+            FA, FA_AF -> when (stringId) {
+                R.string.show_globe_view_label -> "کرهٔ سه‌بعدی"
+                R.string.show_direct_path_label -> "مسیر مستقیم"
+                R.string.show_grid_label -> "توری"
+                R.string.show_my_location_label -> "مکان‌یاب / GPS"
+                R.string.show_location_label -> "مکان"
+                R.string.show_night_mask_label -> "تاریکی شب"
+                else -> null
+            }
+
             else -> null
         }
     }
