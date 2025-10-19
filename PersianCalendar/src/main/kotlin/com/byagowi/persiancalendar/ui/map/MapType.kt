@@ -10,7 +10,7 @@ enum class MapType(@get:StringRes val title: Int, val isCrescentVisibility: Bool
     MAGNETIC_FIELD_STRENGTH(R.string.magnetic_field_strength),
     MAGNETIC_DECLINATION(R.string.magnetic_declination),
     MAGNETIC_INCLINATION(R.string.magnetic_inclination),
-    TIME_ZONES(R.string.time_zones_en),
+    TIME_ZONES(R.string.time_zones),
     TECTONIC_PLATES(R.string.tectonic_plates),
     EVENING_YALLOP(R.string.crescent_evening_visibility_yallop, isCrescentVisibility = true),
     EVENING_ODEH(R.string.crescent_evening_visibility_odeh, isCrescentVisibility = true),

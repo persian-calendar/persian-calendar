@@ -51,7 +51,6 @@ import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -66,11 +65,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.graphics.createBitmap
@@ -82,6 +79,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MAP
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_TIME_BAR
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.DatePickerDialog
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
@@ -137,24 +135,23 @@ fun SharedTransitionScope.MapScreen(
         notifyChange = viewModel::changeCurrentCoordinates,
     )
 
+    val language by language.collectAsState()
     var showMapTypesDialog by rememberSaveable { mutableStateOf(false) }
     if (showMapTypesDialog) AppDialog(onDismissRequest = { showMapTypesDialog = false }) {
-        CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            MapType.entries.drop(1) // Hide "None" option
-                // Hide moon visibilities for now unless is a development build
-                .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }.forEach {
-                    Text(
-                        stringResource(it.title),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable {
-                                showMapTypesDialog = false
-                                viewModel.changeMapType(it)
-                            }
-                            .padding(vertical = 16.dp, horizontal = 24.dp),
-                    )
-                }
-        }
+        MapType.entries.drop(1) // Hide "None" option
+            // Hide moon visibilities for now unless is a development build
+            .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }.forEach {
+                Text(
+                    language.mapType(it) ?: stringResource(it.title),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            showMapTypesDialog = false
+                            viewModel.changeMapType(it)
+                        }
+                        .padding(vertical = 16.dp, horizontal = 24.dp),
+                )
+            }
     }
 
     val lifecycleOwner = LocalLifecycleOwner.current

@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
+import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
@@ -508,6 +509,26 @@ enum class Language(val code: String, val nativeName: String) {
         } + " کیلومتر"
 
         else -> "%,d km".format(Locale.ENGLISH, value)
+    }
+
+    fun mapType(mapType: MapType): String? {
+        return when (this) {
+            FA, FA_AF -> when (mapType) {
+                MapType.NONE -> null
+                MapType.DAY_NIGHT -> "تاریکی شب"
+                MapType.MOON_VISIBILITY -> "پدیداری ماه"
+                MapType.MAGNETIC_FIELD_STRENGTH -> "قدرت میدان مغناطیسی"
+                MapType.MAGNETIC_DECLINATION -> "انحراف مغناطیسی"
+                MapType.MAGNETIC_INCLINATION -> "میل مغناطیسی"
+                MapType.TIME_ZONES -> null
+                MapType.TECTONIC_PLATES -> "صفحه‌های زمین‌ساخت/تکتونیک"
+                MapType.EVENING_YALLOP -> null
+                MapType.EVENING_ODEH -> null
+                MapType.MORNING_YALLOP -> null
+                MapType.MORNING_ODEH -> null
+            }
+            else -> null
+        }
     }
 
     companion object {
