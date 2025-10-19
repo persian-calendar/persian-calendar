@@ -148,6 +148,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val daysOffsetKey = "DAYS_OFFSET"
 
     SharedTransitionLayout {
+        val initialDestination = Route.fromName(intentStartDestination)
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -166,11 +167,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                 }
             },
+            gesturesEnabled = initialDestination == Route.CALENDAR,
         ) {
-            NavHost(
-                navController = navController,
-                startDestination = Route.fromName(intentStartDestination).name,
-            ) {
+            NavHost(navController = navController, startDestination = initialDestination.name) {
                 fun Route.navigate() = navController.navigate(this.name)
                 fun Route.navigate(bundle: Bundle) {
                     val destination = navController.graph.findNode(this.name) ?: return
