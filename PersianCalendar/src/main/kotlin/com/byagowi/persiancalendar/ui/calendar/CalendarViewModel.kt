@@ -32,8 +32,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _selectedMonthOffsetCommand = MutableStateFlow<Int?>(null)
     val selectedMonthOffsetCommand: StateFlow<Int?> get() = _selectedMonthOffsetCommand
 
-    private val _selectedTabIndex = MutableStateFlow(CALENDARS_TAB)
-    val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
+    private val _selectedTab = MutableStateFlow(CalendarScreenTab.CALENDAR)
+    val selectedTab: StateFlow<CalendarScreenTab> get() = _selectedTab
 
     private val _isSearchOpenFlow = MutableStateFlow(false)
     val isSearchOpen: StateFlow<Boolean> get() = _isSearchOpenFlow
@@ -115,8 +115,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         _isHighlighted.value = false
     }
 
-    fun changeSelectedTabIndex(index: Int) {
-        _selectedTabIndex.value = index
+    fun changeSelectedTab(tab: CalendarScreenTab) {
+        _selectedTab.value = tab
     }
 
     fun refreshCalendar() {
@@ -183,8 +183,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     init {
         viewModelScope.launch {
             val preferences = application.preferences
-            changeSelectedTabIndex(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
-            selectedTabIndex.collectLatest { preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it) } }
+            changeSelectedTab(
+                CalendarScreenTab.entries.getOrNull(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
+                    ?: CalendarScreenTab.entries[0]
+            )
+            selectedTab.collectLatest { preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it.ordinal) } }
         }
         viewModelScope.launch {
             while (true) {

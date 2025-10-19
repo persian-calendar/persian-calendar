@@ -316,7 +316,7 @@ fun SharedTransitionScope.CalendarScreen(
             }
         },
         floatingActionButton = {
-            val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+            val selectedTab by viewModel.selectedTab.collectAsState()
             val isOnlyEventsTab = detailsTabs.size == 1
 
             // Window height fallback for older device isn't consistent, let's just
@@ -326,7 +326,7 @@ fun SharedTransitionScope.CalendarScreen(
             } else null
 
             AnimatedVisibility(
-                visible = (selectedTabIndex == EVENTS_TAB || isOnlyEventsTab) && !isYearView && isCurrentDestination,
+                visible = (selectedTab == CalendarScreenTab.EVENT || isOnlyEventsTab) && !isYearView && isCurrentDestination,
                 modifier = Modifier
                     .padding(end = 8.dp)
                     .onGloballyPositioned {
@@ -494,9 +494,9 @@ fun SharedTransitionScope.CalendarScreen(
     }
 }
 
-const val CALENDARS_TAB = 0
-const val EVENTS_TAB = 1
-const val TIMES_TAB = 2
+enum class CalendarScreenTab(@get:StringRes val titleId: Int) {
+    CALENDAR(R.string.calendar), EVENT(R.string.events), TIMES(R.string.times)
+}
 
 private fun enableTimesTab(context: Context): Boolean {
     val preferences = context.preferences
@@ -528,7 +528,7 @@ fun bringDate(viewModel: CalendarViewModel, jdn: Jdn, context: Context, highligh
     ).show()
 }
 
-private typealias DetailsTab = Pair<Int, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
+private typealias DetailsTab = Pair<CalendarScreenTab, @Composable (MutableInteractionSource, minHeight: Dp, bottomPadding: Dp) -> Unit>
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -549,7 +549,7 @@ private fun SharedTransitionScope.detailsTabs(
     val isOnlyEventsTab =
         !hasTimesTab && enabledCalendars.size == 1 && !isAstronomicalExtraFeaturesEnabled
     return listOfNotNull(
-        if (!isOnlyEventsTab) R.string.calendar to { interactionSource, minHeight, bottomPadding ->
+        if (!isOnlyEventsTab) CalendarScreenTab.CALENDAR to { interactionSource, minHeight, bottomPadding ->
             CalendarsTab(
                 viewModel = viewModel,
                 interactionSource = interactionSource,
@@ -560,7 +560,7 @@ private fun SharedTransitionScope.detailsTabs(
                 animatedContentScope = animatedContentScope,
             )
         } else null,
-        R.string.events to { _, _, bottomPadding ->
+        CalendarScreenTab.EVENT to { _, _, bottomPadding ->
             EventsTab(
                 navigateToHolidaysSettings = navigateToHolidaysSettings,
                 viewModel = viewModel,
@@ -570,7 +570,7 @@ private fun SharedTransitionScope.detailsTabs(
             )
         },
         // The optional third tab
-        if (hasTimesTab) R.string.times to { interactionSource, minHeight, bottomPadding ->
+        if (hasTimesTab) CalendarScreenTab.TIMES to { interactionSource, minHeight, bottomPadding ->
             TimesTab(
                 navigateToSettingsLocationTab = navigateToSettingsLocationTab,
                 navigateToSettingsLocationTabSetAthanAlarm = navigateToSettingsLocationTabSetAthanAlarm,
@@ -590,13 +590,16 @@ private fun detailsPagerState(
     viewModel: CalendarViewModel,
     tabs: List<DetailsTab>,
 ): PagerState {
-    val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+    val selectedTab by viewModel.selectedTab.collectAsState()
     val pagerState = rememberPagerState(
-        initialPage = selectedTabIndex.coerceAtMost(tabs.size - 1),
+        initialPage = selectedTab.ordinal.coerceAtMost(tabs.size - 1),
         pageCount = tabs::size,
     )
     LaunchedEffect(key1 = pagerState.currentPage) {
-        viewModel.changeSelectedTabIndex(pagerState.currentPage)
+        viewModel.changeSelectedTab(
+            CalendarScreenTab.entries.getOrNull(pagerState.currentPage)
+                ?: CalendarScreenTab.entries[0]
+        )
     }
     return pagerState
 }
@@ -614,22 +617,22 @@ private fun Details(
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
-        val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+        val selectedTab by viewModel.selectedTab.collectAsState()
         val coroutineScope = rememberCoroutineScope()
         val isOnlyEventsTab = tabs.size == 1
 
         if (!isOnlyEventsTab) PrimaryTabRow(
-            selectedTabIndex = selectedTabIndex,
+            selectedTabIndex = selectedTab.ordinal,
             divider = {},
             containerColor = Color.Transparent,
             indicator = {
-                val offset = selectedTabIndex.coerceAtMost(tabs.size - 1)
+                val offset = selectedTab.ordinal.coerceAtMost(tabs.size - 1)
                 TabRowDefaults.PrimaryIndicator(Modifier.tabIndicatorOffset(offset))
             },
         ) {
-            tabs.forEachIndexed { index, (titlesResId, _) ->
+            tabs.forEachIndexed { index, (tab, _) ->
                 Tab(
-                    text = { Text(stringResource(titlesResId)) },
+                    text = { Text(stringResource(tab.titleId)) },
                     modifier = Modifier.clip(MaterialTheme.shapes.large),
                     selected = pagerState.currentPage == index,
                     unselectedContentColor = MaterialTheme.colorScheme.onSurface,
