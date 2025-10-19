@@ -77,11 +77,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val _daysScreenSelectedDay = MutableStateFlow<Jdn?>(null)
     val daysScreenSelectedDay: StateFlow<Jdn?> get() = _daysScreenSelectedDay
 
-    private val _yearViewCalendar = MutableStateFlow(mainCalendar)
-    val yearViewCalendar: StateFlow<Calendar> get() = _yearViewCalendar
+    private val _yearViewCalendar = MutableStateFlow<Calendar?>(null)
+    val yearViewCalendar: StateFlow<Calendar?> get() = _yearViewCalendar
 
     // Commands
-    fun changeYearViewCalendar(calendar: Calendar) {
+    fun changeYearViewCalendar(calendar: Calendar?) {
         _yearViewCalendar.value = calendar
     }
 
@@ -140,6 +140,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun openYearView() {
+        if (_yearViewCalendar.value == null) _yearViewCalendar.value = mainCalendar
         _isYearView.value = true
     }
 

@@ -878,14 +878,14 @@ private fun SharedTransitionScope.Toolbar(
             // just a noop to update title and subtitle when secondary calendar is toggled
             refreshToken.run {}
 
-            val yearViewCalendar by viewModel.yearViewCalendar.collectAsState()
+            val yearViewCalendar = viewModel.yearViewCalendar.collectAsState().value
             val language by language.collectAsState()
             val title: String
             val subtitle: String
             run {
                 val secondaryCalendar =
                     yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
-                if (isYearView) {
+                if (isYearView && yearViewCalendar != null) {
                     title = stringResource(
                         if (yearViewIsInYearSelection) R.string.select_year else R.string.year_view
                     )
@@ -942,7 +942,7 @@ private fun SharedTransitionScope.Toolbar(
                     }
                     .then(if (isYearView) Modifier.heightIn(max = toolbarHeight) else Modifier),
             ) {
-                if (isYearView) AppScreenModesDropDown(
+                if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
                     yearViewCalendar,
                     onValueChange = viewModel::changeYearViewCalendar,
                     label = { stringResource(it.title) },
