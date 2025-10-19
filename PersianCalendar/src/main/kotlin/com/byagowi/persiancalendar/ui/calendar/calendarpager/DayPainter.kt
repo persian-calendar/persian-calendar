@@ -133,16 +133,25 @@ class DayPainter(
     }
 
     private fun drawHeader(canvas: Canvas) {
-        val xOffset = if (header.isNotEmpty() && isMoonInScorpio) {
-            paints.headerTextSelectedPaint.measureText(" $header") / 2
+        // The logic has become tedious as it tries to renders with two different fonts…
+        val spaceWidth = if (header.isNotEmpty() && isMoonInScorpio) width / 25f else 0f
+        val headerWidth = if (header.isNotEmpty()) {
+            paints.headerTextSelectedPaint.measureText(header)
         } else 0f
-        val x = width / 2f
+        val zodiacWidth = if (isMoonInScorpio) run {
+            paints.zodiacHeaderTextSelectedPaint.measureText(Zodiac.SCORPIO.symbol)
+        } else 0f
+        val lineWidth = headerWidth + zodiacWidth + spaceWidth
         if (header.isNotEmpty()) canvas.drawText(
-            header, x - xOffset, height / 2 + paints.headerYOffset,
+            header,
+            (width - lineWidth) / 2 + if (isRtl) -spaceWidth else zodiacWidth + spaceWidth,
+            height / 2 + paints.headerYOffset,
             if (dayIsSelected) paints.headerTextSelectedPaint else paints.headerTextPaint
         )
         if (isMoonInScorpio) canvas.drawText(
-            Zodiac.SCORPIO.symbol, x + xOffset, height / 2 + paints.headerScorpioYOffset,
+            Zodiac.SCORPIO.symbol,
+            (width - lineWidth) / 2 + if (isRtl) headerWidth + spaceWidth else -spaceWidth,
+            height / 2 + paints.headerScorpioYOffset,
             if (dayIsSelected) paints.zodiacHeaderTextSelectedPaint else paints.zodiacHeaderTextPaint,
         )
     }
@@ -282,35 +291,32 @@ private class Paints(
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
     }
+
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
     }
     val zodiacHeaderTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
         it.textSize = zodiacHeaderTextSize
         it.color = colors.textDaySelected.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         it.typeface = zodiacFont
     }
-
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
         it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         if (typeface != null) it.typeface = typeface
     }
     val zodiacHeaderTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
         it.textSize = zodiacHeaderTextSize
         it.color = colors.colorTextDayName.toArgb()
         if (isWidget) addShadowIfNeeded(it)
         it.typeface = zodiacFont
     }
+
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = if (isYearView) textSize else headerTextSize
