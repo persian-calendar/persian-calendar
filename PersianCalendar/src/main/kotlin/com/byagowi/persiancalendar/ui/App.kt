@@ -167,7 +167,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                 }
             },
-            gesturesEnabled = initialDestination == Route.CALENDAR,
+            gesturesEnabled = initialDestination == Route.CALENDAR || navController.currentDestination?.route != initialDestination.name,
         ) {
             NavHost(navController = navController, startDestination = initialDestination.name) {
                 fun Route.navigate() = navController.navigate(this.name)
