@@ -21,7 +21,9 @@ import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.AppDialog
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.reverseFormatNumber
 
 @Composable
 fun AthanGapDialog(onDismissRequest: () -> Unit) {
@@ -35,8 +37,9 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
         confirmButton = {
             TextButton(onClick = {
                 onDismissRequest()
-                if (minutes.toDoubleOrNull() != null)
-                    context.preferences.edit { putString(PREF_ATHAN_GAP, minutes) }
+                val value = reverseFormatNumber(minutes)
+                if (value.toDoubleOrNull() != null)
+                    context.preferences.edit { putString(PREF_ATHAN_GAP, value) }
             }) { Text(stringResource(R.string.accept)) }
         },
         dismissButton = {
@@ -46,7 +49,7 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = minutes,
+                value = formatNumber(minutes),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 onValueChange = { minutes = it },
             )

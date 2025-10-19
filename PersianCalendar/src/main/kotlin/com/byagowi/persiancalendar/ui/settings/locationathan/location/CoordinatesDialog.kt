@@ -38,9 +38,11 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.reverseFormatNumber
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
@@ -94,7 +96,7 @@ fun CoordinatesDialog(
                     if (i == 2 && x.value.isEmpty()) "0" else x.value
                 }.mapIndexedNotNull { i, coordinate ->
                     // Make sure coordinates array has both parsable and in range numbers
-                    coordinate.toDoubleOrNull()?.takeIf {
+                    reverseFormatNumber(coordinate).toDoubleOrNull()?.takeIf {
                         when (i) {
                             0 -> abs(it) <= 90 // Valid latitudes
                             1 -> abs(it) <= 180 // Valid longitudes
@@ -130,7 +132,7 @@ fun CoordinatesDialog(
                             )
                         }
                     },
-                    value = fieldState.value,
+                    value = formatNumber(fieldState.value),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     onValueChange = {
                         fieldState.value = it

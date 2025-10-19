@@ -130,6 +130,7 @@ const val ZWNJ = "\u200C"
 const val ZWJ = "\u200D"
 const val LRM = "\u200E"
 const val RLM = "\u200F"
+const val ARABIC_DECIMAL_SEPARATOR = "٫"
 
 const val EN_DASH = "–"
 
