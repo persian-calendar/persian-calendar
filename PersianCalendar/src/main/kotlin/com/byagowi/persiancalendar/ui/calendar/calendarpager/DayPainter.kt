@@ -137,15 +137,12 @@ class DayPainter(
             paints.headerTextSelectedPaint.measureText(" $header") / 2
         } else 0f
         val x = width / 2f
-        val y = height / 2 + paints.headerYOffset
         if (header.isNotEmpty()) canvas.drawText(
-            header, x - xOffset, y,
+            header, x - xOffset, height / 2 + paints.headerYOffset,
             if (dayIsSelected) paints.headerTextSelectedPaint else paints.headerTextPaint
         )
         if (isMoonInScorpio) canvas.drawText(
-            Zodiac.SCORPIO.symbol,
-            x + xOffset,
-            y,
+            Zodiac.SCORPIO.symbol, x + xOffset, height / 2 + paints.headerScorpioYOffset,
             if (dayIsSelected) paints.zodiacHeaderTextSelectedPaint else paints.zodiacHeaderTextPaint,
         )
     }
@@ -260,6 +257,7 @@ private class Paints(
     private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)
     private val zodiacHeaderTextSize = diameter / 40 * 10
     val headerYOffset = -diameter * (if (secondaryCalendarDigitsIsArabic) 10 else 7) / 40
+    val headerScorpioYOffset = -diameter * 10 / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
