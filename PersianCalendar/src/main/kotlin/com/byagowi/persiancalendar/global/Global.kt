@@ -234,7 +234,7 @@ val coordinates: StateFlow<Coordinates?> get() = coordinates_
 private val cityName_ = MutableStateFlow<String?>(null)
 val cityName: StateFlow<String?> get() = cityName_
 
-private val widgetTransparency_ = MutableStateFlow(.0f)
+private val widgetTransparency_ = MutableStateFlow(DEFAULT_WIDGET_TRANSPARENCY)
 val widgetTransparency: StateFlow<Float> get() = widgetTransparency_
 
 var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)

@@ -22,6 +22,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
@@ -232,6 +233,7 @@ fun ColumnScope.WidgetDynamicColorsGlobalSettings(prefersWidgetsDynamicColors: B
             SettingsSlider(
                 title = stringResource(R.string.widget_background_transparency),
                 value = widgetTransparency,
+                defaultValue = DEFAULT_WIDGET_TRANSPARENCY,
             ) { widgetTransparencyFlow.value = it }
         }
     }

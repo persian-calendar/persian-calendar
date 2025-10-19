@@ -16,9 +16,11 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Help
+import androidx.compose.material.icons.filled.SettingsBackupRestore
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Slider
@@ -63,8 +65,10 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performLongPress
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.preferences
 import java.util.Locale
+import kotlin.math.roundToInt
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
@@ -411,6 +415,7 @@ private fun SettingsSwitchLayout(
 fun SettingsSlider(
     title: String,
     value: Float,
+    defaultValue: Float,
     onValueChange: (Float) -> Unit,
 ) {
     Column(Modifier.padding(top = 16.dp, start = 24.dp, end = 24.dp)) {
@@ -419,9 +424,20 @@ fun SettingsSlider(
             label = "title",
             transitionSpec = appCrossfadeSpec,
         ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
-        Slider(
-            value = value,
-            onValueChange = onValueChange,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Slider(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier.weight(1f),
+            )
+            Spacer(Modifier.width(16.dp))
+            Text(formatNumber((value * 100).roundToInt()))
+            AnimatedVisibility(value == 0f) { Spacer(Modifier.width(16.dp)) }
+            AnimatedVisibility(value != 0f) {
+                IconButton(onClick = { onValueChange(defaultValue) }) {
+                    Icon(Icons.Default.SettingsBackupRestore, stringResource(R.string.cancel))
+                }
+            }
+        }
     }
 }

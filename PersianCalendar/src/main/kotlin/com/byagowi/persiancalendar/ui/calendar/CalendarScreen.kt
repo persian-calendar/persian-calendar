@@ -978,9 +978,10 @@ private fun SharedTransitionScope.Toolbar(
                                 else -> Modifier
                                     .clip(MaterialTheme.shapes.extraLarge)
                                     .background(LocalContentColor.current.copy(alpha = .175f))
-                                    .clickable(onClickLabel = stringResource(R.string.cancel)) {
-                                        viewModel.changeYearViewCalendar(mainCalendar)
-                                    }
+                                    .clickable(
+                                        onClickLabel = stringResource(R.string.cancel) + " " +
+                                                stringResource(R.string.cancel)
+                                    ) { viewModel.changeYearViewCalendar(mainCalendar) }
                                     .padding(horizontal = 8.dp)
                             },
                         )
