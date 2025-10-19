@@ -548,6 +548,18 @@ enum class Language(val code: String, val nativeName: String) {
         }
     }
 
+    val inch
+        get() = when {
+            isArabicScript -> "اینچ"
+            else -> "in"
+        }
+
+    val centimeter
+        get() = when {
+            isArabicScript -> "سانتی‌متر"
+            else -> "cm"
+        }
+
     companion object {
         @SuppressLint("ConstantLocale")
         val userDeviceLanguage = Locale.getDefault().language ?: "en"
