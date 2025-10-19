@@ -130,6 +130,11 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.color = Color.GRAY
         it.textAlign = Paint.Align.CENTER
     }
+    private val textSecondPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = Color.GRAY
+        it.alpha = 120
+        it.textAlign = Paint.Align.CENTER
+    }
     private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.strokeWidth = 5 * dp
         it.style = Paint.Style.STROKE
@@ -180,6 +185,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             val scale = matrixProperties[Matrix.MSCALE_X]
             planetsPaint.textSize = textSize * scale
             textPaint.textSize = textSize * scale
+            textSecondPaint.textSize = textSize * scale
             textStrokePaint.textSize = textSize * scale
             northArrowPaint.alpha = (100 * cbrt(scale)).roundToInt()
             qiblaPaint.strokeWidth = dashSize * scale
@@ -200,6 +206,16 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         }
     }
 
+    private fun englishDirection(value: Int): String {
+        return when (value) {
+            0 -> "N"
+            6 -> "E"
+            12 -> "S"
+            18 -> "W"
+            else -> ""
+        }
+    }
+
     private val directions = (0..<24).map {
         when {
             it % 6 == 0 -> if (language.value.isArabicScript) resources.getString(
@@ -210,13 +226,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                     18 -> R.string.west
                     else -> R.string.empty
                 }
-            ) else when (it) {
-                0 -> "N"
-                6 -> "E"
-                12 -> "S"
-                18 -> "W"
-                else -> ""
-            }
+            ) else englishDirection(it)
 
             it % 3 == 0 -> formatNumber(it * 15) // Draw the text every alternate 45deg
             else -> ""
@@ -231,6 +241,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         // facing the current bearing.
         val cardinalX = cx
         val cardinalY = cy - radius * .85f
+        val cardinalSecondY = cy - radius * .75f
 
         // Draw the marker every 15 degrees and text every 45.
         repeat(24) {
@@ -238,6 +249,10 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                 drawLine(cx, cy - radius, cx, cy - radius * .975f, markerPaint)
                 // Draw the cardinal points
                 drawText(directions[it], cardinalX, cardinalY, textPaint)
+                if (language.value.isArabicScript && (it == 0 || it == 6 || it == 12 || it == 18)) {
+                    val label = englishDirection(it)
+                    drawText(label, cardinalX, cardinalSecondY, textSecondPaint)
+                }
             }
         }
     }
