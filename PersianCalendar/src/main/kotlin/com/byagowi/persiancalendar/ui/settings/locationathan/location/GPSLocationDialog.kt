@@ -40,6 +40,7 @@ import androidx.compose.ui.text.withLink
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
+import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
@@ -232,7 +233,7 @@ fun GPSLocationDialog(onDismissRequest: () -> Unit) {
         )
         val text = buildAnnotatedString {
             appendLine(
-                "%s$spacedColon%.2f%s%s$spacedColon%.7f".format(
+                "%s$spacedColon$LRM%.4f°%s%s$spacedColon$LRM%.4f°".format(
                     Locale.getDefault(),
                     stringResource(R.string.latitude), coord.latitude, "\n",
                     stringResource(R.string.longitude), coord.longitude
