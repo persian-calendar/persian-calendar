@@ -206,7 +206,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         }
     }
 
-    private fun englishDirection(value: Int): String {
+    private fun cardinalDirection(value: Int): String {
         return when (value) {
             0 -> "N"
             6 -> "E"
@@ -226,7 +226,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                     18 -> R.string.west
                     else -> R.string.empty
                 }
-            ) else englishDirection(it)
+            ) else cardinalDirection(it)
 
             it % 3 == 0 -> formatNumber(it * 15) + "°" // Draw the text every alternate 45deg
             else -> ""
@@ -250,7 +250,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                 // Draw the cardinal points
                 drawText(directions[it], cardinalX, cardinalY, textPaint)
                 if (language.value.isArabicScript && (it == 0 || it == 6 || it == 12 || it == 18)) {
-                    val label = englishDirection(it)
+                    val label = cardinalDirection(it)
                     drawText(label, cardinalX, cardinalSecondY, textSecondPaint)
                 }
             }
