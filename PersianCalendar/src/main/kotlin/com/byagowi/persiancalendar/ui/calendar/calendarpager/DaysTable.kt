@@ -145,6 +145,7 @@ fun daysTable(
     val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
+    val numeral by numeral.collectAsState()
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
@@ -281,7 +282,6 @@ fun daysTable(
                                     ),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                val numeral by numeral.collectAsState()
                                 val formattedWeekNumber = numeral.format(weekNumber)
                                 val description =
                                     stringResource(R.string.nth_week_of_year, formattedWeekNumber)
