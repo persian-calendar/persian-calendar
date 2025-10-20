@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
+import androidx.compose.ui.util.lerp
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.ARABIC_DECIMAL_SEPARATOR
 import com.byagowi.persiancalendar.entities.CityItem
@@ -62,7 +63,18 @@ fun formatNumber(number: String, digits: CharArray = preferredDigits): String {
 // Akin to MediaWiki's {{formatnum:۱۲۳|R}}
 fun reverseFormatNumber(number: String): String {
     return number
-        .replace(ARABIC_DECIMAL_SEPARATOR, ".")
+        .let {
+            if (preferredDigits === Language.PERSIAN_DIGITS || preferredDigits === Language.ARABIC_INDIC_DIGITS)
+                it.replace(ARABIC_DECIMAL_SEPARATOR, ".") else it
+        }
+        .let {
+            if (preferredDigits === Language.TAMIL_DIGITS) when (it) {
+                "௰" -> "10"
+                "௱" -> "100"
+                "௲" -> "1000"
+                else -> it
+            } else it
+        }
         .map {
             val digit = preferredDigits.indexOf(it)
             if (digit == -1) "$it" else "$digit"
