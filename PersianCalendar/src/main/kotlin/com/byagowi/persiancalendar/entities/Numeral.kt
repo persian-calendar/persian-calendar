@@ -16,15 +16,17 @@ enum class Numeral(private val zero: Char) {
     fun format(number: Double) = format("$number")
     fun format(number: String, isInEdit: Boolean = false): String {
         if (isArabic) return number
-        if (isTamil && !isInEdit) when (number) {
-            "10" -> return "௰"
-            "100" -> return "௱"
-            "1000" -> return "௲"
-            else -> Unit
+        if (isTamil) {
+            if (isInEdit) return number // don't format Tamil in edits, complicated
+            when (number) {
+                "10" -> return "௰"
+                "100" -> return "௱"
+                "1000" -> return "௲"
+            }
         }
         return number
             .map {
-                val value = it - '0'
+                val value = it - '0' // Or Arabic.zero
                 if (0 <= value && value <= 9) zero + value else it
             }
             .joinToString("")
