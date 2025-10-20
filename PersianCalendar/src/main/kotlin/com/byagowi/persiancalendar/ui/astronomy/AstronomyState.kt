@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
-import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
@@ -51,9 +50,7 @@ class AstronomyState(val date: GregorianCalendar) {
         horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.Normal).altitude
     }
     val heliocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
-        heliocentricPlanetsList.map {
-            it.titleStringId to equatorialToEcliptic(helioVector(it, time))
-        }
+        heliocentricPlanetsList.map { equatorialToEcliptic(helioVector(it, time)) }
     }
     val geocentricPlanets by lazy(LazyThreadSafetyMode.NONE) {
         geocentricPlanetsList.map {
@@ -91,7 +88,7 @@ class AstronomyState(val date: GregorianCalendar) {
     }
 
     companion object {
-        private val heliocentricPlanetsList = listOf(
+        val heliocentricPlanetsList = listOf(
             Body.Mercury,
             Body.Venus,
             Body.Earth,

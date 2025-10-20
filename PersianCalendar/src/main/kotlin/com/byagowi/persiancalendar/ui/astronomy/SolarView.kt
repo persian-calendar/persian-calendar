@@ -164,7 +164,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             circlesPaint.style = Paint.Style.STROKE
         }
         canvas.drawCircle(radius, radius, radius / 35, sunIndicatorPaint)
-        state.heliocentricPlanets.forEachIndexed { i, (label, ecliptic) ->
+        state.heliocentricPlanets.forEachIndexed { i, ecliptic ->
             canvas.withRotation(-ecliptic.elon.toFloat() + 90, radius, radius) {
                 textPath.rewind()
                 val rectSize = radius / 9 * (1 + i) * .95f
@@ -172,7 +172,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize
                 )
                 textPath.addArc(textPathRect, 0f, 180f)
-                canvas.drawTextOnPath(resources.getString(label), textPath, 0f, 0f, colorTextPaint)
+                canvas.drawTextOnPath(
+                    heliocentricPlanetsTitles[i], textPath, 0f, 0f, colorTextPaint
+                )
             }
         }
     }
@@ -197,7 +199,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.color = Color.GRAY
     }
 
-    private val planetsTitles = AstronomyState.geocentricPlanetsList.map {
+    private val heliocentricPlanetsTitles = AstronomyState.heliocentricPlanetsList.map {
+        resources.getString(it.titleStringId) + " " + it.symbol
+    }
+    private val geocentricPlanetsTitles = AstronomyState.geocentricPlanetsList.map {
         resources.getString(it.titleStringId) + " " + it.symbol
     }
 
@@ -271,7 +276,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize
                 )
                 textPath.addArc(textPathRect, 0f, 180f)
-                canvas.drawTextOnPath(planetsTitles[i], textPath, 0f, 0f, colorTextPaint)
+                canvas.drawTextOnPath(geocentricPlanetsTitles[i], textPath, 0f, 0f, colorTextPaint)
             }
         }
     }
