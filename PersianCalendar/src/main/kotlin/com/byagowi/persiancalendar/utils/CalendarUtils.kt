@@ -379,7 +379,7 @@ fun monthFormatForSecondaryCalendar(
 
 fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
     !language.value.canHaveLocalNumeral -> Numeral.ARABIC
-    numeral == Numeral.ARABIC -> Numeral.ARABIC
+    numeral.isArabic -> Numeral.ARABIC
     else -> secondaryCalendar?.preferredNumeral ?: Numeral.ARABIC
 }
 
