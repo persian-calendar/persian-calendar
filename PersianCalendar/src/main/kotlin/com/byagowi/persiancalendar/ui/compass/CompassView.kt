@@ -241,7 +241,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         // facing the current bearing.
         val cardinalX = cx
         val cardinalY = cy - radius * .85f
-        val cardinalSecondY = cy - radius * .75f
+        val cardinalSecondY = cy - radius * .70f
 
         // Draw the marker every 15 degrees and text every 45.
         repeat(24) {
