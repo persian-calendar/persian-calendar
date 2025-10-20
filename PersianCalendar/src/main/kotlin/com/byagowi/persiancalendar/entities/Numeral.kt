@@ -40,7 +40,10 @@ enum class Numeral(private val zero: Char) {
         }
         return number
             .let { if (isArabicIndicVariants) it.replace(ARABIC_DECIMAL_SEPARATOR, ".") else it }
-            .map { ch -> (ch - zero).takeIf { 0 <= it && it <= 9 }?.let { "$it" } ?: ch }
+            .map {
+                val value = it - zero
+                if (0 <= value && value <= 9) "$value" else it
+            }
             .joinToString("")
             .toDoubleOrNull()
     }
