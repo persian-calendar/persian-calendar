@@ -23,6 +23,7 @@ class NumeralTests {
     @Test
     fun `numeral parse works`() {
         assertEquals(3.14, Numeral.PERSIAN.parseDouble("۳٫۱۴"))
+        assertEquals(3.14, Numeral.PERSIAN.parseDouble("3.14"))
         assertEquals(null, Numeral.PERSIAN.parseDouble("۱۲۳a"))
         assertEquals(null, Numeral.PERSIAN.parseDouble("a۱۲۳"))
         assertEquals(12312.0, Numeral.PERSIAN.parseDouble("۱۲۳۱۲"))
