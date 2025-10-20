@@ -14,9 +14,9 @@ enum class Numeral(private val digits: List<Char>) {
 
     fun format(number: Int) = format(number.toString())
     fun format(number: Double) = format(number.toString())
-    fun format(number: String): String {
+    fun format(number: String, isInEdit: Boolean = false): String {
         if (this == ARABIC) return number
-        if (this == TAMIL) when (number) {
+        if (this == TAMIL && !isInEdit) when (number) {
             "10" -> return "௰"
             "100" -> return "௱"
             "1000" -> return "௲"

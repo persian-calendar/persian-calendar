@@ -47,7 +47,7 @@ fun AthanGapDialog(onDismissRequest: () -> Unit) {
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = numeral.format(minutes),
+                value = numeral.format(minutes, isInEdit = true),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 onValueChange = { minutes = it },
             )

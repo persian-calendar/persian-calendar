@@ -133,7 +133,7 @@ fun CoordinatesDialog(
                             )
                         }
                     },
-                    value = numeral.format(fieldState.value).let {
+                    value = numeral.format(fieldState.value, isInEdit = true).let {
                         if (stringId == R.string.altitude) it else it.replace("°", "") + "°"
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
