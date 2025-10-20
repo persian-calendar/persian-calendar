@@ -58,14 +58,13 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
@@ -77,7 +76,6 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
-import com.byagowi.persiancalendar.utils.isTamilDigitSelected
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.CoroutineScope
@@ -135,10 +133,9 @@ fun daysTable(
             fontFile = fontFile,
         )
     }
-    val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
     val daysTextSize = diameter * when {
-        mainCalendarDigitsIsArabic || fontFile != null -> 18
-        isTamilDigitSelected -> 16
+        mainCalendarNumeral.isArabic || fontFile != null -> 18
+        mainCalendarNumeral.isTamil -> 16
         else -> 25
     } / 40
     val daysStyle = LocalTextStyle.current.copy(
@@ -353,7 +350,7 @@ fun daysTable(
                                     } else if (onlyWeek != null && isAfterMonth) {
                                         dayOffset + 1 - monthLength - startingWeekDay
                                     } else dayOffset + 1 - startingWeekDay,
-                                    mainCalendarDigits,
+                                    mainCalendarNumeral,
                                 ),
                                 color = when {
                                     isHoliday -> monthColors.holidays

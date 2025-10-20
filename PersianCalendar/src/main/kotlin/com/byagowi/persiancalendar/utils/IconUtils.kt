@@ -7,8 +7,8 @@ import android.graphics.Rect
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.global.preferredDigits
+import com.byagowi.persiancalendar.entities.Numeral
+import com.byagowi.persiancalendar.global.preferredNumeral
 
 // Dynamic icon generation, currently unused
 fun createStatusIcon(
@@ -19,8 +19,8 @@ fun createStatusIcon(
     val text = formatNumber(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = when {
-            isArabicDigitSelected -> 75f
-            isTamilDigitSelected -> if (text.length == 1) 65f else 40f
+            preferredNumeral.isArabic -> 75f
+            preferredNumeral.isTamil -> if (text.length == 1) 65f else 40f
             else -> 90f
         }
         it.textAlign = Paint.Align.CENTER
@@ -35,16 +35,16 @@ fun createStatusIcon(
     }
     return createBitmap(90, 90).applyCanvas {
         val y = when {
-            isTamilDigitSelected -> if (text.length == 1) 62.5f else 55f
+            preferredNumeral.isTamil -> if (text.length == 1) 62.5f else 55f
             else -> 45f + bounds.height() / 2f
         }
         drawText(text, 45f, y, paint)
     }
 }
 
-fun getDayIconResource(day: Int): Int = when (preferredDigits) {
-    Language.DEVANAGARI_DIGITS, Language.ARABIC_DIGITS, Language.TAMIL_DIGITS -> DAYS_ICONS_ARABIC
-    Language.ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
+fun getDayIconResource(day: Int): Int = when (preferredNumeral) {
+    Numeral.DEVANAGARI, Numeral.ARABIC, Numeral.TAMIL -> DAYS_ICONS_ARABIC
+    Numeral.ARABIC_INDIC -> DAYS_ICONS_ARABIC_INDIC
     else -> DAYS_ICONS_PERSIAN
 }.getOrNull(day - 1) ?: 0
 

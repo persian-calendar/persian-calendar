@@ -5,13 +5,12 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.os.LocaleList
-import androidx.compose.ui.util.lerp
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.ARABIC_DECIMAL_SEPARATOR
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.preferredDigits
+import com.byagowi.persiancalendar.global.preferredNumeral
 import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
@@ -39,51 +38,14 @@ fun applyLanguageToConfiguration(
     return config
 }
 
-fun formatNumber(number: Double): String {
-    if (isArabicDigitSelected) return number.toString()
-    return formatNumber(number.toString())
-}
+@Deprecated("Use preferredNumeral.format instead")
+fun formatNumber(number: Double): String = preferredNumeral.format(number)
 
-fun formatNumber(number: Int, digits: CharArray = preferredDigits): String =
-    formatNumber(number.toString(), digits)
+@Deprecated("Use preferredNumeral.format instead")
+fun formatNumber(number: Int, numeral: Numeral = preferredNumeral) = numeral.format(number)
 
-fun formatNumber(number: String, digits: CharArray = preferredDigits): String {
-    if (isArabicDigitSelected) return number
-    if (digits === Language.TAMIL_DIGITS) when (number) {
-        "10" -> return "௰"
-        "100" -> return "௱"
-        "1000" -> return "௲"
-        else -> Unit
-    }
-    return number.map { digits.getOrNull(Character.getNumericValue(it)) ?: it }
-        .joinToString("")
-        .replace(".", ARABIC_DECIMAL_SEPARATOR)
-}
-
-// Akin to MediaWiki's {{formatnum:۱۲۳|R}}
-fun reverseFormatNumber(number: String): String {
-    return number
-        .let {
-            if (preferredDigits === Language.PERSIAN_DIGITS || preferredDigits === Language.ARABIC_INDIC_DIGITS)
-                it.replace(ARABIC_DECIMAL_SEPARATOR, ".") else it
-        }
-        .let {
-            if (preferredDigits === Language.TAMIL_DIGITS) when (it) {
-                "௰" -> "10"
-                "௱" -> "100"
-                "௲" -> "1000"
-                else -> it
-            } else it
-        }
-        .map {
-            val digit = preferredDigits.indexOf(it)
-            if (digit == -1) "$it" else "$digit"
-        }
-        .joinToString("")
-}
-
-val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_DIGITS
-val isTamilDigitSelected: Boolean get() = preferredDigits === Language.TAMIL_DIGITS
+@Deprecated("Use preferredNumeral.format instead")
+fun formatNumber(number: String, numeral: Numeral = preferredNumeral) = numeral.format(number)
 
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->

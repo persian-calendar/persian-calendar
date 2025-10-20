@@ -24,7 +24,7 @@ const val PREF_GEOCODED_CITYNAME = "cityname"
 const val PREF_ALTITUDE = "Altitude"
 const val PREF_WIDGET_IN_24 = "WidgetIn24"
 const val PREF_IRAN_TIME = "IranTime"
-const val PREF_LOCAL_DIGITS = "PersianDigits"
+const val PREF_LOCAL_NUMERAL = "PersianDigits"
 const val PREF_ATHAN_URI = "AthanURI"
 const val PREF_ATHAN_NAME = "AthanName"
 const val PREF_SHOW_DEVICE_CALENDAR_EVENTS = "showDeviceCalendarEvents"
@@ -91,7 +91,7 @@ const val DEFAULT_SELECTED_WIDGET_TEXT_COLOR = Color.WHITE
 const val DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR = Color.TRANSPARENT
 const val DEFAULT_WIDGET_IN_24 = false
 const val DEFAULT_IRAN_TIME = false
-const val DEFAULT_LOCAL_DIGITS = true
+const val DEFAULT_LOCAL_NUMERAL = true
 const val DEFAULT_WIDGET_CLOCK = true
 val DEFAULT_NOTIFY_DATE = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
 const val DEFAULT_ASCENDING_ATHAN_VOLUME = false
@@ -130,7 +130,6 @@ const val ZWNJ = "\u200C"
 const val ZWJ = "\u200D"
 const val LRM = "\u200E"
 const val RLM = "\u200F"
-const val ARABIC_DECIMAL_SEPARATOR = "٫"
 
 const val EN_DASH = "–"
 

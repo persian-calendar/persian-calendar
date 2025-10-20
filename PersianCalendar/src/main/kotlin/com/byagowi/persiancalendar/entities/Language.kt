@@ -17,7 +17,6 @@ import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import com.byagowi.persiancalendar.utils.logException
@@ -158,7 +157,7 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
-    val prefersLocalDigits: Boolean
+    val prefersLocalNumeral: Boolean
         get() = when (this) {
             UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, DE, PT, IT, RU, TR, KMR, TG -> false
             else -> true
@@ -172,15 +171,15 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     // Local digits (۱۲۳) make sense for the locale
-    val canHaveLocalDigits get() = isArabicScript || isNepali || isTamil
+    val canHaveLocalNumeral get() = isArabicScript || isNepali || isTamil
 
     // Prefers ٤٥٦ over ۴۵۶
-    val preferredDigits
+    val preferredNumeral
         get() = when (this) {
-            AR, CKB -> ARABIC_INDIC_DIGITS
-            NE -> DEVANAGARI_DIGITS
-            TA -> TAMIL_DIGITS
-            else -> PERSIAN_DIGITS
+            AR, CKB -> Numeral.ARABIC_INDIC
+            NE -> Numeral.DEVANAGARI
+            TA -> Numeral.TAMIL
+            else -> Numeral.PERSIAN
         }
 
     // We can presume user is from Afghanistan
@@ -377,7 +376,7 @@ enum class Language(val code: String, val nativeName: String) {
     }
 
     // https://en.wikipedia.org/wiki/List_of_date_formats_by_country
-    fun allNumericsDateFormat(year: Int, month: Int, dayOfMonth: Int, digits: CharArray): String {
+    fun allNumericsDateFormat(year: Int, month: Int, dayOfMonth: Int, numeral: Numeral): String {
         val sep = when (this) {
             PS, NE -> '-'
             KMR, RU, TR, DE -> '.'
@@ -403,14 +402,12 @@ enum class Language(val code: String, val nativeName: String) {
             AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> "%3\$s$sep%2\$s$sep%1\$s"
         }
         return format.format(
-            formatNumber(year, digits),
+            formatNumber(year, numeral),
             formatNumber(
-                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it },
-                digits
+                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it }, numeral
             ),
             formatNumber(
-                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it },
-                digits
+                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it }, numeral
             )
         )
     }
@@ -499,17 +496,8 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    fun formatAuAsKm(value: Double) = formatKm((value * AU_IN_KM).roundToLong())
-
-    fun formatKm(value: Long): String = when {
-        isArabicScript -> formatNumber("%,d".format(Locale.ENGLISH, value)).let {
-            if (isArabicDigitSelected) it else it
-                // Arabic Thousand Separator
-                .replace(",", "٬")
-        } + " کیلومتر"
-
-        else -> "%,d km".format(Locale.ENGLISH, value)
-    }
+    fun formatAuAsKm(value: Double): String = formatKm((value * AU_IN_KM).roundToLong())
+    fun formatKm(value: Long): String = preferredNumeral.formatLongNumber(value) + " " + kilometer
 
     fun mapType(mapType: MapType): String? {
         return when (this) {
@@ -558,6 +546,12 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when {
             isArabicScript -> "سانتی‌متر"
             else -> "cm"
+        }
+
+    val kilometer
+        get() = when {
+            isArabicScript -> "کیلومتر"
+            else -> "km"
         }
 
     companion object {
@@ -734,14 +728,5 @@ enum class Language(val code: String, val nativeName: String) {
         private val afCodeOrder = listOf("zz", "af", "ir", "tr", "iq")
         private val arCodeOrder = listOf("zz", "iq", "tr", "ir", "af")
         private val trCodeOrder = listOf("zz", "tr", "ir", "iq", "af")
-
-        // See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
-        val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
-        val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-        val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
-        val DEVANAGARI_DIGITS = charArrayOf('०', '१', '२', '३', '४', '५', '६', '७', '८', '९')
-        val TAMIL_DIGITS = charArrayOf('௦', '௧', '௨', '௩', '௪', '௫', '௬', '௭', '௮', '௯')
-        // CJK digits: charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
-        // but they weren't looking nice in the UI
     }
 }

@@ -146,7 +146,10 @@ private class EventsViewFactory(
                 header.secondaryDate?.let {
                     language.value.inParentheses.format(
                         headerFirstPart,
-                        if (widthCells < 3) formatNumber(it.dayOfMonth, it.calendar.preferredDigits)
+                        if (widthCells < 3) formatNumber(
+                            it.dayOfMonth,
+                            it.calendar.preferredNumeral
+                        )
                         else it.monthName
                     )
                 } ?: headerFirstPart
@@ -250,7 +253,7 @@ private class EventsViewFactory(
                         else R.id.today_with_secondary_first_line
                     } else R.id.day_first_line,
                     item.day.weekDayNameInitials + (item.secondaryDate?.let {
-                        "(${formatNumber(it.dayOfMonth, it.calendar.preferredDigits)})"
+                        "(${formatNumber(it.dayOfMonth, it.calendar.preferredNumeral)})"
                     }.orEmpty()),
                 )
                 row.setTextViewText(

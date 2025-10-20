@@ -50,12 +50,11 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_EVENTS
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -202,11 +201,10 @@ fun SharedTransitionScope.ScheduleScreen(
         Box(Modifier.padding(top = paddingValues.calculateTopPadding())) {
             ScreenSurface(animatedContentScope) {
                 val context = LocalContext.current
-                val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
                 val customFontName by customFontName.collectAsState()
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
-                    if (mainCalendarDigitsIsArabic || customFontName != null) MaterialTheme.typography.titleMedium
+                    if (!mainCalendarNumeral.isEasternArabic || customFontName != null) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge
                 Box {
                     val eventsCache = eventsCache(calendarViewModel)

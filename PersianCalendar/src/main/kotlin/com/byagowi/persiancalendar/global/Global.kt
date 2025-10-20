@@ -22,7 +22,7 @@ import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_LARGE_ICON_ON_NOTIFICATION
-import com.byagowi.persiancalendar.DEFAULT_LOCAL_DIGITS
+import com.byagowi.persiancalendar.DEFAULT_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
@@ -59,7 +59,7 @@ import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_LATITUDE
-import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
+import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
@@ -97,6 +97,7 @@ import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.generated.citiesStore
@@ -149,7 +150,7 @@ var weekDays = weekDaysEmptyList
     private set
 var weekDaysInitials = weekDaysEmptyList
     private set
-var preferredDigits = Language.PERSIAN_DIGITS
+var preferredNumeral = Numeral.PERSIAN
     private set
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
@@ -240,12 +241,11 @@ val widgetTransparency: StateFlow<Float> get() = widgetTransparency_
 var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLAMIC)
     private set
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
-val mainCalendarDigits
+val mainCalendarNumeral
     get() = when {
-        secondaryCalendar == null -> preferredDigits
-        preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
-        !language.value.canHaveLocalDigits -> Language.ARABIC_DIGITS
-        else -> mainCalendar.preferredDigits
+        secondaryCalendar == null -> preferredNumeral
+        preferredNumeral.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+        else -> mainCalendar.preferredNumeral
     }
 val secondaryCalendar
     get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
@@ -458,11 +458,11 @@ fun updateStoredPreference(context: Context) {
             true
         )
 
-    preferredDigits = if (!preferences.getBoolean(
-            PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS
-        ) || !language.canHaveLocalDigits
-    ) Language.ARABIC_DIGITS
-    else language.preferredDigits
+    preferredNumeral = if (!preferences.getBoolean(
+            PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL
+        ) || !language.canHaveLocalNumeral
+    ) Numeral.ARABIC
+    else language.preferredNumeral
 
     clockIn24 = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(

@@ -118,14 +118,13 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.preferredDigits
+import com.byagowi.persiancalendar.global.preferredNumeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -1175,8 +1174,7 @@ private fun DaysView(
                     }
                     val compact = dy < 3 / scale.value || run {
                         // This is an ugly hack as the lack of proper autosize here, for now
-                        preferredDigits !== Language.ARABIC_INDIC_DIGITS &&
-                                preferredDigits !== Language.PERSIAN_DIGITS
+                        !preferredNumeral.isEasternArabic
                     }
                     Text(
                         text = clockCache[y * 15] + when {

@@ -59,7 +59,7 @@ import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
-import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
+import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_THEME
@@ -141,9 +141,9 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         )
     }
     // TODO: To be integrated into the language selection dialog one day
-    this.AnimatedVisibility(language.canHaveLocalDigits) {
+    this.AnimatedVisibility(language.canHaveLocalNumeral) {
         SettingsSwitchWithInnerState(
-            PREF_LOCAL_DIGITS,
+            PREF_LOCAL_NUMERAL,
             true,
             stringResource(R.string.native_digits),
             stringResource(R.string.enable_native_digits)

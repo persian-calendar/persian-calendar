@@ -17,7 +17,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.calendarsTitlesAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
@@ -32,7 +32,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
-import com.byagowi.persiancalendar.global.preferredDigits
+import com.byagowi.persiancalendar.global.preferredNumeral
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
@@ -337,8 +337,8 @@ fun formatDate(
         formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year)
     )
 
-fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) =
-    language.value.allNumericsDateFormat(year, month, dayOfMonth, digits)
+fun AbstractDate.toLinearDate(numeral: Numeral = preferredNumeral) =
+    language.value.allNumericsDateFormat(year, month, dayOfMonth, numeral)
 
 fun monthFormatForSecondaryCalendar(
     date: AbstractDate,
@@ -374,10 +374,10 @@ fun monthFormatForSecondaryCalendar(
     }
 }
 
-fun getSecondaryCalendarDigits(secondaryCalendar: Calendar?) = when {
-    !language.value.canHaveLocalDigits -> Language.ARABIC_DIGITS
-    preferredDigits === Language.ARABIC_DIGITS -> Language.ARABIC_DIGITS
-    else -> secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS
+fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
+    !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+    preferredNumeral == Numeral.ARABIC -> Numeral.ARABIC
+    else -> secondaryCalendar?.preferredNumeral ?: Numeral.ARABIC
 }
 
 fun otherCalendarFormat(

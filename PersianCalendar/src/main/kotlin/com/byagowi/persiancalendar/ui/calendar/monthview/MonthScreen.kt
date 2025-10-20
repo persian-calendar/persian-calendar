@@ -40,10 +40,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -56,7 +55,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getWeekDayName
-import com.byagowi.persiancalendar.utils.isTamilDigitSelected
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
@@ -120,11 +118,10 @@ fun SharedTransitionScope.MonthScreen(
             val cellsSizeModifier = Modifier.size(cellWidth, cellHeight)
             val density = LocalDensity.current
             val diameter = min(cellWidth, cellHeight)
-            val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
             val customFontName by customFontName.collectAsState()
             val daysTextSize = diameter * when {
-                mainCalendarDigitsIsArabic || customFontName != null -> 18
-                isTamilDigitSelected -> 16
+                mainCalendarNumeral.isArabic || customFontName != null -> 18
+                mainCalendarNumeral.isTamil -> 16
                 else -> 25
             } / 40
             val daysStyle = LocalTextStyle.current.copy(
@@ -181,7 +178,7 @@ fun SharedTransitionScope.MonthScreen(
 //                                    )
                                 ) {
                                     Text(
-                                        formatNumber(dayDate.dayOfMonth, mainCalendarDigits),
+                                        formatNumber(dayDate.dayOfMonth, mainCalendarNumeral),
                                         style = daysStyle,
                                         modifier = Modifier.alpha(
                                             if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year)

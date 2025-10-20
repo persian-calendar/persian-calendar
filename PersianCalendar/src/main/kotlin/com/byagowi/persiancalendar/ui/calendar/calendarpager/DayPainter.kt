@@ -14,16 +14,15 @@ import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getSecondaryCalendarDigits
+import com.byagowi.persiancalendar.utils.getSecondaryCalendarNumeral
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import java.io.File
 import kotlin.math.min
@@ -173,7 +172,7 @@ class DayPainter(
         this.header = listOfNotNull(
             if (secondaryCalendar == null || jdn == null) null else formatNumber(
                 jdn.on(secondaryCalendar).dayOfMonth,
-                getSecondaryCalendarDigits(secondaryCalendar)
+                getSecondaryCalendarNumeral(secondaryCalendar)
             ),
             header,
         ).joinToString(" ")
@@ -251,21 +250,20 @@ private class Paints(
         }
     }
 
-    private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
     private val textSize =
-        diameter * (if (mainCalendarDigitsIsArabic || typeface != null) 18 else 25) / 40
+        diameter * (if (mainCalendarNumeral.isArabic || typeface != null) 18 else 25) / 40
 
     // https://developer.android.com/about/versions/15/behavior-changes-15
     private val mayElegantIsForced = Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
     val dayOffsetY =
-        if (mainCalendarDigitsIsArabic || typeface != null || mayElegantIsForced) 0f
+        if (mainCalendarNumeral.isArabic || typeface != null || mayElegantIsForced) 0f
         else diameter * 3f / 40
 
-    private val secondaryCalendarDigitsIsArabic =
-        getSecondaryCalendarDigits(secondaryCalendar) === Language.ARABIC_DIGITS
-    private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)
+    private val secondaryCalendarNumeralIsArabic =
+        getSecondaryCalendarNumeral(secondaryCalendar).isArabic
+    private val headerTextSize = diameter / 40 * (if (secondaryCalendarNumeralIsArabic) 11 else 15)
     private val zodiacHeaderTextSize = diameter / 40 * 10
-    val headerYOffset = -diameter * (if (secondaryCalendarDigitsIsArabic) 10 else 7) / 40
+    val headerYOffset = -diameter * (if (secondaryCalendarNumeralIsArabic) 10 else 7) / 40
     val headerScorpioYOffset = -diameter * 10 / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

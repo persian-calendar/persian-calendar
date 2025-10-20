@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
@@ -69,7 +69,7 @@ fun renderMonthWidget(
                 val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                 val isToday = day == today
 
-                val text = formatNumber(dayOffset + 1, mainCalendarDigits)
+                val text = formatNumber(dayOffset + 1, mainCalendarNumeral)
                 val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
                 dayPainter.setDayOfMonthItem(
                     isToday = isToday,

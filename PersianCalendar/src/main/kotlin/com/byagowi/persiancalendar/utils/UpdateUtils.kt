@@ -104,7 +104,7 @@ import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -585,7 +585,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
             )
             dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
             secondaryCalendar?.let {
-                val text = formatNumber((day on it).dayOfMonth, it.preferredDigits)
+                val text = formatNumber((day on it).dayOfMonth, it.preferredNumeral)
                 dayView.setTextViewText(R.id.secondary_day, "($text)")
             } ?: run {
                 dayView.setViewVisibility(R.id.secondary_day, View.GONE)
@@ -825,11 +825,9 @@ private fun createMonthViewRemoteViews(
     val cellWidth = width / if (isShowWeekOfYearEnabled) 8f else 7f
     val cellHeight = height.toFloat() / 7f
     val cellRadius = min(cellWidth, cellHeight) / 2
-    val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
-    val mainCalendarDigitsIsTamil = mainCalendarDigits === Language.TAMIL_DIGITS
     val cellFontSize = cellRadius * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f) * when {
-        mainCalendarDigitsIsArabic -> .8f
-        mainCalendarDigitsIsTamil -> .7f
+        mainCalendarNumeral.isArabic -> .8f
+        mainCalendarNumeral.isTamil -> .7f
         else -> 1f
     }
     val contentDescription = renderMonthWidget(
@@ -858,7 +856,7 @@ private fun createMonthViewRemoteViews(
             val contentDescription = context.getString(R.string.nth_week_of_year, text)
             remoteViews.setContentDescription(id, contentDescription)
             cellRadius.let {
-                it * if (mainCalendarDigitsIsArabic) .8f else 1f
+                it * if (mainCalendarNumeral.isArabic) .8f else 1f
             }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it * .8f) }
             remoteViews.setAlpha(id, .5f)
             remoteViews.setDynamicTextColor(id, android.R.attr.colorForeground)

@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.preferredNumeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
@@ -42,7 +43,6 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
-import com.byagowi.persiancalendar.utils.reverseFormatNumber
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +73,7 @@ fun CoordinatesDialog(
     // and no need to save as below remember also isn't saved
     var changeCounter by remember { mutableIntStateOf(0) }
     fun parseDouble(value: String): Double? =
-        reverseFormatNumber(value).replace("°", "").toDoubleOrNull()
+        preferredNumeral.parseDouble(value.replace("°", ""))
     AppDialog(
         title = { Text(stringResource(R.string.coordinates)) },
         neutralButton = {

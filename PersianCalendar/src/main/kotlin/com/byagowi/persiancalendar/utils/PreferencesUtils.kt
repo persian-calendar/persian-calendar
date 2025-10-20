@@ -14,7 +14,7 @@ import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LATITUDE
-import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
+import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
@@ -73,7 +73,7 @@ fun SharedPreferences.saveLocation(
 // Preferences changes be applied automatically when user requests a language change
 fun SharedPreferences.saveLanguage(language: Language) = edit {
     putString(PREF_APP_LANGUAGE, language.code)
-    putBoolean(PREF_LOCAL_DIGITS, language.prefersLocalDigits)
+    putBoolean(PREF_LOCAL_NUMERAL, language.prefersLocalNumeral)
 
     when {
         language.isAfghanistanExclusive -> {

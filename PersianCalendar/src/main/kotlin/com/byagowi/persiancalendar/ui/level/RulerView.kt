@@ -8,10 +8,10 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.preferredNumeral
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 import java.io.File
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -20,7 +20,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
         it.strokeWidth = 1 * dp
-        it.textSize = textSize * (if (isArabicDigitSelected) 1f else 1.4f)
+        it.textSize = textSize * if (preferredNumeral.isEasternArabic) 1.4f else 1f
     }
     private val textSideOffset = 30 * dp
     private val firstLevel = 25 * dp
