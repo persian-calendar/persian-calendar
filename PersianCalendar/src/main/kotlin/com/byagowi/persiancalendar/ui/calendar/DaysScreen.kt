@@ -1173,7 +1173,7 @@ private fun DaysView(
                     }
                     val compact = dy < 3 / scale.value || run {
                         // This is an ugly hack as the lack of proper autosize here, for now
-                        !numeral.isEasternArabic
+                        !numeral.isArabicIndicVariants
                     }
                     Text(
                         text = clockCache[y * 15] + when {

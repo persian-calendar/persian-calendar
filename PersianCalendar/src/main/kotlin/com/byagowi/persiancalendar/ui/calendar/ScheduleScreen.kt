@@ -204,7 +204,7 @@ fun SharedTransitionScope.ScheduleScreen(
                 val customFontName by customFontName.collectAsState()
                 val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
                 val circleTextStyle =
-                    if (!mainCalendarNumeral.isEasternArabic || customFontName != null) MaterialTheme.typography.titleMedium
+                    if (!mainCalendarNumeral.isArabicIndicVariants || customFontName != null) MaterialTheme.typography.titleMedium
                     else MaterialTheme.typography.titleLarge
                 Box {
                     val eventsCache = eventsCache(calendarViewModel)

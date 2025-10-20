@@ -19,7 +19,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
         it.strokeWidth = 1 * dp
-        it.textSize = textSize * if (numeral.isEasternArabic) 1.4f else 1f
+        it.textSize = textSize * if (numeral.isArabicIndicVariants) 1.4f else 1f
     }
     private val textSideOffset = 30 * dp
     private val firstLevel = 25 * dp
