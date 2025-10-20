@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
@@ -17,6 +18,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
@@ -34,6 +37,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_CUSTOM_FONT_NAME
@@ -44,15 +49,18 @@ import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isRedHolidays
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
 import com.byagowi.persiancalendar.global.systemLightTheme
 import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.SwitchWithLabel
 import com.byagowi.persiancalendar.ui.theme.Theme
+import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.getFileName
@@ -116,7 +124,17 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
             ) {
                 RadioButton(selected = entry == userSetTheme, onClick = null)
                 Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
-                Text(stringResource(entry.title))
+                Text(buildAnnotatedString {
+                    append(stringResource(entry.title))
+                    if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        val language by language.collectAsState()
+                        if (language == Language.FA || language == Language.FA_AF) withStyle(
+                            style = MaterialTheme.typography.bodySmall.toSpanStyle().copy(
+                                color = LocalContentColor.current.copy(alpha = AppBlendAlpha)
+                            )
+                        ) { appendLine(); append("براساس حالت تاریک و رنگ‌بندی پس‌زمینه دستگاه") }
+                    }
+                })
                 this.AnimatedVisibility(visible = showMore && userSetTheme == Theme.SYSTEM_DEFAULT) {
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                         systemThemeOptions.forEach { (label, preferenceKey, selectedTheme) ->
