@@ -22,10 +22,13 @@ enum class Numeral(private val zero: Char) {
             "1000" -> return "௲"
             else -> Unit
         }
-        return number.map {
-            val value = it - '0'
-            if (0 <= value && value <= 9) zero + value else it
-        }.joinToString("").replace(".", ARABIC_DECIMAL_SEPARATOR)
+        return number
+            .map {
+                val value = it - '0'
+                if (0 <= value && value <= 9) zero + value else it
+            }
+            .joinToString("")
+            .let { if (isArabicIndicVariants) it.replace(".", ARABIC_DECIMAL_SEPARATOR) else it }
     }
 
     fun parseDouble(number: String): Double? {

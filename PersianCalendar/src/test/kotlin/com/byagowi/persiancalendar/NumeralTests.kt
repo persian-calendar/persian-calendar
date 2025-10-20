@@ -9,6 +9,7 @@ class NumeralTests {
     fun `format works properly`() {
         assertEquals("۱۲۳۴۵۶۷۸۹۰", Numeral.PERSIAN.format(1234567890))
         assertEquals("۳٫۱۴", Numeral.PERSIAN.format(3.14))
+        assertEquals("௩.௧௪", Numeral.TAMIL.format(3.14))
         assertEquals("abc۱۲۳abc", Numeral.PERSIAN.format("abc123abc"))
         assertEquals("abc123abc", Numeral.ARABIC.format("abc123abc"))
         assertEquals("1234567890", Numeral.ARABIC.format(1234567890))
