@@ -5,12 +5,12 @@ import java.util.Locale
 // https://en.wikipedia.org/wiki/Numeral_system
 // See also https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
 enum class Numeral(private val zero: Char) {
-    PERSIAN('۰'), // ۰۱۲۳۴۵۶۷۸۹
-    ARABIC('0'), // 0123456789
-    ARABIC_INDIC('٠'), // ٠١٢٣٤٥٦٧٨٩
-    DEVANAGARI('०'), // ०१२३४५६७८९
-    TAMIL('௦'), // ௦௧௨௩௪௫௬௭௮௯
-    CJK('０'); // ０１２３４５６７８９
+    PERSIAN('۰'), // ۰۱۲۳۴۵۶۷۸۹ it's called Arabic-Indic Extended also
+    ARABIC('0'), // 0123456789 the that is most common in the world
+    ARABIC_INDIC('٠'), // ٠١٢٣٤٥٦٧٨٩ used in Central Kurdish for example
+    DEVANAGARI('०'), // ०१२३४५६७८९ used in Nepali for example
+    TAMIL('௦'), // ௦௧௨௩௪௫௬௭௮௯ but 10, 100 and 1000 of it has some complexity
+    CJK('０'); // ０１２３４５６７８９ not used in the UI currently
 
     fun format(number: Int) = format("$number")
     fun format(number: Double) = format("$number")
