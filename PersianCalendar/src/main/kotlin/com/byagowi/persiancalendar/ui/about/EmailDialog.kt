@@ -18,8 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppDialog
-import com.byagowi.persiancalendar.utils.formatNumber
 
 @Composable
 fun EmailDialog(onDismissRequest: () -> Unit) {
@@ -47,7 +47,7 @@ fun EmailDialog(onDismissRequest: () -> Unit) {
                 .fillMaxWidth(),
         )
         Text(
-            text = formatNumber(message.length),
+            text = numeral.format(message.length),
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(end = 8.dp),

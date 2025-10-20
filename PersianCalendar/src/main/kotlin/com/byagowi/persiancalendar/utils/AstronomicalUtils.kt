@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
@@ -122,7 +123,7 @@ fun generateYearName(
                     isPersian = false,
                     withEmoji = withEmoji,
                 ),
-                resources.getString(R.string.chinese) + spacedComma + formatNumber(year)
+                resources.getString(R.string.chinese) + spacedComma + numeral.format(year)
             )
         } else null
     ).let { if (language.value.isUserAbleToReadPersian) it else it.reversed() }.joinToString(" ")

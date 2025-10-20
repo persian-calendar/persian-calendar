@@ -11,10 +11,10 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.persiancalendar.calendar.AbstractDate
@@ -59,7 +59,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
             h1 {
                 +listOfNotNull(
                     cityName.value,
-                    language.value.my.format(date.monthName, formatNumber(date.year))
+                    language.value.my.format(date.monthName, numeral.format(date.year))
                 ).joinToString(spacedComma)
             }
             table {
@@ -78,7 +78,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                                     mainCalendar.createDate(date.year, date.month, day)
                                 ).toGregorianCalendar()
                             )
-                            th { +formatNumber(day + 1) }
+                            th { +numeral.format(day + 1) }
                             prayTimeList.forEach {
                                 td { +prayTimes[it].toBasicFormatString() }
                             }

@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.utils.debugLog
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import com.byagowi.persiancalendar.utils.logException
@@ -402,12 +401,12 @@ enum class Language(val code: String, val nativeName: String) {
             AR, CKB, ES, DE, FR, IT, KMR, PT, RU, TG, TR, UR, TA -> "%3\$s$sep%2\$s$sep%1\$s"
         }
         return format.format(
-            formatNumber(year, numeral),
-            formatNumber(
-                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it }, numeral
+            numeral.format(year),
+            numeral.format(
+                "$month".let { if (needsZeroPad) it.padStart(2, '0') else it }
             ),
-            formatNumber(
-                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it }, numeral
+            numeral.format(
+                "$dayOfMonth".let { if (needsZeroPad) it.padStart(2, '0') else it }
             )
         )
     }

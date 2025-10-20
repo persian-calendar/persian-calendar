@@ -2,9 +2,9 @@ package com.byagowi.persiancalendar.entities
 
 import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.formatNumber
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -58,7 +58,8 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
             }
         }.mapNotNull { event ->
             val date = getDateInstance(event, year, type) ?: return@mapNotNull null
-            val title = "${event["title"] ?: return@mapNotNull null} (${formatNumber(year)})"
+            val title =
+                "${event["title"] ?: return@mapNotNull null} (${numeral.format(year)})"
             val isHoliday = event["holiday"] == "true"
             when (date) {
                 is PersianDate -> CalendarEvent.PersianCalendarEvent(title, isHoliday, date)

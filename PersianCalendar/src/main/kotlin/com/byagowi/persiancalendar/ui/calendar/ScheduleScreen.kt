@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.ui.calendar.reports.monthHtmlReport
 import com.byagowi.persiancalendar.ui.common.AppDropdownMenuItem
@@ -68,7 +69,6 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
@@ -124,7 +124,7 @@ fun SharedTransitionScope.ScheduleScreen(
                         Crossfade(date.monthName, label = "title") { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
                         }
-                        Crossfade(formatNumber(date.year), label = "subtitle") { state ->
+                        Crossfade(numeral.format(date.year), label = "subtitle") { state ->
                             Text(state, style = MaterialTheme.typography.titleMedium)
                         }
                     }
@@ -254,7 +254,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                         contentAlignment = Alignment.Center,
                                     ) {
                                         Text(
-                                            text = formatNumber(date.dayOfMonth),
+                                            text = numeral.format(date.dayOfMonth),
                                             style = circleTextStyle,
                                             color = when {
                                                 jdn < today -> MaterialTheme.colorScheme.onPrimaryContainer
@@ -286,7 +286,7 @@ fun SharedTransitionScope.ScheduleScreen(
                                     )
                                     Text(
                                         if (nextMonth.month == 1) language.my.format(
-                                            nextMonth.monthName, formatNumber(nextMonth.year),
+                                            nextMonth.monthName, numeral.format(nextMonth.year),
                                         ) else nextMonth.monthName,
                                         fontSize = 24.sp,
                                         modifier = Modifier

@@ -150,7 +150,7 @@ var weekDays = weekDaysEmptyList
     private set
 var weekDaysInitials = weekDaysEmptyList
     private set
-var preferredNumeral = Numeral.PERSIAN
+var numeral = Numeral.PERSIAN
     private set
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
@@ -243,8 +243,8 @@ var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLA
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
 val mainCalendarNumeral
     get() = when {
-        secondaryCalendar == null -> preferredNumeral
-        preferredNumeral.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+        secondaryCalendar == null -> numeral
+        numeral.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
         else -> mainCalendar.preferredNumeral
     }
 val secondaryCalendar
@@ -458,7 +458,7 @@ fun updateStoredPreference(context: Context) {
             true
         )
 
-    preferredNumeral = if (!preferences.getBoolean(
+    numeral = if (!preferences.getBoolean(
             PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL
         ) || !language.canHaveLocalNumeral
     ) Numeral.ARABIC

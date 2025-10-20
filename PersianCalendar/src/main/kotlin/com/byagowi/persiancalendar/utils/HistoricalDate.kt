@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.util.julianFromJdn
 
 // region Seleucid
@@ -22,7 +23,7 @@ fun formatAsSeleucidDate(jdn: Jdn): String {
     // while one other source uses 321
     val year = julianYear + 311 + if (julianMonth > 9) 1 else 0
     val month = seleucidMonths[(julianMonth + 2) % 12]
-    return "${formatNumber(dayOfMonth)} $month ${formatNumber(year)}"
+    return "${numeral.format(dayOfMonth)} $month ${numeral.format(year)}"
 }
 // endregion
 
@@ -37,7 +38,7 @@ fun formatAsSeleucidDate(jdn: Jdn): String {
 fun formatAsYazdegerdDate(jdn: Jdn): String {
     // It needs one day offset to match with traditionally published calendars
     val daysSinceEpoch = (jdn.value - 1952063).toInt()
-    return formatNumber(daysSinceEpoch / 365 + 1) + "~ یزدگردی"
+    return numeral.format(daysSinceEpoch / 365 + 1) + "~ یزدگردی"
 }
 // endregion
 

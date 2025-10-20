@@ -81,6 +81,7 @@ import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
@@ -95,7 +96,6 @@ import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatAsSeleucidAndYazdegerdDate
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.isOldEra
@@ -369,9 +369,9 @@ fun SharedTransitionScope.CalendarsOverview(
             AutoSizedBodyText(
                 stringResource(
                     R.string.start_of_year_diff,
-                    formatNumber(jdn - startOfYearJdn + 1),
-                    formatNumber(currentWeek),
-                    formatNumber(date.month)
+                    numeral.format(jdn - startOfYearJdn + 1),
+                    numeral.format(currentWeek),
+                    numeral.format(date.month)
                 )
             )
         }
@@ -379,9 +379,9 @@ fun SharedTransitionScope.CalendarsOverview(
             AutoSizedBodyText(
                 stringResource(
                     R.string.end_of_year_diff,
-                    formatNumber(endOfYearJdn - jdn),
-                    formatNumber(weeksCount - currentWeek),
-                    formatNumber(12 - date.month)
+                    numeral.format(endOfYearJdn - jdn),
+                    numeral.format(weeksCount - currentWeek),
+                    numeral.format(12 - date.month)
                 ),
                 topPadding = 0.dp,
             )
@@ -442,7 +442,7 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
     }
     val calendar = Date(timestamp).toGregorianCalendar()
     return resources.getString(
-        R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()
+        R.string.spring_equinox, numeral.format(equinoxYear), calendar.formatDateAndTime()
     ) to timestamp
 }
 
@@ -474,7 +474,7 @@ private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded:
                         .semantics { this.contentDescription = formatDate(date) },
                 ) {
                     Text(
-                        formatNumber(date.dayOfMonth),
+                        numeral.format(date.dayOfMonth),
                         style = MaterialTheme.typography.displayMedium,
                         modifier = Modifier
                             .animateContentSize(appContentSizeAnimationSpec)

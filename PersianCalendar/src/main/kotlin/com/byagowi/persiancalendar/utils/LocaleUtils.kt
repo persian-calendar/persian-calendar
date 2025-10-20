@@ -8,9 +8,7 @@ import android.os.LocaleList
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.preferredNumeral
 import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
@@ -37,15 +35,6 @@ fun applyLanguageToConfiguration(
     config.setLayoutDirection(if (language.value.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
     return config
 }
-
-@Deprecated("Use preferredNumeral.format instead")
-fun formatNumber(number: Double): String = preferredNumeral.format(number)
-
-@Deprecated("Use preferredNumeral.format instead")
-fun formatNumber(number: Int, numeral: Numeral = preferredNumeral) = numeral.format(number)
-
-@Deprecated("Use preferredNumeral.format instead")
-fun formatNumber(number: String, numeral: Numeral = preferredNumeral) = numeral.format(number)
 
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->

@@ -155,6 +155,7 @@ import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
@@ -194,7 +195,6 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.hasAnyWidgetUpdateRecently
@@ -912,7 +912,7 @@ private fun SharedTransitionScope.Toolbar(
                             yearViewOffset == 0 || yearViewIsInYearSelection
                         }) "" else {
                         val yearViewYear = (today on yearViewCalendar).year + yearViewOffset
-                        val formattedYear = formatNumber(yearViewYear)
+                        val formattedYear = numeral.format(yearViewYear)
                         if (yearViewCalendar != mainCalendar) {
                             val mainCalendarTitle =
                                 otherCalendarFormat(yearViewYear, yearViewCalendar, mainCalendar)
@@ -925,10 +925,10 @@ private fun SharedTransitionScope.Toolbar(
                     }
                 } else if (secondaryCalendar == null) {
                     title = selectedMonth.monthName
-                    subtitle = formatNumber(selectedMonth.year)
+                    subtitle = numeral.format(selectedMonth.year)
                 } else {
                     title = language.my.format(
-                        selectedMonth.monthName, formatNumber(selectedMonth.year)
+                        selectedMonth.monthName, numeral.format(selectedMonth.year)
                     )
                     val selectedDay by viewModel.selectedDay.collectAsState()
                     val selectedDate = selectedDay on mainCalendar
@@ -939,7 +939,7 @@ private fun SharedTransitionScope.Toolbar(
                         val selectedSecondaryDate = selectedDay on secondaryCalendar
                         subtitle = language.my.format(
                             selectedSecondaryDate.monthName,
-                            formatNumber(selectedSecondaryDate.year)
+                            numeral.format(selectedSecondaryDate.year)
                         )
                     } else {
                         subtitle = monthFormatForSecondaryCalendar(selectedMonth, secondaryCalendar)

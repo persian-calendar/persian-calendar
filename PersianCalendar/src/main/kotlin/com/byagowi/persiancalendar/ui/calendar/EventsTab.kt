@@ -85,6 +85,7 @@ import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
@@ -94,7 +95,6 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.theme.noTransitionSpec
 import com.byagowi.persiancalendar.ui.utils.appBoundsTransform
 import com.byagowi.persiancalendar.ui.utils.isLight
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getShiftWorksInDaysDistance
 import com.byagowi.persiancalendar.utils.logException
@@ -379,14 +379,14 @@ private fun EquinoxCountDownContent(
         countDownTimeParts.map { (pluralId, interval) ->
             val x = (remainedTime / interval).toInt()
             remainedTime -= interval * x
-            x to pluralStringResource(pluralId, x, formatNumber(x))
+            x to pluralStringResource(pluralId, x, numeral.format(x))
         }.dropWhile { it.first == 0 }.forEach { (_, x) ->
             val parts = x.split(" ")
             if (parts.size == 2 && parts[0].length <= 3 && !isTalkBackEnabled) Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                    val digits = parts[0].padStart(2, formatNumber(0)[0])
+                    val digits = parts[0].padStart(2, numeral.format(0)[0])
                     digits.forEach {
                         Text(
                             "$it",

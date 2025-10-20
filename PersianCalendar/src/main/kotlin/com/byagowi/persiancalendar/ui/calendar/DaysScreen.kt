@@ -124,7 +124,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.preferredNumeral
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeUpAction
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -148,7 +148,6 @@ import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getWeekDayName
@@ -271,24 +270,24 @@ fun SharedTransitionScope.DaysScreen(
                             val subtitle: String
                             if (secondaryCalendar == null) {
                                 title = if (hasWeeksPager) date.monthName else language.dm.format(
-                                    formatNumber(date.dayOfMonth), date.monthName
+                                    numeral.format(date.dayOfMonth), date.monthName
                                 )
-                                subtitle = formatNumber(date.year)
+                                subtitle = numeral.format(date.year)
                             } else {
                                 title = if (hasWeeksPager) language.my.format(
-                                    date.monthName, formatNumber(date.year)
+                                    date.monthName, numeral.format(date.year)
                                 ) else language.dmy.format(
-                                    formatNumber(date.dayOfMonth),
-                                    date.monthName, formatNumber(date.year)
+                                    numeral.format(date.dayOfMonth),
+                                    date.monthName, numeral.format(date.year)
                                 )
                                 val secondaryDate = selectedDay on secondaryCalendar
                                 subtitle = if (hasWeeksPager) language.my.format(
                                     secondaryDate.monthName,
-                                    formatNumber(secondaryDate.year)
+                                    numeral.format(secondaryDate.year)
                                 ) else language.dmy.format(
-                                    formatNumber(secondaryDate.dayOfMonth),
+                                    numeral.format(secondaryDate.dayOfMonth),
                                     secondaryDate.monthName,
-                                    formatNumber(secondaryDate.year),
+                                    numeral.format(secondaryDate.year),
                                 )
                             }
 
@@ -738,7 +737,7 @@ private fun DaysView(
                                     )
                                 }
                                 if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
-                                    " +" + formatNumber(dayEvents.size - 3),
+                                    " +" + numeral.format(dayEvents.size - 3),
                                     modifier = Modifier.padding(bottom = 4.dp),
                                     maxLines = 1,
                                     style = headerTextStyle,
@@ -1174,7 +1173,7 @@ private fun DaysView(
                     }
                     val compact = dy < 3 / scale.value || run {
                         // This is an ugly hack as the lack of proper autosize here, for now
-                        !preferredNumeral.isEasternArabic
+                        !numeral.isEasternArabic
                     }
                     Text(
                         text = clockCache[y * 15] + when {

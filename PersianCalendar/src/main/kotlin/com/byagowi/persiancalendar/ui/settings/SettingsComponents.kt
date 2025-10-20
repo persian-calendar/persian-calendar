@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.common.ColorBox
@@ -65,7 +66,6 @@ import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.ui.utils.performLongPress
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.preferences
 import java.util.Locale
 import kotlin.math.roundToInt
@@ -432,7 +432,7 @@ fun SettingsSlider(
             )
             Spacer(Modifier.width(16.dp))
             val roundedValue = (value * 100).roundToInt()
-            Text(formatNumber(roundedValue))
+            Text(numeral.format(roundedValue))
             AnimatedVisibility(roundedValue == 0) { Spacer(Modifier.width(16.dp)) }
             AnimatedVisibility(roundedValue != 0) {
                 IconButton(onClick = { onValueChange(defaultValue) }) {

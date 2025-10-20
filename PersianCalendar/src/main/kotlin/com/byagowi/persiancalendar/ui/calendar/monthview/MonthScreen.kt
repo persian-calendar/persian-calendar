@@ -43,6 +43,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.preferredSwipeDownAction
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.calendarPagerSize
@@ -52,7 +53,6 @@ import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
 import com.byagowi.persiancalendar.ui.common.ScreenSurface
 import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.monthName
@@ -98,7 +98,7 @@ fun SharedTransitionScope.MonthScreen(
                         Crossfade(date.monthName, label = "title") { state ->
                             Text(state, style = MaterialTheme.typography.titleLarge)
                         }
-                        Crossfade(formatNumber(date.year), label = "subtitle") { state ->
+                        Crossfade(numeral.format(date.year), label = "subtitle") { state ->
                             Text(state, style = MaterialTheme.typography.titleMedium)
                         }
                     }
@@ -178,7 +178,7 @@ fun SharedTransitionScope.MonthScreen(
 //                                    )
                                 ) {
                                     Text(
-                                        formatNumber(dayDate.dayOfMonth, mainCalendarNumeral),
+                                        mainCalendarNumeral.format(dayDate.dayOfMonth),
                                         style = daysStyle,
                                         modifier = Modifier.alpha(
                                             if (focusedDate.month == dayDate.month && focusedDate.year == dayDate.year)

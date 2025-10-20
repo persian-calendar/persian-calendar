@@ -23,11 +23,11 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.toObserver
 import java.io.File
 import java.util.GregorianCalendar
@@ -228,7 +228,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                 }
             ) else cardinalDirection(it)
 
-            it % 3 == 0 -> formatNumber(it * 15) + "°" // Draw the text every alternate 45deg
+            it % 3 == 0 -> numeral.format(it * 15) + "°" // Draw the text every alternate 45deg
             else -> ""
         }
     }

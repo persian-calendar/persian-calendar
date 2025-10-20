@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getSecondaryCalendarNumeral
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import java.io.File
@@ -170,9 +169,9 @@ class DayPainter(
         this.isMoonInScorpio =
             isAstronomicalExtraFeaturesEnabled.value && jdn != null && isMoonInScorpio(jdn)
         this.header = listOfNotNull(
-            if (secondaryCalendar == null || jdn == null) null else formatNumber(
-                jdn.on(secondaryCalendar).dayOfMonth,
-                getSecondaryCalendarNumeral(secondaryCalendar)
+            if (secondaryCalendar == null || jdn == null) null
+            else getSecondaryCalendarNumeral(secondaryCalendar).format(
+                jdn.on(secondaryCalendar).dayOfMonth
             ),
             header,
         ).joinToString(" ")

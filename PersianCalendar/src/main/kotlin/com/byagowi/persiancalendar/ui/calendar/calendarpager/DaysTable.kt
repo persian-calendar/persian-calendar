@@ -65,13 +65,13 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.calendar.AddEventData
 import com.byagowi.persiancalendar.ui.icons.MaterialIconDimension
 import com.byagowi.persiancalendar.ui.theme.appMonthColors
 import com.byagowi.persiancalendar.ui.theme.resolveFontFile
 import com.byagowi.persiancalendar.ui.utils.AppBlendAlpha
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -281,7 +281,7 @@ fun daysTable(
                                     ),
                                 contentAlignment = Alignment.Center,
                             ) {
-                                val formattedWeekNumber = formatNumber(weekNumber)
+                                val formattedWeekNumber = numeral.format(weekNumber)
                                 val description =
                                     stringResource(R.string.nth_week_of_year, formattedWeekNumber)
                                 Text(
@@ -344,13 +344,12 @@ fun daysTable(
                                 )
                             }
                             Text(
-                                text = formatNumber(
+                                text = mainCalendarNumeral.format(
                                     if (previousMonthLength != null && isBeforeMonth) {
                                         previousMonthLength - (startingWeekDay - dayOffset) + 1
                                     } else if (onlyWeek != null && isAfterMonth) {
                                         dayOffset + 1 - monthLength - startingWeekDay
-                                    } else dayOffset + 1 - startingWeekDay,
-                                    mainCalendarNumeral,
+                                    } else dayOffset + 1 - startingWeekDay
                                 ),
                                 color = when {
                                     isHoliday -> monthColors.holidays

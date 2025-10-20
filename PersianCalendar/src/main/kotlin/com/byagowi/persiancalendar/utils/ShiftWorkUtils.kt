@@ -5,6 +5,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.shiftWorkPeriod
 import com.byagowi.persiancalendar.global.shiftWorkRecurs
 import com.byagowi.persiancalendar.global.shiftWorkStartingJdn
@@ -47,7 +48,7 @@ fun getShiftWorksInDaysDistance(jdn: Jdn): String? {
     if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
     return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
         pluralStringResource(
-            R.plurals.days, days.size, formatNumber(days.size)
+            R.plurals.days, days.size, numeral.format(days.size)
         ) + " " + title
     }.joinToString(spacedComma)
 }

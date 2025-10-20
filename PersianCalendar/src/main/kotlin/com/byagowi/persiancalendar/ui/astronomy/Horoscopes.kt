@@ -69,11 +69,11 @@ import com.byagowi.persiancalendar.global.cityName
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.cosinekitty.astronomy.Aberration
@@ -98,7 +98,7 @@ private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     val degrees = value.toInt()
     val minutes = (value % 1 * 60).roundToInt()
     if (isAbjad) return toAbjad(degrees) + " " + toAbjad(minutes)
-    return formatNumber("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
+    return numeral.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
 private fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
@@ -319,8 +319,8 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
 
         Text(
             if (language.isUserAbleToReadPersian) {
-                "لحظهٔ تحویل سال " + formatNumber(persianYear) + " شمسی در $cityName"
-            } else "$cityName, March equinox of " + formatNumber(gregorianYear) + " CE",
+                "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
+            } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
             modifier = Modifier.align(Alignment.CenterHorizontally),
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)

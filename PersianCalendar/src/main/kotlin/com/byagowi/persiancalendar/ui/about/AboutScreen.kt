@@ -101,6 +101,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.common.AppIconButton
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationOpenDrawerIcon
@@ -112,7 +113,6 @@ import com.byagowi.persiancalendar.ui.theme.appTopAppBarColors
 import com.byagowi.persiancalendar.ui.utils.appContentSizeAnimationSpec
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.materialCornerExtraLargeTop
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 
@@ -196,17 +196,17 @@ private fun Header() {
                 Text(
                     buildString {
                         val version =
-                            // Don't formatNumber it if is multi-parted
+                            // Don't use local numeral if version name is multi-parted (debug and nightly builds)
                             if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
-                            else formatNumber(BuildConfig.VERSION_NAME)
+                            else numeral.format(BuildConfig.VERSION_NAME)
                         append(stringResource(R.string.version, version))
                         if (language.value.isUserAbleToReadPersian) {
                             appendLine()
                             append(
                                 stringResource(
                                     R.string.about_help_subtitle,
-                                    formatNumber(supportedYearOfIranCalendar - 1),
-                                    formatNumber(supportedYearOfIranCalendar)
+                                    numeral.format(supportedYearOfIranCalendar - 1),
+                                    numeral.format(supportedYearOfIranCalendar)
                                 )
                             )
                         }

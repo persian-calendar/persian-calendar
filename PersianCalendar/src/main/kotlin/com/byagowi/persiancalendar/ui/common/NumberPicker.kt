@@ -60,8 +60,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.ui.theme.animateColor
-import com.byagowi.persiancalendar.utils.formatNumber
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -72,7 +72,7 @@ import kotlin.math.roundToInt
 @Composable
 fun NumberPicker(
     modifier: Modifier = Modifier,
-    label: (Int) -> String = { formatNumber(it) },
+    label: (Int) -> String = { numeral.format(it) },
     range: IntRange,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
@@ -255,7 +255,7 @@ fun NumberEdit(
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     var value by remember {
-        val valueText = formatNumber(initialValue)
+        val valueText = numeral.format(initialValue)
         mutableStateOf(
             TextFieldValue(
                 valueText, selection = TextRange(0, valueText.length)

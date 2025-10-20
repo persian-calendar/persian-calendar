@@ -7,6 +7,7 @@ package com.byagowi.persiancalendar.utils
 
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.numeral
 import io.github.persiancalendar.calendar.PersianDate
 
 // the returned value is a zero indexed number
@@ -51,9 +52,9 @@ private val jalaliMonthNames = listOf(
 fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     return when (val month = (dayOfYear - 1) / 30) {
-        12 -> "روز " + formatNumber(dayOfMonth + 1) + " خمسهٔ جلالی"
-        else -> formatNumber(dayOfMonth + 1) + " " + jalaliMonthNames[month] + " جلالی"
-    } + " " + formatNumber(persianDate.year - 457)
+        12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ جلالی"
+        else -> numeral.format(dayOfMonth + 1) + " " + jalaliMonthNames[month] + " جلالی"
+    } + " " + numeral.format(persianDate.year - 457)
 }
 // endregion
 

@@ -52,6 +52,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
@@ -64,7 +65,6 @@ import com.byagowi.persiancalendar.ui.theme.appCrossfadeSpec
 import com.byagowi.persiancalendar.ui.utils.SettingsHorizontalPaddingItem
 import com.byagowi.persiancalendar.ui.utils.SettingsItemHeight
 import com.byagowi.persiancalendar.utils.formatDate
-import com.byagowi.persiancalendar.utils.formatNumber
 import org.jetbrains.annotations.VisibleForTesting
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -154,7 +154,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                     pluralStringResource(
                         R.plurals.shift_work_record_title,
                         it.length,
-                        formatNumber(it.length),
+                        numeral.format(it.length),
                         shiftWorkKeyToString(it.type)
                     )
                 }.joinToString(spacedComma)
@@ -184,7 +184,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Spacer(Modifier.width(16.dp))
-                    Text(text = formatNumber(position + 1) + spacedColon)
+                    Text(text = numeral.format(position + 1) + spacedColon)
                     Box(Modifier.weight(70f)) {
                         TextField(shiftWorkKeyToString(type), onValueChange = { value ->
                             selectedTypeDropdownIndex = -1
@@ -217,7 +217,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                     Spacer(Modifier.width(4.dp))
                     Box(Modifier.weight(30f)) {
                         TextField(
-                            value = formatNumber(length),
+                            value = numeral.format(length),
                             readOnly = true,
                             onValueChange = {
                                 selectedTypeDropdownIndex = -1
@@ -244,7 +244,7 @@ fun ColumnScope.ShiftWorkDialogContent(
                             minWidth = 40.dp,
                         ) {
                             (0..14).map { length ->
-                                AppDropdownMenuItem({ Text(formatNumber(length)) }) {
+                                AppDropdownMenuItem({ Text(numeral.format(length)) }) {
                                     focusManager.clearFocus()
                                     selectedLengthDropdownIndex = -1
                                     viewModel.changeShiftWorkLengthOfPosition(position, length)

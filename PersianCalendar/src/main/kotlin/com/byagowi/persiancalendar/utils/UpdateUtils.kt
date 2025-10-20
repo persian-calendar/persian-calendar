@@ -105,6 +105,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
@@ -519,7 +520,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         R.id.month_name,
         if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
         else language.value.my.format(
-            monthStartDate.monthName, formatNumber(monthStartDate.year)
+            monthStartDate.monthName, numeral.format(monthStartDate.year)
         )
     )
     remoteViews.setTextViewTextOrHideIfEmpty(
@@ -583,9 +584,9 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
                 "setBackgroundResource",
                 R.drawable.widget_month_holiday,
             )
-            dayView.setTextViewText(R.id.day, formatNumber(date.dayOfMonth))
+            dayView.setTextViewText(R.id.day, numeral.format(date.dayOfMonth))
             secondaryCalendar?.let {
-                val text = formatNumber((day on it).dayOfMonth, it.preferredNumeral)
+                val text = it.preferredNumeral.format((day on it).dayOfMonth)
                 dayView.setTextViewText(R.id.secondary_day, "($text)")
             } ?: run {
                 dayView.setViewVisibility(R.id.secondary_day, View.GONE)
@@ -655,7 +656,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
         val weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
         val isShowWeekOfYearEnabled = isShowWeekOfYearEnabled.value
         if (isShowWeekOfYearEnabled) monthWidgetWeeks.drop(1).forEachIndexed { i, id ->
-            val weekNumber = formatNumber(weekOfYearStart + i)
+            val weekNumber = numeral.format(weekOfYearStart + i)
             remoteViews.setTextViewText(id, weekNumber)
             val contentDescription = context.getString(R.string.nth_week_of_year, weekNumber)
             remoteViews.setContentDescription(id, contentDescription)
@@ -1063,7 +1064,7 @@ private fun create1x1RemoteViews(
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.textPlaceholder1_1x1, android.R.attr.colorAccent
     )
-    remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
+    remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
     remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, context.launchAppPendingIntent())
     return remoteViews
@@ -1365,7 +1366,7 @@ private fun createWeekViewRemoteViews(
         }
 
         val dayOfMonth = (day on mainCalendar).dayOfMonth
-        remoteViews.setTextViewText(weekDayNumberViewId, formatNumber(dayOfMonth))
+        remoteViews.setTextViewText(weekDayNumberViewId, numeral.format(dayOfMonth))
 
         val action = jdnActionKey + day.value
         remoteViews.setOnClickPendingIntent(
@@ -1377,7 +1378,7 @@ private fun createWeekViewRemoteViews(
     }
 
     remoteViews.setTextViewText(
-        R.id.textDate, language.value.my.format(date.monthName, formatNumber(date.year))
+        R.id.textDate, language.value.my.format(date.monthName, numeral.format(date.year))
     )
 
     remoteViews.setOnClickPendingIntent(

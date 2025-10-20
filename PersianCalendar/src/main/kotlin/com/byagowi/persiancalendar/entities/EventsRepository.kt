@@ -11,11 +11,11 @@ import com.byagowi.persiancalendar.generated.persianEvents
 import com.byagowi.persiancalendar.global.gregorianMonths
 import com.byagowi.persiancalendar.global.islamicMonths
 import com.byagowi.persiancalendar.global.nepaliMonths
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.persianMonths
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.formatNumber
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -171,7 +171,7 @@ data class EventsRepository(
             Calendar.ISLAMIC -> islamicMonths
             Calendar.NEPALI -> nepaliMonths
         }.getOrNull(month - 1).debugAssertNotNull.orEmpty()
-        return language.dm.format(formatNumber(day), monthName)
+        return language.dm.format(numeral.format(day), monthName)
     }
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {

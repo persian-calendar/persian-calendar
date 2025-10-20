@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.nothingScheduledString
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.prayTimesTitles
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
@@ -33,7 +34,6 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendar
 import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.eventKey
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEnabledAlarms
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.jdnActionKey
@@ -139,17 +139,14 @@ private class EventsViewFactory(
             val headerContent = run {
                 val headerFirstPart = if (widthCells < 3) {
                     header.day.weekDayNameInitials + spacedComma + language.value.dm.format(
-                        formatNumber(header.date.dayOfMonth),
+                        numeral.format(header.date.dayOfMonth),
                         header.date.monthName
                     )
                 } else header.date.monthName
                 header.secondaryDate?.let {
                     language.value.inParentheses.format(
                         headerFirstPart,
-                        if (widthCells < 3) formatNumber(
-                            it.dayOfMonth,
-                            it.calendar.preferredNumeral
-                        )
+                        if (widthCells < 3) it.calendar.preferredNumeral.format(it.dayOfMonth)
                         else it.monthName
                     )
                 } ?: headerFirstPart
@@ -253,7 +250,7 @@ private class EventsViewFactory(
                         else R.id.today_with_secondary_first_line
                     } else R.id.day_first_line,
                     item.day.weekDayNameInitials + (item.secondaryDate?.let {
-                        "(${formatNumber(it.dayOfMonth, it.calendar.preferredNumeral)})"
+                        "(${it.calendar.preferredNumeral.format(it.dayOfMonth)})"
                     }.orEmpty()),
                 )
                 row.setTextViewText(
@@ -261,7 +258,7 @@ private class EventsViewFactory(
                         if (item.secondaryDate == null) R.id.today_second_line
                         else R.id.today_with_secondary_second_line
                     } else R.id.day_second_line,
-                    formatNumber(item.date.dayOfMonth)
+                    numeral.format(item.date.dayOfMonth)
                 )
             } else row.setViewVisibility(R.id.day_wrapper, View.INVISIBLE)
         } else row.setViewVisibility(R.id.day_wrapper, View.GONE)

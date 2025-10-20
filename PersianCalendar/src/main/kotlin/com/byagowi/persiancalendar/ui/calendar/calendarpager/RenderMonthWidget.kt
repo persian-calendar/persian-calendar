@@ -10,10 +10,10 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.monthName
@@ -41,7 +41,8 @@ fun renderMonthWidget(
     val cellWidth = dayPainter.width
     val cellHeight = dayPainter.height
 
-    val footer = language.value.my.format(baseDate.monthName, formatNumber(baseDate.year))
+    val footer =
+        language.value.my.format(baseDate.monthName, numeral.format(baseDate.year))
 
     canvas.also {
         (0..<7).forEach { column ->
@@ -69,7 +70,7 @@ fun renderMonthWidget(
                 val events = eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                 val isToday = day == today
 
-                val text = formatNumber(dayOffset + 1, mainCalendarNumeral)
+                val text = mainCalendarNumeral.format(dayOffset + 1)
                 val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
                 dayPainter.setDayOfMonthItem(
                     isToday = isToday,
@@ -99,7 +100,7 @@ fun renderMonthWidget(
                     weekOfYearStart + 1
             (1..6).forEach { week ->
                 val weekNumber = if (week > weeksCount) ""
-                else formatNumber(weekOfYearStart + week - 1)
+                else numeral.format(weekOfYearStart + week - 1)
                 if (setWeekNumberText != null) {
                     setWeekNumberText(week, weekNumber)
                 } else if (weekNumber.isNotEmpty()) {

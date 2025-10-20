@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -85,7 +86,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
-import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
@@ -224,7 +224,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         SettingsSingleSelect(
             PREF_ISLAMIC_OFFSET,
             // One is formatted with locale's numerals and the other used for keys isn't
-            (-2..2).map { formatNumber(it.toString()) },
+            (-2..2).map { numeral.format(it.toString()) },
             (-2..2).map { it.toString() },
             DEFAULT_ISLAMIC_OFFSET,
             R.string.islamic_offset,

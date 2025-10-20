@@ -7,9 +7,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.amString
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.pmString
 import com.byagowi.persiancalendar.global.spacedAndInDates
-import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
 import kotlin.time.Duration.Companion.hours
@@ -56,9 +56,9 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
             .ifEmpty { listOf(R.plurals.minutes to 0) }
         // if both present special casing the short form makes sense
         return if (pairs.size == 2 && short) resources.getString(
-            R.string.n_hours_minutes, formatNumber(hours), formatNumber(minutes)
+            R.string.n_hours_minutes, numeral.format(hours), numeral.format(minutes),
         ) else pairs.joinToString(spacedAndInDates) { (@PluralsRes pluralId: Int, n: Int) ->
-            resources.getQuantityString(pluralId, n, formatNumber(n))
+            resources.getQuantityString(pluralId, n, numeral.format(n))
         }
     }
 
@@ -79,7 +79,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
 
     companion object {
         private fun linearFormat(hours: Int, minutes: Int) =
-            formatNumber("%d:%02d".format(Locale.ENGLISH, hours, minutes))
+            numeral.format("%d:%02d".format(Locale.ENGLISH, hours, minutes))
 
         val zero = Clock(.0)
     }
