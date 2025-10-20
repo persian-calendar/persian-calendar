@@ -59,7 +59,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
             h1 {
                 +listOfNotNull(
                     cityName.value,
-                    language.value.my.format(date.monthName, numeral.format(date.year))
+                    language.value.my.format(date.monthName, numeral.value.format(date.year))
                 ).joinToString(spacedComma)
             }
             table {
@@ -78,7 +78,7 @@ fun prayTimeHtmlReport(resources: Resources, date: AbstractDate): String {
                                     mainCalendar.createDate(date.year, date.month, day)
                                 ).toGregorianCalendar()
                             )
-                            th { +numeral.format(day + 1) }
+                            th { +numeral.value.format(day + 1) }
                             prayTimeList.forEach {
                                 td { +prayTimes[it].toBasicFormatString() }
                             }

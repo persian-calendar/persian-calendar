@@ -516,6 +516,7 @@ private fun createMonthRemoteViews(context: Context, height: Int?, widgetId: Int
     val mainCalendar = mainCalendar
     val secondaryCalendar = secondaryCalendar
     val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(today, offset)
+    val numeral = numeral.value
     remoteViews.setTextViewText(
         R.id.month_name,
         if (monthStartDate.year == (today on mainCalendar).year) monthStartDate.monthName
@@ -1064,7 +1065,7 @@ private fun create1x1RemoteViews(
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.textPlaceholder1_1x1, android.R.attr.colorAccent
     )
-    remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.format(date.dayOfMonth))
+    remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, numeral.value.format(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
     remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, context.launchAppPendingIntent())
     return remoteViews
@@ -1366,7 +1367,7 @@ private fun createWeekViewRemoteViews(
         }
 
         val dayOfMonth = (day on mainCalendar).dayOfMonth
-        remoteViews.setTextViewText(weekDayNumberViewId, numeral.format(dayOfMonth))
+        remoteViews.setTextViewText(weekDayNumberViewId, numeral.value.format(dayOfMonth))
 
         val action = jdnActionKey + day.value
         remoteViews.setOnClickPendingIntent(
@@ -1378,7 +1379,7 @@ private fun createWeekViewRemoteViews(
     }
 
     remoteViews.setTextViewText(
-        R.id.textDate, language.value.my.format(date.monthName, numeral.format(date.year))
+        R.id.textDate, language.value.my.format(date.monthName, numeral.value.format(date.year))
     )
 
     remoteViews.setOnClickPendingIntent(

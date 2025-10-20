@@ -169,6 +169,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
             )
         }
     }
+    val numeral by numeral.collectAsState()
 
     LazyColumn(state = lazyListState, modifier = detectZoom) {
         items(halfPages * 2) {

@@ -98,7 +98,7 @@ private fun formatAngle(value: Double, isAbjad: Boolean = false): String {
     val degrees = value.toInt()
     val minutes = (value % 1 * 60).roundToInt()
     if (isAbjad) return toAbjad(degrees) + " " + toAbjad(minutes)
-    return numeral.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
+    return numeral.value.format("$LRM%02d°:%02d’$LRM".format(degrees, minutes))
 }
 
 private fun geocentricLongitudeAndDistanceOfBody(body: Body, time: Time): Pair<Double, Double> {
@@ -317,6 +317,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             }
         }
 
+        val numeral by numeral.collectAsState()
         Text(
             if (language.isUserAbleToReadPersian) {
                 "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"

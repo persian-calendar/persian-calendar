@@ -265,6 +265,7 @@ fun SharedTransitionScope.DaysScreen(
                                 )
                             ) { if (!isWeekView) isWeekView = true else navigateUp() },
                         ) {
+                            val numeral by numeral.collectAsState()
                             val secondaryCalendar = secondaryCalendar
                             val title: String
                             val subtitle: String
@@ -736,6 +737,7 @@ private fun DaysView(
                                             },
                                     )
                                 }
+                                val numeral by numeral.collectAsState()
                                 if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
                                     " +" + numeral.format(dayEvents.size - 3),
                                     modifier = Modifier.padding(bottom = 4.dp),
@@ -1171,6 +1173,7 @@ private fun DaysView(
                         drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)
                     }
+                    val numeral by numeral.collectAsState()
                     val compact = dy < 3 / scale.value || run {
                         // This is an ugly hack as the lack of proper autosize here, for now
                         !numeral.isArabicIndicVariants

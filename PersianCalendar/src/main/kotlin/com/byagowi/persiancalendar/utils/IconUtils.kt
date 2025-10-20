@@ -16,6 +16,7 @@ fun createStatusIcon(
     color: Int = Color.WHITE,
     addShadow: Boolean = false,
 ): Bitmap {
+    val numeral = numeral.value
     val text = numeral.format(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = when {
@@ -42,7 +43,7 @@ fun createStatusIcon(
     }
 }
 
-fun getDayIconResource(day: Int): Int = when (numeral) {
+fun getDayIconResource(day: Int): Int = when (numeral.value) {
     Numeral.DEVANAGARI, Numeral.ARABIC, Numeral.TAMIL -> DAYS_ICONS_ARABIC
     Numeral.ARABIC_INDIC -> DAYS_ICONS_ARABIC_INDIC
     else -> DAYS_ICONS_PERSIAN

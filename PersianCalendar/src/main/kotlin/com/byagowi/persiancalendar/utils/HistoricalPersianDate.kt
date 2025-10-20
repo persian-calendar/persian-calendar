@@ -52,9 +52,9 @@ private val jalaliMonthNames = listOf(
 fun jalaliName(persianDate: PersianDate, dayOfYear: Int): String {
     val dayOfMonth = (dayOfYear - 1) % 30
     return when (val month = (dayOfYear - 1) / 30) {
-        12 -> "روز " + numeral.format(dayOfMonth + 1) + " خمسهٔ جلالی"
-        else -> numeral.format(dayOfMonth + 1) + " " + jalaliMonthNames[month] + " جلالی"
-    } + " " + numeral.format(persianDate.year - 457)
+        12 -> "روز " + numeral.value.format(dayOfMonth + 1) + " خمسهٔ جلالی"
+        else -> numeral.value.format(dayOfMonth + 1) + " " + jalaliMonthNames[month] + " جلالی"
+    } + " " + numeral.value.format(persianDate.year - 457)
 }
 // endregion
 

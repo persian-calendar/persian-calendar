@@ -193,6 +193,7 @@ private fun Header() {
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = LocalContentColor.current,
                 )
+                val numeral by numeral.collectAsState()
                 Text(
                     buildString {
                         val version =

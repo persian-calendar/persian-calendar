@@ -129,8 +129,11 @@ fun getA11yDaySummary(
     if (withWeekOfYear) {
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
-        appendLine().appendLine()
-            .append(resources.getString(R.string.nth_week_of_year, numeral.format(weekOfYearStart)))
+        appendLine().appendLine().append(
+            resources.getString(
+                R.string.nth_week_of_year, numeral.value.format(weekOfYearStart)
+            )
+        )
     }
 
     if (withZodiac && isAstronomicalExtraFeaturesEnabled.value) {
@@ -302,26 +305,28 @@ fun calculateDaysDifference(
         if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendar
     )
     val days = abs(baseJdn - jdn)
-    val daysString = resources.getQuantityString(R.plurals.days, days, numeral.format(days))
+    val daysString = resources.getQuantityString(R.plurals.days, days, numeral.value.format(days))
     val weeks = if (isInWidget || days < 7) 0 else (days / 7.0).roundToInt()
     val result = listOfNotNull(
         if (months == 0 && years == 0) null
         else listOf(
             R.plurals.years to years, R.plurals.months to months, R.plurals.days to daysOfMonth
         ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
-            resources.getQuantityString(pluralId, n, numeral.format(n))
+            resources.getQuantityString(pluralId, n, numeral.value.format(n))
         }, if (weeks == 0) null
         else (if (days % 7 == 0) "" else "~") + resources.getQuantityString(
             R.plurals.weeks,
             weeks,
-            numeral.format(weeks),
+            numeral.value.format(weeks),
         ), run {
             if (years != 0 || isInWidget) return@run null
             val workDays = eventsRepository?.calculateWorkDays(
                 if (baseJdn > jdn) jdn else baseJdn, if (baseJdn > jdn) baseJdn else jdn
             ) ?: 0
             if (workDays == days || workDays == 0) return@run null
-            resources.getQuantityString(R.plurals.work_days, workDays, numeral.format(workDays))
+            resources.getQuantityString(
+                R.plurals.work_days, workDays, numeral.value.format(workDays)
+            )
         })
     if (result.isEmpty()) return daysString
     return language.value.inParentheses.format(daysString, result.joinToString(spacedOr))
@@ -332,12 +337,13 @@ fun formatDate(
 ): String =
     if (numericalDatePreferred && !forceNonNumerical) (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(
         date
-    )) else "").trim()
-    else language.value.dmy.format(
-        numeral.format(date.dayOfMonth), date.monthName, numeral.format(date.year)
+    )) else "").trim() else language.value.dmy.format(
+        numeral.value.format(date.dayOfMonth),
+        date.monthName,
+        numeral.value.format(date.year),
     )
 
-fun AbstractDate.toLinearDate(numeral: Numeral = com.byagowi.persiancalendar.global.numeral) =
+fun AbstractDate.toLinearDate(numeral: Numeral = com.byagowi.persiancalendar.global.numeral.value) =
     language.value.allNumericsDateFormat(year, month, dayOfMonth, numeral)
 
 fun monthFormatForSecondaryCalendar(
@@ -357,8 +363,7 @@ fun monthFormatForSecondaryCalendar(
     val separator = if (spaced) " $EN_DASH " else EN_DASH
     return when {
         from.month == to.month -> language.value.my.format(
-            from.monthName,
-            numeral.format(from.year)
+            from.monthName, numeral.value.format(from.year)
         )
         from.year != to.year -> listOf(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
@@ -366,20 +371,20 @@ fun monthFormatForSecondaryCalendar(
         ).joinToString(separator) { (year, months) ->
             language.value.my.format(months.joinToString(separator) { month ->
                 from.calendar.createDate(year, month, 1).monthName
-            }, numeral.format(year))
+            }, numeral.value.format(year))
         }
 
         else -> language.value.my.format(
             (from.month..to.month).joinToString(separator) { month ->
                 from.calendar.createDate(from.year, month, 1).monthName
-            }, numeral.format(from.year)
+            }, numeral.value.format(from.year)
         )
     }
 }
 
 fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
     !language.value.canHaveLocalNumeral -> Numeral.ARABIC
-    numeral.isArabic -> Numeral.ARABIC
+    numeral.value.isArabic -> Numeral.ARABIC
     else -> secondaryCalendar?.preferredNumeral ?: Numeral.ARABIC
 }
 
@@ -390,7 +395,9 @@ fun otherCalendarFormat(
     val endOfYear = (Jdn(
         calendar.createDate(yearViewYear + 1, 1, 1)
     ) - 1).on(otherCalendar).year
-    return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) { numeral.format(it) }
+    return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) {
+        numeral.value.format(it)
+    }
 }
 
 private fun getCalendarNameAbbr(date: AbstractDate) =

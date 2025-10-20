@@ -42,7 +42,7 @@ fun renderMonthWidget(
     val cellHeight = dayPainter.height
 
     val footer =
-        language.value.my.format(baseDate.monthName, numeral.format(baseDate.year))
+        language.value.my.format(baseDate.monthName, numeral.value.format(baseDate.year))
 
     canvas.also {
         (0..<7).forEach { column ->
@@ -100,7 +100,7 @@ fun renderMonthWidget(
                     weekOfYearStart + 1
             (1..6).forEach { week ->
                 val weekNumber = if (week > weeksCount) ""
-                else numeral.format(weekOfYearStart + week - 1)
+                else numeral.value.format(weekOfYearStart + week - 1)
                 if (setWeekNumberText != null) {
                     setWeekNumberText(week, weekNumber)
                 } else if (weekNumber.isNotEmpty()) {

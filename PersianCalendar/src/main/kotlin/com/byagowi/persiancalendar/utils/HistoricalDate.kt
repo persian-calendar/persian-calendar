@@ -23,7 +23,7 @@ fun formatAsSeleucidDate(jdn: Jdn): String {
     // while one other source uses 321
     val year = julianYear + 311 + if (julianMonth > 9) 1 else 0
     val month = seleucidMonths[(julianMonth + 2) % 12]
-    return "${numeral.format(dayOfMonth)} $month ${numeral.format(year)}"
+    return "${numeral.value.format(dayOfMonth)} $month ${numeral.value.format(year)}"
 }
 // endregion
 
@@ -38,7 +38,7 @@ fun formatAsSeleucidDate(jdn: Jdn): String {
 fun formatAsYazdegerdDate(jdn: Jdn): String {
     // It needs one day offset to match with traditionally published calendars
     val daysSinceEpoch = (jdn.value - 1952063).toInt()
-    return numeral.format(daysSinceEpoch / 365 + 1) + "~ یزدگردی"
+    return numeral.value.format(daysSinceEpoch / 365 + 1) + "~ یزدگردی"
 }
 // endregion
 

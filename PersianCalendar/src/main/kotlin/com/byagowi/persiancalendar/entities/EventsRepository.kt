@@ -171,7 +171,7 @@ data class EventsRepository(
             Calendar.ISLAMIC -> islamicMonths
             Calendar.NEPALI -> nepaliMonths
         }.getOrNull(month - 1).debugAssertNotNull.orEmpty()
-        return language.dm.format(numeral.format(day), monthName)
+        return language.dm.format(numeral.value.format(day), monthName)
     }
 
     fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {

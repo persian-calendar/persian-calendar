@@ -150,8 +150,10 @@ var weekDays = weekDaysEmptyList
     private set
 var weekDaysInitials = weekDaysEmptyList
     private set
-var numeral = Numeral.PERSIAN
-    private set
+
+private val numeral_ = MutableStateFlow(Numeral.PERSIAN)
+val numeral: StateFlow<Numeral> get() = numeral_
+
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
 
@@ -243,8 +245,8 @@ var enabledCalendars = listOf(Calendar.SHAMSI, Calendar.GREGORIAN, Calendar.ISLA
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: Calendar.SHAMSI
 val mainCalendarNumeral
     get() = when {
-        secondaryCalendar == null -> numeral
-        numeral.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
+        secondaryCalendar == null -> numeral.value
+        numeral.value.isArabic || !language.value.canHaveLocalNumeral -> Numeral.ARABIC
         else -> mainCalendar.preferredNumeral
     }
 val secondaryCalendar
@@ -458,11 +460,13 @@ fun updateStoredPreference(context: Context) {
             true
         )
 
-    numeral = if (!preferences.getBoolean(
-            PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL
-        ) || !language.canHaveLocalNumeral
-    ) Numeral.ARABIC
-    else language.preferredNumeral
+    numeral_.value = when {
+        !language.canHaveLocalNumeral -> Numeral.ARABIC
+        !preferences.getBoolean(PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL)
+            -> Numeral.ARABIC
+
+        else -> language.preferredNumeral
+    }
 
     clockIn24 = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(

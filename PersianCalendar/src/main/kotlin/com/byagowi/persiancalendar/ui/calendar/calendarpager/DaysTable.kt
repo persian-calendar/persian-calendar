@@ -281,6 +281,7 @@ fun daysTable(
                                     ),
                                 contentAlignment = Alignment.Center,
                             ) {
+                                val numeral by numeral.collectAsState()
                                 val formattedWeekNumber = numeral.format(weekNumber)
                                 val description =
                                     stringResource(R.string.nth_week_of_year, formattedWeekNumber)

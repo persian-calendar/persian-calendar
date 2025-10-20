@@ -111,6 +111,7 @@ fun SharedTransitionScope.ScheduleScreen(
             }
         }
     }
+    val numeral by numeral.collectAsState()
 
     Scaffold(
         containerColor = Color.Transparent,

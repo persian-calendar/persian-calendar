@@ -46,9 +46,10 @@ fun getShiftWorksInDaysDistance(jdn: Jdn): String? {
     if ((jdn - today) !in 1..365) return null
     val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::getShiftWorkTitle)
     if (shiftWorksInDaysDistance.size < 2 || null in shiftWorksInDaysDistance) return null
+    @Suppress("SimplifiableCallChain")
     return stringResource(R.string.days_distance) + spacedColon + shiftWorksInDaysDistance.entries.map { (title, days) ->
         pluralStringResource(
-            R.plurals.days, days.size, numeral.format(days.size)
+            R.plurals.days, days.size, numeral.value.format(days.size)
         ) + " " + title
     }.joinToString(spacedComma)
 }

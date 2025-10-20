@@ -228,7 +228,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
                 }
             ) else cardinalDirection(it)
 
-            it % 3 == 0 -> numeral.format(it * 15) + "°" // Draw the text every alternate 45deg
+            it % 3 == 0 -> numeral.value.format(it * 15) + "°" // Draw the text every alternate 45deg
             else -> ""
         }
     }

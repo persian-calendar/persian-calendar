@@ -148,8 +148,10 @@ fun ColumnScope.ShiftWorkDialogContent(
             .weight(weight = 1f, fill = false)
             .fillMaxWidth(),
     ) {
+        val numeral by numeral.collectAsState()
         LazyColumn(state = lazyListState) {
             item {
+                @Suppress("SimplifiableCallChain")
                 val summary = shiftWorkRows.filter { it.length != 0 }.map {
                     pluralStringResource(
                         R.plurals.shift_work_record_title,

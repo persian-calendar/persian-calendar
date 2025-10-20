@@ -365,6 +365,8 @@ fun SharedTransitionScope.CalendarsOverview(
             }
         }
 
+        val numeral by numeral.collectAsState()
+
         this.AnimatedVisibility(isExpanded) {
             AutoSizedBodyText(
                 stringResource(
@@ -442,12 +444,13 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
     }
     val calendar = Date(timestamp).toGregorianCalendar()
     return resources.getString(
-        R.string.spring_equinox, numeral.format(equinoxYear), calendar.formatDateAndTime()
+        R.string.spring_equinox, numeral.value.format(equinoxYear), calendar.formatDateAndTime()
     ) to timestamp
 }
 
 @Composable
 private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded: Boolean) {
+    val numeral by numeral.collectAsState()
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,

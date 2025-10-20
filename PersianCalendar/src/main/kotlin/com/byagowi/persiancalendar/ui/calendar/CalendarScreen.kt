@@ -902,6 +902,7 @@ private fun SharedTransitionScope.Toolbar(
             val title: String
             val subtitle: String
             run {
+                val numeral by numeral.collectAsState()
                 val secondaryCalendar =
                     yearViewCalendar.takeIf { it != mainCalendar } ?: secondaryCalendar
                 if (isYearView && yearViewCalendar != null) {

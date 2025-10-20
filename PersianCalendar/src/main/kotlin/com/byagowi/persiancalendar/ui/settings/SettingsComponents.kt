@@ -432,6 +432,7 @@ fun SettingsSlider(
             )
             Spacer(Modifier.width(16.dp))
             val roundedValue = (value * 100).roundToInt()
+            val numeral by numeral.collectAsState()
             Text(numeral.format(roundedValue))
             AnimatedVisibility(roundedValue == 0) { Spacer(Modifier.width(16.dp)) }
             AnimatedVisibility(roundedValue != 0) {

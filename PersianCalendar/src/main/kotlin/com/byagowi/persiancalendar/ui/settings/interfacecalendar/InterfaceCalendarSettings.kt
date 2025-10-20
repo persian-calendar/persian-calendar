@@ -221,6 +221,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
                 )
             }
         }
+        val numeral by numeral.collectAsState()
         SettingsSingleSelect(
             PREF_ISLAMIC_OFFSET,
             // One is formatted with locale's numerals and the other used for keys isn't
