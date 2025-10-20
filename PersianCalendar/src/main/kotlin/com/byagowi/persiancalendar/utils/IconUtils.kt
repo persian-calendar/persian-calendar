@@ -19,9 +19,9 @@ fun createStatusIcon(
     val text = numeral.format(dayOfMonth)
     val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textSize = when {
-            numeral.isArabic -> 75f
+            numeral.isArabicIndicVariants -> 90f
             numeral.isTamil -> if (text.length == 1) 65f else 40f
-            else -> 90f
+            else -> 75f
         }
         it.textAlign = Paint.Align.CENTER
         it.color = color

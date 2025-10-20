@@ -120,9 +120,9 @@ fun SharedTransitionScope.MonthScreen(
             val diameter = min(cellWidth, cellHeight)
             val customFontName by customFontName.collectAsState()
             val daysTextSize = diameter * when {
-                mainCalendarNumeral.isArabic || customFontName != null -> 18
+                mainCalendarNumeral.isArabicIndicVariants && customFontName == null -> 25
                 mainCalendarNumeral.isTamil -> 16
-                else -> 25
+                else -> 18
             } / 40
             val daysStyle = LocalTextStyle.current.copy(
                 fontSize = with(density) { daysTextSize.toSp() },

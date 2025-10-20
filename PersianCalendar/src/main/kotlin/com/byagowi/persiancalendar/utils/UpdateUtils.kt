@@ -827,9 +827,9 @@ private fun createMonthViewRemoteViews(
     val cellHeight = height.toFloat() / 7f
     val cellRadius = min(cellWidth, cellHeight) / 2
     val cellFontSize = cellRadius * (if (isShowWeekOfYearEnabled) 1.2f else 1.1f) * when {
-        mainCalendarNumeral.isArabic -> .8f
+        mainCalendarNumeral.isArabicIndicVariants -> 1f
         mainCalendarNumeral.isTamil -> .7f
-        else -> 1f
+        else -> .8f
     }
     val contentDescription = renderMonthWidget(
         dayPainter = DayPainter(
@@ -857,7 +857,7 @@ private fun createMonthViewRemoteViews(
             val contentDescription = context.getString(R.string.nth_week_of_year, text)
             remoteViews.setContentDescription(id, contentDescription)
             cellRadius.let {
-                it * if (mainCalendarNumeral.isArabic) .8f else 1f
+                it * if (mainCalendarNumeral.isArabicIndicVariants) 1f else .8f
             }.let { remoteViews.setTextViewTextSize(id, TypedValue.COMPLEX_UNIT_PX, it * .8f) }
             remoteViews.setAlpha(id, .5f)
             remoteViews.setDynamicTextColor(id, android.R.attr.colorForeground)

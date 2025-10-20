@@ -134,9 +134,9 @@ fun daysTable(
         )
     }
     val daysTextSize = diameter * when {
-        mainCalendarNumeral.isArabic || fontFile != null -> 18
         mainCalendarNumeral.isTamil -> 16
-        else -> 25
+        mainCalendarNumeral.isArabicIndicVariants && fontFile == null -> 25
+        else -> 18
     } / 40
     val daysStyle = LocalTextStyle.current.copy(
         fontSize = with(density) { daysTextSize.toSp() },
