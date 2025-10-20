@@ -72,6 +72,8 @@ fun CoordinatesDialog(
     // Whenever text field change this signals geocoder rerun
     // and no need to save as below remember also isn't saved
     var changeCounter by remember { mutableIntStateOf(0) }
+    fun parseDouble(value: String): Double? =
+        reverseFormatNumber(value).replace("°", "").toDoubleOrNull()
     AppDialog(
         title = { Text(stringResource(R.string.coordinates)) },
         neutralButton = {
@@ -96,7 +98,7 @@ fun CoordinatesDialog(
                     if (i == 2 && x.value.isEmpty()) "0" else x.value
                 }.mapIndexedNotNull { i, coordinate ->
                     // Make sure coordinates array has both parsable and in range numbers
-                    reverseFormatNumber(coordinate).toDoubleOrNull()?.takeIf {
+                    parseDouble(coordinate)?.takeIf {
                         when (i) {
                             0 -> abs(it) <= 90 // Valid latitudes
                             1 -> abs(it) <= 180 // Valid longitudes
@@ -132,7 +134,9 @@ fun CoordinatesDialog(
                             )
                         }
                     },
-                    value = formatNumber(fieldState.value),
+                    value = formatNumber(fieldState.value).let {
+                        if (stringId == R.string.altitude) it else it.replace("°", "") + "°"
+                    },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     onValueChange = {
                         fieldState.value = it
@@ -164,8 +168,8 @@ fun CoordinatesDialog(
         LaunchedEffect(changeCounter) {
             launch(Dispatchers.IO) {
                 runCatching {
-                    val latitude = state[0].value.toDoubleOrNull() ?: 0.0
-                    val longitude = state[1].value.toDoubleOrNull() ?: 0.0
+                    val latitude = parseDouble(state[0].value) ?: 0.0
+                    val longitude = parseDouble(state[1].value) ?: 0.0
                     val geocoder =
                         Geocoder(context, language.value.asSystemLocale()).getFromLocation(
                             latitude, longitude, 20
