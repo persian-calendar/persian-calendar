@@ -28,16 +28,13 @@ enum class Numeral(private val digits: List<Char>) {
     }
 
     fun parseDouble(number: String): Double? {
+        if (this == TAMIL) when (number) {
+            "௰" -> return 10.0
+            "௱" -> return 100.0
+            "௲" -> return 1000.0
+        }
         return number
             .let { if (isEasternArabic) it.replace(ARABIC_DECIMAL_SEPARATOR, ".") else it }
-            .let {
-                if (this == TAMIL) when (it) {
-                    "௰" -> "10"
-                    "௱" -> "100"
-                    "௲" -> "1000"
-                    else -> it
-                } else it
-            }
             .map {
                 val digit = digits.indexOf(it)
                 if (digit == -1) "$it" else "$digit"
