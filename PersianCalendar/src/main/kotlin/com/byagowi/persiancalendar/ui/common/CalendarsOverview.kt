@@ -74,6 +74,7 @@ import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAncientIranEnabled
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
@@ -127,6 +128,8 @@ fun SharedTransitionScope.CalendarsOverview(
     animatedContentScope: AnimatedContentScope,
 ) {
     val resources = LocalResources.current
+    val language by language.collectAsState()
+    val numeral by numeral.collectAsState()
     val isToday = today == jdn
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     Column(
@@ -146,7 +149,6 @@ fun SharedTransitionScope.CalendarsOverview(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(horizontal = 24.dp)
         ) {
-            val language by language.collectAsState()
             this.AnimatedVisibility(isExpanded || language.alwaysNeedMoonState) {
                 AndroidView(
                     factory = ::MoonView,
@@ -173,7 +175,7 @@ fun SharedTransitionScope.CalendarsOverview(
             ) { SelectionContainer { Text(it, color = MaterialTheme.colorScheme.primary) } }
         }
         Spacer(Modifier.height(8.dp))
-        CalendarsFlow(shownCalendars, jdn, isExpanded)
+        CalendarsFlow(shownCalendars, jdn, isExpanded, numeral)
         Spacer(Modifier.height(4.dp))
 
         val date = jdn on selectedCalendar
@@ -195,7 +197,6 @@ fun SharedTransitionScope.CalendarsOverview(
             )
         }
 
-        val language by language.collectAsState()
         val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
 
         val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
@@ -365,8 +366,6 @@ fun SharedTransitionScope.CalendarsOverview(
             }
         }
 
-        val numeral by numeral.collectAsState()
-
         this.AnimatedVisibility(isExpanded) {
             AutoSizedBodyText(
                 stringResource(
@@ -449,8 +448,12 @@ fun equinoxTitle(date: PersianDate, jdn: Jdn, resources: Resources): Pair<String
 }
 
 @Composable
-private fun CalendarsFlow(calendarsToShow: List<Calendar>, jdn: Jdn, isExpanded: Boolean) {
-    val numeral by numeral.collectAsState()
+private fun CalendarsFlow(
+    calendarsToShow: List<Calendar>,
+    jdn: Jdn,
+    isExpanded: Boolean,
+    numeral: Numeral,
+) {
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,

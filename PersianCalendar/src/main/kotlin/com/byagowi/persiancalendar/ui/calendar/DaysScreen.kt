@@ -118,6 +118,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -199,6 +200,7 @@ fun SharedTransitionScope.DaysScreen(
     val hasWeeksPager =
         LocalWindowInfo.current.containerSize.height > with(density) { 600.dp.toPx() }
     val language by language.collectAsState()
+    val numeral by numeral.collectAsState()
     var isAddEventBoxEnabled by remember { mutableStateOf(false) }
 
     val todayButtonAction = {
@@ -265,7 +267,6 @@ fun SharedTransitionScope.DaysScreen(
                                 )
                             ) { if (!isWeekView) isWeekView = true else navigateUp() },
                         ) {
-                            val numeral by numeral.collectAsState()
                             val secondaryCalendar = secondaryCalendar
                             val title: String
                             val subtitle: String
@@ -454,6 +455,7 @@ fun SharedTransitionScope.DaysScreen(
                                     initialScroll = initialScroll,
                                     cellHeight = cellHeight,
                                     scale = scale,
+                                    numeral = numeral,
                                 )
                             }
                         }
@@ -519,6 +521,7 @@ fun SharedTransitionScope.DaysScreen(
                                 initialScroll = initialScroll,
                                 cellHeight = cellHeight,
                                 scrollableModifier = swipeDownOnScrollableModifier,
+                                numeral = numeral,
                             )
                         }
                     }
@@ -586,6 +589,7 @@ private fun DaysView(
     scale: Animatable<Float, AnimationVector1D>,
     initialScroll: Int,
     cellHeight: Dp,
+    numeral: Numeral,
     modifier: Modifier = Modifier,
     scrollableModifier: Modifier,
 ) {
@@ -737,7 +741,6 @@ private fun DaysView(
                                             },
                                     )
                                 }
-                                val numeral by numeral.collectAsState()
                                 if (i == 2 && dayEvents.size > 3 && !isExpanded) Text(
                                     " +" + numeral.format(dayEvents.size - 3),
                                     modifier = Modifier.padding(bottom = 4.dp),
@@ -1173,7 +1176,6 @@ private fun DaysView(
                         drawCircle(circleBorder, radius + circleBorderSize, offset2)
                         drawCircle(primaryWithAlpha, radius, offset2)
                     }
-                    val numeral by numeral.collectAsState()
                     val compact = dy < 3 / scale.value || run {
                         // This is an ugly hack as the lack of proper autosize here, for now
                         !numeral.isArabicIndicVariants
