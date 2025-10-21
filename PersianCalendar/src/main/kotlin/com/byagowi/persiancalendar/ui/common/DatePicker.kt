@@ -64,7 +64,7 @@ private fun RowScope.DatePickerContent(
         val months = yearMonthNameOfDate(date);
         { item: Int -> numeral.format(item) + " / " + months[item - 1] }
     }
-    val todayYear = remember(calendar) { Jdn.today().on(calendar).year }
+    val todayYear = remember(calendar) { (Jdn.today() on calendar).year }
     val startYear = remember(calendar) { todayYear - yearsLimit / 2 }
     val view = LocalView.current
     NumberPicker(

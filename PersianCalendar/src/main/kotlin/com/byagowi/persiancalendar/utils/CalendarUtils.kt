@@ -365,6 +365,7 @@ fun monthFormatForSecondaryCalendar(
         from.month == to.month -> language.value.my.format(
             from.monthName, numeral.value.format(from.year)
         )
+
         from.year != to.year -> listOf(
             from.year to from.month..secondaryCalendar.getYearMonths(from.year),
             to.year to 1..to.month
@@ -391,10 +392,10 @@ fun getSecondaryCalendarNumeral(secondaryCalendar: Calendar?) = when {
 fun otherCalendarFormat(
     yearViewYear: Int, calendar: Calendar, otherCalendar: Calendar
 ): String {
-    val startOfYear = Jdn(calendar.createDate(yearViewYear, 1, 1)).on(otherCalendar).year
-    val endOfYear = (Jdn(
+    val startOfYear = (Jdn(calendar.createDate(yearViewYear, 1, 1)) on otherCalendar).year
+    val endOfYear = ((Jdn(
         calendar.createDate(yearViewYear + 1, 1, 1)
-    ) - 1).on(otherCalendar).year
+    ) - 1) on otherCalendar).year
     return listOf(startOfYear, endOfYear).distinct().joinToString(EN_DASH) {
         numeral.value.format(it)
     }

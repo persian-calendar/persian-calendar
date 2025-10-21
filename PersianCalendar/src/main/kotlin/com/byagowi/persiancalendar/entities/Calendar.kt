@@ -49,10 +49,10 @@ enum class Calendar(
     }
 
     fun getYearMonths(year: Int): Int =
-        (Jdn(this, year + 1, 1, 1) - 1).on(this).month
+        ((Jdn(this, year + 1, 1, 1) - 1) on this).month
 
     fun getMonthLength(year: Int, month: Int): Int =
-        (Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - 1).on(this).dayOfMonth
+        ((Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - 1) on this).dayOfMonth
 
     private fun getMonthStartFromMonthsDistance(
         baseYear: Int, baseMonth: Int, monthsDistance: Int

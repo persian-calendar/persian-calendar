@@ -171,7 +171,7 @@ class DayPainter(
         this.header = listOfNotNull(
             if (secondaryCalendar == null || jdn == null) null
             else getSecondaryCalendarNumeral(secondaryCalendar).format(
-                jdn.on(secondaryCalendar).dayOfMonth
+                (jdn on secondaryCalendar).dayOfMonth
             ),
             header,
         ).joinToString(" ")

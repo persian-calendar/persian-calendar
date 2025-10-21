@@ -181,7 +181,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                         remember(yearOffset, today) {
                             val yearStartJdn = Jdn(
                                 calendar.createDate(
-                                    today.on(calendar).year + yearOffset, 1, 1
+                                    (today on calendar).year + yearOffset, 1, 1
                                 )
                             )
                             if (isShowDeviceCalendarEvents.value) {

@@ -187,7 +187,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
                 CalendarScreenTab.entries.getOrNull(preferences.getInt(LAST_CHOSEN_TAB_KEY, 0))
                     ?: CalendarScreenTab.entries[0]
             )
-            selectedTab.collectLatest { preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it.ordinal) } }
+            selectedTab.collectLatest {
+                preferences.edit { putInt(LAST_CHOSEN_TAB_KEY, it.ordinal) }
+            }
         }
         viewModelScope.launch {
             while (true) {

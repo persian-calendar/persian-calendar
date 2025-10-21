@@ -150,7 +150,7 @@ fun daysTable(
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
              selectedDay ->
         val previousMonthLength =
-            if (onlyWeek == null) null else (monthStartJdn - 1).on(mainCalendar).dayOfMonth
+            if (onlyWeek == null) null else ((monthStartJdn - 1) on mainCalendar).dayOfMonth
 
         val startingWeekDay = applyWeekStartOffsetToWeekDay(monthStartJdn.weekDay)
         val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
