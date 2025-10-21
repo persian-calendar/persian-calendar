@@ -9,7 +9,7 @@ enum class Numeral(private val zero: Char) {
     ARABIC('0'), // 0123456789 the that is most common in the world
     ARABIC_INDIC('٠'), // ٠١٢٣٤٥٦٧٨٩ used in Central Kurdish for example
     DEVANAGARI('०'), // ०१२३४५६७८९ used in Nepali for example
-    TAMIL('௦'), // ௦௧௨௩௪௫௬௭௮௯ but 10, 100 and 1000 of it has some complexity
+    TAMIL('௦'), // ௦௧௨௩௪௫௬௭௮௯ but for 10, 100 and 1000 of it has some complexity
     CJK('０'); // ０１２３４５６７８９ not used in the UI currently
 
     fun format(number: Int) = format("$number")
@@ -24,13 +24,14 @@ enum class Numeral(private val zero: Char) {
                 "1000" -> return "௲"
             }
         }
-        return number
-            .map {
-                val value = it - '0' // Or Arabic.zero
-                if (0 <= value && value <= 9) zero + value else it
+        return number.mapToString { ch ->
+            when {
+                ch in '0'..'9' -> zero + (ch - '0')
+                this.isArabicIndicVariants && ch == '.' -> ARABIC_DECIMAL_SEPARATOR
+                this.isArabicIndicVariants && ch == ',' -> ARABIC_THOUSANDS_SEPARATOR
+                else -> ch
             }
-            .joinToString("")
-            .let { if (isArabicIndicVariants) it.replace(".", ARABIC_DECIMAL_SEPARATOR) else it }
+        }
     }
 
     fun parseDouble(number: String): Double? {
@@ -40,28 +41,27 @@ enum class Numeral(private val zero: Char) {
             "௱" -> return 100.0
             "௲" -> return 1000.0
         }
-        return number
-            .let { if (isArabicIndicVariants) it.replace(ARABIC_DECIMAL_SEPARATOR, ".") else it }
-            .map {
-                val value = it - zero
-                if (0 <= value && value <= 9) "$value" else it
+        return number.mapToString { ch ->
+            when {
+                ch in zero..zero + 9 -> '0' + (ch - zero)
+                this.isArabicIndicVariants && ch == ARABIC_DECIMAL_SEPARATOR -> '.'
+                this.isArabicIndicVariants && ch == ARABIC_THOUSANDS_SEPARATOR -> ','
+                else -> ch
             }
-            .joinToString("")
-            .toDoubleOrNull()
+        }.toDoubleOrNull()
     }
 
-    fun formatLongNumber(value: Long): String {
-        return format("%,d".format(Locale.ENGLISH, value)).let {
-            if (isArabicIndicVariants) it.replace(",", ARABIC_THOUSANDS_SEPARATOR) else it
-        }
-    }
+    private inline fun String.mapToString(crossinline action: (Char) -> Char) =
+        String(CharArray(this.length) { action(this[it]) })
+
+    fun formatLongNumber(value: Long) = format("%,d".format(Locale.ENGLISH, value))
 
     val isArabic get() = this == ARABIC
     val isTamil get() = this == TAMIL
     val isArabicIndicVariants get() = this == PERSIAN || this == ARABIC_INDIC
 
     companion object {
-        const val ARABIC_THOUSANDS_SEPARATOR = "٬"
-        const val ARABIC_DECIMAL_SEPARATOR = "٫"
+        const val ARABIC_THOUSANDS_SEPARATOR = '٬'
+        const val ARABIC_DECIMAL_SEPARATOR = '٫'
     }
 }
