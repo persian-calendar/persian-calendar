@@ -1001,7 +1001,7 @@ private fun SharedTransitionScope.Toolbar(
                                     .clickable(
                                         onClickLabel = stringResource(R.string.cancel) + " " +
                                                 stringResource(R.string.cancel)
-                                    ) { viewModel.changeYearViewCalendar(mainCalendar) }
+                                    ) { viewModel.changeYearViewCalendar(null) }
                                     .padding(horizontal = 8.dp)
                             },
                         )
@@ -1042,7 +1042,7 @@ private fun SharedTransitionScope.Toolbar(
             this.AnimatedVisibility(!isYearView) {
                 val todayButtonVisibility by viewModel.todayButtonVisibility.collectAsState()
                 TodayActionButton(todayButtonVisibility) {
-                    viewModel.changeYearViewCalendar(mainCalendar)
+                    viewModel.changeYearViewCalendar(null)
                     bringDate(viewModel, Jdn.today(), context, highlight = false)
                 }
             }
