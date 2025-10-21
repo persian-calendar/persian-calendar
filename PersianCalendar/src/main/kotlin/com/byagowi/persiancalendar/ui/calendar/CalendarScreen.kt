@@ -991,10 +991,8 @@ private fun SharedTransitionScope.Toolbar(
                             ),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            modifier = when {
-                                isYearView -> Modifier
-                                yearViewCalendar == mainCalendar -> Modifier
-                                yearViewCalendar == secondaryCalendar -> Modifier
+                            modifier = if (isYearView) Modifier else when (yearViewCalendar) {
+                                null, mainCalendar, secondaryCalendar -> Modifier
                                 else -> Modifier
                                     .clip(MaterialTheme.shapes.extraLarge)
                                     .background(LocalContentColor.current.copy(alpha = .175f))
