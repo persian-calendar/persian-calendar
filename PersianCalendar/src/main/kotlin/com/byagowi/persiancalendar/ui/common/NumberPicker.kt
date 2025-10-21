@@ -81,7 +81,7 @@ fun NumberPicker(
     onNextLabel: String? = null,
     pendingConfirms: MutableCollection<() -> Unit>,
     value: Int,
-    setValue: (Int) -> Unit,
+    onValueChange: (Int) -> Unit,
 ) {
     val minimumAlpha = 0.3f
     val verticalMargin = 8.dp
@@ -131,7 +131,7 @@ fun NumberPicker(
                             },
                         ).endState.value
 
-                        setValue(
+                        onValueChange(
                             range.first + getItemIndexForOffset(
                                 range,
                                 value,
@@ -166,7 +166,7 @@ fun NumberPicker(
                             indication = null,
                             interactionSource = null,
                         ) {
-                            if (pendingConfirms.isEmpty()) setValue(value - 1)
+                            if (pendingConfirms.isEmpty()) onValueChange(value - 1)
                             else pendingConfirms.forEach { it() }
                         }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
@@ -180,7 +180,7 @@ fun NumberPicker(
                         pendingConfirms = pendingConfirms,
                         isValid = { it in range },
                         initialValue = value,
-                        setValue = setValue,
+                        onValueChange = onValueChange,
                     ) else Label(
                         text = label(range.first + indexOfElement),
                         modifier = Modifier
@@ -188,10 +188,10 @@ fun NumberPicker(
                                 this.role = Role.ValuePicker
                                 this.customActions = listOfNotNull(
                                     onPreviousLabel?.takeIf { previousItemExists() }?.let {
-                                        CustomAccessibilityAction(it) { setValue(value - 1); true }
+                                        CustomAccessibilityAction(it) { onValueChange(value - 1); true }
                                     },
                                     onNextLabel?.takeIf { nextItemExists() }?.let {
-                                        CustomAccessibilityAction(it) { setValue(value + 1); true }
+                                        CustomAccessibilityAction(it) { onValueChange(value + 1); true }
                                     },
                                 )
                             }
@@ -224,7 +224,7 @@ fun NumberPicker(
                             indication = null,
                             interactionSource = null,
                         ) {
-                            if (pendingConfirms.isEmpty()) setValue(value + 1)
+                            if (pendingConfirms.isEmpty()) onValueChange(value + 1)
                             else pendingConfirms.forEach { it() }
                         }
                         .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
@@ -251,7 +251,7 @@ fun NumberEdit(
     modifier: Modifier = Modifier,
     isValid: (Int) -> Boolean,
     initialValue: Int,
-    setValue: (Int) -> Unit,
+    onValueChange: (Int) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -308,7 +308,7 @@ fun NumberEdit(
                 .onFocusChanged {
                     if (!it.isFocused) {
                         pendingConfirms.remove(clearFocus)
-                        resolveValue()?.let(setValue)
+                        resolveValue()?.let(onValueChange)
                     }
                 },
         )
