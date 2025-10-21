@@ -809,7 +809,7 @@ private fun createMonthViewRemoteViews(
             else 0xFF376E9F.toInt()
         ),
         holidays = holidaysColor,
-        holidaysCircle = holidaysColor.copy(alpha = .15f),
+        holidaysCircle = holidaysColor.copy(alpha = .175f),
         eventIndicator = contentColor,
         currentDay = contentColor,
         textDaySelected = contentColor,
@@ -873,7 +873,6 @@ private fun createMonthViewRemoteViews(
             }.also { remoteViews.setDynamicTextColor(id, it) }
             when {
                 i < 7 -> .5f
-                isHoliday -> .5f
                 else -> 1f
             }.also { remoteViews.setAlpha(id, it) }
         } else null,
