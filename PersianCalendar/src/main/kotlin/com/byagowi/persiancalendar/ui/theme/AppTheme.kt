@@ -56,6 +56,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.global.customFontName
 import com.byagowi.persiancalendar.global.isGradient
+import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isRedHolidays
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.systemDarkTheme
@@ -313,7 +314,9 @@ fun appMonthColors(): MonthColors {
         Theme.MODERN -> Color(0xFFE51C23)
         else -> null.debugAssertNotNull ?: Color.Transparent
     }
-    val holidayCircleAlpha = if (theme.isDynamicColors && !isRedHolidays) when (theme) {
+    val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
+    val holidayCircleAlpha = if (isHighTextContrastEnabled) .2f
+    else if (theme.isDynamicColors && !isRedHolidays) when (theme) {
         Theme.LIGHT -> .125f
         Theme.DARK -> .1f
         Theme.BLACK -> .2f
