@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.settings
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -426,7 +427,7 @@ fun SettingsSlider(
         ) { state -> Text(state, style = MaterialTheme.typography.bodyLarge) }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Slider(
-                value = value,
+                value = animateFloatAsState(value).value.coerceIn(0f, 1f),
                 onValueChange = onValueChange,
                 modifier = Modifier.weight(1f),
             )
