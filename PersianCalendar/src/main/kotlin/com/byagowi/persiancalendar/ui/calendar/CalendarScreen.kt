@@ -657,7 +657,7 @@ private fun Details(
                             }
                         }
                         .then(modifier)
-                } else Modifier
+                } else Modifier,
             ) {
                 // Currently scrollable tabs only happen on landscape layout
                 val scrollState = if (scrollableTabs) rememberScrollState() else null
@@ -997,9 +997,11 @@ private fun SharedTransitionScope.Toolbar(
                                     .clip(MaterialTheme.shapes.extraLarge)
                                     .background(LocalContentColor.current.copy(alpha = .175f))
                                     .clickable(
-                                        onClickLabel = stringResource(R.string.cancel) + " " +
-                                                stringResource(R.string.cancel)
-                                    ) { viewModel.changeYearViewCalendar(null) }
+                                        onClickLabel = buildString {
+                                            append(stringResource(R.string.cancel))
+                                            append(" ")
+                                            append(stringResource(R.string.year_view))
+                                        }) { viewModel.changeYearViewCalendar(null) }
                                     .padding(horizontal = 8.dp)
                             },
                         )
