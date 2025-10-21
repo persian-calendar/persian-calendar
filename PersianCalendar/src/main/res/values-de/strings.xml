@@ -416,4 +416,10 @@
     <string name="month_view">Monatsansicht</string>
     <string name="horoscope">Horoskop</string>
     <string name="planetary_hours">Planetenstunden</string>
+    <string name="select_font">Schriftart auswählen</string>
+    <string name="move_up">Nach oben</string>
+    <string name="move_down">Nach unten</string>
+    <string name="black_moon">Lilith</string>
+    <string name="dynamic_icon">Dynamisches Symbol</string>
+    <string name="large_day_number_on_notification">Große Tageszahl auf der Benachrichtigung</string>
 </resources>
