@@ -24,12 +24,12 @@ enum class Numeral(private val zero: Char) {
                 "1000" -> return "௲"
             }
         }
-        return number.mapToString { ch ->
+        return number.mapToString {
             when {
-                ch in '0'..'9' -> zero + (ch - '0')
-                this.isArabicIndicVariants && ch == '.' -> ARABIC_DECIMAL_SEPARATOR
-                this.isArabicIndicVariants && ch == ',' -> ARABIC_THOUSANDS_SEPARATOR
-                else -> ch
+                it in '0'..'9' -> zero + (it - '0')
+                this@Numeral.isArabicIndicVariants && it == '.' -> ARABIC_DECIMAL_SEPARATOR
+                this@Numeral.isArabicIndicVariants && it == ',' -> ARABIC_THOUSANDS_SEPARATOR
+                else -> it
             }
         }
     }
@@ -41,12 +41,12 @@ enum class Numeral(private val zero: Char) {
             "௱" -> return 100.0
             "௲" -> return 1000.0
         }
-        return number.mapToString { ch ->
+        return number.mapToString {
             when {
-                ch in zero..zero + 9 -> '0' + (ch - zero)
-                this.isArabicIndicVariants && ch == ARABIC_DECIMAL_SEPARATOR -> '.'
-                this.isArabicIndicVariants && ch == ARABIC_THOUSANDS_SEPARATOR -> ','
-                else -> ch
+                it in zero..zero + 9 -> '0' + (it - zero)
+                this@Numeral.isArabicIndicVariants && it == ARABIC_DECIMAL_SEPARATOR -> '.'
+                this@Numeral.isArabicIndicVariants && it == ARABIC_THOUSANDS_SEPARATOR -> ','
+                else -> it
             }
         }.toDoubleOrNull()
     }
