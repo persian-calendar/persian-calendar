@@ -73,7 +73,7 @@ import kotlin.math.roundToInt
 @Composable
 fun NumberPicker(
     modifier: Modifier = Modifier,
-    label: ((Int) -> String)? = null,
+    label: (Int) -> String = numeral.collectAsState().value::format,
     range: IntRange,
     onClickLabel: String? = null,
     disableEdit: Boolean = false,
@@ -83,10 +83,6 @@ fun NumberPicker(
     value: Int,
     setValue: (Int) -> Unit,
 ) {
-    val label = label ?: run {
-        val numeral by numeral.collectAsState()
-        numeral::format
-    }
     val minimumAlpha = 0.3f
     val verticalMargin = 8.dp
     val numbersColumnHeight = 96.dp
