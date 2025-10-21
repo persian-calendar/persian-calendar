@@ -52,7 +52,7 @@ enum class Numeral(private val zero: Char) {
     }
 
     private inline fun String.mapToString(crossinline action: (Char) -> Char) =
-        String(CharArray(this.length) { action(this[it]) })
+        CharArray(this.length) { action(this[it]) }.concatToString()
 
     fun formatLongNumber(value: Long) = format("%,d".format(Locale.ENGLISH, value))
 
