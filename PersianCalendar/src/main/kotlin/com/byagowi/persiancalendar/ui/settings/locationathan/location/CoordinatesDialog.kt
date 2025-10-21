@@ -134,6 +134,7 @@ fun CoordinatesDialog(
                             )
                         }
                     },
+                    isError = parseDouble(fieldState.value) == null,
                     value = numeral.format(fieldState.value, isInEdit = true).let {
                         if (stringId == R.string.altitude) it else it.replace("°", "") + "°"
                     },
