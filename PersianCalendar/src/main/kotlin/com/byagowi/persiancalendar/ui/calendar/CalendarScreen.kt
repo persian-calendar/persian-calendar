@@ -627,7 +627,6 @@ private fun Details(
     Column(modifier.indication(interactionSource = interactionSource, indication = ripple())) {
         val selectedTab by viewModel.selectedTab.collectAsState()
         val coroutineScope = rememberCoroutineScope()
-        val isOnlyEventsTab = tabs.size == 1
 
         if (!isOnlyEventsTab) PrimaryTabRow(
             selectedTabIndex = selectedTab.ordinal,
