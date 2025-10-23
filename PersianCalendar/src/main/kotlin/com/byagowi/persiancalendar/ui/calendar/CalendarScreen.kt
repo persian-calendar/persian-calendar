@@ -240,18 +240,6 @@ fun SharedTransitionScope.CalendarScreen(
         daysScreenSelectedDay?.let { bringDate(viewModel, it, context, it != today) }
     }
 
-    val swipeUpActions = mapOf(
-        SwipeUpAction.Schedule to { navigateToSchedule() },
-        SwipeUpAction.DayView to { navigateToDays(viewModel.selectedDay.value, false) },
-        SwipeUpAction.WeekView to { navigateToDays(viewModel.selectedDay.value, true) },
-    )
-
-    val swipeDownActions = mapOf(
-//            SwipeDownAction.MonthView to { navigateToMonthView() },
-        SwipeDownAction.YearView to { viewModel.openYearView() },
-    )
-
-
     val density = LocalDensity.current
     var fabPlaceholderHeight by remember { mutableStateOf<Dp?>(null) }
 
@@ -264,6 +252,24 @@ fun SharedTransitionScope.CalendarScreen(
         animatedContentScope = animatedContentScope,
         today = today,
         fabPlaceholderHeight = fabPlaceholderHeight,
+    )
+    val isOnlyEventsTab = detailsTabs.size == 1
+
+    val swipeUpActions = mapOf(
+        SwipeUpAction.Schedule to { navigateToSchedule() },
+        SwipeUpAction.DayView to { navigateToDays(viewModel.selectedDay.value, false) },
+        SwipeUpAction.WeekView to { navigateToDays(viewModel.selectedDay.value, true) },
+        SwipeUpAction.None to {
+            if (isOnlyEventsTab) bringDate(viewModel, viewModel.selectedDay.value - 7, context)
+        },
+    )
+
+    val swipeDownActions = mapOf(
+//            SwipeDownAction.MonthView to { navigateToMonthView() },
+        SwipeDownAction.YearView to { viewModel.openYearView() },
+        SwipeDownAction.None to {
+            if (isOnlyEventsTab) bringDate(viewModel, viewModel.selectedDay.value + 7, context)
+        },
     )
 
     Scaffold(
@@ -317,7 +323,6 @@ fun SharedTransitionScope.CalendarScreen(
         },
         floatingActionButton = {
             val selectedTab by viewModel.selectedTab.collectAsState()
-            val isOnlyEventsTab = detailsTabs.size == 1
 
             // Window height fallback for older device isn't consistent, let's just
             // use some hardcoded value in detailsTabs() instead
@@ -402,6 +407,7 @@ fun SharedTransitionScope.CalendarScreen(
                                 contentMinHeight = maxHeight,
                                 scrollableTabs = true,
                                 bottomPadding = bottomPaddingWithMinimum,
+                                isOnlyEventsTab = isOnlyEventsTab,
                                 modifier = Modifier
                                     .fillMaxHeight()
                                     .windowInsetsPadding(
@@ -469,6 +475,7 @@ fun SharedTransitionScope.CalendarScreen(
                                         pagerState = detailsPagerState,
                                         contentMinHeight = detailsMinHeight,
                                         bottomPadding = bottomPaddingWithMinimum,
+                                        isOnlyEventsTab = isOnlyEventsTab,
                                         modifier = Modifier.defaultMinSize(minHeight = detailsMinHeight),
                                     )
                                 }
@@ -613,6 +620,7 @@ private fun Details(
     contentMinHeight: Dp,
     modifier: Modifier,
     bottomPadding: Dp,
+    isOnlyEventsTab: Boolean,
     scrollableTabs: Boolean = false,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -1172,7 +1180,7 @@ private fun SharedTransitionScope.Menu(
 
         val preferredSwipeUpAction by preferredSwipeUpAction.collectAsState()
         swipeUpActions.forEach { (item, action) ->
-            ActionItem(
+            if (item != SwipeUpAction.None) ActionItem(
                 item,
                 action,
                 PREF_SWIPE_UP_ACTION,
@@ -1184,7 +1192,7 @@ private fun SharedTransitionScope.Menu(
 
         val preferredSwipeDownAction by preferredSwipeDownAction.collectAsState()
         swipeDownActions.forEach { (item, action) ->
-            ActionItem(
+            if (item != SwipeDownAction.None) ActionItem(
                 item,
                 action,
                 PREF_SWIPE_DOWN_ACTION,
