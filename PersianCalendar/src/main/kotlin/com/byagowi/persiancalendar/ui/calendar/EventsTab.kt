@@ -119,7 +119,7 @@ fun SharedTransitionScope.EventsTab(
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp, bottom = fabPlaceholderHeight),
+            .padding(top = 8.dp, bottom = fabPlaceholderHeight.coerceAtLeast(0.dp)),
     ) {
         val jdn by viewModel.selectedDay.collectAsState()
 
