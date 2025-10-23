@@ -754,14 +754,6 @@ private fun createScheduleRemoteViews(context: Context, width: Int?, widgetId: I
         context.launchAppPendingIntent("CALENDAR", true),
     )
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        remoteViews.setViewLayoutWidth(
-            R.id.add_event,
-            if (widthCells < 3) 32f else 52f,
-            TypedValue.COMPLEX_UNIT_DIP
-        )
-    }
-
     // Add event button
     val addEventPendingIntent = PendingIntent.getBroadcast(
         context,

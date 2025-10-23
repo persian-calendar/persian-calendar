@@ -86,6 +86,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             CKB -> "%1\$sی %2\$s"
             JA, ZH_CN -> "%2\$s %1\$s"
+            EN_US -> "%2\$s %1\$s"
             else -> "%1\$s %2\$s"
         }
     val my: String
