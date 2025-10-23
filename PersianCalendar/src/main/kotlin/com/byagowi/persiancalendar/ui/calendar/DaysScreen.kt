@@ -277,15 +277,17 @@ fun SharedTransitionScope.DaysScreen(
                                 subtitle = numeral.format(date.year)
                             } else {
                                 title = if (hasWeeksPager) language.my.format(
-                                    date.monthName, numeral.format(date.year)
+                                    date.monthName,
+                                    numeral.format(date.year),
                                 ) else language.dmy.format(
                                     numeral.format(date.dayOfMonth),
-                                    date.monthName, numeral.format(date.year)
+                                    date.monthName,
+                                    numeral.format(date.year),
                                 )
                                 val secondaryDate = selectedDay on secondaryCalendar
                                 subtitle = if (hasWeeksPager) language.my.format(
                                     secondaryDate.monthName,
-                                    numeral.format(secondaryDate.year)
+                                    numeral.format(secondaryDate.year),
                                 ) else language.dmy.format(
                                     numeral.format(secondaryDate.dayOfMonth),
                                     secondaryDate.monthName,
@@ -933,7 +935,8 @@ private fun DaysView(
                             val tint = prayTime.tint.copy(alpha = AppBlendAlpha)
                             val position = IntOffset(
                                 (cellWidthPx * offsetDay + firstColumnPx).roundToInt(),
-                                (prayTimes[prayTime].value * cellHeightPx).roundToInt()
+                                ((prayTimes[prayTime].value.takeIf { !it.isNaN() }
+                                    ?: .0) * cellHeightPx).roundToInt(),
                             )
                             Canvas(
                                 Modifier
