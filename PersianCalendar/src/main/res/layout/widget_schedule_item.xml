@@ -148,11 +148,11 @@
 
                 <TextView
                     android:id="@+id/event"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="none"
                     android:singleLine="true"
-                    android:textAlignment="viewStart"
+                    android:textAlignment="textStart"
                     android:textColor="@android:color/white"
                     android:textSize="14sp" />
 

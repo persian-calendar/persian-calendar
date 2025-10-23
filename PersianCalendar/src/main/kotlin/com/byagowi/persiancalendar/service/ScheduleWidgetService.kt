@@ -180,7 +180,8 @@ private class EventsViewFactory(
         } else {
             val title = when {
                 event?.isHoliday == true -> "[$holidayString] ${event.title}"
-                event is CalendarEvent<*> -> event.title
+                event is CalendarEvent.DeviceCalendarEvent -> event.title
+                event is CalendarEvent -> event.compactTitle
                 item.value is String -> item.value
                 else -> ""
             }

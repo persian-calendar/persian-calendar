@@ -33,6 +33,8 @@ sealed class CalendarEvent<T : AbstractDate>(
         val time: String?,
     ) : CalendarEvent<CivilDate>(title, isHoliday, date)
 
+    val compactTitle get() = title.replace(Regex(" \\([^)]+\\)$"), "")
+
     val oneLinerTitleWithTime
         get() = when (this) {
             is DeviceCalendarEvent -> if (time == null) title else {
