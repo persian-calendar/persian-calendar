@@ -43,6 +43,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
@@ -78,6 +79,7 @@ fun ColumnScope.WidgetNotificationSettings() {
 @Composable
 fun ColumnScope.NotificationSettings() {
     val context = LocalContext.current
+    val language by language.collectAsState()
     val isNotifyDate by isNotifyDate.collectAsState()
     run {
         val launcher = rememberLauncherForActivityResult(
@@ -119,6 +121,10 @@ fun ColumnScope.NotificationSettings() {
                 key = PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION,
                 value = isLargeDayNumberOnNotification,
                 title = stringResource(R.string.large_day_number_on_notification),
+                summary = when (language) {
+                    Language.FA, Language.FA_AF -> "نمایش روز ماه به صورت عددی بزرگ در اعلان برنامه"
+                    else -> null
+                }
             )
         }
     }
