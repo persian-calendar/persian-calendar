@@ -168,7 +168,8 @@ fun daysTable(
                     if (onlyWeek != null) suggestedHeight + 8.dp
                     else (cellHeight * (daysRowsCount + 1) + 12.dp)
                 )
-                .semantics { this.isTraversalGroup = true }) {
+                .semantics { this.isTraversalGroup = true },
+        ) {
             val highlightedDayOfMonth = selectedDay - monthStartJdn
             val indicatorCenter = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) {
                 val cellIndex = selectedDay - monthStartJdn + startingWeekDay
