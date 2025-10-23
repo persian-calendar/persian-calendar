@@ -396,7 +396,7 @@ private enum class Screen(val drawerEntry: Pair<ImageVector, Int>? = null) {
     ASTRONOMY(AstrologyIcon to R.string.astronomy), MAP,
     SETTINGS(Icons.Default.Settings to R.string.settings),
     ABOUT(Icons.Default.Info to R.string.about), LICENSES, DEVICE,
-    EXIT(Icons.Default.Cancel to R.string.exit);
+    EXIT(Icons.Default.Cancel to R.string.exit); // Not a screen but is on the drawer, so
 
     // Which item needs to be highlighted when user is on the screen
     val parent
