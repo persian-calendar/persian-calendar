@@ -29,11 +29,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -146,6 +149,8 @@ fun daysTable(
     val isTalkBackEnabled by isTalkBackEnabled.collectAsState()
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val numeral by numeral.collectAsState()
+    var focusedDay by remember { mutableStateOf<Jdn?>(null) }
+    val focusColor = LocalContentColor.current.copy(.1f)
 
     return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =
@@ -248,7 +253,8 @@ fun daysTable(
                     Box(
                         Modifier
                             .offset(y = cellHeight * (row + 1))
-                            .semantics { this.isTraversalGroup = true }) {
+                            .semantics { this.isTraversalGroup = true },
+                    ) {
                         if (column == 0) AnimatedVisibility(
                             isShowWeekOfYearEnabled,
                             modifier = Modifier
@@ -298,6 +304,10 @@ fun daysTable(
                             contentAlignment = Alignment.Center,
                             modifier = cellsSizeModifier
                                 .offset(x = pagerArrowSizeAndPadding.dp + cellWidth * column)
+                                .onFocusChanged {
+                                    if (it.isFocused) focusedDay = day
+                                    else if (!it.hasFocus && focusedDay == day) focusedDay = null
+                                }
                                 .combinedClickable(
                                     indication = null,
                                     interactionSource = null,
@@ -345,6 +355,10 @@ fun daysTable(
                                     style = Stroke(
                                         width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx(),
                                     ),
+                                )
+                                if (day == focusedDay) drawCircle(
+                                    focusColor,
+                                    radius = cellRadius * 1.5f
                                 )
                             }
                             Text(
