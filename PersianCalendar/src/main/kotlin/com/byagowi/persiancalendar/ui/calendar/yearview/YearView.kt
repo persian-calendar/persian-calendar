@@ -139,7 +139,9 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
             YearViewCommand.ToggleYearSelection -> scale.snapTo(if (scale.value > .5f) 0.01f else 1f)
 
             YearViewCommand.PreviousMonth -> {
-                lazyListState.animateScrollToItem(lazyListState.firstVisibleItemIndex - 1)
+                lazyListState.animateScrollToItem(
+                    (lazyListState.firstVisibleItemIndex - 1).coerceAtLeast(0)
+                )
             }
 
             YearViewCommand.NextMonth -> {
