@@ -203,9 +203,10 @@ fun daysTable(
 
             repeat(7) { column ->
                 Box(
-                    contentAlignment = Alignment.Center, modifier = cellsSizeModifier.offset(
+                    contentAlignment = Alignment.Center,
+                    modifier = cellsSizeModifier.offset(
                         x = pagerArrowSizeAndPadding.dp + cellWidth * column
-                    )
+                    ),
                 ) {
                     val weekDayPosition = revertWeekStartOffsetFromWeekDay(column)
                     val description = stringResource(
