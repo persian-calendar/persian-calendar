@@ -148,7 +148,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
     val daysOffsetKey = "DAYS_OFFSET"
 
     SharedTransitionLayout {
-        val initialDestination = Route.fromName(intentStartDestination)
+        val initialDestination = Screen.fromName(intentStartDestination)
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -167,11 +167,11 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     }
                 }
             },
-            gesturesEnabled = initialDestination == Route.CALENDAR,
+            gesturesEnabled = initialDestination == Screen.CALENDAR,
         ) {
             NavHost(navController = navController, startDestination = initialDestination.name) {
-                fun Route.navigate() = navController.navigate(this.name)
-                fun Route.navigate(bundle: Bundle) {
+                fun Screen.navigate() = navController.navigate(this.name)
+                fun Screen.navigate(bundle: Bundle) {
                     val destination = navController.graph.findNode(this.name) ?: return
                     navController.navigate(destination.id, bundle)
                 }
@@ -187,12 +187,12 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
 
                 fun navigateToSettingsLocationTab() =
-                    Route.SETTINGS.navigate(bundleOf(tabKey to LOCATION_ATHAN_TAB))
+                    Screen.SETTINGS.navigate(bundleOf(tabKey to LOCATION_ATHAN_TAB))
 
                 fun navigateToAstronomy(jdn: Jdn) =
-                    Route.ASTRONOMY.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
+                    Screen.ASTRONOMY.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
 
-                composable(Route.CALENDAR.name) { backStackEntry ->
+                composable(Screen.CALENDAR.name) { backStackEntry ->
                     val viewModel = viewModel<CalendarViewModel>()
                     appInitialJdn?.let {
                         viewModel.changeSelectedMonthOffsetCommand(
@@ -204,7 +204,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     CalendarScreen(
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToHolidaysSettings = {
-                            Route.SETTINGS.navigate(
+                            Screen.SETTINGS.navigate(
                                 bundleOf(
                                     tabKey to INTERFACE_CALENDAR_TAB,
                                     settingsKey to PREF_HOLIDAY_TYPES,
@@ -212,20 +212,20 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                             )
                         },
                         navigateToSettingsLocationTabSetAthanAlarm = {
-                            Route.SETTINGS.navigate(
+                            Screen.SETTINGS.navigate(
                                 bundleOf(
                                     tabKey to LOCATION_ATHAN_TAB,
                                     settingsKey to PREF_ATHAN_ALARM,
                                 )
                             )
                         },
-                        navigateToSchedule = { Route.SCHEDULE.navigate() },
+                        navigateToSchedule = { Screen.SCHEDULE.navigate() },
                         navigateToDays = { jdn, isWeek ->
-                            Route.DAYS.navigate(
+                            Screen.DAYS.navigate(
                                 bundleOf(selectedDayKey to jdn.value, isWeekKey to isWeek)
                             )
                         },
-                        navigateToMonthView = { Route.MONTH.navigate() },
+                        navigateToMonthView = { Screen.MONTH.navigate() },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
@@ -234,10 +234,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
 
-                composable(Route.MONTH.name) { backStackEntry ->
+                composable(Screen.MONTH.name) { backStackEntry ->
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
-                    val viewModel = if (previousRoute == Route.CALENDAR.name) {
+                    val viewModel = if (previousRoute == Screen.CALENDAR.name) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
 
@@ -252,10 +252,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
 
-                composable(Route.SCHEDULE.name) { backStackEntry ->
+                composable(Screen.SCHEDULE.name) { backStackEntry ->
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
-                    val viewModel = if (previousRoute == Route.CALENDAR.name) {
+                    val viewModel = if (previousRoute == Screen.CALENDAR.name) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
 
@@ -270,10 +270,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
 
-                composable(Route.DAYS.name) { backStackEntry ->
+                composable(Screen.DAYS.name) { backStackEntry ->
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
-                    val viewModel = if (previousRoute == Route.CALENDAR.name) {
+                    val viewModel = if (previousRoute == Screen.CALENDAR.name) {
                         viewModel<CalendarViewModel>(previousEntry)
                     } else viewModel<CalendarViewModel>()
                     val arguments = backStackEntry.arguments
@@ -289,7 +289,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
 
-                composable(Route.CONVERTER.name) { backStackEntry ->
+                composable(Screen.CONVERTER.name) { backStackEntry ->
                     ConverterScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
@@ -300,27 +300,27 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     )
                 }
 
-                composable(Route.COMPASS.name) { backStackEntry ->
+                composable(Screen.COMPASS.name) { backStackEntry ->
                     CompassScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToLevel = { Route.LEVEL.navigate() },
-                        navigateToMap = { Route.MAP.navigate() },
+                        navigateToLevel = { Screen.LEVEL.navigate() },
+                        navigateToMap = { Screen.MAP.navigate() },
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
                         else ({ navigateUp(backStackEntry) }),
                     )
                 }
 
-                composable(Route.LEVEL.name) { backStackEntry ->
+                composable(Screen.LEVEL.name) { backStackEntry ->
                     LevelScreen(
                         animatedContentScope = this,
                         navigateUp = { navigateUp(backStackEntry) },
-                        navigateToCompass = { Route.COMPASS.navigate() },
+                        navigateToCompass = { Screen.COMPASS.navigate() },
                     )
                 }
 
-                composable(Route.ASTRONOMY.name) { backStackEntry ->
+                composable(Screen.ASTRONOMY.name) { backStackEntry ->
                     val viewModel = viewModel<AstronomyViewModel>()
                     backStackEntry.arguments?.getInt(daysOffsetKey, 0)?.takeIf { it != 0 }?.let {
                         viewModel.changeToTime((Jdn.today() + it).toGregorianCalendar().timeInMillis)
@@ -328,18 +328,18 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AstronomyScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToMap = { Route.MAP.navigate() },
+                        navigateToMap = { Screen.MAP.navigate() },
                         viewModel = viewModel,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
                         else ({ navigateUp(backStackEntry) }),
                     )
                 }
 
-                composable(Route.MAP.name) { backStackEntry ->
+                composable(Screen.MAP.name) { backStackEntry ->
                     val viewModel = viewModel<MapViewModel>()
                     val previousEntry = navController.previousBackStackEntry
                     val previousRoute = previousEntry?.destination?.route
-                    if (previousRoute == Route.ASTRONOMY.name) {
+                    if (previousRoute == Screen.ASTRONOMY.name) {
                         val astronomyViewModel = viewModel<AstronomyViewModel>(previousEntry)
                         LaunchedEffect(Unit) {
                             viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
@@ -349,35 +349,35 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     MapScreen(
                         animatedContentScope = this,
                         navigateUp = { navigateUp(backStackEntry) },
-                        fromSettings = previousRoute == Route.SETTINGS.name,
+                        fromSettings = previousRoute == Screen.SETTINGS.name,
                         viewModel = viewModel,
                     )
                 }
 
-                composable(Route.SETTINGS.name) { backStackEntry ->
+                composable(Screen.SETTINGS.name) { backStackEntry ->
                     SettingsScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToMap = { Route.MAP.navigate() },
+                        navigateToMap = { Screen.MAP.navigate() },
                         initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
                         destination = backStackEntry.arguments?.getString(settingsKey).orEmpty()
                     )
                 }
 
-                composable(Route.ABOUT.name) {
+                composable(Screen.ABOUT.name) {
                     AboutScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToLicenses = { Route.LICENSES.navigate() },
-                        navigateToDeviceInformation = { Route.DEVICE.navigate() },
+                        navigateToLicenses = { Screen.LICENSES.navigate() },
+                        navigateToDeviceInformation = { Screen.DEVICE.navigate() },
                     )
                 }
 
-                composable(Route.LICENSES.name) { backStackEntry ->
+                composable(Screen.LICENSES.name) { backStackEntry ->
                     LicensesScreen(animatedContentScope = this) { navigateUp(backStackEntry) }
                 }
 
-                composable(Route.DEVICE.name) { backStackEntry ->
+                composable(Screen.DEVICE.name) { backStackEntry ->
                     DeviceInformationScreen(
                         navigateUp = { navigateUp(backStackEntry) },
                         animatedContentScope = this,
@@ -389,7 +389,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
 }
 
 // Don't ever change the name of the ones that are mentioned xml/shortcuts.xml and ShortcutActivity.kt
-private enum class Route(val drawerEntry: Pair<ImageVector, Int>? = null) {
+private enum class Screen(val drawerEntry: Pair<ImageVector, Int>? = null) {
     CALENDAR(Icons.Default.DateRange to R.string.calendar), SCHEDULE, DAYS, MONTH,
     CONVERTER(Icons.Default.SwapVerticalCircle to R.string.date_converter),
     COMPASS(Icons.Default.Explore to R.string.compass), LEVEL,
@@ -464,16 +464,16 @@ private fun DrawerContent(
         )
         val coroutineScope = rememberCoroutineScope()
         val navBackStackEntry by navController.currentBackStackEntryAsState()
-        Route.entries.forEach { item ->
+        Screen.entries.forEach { item ->
             val (icon, titleId) = item.drawerEntry ?: return@forEach
             NavigationDrawerItem(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 icon = { Icon(icon, contentDescription = null) },
                 colors = navItemColors,
                 label = { Text(stringResource(titleId)) },
-                selected = item == Route.fromName(navBackStackEntry?.destination?.route).parent,
+                selected = item == Screen.fromName(navBackStackEntry?.destination?.route).parent,
                 onClick = {
-                    if (item == Route.EXIT) finish() else coroutineScope.launch {
+                    if (item == Screen.EXIT) finish() else coroutineScope.launch {
                         drawerState.close()
                         if (navBackStackEntry?.destination?.route != item.name) {
                             navController.navigate(item.name)
