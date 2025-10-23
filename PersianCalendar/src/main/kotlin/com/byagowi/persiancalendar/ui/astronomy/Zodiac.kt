@@ -58,10 +58,7 @@ enum class Zodiac(
     PISCES(348.58, "♓", R.string.pisces); // 330-360
 
     // Some language have translation of Zodiac signs in a parenthesis which isn't always needed
-    fun shortTitle(resources: Resources) = buildString {
-        val result = resources.getString(titleId)
-        append(result.split(" (")[0])
-    }
+    fun shortTitle(resources: Resources) = resources.getString(titleId).split(" (")[0]
 
     private val iauNextRangeStart: Double
         get() = entries.getOrNull(ordinal + 1)?.iauRangeStart ?: (ARIES.iauRangeStart + 360)
