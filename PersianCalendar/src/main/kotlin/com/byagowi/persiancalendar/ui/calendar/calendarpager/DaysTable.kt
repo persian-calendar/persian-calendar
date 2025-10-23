@@ -147,8 +147,7 @@ fun daysTable(
     val isHighTextContrastEnabled by isHighTextContrastEnabled.collectAsState()
     val numeral by numeral.collectAsState()
 
-    return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted,
-             selectedDay ->
+    return { page, monthStartDate, monthStartJdn, deviceEvents, onlyWeek, isHighlighted, selectedDay ->
         val previousMonthLength =
             if (onlyWeek == null) null else ((monthStartJdn - 1) on mainCalendar).dayOfMonth
 
@@ -164,8 +163,7 @@ fun daysTable(
                     if (onlyWeek != null) suggestedHeight + 8.dp
                     else (cellHeight * (daysRowsCount + 1) + 12.dp)
                 )
-                .semantics { this.isTraversalGroup = true }
-        ) {
+                .semantics { this.isTraversalGroup = true }) {
             val highlightedDayOfMonth = selectedDay - monthStartJdn
             val indicatorCenter = if (isHighlighted && highlightedDayOfMonth in 0..<monthLength) {
                 val cellIndex = selectedDay - monthStartJdn + startingWeekDay
@@ -205,8 +203,7 @@ fun daysTable(
 
             repeat(7) { column ->
                 Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = cellsSizeModifier.offset(
+                    contentAlignment = Alignment.Center, modifier = cellsSizeModifier.offset(
                         x = pagerArrowSizeAndPadding.dp + cellWidth * column
                     )
                 ) {
@@ -224,7 +221,6 @@ fun daysTable(
                 }
             }
 
-            val holidaysPositions = remember { mutableIntSetOf() }
             Box(Modifier.fillMaxSize()) {
                 // Invalidate the indicator state on table size changes
                 key(width, suggestedHeight) {
@@ -238,6 +234,8 @@ fun daysTable(
                     }
                 }
 
+                /** TODO: Consider use of BitSet and [java.util.BitSet.stream] when minSdk is 24 */
+                val holidaysPositions = remember { mutableIntSetOf() }
                 repeat(daysRowsCount * 7) { dayOffset ->
                     if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
                     val row = if (onlyWeek == null) dayOffset / 7 else 0
@@ -273,8 +271,9 @@ fun daysTable(
                                                     onlyWeek != null -> day
                                                     row == 0 -> monthStartJdn
                                                     // Select first non weekend day of the week
-                                                    else -> day + ((0..6).firstOrNull { !(day + it).isWeekEnd }
-                                                        ?: 0)
+                                                    else -> day + ((0..6).firstOrNull {
+                                                        !(day + it).isWeekEnd
+                                                    } ?: 0)
                                                 },
                                                 true,
                                             )
@@ -309,16 +308,17 @@ fun daysTable(
                                         addEvent(AddEventData.fromJdn(day))
                                     },
                                 )
-                                .then(if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f) else Modifier),
+                                .then(
+                                    if (isBeforeMonth || isAfterMonth) Modifier.alpha(.5f)
+                                    else Modifier
+                                ),
                         ) {
                             val isSelected = isHighlighted && selectedDay == day
                             val events =
                                 eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                             val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
                             if (isHoliday) holidaysPositions.add(
-                                TablePositionPair(
-                                    column, row
-                                ).value
+                                TablePositionPair(column, row).value
                             )
                             Canvas(cellsSizeModifier) {
                                 val hasEvents =
@@ -341,7 +341,9 @@ fun daysTable(
                                 if (isToday) drawCircle(
                                     monthColors.currentDay,
                                     radius = cellRadius,
-                                    style = Stroke(width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx()),
+                                    style = Stroke(
+                                        width = (if (isHighTextContrastEnabled) 4 else 2).dp.toPx(),
+                                    ),
                                 )
                             }
                             Text(
