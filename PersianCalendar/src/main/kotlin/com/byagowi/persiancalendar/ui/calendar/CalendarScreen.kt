@@ -957,7 +957,7 @@ private fun SharedTransitionScope.Toolbar(
             Column(
                 Modifier
                     .clickable(
-                        indication = ripple(bounded = false),
+                        indication = null,
                         interactionSource = null,
                         onClickLabel = stringResource(
                             if (isYearView && !yearViewIsInYearSelection) R.string.select_year
@@ -967,7 +967,11 @@ private fun SharedTransitionScope.Toolbar(
                         if (isYearView) viewModel.commandYearView(YearViewCommand.ToggleYearSelection)
                         else viewModel.openYearView()
                     }
-                    .then(if (isYearView) Modifier.heightIn(max = toolbarHeight) else Modifier),
+                    .then(
+                        if (!isYearView) Modifier else Modifier
+                            .heightIn(max = toolbarHeight)
+                            .fillMaxWidth()
+                    ),
             ) {
                 if (isYearView && yearViewCalendar != null) AppScreenModesDropDown(
                     yearViewCalendar,
