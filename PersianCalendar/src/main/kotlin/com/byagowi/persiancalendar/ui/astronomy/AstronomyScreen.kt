@@ -570,7 +570,7 @@ private fun Header(modifier: Modifier, viewModel: AstronomyViewModel) {
                                 .align(Alignment.Center),
                             color = color,
                             title = title,
-                            value = sunZodiac.symbol + " " + value,
+                            value = zodiac.symbol + " " + value,
                         )
                     }
                 }
