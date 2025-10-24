@@ -434,7 +434,14 @@ fun SettingsSlider(
             Spacer(Modifier.width(16.dp))
             val roundedValue = (value * 100).roundToInt()
             val numeral by numeral.collectAsState()
-            Text(numeral.format(roundedValue))
+            Box(contentAlignment = Alignment.Center) {
+                Text(
+                    numeral.format(100),
+                    Modifier.semantics { this.hideFromAccessibility() },
+                    color = Color.Transparent,
+                )
+                Text(numeral.format(roundedValue))
+            }
             AnimatedVisibility(roundedValue == 0) { Spacer(Modifier.width(16.dp)) }
             AnimatedVisibility(roundedValue != 0) {
                 IconButton(onClick = { onValueChange(defaultValue) }) {
