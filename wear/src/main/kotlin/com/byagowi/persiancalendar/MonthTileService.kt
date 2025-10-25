@@ -24,7 +24,6 @@ import androidx.wear.protolayout.material3.primaryLayout
 import androidx.wear.protolayout.material3.text
 import androidx.wear.protolayout.modifiers.clickable
 import androidx.wear.protolayout.modifiers.padding
-import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.EventBuilders
 import androidx.wear.tiles.RequestBuilders
@@ -86,8 +85,6 @@ class MonthTileService : TileService() {
         root.build()
     }
 
-    private fun LayoutColor.colorProp() = ColorBuilders.ColorProp.Builder(staticArgb).build()
-
     private fun MaterialScope.curvedText(
         text: String,
         angle: Float,
@@ -98,7 +95,7 @@ class MonthTileService : TileService() {
                 .setText(text)
                 .setFontStyle(
                     LayoutElementBuilders.FontStyle.Builder()
-                        .setColor(colorScheme.secondaryDim.colorProp())
+                        .setColor(colorScheme.secondaryDim.colorProp)
                         .setSize(sp(12f))
                         .build()
                 )
@@ -130,7 +127,7 @@ class MonthTileService : TileService() {
                     if (y == 0) {
                         it.setBackground(
                             ModifiersBuilders.Background.Builder()
-                                .setColor(colorScheme.secondaryContainer.colorProp())
+                                .setColor(colorScheme.secondaryContainer.colorProp)
                                 .setCorner(shapes.full).build()
                         )
                         it.setPadding(padding(start = 4f, end = 4f, bottom = 4f))
@@ -193,7 +190,7 @@ class MonthTileService : TileService() {
                             if (isToday) it.setBorder(
                                 ModifiersBuilders.Border.Builder()
                                     .setWidth(dp(2f))
-                                    .setColor(colorScheme.primary.colorProp())
+                                    .setColor(colorScheme.primary.colorProp)
                                     .build()
                             )
                             val background = ModifiersBuilders.Background.Builder()
@@ -228,7 +225,7 @@ class MonthTileService : TileService() {
                                         isToday -> colorScheme.onPrimary
                                         isHoliday || x == 0 -> colorScheme.onPrimaryContainer
                                         else -> colorScheme.onBackground
-                                    }.colorProp()
+                                    }.colorProp
                                 )
                                 .build(),
                         )
@@ -250,8 +247,8 @@ class MonthTileService : TileService() {
                                         .setBackground(
                                             ModifiersBuilders.Background.Builder()
                                                 .setColor(
-                                                    (if (isToday) colorScheme.onPrimary
-                                                    else colorScheme.onPrimaryContainer).colorProp()
+                                                    if (isToday) colorScheme.onPrimary.colorProp
+                                                    else colorScheme.onPrimaryContainer.colorProp
                                                 )
                                                 .setCorner(shapes.full)
                                                 .build()

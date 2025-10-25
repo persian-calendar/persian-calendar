@@ -2,6 +2,8 @@ package com.byagowi.persiancalendar
 
 import android.content.ComponentName
 import android.content.Context
+import androidx.wear.protolayout.ColorBuilders
+import androidx.wear.protolayout.types.LayoutColor
 import androidx.wear.tiles.TileService.getUpdater
 import androidx.wear.watchface.complications.datasource.ComplicationDataSourceUpdateRequester
 
@@ -15,3 +17,6 @@ fun Context.requestTileUpdate() {
     updater.requestUpdate(MainTileService::class.java)
     updater.requestUpdate(MonthTileService::class.java)
 }
+
+/** There is also [androidx.wear.protolayout.types.LayoutColor.prop] but it's library restricted for whatever reason*/
+val LayoutColor.colorProp get() = ColorBuilders.ColorProp.Builder(staticArgb).build()
