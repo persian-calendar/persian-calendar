@@ -206,7 +206,7 @@ fun SharedTransitionScope.CalendarsOverview(
                 MoonInScorpioState.Borji -> "قمر در برج عقرب"
                 MoonInScorpioState.Falaki -> "قمر در صورت فلکی عقرب"
                 is MoonInScorpioState.Start -> {
-                    "${moonInScorpioState.clock.toFormattedString()} ورود قمر به صورت فلکی عقرب"
+                    "${moonInScorpioState.clock.toFormattedString()} ورود قمر به برج عقرب"
                 }
 
                 is MoonInScorpioState.End -> {
