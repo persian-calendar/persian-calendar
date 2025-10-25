@@ -199,7 +199,7 @@ private fun Header() {
                         val version =
                             // Don't use local numeral if version name is multi-parted (debug and nightly builds)
                             if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
-                            else numeral.format(BuildConfig.VERSION_NAME)
+                            else numeral.format(BuildConfig.VERSION_NAME, skipSeparators = true)
                         append(stringResource(R.string.version, version))
                         if (language.value.isUserAbleToReadPersian) {
                             appendLine()

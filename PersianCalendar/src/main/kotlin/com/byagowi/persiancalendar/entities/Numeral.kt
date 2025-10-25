@@ -14,7 +14,7 @@ enum class Numeral(private val zero: Char) {
 
     fun format(number: Int) = format("$number")
     fun format(number: Double) = format("$number")
-    fun format(number: String, isInEdit: Boolean = false): String {
+    fun format(number: String, isInEdit: Boolean = false, skipSeparators: Boolean = false): String {
         if (isArabic) return number
         if (isTamil) {
             if (isInEdit) return number // don't format Tamil in edits, complicated
@@ -27,8 +27,8 @@ enum class Numeral(private val zero: Char) {
         return number.mapToString {
             when {
                 it in '0'..'9' -> zero + (it - '0')
-                this@Numeral.isArabicIndicVariants && it == '.' -> ARABIC_DECIMAL_SEPARATOR
-                this@Numeral.isArabicIndicVariants && it == ',' -> ARABIC_THOUSANDS_SEPARATOR
+                this@Numeral.isArabicIndicVariants && it == '.' && !skipSeparators -> ARABIC_DECIMAL_SEPARATOR
+                this@Numeral.isArabicIndicVariants && it == ',' && !skipSeparators -> ARABIC_THOUSANDS_SEPARATOR
                 else -> it
             }
         }
