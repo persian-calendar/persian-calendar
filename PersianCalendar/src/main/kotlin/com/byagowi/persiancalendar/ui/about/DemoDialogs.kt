@@ -562,7 +562,7 @@ fun showPeriodicTableDialog(activity: Activity) {
                     it.textDirection = View.TEXT_DIRECTION_LTR
                     it.setText(
                         elements
-                            .reversed()
+                            .asReversed()
                             .mapIndexed { index, s -> "${elements.size - index},$s" }
                             .joinToString("\n"),
                     )

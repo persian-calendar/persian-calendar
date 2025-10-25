@@ -56,6 +56,24 @@ private val chaldeanOrder = listOf(
     Planet(Body.Moon, en = "Ascendant", fa = "طالع")
 )
 
+// This is different level of sky that is used in Astronomy screen in geocentric mode,
+// a bit unrelated here but actually this is the same as chaldeanOrder but reversed, who knew
+// سنایی، فی صفة الافلاک:
+// فلک تاسع است بر ز افلاک - کین فلکها بود درو چو مغاک
+// فلک ثامن است جای بروج - واندر آن هفت را دخول و خروج
+// فلک سابع است آنِ کیوانست - که مر او را بسان ایوانست
+// فلک سادس است زاوش را - که دهنده است دانش و هُش را
+// فلک خامس آنِ بهرامست - آنکه در فعل و رای خودکامست
+// فلک رابع آنِ خورشیدست - که به ملک اندر آن چو جمشیدست
+// فلک ثالث آنِ ناهیدست - زهره کز نور او جهان شیدست
+// فلک ثانی آنِ تیر آمد - آن عُطارد که وی دبیر آمد
+// فلک اوّل آنِ ماه آمد - که اثیر اندر آن پناه آمد
+val geocentricPlanetsList = chaldeanOrder
+    .asReversed()
+    .map { it.body }
+    // Already drawn
+    .filter { it != Body.Moon && it != Body.Sun }
+
 private val ruledBy = listOf(
     Body.Saturn, // Saturday
     Body.Sun, // Sunday
