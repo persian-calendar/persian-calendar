@@ -110,7 +110,7 @@ fun ColumnScope.NotificationSettings() {
             summary = stringResource(R.string.notify_date_lock_screen_summary)
         )
     }
-    this.AnimatedVisibility(isNotifyDate) {
+    this.AnimatedVisibility(isNotifyDate && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Box(
             Modifier
                 .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
