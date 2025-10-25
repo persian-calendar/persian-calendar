@@ -7,8 +7,10 @@ import android.util.TypedValue
 import androidx.core.graphics.ColorUtils
 import androidx.wear.protolayout.ActionBuilders.launchAction
 import androidx.wear.protolayout.ColorBuilders
-import androidx.wear.protolayout.DimensionBuilders
+import androidx.wear.protolayout.DimensionBuilders.degrees
+import androidx.wear.protolayout.DimensionBuilders.dp
 import androidx.wear.protolayout.DimensionBuilders.expand
+import androidx.wear.protolayout.DimensionBuilders.sp
 import androidx.wear.protolayout.DimensionBuilders.wrap
 import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
@@ -90,14 +92,14 @@ class MonthTileService : TileService() {
         text: String,
         angle: Float,
     ): LayoutElementBuilders.LayoutElement = LayoutElementBuilders.Arc.Builder()
-        .setAnchorAngle(DimensionBuilders.DegreesProp.Builder(angle).build())
+        .setAnchorAngle(degrees(angle))
         .addContent(
             LayoutElementBuilders.ArcText.Builder()
                 .setText(text)
                 .setFontStyle(
                     LayoutElementBuilders.FontStyle.Builder()
                         .setColor(colorScheme.secondaryDim.colorProp())
-                        .setSize(DimensionBuilders.SpProp.Builder().setValue(12f).build())
+                        .setSize(sp(12f))
                         .build()
                 )
                 .build()
@@ -190,7 +192,7 @@ class MonthTileService : TileService() {
                         ModifiersBuilders.Modifiers.Builder().also {
                             if (isToday) it.setBorder(
                                 ModifiersBuilders.Border.Builder()
-                                    .setWidth(DimensionBuilders.dp(2f))
+                                    .setWidth(dp(2f))
                                     .setColor(colorScheme.primary.colorProp())
                                     .build()
                             )
@@ -213,13 +215,13 @@ class MonthTileService : TileService() {
                             it.setBackground(background.build())
                         }.build()
                     )
-                    .setWidth(DimensionBuilders.dp(screenMinDp / 12f))
-                    .setHeight(DimensionBuilders.dp(screenMinDp / 12f))
+                    .setWidth(dp(screenMinDp / 12f))
+                    .setHeight(dp(screenMinDp / 12f))
                     .addContent(
                         basicText(
                             text.layoutString,
                             LayoutElementBuilders.FontStyle.Builder()
-                                .setSize(DimensionBuilders.sp(cellFontSize))
+                                .setSize(sp(cellFontSize))
                                 .setColor(
                                     when {
                                         y == 0 -> colorScheme.onSecondaryContainer
@@ -256,8 +258,8 @@ class MonthTileService : TileService() {
                                         )
                                         .build()
                                 )
-                                .setWidth(DimensionBuilders.dp(2f))
-                                .setHeight(DimensionBuilders.dp(2f))
+                                .setWidth(dp(2f))
+                                .setHeight(dp(2f))
                                 .build()
                         )
                         .build()
