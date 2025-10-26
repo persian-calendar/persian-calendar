@@ -356,15 +356,6 @@ private fun EquinoxCountDown(
             }
         }
     }
-    if (isAstronomicalExtraFeaturesEnabled) {
-        val resources = LocalResources.current
-        Text(
-            stringResource(R.string.year_name) + spacedColon + ChineseZodiac.fromPersianCalendar(
-                PersianDate(year, 1, 1)
-            ).format(resources, withEmoji = true, isPersian = true),
-            style = MaterialTheme.typography.bodyMedium.copy(color = contentColor),
-        )
-    }
 }
 
 @Composable
@@ -440,7 +431,16 @@ fun readEvents(
         if (jdn + 1 == Jdn(PersianDate(date.year + 1, 1, 1))) {
             val now by viewModel.now.collectAsState()
             val (rawTitle, equinoxTime) = equinoxTitle(date, jdn, resources)
-            val title = rawTitle.replace(": ", "\n")
+            val language by language.collectAsState()
+            val title = rawTitle.split(spacedColon).mapIndexed { i, x ->
+                if (i == 0 && isAstronomicalExtraFeaturesEnabled) {
+                    val yearString = stringResource(R.string.year)
+                    val zodiac = ChineseZodiac.fromPersianCalendar(date)
+                    val title = zodiac.format(resources, withEmoji = false, isPersian = true)
+                    val symbol = zodiac.resolveEmoji(true)
+                    language.inParentheses.format(x, "$yearString $title $symbol")
+                } else x
+            }.joinToString("\n")
             val remainedTime = equinoxTime - now
             val event = CalendarEvent.EquinoxCalendarEvent(title, false, date, remainedTime)
             return listOf(event) + events

@@ -168,6 +168,15 @@ fun GregorianCalendar.formatDateAndTime(): String {
     )
 }
 
+fun GregorianCalendar.formatDateAndTimeWithWeekDayName(): String {
+    val jdn = Jdn(this.toCivilDate())
+    val weekDayName = jdn.weekDayName
+    return language.value.timeAndDateFormat.format(
+        Clock(this).toFormattedString(),
+        weekDayName + " " + formatDate(jdn on mainCalendar, forceNonNumerical = true)
+    )
+}
+
 // Google Meet generates weird and ugly descriptions with lines having such patterns, let's get rid of them
 private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
 
