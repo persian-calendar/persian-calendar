@@ -52,7 +52,7 @@
     <string name="midnight">نیمه‌شپه</string>
     <string name="times">وختونه</string>
     <string name="events">پيښې</string>
-    <string name="events_summary">تنظیم نوع مناسبت‌های نمایش داده شده در تقویم</string>
+    <string name="events_summary">تنظیم نوع مناسبت‌های نمایش داده‌شده در تقویم</string>
     <string name="today">نن</string>
     <string name="return_to_today">نن ته بیرتګ</string>
     <string name="select_type_date">انتخاب نوع تاریخ</string>
@@ -99,7 +99,7 @@
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="licenses">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>
-    <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
+    <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده‌شده در تقویم فارسی و کتابخانه‌های استفاده‌شده را بررسی کنید.</string>
     <string name="help">مرسته</string>
     <string name="about_report_bug">گزارش اشکال</string>
     <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
@@ -177,7 +177,7 @@
     <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="remove">Remove</string>
-    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %1$s است.</string>
+    <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s است.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
     <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
     <plurals name="minutes">

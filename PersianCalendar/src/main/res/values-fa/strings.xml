@@ -71,13 +71,13 @@
     <string name="select_year">انتخاب سال</string>
     <string name="select_month">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
-    <string name="date_exception">تاریخ وارد شده اشتباه است.</string>
+    <string name="date_exception">تاریخ واردشده اشتباه است.</string>
     <string name="in_city_time">به افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد.</string>
     <string name="stop">توقف</string>
     <string name="wait_for_gps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که مکان‌یاب دستگاه از تنظیمات روشن است. اگر روشن کردن آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
-    <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند.</string>
+    <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم‌شده باشد کار می‌کند.</string>
     <string name="warn_if_events_not_set">جهت روشن کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="ask_for_calendar_permission">مایلید رویدادهای شخصی‌تان از تقویم دستگاه نمایش داده شود؟</string>
     <string name="days_distance">فاصله</string>
@@ -110,7 +110,7 @@
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="licenses">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>
-    <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
+    <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده‌شده در تقویم فارسی و کتابخانه‌های استفاده‌شده را بررسی کنید.</string>
     <string name="help">راهنما</string>
     <string name="about_report_bug">گزارش اشکال</string>
     <string name="about_report_bug_sum">راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب</string>
