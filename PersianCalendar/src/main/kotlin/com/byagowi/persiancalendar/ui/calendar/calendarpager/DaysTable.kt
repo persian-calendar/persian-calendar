@@ -417,7 +417,7 @@ fun daysTable(
 
 @VisibleForTesting
 internal class DayTablePositions {
-    var bits: Long = 0L
+    private var bits: Long = 0L
     fun add(x: Int, y: Int) {
         val index = x * 7 + y
         if (BuildConfig.DEVELOPMENT) assert(y < 7 && index in 0..63)
