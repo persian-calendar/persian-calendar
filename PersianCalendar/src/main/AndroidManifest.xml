@@ -764,20 +764,6 @@
                 android:resource="@xml/shortcuts" />
         </activity-alias>
         <activity-alias
-            android:name=".Day23"
-            android:enabled="false"
-            android:exported="true"
-            android:icon="@mipmap/day23"
-            android:targetActivity=".ui.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcuts" />
-        </activity-alias>
-        <activity-alias
             android:name=".Day24"
             android:enabled="false"
             android:exported="true"
