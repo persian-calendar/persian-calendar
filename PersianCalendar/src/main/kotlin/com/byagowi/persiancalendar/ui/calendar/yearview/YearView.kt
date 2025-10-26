@@ -179,17 +179,16 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
 
             Column(Modifier.fillMaxWidth()) {
                 if (scale.value > yearSelectionModeMaxScale) {
-                    val yearDeviceEvents: DeviceCalendarEventsStore =
-                        remember(yearOffset, today) {
-                            val yearStartJdn = Jdn(
-                                calendar.createDate(
-                                    (today on calendar).year + yearOffset, 1, 1
-                                )
+                    val yearDeviceEvents: DeviceCalendarEventsStore = remember(yearOffset, today) {
+                        val yearStartJdn = Jdn(
+                            calendar.createDate(
+                                (today on calendar).year + yearOffset, 1, 1
                             )
-                            if (isShowDeviceCalendarEvents.value) {
-                                context.readYearDeviceEvents(yearStartJdn)
-                            } else EventsStore.empty()
-                        }
+                        )
+                        if (isShowDeviceCalendarEvents.value) {
+                            context.readYearDeviceEvents(yearStartJdn)
+                        } else EventsStore.empty()
+                    }
                     FlowRow(
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth(),
@@ -219,7 +218,7 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                                                 viewModel.changeSelectedMonthOffsetCommand(
                                                     mainCalendar.getMonthsDistance(
                                                         Jdn.today(),
-                                                        jdn
+                                                        jdn,
                                                     )
                                                 )
                                                 viewModel.changeSelectedDay(jdn)
@@ -268,17 +267,16 @@ fun YearView(viewModel: CalendarViewModel, maxWidth: Dp, maxHeight: Dp, bottomPa
                 if (yearOffset != halfPages - 1) Box(Modifier.align(Alignment.CenterHorizontally)) {
                     val yearViewYear = yearOffset + todayDate.year + 1
 
-                    @Suppress("SimplifiableCallChain")
-                    val tooltip = enabledCalendars.let { if (it.size > 1) it - calendar else it }
-                        .map { otherCalendar ->
-                            otherCalendarFormat(
-                                yearViewYear,
-                                calendar,
-                                otherCalendar,
-                            ) + " " + stringResource(otherCalendar.title)
-                        }.joinToString("\n")
-                    @OptIn(ExperimentalMaterial3Api::class)
-                    TooltipBox(
+                    @Suppress("SimplifiableCallChain") val tooltip =
+                        enabledCalendars.let { if (it.size > 1) it - calendar else it }
+                            .map { otherCalendar ->
+                                otherCalendarFormat(
+                                    yearViewYear,
+                                    calendar,
+                                    otherCalendar,
+                                ) + " " + stringResource(otherCalendar.title)
+                            }.joinToString("\n")
+                    @OptIn(ExperimentalMaterial3Api::class) TooltipBox(
                         positionProvider = TooltipDefaults.rememberTooltipPositionProvider(
                             TooltipAnchorPosition.Above
                         ),

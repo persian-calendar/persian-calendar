@@ -211,7 +211,7 @@ private val easternHoroscopePositions = listOf(
 @Composable
 private fun EasternHoroscopePattern(
     modifier: Modifier = Modifier,
-    cell: @Composable BoxScope.(Int) -> Unit
+    cell: @Composable BoxScope.(Int) -> Unit,
 ) {
     val outline = MaterialTheme.colorScheme.outline
     val textDirection = LocalLayoutDirection.current
@@ -331,7 +331,7 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
             coordinates,
             planetaryModifier,
             animationProgress.value,
-            isYearEquinox = true
+            isYearEquinox = true,
         )
     }
 }
@@ -386,7 +386,7 @@ private fun ColumnScope.AscendantZodiac(
             Modifier
                 .semantics { this.hideFromAccessibility() }
                 .alpha(1 - progress * .9f),
-            fontSize = 40.sp
+            fontSize = 40.sp,
         )
         val text = buildAnnotatedString {
             val house = setOf(zodiac, Zodiac.fromTropical(houses[i])).joinToString("/") {

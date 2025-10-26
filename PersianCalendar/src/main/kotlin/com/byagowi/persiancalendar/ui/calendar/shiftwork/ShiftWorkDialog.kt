@@ -86,7 +86,7 @@ fun ShiftWorkDialog(
                         viewModel,
                         selectedJdn,
                         onDismissRequest,
-                        refreshCalendar
+                        refreshCalendar,
                     )
                 }
             }
@@ -108,7 +108,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         stringResource(
             if (isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit,
-            formatDate(startingDate on mainCalendar)
+            formatDate(startingDate on mainCalendar),
         ),
         modifier = Modifier.padding(horizontal = 24.dp),
     )
@@ -151,15 +151,15 @@ fun ColumnScope.ShiftWorkDialogContent(
         val numeral by numeral.collectAsState()
         LazyColumn(state = lazyListState) {
             item {
-                @Suppress("SimplifiableCallChain")
-                val summary = shiftWorkRows.filter { it.length != 0 }.map {
-                    pluralStringResource(
-                        R.plurals.shift_work_record_title,
-                        it.length,
-                        numeral.format(it.length),
-                        shiftWorkKeyToString(it.type)
-                    )
-                }.joinToString(spacedComma)
+                @Suppress("SimplifiableCallChain") val summary =
+                    shiftWorkRows.filter { it.length != 0 }.map {
+                        pluralStringResource(
+                            R.plurals.shift_work_record_title,
+                            it.length,
+                            numeral.format(it.length),
+                            shiftWorkKeyToString(it.type)
+                        )
+                    }.joinToString(spacedComma)
                 Column {
                     this.AnimatedVisibility(summary.isNotEmpty()) {
                         AnimatedContent(
