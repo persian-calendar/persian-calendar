@@ -32,11 +32,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.EXPANDED_TIME_STATE_KEY
@@ -126,7 +128,7 @@ fun SharedTransitionScope.TimesTab(
                 cityName.orEmpty(), style = MaterialTheme.typography.bodyLarge
             )
             ExpandArrow(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(with(LocalDensity.current) { 20.sp.toDp() }),
                 isExpanded = isExpanded,
                 tint = MaterialTheme.colorScheme.primary
             )

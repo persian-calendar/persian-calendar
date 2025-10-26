@@ -54,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
@@ -68,6 +69,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SHARED_CONTENT_KEY_MOON
@@ -391,7 +393,7 @@ fun SharedTransitionScope.CalendarsOverview(
         Spacer(Modifier.height(8.dp))
         ExpandArrow(
             modifier = Modifier
-                .size(20.dp)
+                .size(with(LocalDensity.current) { 20.sp.toDp() })
                 .align(Alignment.CenterHorizontally),
             isExpanded = isExpanded,
             tint = MaterialTheme.colorScheme.primary,
