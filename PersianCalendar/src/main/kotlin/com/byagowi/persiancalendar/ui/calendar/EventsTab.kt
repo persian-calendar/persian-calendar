@@ -86,6 +86,8 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.YearHoroscopeDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.common.equinoxTitle
@@ -327,15 +329,16 @@ private fun EquinoxCountDown(
     event: CalendarEvent.EquinoxCalendarEvent,
     backgroundColor: Color,
 ) {
+    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
+    val year = event.date.year + 1
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         CompositionLocalProvider(
             LocalLayoutDirection provides LayoutDirection.Ltr
         ) { EquinoxCountDownContent(contentColor, event, backgroundColor) }
         var showHoroscopeDialog by rememberSaveable { mutableStateOf(false) }
-        if (showHoroscopeDialog) YearHoroscopeDialog(event.date.year + 1) {
+        if (showHoroscopeDialog) YearHoroscopeDialog(year) {
             showHoroscopeDialog = false
         }
-        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         if (isAstronomicalExtraFeaturesEnabled) TooltipBox(
             positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
             tooltip = { PlainTooltip { Text(stringResource(R.string.horoscope)) } },
@@ -352,6 +355,15 @@ private fun EquinoxCountDown(
                 }
             }
         }
+    }
+    if (isAstronomicalExtraFeaturesEnabled) {
+        val resources = LocalResources.current
+        Text(
+            stringResource(R.string.year_name) + spacedColon + ChineseZodiac.fromPersianCalendar(
+                PersianDate(year, 1, 1)
+            ).format(resources, withEmoji = true, isPersian = true),
+            style = MaterialTheme.typography.bodyMedium.copy(color = contentColor),
+        )
     }
 }
 
