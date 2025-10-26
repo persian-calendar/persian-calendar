@@ -176,10 +176,11 @@ enum class Language(val code: String, val nativeName: String) {
     // Prefers ٤٥٦ over ۴۵۶
     val preferredNumeral
         get() = when (this) {
+            FA, FA_AF, PS, GLK, AZB -> Numeral.PERSIAN
             AR, CKB -> Numeral.ARABIC_INDIC
             NE -> Numeral.DEVANAGARI
             TA -> Numeral.TAMIL
-            else -> Numeral.PERSIAN
+            else -> Numeral.ARABIC
         }
 
     // We can presume user is from Afghanistan

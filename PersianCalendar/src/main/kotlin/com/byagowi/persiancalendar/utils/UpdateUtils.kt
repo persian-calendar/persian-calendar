@@ -76,12 +76,14 @@ import com.byagowi.persiancalendar.WidgetMoon
 import com.byagowi.persiancalendar.WidgetSchedule
 import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.WidgetWeekView
+import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.Numeral
 import com.byagowi.persiancalendar.entities.PrayTime
 import com.byagowi.persiancalendar.entities.PrayTime.Companion.get
 import com.byagowi.persiancalendar.global.calculationMethod
@@ -291,11 +293,25 @@ fun update(context: Context, updateDate: Boolean) {
     updateNotification(context, title, subtitle, jdn, date, owghat, prayTimes, clock)
 }
 
+// Dynamic icons needs inflation of AndroidManifest.xml which can be scary on older devices,
+// let's skip the feature in less used variants of app locale and settings.
+fun supportsDynamicIcon(calendar: Calendar, language: Language): Boolean {
+    // Doesn't support adaptive icons and needs a redefinition of the icons, skip
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false
+    // Has 32 days on month, skip
+    if (calendar == Calendar.NEPALI) return false
+    // Right now only supported in locales having ۴۵۶ and not the other variants
+    if (language.preferredNumeral == Numeral.PERSIAN) return true
+    // For other locales, only if the mainCalendar is Persian
+    return mainCalendar == Calendar.SHAMSI
+}
+
 private const val dynamicIconActivityNamePrefix = "com.byagowi.persiancalendar.Day"
 
 private fun updateLauncherIcon(date: AbstractDate, context: Context) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
-    val isDynamicIconEnabled = isDynamicIconEnabled.value && date.calendar.supportsDynamicIcon
+    if (!isDynamicIconEverEnabled) return
+    val isDynamicIconEnabled =
+        isDynamicIconEnabled.value && supportsDynamicIcon(date.calendar, language.value)
     val dayOfMonth = date.dayOfMonth
     val actions = buildList {
         add(

@@ -12,7 +12,6 @@ enum class Calendar(
     @get:StringRes val title: Int,
     @get:StringRes val shortTitle: Int,
     val preferredNumeral: Numeral,
-    val supportsDynamicIcon: Boolean = true,
 ) {
     // So vital, don't ever change names of these
     SHAMSI(
@@ -25,11 +24,7 @@ enum class Calendar(
         R.string.gregorian_calendar, R.string.gregorian_calendar_short, Numeral.ARABIC
     ),
     NEPALI(
-        R.string.nepali_calendar,
-        R.string.nepali_calendar_short,
-        Numeral.DEVANAGARI,
-        // Has 32 days months, let's skip for now
-        supportsDynamicIcon = false
+        R.string.nepali_calendar, R.string.nepali_calendar_short, Numeral.DEVANAGARI
     );
 
     fun createDate(year: Int, month: Int, day: Int): AbstractDate = when (this) {

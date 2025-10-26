@@ -85,6 +85,7 @@ import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.ColorSchemeDemoDialog
@@ -111,6 +112,7 @@ import com.byagowi.persiancalendar.utils.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.debugLog
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.preferences
+import com.byagowi.persiancalendar.utils.supportsDynamicIcon
 import kotlinx.coroutines.launch
 
 @Composable
@@ -304,7 +306,8 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
             onClick = openAddWidgetDialog,
         )
     }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && mainCalendar.supportsDynamicIcon) {
+    val language by language.collectAsState()
+    if (supportsDynamicIcon(mainCalendar, language)) {
         val isChecked by isDynamicIconEnabled.collectAsState()
         AppDropdownMenuCheckableItem(stringResource(R.string.dynamic_icon), isChecked) {
             closeMenu()
