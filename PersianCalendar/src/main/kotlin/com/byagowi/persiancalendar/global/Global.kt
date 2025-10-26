@@ -11,6 +11,7 @@ import androidx.collection.longSetOf
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
+import com.byagowi.persiancalendar.DEFAULT_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_CITY
@@ -288,7 +289,7 @@ val eventCalendarsIdsAsHoliday: StateFlow<LongSet> get() = eventCalendarsIdsAsHo
 var whatToShowOnWidgets = emptySet<String>()
     private set
 
-private val isAstronomicalExtraFeaturesEnabled_ = MutableStateFlow(false)
+private val isAstronomicalExtraFeaturesEnabled_ = MutableStateFlow(DEFAULT_ASTRONOMICAL_FEATURES)
 val isAstronomicalExtraFeaturesEnabled: StateFlow<Boolean> get() = isAstronomicalExtraFeaturesEnabled_
 
 val isTalkBackEnabled_ = MutableStateFlow(false)
@@ -579,7 +580,7 @@ fun updateStoredPreference(context: Context) {
         preferences.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null) ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
     isAstronomicalExtraFeaturesEnabled_.value =
-        preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
+        preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, DEFAULT_ASTRONOMICAL_FEATURES)
     numericalDatePreferred = preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?

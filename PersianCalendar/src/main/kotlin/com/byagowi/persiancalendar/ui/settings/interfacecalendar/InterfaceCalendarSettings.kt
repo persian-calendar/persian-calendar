@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
@@ -197,9 +198,10 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         stringResource(R.string.calendars_priority),
         stringResource(R.string.calendars_priority_summary)
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
-    SettingsSwitchWithInnerState(
+    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
+    SettingsSwitch(
         PREF_ASTRONOMICAL_FEATURES,
-        false,
+        isAstronomicalExtraFeaturesEnabled,
         stringResource(R.string.astronomy),
         stringResource(R.string.astronomical_info_summary)
     )
