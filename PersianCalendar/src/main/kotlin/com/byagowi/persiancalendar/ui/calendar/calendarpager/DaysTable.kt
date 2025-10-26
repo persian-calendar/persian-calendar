@@ -421,7 +421,7 @@ internal class DayTablePositions {
     private var bits: Long = 0L
     fun add(row: Int, column: Int) {
         val index = row * 7 + column
-        if (BuildConfig.DEVELOPMENT) assert(column < 7 && index in 0..63)
+        if (BuildConfig.DEVELOPMENT) assert(row < 7 && column < 7 && index in 0..63)
         bits = bits or (1L shl index)
     }
 
