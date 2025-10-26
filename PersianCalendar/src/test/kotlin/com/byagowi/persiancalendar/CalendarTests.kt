@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.initiateMonthNamesForTest
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.DayTablePositions
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.fasliDayName
 import com.byagowi.persiancalendar.utils.formatAsSeleucidDate
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class CalendarTests {
     @ParameterizedTest
@@ -230,5 +232,64 @@ class CalendarTests {
         ).map { (persianDate, expected) ->
             { assertEquals(expected, formatAsSeleucidDate(Jdn(persianDate))) }
         }.run(::assertAll)
+    }
+
+    @Test
+    fun `one day`() {
+        val positions = DayTablePositions()
+        positions.add(5, 3)
+
+        val indices = mutableListOf<Pair<Int, Int>>()
+        positions.forEach { x, y -> indices += x to y }
+
+        assertEquals(listOf(5 to 3), indices)
+    }
+
+    @Test
+    fun `multiple day`() {
+        val positions = DayTablePositions()
+        positions.add(0, 0)
+        positions.add(5, 2)
+        positions.add(5, 6)
+
+        val indices = mutableListOf<Pair<Int, Int>>()
+        positions.forEach { x, y -> indices += x to y }
+
+        assertEquals(listOf(0 to 0, 5 to 2, 5 to 6), indices)
+    }
+
+    @Test
+    fun `empty set`() {
+        val positions = DayTablePositions()
+
+        var called = false
+        positions.forEach { _, _ -> called = true }
+
+        assertFalse(called)
+    }
+
+    @Test
+    fun `idempotent for same day`() {
+        val positions = DayTablePositions()
+        positions.add(5, 6)
+        positions.add(5, 6)
+
+        val indices = mutableSetOf<Pair<Int, Int>>()
+        positions.forEach { x, y -> indices += x to y }
+
+        assertEquals(setOf(5 to 6), indices)
+    }
+
+    @Test
+    fun `forEach should iterate in ascending order`() {
+        val positions = DayTablePositions()
+        positions.add(7, 3)
+        positions.add(3, 6)
+        positions.add(2, 2)
+
+        val indices = mutableListOf<Pair<Int, Int>>()
+        positions.forEach { x, y -> indices += x to y }
+
+        assertEquals(listOf(2 to 2, 3 to 6, 7 to 3), indices)
     }
 }

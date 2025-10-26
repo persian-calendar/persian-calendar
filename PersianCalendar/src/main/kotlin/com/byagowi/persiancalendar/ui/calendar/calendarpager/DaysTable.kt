@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -241,8 +242,7 @@ fun daysTable(
                     }
                 }
 
-                /** TODO: Consider use of BitSet and [java.util.BitSet.stream] when minSdk is 24 */
-                val holidaysPositions = remember { BitSet64() }
+                val holidaysPositions = remember { DayTablePositions() }
                 repeat(daysRowsCount * 7) { dayOffset ->
                     if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
                     val row = if (onlyWeek == null) dayOffset / 7 else 0
@@ -329,9 +329,7 @@ fun daysTable(
                             val events =
                                 eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                             val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
-                            if (isHoliday) holidaysPositions.add(
-                                TablePositionPair(column, row).value
-                            )
+                            if (isHoliday) holidaysPositions.add(column, row)
                             Canvas(cellsSizeModifier) {
                                 val hasEvents =
                                     events.any { it !is CalendarEvent.DeviceCalendarEvent }
@@ -401,8 +399,7 @@ fun daysTable(
                         .fillMaxSize()
                         .zIndex(-1f)
                 ) {
-                    holidaysPositions.forEach {
-                        val (column, row) = TablePositionPair(it)
+                    holidaysPositions.forEach { column, row ->
                         val center = Offset(
                             x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
                             // +1 for weekday names initials row, .5f for center of the circle
@@ -418,26 +415,20 @@ fun daysTable(
     }
 }
 
-@JvmInline
-private value class TablePositionPair(val value: Int) {
-    constructor(x: Int, y: Int) : this(x * 7 + y)
-
-    operator fun component1() = value / 7
-    operator fun component2() = value % 7
-}
-
-private class BitSet64() {
-    private var bits: Long = 0L
-    fun add(index: Int) {
-        if (BuildConfig.DEVELOPMENT) assert(index in 0..63)
+@VisibleForTesting
+internal class DayTablePositions {
+    var bits: Long = 0L
+    fun add(x: Int, y: Int) {
+        val index = x * 7 + y
+        if (BuildConfig.DEVELOPMENT) assert(y < 7 && index in 0..63)
         bits = bits or (1L shl index)
     }
 
-    inline fun forEach(crossinline action: (Int) -> Unit) {
+    inline fun forEach(crossinline action: (Int, Int) -> Unit) {
         var remaining = bits
         while (remaining != 0L) {
             val index = java.lang.Long.numberOfTrailingZeros(remaining)
-            action(index)
+            action(index / 7, index % 7)
             remaining = remaining and (remaining - 1)
         }
     }
