@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
-import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -33,6 +32,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.numericalDatePreferred
+import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
@@ -136,7 +136,7 @@ fun getA11yDaySummary(
         )
     }
 
-    if (withZodiac && isAstronomicalExtraFeaturesEnabled.value) {
+    if (withZodiac && showMoonInScorpio.value) {
         appendLine().appendLine().appendLine(generateYearName(resources, jdn, withEmoji = false))
         if (isMoonInScorpio(jdn)) append(resources.getString(R.string.moon_in_scorpio))
     }

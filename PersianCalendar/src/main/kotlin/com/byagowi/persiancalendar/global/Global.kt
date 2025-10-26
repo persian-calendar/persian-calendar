@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_RED_HOLIDAYS
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
+import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
@@ -77,6 +78,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
+import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_SWIPE_DOWN_ACTION
 import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
@@ -291,6 +293,9 @@ var whatToShowOnWidgets = emptySet<String>()
 
 private val isAstronomicalExtraFeaturesEnabled_ = MutableStateFlow(DEFAULT_ASTRONOMICAL_FEATURES)
 val isAstronomicalExtraFeaturesEnabled: StateFlow<Boolean> get() = isAstronomicalExtraFeaturesEnabled_
+
+private val showMoonInScorpio_ = MutableStateFlow(DEFAULT_SHOW_MOON_IN_SCORPIO)
+val showMoonInScorpio: StateFlow<Boolean> get() = showMoonInScorpio_
 
 val isTalkBackEnabled_ = MutableStateFlow(false)
 val isTalkBackEnabled: StateFlow<Boolean> get() = isTalkBackEnabled_
@@ -581,6 +586,11 @@ fun updateStoredPreference(context: Context) {
 
     isAstronomicalExtraFeaturesEnabled_.value =
         preferences.getBoolean(PREF_ASTRONOMICAL_FEATURES, DEFAULT_ASTRONOMICAL_FEATURES)
+    showMoonInScorpio_.value = isAstronomicalExtraFeaturesEnabled_.value && preferences.getBoolean(
+        PREF_SHOW_MOON_IN_SCORPIO,
+        // It's true for the older users but the moment user enables astronomical features it disables this
+        true
+    )
     numericalDatePreferred = preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?

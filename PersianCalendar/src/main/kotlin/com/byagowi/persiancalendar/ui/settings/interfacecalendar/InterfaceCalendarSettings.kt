@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_CALENDARS_IDS_AS_HOLIDAY
@@ -61,6 +62,7 @@ import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
+import com.byagowi.persiancalendar.PREF_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
@@ -75,6 +77,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
@@ -103,7 +106,7 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         Box(
             Modifier
                 .semantics(mergeDescendants = true) { this.hideFromAccessibility() }
-                .clearAndSetSemantics {}
+                .clearAndSetSemantics {},
         ) {
             SettingsClickable(
                 title = stringResource(R.string.select_skin),
@@ -198,29 +201,48 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         stringResource(R.string.calendars_priority),
         stringResource(R.string.calendars_priority_summary)
     ) { onDismissRequest -> CalendarPreferenceDialog(onDismissRequest) }
-    val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
-    SettingsSwitch(
-        PREF_ASTRONOMICAL_FEATURES,
-        isAstronomicalExtraFeaturesEnabled,
-        stringResource(R.string.astronomy),
-        stringResource(R.string.astronomical_info_summary)
-    )
     run {
         val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
         SettingsSwitch(
-            PREF_SHOW_WEEK_OF_YEAR_NUMBER, isShowWeekOfYearEnabled,
+            PREF_SHOW_WEEK_OF_YEAR_NUMBER,
+            isShowWeekOfYearEnabled,
             stringResource(R.string.week_number),
             stringResource(R.string.week_number_summary)
         )
     }
     run {
+        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
+        SettingsSwitch(
+            PREF_ASTRONOMICAL_FEATURES,
+            isAstronomicalExtraFeaturesEnabled,
+            stringResource(R.string.astronomy),
+            stringResource(R.string.astronomical_info_summary),
+            onBeforeToggle = {
+                val preferences = context.preferences
+                if (PREF_SHOW_MOON_IN_SCORPIO !in preferences) preferences.edit {
+                    putBoolean(PREF_SHOW_MOON_IN_SCORPIO, DEFAULT_SHOW_MOON_IN_SCORPIO)
+                }
+                it
+            }
+        )
+        val showMoonInScorpio by showMoonInScorpio.collectAsState()
+        AnimatedVisibility(isAstronomicalExtraFeaturesEnabled) {
+            SettingsSwitch(
+                PREF_SHOW_MOON_IN_SCORPIO,
+                showMoonInScorpio,
+                stringResource(R.string.moon_in_scorpio),
+                summary = when (language) {
+                    Language.FA, Language.FA_AF -> "نمایش قمر در عقرب در جدول تقویم"
+                    else -> null
+                }
+            )
+        }
+    }
+    run {
         LaunchedEffect(Unit) {
             val preferences = context.preferences
             if (PREF_ISLAMIC_OFFSET in preferences && preferences.isIslamicOffsetExpired) preferences.edit {
-                putString(
-                    PREF_ISLAMIC_OFFSET,
-                    DEFAULT_ISLAMIC_OFFSET
-                )
+                putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)
             }
         }
         val numeral by numeral.collectAsState()
@@ -323,7 +345,9 @@ private fun EventsSettingsDialog(onDismissRequest: () -> Unit) {
                     Text(
                         holidayLabel,
                         Modifier
-                            .onSizeChanged { holidayTextWidth = with(density) { it.width.toDp() } }
+                            .onSizeChanged {
+                                holidayTextWidth = with(density) { it.width.toDp() }
+                            }
                             .padding(end = 16.dp),
                     )
                 }

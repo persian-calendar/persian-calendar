@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numeral
+import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Tithi
@@ -197,10 +198,8 @@ fun SharedTransitionScope.CalendarsOverview(
             )
         }
 
-        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
-
-        val moonInScorpioState = if (isAstronomicalExtraFeaturesEnabled)
-            moonInScorpioState(jdn) else null
+        val moonInScorpioState =
+            if (showMoonInScorpio.collectAsState().value) moonInScorpioState(jdn) else null
         this.AnimatedVisibility(moonInScorpioState != null) {
             val text = if (language.isPersian || language.isDari) when (moonInScorpioState) {
                 MoonInScorpioState.Borji -> "قمر در برج عقرب"
@@ -243,6 +242,7 @@ fun SharedTransitionScope.CalendarsOverview(
             }
         }
 
+        val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         val persianDate = jdn.toPersianDate()
         this.AnimatedVisibility(isExpanded && isAstronomicalExtraFeaturesEnabled) {
             val yearName = generateYearName(

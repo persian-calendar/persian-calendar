@@ -14,11 +14,11 @@ import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarNumeral
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.getSecondaryCalendarNumeral
@@ -166,8 +166,7 @@ class DayPainter(
         this.holiday = isHoliday
         this.jdn = jdn
         this.isWeekNumber = isWeekNumber
-        this.isMoonInScorpio =
-            isAstronomicalExtraFeaturesEnabled.value && jdn != null && isMoonInScorpio(jdn)
+        this.isMoonInScorpio = showMoonInScorpio.value && jdn != null && isMoonInScorpio(jdn)
         this.header = listOfNotNull(
             if (secondaryCalendar == null || jdn == null) null
             else getSecondaryCalendarNumeral(secondaryCalendar).format(
