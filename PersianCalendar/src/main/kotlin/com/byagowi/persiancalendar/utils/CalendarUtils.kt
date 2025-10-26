@@ -173,7 +173,7 @@ fun GregorianCalendar.formatDateAndTimeWithWeekDayName(): String {
     val weekDayName = jdn.weekDayName
     return language.value.timeAndDateFormat.format(
         Clock(this).toFormattedString(),
-        weekDayName + " " + formatDate(jdn on mainCalendar, forceNonNumerical = true)
+        weekDayName + spacedComma + formatDate(jdn on mainCalendar, forceNonNumerical = true)
     )
 }
 
