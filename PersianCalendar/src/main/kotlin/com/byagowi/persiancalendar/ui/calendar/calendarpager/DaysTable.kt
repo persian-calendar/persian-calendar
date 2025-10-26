@@ -329,7 +329,7 @@ fun daysTable(
                             val events =
                                 eventsRepository?.getEvents(day, deviceEvents) ?: emptyList()
                             val isHoliday = events.any { it.isHoliday } || day.isWeekEnd
-                            if (isHoliday) holidaysPositions.add(column, row)
+                            if (isHoliday) holidaysPositions.add(row = row, column = column)
                             Canvas(cellsSizeModifier) {
                                 val hasEvents =
                                     events.any { it !is CalendarEvent.DeviceCalendarEvent }
@@ -399,7 +399,7 @@ fun daysTable(
                         .fillMaxSize()
                         .zIndex(-1f)
                 ) {
-                    holidaysPositions.forEach { column, row ->
+                    holidaysPositions.forEach { row, column ->
                         val center = Offset(
                             x = (.5f + if (isRtl) 6 - column else column) * cellWidthPx + pagerArrowSizeAndPaddingPx,
                             // +1 for weekday names initials row, .5f for center of the circle
@@ -415,16 +415,17 @@ fun daysTable(
     }
 }
 
+// A bitset useful for a 7x7 table, seven days of seven weeks
 @VisibleForTesting
 internal class DayTablePositions {
     private var bits: Long = 0L
-    fun add(x: Int, y: Int) {
-        val index = x * 7 + y
-        if (BuildConfig.DEVELOPMENT) assert(y < 7 && index in 0..63)
+    fun add(row: Int, column: Int) {
+        val index = row * 7 + column
+        if (BuildConfig.DEVELOPMENT) assert(column < 7 && index in 0..63)
         bits = bits or (1L shl index)
     }
 
-    inline fun forEach(crossinline action: (Int, Int) -> Unit) {
+    inline fun forEach(crossinline action: (row: Int, column: Int) -> Unit) {
         var remaining = bits
         while (remaining != 0L) {
             val index = java.lang.Long.numberOfTrailingZeros(remaining)

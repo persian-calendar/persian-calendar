@@ -240,7 +240,7 @@ class CalendarTests {
         positions.add(5, 3)
 
         val indices = mutableListOf<Pair<Int, Int>>()
-        positions.forEach { x, y -> indices += x to y }
+        positions.forEach { row, column -> indices += row to column }
 
         assertEquals(listOf(5 to 3), indices)
     }
@@ -253,7 +253,7 @@ class CalendarTests {
         positions.add(5, 6)
 
         val indices = mutableListOf<Pair<Int, Int>>()
-        positions.forEach { x, y -> indices += x to y }
+        positions.forEach { row, column -> indices += row to column }
 
         assertEquals(listOf(0 to 0, 5 to 2, 5 to 6), indices)
     }
@@ -274,22 +274,22 @@ class CalendarTests {
         positions.add(5, 6)
         positions.add(5, 6)
 
-        val indices = mutableSetOf<Pair<Int, Int>>()
-        positions.forEach { x, y -> indices += x to y }
+        val indices = mutableListOf<Pair<Int, Int>>()
+        positions.forEach { row, column -> indices += row to column }
 
-        assertEquals(setOf(5 to 6), indices)
+        assertEquals(listOf(5 to 6), indices)
     }
 
     @Test
     fun `forEach should iterate in ascending order`() {
         val positions = DayTablePositions()
-        positions.add(7, 3)
+        positions.add(6, 3)
         positions.add(3, 6)
         positions.add(2, 2)
 
         val indices = mutableListOf<Pair<Int, Int>>()
-        positions.forEach { x, y -> indices += x to y }
+        positions.forEach { row, column -> indices += row to column }
 
-        assertEquals(listOf(2 to 2, 3 to 6, 7 to 3), indices)
+        assertEquals(listOf(2 to 2, 3 to 6, 6 to 3), indices)
     }
 }
