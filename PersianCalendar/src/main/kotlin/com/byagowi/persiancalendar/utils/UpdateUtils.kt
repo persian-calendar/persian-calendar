@@ -211,9 +211,7 @@ fun update(context: Context, updateDate: Boolean) {
 //            TileService.requestListeningState(context, tileComponent)
 //        }
 
-        if (mainCalendar.supportsDynamicIcon) {
-            updateLauncherIcon(date.dayOfMonth, context)
-        }
+        updateLauncherIcon(date, context)
     }
 
     val shiftWorkTitle = getShiftWorkTitle(jdn)
@@ -295,9 +293,10 @@ fun update(context: Context, updateDate: Boolean) {
 
 private const val dynamicIconActivityNamePrefix = "com.byagowi.persiancalendar.Day"
 
-private fun updateLauncherIcon(dayOfMonth: Int, context: Context) {
+private fun updateLauncherIcon(date: AbstractDate, context: Context) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O || !isDynamicIconEverEnabled) return
-    val isDynamicIconEnabled = isDynamicIconEnabled.value
+    val isDynamicIconEnabled = isDynamicIconEnabled.value && date.calendar.supportsDynamicIcon
+    val dayOfMonth = date.dayOfMonth
     val actions = buildList {
         add(
             ComponentName(context, MainActivity::class.java) to
