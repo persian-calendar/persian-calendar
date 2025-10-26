@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import androidx.collection.mutableIntSetOf
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -55,6 +54,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.zIndex
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -242,7 +242,7 @@ fun daysTable(
                 }
 
                 /** TODO: Consider use of BitSet and [java.util.BitSet.stream] when minSdk is 24 */
-                val holidaysPositions = remember { mutableIntSetOf() }
+                val holidaysPositions = remember { BitSet64() }
                 repeat(daysRowsCount * 7) { dayOffset ->
                     if (onlyWeek != null && monthStartWeekOfYear + dayOffset / 7 != onlyWeek) return@repeat
                     val row = if (onlyWeek == null) dayOffset / 7 else 0
@@ -420,10 +420,27 @@ fun daysTable(
 
 @JvmInline
 private value class TablePositionPair(val value: Int) {
-    constructor(x: Int, y: Int) : this(x * 16 + y)
+    constructor(x: Int, y: Int) : this(x * 7 + y)
 
-    operator fun component1() = value / 16
-    operator fun component2() = value % 16
+    operator fun component1() = value / 7
+    operator fun component2() = value % 7
+}
+
+private class BitSet64() {
+    private var bits: Long = 0L
+    fun add(index: Int) {
+        if (BuildConfig.DEVELOPMENT) assert(index in 0..63)
+        bits = bits or (1L shl index)
+    }
+
+    inline fun forEach(crossinline action: (Int) -> Unit) {
+        var remaining = bits
+        while (remaining != 0L) {
+            val index = java.lang.Long.numberOfTrailingZeros(remaining)
+            action(index)
+            remaining = remaining and (remaining - 1)
+        }
+    }
 }
 
 private const val pagerArrowSize = MaterialIconDimension + 8 * 2
