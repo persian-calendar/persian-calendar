@@ -57,7 +57,7 @@ private fun WearApp() {
                 val context = LocalContext.current
                 val dataStore = context.dataStore.data
                 val preferences by dataStore.collectAsState(
-                    remember { runBlocking { dataStore.firstOrNull() } }
+                    remember { runBlocking { dataStore.firstOrNull() } },
                 )
                 val navController = rememberSwipeDismissableNavController()
                 val mainRoute = "app"
@@ -85,7 +85,7 @@ private fun WearApp() {
                                         destination.id, bundleOf(dayJdnKey to jdn.value)
                                     )
                                 }
-                            }
+                            },
                         )
                     }
                     composable(utilitiesRoute) {
@@ -100,7 +100,7 @@ private fun WearApp() {
                         CalendarScreen(
                             today = today,
                             localeUtils = localeUtils,
-                            preferences = preferences
+                            preferences = preferences,
                         ) { jdn ->
                             navController.graph.findNode(dayRoute)?.let { destination ->
                                 navController.navigate(
@@ -116,7 +116,7 @@ private fun WearApp() {
                             day = Jdn(
                                 backStackEntry.arguments?.getLong(dayJdnKey, today.value)
                                     ?: today.value
-                            )
+                            ),
                         )
                     }
                     composable(settingsRoute) { SettingsScreen(preferences) }

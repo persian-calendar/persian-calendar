@@ -126,7 +126,7 @@ private fun EventButton(
     onClick: () -> Unit,
     isHoliday: Boolean,
     modifier: Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     if (isHoliday) Button(onClick, modifier) { content() }
     else FilledTonalButton(onClick, modifier) { content() }

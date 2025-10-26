@@ -46,8 +46,9 @@ fun BoxScope.OtherCalendars(
     val isRound = LocalConfiguration.current.isScreenRound
     val nonCurvedStyle = MaterialTheme.typography.bodySmall
     if (isRound || onTop) {
-        val curvedStyle = MaterialTheme.typography.arcSmall
-            .copy(fontSize = with(LocalDensity.current) { 12.dp.toPx().toSp() })
+        val curvedStyle = MaterialTheme.typography.arcSmall.copy(
+            fontSize = with(LocalDensity.current) { 12.dp.toPx().toSp() },
+        )
         if (withWeekDayName) {
             if (isRound) {
                 CurvedLayout(
@@ -65,13 +66,11 @@ fun BoxScope.OtherCalendars(
         }
         CurvedLayout(
             anchor = if (onTop) 315f else 45f,
-            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
-                CurvedDirection.Angular.CounterClockwise,
+            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else CurvedDirection.Angular.CounterClockwise,
         ) { curvedText(text = firstText, style = curvedStyle, color = othersColor) }
         CurvedLayout(
             anchor = if (onTop) 225f else 135f,
-            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else
-                CurvedDirection.Angular.CounterClockwise,
+            angularDirection = if (onTop) CurvedDirection.Angular.Clockwise else CurvedDirection.Angular.CounterClockwise,
         ) { curvedText(text = secondText, style = curvedStyle, color = othersColor) }
     } else {
         if (withWeekDayName) Text(

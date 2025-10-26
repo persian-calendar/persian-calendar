@@ -145,8 +145,7 @@ private val crossfadeSpec = fadeIn(tween()) togetherWith fadeOut(tween())
 
 // Our own cross fade spec where AnimatedContent() has nicer effect
 // than Crossfade() (usually on non binary changes) but we need a crossfade effect also
-val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform =
-    { crossfadeSpec }
+val appCrossfadeSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = { crossfadeSpec }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
