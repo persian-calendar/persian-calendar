@@ -340,15 +340,15 @@ private fun HelpItems() {
         }
     }
     Column {
-        sections.forEach { (title, body) ->
-            var isExpanded by rememberSaveable { mutableStateOf(false) }
+        var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
+        sections.forEachIndexed { i, (title, body) ->
             Column(
                 modifier = Modifier
-                    .toggleable(isExpanded) { isExpanded = it }
+                    .toggleable(expandedItem == i) { expandedItem = if (it) i else -1 }
                     .padding(
                         horizontal = 4.dp,
                         vertical = animateDpAsState(
-                            if (isExpanded) 6.dp else 4.dp,
+                            if (expandedItem == i) 6.dp else 4.dp,
                             animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
                         ).value
                     )
@@ -358,7 +358,7 @@ private fun HelpItems() {
                 FlowRow(verticalArrangement = Arrangement.Center) {
                     Spacer(modifier = Modifier.width(16.dp))
                     ExpandArrow(
-                        isExpanded = isExpanded,
+                        isExpanded = expandedItem == i,
                         tint = MaterialTheme.colorScheme.primary,
                         contentDescription = stringResource(R.string.more),
                         isLineStart = true,
@@ -366,7 +366,7 @@ private fun HelpItems() {
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                 }
-                this.AnimatedVisibility(visible = isExpanded) {
+                this.AnimatedVisibility(visible = expandedItem == i) {
                     SelectionContainer { Text(body, Modifier.padding(horizontal = 16.dp)) }
                 }
             }
