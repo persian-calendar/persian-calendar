@@ -211,7 +211,9 @@ fun update(context: Context, updateDate: Boolean) {
 //            TileService.requestListeningState(context, tileComponent)
 //        }
 
-        updateLauncherIcon(date.dayOfMonth, context)
+        if (mainCalendar.supportsDynamicIcon) {
+            updateLauncherIcon(date.dayOfMonth, context)
+        }
     }
 
     val shiftWorkTitle = getShiftWorkTitle(jdn)
