@@ -1087,7 +1087,10 @@ private fun DaysView(
                                         Interaction.ExtendDown -> duration =
                                             (duration + delta.y / scale.value).coerceIn(
                                                 minimumValue = ySteps * 1f,
-                                                maximumValue = (ySteps * 24 * 4) - position.y
+                                                maximumValue =
+                                                    ((ySteps * 24 * 4) - position.y).coerceAtLeast(
+                                                        ySteps * 1f
+                                                    )
                                             )
 
                                         Interaction.ExtendUp -> {
