@@ -39,7 +39,7 @@ value class Clock(val value: Double/*A real number, usually [0-24), portion of a
     }
 
     fun toFormattedString(printAmPm: Boolean = true): String {
-        if (clockIn24) return toBasicFormatString()
+        if (clockIn24.value) return toBasicFormatString()
         val (hours, minutes) = toHoursAndMinutesPair()
         val clockString = linearFormat((hours % 12).takeIf { it != 0 } ?: 12, minutes)
         if (!printAmPm) return clockString

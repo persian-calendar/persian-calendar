@@ -161,8 +161,8 @@ val numeral: StateFlow<Numeral> get() = numeral_
 private val localNumeralPreference_ = MutableStateFlow(DEFAULT_LOCAL_NUMERAL)
 val localNumeralPreference: StateFlow<Boolean> get() = localNumeralPreference_
 
-var clockIn24 = DEFAULT_WIDGET_IN_24
-    private set
+private val clockIn24_ = MutableStateFlow(DEFAULT_WIDGET_IN_24)
+val clockIn24: StateFlow<Boolean> get() = clockIn24_
 
 var isDynamicIconEverEnabled = false
     private set
@@ -480,7 +480,7 @@ fun updateStoredPreference(context: Context) {
         else -> language.preferredNumeral
     }
 
-    clockIn24 = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
+    clockIn24_.value = preferences.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled_.value = language.showIranTimeOption && preferences.getBoolean(
         PREF_IRAN_TIME, DEFAULT_IRAN_TIME
     ) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
