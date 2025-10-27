@@ -47,9 +47,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.database.getIntOrNull
-import com.byagowi.persiancalendar.DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
-import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
-import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
@@ -69,6 +66,9 @@ import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.alternativePersianMonthsInAzeri
+import com.byagowi.persiancalendar.global.easternGregorianArabicMonths
+import com.byagowi.persiancalendar.global.englishGregorianPersianMonths
 import com.byagowi.persiancalendar.global.eventCalendarsIdsAsHoliday
 import com.byagowi.persiancalendar.global.eventCalendarsIdsToExclude
 import com.byagowi.persiancalendar.global.holidayString
@@ -88,7 +88,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
-import com.byagowi.persiancalendar.ui.settings.SettingsSwitchWithInnerState
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.theme.Theme
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
@@ -121,28 +120,31 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         title = stringResource(R.string.language),
         summary = language.nativeName,
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
+    this.AnimatedVisibility(language.isPersian) {
+        val englishGregorianPersianMonths by englishGregorianPersianMonths.collectAsState()
+        SettingsSwitch(
+            key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+            value = englishGregorianPersianMonths,
+            title = "ماه‌های میلادی با نام انگلیسی",
+            summary = "جون، جولای، آگوست، …"
+        )
+    }
     this.AnimatedVisibility(language.isArabic) {
-        SettingsSwitchWithInnerState(
+        val easternGregorianArabicMonths by easternGregorianArabicMonths.collectAsState()
+        SettingsSwitch(
             key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
-            defaultValue = DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
+            value = easternGregorianArabicMonths,
             title = "السنة الميلادية بالاسماء الشرقية",
             summary = "كانون الثاني، شباط، آذار، …"
         )
     }
     this.AnimatedVisibility(language == Language.AZB) {
-        SettingsSwitchWithInnerState(
+        val alternativePersianMonthsInAzeri by alternativePersianMonthsInAzeri.collectAsState()
+        SettingsSwitch(
             key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
-            defaultValue = DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
+            value = alternativePersianMonthsInAzeri,
             title = "آذربایجان دیلینده ایل آیلار",
             summary = "آغلارگۆلر، گۆلن، قیزاران، …"
-        )
-    }
-    this.AnimatedVisibility(language.isPersian) {
-        SettingsSwitchWithInnerState(
-            key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            defaultValue = DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            title = "ماه‌های میلادی با نام انگلیسی",
-            summary = "جون، جولای، آگوست، …"
         )
     }
     this.AnimatedVisibility(language.canHaveLocalNumeral) {

@@ -236,8 +236,18 @@ val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
 private val customFontName_ = MutableStateFlow<String?>(null)
 val customFontName: StateFlow<String?> get() = customFontName_
 
-private var alternativeGregorianMonths = false
-private var alternativePersianMonthsInAzeri = false
+
+private val englishGregorianPersianMonths_ =
+    MutableStateFlow(DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS)
+val englishGregorianPersianMonths: StateFlow<Boolean> get() = englishGregorianPersianMonths_
+
+private val easternGregorianArabicMonths_ =
+    MutableStateFlow(DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS)
+val easternGregorianArabicMonths: StateFlow<Boolean> get() = easternGregorianArabicMonths_
+
+private val alternativePersianMonthsInAzeri_ =
+    MutableStateFlow(DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS)
+val alternativePersianMonthsInAzeri: StateFlow<Boolean> get() = alternativePersianMonthsInAzeri_
 
 private val coordinates_ = MutableStateFlow<Coordinates?>(null)
 val coordinates: StateFlow<Coordinates?> get() = coordinates_
@@ -390,11 +400,14 @@ fun yearMonthNameOfDate(date: AbstractDate): List<String> {
 fun loadLanguageResources(resources: Resources) {
     debugLog("Utils: loadLanguageResources is called")
     val language = language.value
-    persianMonths = language.getPersianMonths(resources, alternativePersianMonthsInAzeri)
+    persianMonths = language.getPersianMonths(resources, alternativePersianMonthsInAzeri.value)
     oldEraPersianMonths =
         if (language.isPersian) Language.persianCalendarMonthsInDariOrPersianOldEra else persianMonths
     islamicMonths = language.getIslamicMonths(resources)
-    gregorianMonths = language.getGregorianMonths(resources, alternativeGregorianMonths)
+    gregorianMonths = language.getGregorianMonths(
+        resources,
+        englishGregorianPersianMonths.value || easternGregorianArabicMonths.value,
+    )
     nepaliMonths = language.getNepaliMonths()
     weekDays = language.getWeekDays(resources)
     weekDaysInitials = language.getWeekDaysInitials(resources)
@@ -454,18 +467,13 @@ fun updateStoredPreference(context: Context) {
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     customFontName_.value = preferences.getString(PREF_CUSTOM_FONT_NAME, null)
-    alternativeGregorianMonths = when {
-        language.isPersian -> preferences.getBoolean(
-            PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
-        )
-
-        language.isArabic -> preferences.getBoolean(
-            PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
-        )
-
-        else -> false
-    }
-    alternativePersianMonthsInAzeri = language == Language.AZB && preferences.getBoolean(
+    englishGregorianPersianMonths_.value = language.isPersian && preferences.getBoolean(
+        PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+    )
+    easternGregorianArabicMonths_.value = language.isArabic && preferences.getBoolean(
+        PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
+    )
+    alternativePersianMonthsInAzeri_.value = language == Language.AZB && preferences.getBoolean(
         PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS, DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
     )
 

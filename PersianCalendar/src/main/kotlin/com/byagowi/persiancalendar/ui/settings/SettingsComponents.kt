@@ -284,24 +284,6 @@ fun SettingsMultiSelect(
 }
 
 @Composable
-fun SettingsSwitchWithInnerState(
-    key: String,
-    defaultValue: Boolean,
-    title: String,
-    summary: String? = null,
-) {
-    val context = LocalContext.current
-    var currentValue by remember {
-        mutableStateOf(context.preferences.getBoolean(key, defaultValue))
-    }
-    val toggle = { newValue: Boolean ->
-        currentValue = newValue
-        context.preferences.edit { putBoolean(key, newValue) }
-    }
-    SettingsSwitchLayout(toggle, title, summary, currentValue)
-}
-
-@Composable
 fun SettingsSwitch(
     key: String,
     value: Boolean,
@@ -315,7 +297,16 @@ fun SettingsSwitch(
         val finalValue = onBeforeToggle(newValue)
         if (value != finalValue) context.preferences.edit { putBoolean(key, finalValue) }
     }
-    SettingsSwitchLayout(toggle, title, summary, value, extraWidget = extraWidget)
+    val hapticFeedback = LocalHapticFeedback.current
+    SettingsLayout(
+        title = title,
+        summary = summary,
+        extraWidget = extraWidget,
+        modifier = Modifier.toggleable(value, role = Role.Switch) {
+            hapticFeedback.performLongPress()
+            toggle(it)
+        },
+    ) { Switch(checked = value, onCheckedChange = null) }
 }
 
 @Composable
@@ -390,26 +381,6 @@ fun SettingsLayout(
             contentAlignment = Alignment.Center,
         ) { extraWidget() }
     }
-}
-
-@Composable
-private fun SettingsSwitchLayout(
-    toggle: (Boolean) -> Unit,
-    title: String,
-    summary: String?,
-    value: Boolean,
-    extraWidget: (@Composable () -> Unit)? = null,
-) {
-    val hapticFeedback = LocalHapticFeedback.current
-    SettingsLayout(
-        title = title,
-        summary = summary,
-        extraWidget = extraWidget,
-        modifier = Modifier.toggleable(value, role = Role.Switch) {
-            hapticFeedback.performLongPress()
-            toggle(it)
-        },
-    ) { Switch(checked = value, onCheckedChange = null) }
 }
 
 @Composable
