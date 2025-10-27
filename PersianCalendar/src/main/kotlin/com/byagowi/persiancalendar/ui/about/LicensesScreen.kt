@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -54,6 +55,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -62,6 +64,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.ExpandArrow
 import com.byagowi.persiancalendar.ui.common.NavigationNavigateUpIcon
@@ -170,6 +173,7 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
     val sections = remember { getCreditsSections() }
     var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
     val listState = rememberLazyListState()
+    val expandArrowSizeModifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() })
     LazyColumn(state = listState) {
         itemsIndexed(sections) { i, (title, license, text) ->
             if (i > 0) HorizontalDivider(
@@ -198,6 +202,7 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                         tint = MaterialTheme.colorScheme.primary,
                         contentDescription = null,
                         isLineStart = true,
+                        modifier = expandArrowSizeModifier,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))

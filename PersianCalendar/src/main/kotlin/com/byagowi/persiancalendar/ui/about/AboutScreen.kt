@@ -85,6 +85,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
@@ -341,6 +342,7 @@ private fun HelpItems() {
     }
     Column {
         var expandedItem by rememberSaveable { mutableIntStateOf(-1) }
+        val expandArrowSizeModifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() })
         sections.forEachIndexed { i, (title, body) ->
             Column(
                 modifier = Modifier
@@ -362,6 +364,7 @@ private fun HelpItems() {
                         tint = MaterialTheme.colorScheme.primary,
                         contentDescription = stringResource(R.string.more),
                         isLineStart = true,
+                        modifier = expandArrowSizeModifier,
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
