@@ -44,6 +44,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
@@ -59,6 +60,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.LRM
@@ -186,6 +188,11 @@ fun HoroscopeDialog(date: Date = Date(), onDismissRequest: () -> Unit) {
                     cityName?.let { name -> append(spacedComma); append(name) }
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally),
+                maxLines = 1,
+                autoSize = TextAutoSize.StepBased(
+                    maxFontSize = LocalTextStyle.current.fontSize,
+                    minFontSize = 9.sp,
+                )
             )
             HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
             AscendantZodiac(time, it, isYearEquinox = false)
@@ -323,6 +330,11 @@ fun YearHoroscopeDialog(persianYear: Int, onDismissRequest: () -> Unit) {
                 "لحظهٔ تحویل سال " + numeral.format(persianYear) + " شمسی در $cityName"
             } else "$cityName, March equinox of " + numeral.format(gregorianYear) + " CE",
             modifier = Modifier.align(Alignment.CenterHorizontally),
+            maxLines = 1,
+            autoSize = TextAutoSize.StepBased(
+                maxFontSize = LocalTextStyle.current.fontSize,
+                minFontSize = 9.sp,
+            )
         )
         HorizontalDivider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
         val time = seasons(gregorianYear).marchEquinox
@@ -403,7 +415,22 @@ private fun ColumnScope.AscendantZodiac(
                 appendAngle(/*"⚸" + */stringResource(R.string.black_moon), meanApogee)
             }
         }
-        Text(text, textAlign = TextAlign.Center, modifier = Modifier.alpha(progress * 1f))
+        Text(
+            text,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.alpha(progress * 1f),
+            style = LocalTextStyle.current.copy(
+                lineHeight = with(LocalDensity.current) {
+                    LocalTextStyle.current.lineHeight.toDp().coerceAtMost(20.dp).toSp()
+                }
+            ),
+            softWrap = false,
+            maxLines = text.split("\n").size,
+            autoSize = TextAutoSize.StepBased(
+                maxFontSize = LocalTextStyle.current.fontSize,
+                minFontSize = 9.sp,
+            )
+        )
     }
     if (language.isArabicScript) Column(Modifier.align(Alignment.CenterHorizontally)) {
         AnimatedVisibility(progress != 0f) {
