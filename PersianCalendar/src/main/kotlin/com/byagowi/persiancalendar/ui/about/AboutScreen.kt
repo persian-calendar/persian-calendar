@@ -284,13 +284,13 @@ private fun AboutScreenContent(navigateToLicenses: () -> Unit, bottomPadding: Dp
         // Help
         val language by language.collectAsState()
         if (language.isUserAbleToReadPersian) {
-            Row(modifier = Modifier.padding(top = 16.dp, start = 12.dp)) {
+            Row(modifier = Modifier.padding(top = 16.dp, start = 20.dp)) {
                 Icon(
-                    modifier = Modifier.padding(start = 8.dp, end = 4.dp),
+                    modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
                     imageVector = Icons.AutoMirrored.Default.Help,
                     contentDescription = stringResource(R.string.help),
                 )
-                Column {
+                Column(Modifier.padding(start = 4.dp)) {
                     Text(
                         stringResource(R.string.help), style = MaterialTheme.typography.bodyLarge
                     )
@@ -395,11 +395,11 @@ private fun AboutScreenButton(
     ) {
         Row {
             Icon(
-                modifier = Modifier.padding(end = 4.dp),
+                modifier = Modifier.size(with(LocalDensity.current) { 24.sp.toDp() }),
                 imageVector = icon,
                 contentDescription = null,
             )
-            Column {
+            Column(Modifier.padding(start = 4.dp)) {
                 Text(stringResource(title), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
