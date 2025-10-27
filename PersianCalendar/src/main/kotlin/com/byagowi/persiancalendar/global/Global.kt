@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.DEFAULT_LARGE_ICON_ON_NOTIFICATION
 import com.byagowi.persiancalendar.DEFAULT_LOCAL_NUMERAL
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
+import com.byagowi.persiancalendar.DEFAULT_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_RED_HOLIDAYS
@@ -182,8 +183,8 @@ val isLargeDayNumberOnNotification: StateFlow<Boolean> get() = isLargeDayNumberO
 private val prefersWidgetsDynamicColors_ = MutableStateFlow(false)
 val prefersWidgetsDynamicColorsFlow: StateFlow<Boolean> get() = prefersWidgetsDynamicColors_
 
-var isWidgetClock = DEFAULT_WIDGET_CLOCK
-    private set
+private var isWidgetClock_ = MutableStateFlow(DEFAULT_WIDGET_CLOCK)
+val isWidgetClock: StateFlow<Boolean> get() = isWidgetClock_
 
 private val isNotifyDate_ = MutableStateFlow(DEFAULT_NOTIFY_DATE)
 val isNotifyDate: StateFlow<Boolean> get() = isNotifyDate_
@@ -343,7 +344,7 @@ var nothingScheduledString = ""
     private set
 var holidayString = DEFAULT_HOLIDAY
     private set
-var numericalDatePreferred = false
+var numericalDatePreferred = DEFAULT_NUMERICAL_DATE_PREFERRED
     private set
 var calendarsTitlesAbbr = emptyList<String>()
     private set
@@ -492,7 +493,7 @@ fun updateStoredPreference(context: Context) {
     isLargeDayNumberOnNotification_.value = preferences.getBoolean(
         PREF_LARGE_DAY_NUMBER_ON_NOTIFICATION, DEFAULT_LARGE_ICON_ON_NOTIFICATION
     )
-    isWidgetClock = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
+    isWidgetClock_.value = preferences.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate_.value = preferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan_.value = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ||
             preferences.getBoolean(PREF_NOTIFICATION_ATHAN, isNotifyDate.value)
@@ -598,7 +599,8 @@ fun updateStoredPreference(context: Context) {
         // It's true for the older users but the moment user enables astronomical features it disables this
         true
     )
-    numericalDatePreferred = preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
+    numericalDatePreferred =
+        preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, DEFAULT_NUMERICAL_DATE_PREFERRED)
 
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != context.getString(R.string.code)) applyAppLanguage(context)

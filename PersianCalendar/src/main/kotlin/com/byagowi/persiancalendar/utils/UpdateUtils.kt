@@ -1051,7 +1051,7 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
     if (prefersWidgetsDynamicColors) remoteViews.setDynamicTextColor(
         R.id.sample_clock, android.R.attr.colorAccent
     )
-    if (isWidgetClock) {
+    if (isWidgetClock.value) {
         remoteViews.setViewVisibility(R.id.sample_clock, View.VISIBLE)
         remoteViews.configureClock(R.id.sample_clock)
         remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, "")
@@ -1093,14 +1093,14 @@ private fun create4x1RemoteViews(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
-        context.packageName, if (isWidgetClock) {
+        context.packageName, if (isWidgetClock.value) {
             if (isCenterAlignWidgets.value) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
         } else {
             if (isCenterAlignWidgets.value) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x1)
-    if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
+    if (isWidgetClock.value) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     remoteViews.setRoundBackground(R.id.widget_layout4x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x1, context.resources)
     remoteViews.setupForegroundTextColors(
@@ -1110,9 +1110,9 @@ private fun create4x1RemoteViews(
         R.id.textPlaceholder1_4x1, android.R.attr.colorAccent
     )
 
-    if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
+    if (!isWidgetClock.value) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
-        append(if (isWidgetClock) widgetTitle else mainDateString)
+        append(if (isWidgetClock.value) widgetTitle else mainDateString)
         if (showOtherCalendars) append(spacedComma + subtitle)
     })
     remoteViews.setInt(
@@ -1120,7 +1120,7 @@ private fun create4x1RemoteViews(
     )
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
-        if (isWidgetClock && isForcedIranTimeEnabled.value) "(" + context.getString(R.string.iran_time) + ")" else ""
+        if (isWidgetClock.value && isForcedIranTimeEnabled.value) "(" + context.getString(R.string.iran_time) + ")" else ""
     )
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, context.launchAppPendingIntent())
     return remoteViews
@@ -1141,13 +1141,13 @@ private fun create2x2RemoteViews(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
-        context.packageName, if (isWidgetClock) {
+        context.packageName, if (isWidgetClock.value) {
             if (isCenterAlignWidgets.value) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
         } else {
             if (isCenterAlignWidgets.value) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
-    if (isWidgetClock) remoteViews.configureClock(R.id.time_2x2)
+    if (isWidgetClock.value) remoteViews.configureClock(R.id.time_2x2)
     remoteViews.setRoundBackground(R.id.widget_layout2x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout2x2, context.resources)
     remoteViews.setupForegroundTextColors(
@@ -1167,9 +1167,9 @@ private fun create2x2RemoteViews(
         remoteViews.setViewVisibility(R.id.owghat_2x2, View.GONE)
     }
 
-    if (!isWidgetClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
+    if (!isWidgetClock.value) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
     remoteViews.setTextViewText(R.id.date_2x2, buildString {
-        append(if (isWidgetClock) widgetTitle else mainDateString)
+        append(if (isWidgetClock.value) widgetTitle else mainDateString)
         if (showOtherCalendars) appendLine().append(subtitle)
     })
 
@@ -1187,7 +1187,7 @@ private val widget4x2TimesViewsIds = listOf(
 )
 
 private fun RemoteViews.setupTamilTimeSlot(clock: Clock, @IdRes id: Int) {
-    if (isWidgetClock) {
+    if (isWidgetClock.value) {
         setupForegroundTextColors(id)
         if (prefersWidgetsDynamicColors) setDynamicTextColor(
             id,
@@ -1212,10 +1212,11 @@ private fun create4x2RemoteViews(
     val weekDayName = jdn.weekDayName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val remoteViews = RemoteViews(
-        context.packageName, if (isWidgetClock) R.layout.widget4x2_clock else R.layout.widget4x2
+        context.packageName,
+        if (isWidgetClock.value) R.layout.widget4x2_clock else R.layout.widget4x2
     )
 
-    if (isWidgetClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
+    if (isWidgetClock.value) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
     remoteViews.setRoundBackground(R.id.widget_layout4x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x2, context.resources)
 
@@ -1231,7 +1232,7 @@ private fun create4x2RemoteViews(
         R.id.event_4x2
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x2)
-    if (isWidgetClock) remoteViews.setTextViewTextSize(
+    if (isWidgetClock.value) remoteViews.setTextViewTextSize(
         R.id.textPlaceholder0_4x2, TypedValue.COMPLEX_UNIT_SP,
         if (language.value.isTamil) 22f else 48f
     )
@@ -1239,9 +1240,9 @@ private fun create4x2RemoteViews(
         R.id.textPlaceholder0_4x2, android.R.attr.colorAccent
     )
 
-    if (!isWidgetClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
+    if (!isWidgetClock.value) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
-        if (isWidgetClock) append(jdn.weekDayName + "\n")
+        if (isWidgetClock.value) append(jdn.weekDayName + "\n")
         append(formatDate(date, calendarNameInLinear = showOtherCalendars))
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })

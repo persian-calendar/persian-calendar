@@ -21,6 +21,8 @@ import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.DEFAULT_NUMERICAL_DATE_PREFERRED
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
@@ -50,6 +52,7 @@ import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
 import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
+import com.byagowi.persiancalendar.global.isWidgetClock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
@@ -153,18 +156,23 @@ fun ColumnScope.WidgetConfiguration() {
             key = PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
         )
     }
-    SettingsSwitchWithInnerState(
-        key = PREF_NUMERICAL_DATE_PREFERRED,
-        defaultValue = false,
-        title = stringResource(R.string.prefer_linear_date),
-        summary = stringResource(R.string.prefer_linear_date_summary)
-    )
-    SettingsSwitchWithInnerState(
-        key = PREF_WIDGET_CLOCK,
-        defaultValue = true,
-        title = stringResource(R.string.clock_on_widget),
-        summary = stringResource(R.string.showing_clock_on_widget)
-    )
+    run {
+        SettingsSwitchWithInnerState(
+            key = PREF_NUMERICAL_DATE_PREFERRED,
+            defaultValue = DEFAULT_NUMERICAL_DATE_PREFERRED,
+            title = stringResource(R.string.prefer_linear_date),
+            summary = stringResource(R.string.prefer_linear_date_summary)
+        )
+    }
+    run {
+        val isWidgetClock by isWidgetClock.collectAsState()
+        SettingsSwitch(
+            key = PREF_WIDGET_CLOCK,
+            value = isWidgetClock,
+            title = stringResource(R.string.clock_on_widget),
+            summary = stringResource(R.string.showing_clock_on_widget)
+        )
+    }
     run {
         val clockIn24 by clockIn24.collectAsState()
         SettingsSwitch(
