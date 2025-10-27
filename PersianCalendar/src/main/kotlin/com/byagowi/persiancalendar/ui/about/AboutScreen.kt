@@ -38,10 +38,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -60,6 +60,7 @@ import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalMinimumInteractiveComponentSize
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -357,8 +358,11 @@ private fun HelpItems() {
                     .fillMaxWidth()
                     .animateContentSize(appContentSizeAnimationSpec),
             ) {
-                FlowRow(verticalArrangement = Arrangement.Center) {
-                    Spacer(modifier = Modifier.width(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                ) {
                     ExpandArrow(
                         isExpanded = expandedItem == i,
                         tint = MaterialTheme.colorScheme.primary,
@@ -366,8 +370,15 @@ private fun HelpItems() {
                         isLineStart = true,
                         modifier = expandArrowSizeModifier,
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                    Text(
+                        title,
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                        maxLines = 1,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 11.sp,
+                            maxFontSize = LocalTextStyle.current.fontSize,
+                        ),
+                    )
                 }
                 this.AnimatedVisibility(visible = expandedItem == i) {
                     SelectionContainer { Text(body, Modifier.padding(horizontal = 16.dp)) }

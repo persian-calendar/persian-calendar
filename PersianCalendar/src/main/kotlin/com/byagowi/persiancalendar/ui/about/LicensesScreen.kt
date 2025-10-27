@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -26,12 +26,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
@@ -39,6 +39,7 @@ import androidx.compose.material.icons.filled.Motorcycle
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
@@ -196,7 +197,10 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                     .fillMaxWidth()
                     .animateContentSize(appContentSizeAnimationSpec),
             ) {
-                FlowRow(verticalArrangement = Arrangement.Center) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
                     ExpandArrow(
                         isExpanded = expandedItem == i,
                         tint = MaterialTheme.colorScheme.primary,
@@ -204,13 +208,20 @@ private fun BoxScope.Licenses(bottomPadding: Dp) {
                         isLineStart = true,
                         modifier = expandArrowSizeModifier,
                     )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(title, modifier = Modifier.align(alignment = Alignment.CenterVertically))
-                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        title,
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically),
+                        maxLines = 1,
+                        autoSize = TextAutoSize.StepBased(
+                            minFontSize = 11.sp,
+                            maxFontSize = LocalTextStyle.current.fontSize,
+                        ),
+                    )
                     if (license != null) Text(
                         // Maybe linkify them just like https://stackoverflow.com/q/66130513
                         //  Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                         license,
+                        maxLines = 1,
                         modifier = Modifier
                             .background(
                                 MaterialTheme.colorScheme.secondaryContainer,
