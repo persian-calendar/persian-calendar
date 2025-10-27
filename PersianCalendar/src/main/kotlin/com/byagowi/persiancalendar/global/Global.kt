@@ -344,8 +344,10 @@ var nothingScheduledString = ""
     private set
 var holidayString = DEFAULT_HOLIDAY
     private set
-var numericalDatePreferred = DEFAULT_NUMERICAL_DATE_PREFERRED
-    private set
+
+val numericalDatePreferred_ = MutableStateFlow(DEFAULT_NUMERICAL_DATE_PREFERRED)
+val numericalDatePreferred: StateFlow<Boolean> get() = numericalDatePreferred_
+
 var calendarsTitlesAbbr = emptyList<String>()
     private set
 var eventsRepository: EventsRepository? = null
@@ -599,7 +601,7 @@ fun updateStoredPreference(context: Context) {
         // It's true for the older users but the moment user enables astronomical features it disables this
         true
     )
-    numericalDatePreferred =
+    numericalDatePreferred_.value =
         preferences.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, DEFAULT_NUMERICAL_DATE_PREFERRED)
 
     // TODO: probably can be done in applyAppLanguage itself?

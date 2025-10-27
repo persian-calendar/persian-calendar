@@ -344,7 +344,7 @@ fun calculateDaysDifference(
 fun formatDate(
     date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
 ): String =
-    if (numericalDatePreferred && !forceNonNumerical) (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(
+    if (numericalDatePreferred.value && !forceNonNumerical) (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(
         date
     )) else "").trim() else language.value.dmy.format(
         numeral.value.format(date.dayOfMonth),
