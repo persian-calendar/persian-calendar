@@ -1094,9 +1094,9 @@ private fun create4x1RemoteViews(
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) {
-            if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
+            if (isCenterAlignWidgets.value) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
         } else {
-            if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
+            if (isCenterAlignWidgets.value) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
     remoteViews.setupTamilTimeSlot(clock, R.id.time_header_4x1)
@@ -1142,9 +1142,9 @@ private fun create2x2RemoteViews(
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         context.packageName, if (isWidgetClock) {
-            if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
+            if (isCenterAlignWidgets.value) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
         } else {
-            if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
+            if (isCenterAlignWidgets.value) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
     if (isWidgetClock) remoteViews.configureClock(R.id.time_2x2)

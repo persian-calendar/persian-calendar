@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VIBRATION
 import com.byagowi.persiancalendar.DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS
+import com.byagowi.persiancalendar.DEFAULT_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_DREAM_NOISE
 import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -257,8 +258,10 @@ val mainCalendarNumeral
     }
 val secondaryCalendar
     get() = if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
-var isCenterAlignWidgets = true
-    private set
+
+val isCenterAlignWidgets_ = MutableStateFlow(DEFAULT_CENTER_ALIGN_WIDGETS)
+val isCenterAlignWidgets: StateFlow<Boolean> get() = isCenterAlignWidgets_
+
 var weekStartOffset = 0
     private set
 var weekEnds = BooleanArray(7)
@@ -496,7 +499,8 @@ fun updateStoredPreference(context: Context) {
     athanVibration_.value = preferences.getBoolean(PREF_ATHAN_VIBRATION, DEFAULT_ATHAN_VIBRATION)
     ascendingAthan_.value =
         preferences.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
-    isCenterAlignWidgets = preferences.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
+    isCenterAlignWidgets_.value =
+        preferences.getBoolean(PREF_CENTER_ALIGN_WIDGETS, DEFAULT_CENTER_ALIGN_WIDGETS)
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm

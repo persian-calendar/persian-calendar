@@ -44,6 +44,7 @@ import com.byagowi.persiancalendar.PREF_WIDGET_TRANSPARENCY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Calendar
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.isCenterAlignWidgets
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isLargeDayNumberOnNotification
 import com.byagowi.persiancalendar.global.isNotifyDate
@@ -169,12 +170,15 @@ fun ColumnScope.WidgetConfiguration() {
         title = stringResource(R.string.clock_in_24),
         summary = stringResource(R.string.showing_clock_in_24)
     )
-    SettingsSwitchWithInnerState(
-        key = PREF_CENTER_ALIGN_WIDGETS,
-        defaultValue = true,
-        title = stringResource(R.string.center_align_widgets),
-        summary = stringResource(R.string.center_align_widgets_summary)
-    )
+    run {
+        val isCenterAlignWidgets by isCenterAlignWidgets.collectAsState()
+        SettingsSwitch(
+            key = PREF_CENTER_ALIGN_WIDGETS,
+            value = isCenterAlignWidgets,
+            title = stringResource(R.string.center_align_widgets),
+            summary = stringResource(R.string.center_align_widgets_summary)
+        )
+    }
     val isInIranTimeVisible = remember {
         (language.value.showIranTimeOption || mainCalendar == Calendar.SHAMSI) && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     }
