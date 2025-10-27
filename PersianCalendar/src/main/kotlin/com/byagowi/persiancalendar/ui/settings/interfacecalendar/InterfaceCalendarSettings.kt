@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.localNumeralPreference
 import com.byagowi.persiancalendar.global.numeral
 import com.byagowi.persiancalendar.global.showMoonInScorpio
 import com.byagowi.persiancalendar.global.weekDays
@@ -144,11 +145,11 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
             "جون، جولای، آگوست، …"
         )
     }
-    // TODO: To be integrated into the language selection dialog one day
     this.AnimatedVisibility(language.canHaveLocalNumeral) {
-        SettingsSwitchWithInnerState(
+        val localNumeralPreference by localNumeralPreference.collectAsState()
+        SettingsSwitch(
             PREF_LOCAL_NUMERAL,
-            true,
+            localNumeralPreference,
             stringResource(R.string.native_digits),
             stringResource(R.string.enable_native_digits)
         )

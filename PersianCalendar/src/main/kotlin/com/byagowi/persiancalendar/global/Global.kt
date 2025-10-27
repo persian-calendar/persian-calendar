@@ -157,6 +157,9 @@ var weekDaysInitials = weekDaysEmptyList
 private val numeral_ = MutableStateFlow(Numeral.PERSIAN)
 val numeral: StateFlow<Numeral> get() = numeral_
 
+private val localNumeralPreference_ = MutableStateFlow(DEFAULT_LOCAL_NUMERAL)
+val localNumeralPreference: StateFlow<Boolean> get() = localNumeralPreference_
+
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
 
@@ -466,11 +469,11 @@ fun updateStoredPreference(context: Context) {
             true
         )
 
+    localNumeralPreference_.value =
+        preferences.getBoolean(PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL)
     numeral_.value = when {
         !language.canHaveLocalNumeral -> Numeral.ARABIC
-        !preferences.getBoolean(PREF_LOCAL_NUMERAL, DEFAULT_LOCAL_NUMERAL)
-            -> Numeral.ARABIC
-
+        !localNumeralPreference.value -> Numeral.ARABIC
         else -> language.preferredNumeral
     }
 
