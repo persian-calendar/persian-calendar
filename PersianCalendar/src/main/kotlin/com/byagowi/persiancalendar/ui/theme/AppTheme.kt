@@ -21,12 +21,14 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.FloatingActionButtonElevation
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.Typography
@@ -52,9 +54,11 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.text.layoutDirection
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.STORED_FONT_NAME
 import com.byagowi.persiancalendar.global.customFontName
+import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isGradient
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isRedHolidays
@@ -73,7 +77,11 @@ import java.io.File
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = appColorScheme(), typography = resolveTypography()) {
+    MaterialTheme(
+        colorScheme = appColorScheme(),
+        typography = resolveTypography(),
+        shapes = appShapes(),
+    ) {
         val contentColor by animateColor(MaterialTheme.colorScheme.onBackground)
 
         val language by language.collectAsState()
@@ -183,6 +191,19 @@ private fun appColorScheme(): ColorScheme {
         onBackground = if (backgroundColor.isLight) DefaultLightColorScheme.onBackground
         else DefaultDarkColorScheme.onBackground,
     )
+}
+
+@Composable
+private fun appShapes(): Shapes {
+    if (!BuildConfig.DEVELOPMENT) return MaterialTheme.shapes
+    val isCyberpunk by isCyberpunk.collectAsState()
+    return if (isCyberpunk) Shapes(
+        extraSmall = CutCornerShape(MaterialTheme.shapes.extraSmall.topStart),
+        small = CutCornerShape(MaterialTheme.shapes.small.topStart),
+        medium = CutCornerShape(MaterialTheme.shapes.medium.topStart),
+        large = CutCornerShape(MaterialTheme.shapes.large.topStart),
+        extraLarge = CutCornerShape(MaterialTheme.shapes.extraLarge.topStart),
+    ) else MaterialTheme.shapes
 }
 
 @Composable

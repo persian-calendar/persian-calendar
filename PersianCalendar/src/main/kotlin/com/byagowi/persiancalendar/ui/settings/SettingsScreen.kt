@@ -81,9 +81,12 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_DYNAMIC_ICON_ENABLED
+import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.isCyberpunk
 import com.byagowi.persiancalendar.global.isDynamicIconEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -341,6 +344,21 @@ private fun MenuItems(openAddWidgetDialog: () -> Unit, closeMenu: () -> Unit) {
         AppDropdownMenuItem({ Text("Shapes") }) { showDialog = true }
         if (showDialog) ShapesDemoDialog { showDialog = false }
     }
+    val isCyberpunk by isCyberpunk.collectAsState()
+    AppDropdownMenuCheckableItem(
+        text = "Cyberpunk",
+        isChecked = isCyberpunk,
+        onValueChange = {
+            val preferences = context.preferences
+            preferences.edit {
+                putBoolean(
+                    PREF_THEME_CYBERPUNK,
+                    !preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
+                )
+            }
+            closeMenu()
+        },
+    )
     val activity = LocalActivity.current
     AppDropdownMenuItem({ Text("Clear preferences store and exit") }) {
         context.preferences.edit { clear() }

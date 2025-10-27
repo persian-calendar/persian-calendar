@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_RED_HOLIDAYS
 import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_SHOW_MOON_IN_SCORPIO
+import com.byagowi.persiancalendar.DEFAULT_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
@@ -87,6 +88,7 @@ import com.byagowi.persiancalendar.PREF_SWIPE_UP_ACTION
 import com.byagowi.persiancalendar.PREF_SYSTEM_DARK_THEME
 import com.byagowi.persiancalendar.PREF_SYSTEM_LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_THEME_CYBERPUNK
 import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WALLPAPER_AUTOMATIC
 import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
@@ -229,6 +231,8 @@ val systemLightTheme: StateFlow<Theme> get() = systemLightTheme_
 private val isGradient_ = MutableStateFlow(DEFAULT_THEME_GRADIENT)
 val isGradient: StateFlow<Boolean> get() = isGradient_
 
+private val isCyberpunk_ = MutableStateFlow(DEFAULT_THEME_CYBERPUNK)
+val isCyberpunk: StateFlow<Boolean> get() = isCyberpunk_
 
 private val isRedHolidays_ = MutableStateFlow(DEFAULT_RED_HOLIDAYS)
 val isRedHolidays: StateFlow<Boolean> get() = isRedHolidays_
@@ -465,6 +469,7 @@ fun updateStoredPreference(context: Context) {
         Theme.entries.find { it.key == key }.takeIf { it != Theme.SYSTEM_DEFAULT }
     } ?: Theme.LIGHT
     isGradient_.value = preferences.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+    isCyberpunk_.value = preferences.getBoolean(PREF_THEME_CYBERPUNK, DEFAULT_THEME_CYBERPUNK)
     isRedHolidays_.value = preferences.getBoolean(PREF_RED_HOLIDAYS, DEFAULT_RED_HOLIDAYS)
     customFontName_.value = preferences.getString(PREF_CUSTOM_FONT_NAME, null)
     englishGregorianPersianMonths_.value = language.isPersian && preferences.getBoolean(
