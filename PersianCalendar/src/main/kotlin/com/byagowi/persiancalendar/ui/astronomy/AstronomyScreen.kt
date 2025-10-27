@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -68,6 +69,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalResources
@@ -77,7 +79,6 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.coerceAtMost
 import androidx.compose.ui.unit.dp
@@ -161,7 +162,10 @@ fun SharedTransitionScope.AstronomyScreen(
                     Text(
                         stringResource(R.string.astronomy),
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                        autoSize = TextAutoSize.StepBased(
+                            maxFontSize = LocalTextStyle.current.fontSize,
+                            minFontSize = 10.sp,
+                        ),
                     )
                 },
                 colors = appTopAppBarColors(),
@@ -664,7 +668,9 @@ private fun Cell(
     value: String,
 ) {
     Row(
-        modifier.animateContentSize(appContentSizeAnimationSpec),
+        modifier
+            .heightIn(max = 64.dp)
+            .animateContentSize(appContentSizeAnimationSpec),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
@@ -678,14 +684,20 @@ private fun Cell(
                 .padding(vertical = 4.dp, horizontal = 8.dp),
             style = MaterialTheme.typography.bodyMedium,
             color = Color.White,
+            fontSize = with(LocalDensity.current) {
+                MaterialTheme.typography.bodyMedium.fontSize.toDp().coerceAtMost(18.dp).toSp()
+            }
         )
         SelectionContainer {
             Text(
                 value,
-                style = LocalTextStyle.current,
+                style = LocalTextStyle.current.copy(
+                    lineHeight = with(LocalDensity.current) {
+                        LocalTextStyle.current.lineHeight.toDp().coerceAtMost(28.dp).toSp()
+                    }
+                ),
                 modifier = Modifier.padding(start = 8.dp, end = 4.dp),
-                maxLines = 1,
-                softWrap = false,
+                maxLines = if (LocalDensity.current.fontScale > 1) 2 else 1,
                 autoSize = TextAutoSize.StepBased(
                     minFontSize = 9.sp,
                     maxFontSize = MaterialTheme.typography.bodyMedium.fontSize,
