@@ -64,16 +64,16 @@ class WallpaperSettingsActivity : ComponentActivity() {
                         }
                         val wallpaperAutomatic by wallpaperAutomatic.collectAsState()
                         SettingsSwitch(
-                            PREF_WALLPAPER_AUTOMATIC,
-                            wallpaperAutomatic,
-                            stringResource(R.string.theme_default)
+                            key = PREF_WALLPAPER_AUTOMATIC,
+                            value = wallpaperAutomatic,
+                            title = stringResource(R.string.theme_default)
                         )
                         this.AnimatedVisibility(!wallpaperAutomatic) {
                             val wallpaperDark by wallpaperDark.collectAsState()
                             SettingsSwitch(
-                                PREF_WALLPAPER_DARK,
-                                wallpaperDark,
-                                stringResource(R.string.theme_dark)
+                                key = PREF_WALLPAPER_DARK,
+                                value = wallpaperDark,
+                                title = stringResource(R.string.theme_dark)
                             )
                         }
                     }

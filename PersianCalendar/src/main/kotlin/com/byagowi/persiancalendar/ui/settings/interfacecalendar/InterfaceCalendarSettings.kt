@@ -123,35 +123,35 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     ) { onDismissRequest -> LanguageDialog(onDismissRequest) }
     this.AnimatedVisibility(language.isArabic) {
         SettingsSwitchWithInnerState(
-            PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
-            DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
-            "السنة الميلادية بالاسماء الشرقية",
-            "كانون الثاني، شباط، آذار، …"
+            key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS,
+            defaultValue = DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS,
+            title = "السنة الميلادية بالاسماء الشرقية",
+            summary = "كانون الثاني، شباط، آذار، …"
         )
     }
     this.AnimatedVisibility(language == Language.AZB) {
         SettingsSwitchWithInnerState(
-            PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
-            DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
-            "آذربایجان دیلینده ایل آیلار",
-            "آغلارگۆلر، گۆلن، قیزاران، …"
+            key = PREF_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
+            defaultValue = DEFAULT_AZERI_ALTERNATIVE_PERSIAN_MONTHS,
+            title = "آذربایجان دیلینده ایل آیلار",
+            summary = "آغلارگۆلر، گۆلن، قیزاران، …"
         )
     }
     this.AnimatedVisibility(language.isPersian) {
         SettingsSwitchWithInnerState(
-            PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
-            "ماه‌های میلادی با نام انگلیسی",
-            "جون، جولای، آگوست، …"
+            key = PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+            defaultValue = DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS,
+            title = "ماه‌های میلادی با نام انگلیسی",
+            summary = "جون، جولای، آگوست، …"
         )
     }
     this.AnimatedVisibility(language.canHaveLocalNumeral) {
         val localNumeralPreference by localNumeralPreference.collectAsState()
         SettingsSwitch(
-            PREF_LOCAL_NUMERAL,
-            localNumeralPreference,
-            stringResource(R.string.native_digits),
-            stringResource(R.string.enable_native_digits)
+            key = PREF_LOCAL_NUMERAL,
+            value = localNumeralPreference,
+            title = stringResource(R.string.native_digits),
+            summary = stringResource(R.string.enable_native_digits)
         )
     }
 
@@ -165,9 +165,9 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         var showPermissionDialog by rememberSaveable { mutableStateOf(false) }
         val isShowDeviceCalendarEvents by isShowDeviceCalendarEvents.collectAsState()
         SettingsSwitch(
-            PREF_SHOW_DEVICE_CALENDAR_EVENTS, isShowDeviceCalendarEvents,
-            stringResource(R.string.show_device_calendar_events),
-            stringResource(R.string.show_device_calendar_events_summary),
+            key = PREF_SHOW_DEVICE_CALENDAR_EVENTS, value = isShowDeviceCalendarEvents,
+            title = stringResource(R.string.show_device_calendar_events),
+            summary = stringResource(R.string.show_device_calendar_events_summary),
             onBeforeToggle = {
                 if (it && ActivityCompat.checkSelfPermission(
                         context, Manifest.permission.READ_CALENDAR
@@ -205,19 +205,19 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
     run {
         val isShowWeekOfYearEnabled by isShowWeekOfYearEnabled.collectAsState()
         SettingsSwitch(
-            PREF_SHOW_WEEK_OF_YEAR_NUMBER,
-            isShowWeekOfYearEnabled,
-            stringResource(R.string.week_number),
-            stringResource(R.string.week_number_summary)
+            key = PREF_SHOW_WEEK_OF_YEAR_NUMBER,
+            value = isShowWeekOfYearEnabled,
+            title = stringResource(R.string.week_number),
+            summary = stringResource(R.string.week_number_summary)
         )
     }
     run {
         val isAstronomicalExtraFeaturesEnabled by isAstronomicalExtraFeaturesEnabled.collectAsState()
         SettingsSwitch(
-            PREF_ASTRONOMICAL_FEATURES,
-            isAstronomicalExtraFeaturesEnabled,
-            stringResource(R.string.astronomy),
-            stringResource(R.string.astronomical_info_summary),
+            key = PREF_ASTRONOMICAL_FEATURES,
+            value = isAstronomicalExtraFeaturesEnabled,
+            title = stringResource(R.string.astronomy),
+            summary = stringResource(R.string.astronomical_info_summary),
             onBeforeToggle = {
                 val preferences = context.preferences
                 if (PREF_SHOW_MOON_IN_SCORPIO !in preferences) preferences.edit {
@@ -229,9 +229,9 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         val showMoonInScorpio by showMoonInScorpio.collectAsState()
         AnimatedVisibility(isAstronomicalExtraFeaturesEnabled) {
             SettingsSwitch(
-                PREF_SHOW_MOON_IN_SCORPIO,
-                showMoonInScorpio,
-                stringResource(R.string.moon_in_scorpio),
+                key = PREF_SHOW_MOON_IN_SCORPIO,
+                value = showMoonInScorpio,
+                title = stringResource(R.string.moon_in_scorpio),
                 summary = when (language) {
                     Language.FA, Language.FA_AF -> "نمایش قمر در عقرب در جدول تقویم"
                     else -> null

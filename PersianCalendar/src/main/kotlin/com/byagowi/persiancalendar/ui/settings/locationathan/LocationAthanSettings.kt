@@ -220,10 +220,10 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
             updateStoredPreference(context)
         }
         SettingsSwitch(
-            PREF_NOTIFICATION_ATHAN,
-            notificationAthan,
-            stringResource(R.string.notification_athan),
-            stringResource(R.string.enable_notification_athan),
+            key = PREF_NOTIFICATION_ATHAN,
+            value = notificationAthan,
+            title = stringResource(R.string.notification_athan),
+            summary = stringResource(R.string.enable_notification_athan),
             onBeforeToggle = { value ->
                 AthanNotification.invalidateChannel(context)
                 if (value && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ActivityCompat.checkSelfPermission(
@@ -241,10 +241,10 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     }
     this.AnimatedVisibility(isLocationSet && !notificationAthan) {
         SettingsSwitch(
-            PREF_ASCENDING_ATHAN_VOLUME,
-            ascendingAthan,
-            stringResource(R.string.ascending_athan_volume),
-            stringResource(R.string.enable_ascending_athan_volume),
+            key = PREF_ASCENDING_ATHAN_VOLUME,
+            value = ascendingAthan,
+            title = stringResource(R.string.ascending_athan_volume),
+            summary = stringResource(R.string.enable_ascending_athan_volume),
         )
     }
     this.AnimatedVisibility(isLocationSet && !notificationAthan && !ascendingAthan) {
@@ -254,10 +254,10 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     }
     this.AnimatedVisibility(isLocationSet) {
         SettingsSwitch(
-            PREF_ATHAN_VIBRATION,
-            athanVibration.collectAsState().value,
-            stringResource(R.string.vibration),
-            language.tryTranslateAthanVibrationSummary(),
+            key = PREF_ATHAN_VIBRATION,
+            value = athanVibration.collectAsState().value,
+            title = stringResource(R.string.vibration),
+            summary = language.tryTranslateAthanVibrationSummary(),
             onBeforeToggle = {
                 AthanNotification.invalidateChannel(context)
                 it

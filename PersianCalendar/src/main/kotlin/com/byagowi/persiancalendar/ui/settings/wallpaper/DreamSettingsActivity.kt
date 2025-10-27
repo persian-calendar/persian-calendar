@@ -62,9 +62,9 @@ class DreamSettingsActivity : ComponentActivity() {
                         }
                         val dreamNoise by dreamNoise.collectAsState()
                         SettingsSwitch(
-                            PREF_DREAM_NOISE,
-                            dreamNoise,
-                            "🔊🔊🔊",
+                            key = PREF_DREAM_NOISE,
+                            value = dreamNoise,
+                            title = "🔊🔊🔊",
                         )
                     }
                 }
