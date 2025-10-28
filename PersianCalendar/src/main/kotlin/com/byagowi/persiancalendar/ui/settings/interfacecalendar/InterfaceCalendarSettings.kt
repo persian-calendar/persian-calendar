@@ -250,14 +250,14 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         }
         val numeral by numeral.collectAsState()
         SettingsSingleSelect(
-            PREF_ISLAMIC_OFFSET,
+            key = PREF_ISLAMIC_OFFSET,
             // One is formatted with locale's numerals and the other used for keys isn't
-            (-2..2).map { numeral.format(it.toString()) },
-            (-2..2).map { it.toString() },
-            DEFAULT_ISLAMIC_OFFSET,
-            R.string.islamic_offset,
-            stringResource(R.string.islamic_offset),
-            R.string.islamic_offset_summary,
+            entries = (-2..2).map { numeral.format(it.toString()) },
+            entryValues = (-2..2).map { it.toString() },
+            defaultValue = DEFAULT_ISLAMIC_OFFSET,
+            dialogTitleResId = R.string.islamic_offset,
+            title = stringResource(R.string.islamic_offset),
+            summaryResId = R.string.islamic_offset_summary,
         )
     }
     val weekDaysValues = (0..6).map { it.toString() }

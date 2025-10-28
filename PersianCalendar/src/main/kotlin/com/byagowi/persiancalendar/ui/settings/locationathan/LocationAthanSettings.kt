@@ -117,20 +117,20 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     )
     this.AnimatedVisibility(isLocationSet) {
         SettingsSingleSelect(
-            PREF_PRAY_TIME_METHOD,
-            CalculationMethod.entries.map { stringResource(it.titleStringId) },
-            CalculationMethod.entries.map { it.name },
-            DEFAULT_PRAY_TIME_METHOD,
+            key = PREF_PRAY_TIME_METHOD,
+            entries = CalculationMethod.entries.map { stringResource(it.titleStringId) },
+            entryValues = CalculationMethod.entries.map { it.name },
+            defaultValue = DEFAULT_PRAY_TIME_METHOD,
             dialogTitleResId = R.string.pray_methods_calculation,
             title = stringResource(R.string.pray_methods)
         )
     }
     this.AnimatedVisibility(coordinates?.isHighLatitude == true) {
         SettingsSingleSelect(
-            PREF_HIGH_LATITUDES_METHOD,
-            HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
-            HighLatitudesMethod.entries.map { it.name },
-            DEFAULT_HIGH_LATITUDES_METHOD,
+            key = PREF_HIGH_LATITUDES_METHOD,
+            entries = HighLatitudesMethod.entries.map { stringResource(it.titleStringId) },
+            entryValues = HighLatitudesMethod.entries.map { it.name },
+            defaultValue = DEFAULT_HIGH_LATITUDES_METHOD,
             dialogTitleResId = R.string.high_latitudes_method,
             title = stringResource(R.string.high_latitudes_method)
         )

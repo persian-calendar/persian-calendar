@@ -211,12 +211,13 @@ fun ColumnScope.WidgetConfiguration() {
         )
     }
     SettingsMultiSelect(
-        PREF_WHAT_TO_SHOW_WIDGETS,
-        widgetCustomizations.values.map { stringResource(it) },
-        widgetCustomizations.keys.toList(),
-        DEFAULT_WIDGET_CUSTOMIZATIONS, R.string.which_one_to_show,
-        stringResource(R.string.customize_widget),
-        stringResource(R.string.customize_widget_summary),
+        key = PREF_WHAT_TO_SHOW_WIDGETS,
+        entries = widgetCustomizations.values.map { stringResource(it) },
+        entryValues = widgetCustomizations.keys.toList(),
+        defaultValue = DEFAULT_WIDGET_CUSTOMIZATIONS,
+        dialogTitleResId = R.string.which_one_to_show,
+        title = stringResource(R.string.customize_widget),
+        summary = stringResource(R.string.customize_widget_summary),
     )
 }
 
