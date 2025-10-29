@@ -49,6 +49,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import androidx.core.graphics.toColorInt
@@ -102,6 +103,7 @@ fun SettingsSection(title: String, subtitle: String? = null) {
         this.AnimatedVisibility(visible = subtitle != null) {
             Text(
                 subtitle.orEmpty(),
+                textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.alpha(AppBlendAlpha)
             )
