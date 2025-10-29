@@ -219,13 +219,13 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                                 )
                             )
                         },
-                        navigateToSchedule = { Screen.SCHEDULE.navigate() },
+                        navigateToSchedule = Screen.SCHEDULE::navigate,
                         navigateToDays = { jdn, isWeek ->
                             Screen.DAYS.navigate(
                                 bundleOf(selectedDayKey to jdn.value, isWeekKey to isWeek)
                             )
                         },
-                        navigateToMonthView = { Screen.MONTH.navigate() },
+                        navigateToMonthView = Screen.MONTH::navigate,
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         navigateToAstronomy = ::navigateToAstronomy,
                         viewModel = viewModel,
@@ -304,8 +304,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     CompassScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToLevel = { Screen.LEVEL.navigate() },
-                        navigateToMap = { Screen.MAP.navigate() },
+                        navigateToLevel = Screen.LEVEL::navigate,
+                        navigateToMap = Screen.MAP::navigate,
                         navigateToSettingsLocationTab = ::navigateToSettingsLocationTab,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
                         else ({ navigateUp(backStackEntry) }),
@@ -316,7 +316,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     LevelScreen(
                         animatedContentScope = this,
                         navigateUp = { navigateUp(backStackEntry) },
-                        navigateToCompass = { Screen.COMPASS.navigate() },
+                        navigateToCompass = Screen.COMPASS::navigate,
                     )
                 }
 
@@ -328,7 +328,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AstronomyScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToMap = { Screen.MAP.navigate() },
+                        navigateToMap = Screen.MAP::navigate,
                         viewModel = viewModel,
                         noBackStackAction = if (navController.previousBackStackEntry != null) null
                         else ({ navigateUp(backStackEntry) }),
@@ -358,7 +358,7 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     SettingsScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToMap = { Screen.MAP.navigate() },
+                        navigateToMap = Screen.MAP::navigate,
                         initialPage = backStackEntry.arguments?.getInt(tabKey, 0) ?: 0,
                         destination = backStackEntry.arguments?.getString(settingsKey).orEmpty()
                     )
@@ -368,8 +368,8 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                     AboutScreen(
                         animatedContentScope = this,
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
-                        navigateToLicenses = { Screen.LICENSES.navigate() },
-                        navigateToDeviceInformation = { Screen.DEVICE.navigate() },
+                        navigateToLicenses = Screen.LICENSES::navigate,
+                        navigateToDeviceInformation = Screen.DEVICE::navigate,
                     )
                 }
 
