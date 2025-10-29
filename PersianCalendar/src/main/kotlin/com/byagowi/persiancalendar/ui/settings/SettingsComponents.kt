@@ -73,7 +73,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
-    Spacer(Modifier.padding(top = 16.dp))
+    Spacer(Modifier.height(16.dp))
     Column(
         Modifier
             .fillMaxWidth()
@@ -215,7 +215,7 @@ fun SettingsSingleSelect(
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
                     RadioButton(selected = entryValue == currentValue, onClick = null)
-                    Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                    Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                     Text(entry)
                 }
             }
@@ -275,7 +275,7 @@ fun SettingsMultiSelect(
                         .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                 ) {
                     Checkbox(checked = entryValue in result, onCheckedChange = null)
-                    Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                    Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                     Text(entry)
                 }
             }

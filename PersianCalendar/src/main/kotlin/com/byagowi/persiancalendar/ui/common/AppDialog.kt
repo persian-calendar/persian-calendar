@@ -64,7 +64,7 @@ private fun BaseAppDialog(
                 }
 
                 if (neutralButton != null || dismissButton != null || confirmButton != null) {
-                    Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(Modifier.height(8.dp))
 
                     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
                         neutralButton?.invoke()

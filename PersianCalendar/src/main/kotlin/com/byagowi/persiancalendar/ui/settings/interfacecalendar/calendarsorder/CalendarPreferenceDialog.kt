@@ -153,7 +153,7 @@ fun CalendarPreferenceDialog(onDismissRequest: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Checkbox(checked = checked, onCheckedChange = null)
-                    Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                    Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                     Text(stringResource(calendar.title))
                     Spacer(Modifier.weight(1f))
                     Icon(Icons.Rounded.DragHandle, contentDescription = null)

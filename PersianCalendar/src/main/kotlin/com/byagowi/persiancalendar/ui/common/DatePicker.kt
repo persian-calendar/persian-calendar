@@ -80,7 +80,7 @@ private fun RowScope.DatePickerContent(
         setJdn(Jdn(calendar, date.year, date.month, it))
         view.performHapticFeedbackVirtualKey()
     }
-    Spacer(modifier = Modifier.width(8.dp))
+    Spacer(Modifier.width(8.dp))
     NumberPicker(
         modifier = Modifier.weight(1f),
         label = monthsFormat,
@@ -95,7 +95,7 @@ private fun RowScope.DatePickerContent(
         setJdn(Jdn(calendar, date.year, month, day))
         view.performHapticFeedbackVirtualKey()
     }
-    Spacer(modifier = Modifier.width(8.dp))
+    Spacer(Modifier.width(8.dp))
     NumberPicker(
         modifier = Modifier.weight(1f),
         range = startYear..startYear + yearsLimit,

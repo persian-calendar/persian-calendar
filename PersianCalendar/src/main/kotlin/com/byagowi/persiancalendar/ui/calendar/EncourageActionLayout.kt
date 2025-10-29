@@ -49,7 +49,7 @@ fun ColumnScope.EncourageActionLayout(
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.fillMaxWidth(),
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(Modifier.height(4.dp))
             Row {
                 OutlinedButton(
                     onClick = {
@@ -58,7 +58,7 @@ fun ColumnScope.EncourageActionLayout(
                     },
                     Modifier.weight(1f),
                 ) { Text(stringResource(R.string.ignore)) }
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(Modifier.width(8.dp))
                 Button(
                     onClick = {
                         if (hideOnAccept) shown = false

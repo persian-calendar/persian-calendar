@@ -123,7 +123,7 @@ fun ThemeDialog(onDismissRequest: () -> Unit) {
                     .padding(start = SettingsHorizontalPaddingItem.dp),
             ) {
                 RadioButton(selected = entry == userSetTheme, onClick = null)
-                Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(buildAnnotatedString {
                     append(stringResource(entry.title))
                     if (!showMore && entry == Theme.SYSTEM_DEFAULT && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

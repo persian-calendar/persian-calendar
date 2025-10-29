@@ -170,7 +170,7 @@ fun SharedTransitionScope.ConverterScreen(
                 ) {
                     val scrollState = rememberScrollState()
                     Column(Modifier.verticalScroll(scrollState)) {
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(Modifier.height(24.dp))
 
                         // Timezones
                         this.AnimatedVisibility(screenMode == ConverterScreenMode.TIME_ZONES) {
@@ -236,16 +236,16 @@ private fun TimeZones(
     if (isLandscape) Column {
         Row(Modifier.padding(horizontal = 24.dp)) {
             TimezoneClock(viewModel, zones, pendingConfirms, Modifier.weight(1f), isFirst = true)
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(Modifier.width(8.dp))
             TimezoneClock(viewModel, zones, pendingConfirms, Modifier.weight(1f), isFirst = false)
         }
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(Modifier.height(4.dp))
         TextWithSlideAnimation(difference)
     } else Column(Modifier.padding(horizontal = 24.dp)) {
         TimezoneClock(viewModel, zones, pendingConfirms, isFirst = true)
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(Modifier.height(4.dp))
         TextWithSlideAnimation(difference)
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(Modifier.height(4.dp))
         TimezoneClock(viewModel, zones, pendingConfirms, isFirst = false)
     }
 }
@@ -637,7 +637,7 @@ private fun TimezoneClock(
                 disableEdit = true,
                 pendingConfirms = pendingConfirms,
             )
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(Modifier.width(4.dp))
             val time = GregorianCalendar(timeZone).also { it.time = clock.time }
             NumberPicker(
                 modifier = Modifier.weight(1f),

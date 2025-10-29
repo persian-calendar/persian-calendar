@@ -67,7 +67,7 @@ fun PrayerSelectDialog(onDismissRequest: () -> Unit) {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Checkbox(checked = alarm in alarms, onCheckedChange = null)
-                Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(stringResource(alarm.stringRes), Modifier.weight(1f, fill = true))
             }
         }

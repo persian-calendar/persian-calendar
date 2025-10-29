@@ -412,7 +412,7 @@ private fun AboutScreenButton(
             )
             Column(Modifier.padding(start = 4.dp)) {
                 Text(stringResource(title), style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(Modifier.height(4.dp))
                 Text(
                     stringResource(summary),
                     style = MaterialTheme.typography.bodySmall,

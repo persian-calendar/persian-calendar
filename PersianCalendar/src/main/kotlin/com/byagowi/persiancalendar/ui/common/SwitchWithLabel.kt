@@ -35,11 +35,11 @@ fun SwitchWithLabel(
     ) {
         if (labelBeforeSwitch) {
             Text(label)
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(Modifier.width(8.dp))
         }
         Switch(checked, null, Modifier.minimumInteractiveComponentSize())
         if (!labelBeforeSwitch) {
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(Modifier.width(8.dp))
             Text(label)
         }
     }

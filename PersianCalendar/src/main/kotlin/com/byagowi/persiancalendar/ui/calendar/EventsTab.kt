@@ -187,7 +187,7 @@ fun SharedTransitionScope.EventsTab(
         val language by language.collectAsState()
         val context = LocalContext.current
         if (PREF_HOLIDAY_TYPES !in context.preferences && language.isIranExclusive) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             EncourageActionLayout(
                 header = stringResource(R.string.warn_if_events_not_set),
                 discardAction = {
@@ -201,7 +201,7 @@ fun SharedTransitionScope.EventsTab(
             var showDialog by remember { mutableStateOf(false) }
             if (showDialog) AskForCalendarPermissionDialog { showDialog = false }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(16.dp))
             EncourageActionLayout(
                 header = stringResource(R.string.ask_for_calendar_permission),
                 discardAction = {

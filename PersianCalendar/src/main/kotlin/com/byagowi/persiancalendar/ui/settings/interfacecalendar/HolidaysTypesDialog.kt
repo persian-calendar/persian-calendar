@@ -199,7 +199,7 @@ fun CountryEvents(
                 .padding(start = SettingsHorizontalPaddingItem.dp)
                 .align(Alignment.CenterVertically),
         )
-        Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
+        Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
         FlowRow(verticalArrangement = Arrangement.Center) {
             Text(
                 calendarCenterName,
@@ -250,7 +250,7 @@ private fun IndentedCheckBox(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(key in enabledTypes, onCheckedChange = null)
-        Spacer(modifier = Modifier.width(HolidaysHorizontalPaddingItem.dp))
+        Spacer(Modifier.width(HolidaysHorizontalPaddingItem.dp))
         Text(label)
     }
 }

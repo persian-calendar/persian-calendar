@@ -361,7 +361,7 @@ fun SharedTransitionScope.CalendarsOverview(
                             progress = { progress },
                             strokeWidth = indicatorStrokeWidth
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(Modifier.height(4.dp))
                         Text(title, style = MaterialTheme.typography.bodyMedium)
                     }
                 }

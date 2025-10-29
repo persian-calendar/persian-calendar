@@ -78,7 +78,7 @@ fun ShiftWorkDialog(
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         DialogSurface {
             Column {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
                 CompositionLocalProvider(
                     LocalTextStyle provides MaterialTheme.typography.bodyMedium
                 ) {
@@ -122,7 +122,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(checked = recurs, onCheckedChange = null)
-        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+        Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
         Text(stringResource(R.string.recurs))
     }
     TextButton(
@@ -269,7 +269,7 @@ fun ColumnScope.ShiftWorkDialogContent(
         ScrollShadow(lazyListState, top = false)
     }
 
-    Spacer(modifier = Modifier.height(8.dp))
+    Spacer(Modifier.height(8.dp))
     Row(Modifier.padding(bottom = 16.dp, start = 24.dp, end = 24.dp)) {
         TextButton(onClick = {
             viewModel.changeShiftWorks(

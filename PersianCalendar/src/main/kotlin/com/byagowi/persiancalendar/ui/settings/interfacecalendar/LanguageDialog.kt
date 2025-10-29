@@ -65,7 +65,7 @@ fun LanguageDialog(onDismissRequest: () -> Unit) {
                     .padding(horizontal = SettingsHorizontalPaddingItem.dp)
             ) {
                 RadioButton(selected = item == currentLanguage, onClick = null)
-                Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                 Text(item.nativeName)
             }
         }

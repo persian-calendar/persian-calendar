@@ -201,7 +201,7 @@ fun SharedTransitionScope.SettingsScreen(
                         text = {
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 tab.Icon(selectedTabIndex == index)
-                                Spacer(modifier = Modifier.width(8.dp))
+                                Spacer(Modifier.width(8.dp))
                                 tab.Title()
                             }
                         },

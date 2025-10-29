@@ -298,7 +298,7 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
                             .padding(horizontal = SettingsHorizontalPaddingItem.dp),
                     ) {
                         RadioButton(selected = key == currentSelectionKey, onClick = null)
-                        Spacer(modifier = Modifier.width(SettingsHorizontalPaddingItem.dp))
+                        Spacer(Modifier.width(SettingsHorizontalPaddingItem.dp))
                         Text(title)
                     }
                 }
