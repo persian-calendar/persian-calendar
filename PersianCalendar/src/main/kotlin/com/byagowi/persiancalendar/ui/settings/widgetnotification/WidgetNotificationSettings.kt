@@ -58,7 +58,6 @@ import com.byagowi.persiancalendar.global.prefersWidgetsDynamicColorsFlow
 import com.byagowi.persiancalendar.global.userSetTheme
 import com.byagowi.persiancalendar.global.widgetTransparency
 import com.byagowi.persiancalendar.ui.settings.SettingsColor
-import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSlider
@@ -74,7 +73,6 @@ import kotlin.time.Duration.Companion.seconds
 fun ColumnScope.WidgetNotificationSettings() {
     SettingsSection(stringResource(R.string.pref_notification))
     NotificationSettings()
-    SettingsHorizontalDivider()
     SettingsSection(stringResource(R.string.pref_widget))
     WidgetConfiguration()
 }

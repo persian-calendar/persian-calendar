@@ -83,7 +83,6 @@ import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.common.AskForCalendarPermissionDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
-import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsMultiSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
@@ -157,7 +156,6 @@ fun ColumnScope.InterfaceCalendarSettings(destination: String? = null) {
         )
     }
 
-    SettingsHorizontalDivider()
     SettingsSection(stringResource(R.string.calendar))
     SettingsClickable(
         stringResource(R.string.events), stringResource(R.string.events_summary),

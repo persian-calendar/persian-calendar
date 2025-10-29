@@ -63,7 +63,6 @@ import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.common.AppDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsClickable
 import com.byagowi.persiancalendar.ui.settings.SettingsHelp
-import com.byagowi.persiancalendar.ui.settings.SettingsHorizontalDivider
 import com.byagowi.persiancalendar.ui.settings.SettingsSection
 import com.byagowi.persiancalendar.ui.settings.SettingsSingleSelect
 import com.byagowi.persiancalendar.ui.settings.SettingsSwitch
@@ -110,7 +109,6 @@ fun ColumnScope.LocationAthanSettings(navigateToMap: () -> Unit, destination: St
     val notificationAthan by notificationAthan.collectAsState()
     val ascendingAthan by ascendingAthan.collectAsState()
     val language by language.collectAsState()
-    SettingsHorizontalDivider()
     SettingsSection(
         stringResource(R.string.athan),
         if (isLocationSet) null else stringResource(R.string.athan_disabled_summary)

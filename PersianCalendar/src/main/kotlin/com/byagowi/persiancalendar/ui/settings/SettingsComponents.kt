@@ -78,17 +78,26 @@ fun SettingsSection(title: String, subtitle: String? = null) {
         Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AnimatedContent(
-            title,
-            label = "title",
-            transitionSpec = appCrossfadeSpec,
-        ) { state ->
-            Text(
-                state,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            val color by animateColor(MaterialTheme.colorScheme.outlineVariant)
+            HorizontalDivider(color = color, modifier = Modifier.weight(1f))
+            AnimatedContent(
+                title,
+                contentAlignment = Alignment.Center,
+                label = "title",
+                transitionSpec = appCrossfadeSpec,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
+            ) { state ->
+                Text(
+                    state,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
+            HorizontalDivider(color = color, modifier = Modifier.weight(1f))
         }
         this.AnimatedVisibility(visible = subtitle != null) {
             Text(
@@ -98,12 +107,6 @@ fun SettingsSection(title: String, subtitle: String? = null) {
             )
         }
     }
-}
-
-@Composable
-fun SettingsHorizontalDivider() {
-    val color by animateColor(MaterialTheme.colorScheme.outlineVariant)
-    HorizontalDivider(Modifier.padding(horizontal = 8.dp), color = color)
 }
 
 @Composable
