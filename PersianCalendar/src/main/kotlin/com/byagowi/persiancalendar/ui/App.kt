@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui
 
-import android.os.Bundle
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -171,9 +170,9 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
         ) {
             NavHost(navController = navController, startDestination = initialDestination.name) {
                 fun Screen.navigate() = navController.navigate(this.name)
-                fun Screen.navigate(bundle: Bundle) {
+                fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
                     val destination = navController.graph.findNode(this.name) ?: return
-                    navController.navigate(destination.id, bundle)
+                    navController.navigate(destination.id, bundleOf(*pairs))
                 }
 
                 fun isCurrentDestination(backStackEntry: NavBackStackEntry) =
@@ -187,10 +186,10 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                 }
 
                 fun navigateToSettingsLocationTab() =
-                    Screen.SETTINGS.navigate(bundleOf(tabKey to LOCATION_ATHAN_TAB))
+                    Screen.SETTINGS.navigate(tabKey to LOCATION_ATHAN_TAB)
 
                 fun navigateToAstronomy(jdn: Jdn) =
-                    Screen.ASTRONOMY.navigate(bundleOf(daysOffsetKey to jdn - Jdn.today()))
+                    Screen.ASTRONOMY.navigate(daysOffsetKey to jdn - Jdn.today())
 
                 composable(Screen.CALENDAR.name) { backStackEntry ->
                     val viewModel = viewModel<CalendarViewModel>()
@@ -205,24 +204,21 @@ fun App(intentStartDestination: String?, initialJdn: Jdn? = null, finish: () -> 
                         openDrawer = { coroutineScope.launch { drawerState.open() } },
                         navigateToHolidaysSettings = {
                             Screen.SETTINGS.navigate(
-                                bundleOf(
-                                    tabKey to INTERFACE_CALENDAR_TAB,
-                                    settingsKey to PREF_HOLIDAY_TYPES,
-                                )
+                                tabKey to INTERFACE_CALENDAR_TAB,
+                                settingsKey to PREF_HOLIDAY_TYPES,
                             )
                         },
                         navigateToSettingsLocationTabSetAthanAlarm = {
                             Screen.SETTINGS.navigate(
-                                bundleOf(
-                                    tabKey to LOCATION_ATHAN_TAB,
-                                    settingsKey to PREF_ATHAN_ALARM,
-                                )
+                                tabKey to LOCATION_ATHAN_TAB,
+                                settingsKey to PREF_ATHAN_ALARM,
                             )
                         },
                         navigateToSchedule = Screen.SCHEDULE::navigate,
                         navigateToDays = { jdn, isWeek ->
                             Screen.DAYS.navigate(
-                                bundleOf(selectedDayKey to jdn.value, isWeekKey to isWeek)
+                                selectedDayKey to jdn.value,
+                                isWeekKey to isWeek
                             )
                         },
                         navigateToMonthView = Screen.MONTH::navigate,
