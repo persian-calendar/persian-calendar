@@ -47,6 +47,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+private enum class Screen { MAIN, SETTINGS, UTILITIES, CALENDAR, CONVERTER, DAY }
+
 @Composable
 private fun WearApp() {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -60,56 +62,44 @@ private fun WearApp() {
                     remember { runBlocking { dataStore.firstOrNull() } },
                 )
                 val navController = rememberSwipeDismissableNavController()
-                val mainRoute = "app"
-                val settingsRoute = "settings"
-                val utilitiesRoute = "utilities"
-                val converterRoute = "converter"
-                val calendarRoute = "calendar"
-                val dayRoute = "day"
                 val dayJdnKey = "dayJdnKey"
                 val localeUtils = LocaleUtils()
                 val today = updatedToday()
                 SwipeDismissableNavHost(
                     navController = navController,
-                    startDestination = mainRoute,
+                    startDestination = Screen.MAIN.name,
                 ) {
-                    composable(mainRoute) {
+                    fun Screen.navigate() = navController.navigate(this.name)
+                    fun Screen.navigate(vararg pairs: Pair<String, Any?>) {
+                        val destination = navController.graph.findNode(this.name) ?: return
+                        navController.navigate(destination.id, bundleOf(*pairs))
+                    }
+
+                    composable(Screen.MAIN.name) {
                         MainScreen(
                             localeUtils = localeUtils,
                             today = today,
                             preferences = preferences,
-                            navigateToUtilities = { navController.navigate(utilitiesRoute) },
-                            navigateToDay = { jdn ->
-                                navController.graph.findNode(dayRoute)?.let { destination ->
-                                    navController.navigate(
-                                        destination.id, bundleOf(dayJdnKey to jdn.value)
-                                    )
-                                }
-                            },
+                            navigateToUtilities = Screen.UTILITIES::navigate,
+                            navigateToDay = { Screen.DAY.navigate(dayJdnKey to it.value) },
                         )
                     }
-                    composable(utilitiesRoute) {
+                    composable(Screen.UTILITIES.name) {
                         UtilitiesScreen(
-                            navigateToConverter = { navController.navigate(converterRoute) },
-                            navigateToCalendar = { navController.navigate(calendarRoute) },
-                            navigateToSettings = { navController.navigate(settingsRoute) },
+                            navigateToConverter = Screen.CONVERTER::navigate,
+                            navigateToCalendar = Screen.CALENDAR::navigate,
+                            navigateToSettings = Screen.SETTINGS::navigate,
                         )
                     }
-                    composable(converterRoute) { ConverterScreen(today) }
-                    composable(calendarRoute) {
+                    composable(Screen.CONVERTER.name) { ConverterScreen(today) }
+                    composable(Screen.CALENDAR.name) {
                         CalendarScreen(
                             today = today,
                             localeUtils = localeUtils,
                             preferences = preferences,
-                        ) { jdn ->
-                            navController.graph.findNode(dayRoute)?.let { destination ->
-                                navController.navigate(
-                                    destination.id, bundleOf(dayJdnKey to jdn.value)
-                                )
-                            }
-                        }
+                        ) { Screen.DAY.navigate(dayJdnKey to it.value) }
                     }
-                    composable(dayRoute) { backStackEntry ->
+                    composable(Screen.DAY.name) { backStackEntry ->
                         DayScreen(
                             preferences = preferences,
                             localeUtils = localeUtils,
@@ -119,7 +109,7 @@ private fun WearApp() {
                             ),
                         )
                     }
-                    composable(settingsRoute) { SettingsScreen(preferences) }
+                    composable(Screen.SETTINGS.name) { SettingsScreen(preferences) }
                 }
             }
         }
