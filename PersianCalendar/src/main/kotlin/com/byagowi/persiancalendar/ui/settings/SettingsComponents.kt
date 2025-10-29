@@ -74,7 +74,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SettingsSection(title: String, subtitle: String? = null) {
-    Spacer(Modifier.height(16.dp))
+    Spacer(Modifier.height(8.dp))
     Column(
         Modifier
             .fillMaxWidth()
