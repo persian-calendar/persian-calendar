@@ -3,7 +3,7 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-common:2.2.21 (c)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.0 -> 1.8.22 (c)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.0 -> 1.8.22 (c)
-+--- com.github.persian-calendar:calendar:287e35f7220bdd650860627cac2f045996fa5d8c
++--- com.github.persian-calendar:calendar:827abdc67e39ead1cbc72fdad729f1c8ef719423
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.2.21 (*)
 +--- androidx.compose:compose-bom:2025.10.01
 |    +--- androidx.compose.material:material-icons-extended:1.7.8 (c)
