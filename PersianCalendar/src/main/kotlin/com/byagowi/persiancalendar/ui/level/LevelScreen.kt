@@ -210,6 +210,7 @@ fun SharedTransitionScope.LevelScreen(
                     AndroidView(
                         modifier = Modifier
                             .weight(1f, fill = false)
+                            .padding(horizontal = 24.dp)
                             .then(if (isFullscreen) Modifier.safeDrawingPadding() else Modifier)
                             .sharedBounds(
                                 rememberSharedContentState(key = SHARED_CONTENT_KEY_LEVEL),
